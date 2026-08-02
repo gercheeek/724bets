@@ -913,38 +913,8 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
             </div>
         );
 
-        // Watermark & Bonus Overlays (stacked on the right edge)
-        const watermarkOverlay = (
-            <div className="absolute bottom-[35px] sm:bottom-[40px] right-0 z-[50] flex flex-col gap-1.5 pointer-events-none">
-               {/* Bonus Button 3 */}
-               <div className="w-[115px] h-[32px] bg-[#0A0D14] rounded-l-md border border-r-0 border-[#f59e0b]/30 shadow-lg overflow-hidden backdrop-blur-md pointer-events-auto cursor-pointer flex items-center hover:bg-[#f59e0b]/10 transition-colors group">
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#f59e0b]/10 to-transparent opacity-60"></div>
-                  <div className="w-8 flex justify-center"><GiftIcon className="w-3.5 h-3.5 text-[#f59e0b] group-hover:scale-110 transition-transform" /></div>
-                  <span style={{ color: '#f59e0b', fontWeight: 800, fontSize: '10px', letterSpacing: '0.2px', position: 'relative', zIndex: 10 }}>%20 KAYIP</span>
-               </div>
-               
-               {/* Bonus Button 2 */}
-               <div className="w-[115px] h-[32px] bg-[#0A0D14] rounded-l-md border border-r-0 border-[#10b981]/30 shadow-lg overflow-hidden backdrop-blur-md pointer-events-auto cursor-pointer flex items-center hover:bg-[#10b981]/10 transition-colors group">
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#10b981]/10 to-transparent opacity-60"></div>
-                  <div className="w-8 flex justify-center"><Award className="w-3.5 h-3.5 text-[#10b981] group-hover:scale-110 transition-transform" /></div>
-                  <span style={{ color: '#10b981', fontWeight: 800, fontSize: '10px', letterSpacing: '0.2px', position: 'relative', zIndex: 10 }}>%100 BONUS</span>
-               </div>
-
-               {/* Bonus Button 1 */}
-               <div className="w-[115px] h-[32px] bg-[#0A0D14] rounded-l-md border border-r-0 border-[#8b5cf6]/30 shadow-lg overflow-hidden backdrop-blur-md pointer-events-auto cursor-pointer flex items-center hover:bg-[#8b5cf6]/10 transition-colors group">
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#8b5cf6]/10 to-transparent opacity-60"></div>
-                  <div className="w-8 flex justify-center"><Flame className="w-3.5 h-3.5 text-[#8b5cf6] group-hover:scale-110 transition-transform" /></div>
-                  <span style={{ color: '#8b5cf6', fontWeight: 800, fontSize: '10px', letterSpacing: '0.2px', position: 'relative', zIndex: 10 }}>50 FREESPIN</span>
-               </div>
-
-               {/* Original Watermark */}
-               <div className="w-[115px] h-[32px] bg-[#0A0D14] rounded-l-md border border-r-0 border-white/5 shadow-lg overflow-hidden backdrop-blur-md flex items-center justify-center pointer-events-auto cursor-pointer hover:bg-white/5 transition-colors">
-                   <div className="absolute inset-0 bg-gradient-to-r from-[#00E5FF]/10 to-[#10b981]/10 opacity-60"></div>
-                   <span style={{ color: '#00E5FF', fontWeight: 800, fontSize: '13px', letterSpacing: '0.2px', position: 'relative', zIndex: 10 }}>724</span>
-                   <span style={{ color: '#fff', fontWeight: 800, fontSize: '13px', letterSpacing: '0.2px', position: 'relative', zIndex: 10 }}>bets<span style={{ color: '#00E5FF' }}>*</span></span>
-               </div>
-            </div>
-        );
+        // Watermark & Bonus Overlays (moved below the player)
+        const watermarkOverlay = <></>;
 
         const customLoader = !isIframeLoaded && (
             <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: 'radial-gradient(circle, #0F141E 0%, #030407 100%)', zIndex: 60 }}>
@@ -1206,6 +1176,39 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                                     </div>
                                 </div>
                             )}
+                        </div>
+
+                        {/* Bonus & Watermark Buttons (Horizontal) */}
+                        <div className="w-full mt-3 flex items-center justify-between gap-3 overflow-x-auto custom-scrollbar pb-1">
+                            <div className="flex gap-3 flex-1">
+                               {/* Bonus Button 3 */}
+                               <div className="flex-1 min-w-[120px] h-[36px] bg-[#12141a] rounded-lg border border-[#f59e0b]/30 shadow-sm overflow-hidden pointer-events-auto cursor-pointer flex items-center justify-center hover:bg-[#f59e0b]/10 transition-colors group relative">
+                                  <div className="absolute inset-0 bg-gradient-to-r from-[#f59e0b]/10 to-transparent opacity-60"></div>
+                                  <GiftIcon className="w-4 h-4 text-[#f59e0b] group-hover:scale-110 transition-transform mr-2 relative z-10" />
+                                  <span style={{ color: '#f59e0b', fontWeight: 800, fontSize: '11px', letterSpacing: '0.5px', position: 'relative', zIndex: 10 }}>%20 KAYIP</span>
+                               </div>
+                               
+                               {/* Bonus Button 2 */}
+                               <div className="flex-1 min-w-[120px] h-[36px] bg-[#12141a] rounded-lg border border-[#10b981]/30 shadow-sm overflow-hidden pointer-events-auto cursor-pointer flex items-center justify-center hover:bg-[#10b981]/10 transition-colors group relative">
+                                  <div className="absolute inset-0 bg-gradient-to-r from-[#10b981]/10 to-transparent opacity-60"></div>
+                                  <Award className="w-4 h-4 text-[#10b981] group-hover:scale-110 transition-transform mr-2 relative z-10" />
+                                  <span style={{ color: '#10b981', fontWeight: 800, fontSize: '11px', letterSpacing: '0.5px', position: 'relative', zIndex: 10 }}>%100 BONUS</span>
+                               </div>
+
+                               {/* Bonus Button 1 */}
+                               <div className="flex-1 min-w-[120px] h-[36px] bg-[#12141a] rounded-lg border border-[#8b5cf6]/30 shadow-sm overflow-hidden pointer-events-auto cursor-pointer flex items-center justify-center hover:bg-[#8b5cf6]/10 transition-colors group relative">
+                                  <div className="absolute inset-0 bg-gradient-to-r from-[#8b5cf6]/10 to-transparent opacity-60"></div>
+                                  <Flame className="w-4 h-4 text-[#8b5cf6] group-hover:scale-110 transition-transform mr-2 relative z-10" />
+                                  <span style={{ color: '#8b5cf6', fontWeight: 800, fontSize: '11px', letterSpacing: '0.5px', position: 'relative', zIndex: 10 }}>50 FREESPIN</span>
+                               </div>
+                            </div>
+
+                           {/* Original Watermark */}
+                           <div className="min-w-[120px] h-[36px] bg-[#12141a] rounded-lg border border-white/5 shadow-sm overflow-hidden flex items-center justify-center pointer-events-auto cursor-pointer hover:bg-white/5 transition-colors relative">
+                               <div className="absolute inset-0 bg-gradient-to-r from-[#00E5FF]/10 to-[#10b981]/10 opacity-60"></div>
+                               <span style={{ color: '#00E5FF', fontWeight: 800, fontSize: '14px', letterSpacing: '0.5px', position: 'relative', zIndex: 10 }}>724</span>
+                               <span style={{ color: '#fff', fontWeight: 800, fontSize: '14px', letterSpacing: '0.5px', position: 'relative', zIndex: 10 }}>bets<span style={{ color: '#00E5FF' }}>*</span></span>
+                           </div>
                         </div>
                     </div>
 
