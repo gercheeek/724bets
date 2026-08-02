@@ -23,13 +23,31 @@ const ASSETS = {
     tanzanite: 'https://gamdom.com/static/img/tanzanite.svg'
 };
 
-const generateReel = () => {
-    const reel: BetColor[] = [];
+interface BrickData {
+    color: BetColor;
+    number: number;
+    id: string;
+}
+
+const generateReel = (): BrickData[] => {
+    const reel: BrickData[] = [];
     for (let i = 0; i < TOTAL_BRICKS; i++) {
         const rand = Math.random();
-        if (rand < 0.05) reel.push('green');
-        else if (rand < 0.525) reel.push('red');
-        else reel.push('black');
+        let color: BetColor = 'black';
+        let num = 0;
+
+        if (rand < 0.05) {
+            color = 'green';
+            num = 0;
+        } else if (rand < 0.525) {
+            color = 'red';
+            num = Math.floor(Math.random() * 99) + 1;
+        } else {
+            color = 'black';
+            num = Math.floor(Math.random() * 99) + 1;
+        }
+
+        reel.push({ color, number: num, id: `brick_${i}_${Math.random()}` });
     }
     return reel;
 };
@@ -44,7 +62,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
     const [timeLeft, setTimeLeft] = useState<number>(15000); // 15s betting phase
     const [isSpinning, setIsSpinning] = useState(false);
     
-    const [reel, setReel] = useState<BetColor[]>(generateReel());
+    const [reel, setReel] = useState<BrickData[]>(generateReel());
     const [slideOffset, setSlideOffset] = useState<number>(-550);
     const [winningColor, setWinningColor] = useState<BetColor | null>(null);
     const [winAmount, setWinAmount] = useState<number | null>(null);
@@ -53,28 +71,20 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
 
     // -- TIMER LOOP --
     useEffect(() => {
-        let animationFrameId: number;
-        let lastTime = performance.now();
+        if (gameState !== 'betting') return;
+        
+        const interval = setInterval(() => {
+            setTimeLeft(prev => {
+                if (prev <= 100) {
+                    clearInterval(interval);
+                    setGameState('spinning');
+                    return 0;
+                }
+                return prev - 100;
+            });
+        }, 100);
 
-        const loop = (time: number) => {
-            const delta = time - lastTime;
-            lastTime = time;
-
-            if (gameState === 'betting') {
-                setTimeLeft(prev => {
-                    const next = prev - delta;
-                    if (next <= 0) {
-                        setGameState('spinning');
-                        return 0;
-                    }
-                    return next;
-                });
-            }
-            animationFrameId = requestAnimationFrame(loop);
-        };
-
-        animationFrameId = requestAnimationFrame(loop);
-        return () => cancelAnimationFrame(animationFrameId);
+        return () => clearInterval(interval);
     }, [gameState]);
 
     // -- PHASE HANDLER --
@@ -157,7 +167,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
             }
 
             // Target brick position
-            newReel[90] = winResult;
+            newReel[90] = { color: winResult, number: winResult === 'green' ? 0 : Math.floor(Math.random() * 99) + 1, id: 'winning_brick' };
             setReel(newReel);
 
             const itemWidth = BRICK_WIDTH;
@@ -251,16 +261,16 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                                 willChange: 'transform'
                             }}
                         >
-                            {reel.map((color, idx) => (
-                                <div key={idx} className="absolute top-0 flex items-center justify-center h-full" style={{ width: `${BRICK_WIDTH}px`, left: `${idx * BRICK_WIDTH}px` }}>
+                            {reel.map((brick, idx) => (
+                                <div key={brick.id} className="absolute top-0 flex items-center justify-center h-full" style={{ width: `${BRICK_WIDTH}px`, left: `${idx * BRICK_WIDTH}px` }}>
                                     <div className="relative group w-full h-full flex items-center justify-center">
                                         <img 
-                                            src={color === 'red' ? ASSETS.brickRed : (color === 'green' ? ASSETS.brickGreen : ASSETS.brickGrey)} 
-                                            alt={color} 
+                                            src={brick.color === 'red' ? ASSETS.brickRed : (brick.color === 'green' ? ASSETS.brickGreen : ASSETS.brickGrey)} 
+                                            alt={brick.color} 
                                             className={`w-[85px] object-contain drop-shadow-xl ${gameState === 'result' && idx !== 90 ? 'opacity-40' : ''} transition-opacity duration-500`} 
                                         />
                                         <div className="absolute inset-0 flex items-center justify-center font-black text-2xl text-white/90 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
-                                            {color === 'green' ? 0 : Math.floor(Math.random() * 99) + 1}
+                                            {brick.number}
                                         </div>
                                     </div>
                                 </div>
@@ -275,7 +285,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                         {gameState === 'betting' ? (
                             <div 
                                 className="h-full bg-red-500" 
-                                style={{ width: `${(timeLeft / 15000) * 100}%` }}
+                                style={{ width: `${(timeLeft / 15000) * 100}%`, transition: 'width 0.1s linear' }}
                             ></div>
                         ) : (
                             <div className="h-full bg-[#1a1e24]"></div>
