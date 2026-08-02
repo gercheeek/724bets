@@ -514,7 +514,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                     <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 bg-[#171a21] p-3 rounded-xl border border-white/5 w-full shadow-xl">
                         
                         <div className="flex-1 flex bg-[#0f1215] rounded-lg border border-white/10 overflow-hidden min-w-[200px]">
-                            <div className="px-4 flex items-center justify-center bg-white/5"><img src={ASSETS.tanzanite} alt="$" className="h-4" /></div>
+                            <div className="px-4 flex items-center justify-center bg-white/5"><span className="text-emerald-400 font-bold">$</span></div>
                             <input 
                                 type="number" 
                                 value={betAmount}
@@ -760,7 +760,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                             <div className="flex justify-between items-center mb-2 text-[10px] font-bold text-gray-500 uppercase pb-2 border-b border-white/5">
                                 <span>{getColumnCount('red')} Bahis</span>
                                 <div className="flex items-center gap-1 text-white bg-[#0f1215] px-2 py-1 rounded-md">
-                                    <img src={ASSETS.tanzanite} alt="Coin" className="h-2.5" />
+                                    <span className="text-emerald-400 font-bold mr-1">$</span>
                                     <span>{getColumnTotal('red').toFixed(2)}</span>
                                 </div>
                             </div>
@@ -812,7 +812,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                             <div className="flex justify-between items-center mb-2 text-[10px] font-bold text-gray-500 uppercase pb-2 border-b border-white/5">
                                 <span>{getColumnCount('green')} Bahis</span>
                                 <div className="flex items-center gap-1 text-white bg-[#0f1215] px-2 py-1 rounded-md">
-                                    <img src={ASSETS.tanzanite} alt="Coin" className="h-2.5" />
+                                    <span className="text-emerald-400 font-bold mr-1">$</span>
                                     <span>{getColumnTotal('green').toFixed(2)}</span>
                                 </div>
                             </div>
@@ -864,7 +864,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                             <div className="flex justify-between items-center mb-2 text-[10px] font-bold text-gray-500 uppercase pb-2 border-b border-white/5">
                                 <span>{getColumnCount('black')} Bahis</span>
                                 <div className="flex items-center gap-1 text-white bg-[#0f1215] px-2 py-1 rounded-md">
-                                    <img src={ASSETS.tanzanite} alt="Coin" className="h-2.5" />
+                                    <span className="text-emerald-400 font-bold mr-1">$</span>
                                     <span>{getColumnTotal('black').toFixed(2)}</span>
                                 </div>
                             </div>
@@ -915,7 +915,6 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                                 <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-emerald-500/20 rounded-full blur-[80px]"></div>
                                 
                                 <div className="flex items-center justify-center gap-4 mb-2 z-10 animate-bounce-scale">
-                                    <img src={ASSETS.tanzanite} alt="Coin" className="h-10 md:h-14 drop-shadow-[0_0_20px_rgba(255,184,0,0.8)]" />
                                     <span className="text-5xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white via-gray-200 to-gray-600 drop-shadow-[0_15px_25px_rgba(0,0,0,0.9)] tracking-tighter">
                                         +${winAmount.toFixed(2)}
                                     </span>

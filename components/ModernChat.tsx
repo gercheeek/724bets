@@ -549,6 +549,80 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
         };
     }, [open, botsConfig]);
 
+    // FAKE CHAT SIMULATOR (7-20 msgs per minute)
+    useEffect(() => {
+        if (!open) return;
+        
+        let isActive = true;
+        let currentIndex = 0;
+        let timeoutId: any = null;
+
+        const fakeChatScenarios = [
+            { username: 'Anonim33', role: 'USER', message: 'Admin şu siteyi biraz hızlandırın ya donuyor sürekli' },
+            { username: 'Kaan1907', role: 'USER', message: 'bende sorun yok kanka internetini kontrol et' },
+            { username: 'Anonim33', role: 'USER', message: 'ne interneti birader 100mbps net var, amk sitesi hep böyle patlıyor' },
+            { username: 'Yönetici', role: 'MODERATOR', message: 'Lütfen argo kelimeler kullanmayalım, sistemlerimizde anlık bir yoğunluk olabilir. En kısa sürede çözülecektir.' },
+            { username: 'VipAga', role: 'VIP', message: 'ahahahah yine ağlıyor fakirler 😂' },
+            { username: 'KralVip', role: 'VIP', message: 'beyler rulet kırmızı 3 eldir gelmiyor, abanın kırmızıya net' },
+            { username: 'Cimbomlu Berke', role: 'USER', message: 'hadi len oradan geçen de öyle dedin siyah serisi yaptı' },
+            { username: 'KralVip', role: 'VIP', message: 'kanka sen bilirsin ben 5k bastım bekliyorum' },
+            { username: 'Kuponcu', role: 'USER', message: 'şu fener maçı ne olur? ilk yarı bitti' },
+            { username: 'Istatistikci', role: 'USER', message: 'fener deplasmanda zorlanıyor, bence 2.5 alt biter' },
+            { username: 'Kaan1907', role: 'USER', message: 'saçmalama 2. yarı 3 atarız rahat' },
+            { username: 'BatmisDayi', role: 'USER', message: 'amk sitesi sabahtan beri bütün paramı yedi hileli bu yemin ediyorum' },
+            { username: 'Admin', role: 'MODERATOR', message: '@BatmisDayi lütfen üslubunuza dikkat edin, şans oyunlarında kaybetmek de vardır. Küfür devam ederse sohbetten banlanacaksınız.' },
+            { username: 'BatmisDayi', role: 'USER', message: 'tamam aga kızma valla sinirim bozuldu' },
+            { username: 'Aviatorcu', role: 'USER', message: 'beyler uçak kaçta patlıyor genelde?' },
+            { username: 'SansliGenc', role: 'USER', message: 'az önce 25x verdi kaçırdım ya ulan' },
+            { username: 'CanliTaktik', role: 'USER', message: 'canlı bahis kovalayan var mı? real maçı 2. yarı 1 gol çıkar mı?' },
+            { username: 'Cimbomlu Berke', role: 'USER', message: 'real çok baskılı oynuyor kesin atar bas geç' }
+        ];
+
+        const scheduleNextMessage = () => {
+            if (!isActive) return;
+            
+            const delay = Math.random() * (8500 - 3000) + 3000; // 3 to 8.5 seconds
+            
+            timeoutId = setTimeout(() => {
+                if (!isActive) return;
+                
+                const scenario = fakeChatScenarios[currentIndex % fakeChatScenarios.length];
+                currentIndex++;
+                
+                const newMsg = {
+                    id: `fake_${Date.now()}_${Math.random()}`,
+                    username: scenario.username,
+                    role: scenario.role,
+                    message: scenario.message,
+                    created_at: new Date().toISOString(),
+                    channel_id: activeLang.id
+                };
+                
+                setMessages(prev => {
+                    const updated = [...prev, newMsg];
+                    if (updated.length > 70) return updated.slice(updated.length - 70);
+                    return updated;
+                });
+                
+                setTimeout(() => {
+                    if (chatContainerRef.current) {
+                        chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+                    }
+                }, 50);
+
+                scheduleNextMessage();
+            }, delay);
+        };
+
+        // Start after a short delay
+        timeoutId = setTimeout(scheduleNextMessage, 2000);
+
+        return () => {
+            isActive = false;
+            if (timeoutId) clearTimeout(timeoutId);
+        };
+    }, [open, activeLang.id]);
+
     const handleSendMessage = async (e?: React.FormEvent) => {
         if (e) e.preventDefault();
         if (!newMessage.trim()) return;
