@@ -200,62 +200,137 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                     </div>
 
                     {/* Wheel Container */}
-                    <div className="relative w-[320px] h-[320px] md:w-[480px] md:h-[480px] mt-8">
+                    <div className="relative w-[340px] h-[340px] md:w-[500px] md:h-[500px] mt-8 mb-4">
                         
-                        {/* Outer Metallic Ring */}
+                        {/* Outer Metallic Ring Background */}
                         <div 
-                            className="absolute inset-0 rounded-full shadow-[0_0_80px_rgba(0,229,255,0.05),inset_0_15px_30px_rgba(0,0,0,1)] p-[12px] md:p-[16px] border border-[#2A3744]" 
+                            className="absolute inset-0 rounded-full shadow-[0_0_80px_rgba(0,229,255,0.05),inset_0_15px_30px_rgba(0,0,0,1)] p-[15px] border-2 border-[#2A3744]" 
                             style={{ background: 'conic-gradient(from 0deg, #1A212D, #0A0D14, #1A212D, #0A0D14, #1A212D)' }}
                         >
                             {/* The Wheel */}
-                            <div 
-                                className="absolute inset-[12px] md:inset-[16px] rounded-full overflow-hidden shadow-[inset_0_0_40px_rgba(0,0,0,1)] transition-transform ease-[cubic-bezier(0.15,0.9,0.15,1)] bg-[#05070A]"
-                                style={{ 
-                                    transform: `rotate(${spinRotation}deg)`,
-                                    transitionDuration: isPlaying ? '4000ms' : '0ms'
-                                }}
-                            >
-                                {/* Wheel Numbers & Colors */}
-                                {ROULETTE_NUMBERS.map((num, i) => {
-                                    const angle = (360 / ROULETTE_NUMBERS.length) * i;
-                                    const isGreen = num === 0;
-                                    const color = isGreen ? '#00E5FF' : (isRed(num) ? '#E11D48' : '#111827');
+                            <div className="absolute inset-[15px] rounded-full overflow-hidden shadow-[inset_0_0_40px_rgba(0,0,0,1)] bg-[#05070A]">
+                                <svg width="100%" height="100%" viewBox="0 0 500 500" className="drop-shadow-2xl" style={{ filter: 'drop-shadow(0 0 20px rgba(0,0,0,0.8))' }}>
+                                    <defs>
+                                        <filter id="inner-shadow">
+                                            <feOffset dx="0" dy="0"/>
+                                            <feGaussianBlur stdDeviation="15" result="offset-blur"/>
+                                            <feComposite operator="out" in="SourceGraphic" in2="offset-blur" result="inverse"/>
+                                            <feFlood floodColor="black" floodOpacity="0.9" result="color"/>
+                                            <feComposite operator="in" in="color" in2="inverse" result="shadow"/>
+                                            <feComposite operator="over" in="shadow" in2="SourceGraphic"/>
+                                        </filter>
+                                        <filter id="neon-glow" x="-50%" y="-50%" width="200%" height="200%">
+                                            <feGaussianBlur stdDeviation="10" result="blur" />
+                                            <feMerge>
+                                                <feMergeNode in="blur"/>
+                                                <feMergeNode in="SourceGraphic"/>
+                                            </feMerge>
+                                        </filter>
+                                        <radialGradient id="metal-hub" cx="50%" cy="50%" r="50%">
+                                            <stop offset="0%" stopColor="#2A3744" />
+                                            <stop offset="70%" stopColor="#151D24" />
+                                            <stop offset="100%" stopColor="#05070A" />
+                                        </radialGradient>
+                                        <radialGradient id="metal-ring" cx="50%" cy="50%" r="50%">
+                                            <stop offset="85%" stopColor="transparent" />
+                                            <stop offset="95%" stopColor="rgba(255,255,255,0.05)" />
+                                            <stop offset="100%" stopColor="rgba(0,0,0,0.8)" />
+                                        </radialGradient>
+                                    </defs>
                                     
-                                    return (
-                                        <div 
-                                            key={num}
-                                            className="absolute top-0 left-1/2 h-1/2 origin-bottom -translate-x-1/2 flex justify-center pt-2 md:pt-3"
-                                            style={{ 
-                                                transform: `rotate(${angle}deg)`,
-                                                backgroundColor: color,
-                                                clipPath: 'polygon(0 0, 100% 0, 50% 100%)',
-                                                width: '11%',
-                                                boxShadow: isGreen ? 'inset 0 0 20px rgba(0,0,0,0.5)' : (isRed(num) ? 'inset 0 0 10px rgba(0,0,0,0.5)' : 'inset 0 0 15px rgba(0,0,0,0.8)')
-                                            }}
-                                        >
-                                            <span className={`font-black block mt-2 ${isGreen ? 'text-[#0A0D14] text-[10px] md:text-[13px] drop-shadow-[0_0_2px_rgba(0,229,255,0.8)]' : 'text-white/90 text-[9px] md:text-[13px] drop-shadow-[0_2px_2px_rgba(0,0,0,1)]'}`} style={{ transform: 'rotate(0deg)' }}>{num}</span>
-                                        </div>
-                                    );
-                                })}
-                                
-                                {/* Inner Circle (Wood/Metal center) */}
-                                <div className="absolute inset-1/4 rounded-full bg-[#1A212D] border-[6px] border-[#2A3744] shadow-[0_0_30px_rgba(0,0,0,0.8)]">
-                                    <div className="absolute inset-0 rounded-full bg-[conic-gradient(from_0deg,#2A3744,#151D24,#2A3744,#151D24,#2A3744)] shadow-[inset_0_0_30px_rgba(0,0,0,0.9)] opacity-80"></div>
-                                    <div className="absolute inset-1/3 rounded-full bg-[#0A0D14] border-2 border-[#1E2738] shadow-inner flex items-center justify-center">
-                                        <div className="w-4 h-4 md:w-6 md:h-6 rounded-full bg-[#00E5FF] shadow-[0_0_15px_rgba(0,229,255,0.5)] opacity-50"></div>
-                                    </div>
-                                </div>
+                                    {/* Wheel Group - This rotates */}
+                                    <g 
+                                        style={{ 
+                                            transform: `rotate(${spinRotation}deg)`, 
+                                            transformOrigin: '250px 250px',
+                                            transition: isPlaying ? 'transform 4000ms cubic-bezier(0.15, 0.9, 0.15, 1)' : 'none'
+                                        }}
+                                    >
+                                        {/* Sectors */}
+                                        {ROULETTE_NUMBERS.map((num, i) => {
+                                            const angleStep = 360 / ROULETTE_NUMBERS.length;
+                                            const startAngle = -angleStep / 2;
+                                            const endAngle = angleStep / 2;
+                                            const isGreen = num === 0;
+                                            const color = isGreen ? '#00E5FF' : (isRed(num) ? '#E11D48' : '#111827');
+                                            const strokeColor = isGreen ? '#00b8cc' : (isRed(num) ? '#be123c' : '#030712');
+
+                                            // Text distance from center
+                                            const textRadius = 210;
+                                            
+                                            // Helper to draw arc
+                                            const polarToCartesian = (centerX: number, centerY: number, radius: number, angleInDegrees: number) => {
+                                              const angleInRadians = (angleInDegrees - 90) * Math.PI / 180.0;
+                                              return { x: centerX + (radius * Math.cos(angleInRadians)), y: centerY + (radius * Math.sin(angleInRadians)) };
+                                            };
+                                            const start = polarToCartesian(250, 250, 248, endAngle);
+                                            const end = polarToCartesian(250, 250, 248, startAngle);
+                                            const path = `M 250 250 L ${start.x} ${start.y} A 248 248 0 0 0 ${end.x} ${end.y} Z`;
+
+                                            return (
+                                                <g key={num} transform={`rotate(${i * angleStep}, 250, 250)`}>
+                                                    <path 
+                                                        d={path} 
+                                                        fill={color} 
+                                                        stroke={strokeColor} 
+                                                        strokeWidth="0.5"
+                                                    />
+                                                    {/* Outer edge highlight for depth */}
+                                                    <path 
+                                                        d={`M ${start.x} ${start.y} A 248 248 0 0 0 ${end.x} ${end.y}`} 
+                                                        fill="none" 
+                                                        stroke="rgba(0,0,0,0.5)" 
+                                                        strokeWidth="10" 
+                                                    />
+                                                    <text 
+                                                        x="250" 
+                                                        y={250 - textRadius} 
+                                                        textAnchor="middle" 
+                                                        dominantBaseline="middle"
+                                                        fill={isGreen ? '#0A0D14' : '#ffffff'}
+                                                        fontSize="18"
+                                                        fontWeight="900"
+                                                        letterSpacing="-1"
+                                                        style={{ textShadow: isGreen ? '0 0 8px rgba(0,0,0,0.3)' : '0 2px 4px rgba(0,0,0,0.8)' }}
+                                                    >
+                                                        {num}
+                                                    </text>
+                                                </g>
+                                            );
+                                        })}
+
+                                        {/* Gradient Overlay for lighting */}
+                                        <circle cx="250" cy="250" r="250" fill="url(#metal-ring)" pointerEvents="none" />
+
+                                        {/* Center Metal Hub covering the pie slices */}
+                                        <circle cx="250" cy="250" r="160" fill="url(#metal-hub)" stroke="#05070A" strokeWidth="4" filter="url(#inner-shadow)" />
+                                        
+                                        {/* Decorative Rings */}
+                                        <circle cx="250" cy="250" r="150" fill="none" stroke="rgba(255,255,255,0.03)" strokeWidth="2" />
+                                        <circle cx="250" cy="250" r="110" fill="none" stroke="rgba(0,0,0,0.5)" strokeWidth="6" />
+                                        
+                                        {/* Inner Hub Ring */}
+                                        <circle cx="250" cy="250" r="80" fill="#0A0D14" stroke="#1E2738" strokeWidth="4" filter="url(#inner-shadow)" />
+                                        
+                                        {/* Tiny Center Dot */}
+                                        <circle cx="250" cy="250" r="15" fill="#00E5FF" opacity="0.8" filter="url(#neon-glow)" />
+                                    </g>
+                                </svg>
                             </div>
                         </div>
 
-                        {/* Holographic Laser Pointer */}
-                        <div className="absolute -top-8 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center">
-                            {/* Base */}
-                            <div className="w-12 h-3 rounded-full bg-[#0A0D14] border border-[#00E5FF] shadow-[0_0_20px_rgba(0,229,255,0.6)] z-10 flex items-center justify-center">
-                                <div className="w-8 h-1 bg-[#00E5FF] rounded-full animate-pulse"></div>
-                            </div>
-                            {/* Laser Beam */}
-                            <div className="w-1 h-14 bg-gradient-to-b from-[#00E5FF] to-transparent shadow-[0_0_15px_rgba(0,229,255,1)]"></div>
+                        {/* Holographic Laser Pointer (SVG) */}
+                        <div className="absolute -top-10 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center pointer-events-none">
+                            <svg width="60" height="100" viewBox="0 0 60 100" style={{ filter: 'drop-shadow(0 0 10px rgba(0,229,255,0.8))' }}>
+                                {/* Base */}
+                                <rect x="15" y="0" width="30" height="12" rx="6" fill="#0A0D14" stroke="#00E5FF" strokeWidth="2" />
+                                {/* Emitting Diode */}
+                                <circle cx="30" cy="6" r="3" fill="#00E5FF" />
+                                {/* Laser Beam */}
+                                <path d="M 28 12 L 32 12 L 30 80 Z" fill="#00E5FF" opacity="0.9" />
+                                <path d="M 26 12 L 34 12 L 30 85 Z" fill="#00E5FF" opacity="0.5" />
+                                <path d="M 22 12 L 38 12 L 30 95 Z" fill="#00E5FF" opacity="0.2" />
+                            </svg>
                         </div>
                     </div>
 
