@@ -243,21 +243,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
     return (
         <div className="flex flex-col w-full h-full bg-[#111419] text-white font-sans overflow-y-auto">
             
-            {/* Top Bar (Header) */}
-            <div className="flex justify-between items-center px-6 py-4 bg-[#0a0c10] border-b border-white/5 shadow-md">
-                <div className="flex items-center gap-6">
-                    <img src="https://gamdom.com/static/img/game-check.png" alt="Provably Fair" className="h-6 opacity-50 hover:opacity-100 cursor-pointer transition-opacity" />
-                    <img src="https://gamdom.com/static/img/trustpilot-logo.svg" alt="Trustpilot" className="h-6 opacity-50 hover:opacity-100 cursor-pointer transition-opacity" />
-                </div>
-                <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-2 bg-[#171a21] px-4 py-1.5 rounded-full border border-white/10 shadow-inner">
-                        <img src={ASSETS.tanzanite} alt="Balance" className="h-4" />
-                        <span className="font-bold text-sm text-emerald-400">
-                            ${siteUser ? siteUser.balance.toFixed(2) : (isFunMode ? demoBalance.toFixed(2) : '0.00')}
-                        </span>
-                    </div>
-                </div>
-            </div>
+            {/* Top Bar removed as requested */}
 
             <div className="flex-1 flex flex-col w-full max-w-6xl mx-auto p-4 md:p-8">
                 
@@ -469,6 +455,19 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                                 <div className="text-xs text-gray-600 text-center py-4">Henüz bahis yok</div>
                             )}
                         </div>
+                    </div>
+                </div>
+
+                {/* ── GAMECHECK & TRUSTPILOT BOTTOM AREA ── */}
+                <div className="w-full flex flex-col md:flex-row items-center justify-center gap-8 mt-12 py-8 border-t border-white/5">
+                    <div className="flex items-center gap-2 px-6 py-2 rounded-full border border-green-900/50 bg-[#0a0c10] opacity-80 hover:opacity-100 transition-opacity cursor-pointer">
+                        <div className="w-8 h-8 rounded-full bg-green-900/50 flex items-center justify-center">
+                            <span className="text-green-500 font-bold text-xl">✓</span>
+                        </div>
+                        <span className="font-black text-gray-400 tracking-wider text-sm">GAME<span className="text-gray-600">CHECK</span></span>
+                    </div>
+                    <div className="flex items-center opacity-50 hover:opacity-100 transition-opacity cursor-pointer">
+                        <img src="https://gamdom.com/static/img/trustpilot-logo.svg" alt="Trustpilot" className="h-6" />
                     </div>
                 </div>
 
