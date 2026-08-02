@@ -1084,8 +1084,8 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
     }
 
     return (
-        <div ref={wrapperRef} className="tv-redesign-wrapper animate-fade-in" style={{
-            flex: 1, width: '100%', height: '100%', position: 'relative', backgroundColor: '#050508', fontFamily: "'Inter', sans-serif", display: 'flex', flexDirection: 'column', overflow: 'hidden'
+        <div ref={wrapperRef} className="tv-redesign-wrapper animate-fade-in custom-scrollbar" style={{
+            flex: 1, width: '100%', height: '100%', position: 'relative', backgroundColor: '#050508', fontFamily: "'Inter', sans-serif", display: 'flex', flexDirection: 'column', overflowY: 'auto', overflowX: 'hidden'
         }}>
             {/* Elegant dark edges */}
             <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', boxShadow: 'inset 0 0 100px rgba(0, 0, 0, 0.8)', zIndex: 0 }} />
@@ -1107,20 +1107,20 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                 .tv-tab-btn.active::after { transform: scaleX(1); }
             `}</style>
 
-            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', position: 'relative', zIndex: 10, overflow: 'hidden' }}>
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', position: 'relative', zIndex: 10, overflow: 'visible' }}>
                 
                 {/* ─── SPORTS SLIDER ─── */}
                 {!isTheaterMode && (
-                    <div className="w-full pt-1 mb-2">
+                    <div className="w-full pt-1 mb-2 shrink-0">
                         <SportsPromoSlider matches={matches} compact={true} />
                     </div>
                 )}
 
                 {/* Main Column Layout - fills remaining height */}
-                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'visible', minHeight: '600px' }}>
                     
                     {/* TOP: Video Player - fills all available space */}
-                    <div style={{ flex: 1, position: 'relative', overflow: 'hidden' }}>
+                    <div style={{ flex: 1, position: 'relative', overflow: 'hidden', minHeight: '400px' }}>
                         <div ref={playerContainerRef} style={{ width: '100%', height: '100%', background: '#000', overflow: 'hidden', position: 'relative' }}>
                             
                             {!activeChannel ? (
