@@ -256,7 +256,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                         <button 
                             onClick={() => handleAddBet('red')}
                             disabled={isPlaying}
-                            className={`relative py-3 rounded-md font-bold text-xs uppercase tracking-widest transition-all ${getBetAmount('red') > 0 ? 'bg-red-600 text-white shadow-[0_0_15px_rgba(220,38,38,0.5)] border-red-500' : 'bg-red-950/50 text-red-500 border border-red-900 hover:bg-red-900/50'}`}
+                            className={`relative py-3 rounded-md font-bold text-xs uppercase tracking-widest transition-all border ${getBetAmount('red') > 0 ? 'bg-gradient-to-b from-red-500 to-red-700 text-white shadow-[0_0_15px_rgba(220,38,38,0.5)] border-red-500' : 'bg-[#1A1F26] text-red-500 border-[#2A3744] shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)] hover:bg-[#252D38]'}`}
                         >
                             Kırmızı
                             {getBetAmount('red') > 0 && <div className="absolute top-1 right-1 bg-white text-black text-[9px] font-black px-1.5 py-0.5 rounded-full">₺{getBetAmount('red')}</div>}
@@ -264,7 +264,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                         <button 
                             onClick={() => handleAddBet('black')}
                             disabled={isPlaying}
-                            className={`relative py-3 rounded-md font-bold text-xs uppercase tracking-widest transition-all ${getBetAmount('black') > 0 ? 'bg-black text-white shadow-[0_0_15px_rgba(255,255,255,0.2)] border-gray-500' : 'bg-black/50 text-gray-400 border border-gray-800 hover:bg-black/80'}`}
+                            className={`relative py-3 rounded-md font-bold text-xs uppercase tracking-widest transition-all border ${getBetAmount('black') > 0 ? 'bg-gradient-to-b from-gray-700 to-gray-900 text-white shadow-[0_0_15px_rgba(255,255,255,0.2)] border-gray-500' : 'bg-[#1A1F26] text-gray-400 border-[#2A3744] shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)] hover:bg-[#252D38]'}`}
                         >
                             Siyah
                             {getBetAmount('black') > 0 && <div className="absolute top-1 right-1 bg-white text-black text-[9px] font-black px-1.5 py-0.5 rounded-full">₺{getBetAmount('black')}</div>}
@@ -272,7 +272,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                         <button 
                             onClick={() => handleAddBet('even')}
                             disabled={isPlaying}
-                            className={`relative py-3 rounded-md font-bold text-xs uppercase tracking-widest transition-all ${getBetAmount('even') > 0 ? 'bg-[#3D82F6] text-white shadow-[0_0_15px_rgba(59,130,246,0.5)] border-[#3D82F6]' : 'bg-[#151D24] text-gray-400 border border-[#2A3744] hover:bg-[#1E2933]'}`}
+                            className={`relative py-3 rounded-md font-bold text-xs uppercase tracking-widest transition-all border ${getBetAmount('even') > 0 ? 'bg-gradient-to-b from-[#3D82F6] to-[#2563EB] text-white shadow-[0_0_15px_rgba(59,130,246,0.5)] border-[#3D82F6]' : 'bg-[#1A1F26] text-gray-400 border-[#2A3744] shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)] hover:bg-[#252D38]'}`}
                         >
                             Çift
                             {getBetAmount('even') > 0 && <div className="absolute top-1 right-1 bg-white text-black text-[9px] font-black px-1.5 py-0.5 rounded-full">₺{getBetAmount('even')}</div>}
@@ -280,7 +280,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                         <button 
                             onClick={() => handleAddBet('odd')}
                             disabled={isPlaying}
-                            className={`relative py-3 rounded-md font-bold text-xs uppercase tracking-widest transition-all ${getBetAmount('odd') > 0 ? 'bg-[#3D82F6] text-white shadow-[0_0_15px_rgba(59,130,246,0.5)] border-[#3D82F6]' : 'bg-[#151D24] text-gray-400 border border-[#2A3744] hover:bg-[#1E2933]'}`}
+                            className={`relative py-3 rounded-md font-bold text-xs uppercase tracking-widest transition-all border ${getBetAmount('odd') > 0 ? 'bg-gradient-to-b from-[#3D82F6] to-[#2563EB] text-white shadow-[0_0_15px_rgba(59,130,246,0.5)] border-[#3D82F6]' : 'bg-[#1A1F26] text-gray-400 border-[#2A3744] shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)] hover:bg-[#252D38]'}`}
                         >
                             Tek
                             {getBetAmount('odd') > 0 && <div className="absolute top-1 right-1 bg-white text-black text-[9px] font-black px-1.5 py-0.5 rounded-full">₺{getBetAmount('odd')}</div>}
@@ -288,7 +288,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                         <button 
                             onClick={() => handleAddBet('low')}
                             disabled={isPlaying}
-                            className={`relative py-3 rounded-md font-bold text-xs uppercase tracking-widest transition-all ${getBetAmount('low') > 0 ? 'bg-[#3D82F6] text-white shadow-[0_0_15px_rgba(59,130,246,0.5)] border-[#3D82F6]' : 'bg-[#151D24] text-gray-400 border border-[#2A3744] hover:bg-[#1E2933]'}`}
+                            className={`relative py-3 rounded-md font-bold text-xs uppercase tracking-widest transition-all border ${getBetAmount('low') > 0 ? 'bg-gradient-to-b from-[#3D82F6] to-[#2563EB] text-white shadow-[0_0_15px_rgba(59,130,246,0.5)] border-[#3D82F6]' : 'bg-[#1A1F26] text-gray-400 border-[#2A3744] shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)] hover:bg-[#252D38]'}`}
                         >
                             1-18
                             {getBetAmount('low') > 0 && <div className="absolute top-1 right-1 bg-white text-black text-[9px] font-black px-1.5 py-0.5 rounded-full">₺{getBetAmount('low')}</div>}
@@ -296,7 +296,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                         <button 
                             onClick={() => handleAddBet('high')}
                             disabled={isPlaying}
-                            className={`relative py-3 rounded-md font-bold text-xs uppercase tracking-widest transition-all ${getBetAmount('high') > 0 ? 'bg-[#3D82F6] text-white shadow-[0_0_15px_rgba(59,130,246,0.5)] border-[#3D82F6]' : 'bg-[#151D24] text-gray-400 border border-[#2A3744] hover:bg-[#1E2933]'}`}
+                            className={`relative py-3 rounded-md font-bold text-xs uppercase tracking-widest transition-all border ${getBetAmount('high') > 0 ? 'bg-gradient-to-b from-[#3D82F6] to-[#2563EB] text-white shadow-[0_0_15px_rgba(59,130,246,0.5)] border-[#3D82F6]' : 'bg-[#1A1F26] text-gray-400 border-[#2A3744] shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)] hover:bg-[#252D38]'}`}
                         >
                             19-36
                             {getBetAmount('high') > 0 && <div className="absolute top-1 right-1 bg-white text-black text-[9px] font-black px-1.5 py-0.5 rounded-full">₺{getBetAmount('high')}</div>}
@@ -308,7 +308,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                         <button 
                             onClick={() => handleAddBet('1st12')}
                             disabled={isPlaying}
-                            className={`relative py-2 rounded-md font-bold text-xs uppercase tracking-widest transition-all ${getBetAmount('1st12') > 0 ? 'bg-[#3D82F6] text-white shadow-[0_0_15px_rgba(59,130,246,0.5)] border-[#3D82F6]' : 'bg-[#151D24] text-gray-400 border border-[#2A3744] hover:bg-[#1E2933]'}`}
+                            className={`relative py-2 rounded-md font-bold text-xs uppercase tracking-widest transition-all border ${getBetAmount('1st12') > 0 ? 'bg-gradient-to-b from-[#3D82F6] to-[#2563EB] text-white shadow-[0_0_15px_rgba(59,130,246,0.5)] border-[#3D82F6]' : 'bg-[#1A1F26] text-gray-400 border-[#2A3744] shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)] hover:bg-[#252D38]'}`}
                         >
                             1. Düzine
                             {getBetAmount('1st12') > 0 && <div className="absolute top-1 right-1 bg-white text-black text-[9px] font-black px-1.5 py-0.5 rounded-full">₺{getBetAmount('1st12')}</div>}
@@ -316,7 +316,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                         <button 
                             onClick={() => handleAddBet('2nd12')}
                             disabled={isPlaying}
-                            className={`relative py-2 rounded-md font-bold text-xs uppercase tracking-widest transition-all ${getBetAmount('2nd12') > 0 ? 'bg-[#3D82F6] text-white shadow-[0_0_15px_rgba(59,130,246,0.5)] border-[#3D82F6]' : 'bg-[#151D24] text-gray-400 border border-[#2A3744] hover:bg-[#1E2933]'}`}
+                            className={`relative py-2 rounded-md font-bold text-xs uppercase tracking-widest transition-all border ${getBetAmount('2nd12') > 0 ? 'bg-gradient-to-b from-[#3D82F6] to-[#2563EB] text-white shadow-[0_0_15px_rgba(59,130,246,0.5)] border-[#3D82F6]' : 'bg-[#1A1F26] text-gray-400 border-[#2A3744] shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)] hover:bg-[#252D38]'}`}
                         >
                             2. Düzine
                             {getBetAmount('2nd12') > 0 && <div className="absolute top-1 right-1 bg-white text-black text-[9px] font-black px-1.5 py-0.5 rounded-full">₺{getBetAmount('2nd12')}</div>}
@@ -324,7 +324,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                         <button 
                             onClick={() => handleAddBet('3rd12')}
                             disabled={isPlaying}
-                            className={`relative py-2 rounded-md font-bold text-xs uppercase tracking-widest transition-all ${getBetAmount('3rd12') > 0 ? 'bg-[#3D82F6] text-white shadow-[0_0_15px_rgba(59,130,246,0.5)] border-[#3D82F6]' : 'bg-[#151D24] text-gray-400 border border-[#2A3744] hover:bg-[#1E2933]'}`}
+                            className={`relative py-2 rounded-md font-bold text-xs uppercase tracking-widest transition-all border ${getBetAmount('3rd12') > 0 ? 'bg-gradient-to-b from-[#3D82F6] to-[#2563EB] text-white shadow-[0_0_15px_rgba(59,130,246,0.5)] border-[#3D82F6]' : 'bg-[#1A1F26] text-gray-400 border-[#2A3744] shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)] hover:bg-[#252D38]'}`}
                         >
                             3. Düzine
                             {getBetAmount('3rd12') > 0 && <div className="absolute top-1 right-1 bg-white text-black text-[9px] font-black px-1.5 py-0.5 rounded-full">₺{getBetAmount('3rd12')}</div>}
@@ -332,7 +332,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                     </div>
 
                     {/* Specific Number */}
-                    <div className="mt-4 p-3 bg-[#151D24] rounded-md border border-[#2A3744]">
+                    <div className="mt-4 p-3 bg-[#1A1F26] rounded-md border border-[#2A3744] shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)]">
                         <div className="flex items-center justify-between mb-2">
                             <label className="text-xs text-gray-400 font-semibold flex items-center gap-2">
                                 Belirli Sayı (Ödeme: 36x)
@@ -570,7 +570,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                                         {/* Realistic Roulette Turret Base */}
                                         <circle cx="250" cy="250" r="80" fill="url(#metal-ring)" stroke="url(#gold)" strokeWidth="3" filter="url(#inner-shadow)" />
                                         <circle cx="250" cy="250" r="50" fill="url(#metal-hub)" />
-                                        <circle cx="250" cy="250" r="30" fill="#1A212D" stroke="url(#gold)" strokeWidth="2" />
+                                        <circle cx="250" cy="250" r="30" fill="url(#metal-hub)" stroke="url(#gold)" strokeWidth="2" />
                                         
                                         {/* Turret Spindle Arms (Cross) */}
                                         <path d="M 246 170 L 254 170 L 254 330 L 246 330 Z" fill="url(#gold)" filter="drop-shadow(0 5px 5px rgba(0,0,0,0.8))" />
@@ -603,20 +603,24 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
 
                     {/* Result Display */}
                     {resultNumber !== null && !isPlaying && (
-                        <div className="absolute bottom-8 flex flex-col items-center animate-pop-in z-20">
-                            <div className={`w-24 h-24 md:w-28 md:h-28 rounded-full border-[6px] shadow-[0_20px_50px_rgba(0,0,0,0.8),inset_0_0_20px_rgba(0,0,0,0.5)] flex items-center justify-center text-4xl md:text-5xl font-black text-white ${
-                                resultNumber === 0 ? 'bg-gradient-to-b from-[#00E5FF] to-[#0099aa] border-[#0A0D14] text-[#0A0D14] drop-shadow-[0_0_10px_rgba(0,229,255,0.8)]' : isRed(resultNumber) ? 'bg-gradient-to-b from-[#E11D48] to-[#9f1239] border-[#0A0D14]' : 'bg-gradient-to-b from-[#1F2937] to-[#111827] border-[#0A0D14]'
-                            }`}>
-                                {resultNumber}
-                            </div>
-                            
+                        <div className="absolute bottom-6 flex flex-col items-center animate-pop-in z-20">
                             {winAmount !== null && winAmount > 0 ? (
-                                <div className="mt-6 bg-emerald-500/20 backdrop-blur-md text-emerald-400 font-black px-6 md:px-8 py-3 md:py-4 rounded-2xl uppercase tracking-[0.2em] text-sm md:text-base animate-[pulse_2s_ease-in-out_infinite] border border-emerald-500/50 shadow-[0_0_40px_rgba(16,185,129,0.3)] flex items-center gap-3">
+                                <div className="bg-emerald-500/20 backdrop-blur-md text-emerald-400 font-black pr-6 md:pr-8 py-2 md:py-3 rounded-2xl uppercase tracking-[0.1em] text-sm md:text-base animate-[pulse_2s_ease-in-out_infinite] border border-emerald-500/50 shadow-[0_0_40px_rgba(16,185,129,0.3)] flex items-center gap-4">
+                                    <div className={`w-14 h-14 md:w-16 md:h-16 ml-2 rounded-xl shadow-[0_10px_20px_rgba(0,0,0,0.5),inset_0_0_10px_rgba(0,0,0,0.5)] flex items-center justify-center text-2xl font-black text-white ${
+                                        resultNumber === 0 ? 'bg-gradient-to-b from-[#00E5FF] to-[#0099aa] border border-[#0A0D14]' : isRed(resultNumber) ? 'bg-gradient-to-b from-[#E11D48] to-[#9f1239] border border-[#0A0D14]' : 'bg-gradient-to-b from-[#1F2937] to-[#111827] border border-[#0A0D14]'
+                                    }`}>
+                                        {resultNumber}
+                                    </div>
                                     <Trophy className="w-5 h-5 text-emerald-400 drop-shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
-                                    Kazandın +₺{winAmount.toFixed(2)}
+                                    <span>Kazandın +₺{winAmount.toFixed(2)}</span>
                                 </div>
                             ) : (
-                                <div className="mt-6 bg-rose-500/20 backdrop-blur-md text-rose-400 font-black px-6 md:px-8 py-3 md:py-4 rounded-2xl uppercase tracking-[0.2em] text-sm md:text-base border border-rose-500/50 shadow-[0_0_40px_rgba(225,29,72,0.3)] flex items-center gap-3">
+                                <div className="bg-rose-500/20 backdrop-blur-md text-rose-400 font-black pr-6 md:pr-8 py-2 md:py-3 rounded-2xl uppercase tracking-[0.2em] text-sm md:text-base border border-rose-500/50 shadow-[0_0_40px_rgba(225,29,72,0.3)] flex items-center gap-4">
+                                    <div className={`w-14 h-14 md:w-16 md:h-16 ml-2 rounded-xl shadow-[0_10px_20px_rgba(0,0,0,0.5),inset_0_0_10px_rgba(0,0,0,0.5)] flex items-center justify-center text-2xl font-black text-white ${
+                                        resultNumber === 0 ? 'bg-gradient-to-b from-[#00E5FF] to-[#0099aa] border border-[#0A0D14]' : isRed(resultNumber) ? 'bg-gradient-to-b from-[#E11D48] to-[#9f1239] border border-[#0A0D14]' : 'bg-gradient-to-b from-[#1F2937] to-[#111827] border border-[#0A0D14]'
+                                    }`}>
+                                        {resultNumber}
+                                    </div>
                                     <Trash2 className="w-5 h-5 opacity-80" />
                                     Kaybettin
                                 </div>
