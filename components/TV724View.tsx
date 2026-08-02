@@ -1211,8 +1211,8 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
 
                     {/* Feature Banners */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
-                        <div onClick={() => setIsChannelsModalOpen(true)} className="bg-[#12141a] border border-white/5 rounded-xl p-5 md:p-6 flex flex-col justify-center hover:bg-[#1a1d24] transition-colors cursor-pointer relative overflow-hidden group">
-                            <div className="absolute inset-0 bg-gradient-to-r from-[#10b981]/0 via-[#10b981]/5 to-[#10b981]/0 opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <div onClick={() => setIsChannelsModalOpen(!isChannelsModalOpen)} className={`bg-[#12141a] border rounded-xl p-5 md:p-6 flex flex-col justify-center transition-colors cursor-pointer relative overflow-hidden group ${isChannelsModalOpen ? 'border-[#10b981]/50 bg-[#1a1d24]' : 'border-white/5 hover:bg-[#1a1d24]'}`}>
+                            <div className={`absolute inset-0 bg-gradient-to-r from-[#10b981]/0 via-[#10b981]/5 to-[#10b981]/0 transition-opacity ${isChannelsModalOpen ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`} />
                             <h4 className="text-white text-lg md:text-xl font-bold mb-1 relative z-10 flex items-center gap-2">
                                 <Tv className="w-5 h-5 text-[#10b981]" /> Kanallar
                             </h4>
@@ -1228,14 +1228,10 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                         </div>
                     </div>
 
-                    {/* Channels Modal Overlay */}
-                    {isChannelsModalOpen && (
-                        <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-md flex items-center justify-center p-4 sm:p-6" onClick={() => setIsChannelsModalOpen(false)}>
-                            <div 
-                                className="bg-[#0a0c10] border border-[#10b981]/20 rounded-2xl w-full max-w-4xl max-h-[85vh] flex flex-col shadow-[0_0_50px_rgba(16,185,129,0.15)] overflow-hidden" 
-                                onClick={e => e.stopPropagation()}
-                            >
-                                {/* Modal Header & Search */}
+                    {/* Inline Channels Container */}
+                    <div className={`w-full overflow-hidden transition-all duration-500 ease-in-out ${isChannelsModalOpen ? 'max-h-[3000px] opacity-100 mt-2' : 'max-h-0 opacity-0 mt-0 pointer-events-none'}`}>
+                        <div className="bg-[#0a0c10] border border-[#10b981]/20 rounded-2xl w-full flex flex-col shadow-[0_0_50px_rgba(16,185,129,0.05)]">
+                                {/* Header & Search */}
                                 <div className="p-4 md:px-6 md:py-5 border-b border-white/5 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 bg-gradient-to-b from-[#10b981]/10 to-transparent shrink-0">
                                     <div className="flex items-center justify-between md:justify-start gap-4">
                                         <h2 className="text-white text-lg md:text-xl font-black flex items-center gap-2 tracking-wide">
@@ -1273,8 +1269,8 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                                     </div>
                                 </div>
 
-                                {/* Modal Body: Accordion */}
-                                <div className="flex-1 overflow-y-auto custom-scrollbar p-4 md:p-6 flex flex-col gap-3">
+                                {/* Body: Accordion */}
+                                <div className="p-4 md:p-6 flex flex-col gap-3">
                                     {(() => {
                                         const filteredStreamers = streamers.filter(s => !searchQuery || s.name.toLowerCase().includes(searchQuery.toLowerCase()));
                                         
@@ -1374,9 +1370,8 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                                             });
                                     })()}
                                 </div>
-                            </div>
                         </div>
-                    )}
+                    </div>
                     {/* End Modal */}
                 </div>
 
