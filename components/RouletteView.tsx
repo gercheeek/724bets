@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useUser } from '../contexts/UserContext';
-import { ShieldCheck, Target, Trash2 } from 'lucide-react';
+import { ShieldCheck, Target, Trash2, Trophy, Sparkles } from 'lucide-react';
 
 const ROULETTE_NUMBERS = [0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26];
 const RED_NUMBERS = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36];
@@ -488,8 +488,8 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                                             const startAngle = -angleStep / 2;
                                             const endAngle = angleStep / 2;
                                             const isGreen = num === 0;
-                                            const color = isGreen ? '#00E5FF' : (isRed(num) ? '#E11D48' : '#111827');
-                                            const strokeColor = isGreen ? '#00b8cc' : (isRed(num) ? '#be123c' : '#030712');
+                                            const color = isGreen ? 'url(#green-slice)' : (isRed(num) ? 'url(#red-slice)' : 'url(#black-slice)');
+                                            const strokeColor = isGreen ? '#14b8a6' : (isRed(num) ? '#9f1239' : '#1f2937');
 
                                             // Text distance from center
                                             const textRadius = 210;
@@ -537,13 +537,14 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
 
                                         {/* Gradient Overlay for lighting */}
                                         <circle cx="250" cy="250" r="250" fill="url(#metal-ring)" pointerEvents="none" />
+                                        <circle cx="250" cy="250" r="248" fill="none" stroke="url(#gold)" strokeWidth="2" opacity="0.5" pointerEvents="none" />
 
                                         {/* Center Metal Hub covering the pie slices */}
-                                        <circle cx="250" cy="250" r="160" fill="url(#metal-hub)" stroke="#05070A" strokeWidth="4" filter="url(#inner-shadow)" />
+                                        <circle cx="250" cy="250" r="160" fill="url(#metal-hub)" stroke="url(#gold)" strokeWidth="4" filter="url(#inner-shadow)" />
                                         
                                         {/* Decorative Rings */}
-                                        <circle cx="250" cy="250" r="150" fill="none" stroke="rgba(255,255,255,0.03)" strokeWidth="2" />
-                                        <circle cx="250" cy="250" r="110" fill="none" stroke="rgba(0,0,0,0.5)" strokeWidth="6" />
+                                        <circle cx="250" cy="250" r="150" fill="none" stroke="url(#gold)" strokeWidth="2" opacity="0.3" />
+                                        <circle cx="250" cy="250" r="110" fill="none" stroke="rgba(0,0,0,0.8)" strokeWidth="8" />
                                         
                                         {/* Inner Hub Ring */}
                                         <circle cx="250" cy="250" r="80" fill="#0A0D14" stroke="#1E2738" strokeWidth="4" filter="url(#inner-shadow)" />
@@ -573,17 +574,18 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                             </div>
                         </div>
 
-                        {/* Holographic Laser Pointer (SVG) */}
-                        <div className="absolute -top-10 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center pointer-events-none">
-                            <svg width="60" height="100" viewBox="0 0 60 100" style={{ filter: 'drop-shadow(0 0 10px rgba(0,229,255,0.8))' }}>
-                                {/* Base */}
-                                <rect x="15" y="0" width="30" height="12" rx="6" fill="#0A0D14" stroke="#00E5FF" strokeWidth="2" />
-                                {/* Emitting Diode */}
-                                <circle cx="30" cy="6" r="3" fill="#00E5FF" />
-                                {/* Laser Beam */}
-                                <path d="M 28 12 L 32 12 L 30 80 Z" fill="#00E5FF" opacity="0.9" />
-                                <path d="M 26 12 L 34 12 L 30 85 Z" fill="#00E5FF" opacity="0.5" />
-                                <path d="M 22 12 L 38 12 L 30 95 Z" fill="#00E5FF" opacity="0.2" />
+                        {/* Premium Golden Pointer */}
+                        <div className="absolute -top-6 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center pointer-events-none drop-shadow-[0_10px_10px_rgba(0,0,0,0.8)]">
+                            <svg width="40" height="60" viewBox="0 0 40 60">
+                                <defs>
+                                    <linearGradient id="gold-pointer" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" stopColor="#FDE047" />
+                                        <stop offset="50%" stopColor="#EAB308" />
+                                        <stop offset="100%" stopColor="#713F12" />
+                                    </linearGradient>
+                                </defs>
+                                <path d="M 10 0 L 30 0 L 35 30 L 20 55 L 5 30 Z" fill="url(#gold-pointer)" stroke="#fff" strokeWidth="1.5" />
+                                <circle cx="20" cy="15" r="5" fill="#ffffff" style={{ filter: 'drop-shadow(0 0 5px #fff)' }} />
                             </svg>
                         </div>
                     </div>
@@ -598,11 +600,13 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                             </div>
                             
                             {winAmount !== null && winAmount > 0 ? (
-                                <div className="mt-4 bg-[#00E5FF] text-[#0A0D14] font-black px-6 md:px-8 py-2 md:py-3 rounded-full uppercase tracking-[0.2em] text-xs md:text-sm animate-[pulse_2s_ease-in-out_infinite] border-2 border-white shadow-[0_0_30px_rgba(0,229,255,0.6)]">
+                                <div className="mt-6 bg-emerald-500/20 backdrop-blur-md text-emerald-400 font-black px-6 md:px-8 py-3 md:py-4 rounded-2xl uppercase tracking-[0.2em] text-sm md:text-base animate-[pulse_2s_ease-in-out_infinite] border border-emerald-500/50 shadow-[0_0_40px_rgba(16,185,129,0.3)] flex items-center gap-3">
+                                    <Trophy className="w-5 h-5 text-emerald-400 drop-shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
                                     Kazandın +₺{winAmount.toFixed(2)}
                                 </div>
                             ) : (
-                                <div className="mt-4 bg-rose-500/90 text-white font-black px-6 md:px-8 py-2 md:py-3 rounded-full uppercase tracking-[0.2em] text-xs md:text-sm border border-rose-400 shadow-[0_0_20px_rgba(225,29,72,0.4)]">
+                                <div className="mt-6 bg-rose-500/20 backdrop-blur-md text-rose-400 font-black px-6 md:px-8 py-3 md:py-4 rounded-2xl uppercase tracking-[0.2em] text-sm md:text-base border border-rose-500/50 shadow-[0_0_40px_rgba(225,29,72,0.3)] flex items-center gap-3">
+                                    <Trash2 className="w-5 h-5 opacity-80" />
                                     Kaybettin
                                 </div>
                             )}
