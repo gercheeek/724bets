@@ -1134,11 +1134,11 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                 </div>
 
                 {/* Main Column Layout */}
-                <div className="mx-auto w-full max-w-4xl" style={{ display: 'flex', flexDirection: 'column', gap: '24px', alignItems: 'stretch' }}>
+                <div className="mx-auto w-full max-w-5xl" style={{ display: 'flex', flexDirection: 'column', gap: '24px', alignItems: 'stretch' }}>
                     
                     {/* TOP: Video Player */}
-                    <div style={{ width: '100%', position: 'relative' }}>
-                        <div ref={playerContainerRef} style={{ width: '100%', aspectRatio: isMobile ? '16/9' : '21/9', maxHeight: '45vh', background: '#000', borderRadius: '12px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.05)', position: 'relative', boxShadow: '0 20px 50px rgba(0,0,0,0.5)' }}>
+                    <div className="mx-auto" style={{ width: '100%', maxWidth: '768px', position: 'relative' }}>
+                        <div ref={playerContainerRef} style={{ width: '100%', aspectRatio: isMobile ? '16/9' : '21/9', maxHeight: '40vh', background: '#000', borderRadius: '12px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.05)', position: 'relative', boxShadow: '0 20px 50px rgba(0,0,0,0.5)' }}>
                             
                             {!activeChannel ? (
                                 <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: 'radial-gradient(circle at center, #0a110d 0%, #000 100%)' }}>
