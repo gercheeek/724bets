@@ -200,7 +200,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                 setSlideOffset(stopPosition);
             }, 50);
 
-            // Wait for 5s animation to finish
+            // Wait for 7s animation to finish
             setTimeout(() => {
                 setGameState('result');
                 setWinningColor(winResult);
@@ -229,7 +229,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                     setSlideOffset(startPosition);
                 }, 4000);
                 
-            }, 5050);
+            }, 7050);
             
         } catch (e: any) {
             console.error("Game error:", e);
@@ -303,7 +303,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                             className="absolute top-0 left-0 h-full flex items-center"
                             style={{
                                 transform: `translateX(${slideOffset}px)`,
-                                transition: isSpinning ? 'transform 5s cubic-bezier(0.1, 0.9, 0.2, 1)' : 'none',
+                                transition: isSpinning ? 'transform 7s cubic-bezier(0.1, 0.9, 0.2, 1)' : 'none',
                                 willChange: 'transform'
                             }}
                         >
