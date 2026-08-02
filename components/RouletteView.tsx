@@ -463,7 +463,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                     <div className="absolute inset-y-0 right-0 w-40 bg-gradient-to-l from-[#0a0c10] to-transparent z-10 pointer-events-none"></div>
                     <div className="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-[2px] bg-white z-30 shadow-[0_0_15px_white]"></div>
 
-                    <div className="absolute left-1/2 top-1/2 -translate-y-1/2 h-[120px] w-[5000px] pointer-events-none">
+                    <div className="absolute left-1/2 top-1/2 -translate-y-1/2 h-[120px] w-[10000px] pointer-events-none">
                         <div 
                             className="absolute top-0 left-0 h-full flex items-center"
                             style={{
@@ -764,7 +764,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                                 </div>
                             </div>
                             
-                            <div className="flex-1 overflow-y-auto pr-1 space-y-1 max-h-[140px] custom-scrollbar">
+                            <div className="flex-1 overflow-y-auto pr-1 space-y-1 h-[140px] custom-scrollbar">
                                 {/* User Bet */}
                                 {getBetAmount('red') > 0 && (
                                     <div className="flex justify-between items-center py-1">
@@ -816,7 +816,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                                 </div>
                             </div>
                             
-                            <div className="flex-1 overflow-y-auto pr-1 space-y-1 max-h-[140px] custom-scrollbar">
+                            <div className="flex-1 overflow-y-auto pr-1 space-y-1 h-[140px] custom-scrollbar">
                                 {/* User Bet */}
                                 {getBetAmount('green') > 0 && (
                                     <div className="flex justify-between items-center py-1">
@@ -868,7 +868,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                                 </div>
                             </div>
                             
-                            <div className="flex-1 overflow-y-auto pr-1 space-y-1 max-h-[140px] custom-scrollbar">
+                            <div className="flex-1 overflow-y-auto pr-1 space-y-1 h-[140px] custom-scrollbar">
                                 {/* User Bet */}
                                 {getBetAmount('black') > 0 && (
                                     <div className="flex justify-between items-center py-1">
