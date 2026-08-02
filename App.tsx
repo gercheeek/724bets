@@ -2288,7 +2288,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
         } as React.CSSProperties}
       >
 
-        <div className={`orchestrator-content ${isContentReady ? 'content-ready' : ''}`} style={{ visibility: appStage === 'ready' ? 'visible' : 'hidden', height: appStage === 'ready' ? 'auto' : '100dvh' }}>
+        <div className={`orchestrator-content flex-1 flex flex-col ${isContentReady ? 'content-ready' : ''}`} style={{ visibility: appStage === 'ready' ? 'visible' : 'hidden', height: appStage === 'ready' ? '100%' : '100dvh' }}>
 
           {view === 'home' && (
           <div className="animate-fade-in w-full h-full min-h-screen">
@@ -2370,8 +2370,9 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
 
         {/* --- ORIGINAL GAMES RENDERED IN MAIN LAYOUT --- */}
         {['blackjack-pro', 'limbo', 'chicken-run', 'plinko', 'dice', 'mines', 'keno', 'war', 'hilo', 'roulette', 'crash-turbo', 'turbo-mines', 'hacksaw', 'redtiger', 'crash'].includes(view) && (
-          <div className="animate-fade-in w-full h-full flex flex-col relative z-[50] rounded-2xl overflow-hidden shadow-2xl bg-[#0A0D14]">
-            <div className="flex-1 relative overflow-hidden">
+          <div className="animate-fade-in w-full h-full flex flex-col relative z-[50] bg-[#0A0D14]">
+            <div className="flex-1 relative overflow-hidden w-full">
+              <div className="absolute inset-0 w-full h-full overflow-hidden">
                {view === 'blackjack-pro' && (
                  <BlackjackProView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
                )}
@@ -2417,6 +2418,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
                {view === 'redtiger' && (
                  <RedTigerSlotView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
                )}
+              </div>
             </div>
             
             <OriginalsBottomBar 
