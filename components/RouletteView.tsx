@@ -29,6 +29,8 @@ const ASSETS = {
     brickGrey: 'https://gamdom.com/build/brick_grey.613ecdb6fc.500.webp',
     brickRed: 'https://gamdom.com/build/brick_red.c0aaf93b01.500.webp',
     tanzanite: 'https://gamdom.com/static/img/tanzanite.svg',
+    jackpotIcon: 'https://gamdom.com/static/img/jackpot-icon.png',
+    amountPlaceholder: 'https://gamdom.com/build/amount_placeholder.c7bcbdbbf5.500.webp',
 };
 
 const FAKE_NAMES = ['tenshi 13', 'Hidden user', 'PrimeMinister', 'Alex99', 'CryptoKing', 'LuckyGuy', 'Anon', 'GamerX', 'BetMaster', 'Whale99'];
@@ -85,6 +87,9 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
     const [slideOffset, setSlideOffset] = useState<number>(-550);
     const [winningColor, setWinningColor] = useState<BetColor | null>(null);
     const [winAmount, setWinAmount] = useState<number | null>(null);
+    
+    // Jackpot State
+    const [jackpot, setJackpot] = useState<number>(1045.67);
 
     const [history, setHistory] = useState<BetColor[]>(INITIAL_HISTORY);
 
@@ -120,6 +125,11 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                 const randomAmount = randomColor === 'green' ? Number((Math.random() * 5).toFixed(2)) : Number((Math.random() * 50 + 1).toFixed(2));
                 
                 setFakeBets(prev => [{ id: Math.random().toString(), name: randomName, amount: randomAmount, color: randomColor }, ...prev].slice(0, 50));
+            }
+            
+            // Increment Jackpot slowly
+            if (Math.random() > 0.8) {
+                setJackpot(prev => prev + (Math.random() * 0.5));
             }
         }, 600); // Check every 600ms
 
@@ -292,11 +302,24 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
             <div className="flex-1 flex flex-col w-full max-w-6xl mx-auto p-4 md:p-8">
                 
                 {/* ── HISTORY & STATS BAR ── */}
-                <div className="w-full flex justify-between items-center mb-6">
-                    {/* Left: Chest / Bonus */}
-                    <div className="flex items-center gap-2 bg-[#171a21] border border-white/10 px-3 py-1.5 rounded-full shadow-lg">
-                        <span className="text-xl">🎁</span>
-                        <span className="font-bold text-sm text-white">$5,763.43</span>
+                <div className="w-full flex justify-between items-center mb-6 pl-4">
+                    {/* Left: Jackpot Chest */}
+                    <div className="relative flex items-center h-10 min-w-[140px] cursor-pointer hover:brightness-110 transition-all group">
+                        {/* Background tablet */}
+                        <div 
+                            className="absolute right-0 h-[40px] w-full rounded-lg shadow-lg"
+                            style={{ backgroundImage: `url(${ASSETS.amountPlaceholder})`, backgroundSize: '100% 100%', backgroundPosition: 'center' }}
+                        ></div>
+                        {/* Text */}
+                        <div className="relative z-10 w-full text-center pl-6 pr-2 font-black text-white text-[15px] drop-shadow-md">
+                            ${jackpot.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+                        </div>
+                        {/* Chest overlapping on the left */}
+                        <img 
+                            src={ASSETS.jackpotIcon} 
+                            alt="Jackpot"
+                            className="absolute left-[-20px] top-1/2 -translate-y-1/2 h-14 z-20 drop-shadow-[0_5px_15px_rgba(0,0,0,0.5)] group-hover:scale-110 transition-transform" 
+                        />
                     </div>
                     
                     {/* Center: History Hexagons */}
