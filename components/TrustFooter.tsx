@@ -15,17 +15,7 @@ export const TrustFooter = () => {
           <span className="text-white font-black tracking-widest text-[10px]">GAMECHECK</span>
         </div>
 
-        {/* TANZANITE CERTIFIED */}
-        <div className="flex items-center bg-[#13171e] rounded border border-[#ffb800]/20 px-2 py-1 h-8">
-          <div className="relative w-5 h-5 flex items-center justify-center mr-2">
-            <div className="absolute inset-0 bg-[#ffb800] rotate-45 rounded-[3px] opacity-20"></div>
-            <Zap className="w-3 h-3 text-[#ffb800] z-10" fill="currentColor" />
-          </div>
-          <div className="flex flex-col justify-center">
-            <span className="text-white font-black text-[9px] leading-none mb-[2px]">TANZANITE</span>
-            <span className="text-white/60 font-bold text-[8px] leading-none">CERTIFIED</span>
-          </div>
-        </div>
+
 
         {/* Trustpilot */}
         <div className="flex items-center gap-1.5 ml-2 opacity-50 hover:opacity-100 transition-opacity cursor-pointer">
