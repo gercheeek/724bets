@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useUser } from '../contexts/UserContext';
-import { Coins, User } from 'lucide-react';
+import { Coins, User, ChevronDown, X } from 'lucide-react';
 
 type BetColor = 'red' | 'green' | 'black';
 type GameState = 'betting' | 'spinning' | 'result';
@@ -41,7 +41,6 @@ interface BrickData {
     id: string;
 }
 
-// Generate an alternating reel according to Gamdom pattern
 const generateReel = (): BrickData[] => {
     const reel: BrickData[] = [];
     let redCounter = 1;
@@ -69,7 +68,6 @@ const generateReel = (): BrickData[] => {
     return reel;
 };
 
-// Mock history
 const INITIAL_HISTORY: BetColor[] = ['black', 'red', 'black', 'black', 'black', 'red', 'red', 'black', 'red', 'black'];
 
 export default function RouletteView({ siteUser, onAuthRequired }: any) {
@@ -78,9 +76,12 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
     const [placedBets, setPlacedBets] = useState<PlacedBet[]>([]);
     const [fakeBets, setFakeBets] = useState<FakeBet[]>([]);
     
+    // Auto Bet UI State
+    const [isAutoBetOpen, setIsAutoBetOpen] = useState(false);
+    
     // Global Loop State
     const [gameState, setGameState] = useState<GameState>('betting');
-    const [timeLeft, setTimeLeft] = useState<number>(15000); // 15s betting phase
+    const [timeLeft, setTimeLeft] = useState<number>(15000);
     const [isSpinning, setIsSpinning] = useState(false);
     
     const [reel, setReel] = useState<BrickData[]>(generateReel());
@@ -88,9 +89,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
     const [winningColor, setWinningColor] = useState<BetColor | null>(null);
     const [winAmount, setWinAmount] = useState<number | null>(null);
     
-    // Jackpot State
     const [jackpot, setJackpot] = useState<number>(1045.67);
-
     const [history, setHistory] = useState<BetColor[]>(INITIAL_HISTORY);
 
     const totalBetAmount = placedBets.reduce((sum, bet) => sum + bet.amount, 0);
@@ -113,13 +112,13 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
         return () => clearInterval(interval);
     }, [gameState]);
 
-    // -- FAKE PLAYERS LOOP --
+    // -- FAKE PLAYERS & JACKPOT LOOP --
     useEffect(() => {
         if (gameState !== 'betting') return;
         
         const fakeBetInterval = setInterval(() => {
             if (Math.random() > 0.3) {
-                const colors: BetColor[] = ['red', 'black', 'green', 'red', 'black']; // Weighted
+                const colors: BetColor[] = ['red', 'black', 'green', 'red', 'black'];
                 const randomColor = colors[Math.floor(Math.random() * colors.length)];
                 const randomName = FAKE_NAMES[Math.floor(Math.random() * FAKE_NAMES.length)];
                 const randomAmount = randomColor === 'green' ? Number((Math.random() * 5).toFixed(2)) : Number((Math.random() * 50 + 1).toFixed(2));
@@ -127,11 +126,10 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                 setFakeBets(prev => [{ id: Math.random().toString(), name: randomName, amount: randomAmount, color: randomColor }, ...prev].slice(0, 50));
             }
             
-            // Increment Jackpot slowly
             if (Math.random() > 0.8) {
                 setJackpot(prev => prev + (Math.random() * 0.5));
             }
-        }, 600); // Check every 600ms
+        }, 600);
 
         return () => clearInterval(fakeBetInterval);
     }, [gameState]);
@@ -244,22 +242,18 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
             const stopPosition = - (targetIndex * itemWidth) - (itemWidth / 2) + randomOffset;
             const startPosition = - (startIndex * itemWidth) - (itemWidth / 2);
             
-            // Reset to start instantly
             setIsSpinning(false);
             setSlideOffset(startPosition);
             
             setTimeout(() => {
-                // Spin to target
                 setIsSpinning(true);
                 setSlideOffset(stopPosition);
             }, 50);
 
-            // Wait for 7s animation to finish
             setTimeout(() => {
                 setGameState('result');
                 setWinningColor(winResult);
                 
-                // Add to history
                 setHistory(prev => {
                     const newHistory = [...prev, winResult];
                     if (newHistory.length > 10) newHistory.shift();
@@ -273,13 +267,11 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                     }
                 }
 
-                // Show result for 4 seconds, then restart
                 setTimeout(() => {
                     setGameState('betting');
                     setTimeLeft(15000);
                     setPlacedBets([]);
-                    setFakeBets([]); // Clear fake bets for new round
-                    // Silently reset the slider back to start
+                    setFakeBets([]);
                     setIsSpinning(false);
                     setSlideOffset(startPosition);
                 }, 4000);
@@ -288,7 +280,6 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
             
         } catch (e: any) {
             console.error("Game error:", e);
-            // If error, just restart the loop safely
             setGameState('betting');
             setTimeLeft(15000);
             setPlacedBets([]);
@@ -299,22 +290,19 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
     return (
         <div className="flex flex-col w-full h-full bg-[#111419] text-white font-sans overflow-y-auto">
             
-            <div className="flex-1 flex flex-col w-full max-w-6xl mx-auto p-4 md:p-8">
+            <div className="flex-1 flex flex-col w-full max-w-7xl mx-auto p-4 md:p-8">
                 
                 {/* ── HISTORY & STATS BAR ── */}
                 <div className="w-full flex justify-between items-center mb-6 pl-4">
                     {/* Left: Jackpot Chest */}
                     <div className="relative flex items-center h-10 min-w-[140px] cursor-pointer hover:brightness-110 transition-all group">
-                        {/* Background tablet */}
                         <div 
                             className="absolute right-0 h-[40px] w-full rounded-lg shadow-lg"
                             style={{ backgroundImage: `url(${ASSETS.amountPlaceholder})`, backgroundSize: '100% 100%', backgroundPosition: 'center' }}
                         ></div>
-                        {/* Text */}
                         <div className="relative z-10 w-full text-center pl-6 pr-2 font-black text-white text-[15px] drop-shadow-md">
                             ${jackpot.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
                         </div>
-                        {/* Chest overlapping on the left */}
                         <img 
                             src={ASSETS.jackpotIcon} 
                             alt="Jackpot"
@@ -343,14 +331,10 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                 {/* ── REEL CONTAINER ── */}
                 <div className="w-full relative h-[180px] bg-[#0a0c10] rounded-xl overflow-hidden border border-white/5 shadow-[0_15px_40px_rgba(0,0,0,0.6)] mb-4 flex items-center justify-center">
                     
-                    {/* Dark gradient edges */}
                     <div className="absolute inset-y-0 left-0 w-40 bg-gradient-to-r from-[#0a0c10] to-transparent z-10 pointer-events-none"></div>
                     <div className="absolute inset-y-0 right-0 w-40 bg-gradient-to-l from-[#0a0c10] to-transparent z-10 pointer-events-none"></div>
-
-                    {/* The Center Line indicator */}
                     <div className="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-[2px] bg-white z-30 shadow-[0_0_15px_white]"></div>
 
-                    {/* The sliding track */}
                     <div className="absolute left-1/2 top-1/2 -translate-y-1/2 h-[120px] w-[5000px] pointer-events-none">
                         <div 
                             className="absolute top-0 left-0 h-full flex items-center"
@@ -378,7 +362,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                     </div>
                 </div>
 
-                {/* ── PROGRESS BAR (Gamdom style) ── */}
+                {/* ── PROGRESS BAR ── */}
                 <div className="w-full h-6 flex items-center justify-center mb-10 relative">
                     <div className="w-full h-1 bg-[#222730] rounded-full overflow-hidden relative">
                         {gameState === 'betting' ? (
@@ -390,7 +374,6 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                             <div className="h-full bg-[#222730]"></div>
                         )}
                     </div>
-                    {/* Floating pill in center */}
                     <div className="absolute bg-[#2a303c] border border-white/10 px-6 py-1.5 rounded-full shadow-lg text-[10px] font-black text-gray-300 tracking-wider">
                         {gameState === 'betting' && `${(timeLeft / 1000).toFixed(2)} SANİYE`}
                         {gameState === 'spinning' && `DÖNÜYOR`}
@@ -399,7 +382,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                 </div>
 
                 {/* ── BET CONTROLS ── */}
-                <div className={`w-full mb-8 flex flex-col items-center transition-opacity duration-300 ${gameState !== 'betting' ? 'opacity-40 pointer-events-none' : ''}`}>
+                <div className={`w-full mb-6 flex flex-col items-center transition-opacity duration-300 ${gameState !== 'betting' ? 'opacity-40 pointer-events-none' : ''}`}>
                     <div className="flex flex-wrap items-center gap-3 bg-[#171a21] p-3 rounded-xl border border-white/5 w-full shadow-xl">
                         
                         <div className="flex-1 flex bg-[#0f1215] rounded-lg border border-white/10 overflow-hidden min-w-[200px]">
@@ -424,15 +407,164 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                                 const bal = isFunMode ? demoBalance : (siteUser?.balance || 0);
                                 setBetAmount(Math.min(bal, MAX_BET));
                             }}>Max</button>
-                            <button className="px-4 py-3 text-xs font-bold text-emerald-400 hover:text-emerald-300 bg-emerald-500/10 rounded-lg transition-colors border border-emerald-500/20 ml-2">
-                                + Otomatik bahis
+                            <button 
+                                className={`px-4 py-3 text-xs font-bold rounded-lg transition-colors border ml-2 flex items-center gap-2 ${isAutoBetOpen ? 'text-gray-300 bg-[#222730] border-white/10 hover:bg-white/10' : 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20 hover:text-emerald-300'}`}
+                                onClick={() => setIsAutoBetOpen(!isAutoBetOpen)}
+                            >
+                                <span>{isAutoBetOpen ? '-' : '+'}</span>
+                                Otomatik bahis
                             </button>
                         </div>
                     </div>
                 </div>
 
+                {/* ── AUTO BET PANEL ── */}
+                {isAutoBetOpen && (
+                    <div className="w-full flex flex-col md:flex-row gap-6 mb-8 animate-pop-in">
+                        
+                        {/* Section 1: Otomatik Rulet Bahsi */}
+                        <div className="flex-1 bg-[#171a21] rounded-xl border border-white/5 p-5 shadow-lg flex flex-col">
+                            <div className="flex justify-between items-center mb-6">
+                                <h3 className="font-bold text-sm text-white">Otomatik Rulet Bahsi</h3>
+                                <span className="text-[10px] font-black text-amber-500 bg-amber-500/10 px-2 py-1 rounded-md">AKTİF DEĞİL</span>
+                            </div>
+                            
+                            <div className="flex gap-2 mb-4">
+                                <div className="flex-1 flex bg-[#0f1215] rounded-lg border border-white/10 overflow-hidden">
+                                    <div className="px-3 flex items-center justify-center bg-white/5"><img src={ASSETS.tanzanite} alt="$" className="h-3" /></div>
+                                    <input type="text" value="1.00" readOnly className="flex-1 bg-transparent text-white font-bold text-sm py-2 px-2 outline-none" />
+                                </div>
+                                <button className="px-4 py-2 text-xs font-bold text-gray-400 hover:text-white bg-[#222730] rounded-lg border border-white/5">Temizle</button>
+                            </div>
+
+                            <div className="flex flex-wrap gap-3 mb-6">
+                                <div className="flex items-center gap-2 bg-[#0f1215] px-3 py-2 rounded-lg border border-white/5 cursor-pointer hover:border-white/20">
+                                    <div className="w-3 h-3 rounded-sm bg-red-500"></div>
+                                    <span className="text-xs font-medium text-gray-300">Kırmızı</span>
+                                    <div className="ml-2 w-7 h-4 bg-emerald-500 rounded-full relative">
+                                        <div className="absolute right-0.5 top-0.5 w-3 h-3 bg-white rounded-full"></div>
+                                    </div>
+                                </div>
+                                <div className="flex items-center gap-2 bg-[#0f1215] px-3 py-2 rounded-lg border border-white/5 cursor-pointer hover:border-white/20">
+                                    <div className="w-3 h-3 rounded-sm bg-green-500"></div>
+                                    <span className="text-xs font-medium text-gray-300">Yeşil</span>
+                                    <div className="ml-2 w-7 h-4 bg-gray-600 rounded-full relative">
+                                        <div className="absolute left-0.5 top-0.5 w-3 h-3 bg-white rounded-full"></div>
+                                    </div>
+                                </div>
+                                <div className="flex items-center gap-2 bg-[#0f1215] px-3 py-2 rounded-lg border border-white/5 cursor-pointer hover:border-white/20">
+                                    <div className="w-3 h-3 rounded-sm bg-gray-500"></div>
+                                    <span className="text-xs font-medium text-gray-300">Siyah</span>
+                                    <div className="ml-2 w-7 h-4 bg-emerald-500 rounded-full relative">
+                                        <div className="absolute right-0.5 top-0.5 w-3 h-3 bg-white rounded-full"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="space-y-4 flex-1">
+                                <div>
+                                    <label className="text-xs text-gray-500 font-bold mb-1 block">Kazanınca</label>
+                                    <div className="bg-[#0f1215] rounded-lg border border-white/5 p-2.5 flex justify-between items-center cursor-pointer">
+                                        <span className="text-xs font-bold text-gray-300">Return to Base</span>
+                                        <ChevronDown size={14} className="text-gray-500" />
+                                    </div>
+                                </div>
+                                <div>
+                                    <label className="text-xs text-gray-500 font-bold mb-1 block">Kaybedince</label>
+                                    <div className="bg-[#0f1215] rounded-lg border border-white/5 p-2.5 flex justify-between items-center cursor-pointer">
+                                        <span className="text-xs font-bold text-gray-300">Return to Base</span>
+                                        <ChevronDown size={14} className="text-gray-500" />
+                                    </div>
+                                </div>
+                                <div className="flex gap-4">
+                                    <div className="flex-1">
+                                        <label className="text-[10px] text-gray-500 font-bold mb-1 block">Bakiye altındaysa dur</label>
+                                        <div className="flex bg-[#0f1215] rounded-lg border border-white/5 overflow-hidden">
+                                            <div className="px-2 flex items-center justify-center bg-white/5"><img src={ASSETS.tanzanite} alt="$" className="h-3" /></div>
+                                            <input type="text" value="1.00" readOnly className="flex-1 bg-transparent text-white font-bold text-xs py-2 px-2 outline-none" />
+                                        </div>
+                                    </div>
+                                    <div className="flex-1">
+                                        <label className="text-[10px] text-gray-500 font-bold mb-1 block">Bakiye üstündeyse dur</label>
+                                        <div className="flex bg-[#0f1215] rounded-lg border border-white/5 overflow-hidden">
+                                            <div className="px-2 flex items-center justify-center bg-white/5"><img src={ASSETS.tanzanite} alt="$" className="h-3" /></div>
+                                            <input type="text" value="1.00" readOnly className="flex-1 bg-transparent text-white font-bold text-xs py-2 px-2 outline-none" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Section 2: İleri seviye */}
+                        <div className="flex-1 bg-[#171a21] rounded-xl border border-white/5 p-5 shadow-lg flex flex-col">
+                            <h3 className="font-bold text-sm text-white mb-6">İleri seviye</h3>
+                            
+                            <div className="flex justify-between items-center bg-[#0f1215] px-4 py-3 rounded-lg border border-white/5 mb-4">
+                                <span className="text-xs font-bold text-gray-300">Sadece Renk Bahsi</span>
+                                <div className="w-8 h-4.5 bg-emerald-500 rounded-full relative cursor-pointer">
+                                    <div className="absolute right-0.5 top-0.5 w-3.5 h-3.5 bg-white rounded-full shadow"></div>
+                                </div>
+                            </div>
+
+                            <div className="space-y-4 mb-6">
+                                <div>
+                                    <label className="text-[10px] text-gray-500 font-bold mb-1 block">Ne zaman</label>
+                                    <div className="bg-[#0f1215] rounded-lg border border-white/5 p-2.5 flex justify-between items-center cursor-pointer">
+                                        <span className="text-xs font-bold text-gray-300">Gelmedi</span>
+                                        <ChevronDown size={14} className="text-gray-500" />
+                                    </div>
+                                </div>
+                                <div>
+                                    <label className="text-[10px] text-gray-500 font-bold mb-1 block">İçin</label>
+                                    <div className="bg-[#0f1215] rounded-lg border border-white/5 p-2.5 flex justify-between items-center cursor-pointer">
+                                        <span className="text-xs font-bold text-gray-300">3</span>
+                                        <span className="text-[10px] text-gray-500">Arka arkaya oyunlar</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button className="bg-emerald-500 hover:bg-emerald-400 text-black font-black text-xs py-3 px-6 rounded-lg self-start transition-colors shadow-lg shadow-emerald-500/20">
+                                Otomatik Bahsi Başlat
+                            </button>
+                        </div>
+
+                        {/* Section 3: Green Hunt */}
+                        <div className="flex-1 bg-[#171a21] rounded-xl border border-white/5 p-5 shadow-lg flex flex-col">
+                            <div className="flex justify-between items-center mb-6">
+                                <h3 className="font-bold text-sm text-white">Green Hunt</h3>
+                                <span className="text-[10px] font-black text-amber-500 bg-amber-500/10 px-2 py-1 rounded-md">AKTİF DEĞİL</span>
+                            </div>
+
+                            <div className="space-y-4 mb-6">
+                                <div>
+                                    <label className="text-[10px] text-gray-500 font-bold mb-1 block">Otomatik Bahis</label>
+                                    <div className="bg-[#0f1215] rounded-lg border border-white/5 p-2.5">
+                                        <span className="text-xs font-bold text-gray-300">100.00</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label className="text-[10px] text-gray-500 font-bold mb-1 block">Ne zaman</label>
+                                    <div className="bg-[#0f1215] rounded-lg border border-white/5 p-2.5 flex justify-between items-center cursor-pointer">
+                                        <span className="text-xs font-bold text-gray-300">Bahsinizin yüzdesi</span>
+                                        <ChevronDown size={14} className="text-gray-500" />
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <p className="text-[11px] text-gray-500 font-medium mb-6 leading-relaxed">
+                                Kırmızı veya Siyah üzerine bahis oynadığınızda (Otomatik veya Manuel) Yeşil üzerine.
+                            </p>
+
+                            <button className="bg-emerald-500 hover:bg-emerald-400 text-black font-black text-xs py-3 px-6 rounded-lg self-start transition-colors shadow-lg shadow-emerald-500/20">
+                                Green Hunt'ı Başlat
+                            </button>
+                        </div>
+
+                    </div>
+                )}
+
                 {/* ── BETTING BUTTONS & LISTS ── */}
-                <div className="w-full flex flex-col md:flex-row gap-6 mb-12 items-stretch max-w-6xl mx-auto">
+                <div className="w-full flex flex-col md:flex-row gap-6 mb-12 items-stretch">
                     
                     {/* RED SECTION */}
                     <div className="flex-1 flex flex-col">
@@ -622,6 +754,14 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                 }
                 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
                     background: rgba(255, 255, 255, 0.2);
+                }
+                
+                @keyframes pop-in {
+                    0% { transform: scale(0.9); opacity: 0; }
+                    100% { transform: scale(1); opacity: 1; }
+                }
+                .animate-pop-in {
+                    animation: pop-in 0.2s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
                 }
             `}} />
         </div>
