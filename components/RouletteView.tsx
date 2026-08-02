@@ -527,7 +527,11 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                                                         fontSize="18"
                                                         fontWeight="900"
                                                         letterSpacing="-1"
-                                                        style={{ textShadow: isGreen ? '0 0 8px rgba(0,0,0,0.3)' : '0 2px 4px rgba(0,0,0,0.8)' }}
+                                                        style={{ 
+                                                            textShadow: isGreen ? '0 0 8px rgba(0,0,0,0.3)' : '0 2px 4px rgba(0,0,0,0.8)',
+                                                            opacity: isFastSpinning ? 0 : 1,
+                                                            transition: 'opacity 0.5s ease-in-out'
+                                                        }}
                                                     >
                                                         {num}
                                                     </text>
@@ -546,11 +550,18 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                                         <circle cx="250" cy="250" r="150" fill="none" stroke="url(#gold)" strokeWidth="2" opacity="0.3" />
                                         <circle cx="250" cy="250" r="110" fill="none" stroke="rgba(0,0,0,0.8)" strokeWidth="8" />
                                         
-                                        {/* Inner Hub Ring */}
-                                        <circle cx="250" cy="250" r="80" fill="#0A0D14" stroke="#1E2738" strokeWidth="4" filter="url(#inner-shadow)" />
+                                        {/* Realistic Roulette Turret Base */}
+                                        <circle cx="250" cy="250" r="80" fill="url(#metal-ring)" stroke="url(#gold)" strokeWidth="3" filter="url(#inner-shadow)" />
+                                        <circle cx="250" cy="250" r="50" fill="url(#metal-hub)" />
+                                        <circle cx="250" cy="250" r="30" fill="#1A212D" stroke="url(#gold)" strokeWidth="2" />
                                         
-                                        {/* Tiny Center Dot */}
-                                        <circle cx="250" cy="250" r="15" fill="#00E5FF" opacity="0.8" filter="url(#neon-glow)" />
+                                        {/* Turret Spindle Arms (Cross) */}
+                                        <path d="M 246 170 L 254 170 L 254 330 L 246 330 Z" fill="url(#gold)" filter="drop-shadow(0 5px 5px rgba(0,0,0,0.8))" />
+                                        <path d="M 170 246 L 330 246 L 330 254 L 170 254 Z" fill="url(#gold)" filter="drop-shadow(5px 0 5px rgba(0,0,0,0.8))" />
+                                        
+                                        {/* Turret Center Nut */}
+                                        <circle cx="250" cy="250" r="15" fill="url(#gold)" filter="drop-shadow(0 0 8px rgba(0,0,0,0.9))" />
+                                        <circle cx="250" cy="250" r="8" fill="#1A212D" />
 
                                         {/* Fast Spinning 724bets Logo overlay on Numbers */}
                                         <text
