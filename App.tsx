@@ -101,6 +101,7 @@ import ComingSoon from './components/ComingSoon';
 import PlinkoView from './components/PlinkoView';
 import CrashGameView from './components/CrashGameView';
 import LimboView from './components/LimboView';
+import OriginalsBottomBar from './components/OriginalsBottomBar';
 import ChickenRunView from './components/ChickenRunView';
 import DiceView from './components/DiceView';
 import MinesView from './components/MinesView';
@@ -2369,52 +2370,74 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
 
         {/* --- ORIGINAL GAMES RENDERED IN MAIN LAYOUT --- */}
         {['blackjack-pro', 'limbo', 'chicken-run', 'plinko', 'dice', 'mines', 'keno', 'war', 'hilo', 'roulette', 'crash-turbo', 'turbo-mines', 'hacksaw', 'redtiger', 'crash'].includes(view) && (
-          <div className="animate-fade-in w-full h-full relative z-[50] rounded-2xl overflow-hidden shadow-2xl bg-[#0A0D14]">
-             {view === 'blackjack-pro' && (
-               <BlackjackProView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
-             )}
-             {view === 'limbo' && (
-               <LimboView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
-             )}
-             {view === 'chicken-run' && (
-               <ChickenRunView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
-             )}
-             {view === 'plinko' && (
-               <PlinkoView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
-             )}
-             {view === 'crash' && (
-               <CrashGameView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
-             )}
-             {view === 'dice' && (
-               <DiceView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
-             )}
-             {view === 'mines' && (
-               <MinesView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
-             )}
-             {view === 'keno' && (
-               <KenoView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
-             )}
-             {view === 'war' && (
-               <WarView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
-             )}
-             {view === 'hilo' && (
-               <HiLoView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
-             )}
-             {view === 'roulette' && (
-               <RouletteView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
-             )}
-             {view === 'crash-turbo' && (
-               <CrashTurboView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
-             )}
-             {view === 'turbo-mines' && (
-               <TurboMinesView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
-             )}
-             {view === 'hacksaw' && (
-               <HacksawSlotView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
-             )}
-             {view === 'redtiger' && (
-               <RedTigerSlotView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
-             )}
+          <div className="animate-fade-in w-full h-full flex flex-col relative z-[50] rounded-2xl overflow-hidden shadow-2xl bg-[#0A0D14]">
+            <div className="flex-1 relative overflow-hidden">
+               {view === 'blackjack-pro' && (
+                 <BlackjackProView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
+               )}
+               {view === 'limbo' && (
+                 <LimboView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
+               )}
+               {view === 'chicken-run' && (
+                 <ChickenRunView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
+               )}
+               {view === 'plinko' && (
+                 <PlinkoView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
+               )}
+               {view === 'crash' && (
+                 <CrashGameView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
+               )}
+               {view === 'dice' && (
+                 <DiceView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
+               )}
+               {view === 'mines' && (
+                 <MinesView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
+               )}
+               {view === 'keno' && (
+                 <KenoView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
+               )}
+               {view === 'war' && (
+                 <WarView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
+               )}
+               {view === 'hilo' && (
+                 <HiLoView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
+               )}
+               {view === 'roulette' && (
+                 <RouletteView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
+               )}
+               {view === 'crash-turbo' && (
+                 <CrashTurboView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
+               )}
+               {view === 'turbo-mines' && (
+                 <TurboMinesView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
+               )}
+               {view === 'hacksaw' && (
+                 <HacksawSlotView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
+               )}
+               {view === 'redtiger' && (
+                 <RedTigerSlotView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
+               )}
+            </div>
+            
+            <OriginalsBottomBar 
+              gameName={{
+                'blackjack-pro': 'Blackjack Pro',
+                'limbo': 'Limbo',
+                'chicken-run': 'Chicken Run',
+                'plinko': 'Plinko',
+                'dice': 'Dice',
+                'mines': 'Mines',
+                'keno': 'Keno',
+                'war': 'War',
+                'hilo': 'HiLo',
+                'roulette': 'Roulette',
+                'crash-turbo': 'Crash Turbo',
+                'turbo-mines': 'Turbo Mines',
+                'hacksaw': 'Hacksaw Slot',
+                'redtiger': 'RedTiger Slot',
+                'crash': 'Crash',
+              }[view] || '724bets Originals'}
+            />
           </div>
         )}
 
