@@ -22,6 +22,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
     const [isFastSpinning, setIsFastSpinning] = useState(false);
     
     const [spinRotation, setSpinRotation] = useState<number>(0);
+    const [ballRotation, setBallRotation] = useState<number>(0);
     const [resultNumber, setResultNumber] = useState<number | null>(null);
     const [winAmount, setWinAmount] = useState<number | null>(null);
     const [resultDetails, setResultDetails] = useState<{label: string, won: boolean, amount: number}[]>([]);
@@ -146,6 +147,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
             const targetRotation = (spins * 360) - (winningIndex * segmentAngle);
             
             setSpinRotation(prev => prev + targetRotation + (360 - (prev % 360)));
+            setBallRotation(prev => prev - (15 * 360) - (prev % 360));
 
             const generateResultDetails = (winningNum: number) => {
                 return placedBets.map(bet => {
@@ -417,7 +419,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                 <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,229,255,0.03)_0%,transparent_70%)] pointer-events-none"></div>
                 
                 {/* ── CENTERED GAME CONTAINER ── */}
-                <div className="w-full max-w-5xl h-full max-h-[700px] bg-gradient-to-b from-[#111620] to-[#0A0D14] relative rounded-[40px] shadow-[0_30px_60px_rgba(0,0,0,0.8),inset_0_2px_4px_rgba(255,255,255,0.05)] overflow-hidden flex flex-col justify-center items-center border border-[#1E2738]">
+                <div className="w-full max-w-5xl h-full min-h-[700px] bg-gradient-to-b from-[#111620] to-[#0A0D14] relative rounded-[40px] shadow-[0_30px_60px_rgba(0,0,0,0.8),inset_0_2px_4px_rgba(255,255,255,0.05)] overflow-hidden flex flex-col justify-center items-center border border-[#1E2738] py-12">
                     
                     {/* Top Info Badges */}
                     <div className="absolute top-6 left-6 flex items-center gap-3 z-20">
@@ -434,171 +436,154 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                         <span className="text-gray-300 font-bold text-xs uppercase tracking-wider">Adil Oyun</span>
                     </div>
 
-                    {/* Wheel Container */}
-                    <div className="relative w-[340px] h-[340px] md:w-[500px] md:h-[500px] mt-8 mb-4">
-                        
-                        {/* Outer Metallic Ring Background */}
-                        <div 
-                            className="absolute inset-0 rounded-full shadow-[0_0_80px_rgba(0,229,255,0.05),inset_0_15px_30px_rgba(0,0,0,1)] p-[15px] border-2 border-[#2A3744]" 
-                            style={{ background: 'conic-gradient(from 0deg, #1A212D, #0A0D14, #1A212D, #0A0D14, #1A212D)' }}
-                        >
-                            {/* The Wheel */}
-                            <div className="absolute inset-[15px] rounded-full overflow-hidden shadow-[inset_0_0_40px_rgba(0,0,0,1)] bg-[#05070A]">
-                                <svg width="100%" height="100%" viewBox="0 0 500 500" className="drop-shadow-2xl" style={{ filter: 'drop-shadow(0 0 20px rgba(0,0,0,0.8))' }}>
-                                    <defs>
-                                        <filter id="inner-shadow">
-                                            <feOffset dx="0" dy="0"/>
-                                            <feGaussianBlur stdDeviation="15" result="offset-blur"/>
-                                            <feComposite operator="out" in="SourceGraphic" in2="offset-blur" result="inverse"/>
-                                            <feFlood floodColor="black" floodOpacity="0.9" result="color"/>
-                                            <feComposite operator="in" in="color" in2="inverse" result="shadow"/>
-                                            <feComposite operator="over" in="shadow" in2="SourceGraphic"/>
-                                        </filter>
-                                        <filter id="neon-glow" x="-50%" y="-50%" width="200%" height="200%">
-                                            <feGaussianBlur stdDeviation="10" result="blur" />
-                                            <feMerge>
-                                                <feMergeNode in="blur"/>
-                                                <feMergeNode in="SourceGraphic"/>
-                                            </feMerge>
-                                        </filter>
-                                        <radialGradient id="metal-hub" cx="50%" cy="50%" r="50%">
-                                            <stop offset="0%" stopColor="#2A3744" />
-                                            <stop offset="70%" stopColor="#151D24" />
-                                            <stop offset="100%" stopColor="#05070A" />
-                                        </radialGradient>
-                                        <radialGradient id="metal-ring" cx="50%" cy="50%" r="50%">
-                                            <stop offset="85%" stopColor="transparent" />
-                                            <stop offset="95%" stopColor="rgba(255,255,255,0.05)" />
-                                            <stop offset="100%" stopColor="rgba(0,0,0,0.8)" />
-                                        </radialGradient>
-                                        <path id="wheel-text-path" d="M 250, 250 m -195, 0 a 195,195 0 1,1 390,0 a 195,195 0 1,1 -390,0" />
-                                        
-                                        <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
-                                            <stop offset="0%" stopColor="#FDE047" />
-                                            <stop offset="50%" stopColor="#EAB308" />
-                                            <stop offset="100%" stopColor="#713F12" />
-                                        </linearGradient>
-                                        <linearGradient id="red-slice" x1="0%" y1="0%" x2="100%" y2="100%">
-                                            <stop offset="0%" stopColor="#ef4444" />
-                                            <stop offset="50%" stopColor="#be123c" />
-                                            <stop offset="100%" stopColor="#881337" />
-                                        </linearGradient>
-                                        <linearGradient id="black-slice" x1="0%" y1="0%" x2="100%" y2="100%">
-                                            <stop offset="0%" stopColor="#374151" />
-                                            <stop offset="50%" stopColor="#111827" />
-                                            <stop offset="100%" stopColor="#030712" />
-                                        </linearGradient>
-                                        <linearGradient id="green-slice" x1="0%" y1="0%" x2="100%" y2="100%">
-                                            <stop offset="0%" stopColor="#2dd4bf" />
-                                            <stop offset="50%" stopColor="#0f766e" />
-                                            <stop offset="100%" stopColor="#042f2e" />
-                                        </linearGradient>
-                                    </defs>
+                    {/* Premium Wheel Container */}
+                    <div className="relative w-[340px] h-[340px] md:w-[600px] md:h-[600px] mt-10 mb-6 flex-1 shrink-0">
+                        <svg width="100%" height="100%" viewBox="0 0 600 600" className="drop-shadow-2xl" style={{ filter: 'drop-shadow(0 0 40px rgba(0,0,0,0.9))' }}>
+                            <defs>
+                                <radialGradient id="wood-frame" cx="50%" cy="50%" r="50%">
+                                    <stop offset="70%" stopColor="#2c1405" />
+                                    <stop offset="95%" stopColor="#1a0b02" />
+                                    <stop offset="100%" stopColor="#0d0501" />
+                                </radialGradient>
+                                <linearGradient id="metal-fret" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stopColor="#facc15" />
+                                    <stop offset="50%" stopColor="#ca8a04" />
+                                    <stop offset="100%" stopColor="#713f12" />
+                                </linearGradient>
+                                <radialGradient id="ball-gradient" cx="30%" cy="30%" r="70%">
+                                    <stop offset="0%" stopColor="#ffffff" />
+                                    <stop offset="70%" stopColor="#d1d5db" />
+                                    <stop offset="100%" stopColor="#4b5563" />
+                                </radialGradient>
+                                <radialGradient id="track-gradient" cx="50%" cy="50%" r="50%">
+                                    <stop offset="70%" stopColor="#111827" />
+                                    <stop offset="95%" stopColor="#1f2937" />
+                                    <stop offset="100%" stopColor="#030712" />
+                                </radialGradient>
+                                <radialGradient id="metal-hub" cx="50%" cy="50%" r="50%">
+                                    <stop offset="0%" stopColor="#2A3744" />
+                                    <stop offset="70%" stopColor="#151D24" />
+                                    <stop offset="100%" stopColor="#05070A" />
+                                </radialGradient>
+                                <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stopColor="#FDE047" />
+                                    <stop offset="50%" stopColor="#EAB308" />
+                                    <stop offset="100%" stopColor="#713F12" />
+                                </linearGradient>
+                                <linearGradient id="red-slice" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stopColor="#dc2626" />
+                                    <stop offset="50%" stopColor="#991b1b" />
+                                    <stop offset="100%" stopColor="#7f1d1d" />
+                                </linearGradient>
+                                <linearGradient id="black-slice" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stopColor="#374151" />
+                                    <stop offset="50%" stopColor="#111827" />
+                                    <stop offset="100%" stopColor="#030712" />
+                                </linearGradient>
+                                <linearGradient id="green-slice" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stopColor="#2dd4bf" />
+                                    <stop offset="50%" stopColor="#0f766e" />
+                                    <stop offset="100%" stopColor="#042f2e" />
+                                </linearGradient>
+                            </defs>
+
+                            {/* STATIC OUTER Casing */}
+                            <circle cx="300" cy="300" r="290" fill="url(#wood-frame)" stroke="#0d0501" strokeWidth="4" />
+                            {/* Inner metal rim */}
+                            <circle cx="300" cy="300" r="265" fill="url(#track-gradient)" stroke="url(#gold)" strokeWidth="6" />
+                            
+                            {/* Ball Track Base */}
+                            <circle cx="300" cy="300" r="245" fill="none" stroke="#0f172a" strokeWidth="40" />
+
+                            {/* Static Diamonds (Deflectors) on Track */}
+                            <g>
+                                {[0, 45, 90, 135, 180, 225, 270, 315].map((angle, i) => (
+                                    <path key={`diamond-${i}`} transform={`rotate(${angle}, 300, 300) translate(300, 55)`} d="M 0 -10 L 8 0 L 0 10 L -8 0 Z" fill="url(#gold)" filter="drop-shadow(0 2px 2px rgba(0,0,0,0.8))"/>
+                                ))}
+                            </g>
+
+                            {/* ROTATING WHEEL AND NUMBERS */}
+                            <g 
+                                style={{ 
+                                    transform: `rotate(${spinRotation}deg)`, 
+                                    transformOrigin: '300px 300px',
+                                    transition: isPlaying ? 'transform 8000ms cubic-bezier(0.2, 0.8, 0.2, 1)' : 'none'
+                                }}
+                            >
+                                {/* Sectors */}
+                                {ROULETTE_NUMBERS.map((num, i) => {
+                                    const angleStep = 360 / 37;
+                                    const startAngle = -angleStep / 2;
+                                    const endAngle = angleStep / 2;
+                                    const isGreen = num === 0;
+                                    const color = isGreen ? 'url(#green-slice)' : (isRed(num) ? 'url(#red-slice)' : 'url(#black-slice)');
                                     
-                                    {/* Wheel Group - This rotates */}
-                                    <g 
-                                        style={{ 
-                                            transform: `rotate(${spinRotation}deg)`, 
-                                            transformOrigin: '250px 250px',
-                                            transition: isPlaying ? 'transform 8000ms cubic-bezier(0.4, 0, 0.1, 1)' : 'none'
-                                        }}
-                                    >
-                                        {/* Sectors */}
-                                        {ROULETTE_NUMBERS.map((num, i) => {
-                                            const angleStep = 360 / ROULETTE_NUMBERS.length;
-                                            const startAngle = -angleStep / 2;
-                                            const endAngle = angleStep / 2;
-                                            const isGreen = num === 0;
-                                            const color = isGreen ? 'url(#green-slice)' : (isRed(num) ? 'url(#red-slice)' : 'url(#black-slice)');
-                                            const strokeColor = isGreen ? '#14b8a6' : (isRed(num) ? '#9f1239' : '#1f2937');
+                                    const polarToCartesian = (cx: number, cy: number, r: number, angle: number) => {
+                                        const rad = (angle - 90) * Math.PI / 180.0;
+                                        return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
+                                    };
+                                    const p1 = polarToCartesian(300, 300, 222, endAngle);
+                                    const p2 = polarToCartesian(300, 300, 222, startAngle);
+                                    const path = `M 300 300 L ${p1.x} ${p1.y} A 222 222 0 0 0 ${p2.x} ${p2.y} Z`;
+                                    
+                                    const fretP = polarToCartesian(300, 300, 222, endAngle);
 
-                                            // Text distance from center
-                                            const textRadius = 210;
+                                    return (
+                                        <g key={num} transform={`rotate(${i * angleStep}, 300, 300)`}>
+                                            <path d={path} fill={color} />
+                                            {/* Fret (Separator) */}
+                                            <line x1="300" y1="300" x2={fretP.x} y2={fretP.y} stroke="url(#metal-fret)" strokeWidth="3" filter="drop-shadow(2px 2px 2px rgba(0,0,0,0.5))" />
                                             
-                                            // Helper to draw arc
-                                            const polarToCartesian = (centerX: number, centerY: number, radius: number, angleInDegrees: number) => {
-                                              const angleInRadians = (angleInDegrees - 90) * Math.PI / 180.0;
-                                              return { x: centerX + (radius * Math.cos(angleInRadians)), y: centerY + (radius * Math.sin(angleInRadians)) };
-                                            };
-                                            const start = polarToCartesian(250, 250, 248, endAngle);
-                                            const end = polarToCartesian(250, 250, 248, startAngle);
-                                            const path = `M 250 250 L ${start.x} ${start.y} A 248 248 0 0 0 ${end.x} ${end.y} Z`;
+                                            {/* Number Text */}
+                                            <text 
+                                                x="300" 
+                                                y="105" 
+                                                textAnchor="middle" 
+                                                dominantBaseline="middle"
+                                                fill={isGreen ? '#0A0D14' : '#ffffff'}
+                                                fontSize="18"
+                                                fontWeight="900"
+                                                fontFamily="serif"
+                                                letterSpacing="-1"
+                                                style={{ textShadow: isGreen ? '0 0 8px rgba(0,0,0,0.3)' : '0 2px 4px rgba(0,0,0,0.8)' }}
+                                            >
+                                                {num}
+                                            </text>
+                                        </g>
+                                    );
+                                })}
 
-                                            return (
-                                                <g key={num} transform={`rotate(${i * angleStep}, 250, 250)`}>
-                                                    <path 
-                                                        d={path} 
-                                                        fill={color} 
-                                                        stroke={strokeColor} 
-                                                        strokeWidth="0.5"
-                                                    />
-                                                    {/* Outer edge highlight for depth */}
-                                                    <path 
-                                                        d={`M ${start.x} ${start.y} A 248 248 0 0 0 ${end.x} ${end.y}`} 
-                                                        fill="none" 
-                                                        stroke="rgba(0,0,0,0.5)" 
-                                                        strokeWidth="10" 
-                                                    />
-                                                    <text 
-                                                        x="250" 
-                                                        y={250 - textRadius} 
-                                                        textAnchor="middle" 
-                                                        dominantBaseline="middle"
-                                                        fill={isGreen ? '#0A0D14' : '#ffffff'}
-                                                        fontSize="18"
-                                                        fontWeight="900"
-                                                        letterSpacing="-1"
-                                                        style={{ textShadow: isGreen ? '0 0 8px rgba(0,0,0,0.3)' : '0 2px 4px rgba(0,0,0,0.8)' }}
-                                                    >
-                                                        {num}
-                                                    </text>
-                                                </g>
-                                            );
-                                        })}
+                                {/* Center Turret (Spindle) */}
+                                <circle cx="300" cy="300" r="140" fill="url(#metal-hub)" stroke="url(#gold)" strokeWidth="6" filter="drop-shadow(0 0 20px rgba(0,0,0,0.8))" />
+                                <circle cx="300" cy="300" r="70" fill="url(#track-gradient)" stroke="url(#gold)" strokeWidth="4" />
+                                <circle cx="300" cy="300" r="30" fill="url(#metal-hub)" stroke="url(#gold)" strokeWidth="2" />
+                                
+                                {/* Turret Spindle Arms */}
+                                <path d="M 296 180 L 304 180 L 304 420 L 296 420 Z" fill="url(#gold)" filter="drop-shadow(0 5px 5px rgba(0,0,0,0.9))" />
+                                <path d="M 180 296 L 420 296 L 420 304 L 180 304 Z" fill="url(#gold)" filter="drop-shadow(5px 0 5px rgba(0,0,0,0.9))" />
+                                
+                                {/* Nut */}
+                                <circle cx="300" cy="300" r="15" fill="url(#gold)" filter="drop-shadow(0 0 10px rgba(0,0,0,0.9))" />
+                            </g>
 
-                                        {/* Gradient Overlay for lighting */}
-                                        <circle cx="250" cy="250" r="250" fill="url(#metal-ring)" pointerEvents="none" />
-                                        <circle cx="250" cy="250" r="248" fill="none" stroke="url(#gold)" strokeWidth="2" opacity="0.5" pointerEvents="none" />
-
-                                        {/* Center Metal Hub covering the pie slices */}
-                                        <circle cx="250" cy="250" r="160" fill="url(#metal-hub)" stroke="url(#gold)" strokeWidth="4" filter="url(#inner-shadow)" />
-                                        
-                                        {/* Decorative Rings */}
-                                        <circle cx="250" cy="250" r="150" fill="none" stroke="url(#gold)" strokeWidth="2" opacity="0.3" />
-                                        <circle cx="250" cy="250" r="110" fill="none" stroke="rgba(0,0,0,0.8)" strokeWidth="8" />
-                                        
-                                        {/* Realistic Roulette Turret Base */}
-                                        <circle cx="250" cy="250" r="80" fill="url(#metal-ring)" stroke="url(#gold)" strokeWidth="3" filter="url(#inner-shadow)" />
-                                        <circle cx="250" cy="250" r="50" fill="url(#metal-hub)" />
-                                        <circle cx="250" cy="250" r="30" fill="url(#metal-hub)" stroke="url(#gold)" strokeWidth="2" />
-                                        
-                                        {/* Turret Spindle Arms (Cross) */}
-                                        <path d="M 246 170 L 254 170 L 254 330 L 246 330 Z" fill="url(#gold)" filter="drop-shadow(0 5px 5px rgba(0,0,0,0.8))" />
-                                        <path d="M 170 246 L 330 246 L 330 254 L 170 254 Z" fill="url(#gold)" filter="drop-shadow(5px 0 5px rgba(0,0,0,0.8))" />
-                                        
-                                        {/* Turret Center Nut */}
-                                        <circle cx="250" cy="250" r="15" fill="url(#gold)" filter="drop-shadow(0 0 8px rgba(0,0,0,0.9))" />
-                                        <circle cx="250" cy="250" r="8" fill="#1A212D" />
-
-                                    </g>
-                                </svg>
-                            </div>
-                        </div>
-
-                        {/* Premium Golden Pointer */}
-                        <div className="absolute -top-6 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center pointer-events-none drop-shadow-[0_10px_10px_rgba(0,0,0,0.8)]">
-                            <svg width="40" height="60" viewBox="0 0 40 60">
-                                <defs>
-                                    <linearGradient id="gold-pointer" x1="0%" y1="0%" x2="100%" y2="100%">
-                                        <stop offset="0%" stopColor="#FDE047" />
-                                        <stop offset="50%" stopColor="#EAB308" />
-                                        <stop offset="100%" stopColor="#713F12" />
-                                    </linearGradient>
-                                </defs>
-                                <path d="M 10 0 L 30 0 L 35 30 L 20 55 L 5 30 Z" fill="url(#gold-pointer)" stroke="#fff" strokeWidth="1.5" />
-                                <circle cx="20" cy="15" r="5" fill="#ffffff" style={{ filter: 'drop-shadow(0 0 5px #fff)' }} />
-                            </svg>
-                        </div>
+                            {/* ROTATING BALL */}
+                            <g
+                                style={{ 
+                                    transform: `rotate(${ballRotation}deg)`, 
+                                    transformOrigin: '300px 300px',
+                                    transition: isPlaying ? 'transform 8000ms cubic-bezier(0.2, 0.8, 0.2, 1)' : 'none'
+                                }}
+                            >
+                                <circle 
+                                    cx="300" 
+                                    cy={isPlaying ? 60 : 105} 
+                                    r={isPlaying ? 8 : 7}
+                                    fill="url(#ball-gradient)" 
+                                    filter="drop-shadow(0 4px 6px rgba(0,0,0,0.6))" 
+                                    style={{ transition: isPlaying ? 'cy 0.1s, r 0.1s' : 'cy 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), r 0.4s ease-out' }}
+                                />
+                            </g>
+                        </svg>
                     </div>
 
                     {/* Result Display */}
