@@ -10,7 +10,7 @@ interface PlacedBet {
 }
 
 const BRICK_WIDTH = 100; // pixels
-const TOTAL_BRICKS = 60; // How many bricks in the slider
+const TOTAL_BRICKS = 100; // How many bricks in the slider
 
 const ASSETS = {
     btnGrey: 'https://gamdom.com/build/button_grey.d7429b7c0b343420ecdf.svg',
@@ -118,14 +118,14 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
             }
 
             // Force the target brick to the winning color
-            newReel[50] = winResult;
+            newReel[90] = winResult;
             setReel(newReel);
 
             const itemWidth = BRICK_WIDTH; // 100
             
             // To center brick index `idx` when container is left-1/2:
             // offset = - (idx * itemWidth) - (itemWidth / 2)
-            const targetIndex = 50;
+            const targetIndex = 90;
             const startIndex = 5;
             
             const randomOffset = Math.floor(Math.random() * (itemWidth - 20)) - (itemWidth - 20)/2;
@@ -150,7 +150,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                 }
                 setIsPlaying(false);
                 setIsSpinning(false);
-            }, 6050);
+            }, 5050);
             
         } catch (e: any) {
             alert(e.message || 'Hata oluştu');
@@ -195,7 +195,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                             className="absolute top-0 left-0 h-full flex items-center"
                             style={{
                                 transform: `translateX(${slideOffset}px)`,
-                                transition: isSpinning ? 'transform 6s cubic-bezier(0.1, 0.1, 0, 1)' : 'none',
+                                transition: isSpinning ? 'transform 5s cubic-bezier(0.1, 0.9, 0.2, 1)' : 'none',
                                 willChange: 'transform'
                             }}
                         >
