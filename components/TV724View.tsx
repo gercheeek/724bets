@@ -1187,7 +1187,7 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                                         </div>
                                         
                                         <div className="flex flex-col items-center justify-center flex-1 w-full relative z-10">
-                                            <div className="flex flex-col items-center -space-y-1 md:-space-y-2 mb-4">
+                                            <div className="flex flex-col items-center gap-2 mb-4">
                                                 <span className="text-white font-black text-lg md:text-xl italic tracking-tighter" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>KAZANCINI</span>
                                                 <span className="text-[#06b6d4] font-black text-lg md:text-xl italic tracking-tighter" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>İ. KATLA</span>
                                             </div>
@@ -1210,7 +1210,7 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                                         </div>
                                         
                                         <div className="flex flex-col items-center justify-center flex-1 w-full relative z-10">
-                                            <div className="flex flex-col items-center -space-y-1 md:-space-y-2 mb-4">
+                                            <div className="flex flex-col items-center gap-2 mb-4">
                                                 <span className="text-white font-black text-lg md:text-xl italic tracking-tighter" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>ERKEN</span>
                                                 <span className="text-white font-black text-lg md:text-xl italic tracking-tighter" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>ÖDEME</span>
                                             </div>
