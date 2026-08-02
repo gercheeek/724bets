@@ -358,7 +358,14 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
     });
     const [selectedGroupFilter, setSelectedGroupFilter] = useState<string>('Tümü');
     const toggleGroup = (group: string) => {
-        setCollapsedGroups(prev => ({ ...prev, [group]: !prev[group] }));
+        setCollapsedGroups(prev => {
+            const newState: Record<string, boolean> = {};
+            // Collapse all groups
+            Object.keys(prev).forEach(k => newState[k] = true);
+            // Toggle the target group
+            newState[group] = !prev[group];
+            return newState;
+        });
     };
 
     const toggleAllGroups = () => {
@@ -1294,7 +1301,7 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                                                         }}
                                                     >
                                                         <div style={{ overflow: 'hidden' }}>
-                                                            <div style={{ padding: '16px 20px', borderTop: `1px solid ${config.color}15`, display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '12px' }}>
+                                                            <div className="p-3 border-t flex flex-row sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-2 overflow-x-auto custom-scrollbar" style={{ borderTopColor: `${config.color}15` }}>
                                                                 {grouped[groupName].map(s => {
                                                                     const isActive = activeChannel?.id === s.id;
                                                                     return (
@@ -1311,53 +1318,34 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                                                                                     fallbackIframeUrl: s.fallback_iframe_url, viewer_count: s.viewer_count,
                                                                                 } as any);
                                                                             }}
-                                                                            style={{ 
-                                                                                display: 'flex', alignItems: 'center', gap: '12px', padding: '10px 14px', 
-                                                                                background: isActive ? 'linear-gradient(90deg, rgba(16,185,129,0.15) 0%, rgba(16,185,129,0.02) 100%)' : 'rgba(255,255,255,0.03)', 
-                                                                                borderRadius: '10px', cursor: 'pointer', transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
-                                                                                borderLeft: isActive ? '3px solid #10b981' : '3px solid transparent',
-                                                                                border: isActive ? '' : '1px solid rgba(255,255,255,0.03)'
-                                                                            }}
-                                                                            className={`group/item ${isActive ? '' : 'hover:bg-[#ffffff0a] hover:border-[#ffffff20] hover:translate-y-[-2px]'}`}
+                                                                            className={`group/item flex items-center min-w-[150px] sm:min-w-0 w-full gap-2 p-2 rounded-lg cursor-pointer transition-all duration-200 border flex-shrink-0 ${isActive ? 'bg-[#10b981]/10 border-[#10b981]' : 'bg-white/5 border-white/5 hover:bg-white/10 hover:border-white/10'}`}
                                                                         >
-                                                                            <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyItems: 'center', width: '16px' }}>
-                                                                                <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: isActive ? '#10b981' : (s.is_live ? 'rgba(16,185,129,0.3)' : 'rgba(255,255,255,0.2)'), boxShadow: isActive ? '0 0 10px rgba(16,185,129,0.8)' : 'none' }} />
+                                                                            <div className="relative flex-shrink-0">
+                                                                                <div className={`w-8 h-8 rounded-md overflow-hidden bg-black/50 border ${isActive ? 'border-[#10b981]' : 'border-white/10'}`}>
+                                                                                    <img src={getChannelLogo(s.name, s.avatar_url)} alt={s.name} className="w-full h-full object-contain p-1" />
+                                                                                </div>
+                                                                                <div className={`absolute -bottom-1 -right-1 w-3 h-3 rounded-full border-2 border-[#0B0E14] ${isActive ? 'bg-[#10b981] shadow-[0_0_8px_#10b981]' : (s.is_live ? 'bg-[#10b981]/50' : 'bg-zinc-600')}`} />
                                                                             </div>
-                                                                            <div style={{ flex: 1, minWidth: 0, textAlign: 'left' }}>
-                                                                                <div style={{ fontSize: '13px', fontWeight: isActive ? 900 : 700, color: isActive ? '#fff' : '#d1d5db', marginBottom: '4px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', transition: 'color 0.2s' }} className="group-hover/item:text-white">{s.name}</div>
-                                                                                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                                                                    <span style={{ 
-                                                                                        fontSize: '10px', fontWeight: 800, 
-                                                                                        background: s.is_live ? 'rgba(16,185,129,0.1)' : 'rgba(255,255,255,0.04)', 
-                                                                                        color: s.is_live ? '#10b981' : '#6b7280', 
-                                                                                        padding: '2px 6px', borderRadius: '4px', 
-                                                                                        display: 'flex', alignItems: 'center', gap: '3px',
-                                                                                        border: s.is_live ? '1px solid rgba(16,185,129,0.2)' : '1px solid transparent'
-                                                                                    }}>
-                                                                                        {s.is_live ? (
+                                                                            
+                                                                            <div className="flex-1 min-w-0 text-left flex flex-col justify-center">
+                                                                                <div className={`text-xs font-bold truncate transition-colors ${isActive ? 'text-white' : 'text-zinc-300 group-hover/item:text-white'}`}>
+                                                                                    {s.name}
+                                                                                </div>
+                                                                                {s.is_live ? (
+                                                                                    <div className="flex items-center gap-1 mt-0.5">
+                                                                                        <span className="text-[9px] font-black text-[#10b981] tracking-wider">CANLI</span>
+                                                                                        {s.viewer_count && s.viewer_count > 0 && (
                                                                                             <>
-                                                                                                <span style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#10b981' }} />
-                                                                                                CANLI
+                                                                                                <span className="text-zinc-600 text-[8px]">•</span>
+                                                                                                <Users className="w-2.5 h-2.5 text-zinc-500" />
+                                                                                                <span className="text-[9px] font-bold text-zinc-500">{s.viewer_count}</span>
                                                                                             </>
-                                                                                        ) : 'ÇEVRİMDIŞI'}
-                                                                                    </span>
-                                                                                    {s.viewer_count && s.viewer_count > 0 && s.is_live && (
-                                                                                        <span style={{ fontSize: '10px', color: '#9ca3af', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '3px' }}>
-                                                                                            <Users style={{ width: 11, height: 11 }} />
-                                                                                            {s.viewer_count.toLocaleString()}
-                                                                                        </span>
-                                                                                    )}
-                                                                                </div>
+                                                                                        )}
+                                                                                    </div>
+                                                                                ) : (
+                                                                                    <span className="text-[9px] font-bold text-zinc-500 mt-0.5">ÇEVRİMDIŞI</span>
+                                                                                )}
                                                                             </div>
-                                                                            {isActive ? (
-                                                                                <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: 'rgba(16,185,129,0.15)', display: 'flex', alignItems: 'center', justifyItems: 'center', justifyContent: 'center', boxShadow: '0 0 10px rgba(16,185,129,0.3)', border: '1px solid rgba(16,185,129,0.3)' }}>
-                                                                                    <Play style={{ width: 12, height: 12, color: '#10b981', marginLeft: '2px' }} />
-                                                                                </div>
-                                                                            ) : (
-                                                                                <div className="opacity-0 group-hover/item:opacity-100 transition-opacity" style={{ width: '28px', height: '28px', borderRadius: '50%', background: 'rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', justifyItems: 'center', justifyContent: 'center', border: '1px solid rgba(255,255,255,0.1)' }}>
-                                                                                    <Play style={{ width: 12, height: 12, color: '#9ca3af', marginLeft: '2px' }} />
-                                                                                </div>
-                                                                            )}
                                                                         </button>
                                                                     );
                                                                 })}
