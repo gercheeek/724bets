@@ -39,14 +39,14 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
     const [placedBets, setPlacedBets] = useState<PlacedBet[]>([]);
     
     const [isPlaying, setIsPlaying] = useState(false);
+    const [isSpinning, setIsSpinning] = useState(false);
     const [reel, setReel] = useState<BetColor[]>(generateReel());
-    const [slideOffset, setSlideOffset] = useState<number>(0);
+    const [slideOffset, setSlideOffset] = useState<number>(-550); // Initial offset for brick index 5
     const [winningColor, setWinningColor] = useState<BetColor | null>(null);
     const [winAmount, setWinAmount] = useState<number | null>(null);
 
-    useEffect(() => {
-        setSlideOffset(0);
-    }, []);
+    // No need to reset slideOffset on mount if we initialize it correctly
+    // Remove the useEffect that forces it to 0
 
     const totalBetAmount = placedBets.reduce((sum, bet) => sum + bet.amount, 0);
 
@@ -117,18 +117,28 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                 totalPayout = data.win_amount;
             }
 
-            // Target brick position
+            // Force the target brick to the winning color
             newReel[50] = winResult;
             setReel(newReel);
 
-            const targetIndex = 50;
-            const itemWidth = BRICK_WIDTH;
-            const randomOffset = Math.floor(Math.random() * (itemWidth - 20)) - (itemWidth - 20)/2;
-            const stopPosition = - (targetIndex * itemWidth) + randomOffset;
+            const itemWidth = BRICK_WIDTH; // 100
             
-            setSlideOffset(0);
+            // To center brick index `idx` when container is left-1/2:
+            // offset = - (idx * itemWidth) - (itemWidth / 2)
+            const targetIndex = 50;
+            const startIndex = 5;
+            
+            const randomOffset = Math.floor(Math.random() * (itemWidth - 20)) - (itemWidth - 20)/2;
+            const stopPosition = - (targetIndex * itemWidth) - (itemWidth / 2) + randomOffset;
+            const startPosition = - (startIndex * itemWidth) - (itemWidth / 2);
+            
+            // Reset to start instantly
+            setIsSpinning(false);
+            setSlideOffset(startPosition);
             
             setTimeout(() => {
+                // Spin to target
+                setIsSpinning(true);
                 setSlideOffset(stopPosition);
             }, 50);
 
@@ -139,6 +149,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                     setDemoBalance(prev => prev + totalPayout);
                 }
                 setIsPlaying(false);
+                setIsSpinning(false);
             }, 6050);
             
         } catch (e: any) {
@@ -184,7 +195,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                             className="absolute top-0 left-0 h-full flex items-center"
                             style={{
                                 transform: `translateX(${slideOffset}px)`,
-                                transition: isPlaying ? 'transform 6s cubic-bezier(0.1, 0.1, 0, 1)' : 'none',
+                                transition: isSpinning ? 'transform 6s cubic-bezier(0.1, 0.1, 0, 1)' : 'none',
                                 willChange: 'transform'
                             }}
                         >
