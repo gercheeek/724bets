@@ -1,16 +1,22 @@
 import React, { useState } from 'react';
 import { useUser } from '../contexts/UserContext';
-import { ShieldCheck, Target } from 'lucide-react';
+import { ShieldCheck, Target, Trash2 } from 'lucide-react';
 
 const ROULETTE_NUMBERS = [0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26];
 const RED_NUMBERS = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36];
 
 type BetType = 'red' | 'black' | 'even' | 'odd' | 'low' | 'high' | '1st12' | '2nd12' | '3rd12' | 'number';
 
+interface PlacedBet {
+    type: BetType;
+    amount: number;
+    value?: number;
+}
+
 export default function RouletteView({ siteUser, onAuthRequired }: any) {
     const { playInstantGame, isFunMode, demoBalance, setDemoBalance } = useUser();
     const [betAmount, setBetAmount] = useState<number>(0);
-    const [selectedBet, setSelectedBet] = useState<BetType | null>(null);
+    const [placedBets, setPlacedBets] = useState<PlacedBet[]>([]);
     const [selectedNumber, setSelectedNumber] = useState<number>(0);
     const [isPlaying, setIsPlaying] = useState(false);
     
@@ -18,14 +24,41 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
     const [resultNumber, setResultNumber] = useState<number | null>(null);
     const [winAmount, setWinAmount] = useState<number | null>(null);
 
+    const totalBetAmount = placedBets.reduce((sum, bet) => sum + bet.amount, 0);
+
+    const handleAddBet = (type: BetType, value?: number) => {
+        if (betAmount <= 0) return alert('Geçerli bir bahis tutarı girin.');
+        if (isFunMode && (totalBetAmount + betAmount) > demoBalance) return alert('Yetersiz demo bakiye.');
+        
+        setPlacedBets(prev => {
+            const existingIndex = prev.findIndex(b => b.type === type && b.value === value);
+            if (existingIndex >= 0) {
+                const newBets = [...prev];
+                newBets[existingIndex].amount += betAmount;
+                return newBets;
+            }
+            return [...prev, { type, amount: betAmount, value }];
+        });
+    };
+
+    const handleClearBets = () => {
+        if (isPlaying) return;
+        setPlacedBets([]);
+    };
+
+    const getBetAmount = (type: BetType, value?: number) => {
+        const bet = placedBets.find(b => b.type === type && b.value === value);
+        return bet ? bet.amount : 0;
+    };
+
     const handlePlay = async () => {
         if (!isFunMode && !siteUser) return onAuthRequired();
-        if (!selectedBet) {
-            alert('Lütfen bir bahis türü seçin.');
+        if (placedBets.length === 0) {
+            alert('Lütfen en az bir bahis yapın.');
             return;
         }
         
-        if (isFunMode && betAmount > demoBalance) {
+        if (isFunMode && totalBetAmount > demoBalance) {
             alert('Yetersiz demo bakiye.');
             return;
         }
@@ -36,65 +69,70 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
 
         try {
             let winningNum: number;
-            let payout: number = 0;
+            let totalPayout: number = 0;
 
             if (isFunMode) {
                 // --- DEMO (MOCK) LOGIC ---
-                setDemoBalance(prev => prev - betAmount);
+                setDemoBalance(prev => prev - totalBetAmount);
                 winningNum = Math.floor(Math.random() * 37);
                 
                 // Demo Payout Calculation
-                if (['red', 'black'].includes(selectedBet)) {
-                    if (winningNum !== 0) {
-                        const isRedResult = RED_NUMBERS.includes(winningNum);
-                        if ((selectedBet === 'red' && isRedResult) || (selectedBet === 'black' && !isRedResult)) {
-                            payout = betAmount * 2;
+                placedBets.forEach(bet => {
+                    let payout = 0;
+                    if (['red', 'black'].includes(bet.type)) {
+                        if (winningNum !== 0) {
+                            const isRedResult = RED_NUMBERS.includes(winningNum);
+                            if ((bet.type === 'red' && isRedResult) || (bet.type === 'black' && !isRedResult)) {
+                                payout = bet.amount * 2;
+                            }
+                        }
+                    } else if (['even', 'odd'].includes(bet.type)) {
+                        if (winningNum !== 0) {
+                            const isEven = winningNum % 2 === 0;
+                            if ((bet.type === 'even' && isEven) || (bet.type === 'odd' && !isEven)) {
+                                payout = bet.amount * 2;
+                            }
+                        }
+                    } else if (['low', 'high'].includes(bet.type)) {
+                        if (winningNum !== 0) {
+                            const isLow = winningNum >= 1 && winningNum <= 18;
+                            if ((bet.type === 'low' && isLow) || (bet.type === 'high' && !isLow)) {
+                                payout = bet.amount * 2;
+                            }
+                        }
+                    } else if (['1st12', '2nd12', '3rd12'].includes(bet.type)) {
+                        if (winningNum !== 0) {
+                            const is1st = winningNum >= 1 && winningNum <= 12;
+                            const is2nd = winningNum >= 13 && winningNum <= 24;
+                            const is3rd = winningNum >= 25 && winningNum <= 36;
+                            if ((bet.type === '1st12' && is1st) || (bet.type === '2nd12' && is2nd) || (bet.type === '3rd12' && is3rd)) {
+                                payout = bet.amount * 3;
+                            }
+                        }
+                    } else if (bet.type === 'number') {
+                        if (winningNum === bet.value) {
+                            payout = bet.amount * 36;
                         }
                     }
-                } else if (['even', 'odd'].includes(selectedBet)) {
-                    if (winningNum !== 0) {
-                        const isEven = winningNum % 2 === 0;
-                        if ((selectedBet === 'even' && isEven) || (selectedBet === 'odd' && !isEven)) {
-                            payout = betAmount * 2;
-                        }
-                    }
-                } else if (['low', 'high'].includes(selectedBet)) {
-                    if (winningNum !== 0) {
-                        const isLow = winningNum >= 1 && winningNum <= 18;
-                        if ((selectedBet === 'low' && isLow) || (selectedBet === 'high' && !isLow)) {
-                            payout = betAmount * 2;
-                        }
-                    }
-                } else if (['1st12', '2nd12', '3rd12'].includes(selectedBet)) {
-                    if (winningNum !== 0) {
-                        const is1st = winningNum >= 1 && winningNum <= 12;
-                        const is2nd = winningNum >= 13 && winningNum <= 24;
-                        const is3rd = winningNum >= 25 && winningNum <= 36;
-                        if ((selectedBet === '1st12' && is1st) || (selectedBet === '2nd12' && is2nd) || (selectedBet === '3rd12' && is3rd)) {
-                            payout = betAmount * 3;
-                        }
-                    }
-                } else if (selectedBet === 'number') {
-                    if (winningNum === selectedNumber) {
-                        payout = betAmount * 36;
-                    }
-                }
+                    totalPayout += payout;
+                });
             } else {
                 // --- REAL MONEY LOGIC ---
-                let betPayload = {};
-                if (['red', 'black'].includes(selectedBet)) {
-                    betPayload = { type: 'color', value: selectedBet, amount: betAmount };
-                } else if (selectedBet === 'number') {
-                    betPayload = { type: 'number', value: selectedNumber, amount: betAmount };
-                } else if (['1st12', '2nd12', '3rd12'].includes(selectedBet)) {
-                    betPayload = { type: 'dozen', value: selectedBet, amount: betAmount };
-                } else {
-                    betPayload = { type: 'outside', value: selectedBet, amount: betAmount };
-                }
+                const betPayloads = placedBets.map(bet => {
+                    if (['red', 'black'].includes(bet.type)) {
+                        return { type: 'color', value: bet.type, amount: bet.amount };
+                    } else if (bet.type === 'number') {
+                        return { type: 'number', value: bet.value, amount: bet.amount };
+                    } else if (['1st12', '2nd12', '3rd12'].includes(bet.type)) {
+                        return { type: 'dozen', value: bet.type, amount: bet.amount };
+                    } else {
+                        return { type: 'outside', value: bet.type, amount: bet.amount };
+                    }
+                });
 
-                const data = await playInstantGame(betAmount, 'Roulette', 0, 'none', { bets: [betPayload] });
+                const data = await playInstantGame(totalBetAmount, 'Roulette', 0, 'none', { bets: betPayloads });
                 winningNum = data.result.number;
-                payout = data.win_amount;
+                totalPayout = data.win_amount;
             }
             
             const winningIndex = ROULETTE_NUMBERS.indexOf(winningNum);
@@ -106,9 +144,9 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
 
             setTimeout(() => {
                 setResultNumber(winningNum);
-                setWinAmount(payout);
-                if (isFunMode && payout > 0) {
-                    setDemoBalance(prev => prev + payout);
+                setWinAmount(totalPayout);
+                if (isFunMode && totalPayout > 0) {
+                    setDemoBalance(prev => prev + totalPayout);
                 }
                 setIsPlaying(false);
             }, 4000);
@@ -158,118 +196,157 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
 
                 {/* Outside Bets Selection */}
                 <div className="mb-6">
-                    <label className="block text-xs text-gray-400 font-semibold mb-2">Bahis Seçimi (Ödeme: 2x)</label>
+                    <div className="flex justify-between items-center mb-2">
+                        <label className="text-xs text-gray-400 font-semibold">Bahis Seçimi (Ödeme: 2x)</label>
+                        {totalBetAmount > 0 && (
+                            <span className="text-xs text-[#00E5FF] font-bold">Toplam Bahis: ₺{totalBetAmount.toFixed(2)}</span>
+                        )}
+                    </div>
                     <div className="grid grid-cols-2 gap-2">
                         <button 
-                            onClick={() => setSelectedBet('red')}
+                            onClick={() => handleAddBet('red')}
                             disabled={isPlaying}
-                            className={`py-3 rounded-md font-bold text-xs uppercase tracking-widest transition-all ${selectedBet === 'red' ? 'bg-red-600 text-white shadow-[0_0_15px_rgba(220,38,38,0.5)] border-red-500' : 'bg-red-950/50 text-red-500 border border-red-900 hover:bg-red-900/50'}`}
+                            className={`relative py-3 rounded-md font-bold text-xs uppercase tracking-widest transition-all ${getBetAmount('red') > 0 ? 'bg-red-600 text-white shadow-[0_0_15px_rgba(220,38,38,0.5)] border-red-500' : 'bg-red-950/50 text-red-500 border border-red-900 hover:bg-red-900/50'}`}
                         >
                             Kırmızı
+                            {getBetAmount('red') > 0 && <div className="absolute top-1 right-1 bg-white text-black text-[9px] font-black px-1.5 py-0.5 rounded-full">₺{getBetAmount('red')}</div>}
                         </button>
                         <button 
-                            onClick={() => setSelectedBet('black')}
+                            onClick={() => handleAddBet('black')}
                             disabled={isPlaying}
-                            className={`py-3 rounded-md font-bold text-xs uppercase tracking-widest transition-all ${selectedBet === 'black' ? 'bg-black text-white shadow-[0_0_15px_rgba(255,255,255,0.2)] border-gray-500' : 'bg-black/50 text-gray-400 border border-gray-800 hover:bg-black/80'}`}
+                            className={`relative py-3 rounded-md font-bold text-xs uppercase tracking-widest transition-all ${getBetAmount('black') > 0 ? 'bg-black text-white shadow-[0_0_15px_rgba(255,255,255,0.2)] border-gray-500' : 'bg-black/50 text-gray-400 border border-gray-800 hover:bg-black/80'}`}
                         >
                             Siyah
+                            {getBetAmount('black') > 0 && <div className="absolute top-1 right-1 bg-white text-black text-[9px] font-black px-1.5 py-0.5 rounded-full">₺{getBetAmount('black')}</div>}
                         </button>
                         <button 
-                            onClick={() => setSelectedBet('even')}
+                            onClick={() => handleAddBet('even')}
                             disabled={isPlaying}
-                            className={`py-3 rounded-md font-bold text-xs uppercase tracking-widest transition-all ${selectedBet === 'even' ? 'bg-[#3D82F6] text-white shadow-[0_0_15px_rgba(59,130,246,0.5)] border-[#3D82F6]' : 'bg-[#151D24] text-gray-400 border border-[#2A3744] hover:bg-[#1E2933]'}`}
+                            className={`relative py-3 rounded-md font-bold text-xs uppercase tracking-widest transition-all ${getBetAmount('even') > 0 ? 'bg-[#3D82F6] text-white shadow-[0_0_15px_rgba(59,130,246,0.5)] border-[#3D82F6]' : 'bg-[#151D24] text-gray-400 border border-[#2A3744] hover:bg-[#1E2933]'}`}
                         >
                             Çift
+                            {getBetAmount('even') > 0 && <div className="absolute top-1 right-1 bg-white text-black text-[9px] font-black px-1.5 py-0.5 rounded-full">₺{getBetAmount('even')}</div>}
                         </button>
                         <button 
-                            onClick={() => setSelectedBet('odd')}
+                            onClick={() => handleAddBet('odd')}
                             disabled={isPlaying}
-                            className={`py-3 rounded-md font-bold text-xs uppercase tracking-widest transition-all ${selectedBet === 'odd' ? 'bg-[#3D82F6] text-white shadow-[0_0_15px_rgba(59,130,246,0.5)] border-[#3D82F6]' : 'bg-[#151D24] text-gray-400 border border-[#2A3744] hover:bg-[#1E2933]'}`}
+                            className={`relative py-3 rounded-md font-bold text-xs uppercase tracking-widest transition-all ${getBetAmount('odd') > 0 ? 'bg-[#3D82F6] text-white shadow-[0_0_15px_rgba(59,130,246,0.5)] border-[#3D82F6]' : 'bg-[#151D24] text-gray-400 border border-[#2A3744] hover:bg-[#1E2933]'}`}
                         >
                             Tek
+                            {getBetAmount('odd') > 0 && <div className="absolute top-1 right-1 bg-white text-black text-[9px] font-black px-1.5 py-0.5 rounded-full">₺{getBetAmount('odd')}</div>}
                         </button>
                         <button 
-                            onClick={() => setSelectedBet('low')}
+                            onClick={() => handleAddBet('low')}
                             disabled={isPlaying}
-                            className={`py-3 rounded-md font-bold text-xs uppercase tracking-widest transition-all ${selectedBet === 'low' ? 'bg-[#3D82F6] text-white shadow-[0_0_15px_rgba(59,130,246,0.5)] border-[#3D82F6]' : 'bg-[#151D24] text-gray-400 border border-[#2A3744] hover:bg-[#1E2933]'}`}
+                            className={`relative py-3 rounded-md font-bold text-xs uppercase tracking-widest transition-all ${getBetAmount('low') > 0 ? 'bg-[#3D82F6] text-white shadow-[0_0_15px_rgba(59,130,246,0.5)] border-[#3D82F6]' : 'bg-[#151D24] text-gray-400 border border-[#2A3744] hover:bg-[#1E2933]'}`}
                         >
                             1-18
+                            {getBetAmount('low') > 0 && <div className="absolute top-1 right-1 bg-white text-black text-[9px] font-black px-1.5 py-0.5 rounded-full">₺{getBetAmount('low')}</div>}
                         </button>
                         <button 
-                            onClick={() => setSelectedBet('high')}
+                            onClick={() => handleAddBet('high')}
                             disabled={isPlaying}
-                            className={`py-3 rounded-md font-bold text-xs uppercase tracking-widest transition-all ${selectedBet === 'high' ? 'bg-[#3D82F6] text-white shadow-[0_0_15px_rgba(59,130,246,0.5)] border-[#3D82F6]' : 'bg-[#151D24] text-gray-400 border border-[#2A3744] hover:bg-[#1E2933]'}`}
+                            className={`relative py-3 rounded-md font-bold text-xs uppercase tracking-widest transition-all ${getBetAmount('high') > 0 ? 'bg-[#3D82F6] text-white shadow-[0_0_15px_rgba(59,130,246,0.5)] border-[#3D82F6]' : 'bg-[#151D24] text-gray-400 border border-[#2A3744] hover:bg-[#1E2933]'}`}
                         >
                             19-36
+                            {getBetAmount('high') > 0 && <div className="absolute top-1 right-1 bg-white text-black text-[9px] font-black px-1.5 py-0.5 rounded-full">₺{getBetAmount('high')}</div>}
                         </button>
                     </div>
                     
                     {/* Dozens */}
                     <div className="grid grid-cols-3 gap-2 mt-2">
                         <button 
-                            onClick={() => setSelectedBet('1st12')}
+                            onClick={() => handleAddBet('1st12')}
                             disabled={isPlaying}
-                            className={`py-2 rounded-md font-bold text-xs uppercase tracking-widest transition-all ${selectedBet === '1st12' ? 'bg-[#3D82F6] text-white shadow-[0_0_15px_rgba(59,130,246,0.5)] border-[#3D82F6]' : 'bg-[#151D24] text-gray-400 border border-[#2A3744] hover:bg-[#1E2933]'}`}
+                            className={`relative py-2 rounded-md font-bold text-xs uppercase tracking-widest transition-all ${getBetAmount('1st12') > 0 ? 'bg-[#3D82F6] text-white shadow-[0_0_15px_rgba(59,130,246,0.5)] border-[#3D82F6]' : 'bg-[#151D24] text-gray-400 border border-[#2A3744] hover:bg-[#1E2933]'}`}
                         >
                             1. Düzine
+                            {getBetAmount('1st12') > 0 && <div className="absolute top-1 right-1 bg-white text-black text-[9px] font-black px-1.5 py-0.5 rounded-full">₺{getBetAmount('1st12')}</div>}
                         </button>
                         <button 
-                            onClick={() => setSelectedBet('2nd12')}
+                            onClick={() => handleAddBet('2nd12')}
                             disabled={isPlaying}
-                            className={`py-2 rounded-md font-bold text-xs uppercase tracking-widest transition-all ${selectedBet === '2nd12' ? 'bg-[#3D82F6] text-white shadow-[0_0_15px_rgba(59,130,246,0.5)] border-[#3D82F6]' : 'bg-[#151D24] text-gray-400 border border-[#2A3744] hover:bg-[#1E2933]'}`}
+                            className={`relative py-2 rounded-md font-bold text-xs uppercase tracking-widest transition-all ${getBetAmount('2nd12') > 0 ? 'bg-[#3D82F6] text-white shadow-[0_0_15px_rgba(59,130,246,0.5)] border-[#3D82F6]' : 'bg-[#151D24] text-gray-400 border border-[#2A3744] hover:bg-[#1E2933]'}`}
                         >
                             2. Düzine
+                            {getBetAmount('2nd12') > 0 && <div className="absolute top-1 right-1 bg-white text-black text-[9px] font-black px-1.5 py-0.5 rounded-full">₺{getBetAmount('2nd12')}</div>}
                         </button>
                         <button 
-                            onClick={() => setSelectedBet('3rd12')}
+                            onClick={() => handleAddBet('3rd12')}
                             disabled={isPlaying}
-                            className={`py-2 rounded-md font-bold text-xs uppercase tracking-widest transition-all ${selectedBet === '3rd12' ? 'bg-[#3D82F6] text-white shadow-[0_0_15px_rgba(59,130,246,0.5)] border-[#3D82F6]' : 'bg-[#151D24] text-gray-400 border border-[#2A3744] hover:bg-[#1E2933]'}`}
+                            className={`relative py-2 rounded-md font-bold text-xs uppercase tracking-widest transition-all ${getBetAmount('3rd12') > 0 ? 'bg-[#3D82F6] text-white shadow-[0_0_15px_rgba(59,130,246,0.5)] border-[#3D82F6]' : 'bg-[#151D24] text-gray-400 border border-[#2A3744] hover:bg-[#1E2933]'}`}
                         >
                             3. Düzine
+                            {getBetAmount('3rd12') > 0 && <div className="absolute top-1 right-1 bg-white text-black text-[9px] font-black px-1.5 py-0.5 rounded-full">₺{getBetAmount('3rd12')}</div>}
                         </button>
                     </div>
 
                     {/* Specific Number */}
                     <div className="mt-4 p-3 bg-[#151D24] rounded-md border border-[#2A3744]">
                         <div className="flex items-center justify-between mb-2">
-                            <label className="text-xs text-gray-400 font-semibold cursor-pointer flex items-center gap-2" onClick={() => setSelectedBet('number')}>
-                                <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${selectedBet === 'number' ? 'border-[#3D82F6] bg-[#3D82F6]/20' : 'border-gray-600'}`}>
-                                    {selectedBet === 'number' && <div className="w-2 h-2 rounded-full bg-[#3D82F6]"></div>}
-                                </div>
+                            <label className="text-xs text-gray-400 font-semibold flex items-center gap-2">
                                 Belirli Sayı (Ödeme: 36x)
                             </label>
+                            {getBetAmount('number', selectedNumber) > 0 && (
+                                <span className="text-xs text-[#00E5FF] font-bold">₺{getBetAmount('number', selectedNumber)}</span>
+                            )}
                         </div>
-                        <div className="flex items-center gap-2 opacity-100 transition-opacity">
+                        <div className="flex items-center gap-2 opacity-100 transition-opacity mb-3">
                             <input 
                                 type="range" 
                                 min="0" 
                                 max="36" 
                                 value={selectedNumber}
-                                onChange={(e) => {
-                                    setSelectedNumber(Number(e.target.value));
-                                    setSelectedBet('number');
-                                }}
+                                onChange={(e) => setSelectedNumber(Number(e.target.value))}
                                 disabled={isPlaying}
                                 className="flex-1 accent-[#3D82F6]"
                             />
-                            <div className="w-10 h-10 bg-[#0B0E14] rounded flex items-center justify-center font-black text-[#00E5FF] shadow-inner text-lg">
+                            <div className="w-10 h-10 bg-[#0B0E14] rounded flex items-center justify-center font-black text-[#00E5FF] shadow-inner text-lg border border-[#00E5FF]/20">
                                 {selectedNumber}
                             </div>
                         </div>
+                        <button 
+                            onClick={() => handleAddBet('number', selectedNumber)}
+                            disabled={isPlaying}
+                            className="w-full py-2 bg-[#3D82F6] hover:bg-[#2563EB] text-white font-bold text-xs rounded transition-colors"
+                        >
+                            {selectedNumber} Numarasına Bahis Ekle
+                        </button>
                     </div>
                 </div>
 
                 {/* Actions */}
                 <div className="flex flex-col gap-2 mt-auto">
-                    <button 
-                        onClick={handlePlay}
-                        disabled={isPlaying || !selectedBet}
-                        className={`w-full font-bold py-3.5 rounded-md transition-colors shadow-lg ${
-                            isPlaying || !selectedBet ? 'bg-[#324555] text-gray-400 cursor-not-allowed' : 'bg-emerald-500 hover:bg-emerald-600 text-white'
-                        }`}
-                    >
-                        {isPlaying ? 'Çevriliyor...' : 'Bahis (Çevir)'}
-                    </button>
+                    <div className="flex gap-2">
+                        <button 
+                            onClick={handleClearBets}
+                            disabled={isPlaying || placedBets.length === 0}
+                            className={`px-4 font-bold rounded-md transition-colors flex items-center justify-center ${
+                                isPlaying || placedBets.length === 0 ? 'bg-[#151D24] text-gray-600 cursor-not-allowed border border-[#2A3744]' : 'bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/30'
+                            }`}
+                            title="Bahisleri Temizle"
+                        >
+                            <Trash2 className="w-5 h-5" />
+                        </button>
+                        <button 
+                            onClick={handlePlay}
+                            disabled={isPlaying || placedBets.length === 0}
+                            className={`flex-1 font-bold py-3.5 rounded-md transition-colors shadow-lg flex items-center justify-center gap-2 ${
+                                isPlaying || placedBets.length === 0 ? 'bg-[#324555] text-gray-400 cursor-not-allowed' : 'bg-emerald-500 hover:bg-emerald-600 text-white'
+                            }`}
+                        >
+                            {isPlaying ? 'Çevriliyor...' : (
+                                <>
+                                    Bahis (Çevir)
+                                    {placedBets.length > 0 && (
+                                        <span className="bg-white/20 px-2 py-0.5 rounded-full text-[10px]">
+                                            {placedBets.length} Bahis
+                                        </span>
+                                    )}
+                                </>
+                            )}
+                        </button>
+                    </div>
                 </div>
 
                 {/* Profit */}
@@ -277,7 +354,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                     <div className={`mt-4 bg-[#151D24] rounded-md border px-3 py-3 flex items-center justify-between transition-colors ${winAmount > 0 ? 'border-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.3)]' : 'border-[#2A3744]'}`}>
                         <span className="text-gray-400 text-xs font-bold uppercase">{winAmount > 0 ? 'Kazanç' : 'Kayıp'}</span>
                         <span className={`font-mono text-sm font-bold ${winAmount > 0 ? 'text-emerald-400' : 'text-red-400'}`}>
-                            {winAmount > 0 ? `+₺${winAmount.toFixed(2)}` : `-₺${betAmount.toFixed(2)}`}
+                            {winAmount > 0 ? `+₺${winAmount.toFixed(2)}` : `-₺${totalBetAmount.toFixed(2)}`}
                         </span>
                     </div>
                 )}
