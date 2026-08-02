@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { X, Send, Shield, Smile, Cpu, Target, ChevronDown, MessageCircle, MoreVertical, Heart, CornerUpLeft, Trash2, VolumeX, Ban, User, Check, Star } from 'lucide-react';
+import { X, Send, Shield, Smile, Cpu, Target, ChevronDown, MessageCircle, MoreVertical, Heart, CornerUpLeft, Trash2, VolumeX, Ban, User, Check, Star, Trophy } from 'lucide-react';
 import { supabase, getGlobalConfig, updateGlobalConfig } from '../utils/supabase';
 import { triggerGlobalToast } from './GlobalToaster';
 import { useTranslation } from 'react-i18next';
@@ -764,6 +764,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
                         const isSystem = msg.role?.toUpperCase() === 'SYSTEM';
                         const isVip = msg.role?.toUpperCase() === 'VIP';
                         const isBetShare = (msg.message || '').startsWith('[BET_SHARE:');
+                        const isBigWin = (msg.message || '').startsWith('[BIG_WIN:');
                         const isMentioned = siteUser && (msg.message || '').includes(`@${siteUser.username}`);
                         
                         const userName = msg.username || 'Misafir';
@@ -812,6 +813,38 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
                                                 replies={replies} 
                                                 onReply={handleSendReply} 
                                             />
+                                        </div>
+                                    </div>
+                                );
+                            }
+                        } else if (isBigWin) {
+                            let payload: any = null;
+                            try {
+                                const jsonStr = msg.message.replace('[BIG_WIN:', '').replace(/\]$/, '');
+                                payload = JSON.parse(jsonStr);
+                            } catch(e) {}
+                            
+                            if (payload) {
+                                return (
+                                    <div key={msg.id || i} className="mb-2.5 px-3 py-3 bg-[#11141A]/90 border border-white/5 rounded-xl shadow-[0_4px_15px_rgba(0,0,0,0.4)] flex items-start gap-3 relative overflow-hidden group">
+                                        {/* Icon */}
+                                        <div className="flex flex-col items-center gap-1.5 shrink-0 z-10 pt-0.5">
+                                            <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center">
+                                                <Trophy className="w-5 h-5 text-white" />
+                                            </div>
+                                            <span className="text-[10px] font-bold text-slate-500">
+                                                {new Date(msg.created_at || Date.now()).toLocaleTimeString('tr-TR', {hour: '2-digit', minute:'2-digit'})}
+                                            </span>
+                                        </div>
+                                        {/* Content */}
+                                        <div className="flex flex-col z-10 flex-1">
+                                            <div className="flex items-center gap-2 mb-1.5">
+                                                <span className="bg-[#00E676] text-[#0A0D14] text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded-md">BOT</span>
+                                                <span className="text-white text-xs font-semibold">Büyük Kazanç</span>
+                                            </div>
+                                            <p className="text-[#E2E8F0] text-[13px] leading-relaxed font-medium">
+                                                <span className="font-bold text-white">{payload.username}</span> kullanıcısı <span className="font-bold text-white underline decoration-white/20 underline-offset-2">{payload.game}</span> oynarken <span className="font-bold text-[#00E676]">${payload.amount}</span> kazandı
+                                            </p>
                                         </div>
                                     </div>
                                 );

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { X, Crown, Megaphone, Trash2, ShieldAlert, Lock, Unlock, Send, Shield, Zap, Activity, Bot, ChevronDown, Coins, Clock, Target, Gift, EyeOff, Star, UploadCloud } from 'lucide-react';
+import { X, Crown, Megaphone, Trash2, ShieldAlert, Lock, Unlock, Send, Shield, Zap, Activity, Bot, ChevronDown, Coins, Clock, Target, Gift, EyeOff, Star, UploadCloud, Trophy } from 'lucide-react';
 import { triggerGlobalToast } from './GlobalToaster';
 import { supabase } from '../utils/supabase';
 
@@ -97,6 +97,11 @@ export default function KralChatModal({ isOpen, onClose }: KralChatModalProps) {
     const [selectedBotId, setSelectedBotId] = useState<number | null>(null);
     const [applyPersona, setApplyPersona] = useState(true);
 
+    // Big Win Bot State
+    const [bigWinUser, setBigWinUser] = useState('Memuta');
+    const [bigWinGame, setBigWinGame] = useState('Sweet Bonanza 1000');
+    const [bigWinAmount, setBigWinAmount] = useState('56,332.54');
+
     // Sniper Mode (Target User)
     const [targetUser, setTargetUser] = useState<{name: string, role: string, x: number, y: number} | null>(null);
 
@@ -184,6 +189,18 @@ export default function KralChatModal({ isOpen, onClose }: KralChatModalProps) {
         }]);
         setChatInput('');
         triggerGlobalToast(`${senderName} adına mesaj hazırlandı!`, 'success');
+    };
+
+    const handleSendBigWin = () => {
+        const payload = { username: bigWinUser, game: bigWinGame, amount: bigWinAmount };
+        setMessages(prev => [...prev, {
+            id: Date.now(),
+            user: 'Sistem',
+            role: 'system',
+            msg: `[BIG_WIN:${JSON.stringify(payload)}]`,
+            isPushed: false
+        }]);
+        triggerGlobalToast('Büyük Kazanç duyurusu hazırlandı!', 'success');
     };
 
     const handleAutoHype = () => {
@@ -313,6 +330,46 @@ export default function KralChatModal({ isOpen, onClose }: KralChatModalProps) {
                                         <button 
                                             onClick={handleSendAnnounce}
                                             className="px-4 py-2 bg-[#FFD700]/10 hover:bg-[#FFD700]/20 text-[#FFD700] border border-[#FFD700]/30 hover:border-[#FFD700]/50 rounded-lg text-xs font-bold transition-all"
+                                        >
+                                            Hazırla
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {/* Big Win Announce */}
+                                <div className="bg-[#0A0A0A] border border-emerald-500/20 rounded-2xl p-6 relative group">
+                                    <div className="absolute -top-10 -right-10 w-32 h-32 bg-emerald-500/10 blur-[40px] rounded-full group-hover:bg-emerald-500/20 transition-colors pointer-events-none"></div>
+                                    <h3 className="text-sm font-black text-emerald-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                                        <Trophy className="w-4 h-4" /> Bot Büyük Kazanç (Hazırla)
+                                    </h3>
+                                    <div className="space-y-3">
+                                        <input 
+                                            type="text" 
+                                            value={bigWinUser} 
+                                            onChange={e => setBigWinUser(e.target.value)} 
+                                            placeholder="Kullanıcı Adı" 
+                                            className="w-full bg-[#111216]/50 border border-white/5 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-emerald-500/50" 
+                                        />
+                                        <input 
+                                            type="text" 
+                                            value={bigWinGame} 
+                                            onChange={e => setBigWinGame(e.target.value)} 
+                                            placeholder="Oyun Adı" 
+                                            className="w-full bg-[#111216]/50 border border-white/5 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-emerald-500/50" 
+                                        />
+                                        <input 
+                                            type="text" 
+                                            value={bigWinAmount} 
+                                            onChange={e => setBigWinAmount(e.target.value)} 
+                                            placeholder="Kazanç Miktarı (örn. 56,332.54)" 
+                                            className="w-full bg-[#111216]/50 border border-white/5 rounded-xl p-3 text-sm text-emerald-400 font-bold focus:outline-none focus:border-emerald-500/50" 
+                                        />
+                                    </div>
+                                    <div className="flex justify-between items-center mt-3">
+                                        <p className="text-[9px] text-zinc-500 uppercase tracking-widest font-bold max-w-[200px]">Not: "PUSHLA" butonuna basılana kadar kimse görmez.</p>
+                                        <button 
+                                            onClick={handleSendBigWin}
+                                            className="px-4 py-2 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 hover:border-emerald-500/50 rounded-lg text-xs font-bold transition-all"
                                         >
                                             Hazırla
                                         </button>
