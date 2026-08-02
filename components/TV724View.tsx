@@ -312,6 +312,7 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
     const [isPlaying, setIsPlaying] = useState(true);
     const [isMuted, setIsMuted] = useState(true);
     const [isFullscreen, setIsFullscreen] = useState(false);
+    const [isTheaterMode, setIsTheaterMode] = useState(false);
     const [isMiniPlayer, setIsMiniPlayer] = useState(false);
     const [isIframeLoaded, setIsIframeLoaded] = useState(false);
     const iframeLoadTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -884,14 +885,10 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
         setTouchStartX(null);
     };
 
-    // ══ Player Fullscreen on tap (mobile) ═════════════════════════════════
+    // ══ Player Fullscreen on tap ════════════════════════════════════════
     const handlePlayerTap = () => {
-        const isMobile = window.innerWidth < 768;
-        if (isMobile && playerContainerRef.current && !document.fullscreenElement) {
-            playerContainerRef.current.requestFullscreen?.().catch(() => {});
-        } else {
-            setIsPlaying(!isPlaying);
-        }
+        // Desktop or mobile: toggle theater mode
+        setIsTheaterMode(!isTheaterMode);
     };
 
     // ══ Stream Embed ═════════════════════════════════════════════════════════
@@ -997,7 +994,7 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                 const embedUrl = (parsedId.startsWith('UC') || parsedId.startsWith('HC'))
                     ? `https://www.youtube.com/embed/live_stream?channel=${parsedId}&autoplay=1&mute=${ytMute}&playsinline=1&controls=0&showinfo=0&modestbranding=1&rel=0&disablekb=1&fs=0&iv_load_policy=3`
                     : `https://www.youtube.com/embed/${parsedId}?autoplay=1&mute=${ytMute}&playsinline=1&controls=0&showinfo=0&modestbranding=1&rel=0&disablekb=1&fs=0&iv_load_policy=3`;
-                return <div style={{ width: '100%', height: '100%', position: 'relative' }}>{customLoader}{watermarkOverlay}<iframe src={embedUrl} style={{ width: '100%', height: '100%', border: 'none' }} allowFullScreen allow="autoplay; encrypted-media; fullscreen; picture-in-picture" onLoad={handleIframeLoad} title={activeChannel.name} /></div>;
+                return <div style={{ width: '100%', height: '100%', position: 'relative' }}>{customLoader}{watermarkOverlay}<iframe src={embedUrl} style={{ width: '100%', height: '100%', border: 'none' }} allow="autoplay; encrypted-media; picture-in-picture" onLoad={handleIframeLoad} title={activeChannel.name} /></div>;
             }
         }
         if (sourceType === 'video') return <div style={{ width: '100%', height: '100%', background: '#000', position: 'relative' }}>{watermarkOverlay}<video ref={videoRef} src={activeChannel.videoUrl || activeChannel.streamUrl} autoPlay={isPlaying} muted={isMuted} playsInline loop style={{ width: '100%', height: '100%', objectFit: 'contain' }} /></div>;
@@ -1014,10 +1011,10 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                     finalUrl = `${mbUrl.replace(/\/$/, '')}/channel?id=${idMatch[1]}`;
                 }
             }
-            return <div style={{ width: '100%', height: '100%', position: 'relative' }}>{customLoader}{watermarkOverlay}<iframe src={finalUrl} style={{ width: '100%', height: '100%', border: 'none' }} allowFullScreen allow="autoplay; encrypted-media; fullscreen; picture-in-picture" onLoad={handleIframeLoad} title={activeChannel.name} /></div>;
+            return <div style={{ width: '100%', height: '100%', position: 'relative' }}>{customLoader}{watermarkOverlay}<iframe src={finalUrl} style={{ width: '100%', height: '100%', border: 'none' }} allow="autoplay; encrypted-media; picture-in-picture" onLoad={handleIframeLoad} title={activeChannel.name} /></div>;
         }
         if (activeChannel.fallbackType === 'video' && activeChannel.fallbackVideoUrl) return <div style={{ width: '100%', height: '100%', background: '#000', position: 'relative' }}>{watermarkOverlay}<video ref={videoRef} src={activeChannel.fallbackVideoUrl} autoPlay={isPlaying} muted={isMuted} playsInline loop style={{ width: '100%', height: '100%', objectFit: 'contain' }} /></div>;
-        if (activeChannel.fallbackType === 'iframe' && activeChannel.fallbackIframeUrl) return <div style={{ width: '100%', height: '100%', position: 'relative' }}>{customLoader}{watermarkOverlay}<iframe src={activeChannel.fallbackIframeUrl} style={{ width: '100%', height: '100%', border: 'none' }} allowFullScreen allow="autoplay; encrypted-media; fullscreen; picture-in-picture" onLoad={handleIframeLoad} title={activeChannel.name} /></div>;
+        if (activeChannel.fallbackType === 'iframe' && activeChannel.fallbackIframeUrl) return <div style={{ width: '100%', height: '100%', position: 'relative' }}>{customLoader}{watermarkOverlay}<iframe src={activeChannel.fallbackIframeUrl} style={{ width: '100%', height: '100%', border: 'none' }} allow="autoplay; encrypted-media; picture-in-picture" onLoad={handleIframeLoad} title={activeChannel.name} /></div>;
 
         return (
             <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: '#06b6d4', gap: '12px', background: 'radial-gradient(circle, #111118 0%, #040507 100%)' }}>
@@ -1075,7 +1072,9 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
     }
 
     return (
-        <div ref={wrapperRef} className="tv-redesign-wrapper animate-fade-in" style={{ width: '100%', minHeight: '100vh', fontFamily: "'Inter', sans-serif", backgroundColor: '#050508', backgroundImage: 'radial-gradient(circle at 50% 0%, rgba(212,175,55,0.03) 0%, #050508 70%)', position: 'relative', overflow: 'hidden' }}>
+        <div ref={wrapperRef} className="tv-redesign-wrapper animate-fade-in" style={isTheaterMode ? {
+            position: 'fixed', top: 0, left: 0, bottom: 0, right: window.innerWidth >= 1280 ? '350px' : 0, zIndex: 99990, backgroundColor: '#050508', width: 'auto', minHeight: '100vh', fontFamily: "'Inter', sans-serif"
+        } : { width: '100%', minHeight: '100vh', fontFamily: "'Inter', sans-serif", backgroundColor: '#050508', backgroundImage: 'radial-gradient(circle at 50% 0%, rgba(212,175,55,0.03) 0%, #050508 70%)', position: 'relative', overflow: 'hidden' }}>
             {/* Elegant dark edges */}
             <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', boxShadow: 'inset 0 0 100px rgba(0, 0, 0, 0.8)', zIndex: 0 }} />
             
@@ -1099,16 +1098,18 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
             <div style={{ maxWidth: '1400px', margin: '0 auto', padding: isMobile ? '10px' : '20px', position: 'relative', zIndex: 10, display: 'flex', flexDirection: 'column', gap: '20px' }}>
                 
                 {/* ─── SPORTS SLIDER ─── */}
-                <div className="w-full -mt-2 mb-2">
-                    <SportsPromoSlider matches={matches} compact={true} />
-                </div>
+                {!isTheaterMode && (
+                    <div className="w-full -mt-2 mb-2">
+                        <SportsPromoSlider matches={matches} compact={true} />
+                    </div>
+                )}
 
                 {/* Main Column Layout */}
-                <div className="mx-auto w-full max-w-5xl" style={{ display: 'flex', flexDirection: 'column', gap: '24px', alignItems: 'stretch' }}>
+                <div className="mx-auto w-full max-w-5xl" style={isTheaterMode ? { display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'center', maxWidth: 'none' } : { display: 'flex', flexDirection: 'column', gap: '24px', alignItems: 'stretch' }}>
                     
                     {/* TOP: Video Player */}
-                    <div className="mx-auto" style={{ width: '100%', maxWidth: '768px', position: 'relative' }}>
-                        <div ref={playerContainerRef} style={{ width: '100%', aspectRatio: isMobile ? '16/9' : '21/9', maxHeight: '40vh', background: '#000', borderRadius: '12px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.05)', position: 'relative', boxShadow: '0 20px 50px rgba(0,0,0,0.5)' }}>
+                    <div className="mx-auto" style={isTheaterMode ? { width: '100%', height: '100vh', position: 'relative' } : { width: '100%', maxWidth: '768px', position: 'relative' }}>
+                        <div ref={playerContainerRef} style={isTheaterMode ? { width: '100%', height: '100%', background: '#000', overflow: 'hidden', position: 'relative' } : { width: '100%', aspectRatio: isMobile ? '16/9' : '21/9', maxHeight: '40vh', background: '#000', borderRadius: '12px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.05)', position: 'relative', boxShadow: '0 20px 50px rgba(0,0,0,0.5)' }}>
                             
                             {!activeChannel ? (
                                 <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: 'radial-gradient(circle at center, #0a110d 0%, #000 100%)' }}>
@@ -1162,8 +1163,7 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                                                 <span style={{ fontSize: '10px', fontWeight: 800, color: '#10b981' }}>CANLI</span>
                                             </div>
                                             <button onClick={() => {
-                                                if (document.fullscreenElement) document.exitFullscreen();
-                                                else playerContainerRef.current?.requestFullscreen();
+                                                setIsTheaterMode(!isTheaterMode);
                                             }} style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer' }}>
                                                 <Maximize style={{ width: 18, height: 18 }} />
                                             </button>
@@ -1260,23 +1260,26 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                     </div>
 
                     {/* Feature Banners */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
-                        <div onClick={() => setIsChannelsModalOpen(!isChannelsModalOpen)} className={`bg-[#12141a] border rounded-xl p-5 md:p-6 flex flex-col justify-center transition-colors cursor-pointer relative overflow-hidden group ${isChannelsModalOpen ? 'border-[#10b981]/50 bg-[#1a1d24]' : 'border-white/5 hover:bg-[#1a1d24]'}`}>
-                            <div className={`absolute inset-0 bg-gradient-to-r from-[#10b981]/0 via-[#10b981]/5 to-[#10b981]/0 transition-opacity ${isChannelsModalOpen ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`} />
-                            <h4 className="text-white text-lg md:text-xl font-bold mb-1 relative z-10 flex items-center gap-2">
-                                <Tv className="w-5 h-5 text-[#10b981]" /> Kanallar
-                            </h4>
-                            <p className="text-zinc-400 text-[10px] md:text-xs font-bold uppercase tracking-wider relative z-10">TÜM CANLI YAYINLARI KEŞFEDİN</p>
+                    {!isTheaterMode && (
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
+                            <div onClick={() => setIsChannelsModalOpen(!isChannelsModalOpen)} className={`bg-[#12141a] border rounded-xl p-5 md:p-6 flex flex-col justify-center transition-colors cursor-pointer relative overflow-hidden group ${isChannelsModalOpen ? 'border-[#10b981]/50 bg-[#1a1d24]' : 'border-white/5 hover:bg-[#1a1d24]'}`}>
+                                <div className={`absolute inset-0 bg-gradient-to-r from-[#10b981]/0 via-[#10b981]/5 to-[#10b981]/0 transition-opacity ${isChannelsModalOpen ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`} />
+                                <h4 className="text-white text-lg md:text-xl font-bold mb-1 relative z-10 flex items-center gap-2">
+                                    <Tv className="w-5 h-5 text-[#10b981]" /> Kanallar
+                                </h4>
+                                <p className="text-zinc-400 text-[10px] md:text-xs font-bold uppercase tracking-wider relative z-10">TÜM CANLI YAYINLARI KEŞFEDİN</p>
+                            </div>
+                            <div className="bg-[#12141a] border border-white/5 rounded-xl p-5 md:p-6 flex flex-col justify-center hover:bg-[#1a1d24] transition-colors cursor-pointer">
+                                <h4 className="text-white text-lg md:text-xl font-bold mb-1">Güvenilir Sistem</h4>
+                                <p className="text-zinc-400 text-[10px] md:text-xs font-bold uppercase tracking-wider">LİSANSLI ALTYAPI İLE GÜVENDESİNİZ</p>
+                            </div>
+                            <div className="bg-[#12141a] border border-white/5 rounded-xl p-5 md:p-6 flex flex-col justify-center hover:bg-[#1a1d24] transition-colors cursor-pointer">
+                                <h4 className="text-white text-lg md:text-xl font-bold mb-1">Canlı Destek</h4>
+                                <p className="text-zinc-400 text-[10px] md:text-xs font-bold uppercase tracking-wider">7/24 KESİNTİSİZ HİZMET</p>
+                            </div>
                         </div>
-                        <div className="bg-[#12141a] border border-white/5 rounded-xl p-5 md:p-6 flex flex-col justify-center hover:bg-[#1a1d24] transition-colors cursor-pointer">
-                            <h4 className="text-white text-lg md:text-xl font-bold mb-1">Güvenilir Sistem</h4>
-                            <p className="text-zinc-400 text-[10px] md:text-xs font-bold uppercase tracking-wider">LİSANSLI ALTYAPI İLE GÜVENDESİNİZ</p>
-                        </div>
-                        <div className="bg-[#12141a] border border-white/5 rounded-xl p-5 md:p-6 flex flex-col justify-center hover:bg-[#1a1d24] transition-colors cursor-pointer">
-                            <h4 className="text-white text-lg md:text-xl font-bold mb-1">Canlı Destek</h4>
-                            <p className="text-zinc-400 text-[10px] md:text-xs font-bold uppercase tracking-wider">7/24 KESİNTİSİZ HİZMET</p>
-                        </div>
-                    </div>
+                    )}
+
 
                     {/* Inline Channels Container */}
                     <div className={`w-full overflow-hidden transition-all duration-500 ease-in-out ${isChannelsModalOpen ? 'max-h-[3000px] opacity-100 mt-2' : 'max-h-0 opacity-0 mt-0 pointer-events-none'}`}>
