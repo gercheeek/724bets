@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useUser } from '../contexts/UserContext';
-import { Coins } from 'lucide-react';
+import { Coins, User } from 'lucide-react';
 
 type BetColor = 'red' | 'green' | 'black';
 type GameState = 'betting' | 'spinning' | 'result';
@@ -10,8 +10,16 @@ interface PlacedBet {
     amount: number;
 }
 
+interface FakeBet {
+    id: string;
+    name: string;
+    amount: number;
+    color: BetColor;
+}
+
 const BRICK_WIDTH = 100;
 const TOTAL_BRICKS = 100;
+const MAX_BET = 100;
 
 const ASSETS = {
     btnGrey: 'https://gamdom.com/build/button_grey.d7429b7c0b343420ecdf.svg',
@@ -21,8 +29,9 @@ const ASSETS = {
     brickGrey: 'https://gamdom.com/build/brick_grey.613ecdb6fc.500.webp',
     brickRed: 'https://gamdom.com/build/brick_red.c0aaf93b01.500.webp',
     tanzanite: 'https://gamdom.com/static/img/tanzanite.svg',
-    chest: 'https://gamdom.com/static/img/chest.png', // Fallback or placeholder for the chest
 };
+
+const FAKE_NAMES = ['tenshi 13', 'Hidden user', 'PrimeMinister', 'Alex99', 'CryptoKing', 'LuckyGuy', 'Anon', 'GamerX', 'BetMaster', 'Whale99'];
 
 interface BrickData {
     color: BetColor;
@@ -40,7 +49,6 @@ const generateReel = (): BrickData[] => {
         let color: BetColor = 'black';
         let num = 0;
 
-        // Force a green every once in a while, e.g. at index 50, but usually alternate
         if (i === 50 || (Math.random() < 0.01 && i > 10 && i < 80)) {
             color = 'green';
             num = 0;
@@ -66,6 +74,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
     const { playInstantGame, isFunMode, demoBalance, setDemoBalance } = useUser();
     const [betAmount, setBetAmount] = useState<number>(1);
     const [placedBets, setPlacedBets] = useState<PlacedBet[]>([]);
+    const [fakeBets, setFakeBets] = useState<FakeBet[]>([]);
     
     // Global Loop State
     const [gameState, setGameState] = useState<GameState>('betting');
@@ -99,6 +108,24 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
         return () => clearInterval(interval);
     }, [gameState]);
 
+    // -- FAKE PLAYERS LOOP --
+    useEffect(() => {
+        if (gameState !== 'betting') return;
+        
+        const fakeBetInterval = setInterval(() => {
+            if (Math.random() > 0.3) {
+                const colors: BetColor[] = ['red', 'black', 'green', 'red', 'black']; // Weighted
+                const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                const randomName = FAKE_NAMES[Math.floor(Math.random() * FAKE_NAMES.length)];
+                const randomAmount = randomColor === 'green' ? Number((Math.random() * 5).toFixed(2)) : Number((Math.random() * 50 + 1).toFixed(2));
+                
+                setFakeBets(prev => [{ id: Math.random().toString(), name: randomName, amount: randomAmount, color: randomColor }, ...prev].slice(0, 50));
+            }
+        }, 600); // Check every 600ms
+
+        return () => clearInterval(fakeBetInterval);
+    }, [gameState]);
+
     // -- PHASE HANDLER --
     useEffect(() => {
         if (gameState === 'spinning') {
@@ -113,6 +140,11 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
             return;
         }
         if (betAmount <= 0) return alert('Geçerli bir bahis tutarı girin.');
+        
+        if (totalBetAmount + betAmount > MAX_BET) {
+            return alert(`Bir turda maksimum bahis tutarı $${MAX_BET} olabilir.`);
+        }
+
         if (isFunMode && (totalBetAmount + betAmount) > demoBalance) return alert('Yetersiz demo bakiye.');
         
         setPlacedBets(prev => {
@@ -134,6 +166,18 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
     const getBetAmount = (type: BetColor) => {
         const bet = placedBets.find(b => b.type === type);
         return bet ? bet.amount : 0;
+    };
+
+    const getColumnTotal = (type: BetColor) => {
+        const userBet = getBetAmount(type);
+        const fakeTotal = fakeBets.filter(b => b.color === type).reduce((sum, b) => sum + b.amount, 0);
+        return userBet + fakeTotal;
+    };
+
+    const getColumnCount = (type: BetColor) => {
+        const userBetCount = getBetAmount(type) > 0 ? 1 : 0;
+        const fakeCount = fakeBets.filter(b => b.color === type).length;
+        return userBetCount + fakeCount;
     };
 
     const runGameLogic = async () => {
@@ -224,6 +268,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                     setGameState('betting');
                     setTimeLeft(15000);
                     setPlacedBets([]);
+                    setFakeBets([]); // Clear fake bets for new round
                     // Silently reset the slider back to start
                     setIsSpinning(false);
                     setSlideOffset(startPosition);
@@ -237,14 +282,13 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
             setGameState('betting');
             setTimeLeft(15000);
             setPlacedBets([]);
+            setFakeBets([]);
         }
     };
 
     return (
         <div className="flex flex-col w-full h-full bg-[#111419] text-white font-sans overflow-y-auto">
             
-            {/* Top Bar removed as requested */}
-
             <div className="flex-1 flex flex-col w-full max-w-6xl mx-auto p-4 md:p-8">
                 
                 {/* ── HISTORY & STATS BAR ── */}
@@ -353,7 +397,10 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                             <button className="px-4 py-3 text-xs font-bold text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition-colors bg-[#222730] shadow-inner" onClick={() => setBetAmount(prev => prev + 100)}>+$100</button>
                             <button className="px-4 py-3 text-xs font-bold text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition-colors bg-[#222730] shadow-inner" onClick={() => setBetAmount(prev => Math.max(1, prev / 2))}>1/2</button>
                             <button className="px-4 py-3 text-xs font-bold text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition-colors bg-[#222730] shadow-inner" onClick={() => setBetAmount(prev => prev * 2)}>x2</button>
-                            <button className="px-4 py-3 text-xs font-bold text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition-colors bg-[#222730] shadow-inner" onClick={() => setBetAmount(isFunMode ? demoBalance : (siteUser?.balance || 0))}>Max</button>
+                            <button className="px-4 py-3 text-xs font-bold text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition-colors bg-[#222730] shadow-inner" onClick={() => {
+                                const bal = isFunMode ? demoBalance : (siteUser?.balance || 0);
+                                setBetAmount(Math.min(bal, MAX_BET));
+                            }}>Max</button>
                             <button className="px-4 py-3 text-xs font-bold text-emerald-400 hover:text-emerald-300 bg-emerald-500/10 rounded-lg transition-colors border border-emerald-500/20 ml-2">
                                 + Otomatik bahis
                             </button>
@@ -361,99 +408,162 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                     </div>
                 </div>
 
-                {/* ── BETTING BUTTONS ── */}
+                {/* ── BETTING BUTTONS & LISTS ── */}
                 <div className="w-full flex flex-col md:flex-row gap-6 mb-12 items-stretch max-w-6xl mx-auto">
                     
-                    {/* RED BUTTON */}
-                    <div className="flex-1 flex flex-col group cursor-pointer" onClick={() => handleAddBet('red')}>
+                    {/* RED SECTION */}
+                    <div className="flex-1 flex flex-col">
                         <div 
-                            className={`relative w-full h-20 sm:h-24 mb-4 transition-all flex items-center justify-between px-6 sm:px-10 overflow-hidden rounded-xl shadow-lg ${gameState !== 'betting' ? 'opacity-50' : 'hover:-translate-y-1 active:translate-y-0'}`}
+                            className={`relative w-full h-20 sm:h-24 mb-4 transition-all flex items-center justify-between px-6 sm:px-10 overflow-hidden rounded-xl shadow-lg cursor-pointer ${gameState !== 'betting' ? 'opacity-50' : 'hover:-translate-y-1 active:translate-y-0'}`}
                             style={{ backgroundImage: `url(${ASSETS.btnRed})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+                            onClick={() => handleAddBet('red')}
                         >
                             <span className="text-white font-black text-2xl drop-shadow-md">Kırmızı</span>
                             <span className="text-white/60 font-bold text-lg drop-shadow-md bg-black/20 px-4 py-1 rounded-full">X2</span>
                         </div>
                         
-                        <div className="bg-[#171a21] border border-white/5 rounded-xl p-4 min-h-[120px] shadow-inner">
-                            <div className="flex justify-between items-center mb-4 text-xs font-bold text-gray-500 uppercase">
-                                <span>Toplam Bahisler</span>
+                        <div className="bg-[#171a21] border border-white/5 rounded-xl p-4 flex-1 shadow-inner overflow-hidden flex flex-col">
+                            <div className="flex justify-between items-center mb-4 text-xs font-bold text-gray-500 uppercase pb-2 border-b border-white/5">
+                                <span>{getColumnCount('red')} Toplam Bahisler</span>
                                 <div className="flex items-center gap-1 text-white bg-[#0f1215] px-2 py-1 rounded-md">
                                     <img src={ASSETS.tanzanite} alt="Coin" className="h-3" />
-                                    <span>{getBetAmount('red').toFixed(2)}</span>
+                                    <span>{getColumnTotal('red').toFixed(2)}</span>
                                 </div>
                             </div>
-                            {getBetAmount('red') > 0 ? (
-                                <div className="flex justify-between items-center pt-3 border-t border-white/5">
-                                    <div className="flex items-center gap-2">
-                                        <div className="w-6 h-6 bg-[#0f1215] rounded flex items-center justify-center border border-red-500/30 text-white font-bold text-[10px]">Sen</div>
+                            
+                            <div className="flex-1 overflow-y-auto pr-1 space-y-2 max-h-[160px] custom-scrollbar">
+                                {/* User Bet */}
+                                {getBetAmount('red') > 0 && (
+                                    <div className="flex justify-between items-center py-1">
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-6 h-6 bg-[#0f1215] rounded flex items-center justify-center border border-red-500/30 text-white font-bold text-[10px]">Sen</div>
+                                            <span className="text-sm text-gray-300 font-medium truncate max-w-[100px]">Sen</span>
+                                        </div>
+                                        <span className="text-sm font-bold text-emerald-400">${getBetAmount('red').toFixed(2)}</span>
                                     </div>
-                                    <span className="text-sm font-bold text-emerald-400">${getBetAmount('red').toFixed(2)}</span>
-                                </div>
-                            ) : (
-                                <div className="text-xs text-gray-600 text-center py-4">Henüz bahis yok</div>
-                            )}
+                                )}
+                                
+                                {/* Fake Bets */}
+                                {fakeBets.filter(b => b.color === 'red').map(b => (
+                                    <div key={b.id} className="flex justify-between items-center py-1">
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-6 h-6 bg-[#0f1215] rounded flex items-center justify-center border border-white/5 text-gray-400">
+                                                <User size={12} />
+                                            </div>
+                                            <span className="text-sm text-gray-400 font-medium truncate max-w-[100px]">{b.name}</span>
+                                        </div>
+                                        <span className="text-sm font-bold text-emerald-400">${b.amount.toFixed(2)}</span>
+                                    </div>
+                                ))}
+
+                                {getColumnCount('red') === 0 && (
+                                    <div className="text-xs text-gray-600 text-center py-4">Henüz bahis yok</div>
+                                )}
+                            </div>
                         </div>
                     </div>
 
-                    {/* GREEN BUTTON */}
-                    <div className="flex-1 flex flex-col group cursor-pointer" onClick={() => handleAddBet('green')}>
+                    {/* GREEN SECTION */}
+                    <div className="flex-1 flex flex-col">
                         <div 
-                            className={`relative w-full h-20 sm:h-24 mb-4 transition-all flex items-center justify-between px-6 sm:px-10 overflow-hidden rounded-xl shadow-lg ${gameState !== 'betting' ? 'opacity-50' : 'hover:-translate-y-1 active:translate-y-0'}`}
+                            className={`relative w-full h-20 sm:h-24 mb-4 transition-all flex items-center justify-between px-6 sm:px-10 overflow-hidden rounded-xl shadow-lg cursor-pointer ${gameState !== 'betting' ? 'opacity-50' : 'hover:-translate-y-1 active:translate-y-0'}`}
                             style={{ backgroundImage: `url(${ASSETS.btnGreen})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+                            onClick={() => handleAddBet('green')}
                         >
                             <span className="text-white font-black text-2xl drop-shadow-md">Yeşil</span>
                             <span className="text-white/60 font-bold text-lg drop-shadow-md bg-black/20 px-4 py-1 rounded-full">X100</span>
                         </div>
                         
-                        <div className="bg-[#171a21] border border-white/5 rounded-xl p-4 min-h-[120px] shadow-inner">
-                            <div className="flex justify-between items-center mb-4 text-xs font-bold text-gray-500 uppercase">
-                                <span>Toplam Bahisler</span>
+                        <div className="bg-[#171a21] border border-white/5 rounded-xl p-4 flex-1 shadow-inner overflow-hidden flex flex-col">
+                            <div className="flex justify-between items-center mb-4 text-xs font-bold text-gray-500 uppercase pb-2 border-b border-white/5">
+                                <span>{getColumnCount('green')} Toplam Bahisler</span>
                                 <div className="flex items-center gap-1 text-white bg-[#0f1215] px-2 py-1 rounded-md">
                                     <img src={ASSETS.tanzanite} alt="Coin" className="h-3" />
-                                    <span>{getBetAmount('green').toFixed(2)}</span>
+                                    <span>{getColumnTotal('green').toFixed(2)}</span>
                                 </div>
                             </div>
-                            {getBetAmount('green') > 0 ? (
-                                <div className="flex justify-between items-center pt-3 border-t border-white/5">
-                                    <div className="flex items-center gap-2">
-                                        <div className="w-6 h-6 bg-[#0f1215] rounded flex items-center justify-center border border-green-500/30 text-white font-bold text-[10px]">Sen</div>
+                            
+                            <div className="flex-1 overflow-y-auto pr-1 space-y-2 max-h-[160px] custom-scrollbar">
+                                {/* User Bet */}
+                                {getBetAmount('green') > 0 && (
+                                    <div className="flex justify-between items-center py-1">
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-6 h-6 bg-[#0f1215] rounded flex items-center justify-center border border-green-500/30 text-white font-bold text-[10px]">Sen</div>
+                                            <span className="text-sm text-gray-300 font-medium truncate max-w-[100px]">Sen</span>
+                                        </div>
+                                        <span className="text-sm font-bold text-emerald-400">${getBetAmount('green').toFixed(2)}</span>
                                     </div>
-                                    <span className="text-sm font-bold text-emerald-400">${getBetAmount('green').toFixed(2)}</span>
-                                </div>
-                            ) : (
-                                <div className="text-xs text-gray-600 text-center py-4">Henüz bahis yok</div>
-                            )}
+                                )}
+                                
+                                {/* Fake Bets */}
+                                {fakeBets.filter(b => b.color === 'green').map(b => (
+                                    <div key={b.id} className="flex justify-between items-center py-1">
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-6 h-6 bg-[#0f1215] rounded flex items-center justify-center border border-white/5 text-gray-400">
+                                                <User size={12} />
+                                            </div>
+                                            <span className="text-sm text-gray-400 font-medium truncate max-w-[100px]">{b.name}</span>
+                                        </div>
+                                        <span className="text-sm font-bold text-emerald-400">${b.amount.toFixed(2)}</span>
+                                    </div>
+                                ))}
+
+                                {getColumnCount('green') === 0 && (
+                                    <div className="text-xs text-gray-600 text-center py-4">Henüz bahis yok</div>
+                                )}
+                            </div>
                         </div>
                     </div>
 
-                    {/* BLACK (GREY) BUTTON */}
-                    <div className="flex-1 flex flex-col group cursor-pointer" onClick={() => handleAddBet('black')}>
+                    {/* BLACK (GREY) SECTION */}
+                    <div className="flex-1 flex flex-col">
                         <div 
-                            className={`relative w-full h-20 sm:h-24 mb-4 transition-all flex items-center justify-between px-6 sm:px-10 overflow-hidden rounded-xl shadow-lg ${gameState !== 'betting' ? 'opacity-50' : 'hover:-translate-y-1 active:translate-y-0'}`}
+                            className={`relative w-full h-20 sm:h-24 mb-4 transition-all flex items-center justify-between px-6 sm:px-10 overflow-hidden rounded-xl shadow-lg cursor-pointer ${gameState !== 'betting' ? 'opacity-50' : 'hover:-translate-y-1 active:translate-y-0'}`}
                             style={{ backgroundImage: `url(${ASSETS.btnGrey})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+                            onClick={() => handleAddBet('black')}
                         >
                             <span className="text-white font-black text-2xl drop-shadow-md">Siyah</span>
                             <span className="text-white/60 font-bold text-lg drop-shadow-md bg-black/20 px-4 py-1 rounded-full">X2</span>
                         </div>
                         
-                        <div className="bg-[#171a21] border border-white/5 rounded-xl p-4 min-h-[120px] shadow-inner">
-                            <div className="flex justify-between items-center mb-4 text-xs font-bold text-gray-500 uppercase">
-                                <span>Toplam Bahisler</span>
+                        <div className="bg-[#171a21] border border-white/5 rounded-xl p-4 flex-1 shadow-inner overflow-hidden flex flex-col">
+                            <div className="flex justify-between items-center mb-4 text-xs font-bold text-gray-500 uppercase pb-2 border-b border-white/5">
+                                <span>{getColumnCount('black')} Toplam Bahisler</span>
                                 <div className="flex items-center gap-1 text-white bg-[#0f1215] px-2 py-1 rounded-md">
                                     <img src={ASSETS.tanzanite} alt="Coin" className="h-3" />
-                                    <span>{getBetAmount('black').toFixed(2)}</span>
+                                    <span>{getColumnTotal('black').toFixed(2)}</span>
                                 </div>
                             </div>
-                            {getBetAmount('black') > 0 ? (
-                                <div className="flex justify-between items-center pt-3 border-t border-white/5">
-                                    <div className="flex items-center gap-2">
-                                        <div className="w-6 h-6 bg-[#0f1215] rounded flex items-center justify-center border border-gray-500/30 text-white font-bold text-[10px]">Sen</div>
+                            
+                            <div className="flex-1 overflow-y-auto pr-1 space-y-2 max-h-[160px] custom-scrollbar">
+                                {/* User Bet */}
+                                {getBetAmount('black') > 0 && (
+                                    <div className="flex justify-between items-center py-1">
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-6 h-6 bg-[#0f1215] rounded flex items-center justify-center border border-gray-500/30 text-white font-bold text-[10px]">Sen</div>
+                                            <span className="text-sm text-gray-300 font-medium truncate max-w-[100px]">Sen</span>
+                                        </div>
+                                        <span className="text-sm font-bold text-emerald-400">${getBetAmount('black').toFixed(2)}</span>
                                     </div>
-                                    <span className="text-sm font-bold text-emerald-400">${getBetAmount('black').toFixed(2)}</span>
-                                </div>
-                            ) : (
-                                <div className="text-xs text-gray-600 text-center py-4">Henüz bahis yok</div>
-                            )}
+                                )}
+                                
+                                {/* Fake Bets */}
+                                {fakeBets.filter(b => b.color === 'black').map(b => (
+                                    <div key={b.id} className="flex justify-between items-center py-1">
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-6 h-6 bg-[#0f1215] rounded flex items-center justify-center border border-white/5 text-gray-400">
+                                                <User size={12} />
+                                            </div>
+                                            <span className="text-sm text-gray-400 font-medium truncate max-w-[100px]">{b.name}</span>
+                                        </div>
+                                        <span className="text-sm font-bold text-emerald-400">${b.amount.toFixed(2)}</span>
+                                    </div>
+                                ))}
+
+                                {getColumnCount('black') === 0 && (
+                                    <div className="text-xs text-gray-600 text-center py-4">Henüz bahis yok</div>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -475,6 +585,22 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                     </div>
                 )}
             </div>
+            
+            <style dangerouslySetInnerHTML={{__html: `
+                .custom-scrollbar::-webkit-scrollbar {
+                    width: 4px;
+                }
+                .custom-scrollbar::-webkit-scrollbar-track {
+                    background: transparent;
+                }
+                .custom-scrollbar::-webkit-scrollbar-thumb {
+                    background: rgba(255, 255, 255, 0.1);
+                    border-radius: 10px;
+                }
+                .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+                    background: rgba(255, 255, 255, 0.2);
+                }
+            `}} />
         </div>
     );
 }
