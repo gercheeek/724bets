@@ -902,30 +902,38 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
 
                 {/* WIN/LOSS Overlay */}
                 {gameState === 'result' && winAmount !== null && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none p-4 overflow-hidden">
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-hidden">
+                        <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] pointer-events-auto"></div>
                         {winAmount > 0 ? (
-                            <div className="relative bg-gradient-to-br from-[#0f1215]/95 to-[#171a21]/95 px-8 md:px-20 py-8 md:py-12 rounded-3xl shadow-[0_30px_100px_rgba(16,185,129,0.4)] border border-emerald-500/50 flex flex-col items-center backdrop-blur-md animate-pop-in">
-                                <div className="absolute inset-0 bg-emerald-500/10 rounded-3xl animate-pulse"></div>
-                                {/* Glow effect */}
-                                <div className="absolute -top-10 -left-10 w-40 h-40 bg-emerald-500/30 rounded-full blur-[60px]"></div>
-                                <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-emerald-500/30 rounded-full blur-[60px]"></div>
+                            <div className="relative px-8 md:px-24 py-10 md:py-16 rounded-[2rem] border-t-2 border-emerald-400 shadow-[0_0_100px_rgba(16,185,129,0.5)] flex flex-col items-center backdrop-blur-2xl animate-pop-in z-10 overflow-hidden" style={{ background: 'radial-gradient(circle at top, rgba(16,185,129,0.3) 0%, rgba(15,18,21,0.95) 70%)' }}>
+                                {/* Golden/Emerald Shine Sweep */}
+                                <div className="absolute inset-0 animate-shine opacity-30"></div>
                                 
-                                <span className="text-xs md:text-sm font-black uppercase tracking-[0.3em] mb-3 text-emerald-400 drop-shadow-[0_0_10px_rgba(16,185,129,0.8)] z-10">Kazandın!</span>
-                                <span className="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-400 drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)] z-10 mb-4">+${winAmount.toFixed(2)}</span>
-                                <div className="bg-emerald-500/20 text-emerald-300 text-xs font-bold px-4 py-1.5 rounded-full border border-emerald-500/30 z-10">Tebrikler</div>
+                                <div className="absolute -top-20 -left-20 w-64 h-64 bg-emerald-500/20 rounded-full blur-[80px]"></div>
+                                <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-emerald-500/20 rounded-full blur-[80px]"></div>
+                                
+                                <div className="flex items-center justify-center gap-4 mb-2 z-10 animate-bounce-scale">
+                                    <img src={ASSETS.tanzanite} alt="Coin" className="h-10 md:h-14 drop-shadow-[0_0_20px_rgba(255,184,0,0.8)]" />
+                                    <span className="text-5xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white via-gray-200 to-gray-600 drop-shadow-[0_15px_25px_rgba(0,0,0,0.9)] tracking-tighter">
+                                        +${winAmount.toFixed(2)}
+                                    </span>
+                                </div>
+                                
+                                <div className="z-10 bg-emerald-500/20 text-emerald-400 text-sm md:text-base font-black px-6 py-2 rounded-full border border-emerald-500/40 uppercase tracking-[0.4em] shadow-[0_0_30px_rgba(16,185,129,0.4)] mt-6">
+                                    Kazandın
+                                </div>
                             </div>
                         ) : (
-                            <div className="relative bg-[#0f1215]/90 px-8 md:px-20 py-8 md:py-12 rounded-3xl shadow-[0_30px_100px_rgba(225,29,72,0.3)] border border-rose-500/30 flex flex-col items-center backdrop-blur-md animate-pop-in">
-                                {/* Subtle red glow */}
-                                <div className="absolute inset-0 bg-rose-500/5 rounded-3xl"></div>
-                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-rose-500/10 rounded-full blur-[80px]"></div>
-
-                                <span className="text-xs md:text-sm font-black uppercase tracking-[0.3em] mb-4 text-rose-500 drop-shadow-[0_0_10px_rgba(225,29,72,0.5)] z-10">Kaybettin</span>
-                                <div className="flex items-center gap-3 bg-[#171a21]/80 px-6 py-3 rounded-2xl border border-white/5 z-10 shadow-inner">
-                                    <span className="text-sm font-bold text-gray-400">Sonuç:</span>
-                                    <div className="flex items-center gap-2">
-                                        <div className={`w-4 h-4 rounded-full shadow-inner ${winningColor === 'red' ? 'bg-red-500' : winningColor === 'green' ? 'bg-green-500' : 'bg-gray-500'}`}></div>
-                                        <span className="text-lg font-black text-white">{winningColor === 'red' ? 'Kırmızı' : winningColor === 'green' ? 'Yeşil' : 'Siyah'}</span>
+                            <div className="relative px-8 md:px-24 py-10 md:py-16 rounded-[2rem] border-t-2 border-rose-500 shadow-[0_0_100px_rgba(225,29,72,0.2)] flex flex-col items-center backdrop-blur-2xl animate-pop-in z-10" style={{ background: 'radial-gradient(circle at top, rgba(225,29,72,0.15) 0%, rgba(15,18,21,0.95) 70%)' }}>
+                                <div className="absolute -top-20 -left-20 w-64 h-64 bg-rose-500/10 rounded-full blur-[80px]"></div>
+                                
+                                <span className="text-sm md:text-base font-black uppercase tracking-[0.5em] mb-6 text-gray-500 z-10">Kaybettin</span>
+                                
+                                <div className="flex flex-col items-center gap-3 z-10">
+                                    <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Gelen Renk</span>
+                                    <div className="flex items-center gap-3 bg-black/40 px-8 py-4 rounded-2xl border border-white/5 shadow-inner">
+                                        <div className={`w-6 h-6 rounded-full shadow-[0_0_20px_currentColor] ${winningColor === 'red' ? 'bg-red-500 text-red-500' : winningColor === 'green' ? 'bg-green-500 text-green-500' : 'bg-gray-500 text-gray-500'}`}></div>
+                                        <span className="text-2xl md:text-3xl font-black text-white">{winningColor === 'red' ? 'Kırmızı' : winningColor === 'green' ? 'Yeşil' : 'Siyah'}</span>
                                     </div>
                                 </div>
                             </div>
@@ -950,11 +958,27 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                 }
                 
                 @keyframes pop-in {
-                    0% { transform: scale(0.9); opacity: 0; }
-                    100% { transform: scale(1); opacity: 1; }
+                    0% { transform: scale(0.9) translateY(20px); opacity: 0; }
+                    100% { transform: scale(1) translateY(0); opacity: 1; }
                 }
                 .animate-pop-in {
-                    animation: pop-in 0.2s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
+                    animation: pop-in 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+                }
+                @keyframes shine {
+                    0% { background-position: -200% center; }
+                    100% { background-position: 200% center; }
+                }
+                .animate-shine {
+                    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+                    background-size: 200% auto;
+                    animation: shine 3s linear infinite;
+                }
+                @keyframes bounce-scale {
+                    0%, 100% { transform: scale(1); }
+                    50% { transform: scale(1.05); }
+                }
+                .animate-bounce-scale {
+                    animation: bounce-scale 2s ease-in-out infinite;
                 }
             `}} />
         </div>
