@@ -131,6 +131,11 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
         setPlacedBets([]);
     };
 
+    const getBetAmount = (type: BetColor) => {
+        const bet = placedBets.find(b => b.type === type);
+        return bet ? bet.amount : 0;
+    };
+
     const runGameLogic = async () => {
         const currentBets = [...placedBets];
         const betTotal = currentBets.reduce((sum, bet) => sum + bet.amount, 0);
