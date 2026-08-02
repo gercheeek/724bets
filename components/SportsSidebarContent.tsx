@@ -99,20 +99,18 @@ const SportsSidebarContent: React.FC<SportsSidebarContentProps> = ({ isOpen, onV
                  Canlı Etkinlikler
                </div>
             )}
-          </button>
-
-          <button 
+          </button>          <button 
             onClick={() => { 
               setActiveMenu('upcoming'); 
               onViewChange('spor724'); 
               window.dispatchEvent(new CustomEvent('changeSportsTab', { detail: 'upcoming' }));
               if (window.innerWidth < 1024) onToggle?.();
             }}
-            className={`flex items-center justify-between py-2.5 mb-1 cursor-pointer transition-all duration-300 relative group px-2 mx-3 rounded-lg ${activeMenu === 'upcoming' ? 'bg-gradient-to-r from-[#3b82f6]/10 to-transparent text-white' : 'text-[#8b92a5] hover:bg-white/5 hover:text-white'}`}
+            className={`flex items-center justify-between py-2.5 mb-1 cursor-pointer transition-all duration-300 relative group px-2 mx-3 rounded-lg ${activeMenu === 'upcoming' ? 'bg-gradient-to-r from-[#f59e0b]/10 to-transparent text-[#f59e0b]' : 'text-[#8b92a5] hover:bg-white/5 hover:text-white'}`}
           >
-            {activeMenu === 'upcoming' && <div className="absolute left-0 top-0 h-full w-[2px] bg-gradient-to-b from-transparent via-[#3b82f6] to-transparent shadow-[0_0_15px_#3b82f6] z-10"></div>}
+            {activeMenu === 'upcoming' && <div className="absolute left-0 top-1/2 -translate-y-1/2 h-3/4 w-[2px] bg-gradient-to-b from-transparent via-[#f59e0b] to-transparent shadow-[0_0_15px_#f59e0b] z-10"></div>}
             <div className="flex items-center">
-              <Clock className={`w-5 h-5 min-w-[20px] transition-colors ml-2.5 ${activeMenu === 'upcoming' ? 'text-white' : 'text-[#8b92a5] group-hover:text-white'}`} strokeWidth={activeMenu === 'upcoming' ? 2.5 : 2} />
+              <Clock className={`w-5 h-5 min-w-[20px] transition-all duration-300 ml-2.5 ${activeMenu === 'upcoming' ? 'text-[#f59e0b] drop-shadow-[0_0_8px_rgba(245,158,11,0.6)]' : 'text-[#8b92a5] group-hover:text-[#f59e0b]'}`} strokeWidth={activeMenu === 'upcoming' ? 2.5 : 2} />
               {isOpen && <span className="ml-4 font-semibold text-[14px] tracking-tight whitespace-nowrap">Yaklaşanlar</span>}
             </div>
             {!isOpen && (
@@ -129,11 +127,11 @@ const SportsSidebarContent: React.FC<SportsSidebarContentProps> = ({ isOpen, onV
               window.dispatchEvent(new CustomEvent('changeSportsTab', { detail: 'home' }));
               if (window.innerWidth < 1024) onToggle?.();
             }}
-            className={`flex items-center justify-between py-2.5 mb-1 cursor-pointer transition-all duration-300 relative group px-2 mx-3 rounded-lg ${activeMenu === 'hepsi' ? 'bg-gradient-to-r from-[#3b82f6]/10 to-transparent text-white' : 'text-[#8b92a5] hover:bg-white/5 hover:text-white'}`}
+            className={`flex items-center justify-between py-2.5 mb-1 cursor-pointer transition-all duration-300 relative group px-2 mx-3 rounded-lg ${activeMenu === 'hepsi' ? 'bg-gradient-to-r from-[#8b5cf6]/10 to-transparent text-[#8b5cf6]' : 'text-[#8b92a5] hover:bg-white/5 hover:text-white'}`}
           >
-            {activeMenu === 'hepsi' && <div className="absolute left-0 top-0 h-full w-[2px] bg-gradient-to-b from-transparent via-[#3b82f6] to-transparent shadow-[0_0_15px_#3b82f6] z-10"></div>}
+            {activeMenu === 'hepsi' && <div className="absolute left-0 top-1/2 -translate-y-1/2 h-3/4 w-[2px] bg-gradient-to-b from-transparent via-[#8b5cf6] to-transparent shadow-[0_0_15px_#8b5cf6] z-10"></div>}
             <div className="flex items-center">
-              <LayoutGrid className={`w-5 h-5 min-w-[20px] transition-colors ml-2.5 ${activeMenu === 'hepsi' ? 'text-white' : 'text-[#8b92a5] group-hover:text-white'}`} strokeWidth={activeMenu === 'hepsi' ? 2.5 : 2} />
+              <LayoutGrid className={`w-5 h-5 min-w-[20px] transition-all duration-300 ml-2.5 ${activeMenu === 'hepsi' ? 'text-[#8b5cf6] drop-shadow-[0_0_8px_rgba(139,92,246,0.6)]' : 'text-[#8b92a5] group-hover:text-[#8b5cf6]'}`} strokeWidth={activeMenu === 'hepsi' ? 2.5 : 2} />
               {isOpen && <span className="ml-4 font-semibold text-[14px] tracking-tight whitespace-nowrap">Hepsi</span>}
             </div>
             {!isOpen && (
@@ -145,16 +143,16 @@ const SportsSidebarContent: React.FC<SportsSidebarContentProps> = ({ isOpen, onV
 
           <button 
             onClick={() => { 
-              setActiveMenu('bahislerim');
-              onViewChange('spor724');
+              setActiveMenu('bahislerim'); 
+              onViewChange('spor724'); 
               window.dispatchEvent(new CustomEvent('changeSportsTab', { detail: 'mybets' }));
               if (window.innerWidth < 1024) onToggle?.();
             }}
-            className={`flex items-center justify-between py-2.5 mb-1 cursor-pointer transition-all duration-300 relative group px-2 mx-3 rounded-lg ${activeMenu === 'bahislerim' ? 'bg-gradient-to-r from-[#10b981]/10 to-transparent text-white' : 'text-[#8b92a5] hover:bg-white/5 hover:text-white'}`}
+            className={`flex items-center justify-between py-2.5 mb-1 cursor-pointer transition-all duration-300 relative group px-2 mx-3 rounded-lg ${activeMenu === 'bahislerim' ? 'bg-gradient-to-r from-[#10b981]/10 to-transparent text-[#10b981]' : 'text-[#8b92a5] hover:bg-white/5 hover:text-white'}`}
           >
-            {activeMenu === 'bahislerim' && <div className="absolute left-0 top-0 h-full w-[2px] bg-gradient-to-b from-transparent via-[#10b981] to-transparent shadow-[0_0_15px_#10b981] z-10"></div>}
+            {activeMenu === 'bahislerim' && <div className="absolute left-0 top-1/2 -translate-y-1/2 h-3/4 w-[2px] bg-gradient-to-b from-transparent via-[#10b981] to-transparent shadow-[0_0_15px_#10b981] z-10"></div>}
             <div className="flex items-center">
-              <Receipt className={`w-5 h-5 min-w-[20px] transition-colors ml-2.5 ${activeMenu === 'bahislerim' ? 'text-white' : 'text-[#8b92a5] group-hover:text-white'}`} strokeWidth={activeMenu === 'bahislerim' ? 2.5 : 2} />
+              <Receipt className={`w-5 h-5 min-w-[20px] transition-all duration-300 ml-2.5 ${activeMenu === 'bahislerim' ? 'text-[#10b981] drop-shadow-[0_0_8px_rgba(16,185,129,0.6)]' : 'text-[#8b92a5] group-hover:text-[#10b981]'}`} strokeWidth={activeMenu === 'bahislerim' ? 2.5 : 2} />
               {isOpen && <span className="ml-4 font-semibold text-[14px] tracking-tight whitespace-nowrap">Takip Ettiklerim</span>}
             </div>
             {!isOpen && (
@@ -185,16 +183,16 @@ const SportsSidebarContent: React.FC<SportsSidebarContentProps> = ({ isOpen, onV
         {(isTopSportsOpen || !isOpen) && (
         <div className="flex flex-col gap-1 mb-4">
           {[
-            { id: 'futbol', name: 'Futbol', Icon: SoccerIcon },
-            { id: 'cs2', name: 'CS2', Icon: Crosshair },
-            { id: 'tenis', name: 'Tenis', Icon: TennisIcon },
-            { id: 'basketbol', name: 'Basketbol', Icon: Dribbble },
-            { id: 'fifa', name: 'FIFA', Icon: Gamepad2 },
-            { id: 'valorant', name: 'Valorant', Icon: Target },
-            { id: 'voleybol', name: 'Voleybol', Icon: VolleyballIcon },
-            { id: 'masatenisi', name: 'Masa Tenisi', Icon: PingPongIcon },
-            { id: 'formula1', name: 'Formula 1', Icon: Trophy },
-            { id: 'mma', name: 'MMA', Icon: MmaIcon },
+            { id: 'futbol', name: 'Futbol', Icon: SoccerIcon, activeColor: 'text-[#10b981]', hoverColor: 'group-hover:text-[#10b981]', bgGradient: 'from-[#10b981]/10', shadow: 'shadow-[0_0_15px_#10b981]', drop: 'drop-shadow-[0_0_8px_rgba(16,185,129,0.6)]' },
+            { id: 'cs2', name: 'CS2', Icon: Crosshair, activeColor: 'text-[#f59e0b]', hoverColor: 'group-hover:text-[#f59e0b]', bgGradient: 'from-[#f59e0b]/10', shadow: 'shadow-[0_0_15px_#f59e0b]', drop: 'drop-shadow-[0_0_8px_rgba(245,158,11,0.6)]' },
+            { id: 'tenis', name: 'Tenis', Icon: TennisIcon, activeColor: 'text-[#eab308]', hoverColor: 'group-hover:text-[#eab308]', bgGradient: 'from-[#eab308]/10', shadow: 'shadow-[0_0_15px_#eab308]', drop: 'drop-shadow-[0_0_8px_rgba(234,179,8,0.6)]' },
+            { id: 'basketbol', name: 'Basketbol', Icon: Dribbble, activeColor: 'text-[#f97316]', hoverColor: 'group-hover:text-[#f97316]', bgGradient: 'from-[#f97316]/10', shadow: 'shadow-[0_0_15px_#f97316]', drop: 'drop-shadow-[0_0_8px_rgba(249,115,22,0.6)]' },
+            { id: 'fifa', name: 'FIFA', Icon: Gamepad2, activeColor: 'text-[#3b82f6]', hoverColor: 'group-hover:text-[#3b82f6]', bgGradient: 'from-[#3b82f6]/10', shadow: 'shadow-[0_0_15px_#3b82f6]', drop: 'drop-shadow-[0_0_8px_rgba(59,130,246,0.6)]' },
+            { id: 'valorant', name: 'Valorant', Icon: Target, activeColor: 'text-[#f43f5e]', hoverColor: 'group-hover:text-[#f43f5e]', bgGradient: 'from-[#f43f5e]/10', shadow: 'shadow-[0_0_15px_#f43f5e]', drop: 'drop-shadow-[0_0_8px_rgba(244,63,94,0.6)]' },
+            { id: 'voleybol', name: 'Voleybol', Icon: VolleyballIcon, activeColor: 'text-[#8b5cf6]', hoverColor: 'group-hover:text-[#8b5cf6]', bgGradient: 'from-[#8b5cf6]/10', shadow: 'shadow-[0_0_15px_#8b5cf6]', drop: 'drop-shadow-[0_0_8px_rgba(139,92,246,0.6)]' },
+            { id: 'masatenisi', name: 'Masa Tenisi', Icon: PingPongIcon, activeColor: 'text-[#06b6d4]', hoverColor: 'group-hover:text-[#06b6d4]', bgGradient: 'from-[#06b6d4]/10', shadow: 'shadow-[0_0_15px_#06b6d4]', drop: 'drop-shadow-[0_0_8px_rgba(6,182,212,0.6)]' },
+            { id: 'formula1', name: 'Formula 1', Icon: Trophy, activeColor: 'text-[#ef4444]', hoverColor: 'group-hover:text-[#ef4444]', bgGradient: 'from-[#ef4444]/10', shadow: 'shadow-[0_0_15px_#ef4444]', drop: 'drop-shadow-[0_0_8px_rgba(239,68,68,0.6)]' },
+            { id: 'mma', name: 'MMA', Icon: MmaIcon, activeColor: 'text-[#dc2626]', hoverColor: 'group-hover:text-[#dc2626]', bgGradient: 'from-[#dc2626]/10', shadow: 'shadow-[0_0_15px_#dc2626]', drop: 'drop-shadow-[0_0_8px_rgba(220,38,38,0.6)]' },
           ].map((sport) => {
              const isActive = activeSlug === sport.id;
              return (
@@ -205,12 +203,12 @@ const SportsSidebarContent: React.FC<SportsSidebarContentProps> = ({ isOpen, onV
                  window.dispatchEvent(new PopStateEvent('popstate'));
                  if (window.innerWidth < 1024) onToggle?.();
                }}
-               className={`flex items-center justify-between py-3 mb-1.5 cursor-pointer transition-all duration-300 relative group px-2 mx-3 rounded-lg ${isActive ? 'bg-gradient-to-r from-[#3b82f6]/10 to-transparent text-white' : 'text-[#8b92a5] hover:bg-white/5 hover:text-white'} ${!isOpen ? 'justify-center' : ''}`}
+               className={`flex items-center justify-between py-3 mb-1.5 cursor-pointer transition-all duration-300 relative group px-2 mx-3 rounded-lg ${isActive ? `bg-gradient-to-r ${sport.bgGradient} to-transparent ${sport.activeColor}` : 'text-[#8b92a5] hover:bg-white/5 hover:text-white'} ${!isOpen ? 'justify-center' : ''}`}
              >
-               {isActive && <div className="absolute left-0 top-0 h-full w-[2px] bg-gradient-to-b from-transparent via-[#3b82f6] to-transparent shadow-[0_0_15px_#3b82f6] z-10"></div>}
+               {isActive && <div className={`absolute left-0 top-1/2 -translate-y-1/2 h-3/4 w-[2px] bg-gradient-to-b from-transparent via-current to-transparent ${sport.shadow} z-10`}></div>}
                <div className="flex items-center">
-                 <sport.Icon className={`w-5 h-5 min-w-[20px] transition-colors ml-2.5 ${isActive ? 'text-white' : 'text-[#8b92a5] group-hover:text-white'}`} />
-                 {isOpen && <span className={`ml-4 font-semibold text-[14px] tracking-tight whitespace-nowrap transition-colors ${isActive ? 'text-white' : 'text-[#8b92a5] group-hover:text-white'}`}>{sport.name}</span>}
+                 <sport.Icon className={`w-5 h-5 min-w-[20px] transition-all duration-300 ml-2.5 ${isActive ? `${sport.activeColor} ${sport.drop}` : `text-[#8b92a5] ${sport.hoverColor}`}`} />
+                 {isOpen && <span className={`ml-4 font-semibold text-[14px] tracking-tight whitespace-nowrap transition-colors ${isActive ? sport.activeColor : `text-[#8b92a5] group-hover:text-white`}`}>{sport.name}</span>}
                </div>
                {!isOpen && (
                  <div className="absolute left-[calc(100%+12px)] top-auto bg-[#1a1d29] text-white px-2.5 py-1.5 rounded shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible whitespace-nowrap z-[999] transition-all font-bold text-xs">

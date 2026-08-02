@@ -55,6 +55,11 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
   // Inbox States
   const [expandedMsg, setExpandedMsg] = useState<number | null>(null);
 
+  // Advanced Security & KYC States
+  const [twoFactorStep, setTwoFactorStep] = useState<'idle' | 'setup' | 'active'>('idle');
+  const [twoFactorCode, setTwoFactorCode] = useState('');
+  const [kycStatus, setKycStatus] = useState<'unverified' | 'pending' | 'verified'>('unverified');
+
   const defaultMessages = [
     {
       id: 1,
@@ -550,25 +555,223 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
               </div>
 
               <div className="flex flex-col gap-4">
-                <h2 className="text-xl font-black text-white">2FA</h2>
-                <button className="bg-[#06b6d4] hover:bg-[#00E676] text-black font-black text-sm px-6 py-3 rounded-xl w-max transition-colors">
-                  2FA Kimlik Doğrulayıcıyı Etkinleştir
-                </button>
+                <h2 className="text-xl font-black text-white">İki Faktörlü Doğrulama (2FA)</h2>
+                {twoFactorStep === 'idle' && (
+                  <div className="bg-[#12161E] border border-[#202532] rounded-xl p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                    <div className="flex flex-col gap-1">
+                      <span className="text-white font-bold text-sm">Hesabınızı güvenceye alın</span>
+                      <span className="text-zinc-500 text-xs">Para çekme işlemlerinde ve şüpheli girişlerde ek güvenlik sağlar.</span>
+                    </div>
+                    <button onClick={() => setTwoFactorStep('setup')} className="bg-[#06b6d4] hover:bg-[#00E676] text-black font-black text-sm px-6 py-2.5 rounded-xl w-full md:w-max transition-colors whitespace-nowrap">
+                      Etkinleştir
+                    </button>
+                  </div>
+                )}
+                {twoFactorStep === 'setup' && (
+                  <div className="bg-[#12161E] border border-[#06b6d4]/30 rounded-xl p-6 flex flex-col gap-6 animate-fade-in shadow-[0_0_20px_rgba(6,182,212,0.1)]">
+                    <div className="flex flex-col md:flex-row items-start gap-6">
+                      <div className="bg-white p-2 rounded-xl">
+                        {/* Mock QR Code */}
+                        <div className="w-32 h-32 bg-black flex items-center justify-center text-white text-xs text-center border-4 border-white">
+                          [QR KOD<br/>SİMÜLASYONU]
+                        </div>
+                      </div>
+                      <div className="flex flex-col gap-3 flex-1">
+                        <h3 className="text-white font-bold">1. Uygulamayı İndirin</h3>
+                        <p className="text-zinc-400 text-sm">Google Authenticator veya Authy uygulamasını indirin ve soldaki QR kodu taratın.</p>
+                        
+                        <h3 className="text-white font-bold mt-2">2. Kodu Girin</h3>
+                        <div className="flex gap-2">
+                          <input 
+                            type="text" 
+                            placeholder="6 haneli kod" 
+                            className="bg-[#1A212D] border border-white/10 rounded-lg px-4 py-2 text-white outline-none focus:border-[#06b6d4] flex-1 font-mono tracking-widest"
+                            maxLength={6}
+                            value={twoFactorCode}
+                            onChange={(e) => setTwoFactorCode(e.target.value.replace(/\D/g, ''))}
+                          />
+                          <button 
+                            onClick={() => {
+                              if (twoFactorCode.length === 6) setTwoFactorStep('active');
+                            }}
+                            className="bg-[#06b6d4] hover:bg-[#00d0e8] text-black font-bold px-6 py-2 rounded-lg transition-colors"
+                          >
+                            Doğrula
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <button onClick={() => setTwoFactorStep('idle')} className="text-zinc-500 hover:text-white text-sm font-bold w-max transition-colors">Vazgeç</button>
+                  </div>
+                )}
+                {twoFactorStep === 'active' && (
+                  <div className="bg-[#00E676]/10 border border-[#00E676]/30 rounded-xl p-5 flex items-center justify-between gap-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-[#00E676]/20 flex items-center justify-center text-[#00E676]">
+                        <CheckCircle2 className="w-6 h-6" />
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-[#00E676] font-bold text-sm">2FA Aktif</span>
+                        <span className="text-zinc-400 text-xs">Hesabınız Google Authenticator ile korunuyor.</span>
+                      </div>
+                    </div>
+                    <button onClick={() => setTwoFactorStep('idle')} className="bg-[#1A212D] border border-white/10 hover:border-red-500/50 hover:text-red-400 text-white font-bold text-sm px-6 py-2.5 rounded-xl transition-colors whitespace-nowrap">
+                      Devre Dışı Bırak
+                    </button>
+                  </div>
+                )}
               </div>
 
               <div className="flex flex-col gap-4">
-                <h2 className="text-xl font-black text-white">Kendini Dışlama</h2>
-                <p className="text-zinc-500 text-sm font-medium leading-relaxed max-w-3xl">
-                  Bu özelliği, belirlediğiniz zaman dilimi içerisinde para yatırmanızı ve kumar oynamanızı engellemek ama aynı zamanda para çekme ve sohbet etme gibi diğer özellikleri kullanmaya devam etmek için kullanabilirsiniz.
-                </p>
-                <div className="bg-[#1F170D] border border-orange-500/20 rounded-xl p-4 flex items-start gap-3">
-                  <div className="w-5 h-5 rounded-full bg-orange-500 text-black flex items-center justify-center font-black text-xs shrink-0 mt-0.5">!</div>
-                  <span className="text-orange-500 font-bold text-sm">Lütfen daha sonra fikrinizi değiştirseniz bile bu talebin HİÇBİR NEDENLE KALDIRILMAYACAĞINI unutmayın.</span>
+                <h2 className="text-xl font-black text-white">Sorumlu Oyun (Responsible Gambling)</h2>
+                
+                {/* Deposit Limits */}
+                <div className="bg-[#12161E] border border-[#202532] rounded-xl p-5 flex flex-col gap-4">
+                  <div>
+                    <h3 className="text-white font-bold text-sm mb-1">Para Yatırma Limitleri</h3>
+                    <p className="text-zinc-500 text-xs">Bütçenizi kontrol altında tutmak için günlük, haftalık veya aylık limitler belirleyebilirsiniz.</p>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-zinc-400 text-xs font-bold">Günlük Limit ($)</label>
+                      <input type="number" placeholder="Limit yok" className="bg-[#1A212D] border border-white/5 rounded-lg px-3 py-2 text-white outline-none focus:border-[#06b6d4] text-sm" />
+                    </div>
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-zinc-400 text-xs font-bold">Haftalık Limit ($)</label>
+                      <input type="number" placeholder="Limit yok" className="bg-[#1A212D] border border-white/5 rounded-lg px-3 py-2 text-white outline-none focus:border-[#06b6d4] text-sm" />
+                    </div>
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-zinc-400 text-xs font-bold">Aylık Limit ($)</label>
+                      <input type="number" placeholder="Limit yok" className="bg-[#1A212D] border border-white/5 rounded-lg px-3 py-2 text-white outline-none focus:border-[#06b6d4] text-sm" />
+                    </div>
+                  </div>
+                  <button className="bg-[#1A212D] hover:bg-[#202836] text-white font-bold px-6 py-2 rounded-lg text-sm transition-colors w-max">Limitleri Kaydet</button>
                 </div>
-                <div className="flex items-center gap-3 mt-2">
-                  <button className="bg-[#1A212D] hover:bg-[#202836] text-white font-bold px-6 py-2.5 rounded-lg text-sm transition-colors">1 gün</button>
-                  <button className="bg-[#1A212D] hover:bg-[#202836] text-white font-bold px-6 py-2.5 rounded-lg text-sm transition-colors">5 gün</button>
-                  <button className="bg-[#1A212D] hover:bg-[#202836] text-white font-bold px-6 py-2.5 rounded-lg text-sm transition-colors">8 gün</button>
+
+                {/* Self Exclusion */}
+                <div className="bg-[#1F170D] border border-orange-500/20 rounded-xl p-5 flex flex-col gap-4">
+                  <div>
+                    <h3 className="text-orange-500 font-black text-sm mb-1 flex items-center gap-2">
+                      <AlertCircle className="w-4 h-4" /> Kendini Dışlama (Self-Exclusion)
+                    </h3>
+                    <p className="text-zinc-400 text-xs leading-relaxed">
+                      Belirlediğiniz süre boyunca hesabınıza para yatırmanızı ve oyun oynamanızı engeller. Bu işlem BAŞLATILDIKTAN SONRA İPTAL EDİLEMEZ.
+                    </p>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-3">
+                    <button className="bg-orange-500/10 hover:bg-orange-500/20 text-orange-500 border border-orange-500/20 font-bold px-5 py-2 rounded-lg text-sm transition-colors">24 Saat</button>
+                    <button className="bg-orange-500/10 hover:bg-orange-500/20 text-orange-500 border border-orange-500/20 font-bold px-5 py-2 rounded-lg text-sm transition-colors">7 Gün</button>
+                    <button className="bg-orange-500/10 hover:bg-orange-500/20 text-orange-500 border border-orange-500/20 font-bold px-5 py-2 rounded-lg text-sm transition-colors">30 Gün</button>
+                    <button className="bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 font-bold px-5 py-2 rounded-lg text-sm transition-colors">Kalıcı Kapat</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* VERIFICATION (KYC) TAB */}
+          {activeTab === 'verification' && (
+            <div className="animate-fade-in flex flex-col w-full space-y-6">
+              <h1 className="text-2xl font-black text-white tracking-tight flex items-center gap-3">
+                <ShieldCheck className="w-8 h-8 text-[#00E676]" /> 
+                Doğrulamalar (KYC)
+              </h1>
+              
+              <div className="bg-[#12161E] border border-[#202532] rounded-xl overflow-hidden">
+                <div className="p-6 border-b border-[#202532] bg-gradient-to-r from-[#1A212D] to-transparent">
+                  <h3 className="text-white font-bold text-lg mb-2">Müşterini Tanı (KYC) Prosedürü</h3>
+                  <p className="text-zinc-400 text-sm leading-relaxed max-w-3xl">
+                    Hesabınızın güvenliğini sağlamak, kara para aklamayı önlemek ve lisans kurallarımıza uymak amacıyla kimlik doğrulama işlemi zorunludur. Tüm verileriniz şifrelenerek saklanır.
+                  </p>
+                </div>
+                
+                <div className="p-6 flex flex-col gap-6">
+                  {/* Status Indicator */}
+                  <div className="flex items-center gap-4 bg-[#1A212D]/50 p-4 rounded-xl border border-white/5">
+                    <div className={`w-12 h-12 rounded-full flex items-center justify-center shrink-0 ${
+                      kycStatus === 'verified' ? 'bg-[#00E676]/20 text-[#00E676]' : 
+                      kycStatus === 'pending' ? 'bg-amber-500/20 text-amber-500' : 'bg-red-500/20 text-red-500'
+                    }`}>
+                      {kycStatus === 'verified' ? <CheckCircle2 className="w-6 h-6" /> : 
+                       kycStatus === 'pending' ? <AlertCircle className="w-6 h-6" /> : <ShieldCheck className="w-6 h-6" />}
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-white font-bold">Hesap Durumu</span>
+                      <span className={`text-sm font-bold ${
+                        kycStatus === 'verified' ? 'text-[#00E676]' : 
+                        kycStatus === 'pending' ? 'text-amber-500' : 'text-red-500'
+                      }`}>
+                        {kycStatus === 'verified' ? 'Onaylandı - Sınırsız İşlem' : 
+                         kycStatus === 'pending' ? 'İnceleniyor - Bekleyiniz' : 'Doğrulanmadı - İşlem Limitleri Geçerli'}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Upload Area */}
+                  {kycStatus === 'unverified' && (
+                    <div className="flex flex-col gap-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="border-2 border-dashed border-[#2A3143] hover:border-[#06b6d4] bg-[#161B24] rounded-xl p-8 flex flex-col items-center justify-center text-center transition-colors cursor-pointer group">
+                          <div className="w-12 h-12 bg-[#2A3143] group-hover:bg-[#06b6d4]/20 rounded-full flex items-center justify-center mb-4 transition-colors">
+                            <FileText className="w-6 h-6 text-zinc-400 group-hover:text-[#06b6d4] transition-colors" />
+                          </div>
+                          <h4 className="text-white font-bold mb-1">Kimlik Belgesi</h4>
+                          <p className="text-zinc-500 text-xs">Pasaport, Kimlik Kartı veya Ehliyet (Ön ve Arka Yüz)</p>
+                        </div>
+
+                        <div className="border-2 border-dashed border-[#2A3143] hover:border-[#06b6d4] bg-[#161B24] rounded-xl p-8 flex flex-col items-center justify-center text-center transition-colors cursor-pointer group">
+                          <div className="w-12 h-12 bg-[#2A3143] group-hover:bg-[#06b6d4]/20 rounded-full flex items-center justify-center mb-4 transition-colors">
+                            <FileText className="w-6 h-6 text-zinc-400 group-hover:text-[#06b6d4] transition-colors" />
+                          </div>
+                          <h4 className="text-white font-bold mb-1">Adres Belgesi</h4>
+                          <p className="text-zinc-500 text-xs">Son 3 aya ait fatura veya e-Devlet İkametgah Belgesi</p>
+                        </div>
+                      </div>
+                      
+                      <button 
+                        onClick={() => setKycStatus('pending')}
+                        className="bg-[#06b6d4] hover:bg-[#00d0e8] text-black font-black py-4 rounded-xl transition-all shadow-[0_0_15px_rgba(6,182,212,0.2)] hover:shadow-[0_0_25px_rgba(6,182,212,0.4)]"
+                      >
+                        Belgeleri Yükle ve Onaya Gönder
+                      </button>
+                    </div>
+                  )}
+
+                  {kycStatus === 'pending' && (
+                    <div className="flex flex-col items-center justify-center py-10 bg-[#161B24] rounded-xl border border-white/5">
+                      <div className="w-16 h-16 border-4 border-amber-500/20 border-t-amber-500 rounded-full animate-spin mb-4" />
+                      <h4 className="text-white font-bold text-lg mb-2">Belgeleriniz İnceleniyor</h4>
+                      <p className="text-zinc-400 text-sm text-center max-w-md">
+                        Risk birimimiz gönderdiğiniz belgeleri inceliyor. Bu işlem genellikle 1-2 saat içinde sonuçlanır. Sonuç e-posta ile tarafınıza bildirilecektir.
+                      </p>
+                      <button 
+                        onClick={() => setKycStatus('verified')}
+                        className="mt-6 text-amber-500 text-xs underline opacity-50 hover:opacity-100"
+                      >
+                        (Dev Test: Onaylandı Olarak İşaretle)
+                      </button>
+                    </div>
+                  )}
+                  
+                  {kycStatus === 'verified' && (
+                    <div className="flex flex-col items-center justify-center py-10 bg-gradient-to-b from-[#00E676]/10 to-transparent rounded-xl border border-[#00E676]/20">
+                      <CheckCircle2 className="w-20 h-20 text-[#00E676] mb-4 drop-shadow-[0_0_15px_rgba(0,230,118,0.5)]" />
+                      <h4 className="text-white font-black text-xl mb-2">Hesabınız Tamamen Onaylandı</h4>
+                      <p className="text-zinc-300 text-sm text-center max-w-md mb-6">
+                        Tebrikler! Sınır olmaksızın para yatırabilir, çekebilir ve yüksek limitli oyunlar oynayabilirsiniz.
+                      </p>
+                      <div className="grid grid-cols-2 gap-4 w-full max-w-md">
+                        <div className="bg-[#1A212D] p-3 rounded-lg text-center">
+                          <span className="block text-zinc-500 text-xs font-bold mb-1">Günlük Para Çekme</span>
+                          <span className="text-[#00E676] font-bold">Limitsiz</span>
+                        </div>
+                        <div className="bg-[#1A212D] p-3 rounded-lg text-center">
+                          <span className="block text-zinc-500 text-xs font-bold mb-1">Kimlik Teyidi</span>
+                          <span className="text-[#00E676] font-bold">Onaylandı</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

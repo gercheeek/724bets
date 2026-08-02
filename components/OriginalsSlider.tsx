@@ -36,12 +36,25 @@ export const getOriginalsData = (t: (key: string) => string): GameData[] => [
         desc: t("originals.desc_blackjack"),
         color: 'from-[#A158FF] to-[#6E30D6]',
         image: '/images/flat-blackjack.jpg',
-        path: 'blackjack',
+        path: 'blackjack-pro',
         icon: '🃏',
         players: 1205,
         rtp: '%99.5',
         maxWin: '2.5x',
         volatility: t('slider.volatility_low')
+    },
+    {
+        id: 'crash',
+        name: 'Crash',
+        desc: t("originals.desc_crash") || "Ride the multiplier",
+        color: 'from-[#00E5FF] to-[#0088FF]',
+        image: '/images/new-mission.webp',
+        path: 'crash',
+        icon: '📈',
+        players: 4521,
+        rtp: '%99.0',
+        maxWin: '5000x',
+        volatility: t('slider.volatility_high')
     },
     {
         id: 'plinko',

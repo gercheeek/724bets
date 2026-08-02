@@ -69,7 +69,7 @@ const InGameLayout: React.FC<InGameLayoutProps> = ({ children, siteUser, onViewC
                <div className="flex items-center gap-3 bg-[#05070A] border border-white/10 rounded-full py-1.5 px-3 sm:px-4 shadow-inner">
                   <div className="flex flex-col items-end">
                      <span className="text-[10px] text-gray-400 font-medium uppercase tracking-widest leading-none mb-0.5">Bakiye</span>
-                     <span className="text-sm sm:text-base font-black text-white leading-none font-mono tracking-tight">₺{siteUser.balance.toLocaleString('tr-TR')}</span>
+                     <span className="text-sm sm:text-base font-black text-white leading-none font-mono tracking-tight">₺{siteUser ? siteUser.balance.toLocaleString('tr-TR') : '0.00'}</span>
                   </div>
                   <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#06b6d4] to-[#047857] flex items-center justify-center shadow-[0_0_15px_rgba(16,185,129,0.4)]">
                      <Wallet className="w-4 h-4 text-white" />

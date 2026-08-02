@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ShieldCheck, Info } from 'lucide-react';
+import { ShieldCheck, Settings } from 'lucide-react';
 import { usePlinkoEngine } from './usePlinkoEngine';
 import { useUser } from '../contexts/UserContext';
 
@@ -9,43 +9,66 @@ const TOTAL_WEIGHT = 65536;
 
 export default function PlinkoView({ siteUser, onAuthRequired }: any) {
   const { playInstantGame } = useUser();
-  const [betAmount, setBetAmount] = useState('1.00');
+  const [betAmount, setBetAmount] = useState('2.00');
   const [risk, setRisk] = useState<'low' | 'medium' | 'high'>('low');
   const [isBetting, setIsBetting] = useState(false);
   const [lastPayout, setLastPayout] = useState<{ amount: number; multiplier: number } | null>(null);
+  const [demoBalance, setDemoBalance] = useState<number>(10000.00);
 
   const { canvasRef, dropBall } = usePlinkoEngine({
     rowCount: 16,
-    width: 800,
-    height: 600,
+    width: 900,
+    height: 700,
     onBucketLanded: () => {} 
   });
 
   const handleBet = async () => {
-    if (!siteUser) {
-      if (onAuthRequired) onAuthRequired();
-      return;
-    }
     const amount = parseFloat(betAmount);
     if (isNaN(amount) || amount <= 0) return;
-    if (siteUser.balance < amount) {
+    
+    if (siteUser && siteUser.balance < amount) {
       alert("Yetersiz bakiye!");
+      return;
+    } else if (!siteUser && demoBalance < amount) {
+      alert("Demo bakiyesi yetersiz!");
       return;
     }
 
     try {
-      const data = await playInstantGame(amount, 'Plinko');
+      let targetBucket = 8;
+      let winAmount = 0;
+      let multiplier = 0.5;
+
+      if (siteUser) {
+          const data = await playInstantGame(amount, 'Plinko');
+          targetBucket = data.result.bucket;
+          winAmount = data.win_amount;
+          multiplier = data.multiplier;
+      } else {
+          // Demo Mode
+          let r = Math.random() * TOTAL_WEIGHT;
+          let sum = 0;
+          for (let i = 0; i < WEIGHTS.length; i++) {
+              sum += WEIGHTS[i];
+              if (r < sum) {
+                  targetBucket = i;
+                  multiplier = MULTIPLIERS[i];
+                  break;
+              }
+          }
+          winAmount = amount * multiplier;
+          setDemoBalance(prev => prev - amount); // Deduct immediately
+      }
       
       setIsBetting(true);
-      const targetBucket = data.result.bucket;
-      const winAmount = data.win_amount;
-      const multiplier = data.multiplier;
-
-      dropBall(targetBucket);
+      dropBall(targetBucket, '#c6ff00');
 
       setTimeout(() => {
         setIsBetting(false);
         setLastPayout({ amount: winAmount, multiplier });
+        if (!siteUser) {
+            setDemoBalance(prev => prev + winAmount);
+        }
       }, 2000);
 
     } catch (err: any) {
@@ -55,117 +78,138 @@ export default function PlinkoView({ siteUser, onAuthRequired }: any) {
   };
 
   return (
-    <div className="flex flex-col md:flex-row w-full h-full bg-[#10171E] text-white font-sans overflow-y-auto md:overflow-hidden">
+    <div className="flex flex-col lg:flex-row w-full min-h-[calc(100vh-72px)] lg:h-[calc(100vh-72px)] bg-[#0B0E14] text-white font-sans overflow-y-auto lg:overflow-hidden relative">
         
         {/* ── LEFT SIDEBAR (Controls) ── */}
-        <div className="w-full md:w-[320px] bg-[#222E3A] border-r border-[#151D24] p-4 flex flex-col shrink-0 z-20 shadow-2xl order-2 md:order-1 h-auto md:h-full overflow-y-auto">
+        <div className="w-full lg:w-[320px] bg-[#131620] border-r border-[#1E2336] p-4 md:p-5 flex flex-col shrink-0 z-20 lg:h-full overflow-y-auto order-2 lg:order-1 shadow-[10px_0_30px_rgba(0,0,0,0.5)]">
             
             {/* Tabs */}
-            <div className="flex bg-[#151D24] rounded-full p-1 mb-6">
-                <button className="flex-1 bg-[#324555] text-white text-sm font-semibold rounded-full py-2 shadow-sm">Manuel</button>
-                <button className="flex-1 text-gray-400 hover:text-white text-sm font-semibold rounded-full py-2 transition-colors">Oto</button>
+            <div className="flex bg-[#0B0E14] rounded-full p-1 mb-6 border border-[#1E2336]">
+                <button className="flex-1 bg-[#1E2336] text-white rounded-full py-1.5 text-[13px] font-bold shadow-md">Manual</button>
+                <button className="flex-1 text-zinc-500 rounded-full py-1.5 text-[13px] font-bold hover:text-white transition-colors">Auto</button>
             </div>
 
-            {/* Bet Amount */}
-            <div className="mb-4 relative">
-                <div className="flex justify-between items-end mb-2">
-                    <label className="text-xs text-gray-400 font-semibold">Bahis Tutarı</label>
-                    <span className="text-xs text-gray-300 font-mono">₺{siteUser ? siteUser.balance.toFixed(2) : '0.00'}</span>
-                </div>
-                <div className="flex bg-[#151D24] rounded-md border border-[#2A3744] overflow-hidden focus-within:border-[#3D82F6] transition-colors">
-                    <div className="px-3 flex items-center justify-center text-gray-400">₺</div>
-                    <input 
-                        type="number" 
-                        value={betAmount || ''}
-                        onChange={(e) => setBetAmount(e.target.value)}
-                        disabled={isBetting}
-                        placeholder="0.00"
-                        className="flex-1 bg-transparent text-white font-mono text-sm py-3 outline-none"
-                    />
-                    <div className="flex">
-                        <button className="px-3 text-xs font-bold text-gray-300 hover:bg-[#2A3744] border-l border-[#2A3744] transition-colors" onClick={() => setBetAmount((parseFloat(betAmount) / 2).toFixed(2))}>½</button>
-                        <button className="px-3 text-xs font-bold text-gray-300 hover:bg-[#2A3744] border-l border-[#2A3744] transition-colors" onClick={() => setBetAmount((parseFloat(betAmount) * 2).toFixed(2))}>2x</button>
+            <div className="px-1 flex flex-col gap-4 mb-4">
+                {/* Bet Amount */}
+                <div>
+                    <div className="flex justify-between items-center mb-1">
+                        <label className="text-[12px] text-zinc-400 font-bold block">Bet amount</label>
+                        <span className="text-[10px] text-zinc-500 font-bold">{siteUser ? siteUser.balance.toFixed(2) : demoBalance.toFixed(2)} EUR</span>
+                    </div>
+                    <div className="flex bg-[#0B0E14] border border-[#1E2336] rounded-md overflow-hidden h-11 focus-within:border-[#00E5FF]/50 focus-within:shadow-[0_0_10px_rgba(0,229,255,0.1)] transition-all">
+                        <input 
+                            type="number" 
+                            value={betAmount || ''}
+                            onChange={(e) => setBetAmount(e.target.value)}
+                            disabled={isBetting}
+                            placeholder="0.00"
+                            className="flex-1 bg-transparent px-3 text-sm text-white outline-none font-medium disabled:opacity-50"
+                        />
+                        <div className="flex items-center border-l border-[#1E2336]">
+                            <span className="text-zinc-500 text-xs font-bold px-2">EUR</span>
+                            <div className="flex h-full border-l border-[#1E2336]">
+                                <button className="px-3 hover:bg-white/5 text-zinc-400 text-xs font-bold transition-colors" onClick={() => setBetAmount((parseFloat(betAmount) / 2).toFixed(2))}>½</button>
+                                <div className="w-[1px] h-full bg-[#1E2336]"></div>
+                                <button className="px-3 hover:bg-white/5 text-zinc-400 text-xs font-bold transition-colors" onClick={() => setBetAmount((parseFloat(betAmount) * 2).toFixed(2))}>2x</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            {/* Risk Level */}
-            <div className="mb-6">
-                <label className="block text-xs text-gray-400 font-semibold mb-2">Risk Seviyesi</label>
-                <div className="relative">
-                    <select 
-                        value={risk}
-                        onChange={(e) => setRisk(e.target.value as any)}
-                        disabled={isBetting}
-                        className="w-full bg-[#151D24] text-white text-sm font-semibold py-3 px-4 rounded-md appearance-none border border-[#2A3744] outline-none focus:border-[#3D82F6]"
-                    >
-                        <option value="low">Düşük</option>
-                        <option value="medium">Orta</option>
-                        <option value="high">Yüksek</option>
-                    </select>
-                    <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                {/* Risk Level */}
+                <div>
+                    <label className="text-[12px] text-zinc-400 font-bold mb-1 block">Risk</label>
+                    <div className="relative">
+                        <select 
+                            value={risk}
+                            onChange={(e) => setRisk(e.target.value as any)}
+                            disabled={isBetting}
+                            className="w-full bg-[#0B0E14] border border-[#1E2336] rounded-md h-11 px-3 text-sm text-white outline-none font-medium appearance-none focus:border-[#00E5FF]/50 transition-all"
+                        >
+                            <option value="low">Low</option>
+                            <option value="medium">Medium</option>
+                            <option value="high">High</option>
+                        </select>
+                        <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-zinc-500">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            {/* Actions */}
-            <div className="flex flex-col gap-2 mt-auto">
+                {/* Rows */}
+                <div>
+                    <label className="text-[12px] text-zinc-400 font-bold mb-1 block">Rows</label>
+                    <div className="relative">
+                        <select 
+                            disabled={isBetting}
+                            className="w-full bg-[#0B0E14] border border-[#1E2336] rounded-md h-11 px-3 text-sm text-white outline-none font-medium appearance-none focus:border-[#00E5FF]/50 transition-all"
+                        >
+                            <option value="16">16</option>
+                        </select>
+                        <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-zinc-500">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Actions */}
                 <button 
                     onClick={handleBet}
                     disabled={isBetting}
-                    className={`w-full font-bold py-3.5 rounded-md transition-colors shadow-lg ${
-                        isBetting ? 'bg-[#324555] text-gray-400 cursor-not-allowed' : 'bg-emerald-500 hover:bg-emerald-600 text-white'
+                    className={`w-full py-3.5 rounded-md font-black text-[14px] tracking-wide transition-all uppercase relative overflow-hidden mt-4 ${
+                        isBetting ? 'bg-[#1E2336] text-zinc-500 cursor-not-allowed' : 'bg-[#c6ff00] hover:bg-[#a6d900] text-black shadow-[0_0_15px_rgba(198,255,0,0.3)]'
                     }`}
                 >
-                    {isBetting ? 'Düşüyor...' : 'Bahis'}
+                    {isBetting ? 'Dropping...' : 'Bet'}
                 </button>
             </div>
         </div>
 
-        {/* ── RIGHT MAIN AREA (Centered Game Frame) ── */}
-        <div className="flex-1 bg-[#10171E] relative overflow-hidden flex items-center justify-center p-2 sm:p-4 md:p-12 order-1 md:order-2 min-h-[400px] md:min-h-0">
+        {/* ── RIGHT MAIN AREA (Robust Absolute/Flex Layout) ── */}
+        <div className="flex-1 flex flex-col relative bg-[#0B0E14] order-1 lg:order-2 min-h-[350px] lg:min-h-0 border-b lg:border-b-0 border-[#1E2336]">
             
-            {/* ── CENTERED GAME CONTAINER ── */}
-            <div className="w-full max-w-5xl h-full max-h-[700px] bg-[#151C23] relative rounded-3xl shadow-2xl overflow-hidden flex flex-col items-center justify-center border-[6px] border-[#1C252D]">
-                
-                {/* Top Info Badges */}
-                <div className="absolute top-6 left-6 flex items-center gap-2 z-20">
-                    <Info className="w-5 h-5 text-gray-500" />
-                    <span className="text-white font-bold tracking-widest text-sm flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-[#27D26D]"></div>
-                        Plinko
-                    </span>
-                </div>
-                
-                <div className="absolute top-6 right-6 flex items-center gap-2 bg-[#111111] px-3 py-1.5 rounded-full border border-white/5 z-20">
-                    <ShieldCheck className="w-4 h-4 text-gray-400" />
-                    <span className="text-gray-300 font-semibold text-xs">Adil Oyun</span>
-                </div>
 
+            {/* Main Graph Area */}
+            <div className="flex-1 relative w-full overflow-hidden bg-gradient-to-b from-[#131620] to-[#0b0e14]">
+                {/* Decorative inner pattern */}
+                <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '30px 30px' }}></div>
+                
                 {/* Payout Notification */}
                 {lastPayout && !isBetting && (
-                    <div className="absolute top-20 right-6 bg-[#111111] border border-[#262A36] px-4 py-2 rounded-lg animate-fade-in-up z-50">
-                        <span className="text-gray-400 text-xs block mb-1">Son Kazanç</span>
-                        <span className={`text-lg font-black ${lastPayout.multiplier >= 1 ? 'text-[#27D26D]' : 'text-gray-300'}`}>
+                    <div className="absolute top-6 right-6 z-50 animate-fade-in-up flex flex-col items-end">
+                        <span className="text-zinc-500 text-[10px] font-bold uppercase tracking-widest block mb-0.5">KAZANÇ</span>
+                        <span className={`text-2xl font-black ${lastPayout.multiplier > 1 ? 'text-[#c6ff00]' : 'text-zinc-300'}`}>
                             {lastPayout.multiplier >= 1 ? '+' : ''}{lastPayout.amount.toFixed(2)} ₺
                         </span>
                     </div>
                 )}
 
-                {/* Plinko Logo Background */}
-                <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.03] z-0">
-                    <h1 className="text-[100px] md:text-[140px] font-black italic tracking-tighter select-none">PLINKO</h1>
-                </div>
-                
-                {/* The Canvas */}
-                <div className="relative w-full h-full max-w-[800px] aspect-[4/3] flex flex-col items-center justify-center mt-12 scale-90 md:scale-100 z-10">
+                {/* The Canvas Container */}
+                <div className="absolute inset-0 flex items-center justify-center">
                     <canvas 
                         ref={canvasRef}
-                        width={800}
-                        height={600}
-                        className="w-full h-full object-contain"
+                        width={900}
+                        height={700}
+                        className="w-full h-full max-w-full max-h-full object-contain [object-position:center] z-10"
                     />
+                </div>
+            </div>
+
+            {/* Bottom Footer bar */}
+            <div className="h-12 border-t border-[#1E2336] bg-[#0B0E14] flex items-center justify-between px-4 md:px-6 z-30 shrink-0">
+                <button className="flex items-center justify-center w-8 h-8 rounded hover:bg-white/5 text-zinc-500 hover:text-white transition-colors group">
+                    <Settings className="w-4 h-4 group-hover:rotate-90 transition-transform" />
+                </button>
+                
+                <div className="text-zinc-700 font-black text-lg md:text-xl tracking-tighter opacity-30 absolute left-1/2 -translate-x-1/2 flex flex-col items-center leading-none" style={{ fontFamily: 'Arial, sans-serif' }}>
+                    724<span className="font-light text-[10px] md:text-xs tracking-widest mt-0.5">ORIGINALS</span>
+                </div>
+
+                <div className="flex gap-2">
+                    <span className="text-zinc-500 text-[10px] md:text-xs font-bold mr-4 self-center">Fairness</span>
+                    <div className="w-8 h-8 rounded-full bg-[#00E5FF] text-black font-black flex items-center justify-center shadow-[0_0_10px_rgba(0,229,255,0.3)] text-[10px] cursor-pointer hover:bg-[#33edff] transition-colors">
+                        CHAT
+                    </div>
                 </div>
             </div>
         </div>

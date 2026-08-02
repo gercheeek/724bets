@@ -7,7 +7,7 @@ const TICKER_GAMES = [
   { name: "Plinko", provider: '724bets', image: "/images/flat-plinko.jpg", type: 'slot' as const, path: "plinko", rules: "Topları yukarıdan bırakın, çarpan engellerini aşarak en yüksek kazanç kutusuna ulaşmasını sağlayın. Tamamen adil ve yüksek RTP oranına sahiptir." },
   { name: "Mission Uncrossable", provider: '724bets', image: "/images/flat-mission.jpg", type: 'slot' as const, path: "chicken-run", rules: "Tavuğu güvenle karşıya geçirin. Her başarılı adımda çarpanınız artsın, büyük ödülü kapın!" },
   { name: "Keno", provider: '724bets', image: "/images/flat-keno.jpg", type: 'keno' as const, path: "keno", rules: "Şanslı sayılarınızı seçin. Ne kadar çok eşleşme yakalarsanız, kazancınız o kadar büyük olur." },
-  { name: "Blackjack", provider: '724bets', image: "/images/flat-blackjack.jpg", type: 'blackjack' as const, path: "blackjack", rules: "Krupiyeyi 21'e en yakın skorla yenin. En popüler kart oyununda şansınızı deneyin." },
+  { name: "Blackjack", provider: '724bets', image: "/images/flat-blackjack.jpg", type: 'blackjack' as const, path: "blackjack-pro", rules: "Krupiyeyi 21'e en yakın skorla yenin. En popüler kart oyununda şansınızı deneyin." },
   { name: "Roulette", provider: '724bets', image: "/images/flat-roulette.jpg", type: 'slot' as const, path: "roulette", rules: "Şanslı rakamlarınızı seçin ve tekerleğin dönüşünü heyecanla bekleyin." },
   { name: "Limbo", provider: '724bets', image: "/images/flat-keno.jpg", type: 'slot' as const, path: "limbo", rules: "Hedef çarpanınızı belirleyin. Roket belirlediğiniz çarpanın üzerine çıktığı an bahis tutarınız o çarpan ile çarpılır." },
   { name: "Sugar Twist 1000", provider: "Pragmatic Play", image: "https://mediumrare.imgix.net/2782fa43a134b33c6c44f35edaa6850ef5cf9899a8a2efa9a2450ba5d30f5610?w=300&h=400&fit=min&auto=format", type: 'slot' as const, path: "sugar-twist-1000", rules: "Şeker dolu bir dünyaya adım atın ve 1000x çarpanlarla büyük kazançlar elde edin." },
@@ -26,7 +26,7 @@ const formatCurrency = (amount: number) => {
 const generateFakeBet = (t: any): BetDetailData => {
   const game = getRandom(TICKER_GAMES);
   const userId = Math.floor(100000 + Math.random() * 900000);
-  const user = `${t('common.member', 'Üye')} #${userId}`;
+  const user = `${t('common.member', { defaultValue: 'Üye' })} #${userId}`;
   const userRank = Math.floor(Math.random() * 100);
   
   // Sadece heyecan verici yüksek yatırımlar
@@ -109,7 +109,7 @@ export default function LiveWinsTicker({ guestTheme = "retro" }: { guestTheme?: 
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-red-500"></span>
           </span>
-          <span className="text-gray-200 font-bold text-[8px] tracking-widest uppercase">{t('common.live', 'CANLI')}</span>
+          <span className="text-gray-200 font-bold text-[8px] tracking-widest uppercase">{t('common.live', { defaultValue: 'CANLI' })}</span>
         </div>
 
         {/* Horizontal Scrolling List (Full Width) */}

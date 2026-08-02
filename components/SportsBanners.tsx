@@ -29,7 +29,7 @@ const getBanners = (t: any) => [
   {
     id: 'crypto_vip',
     bgImage: '/images/bitcoin_hero_banner.jpg',
-    title: <><span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-yellow-600 drop-shadow-[0_0_10px_rgba(251,191,36,0.3)]">{t('home.banner_crypto')}</span> {t('home.banner_crypto_bonus')}</>,
+    title: <><span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-amber-500 drop-shadow-[0_0_15px_rgba(251,191,36,0.6)]">{t('home.banner_crypto')}</span> {t('home.banner_crypto_bonus')}</>,
     subtitle: <span className="text-[#94a3b8]">{t('home.banner_crypto_desc_1')} <span className="text-white font-black drop-shadow-[0_2px_4px_rgba(0,0,0,1)]">{t('home.banner_crypto_desc_2')}</span></span>,
     buttonText: t('home.banner_deposit'),
     hoverShadow: 'hover:shadow-yellow-500/40',
@@ -75,7 +75,7 @@ const SportsBanners: React.FC = () => {
       {/* Content */}
       <div className="relative z-20 p-5 md:p-8 flex flex-col justify-center h-full w-[95%] md:w-[70%] lg:w-[50%] gap-2">
         <div className="flex flex-col transform group-hover:translate-x-2 transition-transform duration-700">
-          <h3 className="text-white text-[24px] md:text-[32px] lg:text-[40px] font-black leading-[1.1] mb-1.5 md:mb-2 font-['Outfit'] drop-shadow-lg tracking-tight">
+          <h3 className="text-white text-[26px] md:text-[36px] lg:text-[44px] font-black leading-[1.1] mb-2 md:mb-3 font-['Outfit'] drop-shadow-lg tracking-tight">
             {banner.title}
           </h3>
           <p className="text-[#cbd5e1] text-[12px] md:text-[14px] lg:text-[15px] font-medium leading-relaxed drop-shadow-md">
@@ -98,6 +98,17 @@ const SportsBanners: React.FC = () => {
            {renderBannerContent(banner)}
         </div>
       ))}
+
+      {/* Pagination Dots */}
+      <div className="absolute bottom-4 md:bottom-6 left-6 md:left-8 flex gap-2 z-30">
+        {banners.map((_, idx) => (
+          <button 
+            key={idx}
+            onClick={(e) => { e.stopPropagation(); setActiveIndex(idx); }}
+            className={`h-1.5 md:h-2 rounded-full transition-all duration-500 ${idx === activeIndex ? "w-8 md:w-12 bg-[#00E5FF] shadow-[0_0_15px_rgba(0,229,255,0.9)]" : "w-2 bg-white/30 hover:bg-white/60"}`}
+          />
+        ))}
+      </div>
     </div>
   );
 };

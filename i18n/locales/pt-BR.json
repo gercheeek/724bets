@@ -392,5 +392,21 @@
     "my_bets": "Minhas Apostas",
     "bet_slip": "Boletim",
     "search": "Busca"
+  },
+  "wallet": {
+    "title": "Carteira",
+    "deposit": "Depositar",
+    "withdraw": "Sacar",
+    "two_factor_disabled": "2FA está desativado",
+    "enable_2fa": "Ativar 2FA",
+    "deposit_options": "Opções de Depósito",
+    "withdraw_options": "Opções de Saque",
+    "crypto_deposit": "Depósito Cripto",
+    "crypto_withdraw": "Saque Cripto",
+    "exchanges": "Exchanges e Carteiras",
+    "bank": "Conta Bancária",
+    "gift_cards": "Cartões Presente",
+    "others": "Outros",
+    "popular": "POPULAR"
   }
 }

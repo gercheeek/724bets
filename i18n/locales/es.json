@@ -392,5 +392,21 @@
     "my_bets": "Mis Apuestas",
     "bet_slip": "Boleto",
     "search": "Buscar"
+  },
+  "wallet": {
+    "title": "Cartera",
+    "deposit": "Depositar",
+    "withdraw": "Retirar",
+    "two_factor_disabled": "El 2FA está desactivado",
+    "enable_2fa": "Habilitar 2FA",
+    "deposit_options": "Opciones de Depósito",
+    "withdraw_options": "Opciones de Retiro",
+    "crypto_deposit": "Depósito de Cripto",
+    "crypto_withdraw": "Retiro de Cripto",
+    "exchanges": "Exchanges y Carteras",
+    "bank": "Cuenta Bancaria",
+    "gift_cards": "Tarjetas de Regalo",
+    "others": "Otros",
+    "popular": "POPULAR"
   }
 }

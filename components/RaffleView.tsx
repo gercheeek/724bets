@@ -76,44 +76,69 @@ const CountdownDisplay = React.memo(({ targetDate }: { targetDate: Date }) => {
 // --------------------------------------------------------------------------------
 // OPTIMIZATION 2: Memoize individual Ticket Slots to stop re-rendering 200 elements
 // --------------------------------------------------------------------------------
-const TicketSlot = React.memo(({ index, isSold, isMe, username, onSelect }: { index: number, isSold: boolean, isMe: boolean, username: string, onSelect: (idx: number) => void }) => {
+const TicketSlot = React.memo(({ index, isSold, isMe, username, onSelect, isHighlighted, isDimmed, isSimulating, isWinner }: { index: number, isSold: boolean, isMe: boolean, username: string, onSelect: (idx: number) => void, isHighlighted: boolean, isDimmed: boolean, isSimulating: boolean, isWinner: boolean }) => {
     const { t } = useTranslation();
+    
+    let containerClass = 'bg-[#101014] border-white/5 hover:bg-[#1a1a24] hover:border-[#10b981] hover:shadow-[0_0_25px_rgba(16,185,129,0.5)] cursor-pointer hover:-translate-y-1';
+    
+    if (isWinner) {
+        containerClass = 'bg-gradient-to-br from-amber-400 to-amber-600 border-amber-300 shadow-[0_0_40px_rgba(251,191,36,0.8)] scale-110 z-50 animate-[pulse_1s_infinite]';
+    } else if (isSimulating) {
+        containerClass = 'bg-white border-white shadow-[0_0_30px_rgba(255,255,255,1)] scale-110 z-40';
+    } else if (isSold) {
+        if (isMe) {
+            containerClass = 'bg-gradient-to-br from-emerald-400 to-emerald-600 border-emerald-300 shadow-[0_0_20px_rgba(16,185,129,0.6)] cursor-default transform scale-95';
+        } else {
+            containerClass = 'bg-gradient-to-br from-zinc-900 to-black border-zinc-800 cursor-default group';
+        }
+    }
+    
+    if (isDimmed) {
+        containerClass += ' opacity-10 grayscale blur-[1px] scale-90';
+    } else if (isHighlighted) {
+        containerClass += ' ring-2 ring-emerald-400 ring-offset-2 ring-offset-[#050505] scale-105 shadow-[0_0_30px_rgba(16,185,129,0.8)] z-20';
+    } else if (isSold && !isMe && !isSimulating && !isWinner) {
+        containerClass += ' opacity-40';
+    }
+
     return (
         <div
             title={isSold ? (isMe ? t('raffle.your_ticket', 'Sizin') : username) : t('raffle.empty_ticket', 'Bilet {0} (Boş)').replace('{0}', String(index + 1))}
             onClick={() => !isSold && onSelect(index)}
-            className={`
-                relative flex flex-col items-center justify-center p-2 rounded-xl border transition-all duration-300 group
-                ${isSold 
-                    ? (isMe 
-                        ? 'bg-gradient-to-br from-emerald-400 to-emerald-600 border-emerald-300 shadow-[0_0_20px_rgba(16,185,129,0.6)] cursor-default transform scale-95' 
-                        : 'bg-gradient-to-br from-zinc-900 to-black border-zinc-800 opacity-40 cursor-default'
-                      ) 
-                    : 'bg-[#101014] border-white/5 hover:bg-[#1a1a24] hover:border-amber-400 hover:shadow-[0_0_25px_rgba(255,215,0,0.5)] cursor-pointer hover:-translate-y-1'
-                }
-            `}
+            className={`relative flex flex-col items-center justify-center p-2 rounded-xl border transition-all duration-300 group ${containerClass}`}
             style={{ minHeight: 64 }}
         >
             {isSold ? (
                 <>
-                    {isMe ? <Ticket className="w-5 h-5 mb-1 text-emerald-950" /> : <Lock className="w-4 h-4 mb-1 text-zinc-600" />}
-                    <div className={`font-black text-[9px] text-center tracking-wider uppercase ${isMe ? 'text-emerald-950' : 'text-zinc-500'}`}>
+                    {isMe ? <Ticket className="w-5 h-5 mb-1 text-emerald-950" /> : <Lock className="w-4 h-4 mb-1 text-zinc-600 group-hover:text-amber-400 transition-colors" />}
+                    <div className={`font-black text-[9px] text-center tracking-wider uppercase ${isMe ? 'text-emerald-950' : 'text-zinc-500 group-hover:text-amber-400'}`}>
                         {isMe ? t('raffle.yours', 'SİZİN') : t('raffle.taken', 'DOLU')}
                     </div>
-                    <div className={`text-[8px] font-mono mt-0.5 ${isMe ? 'text-emerald-900/70 font-bold' : 'text-white/20'}`}>#{String(index + 1).padStart(3, '0')}</div>
+                    <div className={`text-[8px] font-mono mt-0.5 ${isMe ? 'text-emerald-900/70 font-bold' : 'text-white/20 group-hover:text-amber-400/50'}`}>#{String(index + 1).padStart(3, '0')}</div>
+                    
+                    {/* Tooltip for others' tickets */}
+                    {!isMe && !isWinner && (
+                        <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-[#0A0F1A] border border-[#00E5FF]/30 text-[#00E5FF] text-[10px] font-black px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-50 shadow-xl">
+                            {username}
+                        </div>
+                    )}
                 </>
             ) : (
                 <>
-                    <Ticket className="w-5 h-5 text-white/10 mb-1 group-hover:text-amber-400 transition-colors" />
-                    <div className="text-white/30 text-[10px] font-bold text-center font-mono group-hover:text-amber-400 transition-colors">
+                    <Ticket className="w-5 h-5 text-white/10 mb-1 group-hover:text-[#10b981] transition-colors" />
+                    <div className="text-white/30 text-[10px] font-bold text-center font-mono group-hover:text-[#10b981] transition-colors">
                         {String(index + 1).padStart(3, '0')}
                     </div>
                 </>
             )}
             
             {/* Hover Glare Effect */}
-            {!isSold && (
+            {!isSold && !isDimmed && (
                 <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-xl pointer-events-none" />
+            )}
+            
+            {isWinner && (
+                <div className="absolute inset-0 border-[3px] border-amber-400 rounded-xl animate-ping opacity-75 pointer-events-none" />
             )}
         </div>
     );
@@ -136,6 +161,10 @@ const RaffleView: React.FC<RaffleViewProps> = ({ config, loyaltyConfig, userId, 
     const [isDepositModalOpen, setIsDepositModalOpen] = useState(false);
     const [isArenaModalOpen, setIsArenaModalOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
+    const [highlightMyTickets, setHighlightMyTickets] = useState(false);
+    const [isDrawSimulating, setIsDrawSimulating] = useState(false);
+    const [simulationSlot, setSimulationSlot] = useState<number | null>(null);
+    const [winnerSlot, setWinnerSlot] = useState<number | null>(null);
 
     // Collapsed sections state
     const [collapsed, setCollapsed] = useState<Record<string, boolean>>({
@@ -282,6 +311,37 @@ const RaffleView: React.FC<RaffleViewProps> = ({ config, loyaltyConfig, userId, 
         }
     };
 
+    const simulateDraw = () => {
+        if (ticketPool.length === 0) {
+            showSuccess('❌ Çekiliş için hiç bilet satılmamış!');
+            return;
+        }
+        setIsDrawSimulating(true);
+        setWinnerSlot(null);
+        setHighlightMyTickets(false);
+
+        let duration = 0;
+        let speed = 50;
+        const totalDuration = 5000; // 5 seconds
+        
+        const drawInterval = setInterval(() => {
+            duration += speed;
+            const randomSoldTicket = ticketPool[Math.floor(Math.random() * ticketPool.length)];
+            setSimulationSlot(randomSoldTicket.slot);
+            
+            // Slow down the roulette
+            if (duration > totalDuration * 0.7) speed = 150;
+            if (duration > totalDuration * 0.9) speed = 300;
+
+            if (duration >= totalDuration) {
+                clearInterval(drawInterval);
+                setIsDrawSimulating(false);
+                setWinnerSlot(randomSoldTicket.slot);
+                showSuccess(`🎉 ÇEKİLİŞ KAZANANI: BİLET #${String(randomSoldTicket.slot + 1).padStart(3, '0')} (${randomSoldTicket.username})`);
+            }
+        }, speed);
+    };
+
     return (
         <div style={{ minHeight: '100vh', background: 'transparent', padding: '0 0 60px', fontFamily: "'Inter', sans-serif", color: '#fff' }}>
             <style>{`
@@ -374,10 +434,21 @@ const RaffleView: React.FC<RaffleViewProps> = ({ config, loyaltyConfig, userId, 
                         
                         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-6 border-b border-white/5 bg-white/[0.02] gap-5 relative z-10">
                             <h3 className="text-white text-xl font-black uppercase tracking-wider flex items-center gap-2">
-                                <div className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse shadow-[0_0_10px_rgba(245,166,35,0.5)]" />
-                                Bilet Arenası
+                                <div className="w-2.5 h-2.5 rounded-full bg-[#10b981] animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
+                                Bilet Arenası Matrix
                             </h3>
                             <div className="flex items-center gap-5 w-full sm:w-auto justify-between sm:justify-end">
+                                {/* Highlight Toggle */}
+                                {myTickets.length > 0 && (
+                                    <button 
+                                        onClick={() => setHighlightMyTickets(!highlightMyTickets)}
+                                        className={`px-3 py-1.5 rounded-lg border text-xs font-bold transition-all flex items-center gap-2 ${highlightMyTickets ? 'bg-[#10b981]/20 border-[#10b981]/50 text-[#10b981]' : 'bg-white/5 border-white/10 text-zinc-400 hover:text-white hover:bg-white/10'}`}
+                                    >
+                                        Biletlerimi Vurgula
+                                        <div className={`w-2.5 h-2.5 rounded-full transition-colors ${highlightMyTickets ? 'bg-[#10b981] shadow-[0_0_8px_rgba(16,185,129,0.8)]' : 'bg-zinc-600'}`} />
+                                    </button>
+                                )}
+                                
                                 {/* Legend */}
                                 <div className="flex items-center gap-5 mr-0 sm:mr-4">
                                     <div className="flex items-center gap-2">
@@ -393,7 +464,7 @@ const RaffleView: React.FC<RaffleViewProps> = ({ config, loyaltyConfig, userId, 
                                         <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider hidden sm:inline">Boş</span>
                                     </div>
                                 </div>
-                                <div className="bg-amber-500/10 border border-amber-500/20 text-amber-400 px-4 py-2 rounded-lg text-sm font-black tracking-widest shrink-0 shadow-[0_0_15px_rgba(245,166,35,0.1)]">
+                                <div className="bg-[#10b981]/10 border border-[#10b981]/20 text-[#10b981] px-4 py-2 rounded-lg text-sm font-black tracking-widest shrink-0 shadow-[0_0_15px_rgba(16,185,129,0.1)]">
                                     {totalSold} / {TOTAL_POOL_SIZE}
                                 </div>
                             </div>
@@ -409,23 +480,34 @@ const RaffleView: React.FC<RaffleViewProps> = ({ config, loyaltyConfig, userId, 
                                 {useMemo(() => {
                                     return Array.from({ length: TOTAL_POOL_SIZE }, (_, index) => {
                                         const found = ticketPool.find(t => t.slot === index);
+                                        const isMe = found?.userId === userId;
+                                        
+                                        const isHighlighted = highlightMyTickets && isMe;
+                                        const isDimmed = (highlightMyTickets && !isMe) || (isDrawSimulating && simulationSlot !== index) || (winnerSlot !== null && winnerSlot !== index);
+                                        const isSimulating = isDrawSimulating && simulationSlot === index;
+                                        const isWinner = winnerSlot === index;
+
                                         return (
                                             <TicketSlot 
                                                 key={index} 
                                                 index={index} 
                                                 isSold={!!found} 
-                                                isMe={found?.userId === userId} 
+                                                isMe={isMe} 
                                                 username={found?.username || ''} 
-                                                onSelect={handleSelectSlot} 
+                                                onSelect={handleSelectSlot}
+                                                isHighlighted={isHighlighted}
+                                                isDimmed={isDimmed}
+                                                isSimulating={isSimulating}
+                                                isWinner={isWinner}
                                             />
                                         );
                                     });
-                                }, [ticketPool, userId, handleSelectSlot])}
+                                }, [ticketPool, userId, handleSelectSlot, highlightMyTickets, isDrawSimulating, simulationSlot, winnerSlot])}
                             </div>
                         </div>
 
-                        {/* Random Selection Button */}
-                        <div className="w-full p-6 sm:p-8 flex items-center justify-center border-t border-white/5 bg-gradient-to-t from-black/50 to-transparent relative z-10">
+                        {/* Random Selection & Simulate Button */}
+                        <div className="w-full p-6 sm:p-8 flex items-center justify-center gap-4 border-t border-white/5 bg-gradient-to-t from-black/50 to-transparent relative z-10">
                             <button 
                                 onClick={handleSelectRandom}
                                 className="relative overflow-hidden group px-8 py-4 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 border border-amber-300 text-amber-950 font-black text-sm uppercase tracking-widest shadow-[0_0_20px_rgba(245,166,35,0.4)] transition-all transform hover:-translate-y-1 animate-sweep"
@@ -435,6 +517,19 @@ const RaffleView: React.FC<RaffleViewProps> = ({ config, loyaltyConfig, userId, 
                                     Rastgele Şanslı Bilet Seç
                                 </span>
                             </button>
+
+                            {(userId === 'admin' || true) && ( /* Using true for demo purposes */
+                                <button 
+                                    onClick={simulateDraw}
+                                    disabled={isDrawSimulating || ticketPool.length === 0}
+                                    className={`relative overflow-hidden group px-8 py-4 rounded-xl font-black text-sm uppercase tracking-widest transition-all transform hover:-translate-y-1 shadow-[0_0_20px_rgba(0,229,255,0.4)] ${isDrawSimulating ? 'bg-zinc-800 text-zinc-500 border border-zinc-700 cursor-not-allowed' : 'bg-gradient-to-r from-[#00E5FF] to-[#0088ff] hover:from-[#33eeff] hover:to-[#00aaff] border border-[#00E5FF] text-[#041E24]'}`}
+                                >
+                                    <span className="relative z-10 flex items-center gap-2">
+                                        <Trophy className={`w-5 h-5 ${isDrawSimulating ? 'animate-spin' : ''}`} />
+                                        {isDrawSimulating ? 'ÇEKİLİŞ YAPILIYOR...' : 'ÇEKİLİŞİ SİMÜLE ET'}
+                                    </span>
+                                </button>
+                            )}
                         </div>
                     </div>
                 </div>

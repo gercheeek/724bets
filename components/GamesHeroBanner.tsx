@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Zap, ArrowRight, Star, ChevronRight, Info, Crown } from 'lucide-react';
 import AnimatedCounter from './AnimatedCounter';
+import { useTranslation } from 'react-i18next';
 
 const AnimatedJackpot = () => {
   const [jackpot, setJackpot] = useState(12450890.45);
@@ -19,11 +20,13 @@ const AnimatedJackpot = () => {
   );
 };
 
-const HeroBanner = ({ onNavigate }: { onNavigate?: (v: string) => void }) => {
+const HeroBanner = ({ onNavigate, isLoggedIn, onAuthRequired, setSiteUser }: { onNavigate?: (v: string) => void, isLoggedIn?: boolean, onAuthRequired?: () => void, setSiteUser?: any }) => {
+  const { t } = useTranslation();
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
   const [hoveredGameId, setHoveredGameId] = useState<string | null>(null);
   const [isLoadingGame, setIsLoadingGame] = useState<string | null>(null);
+  const [authPromptGame, setAuthPromptGame] = useState<string | null>(null);
   const cardRef = useRef<HTMLDivElement>(null);
 
   const handleMouseMove = (e: React.MouseEvent) => {
@@ -164,16 +167,31 @@ const HeroBanner = ({ onNavigate }: { onNavigate?: (v: string) => void }) => {
       `}</style>
 
 
+      {/* Loading Screen */}
       {isLoadingGame && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[#050505] animate-fade-in backdrop-blur-md">
+        <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#05070A] animate-fade-in backdrop-blur-md">
           <div className="flex flex-col items-center gap-6 animate-pulse">
-            <img src="/logo.png" alt="724BETS" className="h-16 md:h-20 drop-shadow-[0_0_20px_rgba(0,255,136,0.5)] animate-bounce" />
-            <div className="text-[#00ff88] font-arcade text-xl md:text-2xl tracking-widest drop-shadow-[0_0_10px_rgba(0,255,136,0.8)]">
-              OYUN YÜKLENIYOR...
+            {/* 724bets Text and Clover Logo */}
+            <div className="flex items-center text-[32px] md:text-[42px] font-black tracking-tighter drop-shadow-xl" style={{ fontFamily: 'Arial, sans-serif' }}>
+                <span className="text-white drop-shadow-[0_2px_5px_rgba(0,0,0,1)]">724</span>
+                <span className="text-[#00E5FF] ml-[1px] drop-shadow-[0_2px_5px_rgba(0,0,0,1)]">bets</span>
+                <div className="w-10 h-10 md:w-14 md:h-14 ml-2 -translate-y-1">
+                    <svg viewBox="0 0 100 100" fill="currentColor" className="w-full h-full text-[#c6ff00] drop-shadow-[0_0_12px_rgba(198,255,0,0.5)]">
+                        <path d="M 50,45 C 35,25 40,10 50,18 C 60,10 65,25 50,45 Z" />
+                        <path d="M 47,48 C 25,35 15,45 25,55 C 15,65 25,75 47,48 Z" />
+                        <path d="M 53,48 C 75,35 85,45 75,55 C 85,65 75,75 53,48 Z" />
+                        <path d="M 50,50 C 45,65 40,75 35,70 C 45,70 50,60 50,50 Z" />
+                    </svg>
+                </div>
             </div>
+            
+            <div className="text-[#00E5FF] font-black text-xl md:text-2xl tracking-widest drop-shadow-[0_0_10px_rgba(0,229,255,0.8)] mt-2">
+              {t('OYUN YÜKLENİYOR...', 'OYUN YÜKLENİYOR...')}
+            </div>
+            
             {/* Loading Bar */}
-            <div className="w-64 h-2 bg-white/10 rounded-full overflow-hidden mt-4">
-              <div className="h-full bg-gradient-to-r from-[#00ff88] to-[#a855f7] animate-[shimmer_3s_ease-in-out_forwards] w-full" style={{ transformOrigin: 'left', animationName: 'shimmer', animationDuration: '3s' }}></div>
+            <div className="w-64 h-1.5 bg-white/10 rounded-full overflow-hidden mt-2">
+              <div className="h-full bg-gradient-to-r from-[#00E5FF] to-[#c6ff00] animate-[shimmer_3s_ease-in-out_forwards] w-full" style={{ transformOrigin: 'left', animationName: 'shimmer', animationDuration: '3s' }}></div>
             </div>
           </div>
         </div>
@@ -219,10 +237,11 @@ const HeroBanner = ({ onNavigate }: { onNavigate?: (v: string) => void }) => {
         <div className="flex flex-col justify-center gap-1.5 w-full max-w-sm mx-auto md:ml-auto perspective-1000 mt-10 md:mt-0 relative z-20">
           
           {[
+            { id: 'crash', name: 'CRASH', color: 'text-[#00E5FF]', image: '/images/new-mission.webp', players: 4521, maxWin: '5000x' },
             { id: 'plinko', name: 'PLINKO', color: 'text-[#00ff88]', image: '/images/flat-plinko.jpg', players: 1245, maxWin: '1000x' },
             { id: 'limbo', name: 'LIMBO', color: 'text-[#a855f7]', image: '/images/flat-mission.jpg', players: 843, maxWin: '10,000x' },
             { id: 'roulette', name: 'ROULETTE', color: 'text-emerald-400', image: '/images/flat-roulette.jpg', players: 3201, maxWin: '36x' },
-            { id: 'blackjack', name: 'BLACKJACK', color: 'text-white', image: '/images/flat-blackjack.jpg', players: 2150, maxWin: '2.5x' },
+            { id: 'blackjack-pro', name: 'BLACKJACK', color: 'text-white', image: '/images/flat-blackjack.jpg', players: 2150, maxWin: '2.5x' },
             { id: 'keno', name: 'KENO', color: 'text-yellow-400', image: '/images/flat-keno.webp', players: 540, maxWin: '500x' },
           ].map((game, idx) => {
             const isHovered = hoveredGameId ? game.id === hoveredGameId : idx === 0;

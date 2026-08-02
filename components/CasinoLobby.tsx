@@ -494,22 +494,34 @@ export default function CasinoLobby({
   const newGames = allGames.filter(g => g.category === 'new' || g.isNew).slice(0, 12);
 
   const handleGameClick = (game: any) => {
-    if (game.provider === 'Originals') {
-      if (game.name === 'Blackjack') {
-        onNavigate && onNavigate('blackjack-pro');
-      } else if (game.name === 'Plinko') {
-        onNavigate && onNavigate('plinko');
-      } else {
-        setSelectedGame(game);
-        setShowDemoIframe(true);
-      }
+    const gameName = (game.name || '').toLowerCase();
+    
+    // Always route our Originals to their native views, regardless of provider string
+    if (gameName.includes('blackjack')) {
+      onNavigate && onNavigate('blackjack-pro');
       return;
     }
+    if (gameName.includes('plinko')) {
+      onNavigate && onNavigate('plinko');
+      return;
+    }
+    if (gameName.includes('limbo')) {
+      onNavigate && onNavigate('limbo');
+      return;
+    }
+
+    if (game.provider === 'Originals') {
+      setSelectedGame(game);
+      setShowDemoIframe(true);
+      return;
+    }
+    
     setSelectedGame(game);
   };
 
   const handleDemoClick = (game: any) => {
-    if (game.provider === 'Originals') {
+    const gameName = (game.name || '').toLowerCase();
+    if (game.provider === 'Originals' || gameName.includes('blackjack') || gameName.includes('plinko') || gameName.includes('limbo')) {
       handleGameClick(game);
       return;
     }

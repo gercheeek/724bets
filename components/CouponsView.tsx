@@ -21,6 +21,7 @@ const CouponsView: React.FC<CouponsViewProps> = ({
   const { t } = useTranslation();
   const [activeMainTab, setActiveMainTab] = useState<'aktif' | 'gecmis'>('aktif');
   const [activeSubTab, setActiveSubTab] = useState('all');
+  const [cashedOutBets, setCashedOutBets] = useState<string[]>([]);
 
   const subTabs = [
     { id: 'all', label: t('coupons.subtab_all', 'Tümü') },
@@ -158,7 +159,24 @@ const CouponsView: React.FC<CouponsViewProps> = ({
                     <button className="w-8 h-8 flex items-center justify-center rounded bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10 transition-colors" title={t('coupons.share_img', 'Görsel Olarak Paylaş')}>
                       <ImageIcon className="w-4 h-4" />
                     </button>
-                    <button className="w-8 h-8 flex items-center justify-center rounded bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10 transition-colors" title={t('coupons.share', 'Paylaş')}>
+                    <button 
+                      onClick={() => {
+                        const chatInput = document.querySelector('input[placeholder="Bir mesaj yazın..."]') as HTMLInputElement;
+                        if (chatInput) {
+                          // Simulate typing a bet share command into the chat
+                          chatInput.value = `Spor: #${bet.id} Özel Oran: ${bet.odds} - Olası Kazanç: ${bet.estimatedPayout}`;
+                          chatInput.dispatchEvent(new Event('input', { bubbles: true }));
+                          // Highlight chat area to draw attention
+                          const chatWrapper = document.getElementById('modern-chat-wrapper');
+                          if (chatWrapper) {
+                             chatWrapper.classList.add('ring-2', 'ring-[#06b6d4]', 'ring-offset-2', 'ring-offset-[#090D14]');
+                             setTimeout(() => chatWrapper.classList.remove('ring-2', 'ring-[#06b6d4]', 'ring-offset-2', 'ring-offset-[#090D14]'), 2000);
+                          }
+                        }
+                      }}
+                      className="w-8 h-8 flex items-center justify-center rounded bg-white/5 text-zinc-400 hover:text-[#06b6d4] hover:bg-white/10 transition-colors" 
+                      title={t('coupons.share', 'Paylaş')}
+                    >
                       <Share2 className="w-4 h-4" />
                     </button>
                   </div>
@@ -181,10 +199,24 @@ const CouponsView: React.FC<CouponsViewProps> = ({
                 </div>
                 
                 {/* Action Button */}
-                <button className="w-full py-3.5 bg-[#06b6d4] hover:bg-[#33FFB5] text-black font-black uppercase tracking-wide text-sm rounded-lg transition-all flex items-center justify-between px-6 shadow-[0_0_20px_rgba(0,255,163,0.15)] hover:shadow-[0_0_30px_rgba(0,255,163,0.3)]">
-                  <span>{t('coupons.early_cashout', 'Erken ödeme')} {bet.cashoutValue}</span>
-                  <ArrowRightLeft className="w-4 h-4" />
-                </button>
+                {cashedOutBets.includes(bet.id) ? (
+                  <button disabled className="w-full py-3.5 bg-[#00E676]/20 border border-[#00E676]/30 text-[#00E676] font-black uppercase tracking-wide text-sm rounded-lg flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(0,230,118,0.1)]">
+                    <CheckCircle2 className="w-5 h-5" />
+                    <span>BAHİS BOZDURULDU</span>
+                  </button>
+                ) : (
+                  <button 
+                    onClick={() => {
+                      if (window.confirm(`${bet.cashoutValue} tutarında bahis bozdurma işlemini onaylıyor musunuz?`)) {
+                        setCashedOutBets([...cashedOutBets, bet.id]);
+                      }
+                    }}
+                    className="w-full py-3.5 bg-[#06b6d4] hover:bg-[#33FFB5] text-black font-black uppercase tracking-wide text-sm rounded-lg transition-all flex items-center justify-between px-6 shadow-[0_0_20px_rgba(0,255,163,0.15)] hover:shadow-[0_0_30px_rgba(0,255,163,0.3)]"
+                  >
+                    <span>{t('coupons.early_cashout', 'Erken ödeme')} {bet.cashoutValue}</span>
+                    <ArrowRightLeft className="w-4 h-4" />
+                  </button>
+                )}
 
               </div>
             </div>

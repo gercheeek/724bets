@@ -9,80 +9,142 @@ import { useTranslation } from 'react-i18next';
 const MOCK_MY_BETS = [
   {
     id: 1,
-    type: 'Geliştirilmiş Bahis',
-    title: 'GNK Dinamo Zagreb vs. FC Thun',
+    type: 'TEKLİ BAHİS',
+    title: 'Real Madrid vs. Barcelona',
     picks: [
-      { text: '+ Üstü 2.5', detail: 'Toplam gol' },
-      { text: '+ GNK Dinamo Zagreb', detail: '1x2' },
-      { text: '+ var', detail: 'İlk yarı - her iki takım da gol atar' }
+      { text: 'Real Madrid', detail: 'Maç Sonucu' }
     ],
-    oldOdds: '4.71',
-    newOdds: '5.64',
-    players: '873'
+    odds: '2.10',
+    stake: '1,000 ₺',
+    potentialWin: '2,100 ₺',
+    cashoutValue: '1,350 ₺',
+    isLive: true,
+    score: '1 - 0',
+    minute: '68\''
   },
   {
     id: 2,
-    type: 'Geliştirilmiş Bahis',
-    title: 'Heart of Midlothian FC vs. Sturm Graz',
+    type: 'KOMBİNE BAHİS',
+    title: 'Arsenal vs. Chelsea',
     picks: [
-      { text: '+ Sturm Graz', detail: '1x2' },
-      { text: '+ Üstü 0.5', detail: 'İlk Yarı - Toplam gol' },
-      { text: '+ var', detail: 'Sturm Graz gol yemez' }
+      { text: 'Üst 2.5', detail: 'Toplam Gol' }
     ],
-    oldOdds: '10.07',
-    newOdds: '12.34',
-    players: '975'
+    odds: '1.85',
+    stake: '500 ₺',
+    potentialWin: '925 ₺',
+    cashoutValue: '480 ₺',
+    isLive: false,
+    score: '',
+    minute: ''
   }
 ];
 
-const MyBetsPanel = () => {
+const MyBetsPanel = ({ onShare }: { onShare: (msg: string) => void }) => {
+  const [cashedOutBets, setCashedOutBets] = useState<number[]>([]);
+
   return (
     <div className="flex-1 overflow-y-auto bg-[#050608] flex flex-col p-3 gap-4">
-      <div className="flex items-center gap-2 px-1 mb-2">
-        <div className="w-5 h-5 bg-[#00E5FF] rounded-full flex items-center justify-center shadow-[0_0_10px_#00E5FF]">
-          <Target className="w-3 h-3 text-black" />
+      <div className="flex items-center justify-between px-1 mb-2">
+        <div className="flex items-center gap-2">
+          <div className="w-5 h-5 bg-[#06b6d4] rounded-full flex items-center justify-center shadow-[0_0_10px_#06b6d4]">
+            <Target className="w-3 h-3 text-black" />
+          </div>
+          <h3 className="text-white font-bold text-sm">Aktif Bahislerim</h3>
         </div>
-        <h3 className="text-white font-bold text-sm">Bonuslu Bahisler</h3>
+        <span className="text-[10px] text-zinc-400 font-bold bg-white/5 px-2 py-1 rounded">2 KUPON</span>
       </div>
 
       {MOCK_MY_BETS.map((bet) => (
-        <div key={bet.id} className="relative bg-gradient-to-br from-[#0d1512] to-[#0A0D14] border border-[#00ff88]/20 rounded-xl overflow-hidden shadow-[0_0_20px_rgba(0,255,136,0.05)]">
+        <div key={bet.id} className="relative bg-[#0d1017] border border-white/10 rounded-xl overflow-hidden shadow-lg hover:border-[#06b6d4]/30 transition-colors">
           {/* Header */}
-          <div className="p-3 pb-2 flex items-center justify-between">
-            <span className="text-[#00ff88] text-[10px] uppercase font-black tracking-wider drop-shadow-[0_0_5px_rgba(0,255,136,0.5)]">
+          <div className="p-3 pb-2 flex items-center justify-between border-b border-white/5 bg-[#12161e]">
+            <span className="text-[#06b6d4] text-[10px] uppercase font-black tracking-wider">
               {bet.type}
             </span>
-            <div className="flex items-center gap-1 bg-black/40 px-2 py-0.5 rounded text-[9px] font-bold text-zinc-400">
-              <span className="w-2 h-2 rounded-full bg-[#00ff88] animate-pulse shadow-[0_0_5px_#00ff88]"></span>
-              {bet.players}
-            </div>
+            {bet.isLive && (
+              <div className="flex items-center gap-1.5 bg-red-500/10 border border-red-500/20 px-2 py-0.5 rounded text-[10px] font-bold text-red-500">
+                <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
+                CANLI {bet.minute}
+              </div>
+            )}
           </div>
 
-          {/* Title */}
-          <div className="px-3 pb-3 border-b border-white/5 flex items-center gap-1.5">
-            <div className="w-4 h-4 bg-white/10 rounded-full flex items-center justify-center shrink-0">
-              <div className="w-2 h-2 bg-white/50 rounded-full"></div>
-            </div>
-            <h4 className="text-white font-bold text-[12px] leading-tight">{bet.title}</h4>
+          {/* Title & Live Score */}
+          <div className="p-3 flex items-center justify-between gap-2">
+            <h4 className="text-white font-bold text-[13px] leading-tight flex-1">{bet.title}</h4>
+            {bet.isLive && (
+              <div className="text-[#10b981] font-black text-lg bg-[#10b981]/10 px-3 py-1 rounded-md border border-[#10b981]/20">
+                {bet.score}
+              </div>
+            )}
           </div>
 
           {/* Picks */}
-          <div className="p-3 flex flex-col gap-2">
+          <div className="px-3 pb-3 flex flex-col gap-2">
             {bet.picks.map((pick, i) => (
-              <div key={i} className="flex flex-col relative pl-2 border-l border-[#00ff88]/20">
-                <span className="text-[#00ff88] text-[11px] font-bold">{pick.text} <span className="text-zinc-500 font-normal">| {pick.detail}</span></span>
+              <div key={i} className="flex flex-col relative pl-2 border-l-2 border-[#06b6d4]">
+                <span className="text-white text-[12px] font-bold">{pick.text}</span>
+                <span className="text-zinc-500 text-[11px] font-medium">{pick.detail}</span>
               </div>
             ))}
           </div>
 
-          {/* Odds Footer */}
-          <div className="bg-[#11161d] p-3 flex items-center justify-between mt-2 border-t border-[#00ff88]/10">
-            <div className="w-full h-9 bg-black/40 rounded-lg flex items-center justify-center gap-3">
-              <span className="text-zinc-500 font-bold text-[12px]">{bet.oldOdds}</span>
-              <div className="w-[45%] h-[80%] rounded-full border border-[#00ff88] bg-[#00ff88]/10 flex items-center justify-center gap-1 shadow-[0_0_10px_rgba(0,255,136,0.2)]">
-                <Target className="w-3 h-3 text-[#00ff88]" />
-                <span className="text-white font-black text-[13px]">{bet.newOdds}</span>
-              </div>
+          {/* Odds Footer & Actions */}
+          <div className="bg-[#151a24] p-3 flex flex-col gap-3 border-t border-white/5">
+            <div className="flex items-center justify-between">
+              <span className="text-zinc-400 text-xs font-medium">Toplam Oran:</span>
+              <span className="text-white font-black text-sm">{bet.odds}</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-zinc-400 text-xs font-medium">Bahis Miktarı:</span>
+              <span className="text-white font-bold text-sm">{bet.stake}</span>
+            </div>
+            <div className="flex items-center justify-between mt-1 pt-2 border-t border-white/5 mb-1">
+              <span className="text-zinc-400 text-xs font-medium">Olası Kazanç:</span>
+              <span className="text-[#10b981] font-black text-base">{bet.potentialWin}</span>
+            </div>
+            
+            {/* Action Buttons */}
+            <div className="flex gap-2 mt-1">
+              {cashedOutBets.includes(bet.id) ? (
+                <button disabled className="flex-1 py-2.5 bg-[#00E676]/20 border border-[#00E676]/30 text-[#00E676] font-black uppercase tracking-wide text-[11px] rounded-lg flex items-center justify-center gap-1.5 shadow-[0_0_15px_rgba(0,230,118,0.1)]">
+                  <CheckCircle2 className="w-4 h-4" />
+                  <span>BOZDURULDU</span>
+                </button>
+              ) : (
+                <button 
+                  onClick={() => {
+                    if (window.confirm(`${bet.cashoutValue} tutarında bahis bozdurma işlemini onaylıyor musunuz?`)) {
+                      setCashedOutBets([...cashedOutBets, bet.id]);
+                    }
+                  }}
+                  className="flex-1 py-2.5 bg-[#06b6d4] hover:bg-[#33FFB5] text-black font-black uppercase tracking-wide text-[11px] rounded-lg transition-all flex items-center justify-center gap-1.5 shadow-[0_0_15px_rgba(0,255,163,0.15)] hover:shadow-[0_0_20px_rgba(0,255,163,0.3)]"
+                >
+                  <RefreshCcw className="w-3.5 h-3.5" />
+                  <span>BAHİS BOZDUR {bet.cashoutValue}</span>
+                </button>
+              )}
+              <button 
+                onClick={() => {
+                  const payload = {
+                    id: bet.id,
+                    type: bet.type,
+                    title: bet.title,
+                    picks: bet.picks,
+                    odds: bet.odds,
+                    stake: bet.stake,
+                    win: bet.potentialWin,
+                    isLive: bet.isLive,
+                    score: bet.score,
+                    minute: bet.minute
+                  };
+                  onShare(`[BET_SHARE:${JSON.stringify(payload)}]`);
+                }}
+                className="w-10 flex items-center justify-center bg-[#1A212D] border border-white/5 hover:border-[#06b6d4]/50 hover:bg-[#202836] text-white rounded-lg transition-colors group"
+                title="Kuponu Sohbette Paylaş"
+              >
+                <Share2 className="w-4 h-4 text-zinc-400 group-hover:text-[#06b6d4] transition-colors" />
+              </button>
             </div>
           </div>
         </div>
@@ -435,7 +497,12 @@ export const DualRightPanel: React.FC<{
             )}
           </>
         ) : activePanel === 'mybets' ? (
-          <MyBetsPanel />
+          <MyBetsPanel onShare={(msg) => {
+            setActivePanel('chat');
+            setTimeout(() => {
+              window.dispatchEvent(new CustomEvent('shareBetEvent', { detail: { message: msg } }));
+            }, 150);
+          }} />
         ) : (
           <ModernChat 
             open={true}

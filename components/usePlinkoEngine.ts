@@ -32,8 +32,8 @@ interface PlinkoEngineConfig {
 
 const MULTIPLIERS = [16, 9, 2, 1.4, 1.4, 1.2, 1.1, 1, 0.5, 1, 1.1, 1.2, 1.4, 1.4, 2, 9, 16];
 const BUCKET_COLORS = [
-  '#ff3b3b', '#ff543b', '#ff713b', '#ff8c3b', '#ffa63b', '#ffbf3b', '#ffd53b', '#ffea3b', '#f3ff3b', 
-  '#ffea3b', '#ffd53b', '#ffbf3b', '#ffa63b', '#ff8c3b', '#ff713b', '#ff543b', '#ff3b3b'
+  '#F43F5E', '#F43F5E', '#a855f7', '#a855f7', '#00E5FF', '#00E5FF', '#00E5FF', '#c6ff00', '#2C3145', 
+  '#c6ff00', '#00E5FF', '#00E5FF', '#00E5FF', '#a855f7', '#a855f7', '#F43F5E', '#F43F5E'
 ];
 
 export function usePlinkoEngine(config: PlinkoEngineConfig) {
@@ -46,21 +46,24 @@ export function usePlinkoEngine(config: PlinkoEngineConfig) {
   
   // Physics constants
   const gravity = 0.4;
-  const pegRadius = 4;
+  const pegRadius = 4.5;
   const ballRadius = 8;
   const restitution = 0.5; // bounciness
   
   // Board dimensions
-  const yStart = 60; // Top margin
-  const bucketHeight = 40;
-  const ySpacing = (height - yStart - bucketHeight - 20) / rowCount;
+  const yStart = 40; // Higher top margin to fit giant pyramid
+  const bucketHeight = 52; // Massive buckets for expanded layout
+  const ySpacing = (height - yStart - bucketHeight - 20) / rowCount; 
+  
+  // X spacing expanded heavily to fill the entire horizontal space
+  const xSpacing = width / (rowCount + 1.5); 
   
   // X calculation function
   const getPegX = (row: number, col: number) => {
     const pegsInRow = row + 3;
-    const rowWidth = (pegsInRow - 1) * ySpacing; // Distance from first peg to last peg
+    const rowWidth = (pegsInRow - 1) * xSpacing; // Use xSpacing instead of ySpacing
     const startX = width / 2 - rowWidth / 2;
-    return startX + col * ySpacing;
+    return startX + col * xSpacing;
   };
 
   const getBucketX = (col: number) => {
@@ -80,12 +83,9 @@ export function usePlinkoEngine(config: PlinkoEngineConfig) {
     // Clear with dark bg
     ctx.clearRect(0, 0, width, height);
     
-    // Draw Background Grid/Glow (optional subtle effect)
-    const gradient = ctx.createRadialGradient(width/2, height/2, 0, width/2, height/2, height);
-    gradient.addColorStop(0, 'rgba(255, 255, 255, 0.02)');
-    gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
-    ctx.fillStyle = gradient;
-    ctx.fillRect(0, 0, width, height);
+    // Solid minimal background (usually handled by wrapper, so we can just leave it transparent or solid)
+    // No flashy background effects
+
 
     // Draw Pegs (Pins)
     for (let row = 0; row < rowCount; row++) {
@@ -95,29 +95,15 @@ export function usePlinkoEngine(config: PlinkoEngineConfig) {
         const y = yStart + row * ySpacing;
         
         ctx.beginPath();
-        ctx.arc(x, y, pegRadius, 0, Math.PI * 2);
-        ctx.fillStyle = '#E2E8F0'; // light gray
+        ctx.arc(x, y, pegRadius * 0.8, 0, Math.PI * 2);
+        ctx.fillStyle = '#8C97A7'; // flat gray peg
         ctx.fill();
-        
-        // Inner shadow for 3D effect
-        ctx.beginPath();
-        ctx.arc(x - 1, y - 1, pegRadius - 1.5, 0, Math.PI * 2);
-        ctx.fillStyle = '#FFFFFF';
-        ctx.fill();
-        
-        // Outer glow
-        ctx.shadowBlur = 10;
-        ctx.shadowColor = 'rgba(255, 255, 255, 0.3)';
-        ctx.beginPath();
-        ctx.arc(x, y, pegRadius, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.shadowBlur = 0;
       }
     }
 
     // Draw Buckets (Multipliers)
     const bucketY = yStart + rowCount * ySpacing + 10;
-    const bucketWidth = ySpacing - 4;
+    const bucketWidth = xSpacing - 4; // Width based on xSpacing with a gap
     
     for (let i = 0; i < MULTIPLIERS.length; i++) {
       const x = getBucketX(i);
@@ -129,27 +115,78 @@ export function usePlinkoEngine(config: PlinkoEngineConfig) {
       const bX = x - bWidth / 2;
       const bY = bucketY + (bucketHeight - bHeight) / 2;
 
-      // Bucket body
-      ctx.fillStyle = BUCKET_COLORS[i];
+      const gap = 3; // slightly bigger gap
+      const isDarkBucket = BUCKET_COLORS[i] === '#2C3145' || BUCKET_COLORS[i] === '#a855f7' || BUCKET_COLORS[i] === '#F43F5E';
       
-      // Rounded rect
+      // Animation handling (Bounce Scale + Press)
+      const popScale = isAnim ? 1 + (Math.sin(anim.time * 2) * 0.15 * Math.max(0, 1 - anim.time/3)) : 1; 
+      const pressOffset = isAnim ? (Math.sin(anim.time * 1.5) * 4) : 0; // Subtle press down
+      const glowAlpha = isAnim ? Math.max(0, 1 - (anim.time / 3)) : 0; // Fade out glow
+      const currentY = bY + Math.max(0, pressOffset);
+      
+      const scaledWidth = (bWidth - gap) * popScale;
+      const scaledHeight = bHeight * popScale;
+      const scaledX = bX + gap/2 - (scaledWidth - (bWidth - gap)) / 2;
+      const scaledY = currentY - (scaledHeight - bHeight) / 2;
+
+      // Shadow / Base for 3D effect
+      ctx.fillStyle = 'rgba(0,0,0,0.6)';
       ctx.beginPath();
-      ctx.roundRect(bX, bY, bWidth, bHeight, 6);
-      ctx.fill();
-      
-      // Inner gradient/shadow for 3D
-      const bGrad = ctx.createLinearGradient(bX, bY, bX, bY + bHeight);
-      bGrad.addColorStop(0, 'rgba(255,255,255,0.2)');
-      bGrad.addColorStop(1, 'rgba(0,0,0,0.3)');
-      ctx.fillStyle = bGrad;
+      ctx.roundRect(scaledX, scaledY + 4, scaledWidth, scaledHeight, 6);
       ctx.fill();
 
-      // Text
-      ctx.fillStyle = '#000000';
-      ctx.font = `900 ${12 * scale}px "Inter", sans-serif`;
+      // Main Block Gradient
+      const bucketGrad = ctx.createLinearGradient(scaledX, scaledY, scaledX, scaledY + scaledHeight);
+      bucketGrad.addColorStop(0, BUCKET_COLORS[i]); 
+      bucketGrad.addColorStop(1, BUCKET_COLORS[i]); 
+      
+      ctx.fillStyle = bucketGrad;
+      
+      // Apply Glow if animated
+      if (isAnim && glowAlpha > 0) {
+          ctx.shadowBlur = 20 * glowAlpha;
+          ctx.shadowColor = BUCKET_COLORS[i];
+      } else {
+          ctx.shadowBlur = 0;
+      }
+      
+      ctx.beginPath();
+      ctx.roundRect(scaledX, scaledY, scaledWidth, scaledHeight, 6);
+      ctx.fill();
+      ctx.shadowBlur = 0; // Reset
+      
+      // Top Inner Highlight (Glassy 3D edge)
+      ctx.fillStyle = 'rgba(255,255,255,0.25)';
+      ctx.beginPath();
+      ctx.roundRect(scaledX, scaledY, scaledWidth, scaledHeight/2, { tl: 6, tr: 6, bl: 0, br: 0 });
+      ctx.fill();
+
+      // Bottom Inner Shadow
+      ctx.fillStyle = 'rgba(0,0,0,0.15)';
+      ctx.beginPath();
+      ctx.roundRect(scaledX, scaledY + scaledHeight/2, scaledWidth, scaledHeight/2, { tl: 0, tr: 0, bl: 6, br: 6 });
+      ctx.fill();
+
+      // White flash overlay during animation hit
+      if (isAnim && glowAlpha > 0.5) {
+          ctx.fillStyle = `rgba(255,255,255,${(glowAlpha - 0.5) * 2})`;
+          ctx.beginPath();
+          ctx.roundRect(scaledX, scaledY, scaledWidth, scaledHeight, 6);
+          ctx.fill();
+      }
+
+      // Text with drop shadow
+      ctx.fillStyle = isDarkBucket ? '#FFFFFF' : '#000000';
+      ctx.shadowBlur = 2;
+      ctx.shadowColor = isDarkBucket ? 'rgba(0,0,0,0.8)' : 'rgba(255,255,255,0.5)';
+      
+      // Dynamic large font size
+      const fontSize = Math.max(14, (bWidth - gap) * 0.45); // Scale font to bucket width, minimum 14px
+      ctx.font = `900 ${fontSize * popScale}px "Inter", sans-serif`; 
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText(`${MULTIPLIERS[i]}x`, x, bucketY + bucketHeight / 2);
+      ctx.fillText(`${MULTIPLIERS[i]}x`, x, scaledY + scaledHeight / 2 + 1);
+      ctx.shadowBlur = 0; // Reset
 
       // Draw shadow if animated
       if (isAnim && isAnim.alpha > 0) {
@@ -167,7 +204,7 @@ export function usePlinkoEngine(config: PlinkoEngineConfig) {
       const anim = bucketAnimsRef.current[i];
       if (anim.alpha > 0) {
         const x = getBucketX(anim.index);
-        ctx.fillStyle = `rgba(39, 210, 109, ${anim.alpha})`; // Green text
+        ctx.fillStyle = `rgba(198, 255, 0, ${anim.alpha})`; // Neon green text
         ctx.font = '900 16px "Inter", sans-serif';
         ctx.textAlign = 'center';
         ctx.fillText(`+${anim.winAmount.toFixed(2)}$`, x, anim.textY);
@@ -267,19 +304,36 @@ export function usePlinkoEngine(config: PlinkoEngineConfig) {
         
         const pegY = yStart + expectedRow * ySpacing;
         
+        // Snap X to the peg to prevent drift
+        const actualPegX = getPegX(expectedRow, closestCol);
+        
+        // Smoothly adjust X towards peg instead of snapping instantly (looks better)
+        ball.x = actualPegX + (Math.random() - 0.5); 
+
         // Bounce physics
         ball.y = pegY - ball.radius; // snap above peg
-        ball.vy = ball.vy * -restitution; 
+        
+        // Clamp vy so it doesn't bounce too high or fall too fast
+        const impactVy = Math.min(Math.max(ball.vy, 2), 8);
+        ball.vy = impactVy * -restitution; 
         
         // Force outcome based on predefined path
         const goRight = ball.path[expectedRow];
-        const horizontalPush = ySpacing * 0.25; // How much to push horizontally
         
-        if (goRight) {
-          ball.vx = horizontalPush + (Math.random() * 0.5);
+        // Calculate next peg X
+        const nextPegCol = goRight ? closestCol + 1 : closestCol;
+        // Handle last row dropping into buckets
+        let targetX;
+        if (expectedRow + 1 < rowCount) {
+             targetX = getPegX(expectedRow + 1, nextPegCol);
         } else {
-          ball.vx = -horizontalPush - (Math.random() * 0.5);
+             targetX = getBucketX(ball.targetBucket);
         }
+        
+        const distToTarget = targetX - ball.x;
+        // Adjust horizontal velocity so it arcs beautifully to the target
+        // Usually takes around 12-16 frames to fall to the next row
+        ball.vx = (distToTarget / 14) + (Math.random() - 0.5) * 0.3;
       }
 
       // Check if reached bottom buckets

@@ -38,6 +38,7 @@ export default function AdminPanel(props: AdminPanelProps) {
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [activeTab, setActiveTab] = useState<'dashboard' | 'bot' | 'luckywheel' | 'members' | 'risk' | 'radar' | 'marketing' | 'withdrawals' | 'deposits' | 'audit' | 'sports' | 'tv' | 'whale' | 'liquidity' | 'provider' | 'community' | 'kral' | 'odds'>('dashboard');
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     const [expandedGroups, setExpandedGroups] = useState<string[]>(['CASINO YÖNETİMİ', 'PAZARLAMA & BONUS', 'SPOR YÖNETİMİ', 'GÜVENLİK & FRAUD', 'FİNANS & MÜŞTERİ', 'SİSTEM', 'DİĞER']);
     const toggleGroup = (group: string) => setExpandedGroups(prev => prev.includes(group) ? prev.filter(g => g !== group) : [...prev, group]);
@@ -86,39 +87,53 @@ export default function AdminPanel(props: AdminPanelProps) {
         <div className="w-full h-full min-h-[100dvh] flex flex-col bg-[#050608] overflow-hidden font-sans text-slate-300 relative z-[100]">
                 
                 {/* Header */}
-                <div className="px-6 py-4 border-b border-gray-800 flex justify-between items-center bg-[#15171e]">
-                    <div className="flex items-center gap-3">
-                        <div className="p-2 bg-emerald-500/20 rounded-lg">
-                            <Settings className="w-5 h-5 text-emerald-400" />
+                <div className="px-4 md:px-6 py-3 md:py-4 border-b border-gray-800 flex flex-wrap md:flex-nowrap justify-between items-center bg-[#15171e] gap-3">
+                    <div className="flex items-center gap-2 md:gap-3">
+                        <button 
+                            className="md:hidden p-2 bg-white/5 rounded-lg text-white"
+                            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                        >
+                            <Monitor className="w-5 h-5" />
+                        </button>
+                        <div className="p-1.5 md:p-2 bg-emerald-500/20 rounded-lg">
+                            <Settings className="w-4 h-4 md:w-5 md:h-5 text-emerald-400" />
                         </div>
-                        <h2 className="text-xl font-bold text-white">Yönetim Paneli</h2>
+                        <h2 className="text-lg md:text-xl font-bold text-white hidden sm:block">Yönetim Paneli</h2>
                         
                         <button 
-                            onClick={() => setActiveTab('kral')} 
-                            className={`ml-4 px-4 py-1.5 rounded-xl font-black italic tracking-widest text-sm transition-all flex items-center gap-2 shadow-lg hover:-translate-y-0.5 ${activeTab === 'kral' ? 'bg-gradient-to-r from-yellow-600 to-yellow-400 text-black shadow-[0_0_20px_rgba(234,179,8,0.4)]' : 'bg-[#1e2330] hover:bg-yellow-500/20 border border-yellow-500/30 text-yellow-500'}`}
+                            onClick={() => { setActiveTab('kral'); setIsSidebarOpen(false); }} 
+                            className={`ml-1 md:ml-4 px-3 md:px-4 py-1.5 rounded-xl font-black italic tracking-widest text-[10px] md:text-sm transition-all flex items-center gap-1.5 md:gap-2 shadow-lg hover:-translate-y-0.5 ${activeTab === 'kral' ? 'bg-gradient-to-r from-yellow-600 to-yellow-400 text-black shadow-[0_0_20px_rgba(234,179,8,0.4)]' : 'bg-[#1e2330] hover:bg-yellow-500/20 border border-yellow-500/30 text-yellow-500'}`}
                         >
-                            👑 KRAL
+                            👑 <span className="hidden sm:inline">KRAL</span>
                         </button>
 
                         <button 
                             onClick={handleGoToSite} 
-                            className="ml-3 px-3.5 py-1.5 bg-[#1e2330] hover:bg-emerald-500/20 border border-[#2b3548] hover:border-emerald-500/40 text-slate-200 hover:text-emerald-400 rounded-xl text-xs font-bold transition-all flex items-center gap-2 shadow-sm group cursor-pointer"
+                            className="ml-2 md:ml-3 px-2.5 md:px-3.5 py-1.5 bg-[#1e2330] hover:bg-emerald-500/20 border border-[#2b3548] hover:border-emerald-500/40 text-slate-200 hover:text-emerald-400 rounded-xl text-[10px] md:text-xs font-bold transition-all flex items-center gap-1.5 md:gap-2 shadow-sm group cursor-pointer"
                             title="Siteye Git / Paneli Kapat"
                         >
                             <Globe className="w-3.5 h-3.5 text-emerald-400 group-hover:rotate-12 transition-transform" />
-                            <span>Siteye Git</span>
+                            <span className="hidden sm:inline">Siteye Git</span>
                         </button>
                     </div>
-                    <button onClick={onClose} className="p-2 hover:bg-white/5 rounded-lg transition-colors text-gray-400 hover:text-white">
+                    <button onClick={onClose} className="p-1.5 md:p-2 hover:bg-white/5 rounded-lg transition-colors text-gray-400 hover:text-white ml-auto">
                         <X className="w-5 h-5" />
                     </button>
                 </div>
 
                 {/* Content */}
-                <div className="flex flex-1 overflow-hidden">
+                <div className="flex flex-1 overflow-hidden relative">
                     
                     {/* Pro Sidebar Navigation */}
-                    <div className="w-56 bg-[#090a0f] border-r border-white/5 p-3 flex flex-col gap-1 overflow-y-auto shrink-0 z-10 shadow-[4px_0_24px_rgba(0,0,0,0.5)] custom-scrollbar select-none">
+                    {/* Mobile Overlay */}
+                    {isSidebarOpen && (
+                        <div 
+                            className="absolute inset-0 bg-black/60 z-40 md:hidden backdrop-blur-sm"
+                            onClick={() => setIsSidebarOpen(false)}
+                        ></div>
+                    )}
+                    
+                    <div className={`absolute md:relative z-50 h-full w-56 bg-[#090a0f] border-r border-white/5 p-3 flex flex-col gap-1 overflow-y-auto shrink-0 shadow-[4px_0_24px_rgba(0,0,0,0.5)] custom-scrollbar select-none transition-transform duration-300 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
                         
                         {/* CASINO YÖNETİMİ */}
                         <div onClick={() => toggleGroup('CASINO YÖNETİMİ')} className="flex items-center justify-between cursor-pointer group mt-2 mb-1 px-2">
@@ -127,13 +142,13 @@ export default function AdminPanel(props: AdminPanelProps) {
                         </div>
                         {expandedGroups.includes('CASINO YÖNETİMİ') && (
                             <div className="flex flex-col gap-1 mb-2 animate-in slide-in-from-top-2 duration-200">
-                                <button onClick={() => setActiveTab('dashboard')} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'dashboard' ? 'bg-[#00ff88]/10 text-[#00ff88] border border-[#00ff88]/30 shadow-[0_0_10px_rgba(0,255,136,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
+                                <button onClick={() => { setActiveTab('dashboard'); setIsSidebarOpen(false); }} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'dashboard' ? 'bg-[#00ff88]/10 text-[#00ff88] border border-[#00ff88]/30 shadow-[0_0_10px_rgba(0,255,136,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
                                     <Activity className="w-3.5 h-3.5" /> Casino Komuta
                                 </button>
-                                <button onClick={() => setActiveTab('provider')} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'provider' ? 'bg-[#a855f7]/10 text-[#a855f7] border border-[#a855f7]/30 shadow-[0_0_10px_rgba(168,85,247,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
+                                <button onClick={() => { setActiveTab('provider'); setIsSidebarOpen(false); }} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'provider' ? 'bg-[#a855f7]/10 text-[#a855f7] border border-[#a855f7]/30 shadow-[0_0_10px_rgba(168,85,247,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
                                     <Gamepad2 className="w-3.5 h-3.5" /> Sağlayıcı RTP
                                 </button>
-                                <button onClick={() => setActiveTab('risk')} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'risk' ? 'bg-[#ef4444]/10 text-[#ef4444] border border-[#ef4444]/30 shadow-[0_0_10px_rgba(239,68,68,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
+                                <button onClick={() => { setActiveTab('risk'); setIsSidebarOpen(false); }} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'risk' ? 'bg-[#ef4444]/10 text-[#ef4444] border border-[#ef4444]/30 shadow-[0_0_10px_rgba(239,68,68,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
                                     <ShieldCheck className="w-3.5 h-3.5" /> Casino Risk
                                 </button>
                             </div>
@@ -146,7 +161,7 @@ export default function AdminPanel(props: AdminPanelProps) {
                         </div>
                         {expandedGroups.includes('PAZARLAMA & BONUS') && (
                             <div className="flex flex-col gap-1 mb-2 animate-in slide-in-from-top-2 duration-200">
-                                <button onClick={() => setActiveTab('bonus')} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'bonus' ? 'bg-[#f43f5e]/10 text-[#f43f5e] border border-[#f43f5e]/30 shadow-[0_0_10px_rgba(244,63,94,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
+                                <button onClick={() => { setActiveTab('bonus'); setIsSidebarOpen(false); }} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'bonus' ? 'bg-[#f43f5e]/10 text-[#f43f5e] border border-[#f43f5e]/30 shadow-[0_0_10px_rgba(244,63,94,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
                                     <Gift className="w-3.5 h-3.5" /> Bonus & Kampanya
                                 </button>
                                 <button onClick={() => setActiveTab('affiliate')} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'affiliate' ? 'bg-[#f43f5e]/10 text-[#f43f5e] border border-[#f43f5e]/30 shadow-[0_0_10px_rgba(244,63,94,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>

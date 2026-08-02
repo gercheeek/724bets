@@ -518,6 +518,17 @@ const Header: React.FC<HeaderProps> = ({
                         <div className="h-full bg-emerald-500" style={{ width: `${((siteUser.loyalty?.points || 0) % 1000) / 10}%` }}></div>
                       </div>
                     </div>
+
+                    {/* ADMIN PANEL LINK */}
+                    {(siteUser?.role?.toLowerCase() === 'admin' || siteUser?.username?.toLowerCase() === 'yönetici') && (
+                      <button 
+                        onClick={() => { if(onViewChange) onViewChange('admin'); setIsProfileOpen(false); }}
+                        className="w-full text-left px-4 py-2.5 text-[#FFD700] hover:text-yellow-400 hover:bg-white/5 transition-colors flex items-center text-[14px] font-black tracking-wider uppercase border-b border-white/5"
+                      >
+                        <Crown className="w-4 h-4 mr-3 text-[#FFD700]" /> Yönetim Paneli
+                      </button>
+                    )}
+                    
                     
                     <button 
                       onClick={() => { if(onViewChange) onViewChange('profile'); setIsProfileOpen(false); }}
@@ -545,9 +556,14 @@ const Header: React.FC<HeaderProps> = ({
           ) : (
             <div className="flex items-center gap-2 h-[40px] md:h-[44px]">
               
-              {/* Search Icon */}
-              <button className="hidden lg:flex w-11 h-full items-center justify-center bg-[#1b2230] hover:bg-[#252e42] transition-colors rounded-[8px] text-gray-400 hover:text-white">
-                <Search className="w-5 h-5" />
+              {/* Payment (Deposit) Button for Guests */}
+              <button 
+                onClick={() => window.dispatchEvent(new CustomEvent('openDepositModal', { detail: { tab: 'deposit' } }))}
+                className="hidden lg:flex w-11 h-full items-center justify-center bg-gradient-to-br from-[#00E676]/10 to-transparent hover:from-[#00E676]/20 transition-all rounded-[8px] text-[#00E676] hover:text-white border border-[#00E676]/20 hover:border-[#00E676]/50 shadow-[0_0_10px_rgba(0,230,118,0.1)] hover:shadow-[0_0_15px_rgba(0,230,118,0.3)] relative group overflow-hidden"
+              >
+                <div className="absolute inset-0 bg-[#00E676] opacity-0 group-hover:opacity-10 transition-opacity"></div>
+                <Wallet className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" strokeWidth={2.5} />
+                <div className="absolute top-2 right-2 w-1.5 h-1.5 bg-[#00E676] rounded-full border border-[#1b2230] shadow-[0_0_5px_#00E676]"></div>
               </button>
 
               {/* Ödüller (Gift Icon) */}

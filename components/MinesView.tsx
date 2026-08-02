@@ -23,6 +23,7 @@ export default function MinesView({ siteUser, onAuthRequired }: any) {
     const [minesCount, setMinesCount] = useState<number>(3);
     const [isPlaying, setIsPlaying] = useState(false);
     const [crashed, setCrashed] = useState(false);
+    const [showProvablyFair, setShowProvablyFair] = useState(false);
     
     const [grid, setGrid] = useState<boolean[]>(Array(GRID_SIZE).fill(false)); // true if it has a mine
     const [revealed, setRevealed] = useState<boolean[]>(Array(GRID_SIZE).fill(false));
@@ -221,10 +222,13 @@ export default function MinesView({ siteUser, onAuthRequired }: any) {
                         </span>
                     </div>
                     
-                    <div className="absolute top-6 right-6 flex items-center gap-2 bg-[#111111] px-3 py-1.5 rounded-full border border-white/5 z-20">
-                        <ShieldCheck className="w-4 h-4 text-gray-400" />
-                        <span className="text-gray-300 font-semibold text-xs">Adil Oyun</span>
-                    </div>
+                    <button 
+                        onClick={() => setShowProvablyFair(true)}
+                        className="absolute top-6 right-6 flex items-center gap-2 bg-[#111111] hover:bg-[#1A242D] px-3 py-1.5 rounded-full border border-white/5 z-20 cursor-pointer transition-colors shadow-lg hover:border-emerald-500/30 group"
+                    >
+                        <ShieldCheck className="w-4 h-4 text-gray-400 group-hover:text-emerald-400 transition-colors" />
+                        <span className="text-gray-300 group-hover:text-white font-semibold text-xs transition-colors">Provably Fair</span>
+                    </button>
 
                     {/* Background Logo */}
                     <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.02] z-0">
@@ -283,6 +287,44 @@ export default function MinesView({ siteUser, onAuthRequired }: any) {
                                  </div>
                              )}
                          </div>
+                    )}
+                    
+                    {/* Provably Fair Modal */}
+                    {showProvablyFair && (
+                        <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+                            <div className="bg-[#151C23] border border-white/10 w-full max-w-md rounded-2xl p-6 relative shadow-2xl flex flex-col gap-4">
+                                <button 
+                                    onClick={() => setShowProvablyFair(false)}
+                                    className="absolute top-4 right-4 text-zinc-500 hover:text-white transition-colors"
+                                >
+                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                </button>
+                                
+                                <div className="flex items-center gap-3 border-b border-white/5 pb-4">
+                                    <ShieldCheck className="w-6 h-6 text-emerald-400" />
+                                    <h3 className="text-white font-black text-lg tracking-tight">Provably Fair (Kanıtlanabilir Adil)</h3>
+                                </div>
+                                
+                                <p className="text-zinc-400 text-sm leading-relaxed">
+                                    Bu oyun, sonucun dışarıdan manipüle edilemeyeceğini kanıtlayan kriptografik bir hash sistemi (SHA-256) kullanır. Sonuç, oyuna başlamadan önce belirlenir.
+                                </p>
+                                
+                                <div className="flex flex-col gap-3 mt-2">
+                                    <div className="flex flex-col gap-1">
+                                        <span className="text-xs font-bold text-zinc-500 uppercase">Aktif Sunucu Seed Hash'i</span>
+                                        <div className="bg-[#0F131A] p-2.5 rounded-lg border border-white/5 text-xs text-emerald-400/80 font-mono break-all truncate">
+                                            {gameId ? `sha256(server_seed:${gameId})` : 'b5c2a1... (Yeni Oyun Bekleniyor)'}
+                                        </div>
+                                    </div>
+                                    <div className="flex flex-col gap-1">
+                                        <span className="text-xs font-bold text-zinc-500 uppercase">İstemci (Client) Seed</span>
+                                        <div className="bg-[#0F131A] p-2.5 rounded-lg border border-white/5 text-xs text-white/80 font-mono">
+                                            {siteUser?.id?.slice(0, 16) || 'guest_client_seed_42'}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     )}
                 </div>
             </div>

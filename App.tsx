@@ -99,6 +99,7 @@ import VIPClubView from './components/VIPClubView';
 import InGameLayout from './components/InGameLayout';
 import ComingSoon from './components/ComingSoon';
 import PlinkoView from './components/PlinkoView';
+import CrashGameView from './components/CrashGameView';
 import LimboView from './components/LimboView';
 import ChickenRunView from './components/ChickenRunView';
 import DiceView from './components/DiceView';
@@ -836,9 +837,18 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
     // Logic removed to keep sidebar collapsed by default
   }, [siteUser, view]);
   const [showDepositModal, setShowDepositModal] = useState(false);
+  const [walletInitialTab, setWalletInitialTab] = useState<'deposit'|'withdraw'>('deposit');
 
   useEffect(() => {
-    const handleOpenDeposit = () => setShowDepositModal(true);
+    const handleOpenDeposit = (e: Event) => {
+      const customEvent = e as CustomEvent;
+      if (customEvent.detail && customEvent.detail.tab) {
+        setWalletInitialTab(customEvent.detail.tab);
+      } else {
+        setWalletInitialTab('deposit');
+      }
+      setShowDepositModal(true);
+    };
     window.addEventListener('openDepositModal', handleOpenDeposit);
     return () => window.removeEventListener('openDepositModal', handleOpenDeposit);
   }, []);
@@ -1411,6 +1421,10 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
         setView('cekilis');
       } else if (cleanPath === '/bilet') {
         setView('raffle');
+      } else if (cleanPath === '/deposit' || cleanPath === '/withdraw') {
+        window.dispatchEvent(new CustomEvent('openDepositModal', { detail: { tab: cleanPath.substring(1) } }));
+        window.history.replaceState(null, '', '/');
+        setView('home');
       } else if (cleanPath === '/admin') {
         setView('admin');
       } else if (cleanPath === '/') {
@@ -1495,6 +1509,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
       case 'slotra':
       case 'slotra2':
       case 'plinko':
+      case 'crash':
       case 'limbo':
       case 'chicken-run':
       case 'pool':
@@ -2034,7 +2049,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
       )}
 
       {showDepositModal && (
-        <WalletModal onClose={() => setShowDepositModal(false)} />
+        <WalletModal initialTab={walletInitialTab} onClose={() => setShowDepositModal(false)} />
       )}
 
       {/* InGameLayout was removed from here. The games are now rendered inside the main layout below. */}
@@ -2353,7 +2368,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
         )}
 
         {/* --- ORIGINAL GAMES RENDERED IN MAIN LAYOUT --- */}
-        {['blackjack-pro', 'limbo', 'chicken-run', 'plinko', 'dice', 'mines', 'keno', 'war', 'hilo', 'roulette', 'crash-turbo', 'turbo-mines', 'hacksaw', 'redtiger'].includes(view) && (
+        {['blackjack-pro', 'limbo', 'chicken-run', 'plinko', 'dice', 'mines', 'keno', 'war', 'hilo', 'roulette', 'crash-turbo', 'turbo-mines', 'hacksaw', 'redtiger', 'crash'].includes(view) && (
           <div className="animate-fade-in w-full h-full relative z-[50] rounded-2xl overflow-hidden shadow-2xl bg-[#0A0D14]">
              {view === 'blackjack-pro' && (
                <BlackjackProView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
@@ -2366,6 +2381,9 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
              )}
              {view === 'plinko' && (
                <PlinkoView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
+             )}
+             {view === 'crash' && (
+               <CrashGameView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />
              )}
              {view === 'dice' && (
                <DiceView siteUser={siteUser} setSiteUser={setSiteUser} onAuthRequired={() => setAuthModalMode('member')} />

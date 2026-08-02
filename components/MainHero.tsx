@@ -19,11 +19,14 @@ export default function MainHero({ onRegisterClick, onNavigate }: MainHeroProps)
         
         {/* Title */}
         <h1 
-          className="text-[26px] sm:text-3xl xl:text-[36px] 2xl:text-[46px] font-black leading-[1.15] xl:leading-[1.1] mb-4 xl:mb-10 font-sans tracking-tighter w-full drop-shadow-[0_4px_24px_rgba(255,255,255,0.15)] relative z-10 bg-clip-text text-transparent bg-gradient-to-r from-white via-[#b3d4ff] to-white bg-[length:200%_auto] animate-[bg-gradient_4s_linear_infinite,fade-in-up_0.8s_ease-out_forwards] opacity-0"
+          className="text-[26px] sm:text-3xl xl:text-[36px] 2xl:text-[46px] font-black leading-[1.15] xl:leading-[1.1] mb-3 xl:mb-6 font-sans tracking-tighter w-full drop-shadow-[0_4px_24px_rgba(255,255,255,0.15)] relative z-10 bg-clip-text text-transparent bg-gradient-to-r from-white via-[#b3d4ff] to-white bg-[length:200%_auto] animate-[bg-gradient_4s_linear_infinite,fade-in-up_0.8s_ease-out_forwards] opacity-0"
         >
         {t('home.hero_title_1')} <br className="hidden md:block" /> {t('home.hero_title_2')}
       </h1>
 
+        <p className="text-zinc-400 text-sm xl:text-base mb-6 xl:mb-10 font-medium max-w-lg leading-relaxed opacity-0 animate-[fade-in-up_0.8s_ease-out_0.1s_forwards]">
+          Kripto odaklı, limitsiz ve kesintisiz bahis dünyasına adım atın. Favori oyunlarınızı oynarken sürpriz bonuslarla kazancınızı anında katlayın!
+        </p>
       {/* Action Row */}
       <div 
         className="flex flex-row items-center gap-2 sm:gap-6 mb-6 xl:mb-14 w-full opacity-0 animate-[fade-in-up_0.8s_ease-out_0.2s_forwards]"
@@ -39,7 +42,7 @@ export default function MainHero({ onRegisterClick, onNavigate }: MainHeroProps)
         </button>
         
         {/* Or Text */}
-        <span className="text-zinc-500 font-bold text-[11px] lg:text-sm px-1 uppercase tracking-widest opacity-60 shrink-0">{t('home.or')}</span>
+        <span className="text-zinc-500 font-bold text-[11px] lg:text-sm px-1 uppercase tracking-widest text-zinc-400 shrink-0">{t('home.or')}</span>
         
         {/* Social Login Select */}
         <button className="bg-[#131823]/80 backdrop-blur-md hover:bg-[#1a2130] rounded-xl px-3 py-2.5 lg:px-5 lg:py-3.5 flex items-center gap-2 lg:gap-4 border border-white/10 transition-all shadow-xl group hover:border-white/20 active:scale-95 flex-1 max-w-[140px] lg:max-w-none justify-center">
@@ -63,7 +66,7 @@ export default function MainHero({ onRegisterClick, onNavigate }: MainHeroProps)
           {/* Casino Card */}
           <div 
             onClick={() => onNavigate('casino')} 
-            className="group relative w-full aspect-[4/3] xl:aspect-square rounded-xl xl:rounded-2xl overflow-hidden cursor-pointer shadow-2xl flex flex-col border border-white/5 transition-all duration-500 hover:-translate-y-2 hover:scale-[1.02] hover:shadow-[0_20px_50px_rgba(38,98,159,0.5)] hover:border-white/20"
+            className="group relative w-full aspect-[4/3] xl:aspect-square rounded-xl xl:rounded-2xl overflow-hidden cursor-pointer shadow-2xl flex flex-col border border-white/5 transition-all duration-500 hover:-translate-y-2 hover:scale-[1.02] hover:shadow-[0_20px_50px_rgba(0,229,255,0.4)] hover:border-[#00E5FF]/50"
           >
           {/* Main Image Area */}
           <div className="flex-1 relative overflow-hidden bg-[#0d1421]">
@@ -72,13 +75,13 @@ export default function MainHero({ onRegisterClick, onNavigate }: MainHeroProps)
               className="absolute inset-0 bg-center transition-transform duration-700 group-hover:scale-[1.1] opacity-90" 
               style={{ backgroundImage: "url('/images/mosaic_casino_bg.webp')", backgroundSize: "400%" }} 
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#26629F]/80 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#00E5FF]/40 to-transparent" />
           </div>
           {/* Bottom Bar */}
-          <div className="h-9 xl:h-16 bg-[#26629F] flex items-center justify-center px-1 xl:px-4 z-10 shrink-0 gap-1.5 xl:gap-2">
-            <Gamepad2 className="w-3.5 h-3.5 xl:w-6 xl:h-6 text-white/90" />
-            <span className="text-white font-bold text-[12px] xl:text-lg tracking-wide">{t('home.casino')}</span>
-            <ArrowRight className="w-3.5 h-3.5 xl:w-4 xl:h-4 text-white/70 ml-0.5 xl:ml-1 group-hover:translate-x-1 transition-transform" />
+          <div className="h-9 xl:h-16 bg-[#131620] border-t border-[#00E5FF]/30 flex items-center justify-center px-1 xl:px-4 z-10 shrink-0 gap-1.5 xl:gap-2 group-hover:bg-[#00E5FF]/10 transition-colors">
+            <Gamepad2 className="w-3.5 h-3.5 xl:w-6 xl:h-6 text-[#00E5FF]" />
+            <span className="text-[#00E5FF] font-bold text-[12px] xl:text-lg tracking-wide">{t('home.casino')}</span>
+            <ArrowRight className="w-3.5 h-3.5 xl:w-4 xl:h-4 text-[#00E5FF] ml-0.5 xl:ml-1 group-hover:translate-x-1 transition-transform" />
           </div>
         </div>
         </div>
@@ -88,7 +91,7 @@ export default function MainHero({ onRegisterClick, onNavigate }: MainHeroProps)
           {/* Sports Card */}
           <div 
             onClick={() => onNavigate('sports')} 
-            className="group relative w-full aspect-[4/3] xl:aspect-square rounded-xl xl:rounded-2xl overflow-hidden cursor-pointer shadow-2xl flex flex-col border border-white/5 transition-all duration-500 hover:-translate-y-2 hover:scale-[1.02] hover:shadow-[0_20px_50px_rgba(54,62,81,0.6)] hover:border-white/20"
+            className="group relative w-full aspect-[4/3] xl:aspect-square rounded-xl xl:rounded-2xl overflow-hidden cursor-pointer shadow-2xl flex flex-col border border-white/5 transition-all duration-500 hover:-translate-y-2 hover:scale-[1.02] hover:shadow-[0_20px_50px_rgba(198,255,0,0.4)] hover:border-[#c6ff00]/50"
           >
             {/* Main Image Area */}
             <div className="flex-1 relative overflow-hidden bg-[#1a1f2c]">
@@ -96,13 +99,13 @@ export default function MainHero({ onRegisterClick, onNavigate }: MainHeroProps)
                 className="absolute inset-0 bg-center transition-transform duration-700 group-hover:scale-[1.1] opacity-90" 
                 style={{ backgroundImage: "url('/images/mosaic_sports_bg.webp')", backgroundSize: "400%" }} 
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#363E51]/80 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#c6ff00]/40 to-transparent" />
             </div>
             {/* Bottom Bar */}
-            <div className="h-9 xl:h-16 bg-[#363E51] flex items-center justify-center px-1 xl:px-4 z-10 shrink-0 gap-1.5 xl:gap-2">
-              <Trophy className="w-3.5 h-3.5 xl:w-6 xl:h-6 text-white/90" />
-              <span className="text-white font-bold text-[12px] xl:text-lg tracking-wide whitespace-nowrap">{t('home.sportsbook')}</span>
-              <ArrowRight className="w-3.5 h-3.5 xl:w-4 xl:h-4 text-white/70 ml-0.5 xl:ml-1 group-hover:translate-x-1 transition-transform" />
+            <div className="h-9 xl:h-16 bg-[#131620] border-t border-[#c6ff00]/30 flex items-center justify-center px-1 xl:px-4 z-10 shrink-0 gap-1.5 xl:gap-2 group-hover:bg-[#c6ff00]/10 transition-colors">
+              <Trophy className="w-3.5 h-3.5 xl:w-6 xl:h-6 text-[#c6ff00]" />
+              <span className="text-[#c6ff00] font-bold text-[12px] xl:text-lg tracking-wide whitespace-nowrap">{t('home.sportsbook')}</span>
+              <ArrowRight className="w-3.5 h-3.5 xl:w-4 xl:h-4 text-[#00E5FF] ml-0.5 xl:ml-1 group-hover:translate-x-1 transition-transform" />
             </div>
           </div>
         </div>

@@ -80,9 +80,32 @@ export const CustomBetSlip = () => {
             <span className="text-white text-lg font-black">{potentialWin} ₺</span>
           </div>
 
-          <button className="w-full bg-[#06b6d4] hover:bg-[#06b6d4]/90 text-black font-black uppercase tracking-wider py-4 rounded-xl transition-all shadow-[0_0_20px_rgba(0,255,163,0.2)]">
-            Bahis Yap
-          </button>
+          <div className="flex gap-2">
+            <button className="flex-1 bg-[#06b6d4] hover:bg-[#06b6d4]/90 text-black font-black uppercase tracking-wider py-4 rounded-xl transition-all shadow-[0_0_20px_rgba(0,255,163,0.2)]">
+              Bahis Yap
+            </button>
+            <button 
+              onClick={() => {
+                const betId = Math.random().toString(36).substr(2, 6).toUpperCase();
+                const chatInput = document.querySelector('input[placeholder="Bir mesaj yazın..."]') as HTMLInputElement;
+                if (chatInput) {
+                  // Simulate typing a bet share command into the chat
+                  chatInput.value = `Spor: #${betId} Özel Oran: ${totalOdds} - Olası Kazanç: ${potentialWin}₺`;
+                  chatInput.dispatchEvent(new Event('input', { bubbles: true }));
+                  // Highlight chat area to draw attention
+                  const chatWrapper = document.getElementById('modern-chat-wrapper');
+                  if (chatWrapper) {
+                     chatWrapper.classList.add('ring-2', 'ring-[#06b6d4]', 'ring-offset-2', 'ring-offset-black');
+                     setTimeout(() => chatWrapper.classList.remove('ring-2', 'ring-[#06b6d4]', 'ring-offset-2', 'ring-offset-black'), 2000);
+                  }
+                }
+              }}
+              className="w-14 bg-[#1A212D] border border-white/5 hover:border-[#06b6d4]/50 hover:bg-[#202836] text-white flex items-center justify-center rounded-xl transition-colors group"
+              title="Kuponu Sohbette Paylaş"
+            >
+              <Share2 className="w-5 h-5 text-zinc-400 group-hover:text-[#06b6d4] transition-colors" />
+            </button>
+          </div>
         </div>
       )}
     </div>

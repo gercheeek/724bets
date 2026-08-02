@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Users, Copy, Check, Zap, Infinity, SlidersHorizontal, Headphones, Play, ArrowRight, ShieldCheck, Globe, CreditCard, X } from 'lucide-react';
+import { Users, Copy, Check, Zap, Infinity, SlidersHorizontal, Headphones, Play, ArrowRight, ShieldCheck, Globe, CreditCard, X, TrendingUp, TrendingDown } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 interface AffiliateViewProps {
@@ -145,6 +145,75 @@ const AffiliateView: React.FC<AffiliateViewProps> = ({ onNavigate, onAuthRequire
                 $4,250.<span className="text-[#8b92a5] text-sm">00</span>
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* AFFILIATE DASHBOARD WIDGETS */}
+        <div className="mt-8 mb-16 space-y-6">
+          <div className="flex items-center justify-between">
+            <h2 className="text-[20px] font-black text-white tracking-tight">Ortaklık Paneli (Özet)</h2>
+            <button className="text-[12px] font-bold text-[#00E5FF] hover:text-white transition-colors flex items-center gap-1">
+              Tüm Verileri Gör <ArrowRight className="w-3 h-3" />
+            </button>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* Stat Card 1 */}
+            <div className="bg-[#131823]/80 border border-white/5 rounded-2xl p-5 hover:border-[#00E5FF]/30 transition-colors shadow-lg relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-[#00E5FF]/10 to-transparent rounded-bl-full pointer-events-none group-hover:scale-110 transition-transform"></div>
+              <div className="text-zinc-400 text-xs font-bold uppercase tracking-wider mb-1">Toplam Kazanç</div>
+              <div className="text-3xl font-black text-white mb-2">$12,450<span className="text-zinc-500 text-lg">.00</span></div>
+              <div className="flex items-center gap-2 text-xs font-bold text-emerald-400">
+                <TrendingUp className="w-4 h-4" /> +14.5% bu ay
+              </div>
+            </div>
+
+            {/* Stat Card 2 */}
+            <div className="bg-[#131823]/80 border border-white/5 rounded-2xl p-5 hover:border-[#10B981]/30 transition-colors shadow-lg relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-[#10B981]/10 to-transparent rounded-bl-full pointer-events-none group-hover:scale-110 transition-transform"></div>
+              <div className="text-zinc-400 text-xs font-bold uppercase tracking-wider mb-1">Aktif Oyuncular</div>
+              <div className="text-3xl font-black text-white mb-2">1,204</div>
+              <div className="flex items-center gap-2 text-xs font-bold text-emerald-400">
+                <TrendingUp className="w-4 h-4" /> +82 yeni üye
+              </div>
+            </div>
+
+            {/* Stat Card 3 */}
+            <div className="bg-[#131823]/80 border border-white/5 rounded-2xl p-5 hover:border-[#A855F7]/30 transition-colors shadow-lg relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-[#A855F7]/10 to-transparent rounded-bl-full pointer-events-none group-hover:scale-110 transition-transform"></div>
+              <div className="text-zinc-400 text-xs font-bold uppercase tracking-wider mb-1">Dönüşüm Oranı</div>
+              <div className="text-3xl font-black text-white mb-2">24.8%</div>
+              <div className="flex items-center gap-2 text-xs font-bold text-emerald-400">
+                <TrendingUp className="w-4 h-4" /> +2.1% artış
+              </div>
+            </div>
+
+            {/* Stat Card 4 */}
+            <div className="bg-[#131823]/80 border border-white/5 rounded-2xl p-5 hover:border-[#EAB308]/30 transition-colors shadow-lg relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-[#EAB308]/10 to-transparent rounded-bl-full pointer-events-none group-hover:scale-110 transition-transform"></div>
+              <div className="text-zinc-400 text-xs font-bold uppercase tracking-wider mb-1">Tıklanmalar</div>
+              <div className="text-3xl font-black text-white mb-2">45.2K</div>
+              <div className="flex items-center gap-2 text-xs font-bold text-red-400">
+                <TrendingDown className="w-4 h-4" /> -1.2% azalış
+              </div>
+            </div>
+          </div>
+          
+          {/* Chart Mockup */}
+          <div className="w-full h-64 bg-[#131823]/80 border border-white/5 rounded-2xl p-5 shadow-lg relative flex flex-col justify-between overflow-hidden">
+             <div className="flex justify-between items-center z-10">
+               <span className="text-white font-bold">Kazanç Grafiği (Son 30 Gün)</span>
+               <div className="flex gap-2">
+                 <button className="px-3 py-1 bg-white/5 hover:bg-white/10 rounded text-xs font-bold text-zinc-400 transition-colors">Haftalık</button>
+                 <button className="px-3 py-1 bg-[#00E5FF]/20 text-[#00E5FF] rounded text-xs font-bold transition-colors">Aylık</button>
+               </div>
+             </div>
+             {/* Simple CSS Chart Graphic */}
+             <div className="absolute bottom-0 left-0 right-0 h-40 flex items-end justify-between px-6 pb-4 opacity-50 z-0">
+               {[40, 60, 45, 80, 50, 70, 90, 65, 85, 100].map((h, i) => (
+                 <div key={i} className="w-1/12 bg-gradient-to-t from-[#00E5FF]/30 to-transparent rounded-t-sm transition-all duration-1000" style={{ height: `${h}%` }}></div>
+               ))}
+             </div>
           </div>
         </div>
 

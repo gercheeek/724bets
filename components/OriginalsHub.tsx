@@ -69,7 +69,7 @@ export default function OriginalsHub({ onNavigate, isLoggedIn, siteUser, setSite
                 {/* VIP Dashboard & Hero Banner */}
                 <div className="w-full my-4">
                    <div className="mt-8 relative z-[100] transition-all duration-500 animate-fade-in">
-                      <GamesHeroBanner onNavigate={handleInternalPlay} />
+                      <GamesHeroBanner onNavigate={handleInternalPlay} isLoggedIn={isLoggedIn} onAuthRequired={onAuthRequired} setSiteUser={setSiteUser} />
                    </div>
                 </div>
 

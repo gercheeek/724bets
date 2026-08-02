@@ -18,6 +18,7 @@ export const GamePlayView: React.FC<GamePlayViewProps> = ({ game, demoUrl, onClo
   const [activeTab, setActiveTab] = useState<'bigwins' | 'luckywins' | 'desc'>('bigwins');
   const [isRealMoney, setIsRealMoney] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [showInsufficientFunds, setShowInsufficientFunds] = useState(false);
   
   const gameName = game.name || game.title || 'Slot Game';
   const provider = game.provider || 'Pragmatic Play';
@@ -102,6 +103,37 @@ export const GamePlayView: React.FC<GamePlayViewProps> = ({ game, demoUrl, onClo
             className="w-full h-full border-0"
             allowFullScreen
           />
+
+          {/* Global Game Session ID (Serial) */}
+          <div className="absolute left-[108px] bottom-[3px] pointer-events-none z-20 opacity-50 flex items-end">
+            <span className="text-white text-[9.5px] font-mono tracking-widest drop-shadow-md leading-none">12321412431243242</span>
+          </div>
+
+          {/* Insufficient Funds Modal Overlay */}
+          {showInsufficientFunds && isRealMoney && (
+            <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-[2px]">
+                <div className="bg-[#0B0B0B] border-2 border-[#1A1A1A] rounded-xl w-[90%] max-w-[320px] overflow-hidden flex flex-col shadow-2xl animate-fade-in">
+                    <div className="flex justify-between items-center p-3 relative">
+                        <div className="w-full text-center">
+                            <span className="text-[#EAB308] font-black text-sm tracking-wider uppercase">Mesaj</span>
+                        </div>
+                        <button onClick={() => setShowInsufficientFunds(false)} className="absolute right-3 top-3 text-zinc-400 hover:text-white transition-colors">
+                            <X size={20} strokeWidth={2.5} />
+                        </button>
+                    </div>
+                    <div className="px-6 py-4 text-center">
+                        <p className="text-white font-bold text-sm md:text-base leading-snug">
+                            Bu bahsi koymak için yeterli bakiyeniz yok. Hesabınıza para yatırın veya bahis seviyesini düşürün.
+                        </p>
+                    </div>
+                    <div className="p-4 pt-2">
+                        <button onClick={() => setShowInsufficientFunds(false)} className="w-full bg-[#10b981] hover:bg-[#059669] text-black font-black py-3 rounded-lg text-sm transition-colors uppercase tracking-wider">
+                            OK
+                        </button>
+                    </div>
+                </div>
+            </div>
+          )}
         </div>
 
         {/* Control Bar */}
@@ -145,7 +177,15 @@ export const GamePlayView: React.FC<GamePlayViewProps> = ({ game, demoUrl, onClo
                 </span>
                 
                 <button 
-                  onClick={() => setIsRealMoney(!isRealMoney)}
+                  onClick={() => {
+                    const nextMode = !isRealMoney;
+                    setIsRealMoney(nextMode);
+                    if (nextMode && (!siteUser || siteUser.balance <= 0)) {
+                      setShowInsufficientFunds(true);
+                    } else {
+                      setShowInsufficientFunds(false);
+                    }
+                  }}
                   className={`w-12 h-6 md:w-14 md:h-7 rounded-full relative transition-colors ${isRealMoney ? 'bg-[#10b981]' : 'bg-[#00E5FF]'}`}
                 >
                   <div className={`absolute top-[2px] w-5 h-5 md:w-6 md:h-6 bg-white rounded-full transition-transform shadow-md ${isRealMoney ? 'left-[calc(100%-2px)] -translate-x-full' : 'left-[2px]'}`}></div>

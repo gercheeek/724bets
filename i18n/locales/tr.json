@@ -392,5 +392,21 @@
     "my_bets": "Bahislerim",
     "bet_slip": "Bahis kuponu",
     "search": "Ara"
+  },
+  "wallet": {
+    "title": "Cüzdan",
+    "deposit": "Para Yatır",
+    "withdraw": "Para Çek",
+    "two_factor_disabled": "Şu anda 2FA etkin değil",
+    "enable_2fa": "2FA'yı Etkinleştir",
+    "deposit_options": "Para Yatırma Seçenekleri",
+    "withdraw_options": "Para Çekme Seçenekleri",
+    "crypto_deposit": "Kripto Para Yatırma",
+    "crypto_withdraw": "Kripto Para Çekme",
+    "exchanges": "Borsalar ve Cüzdanlar",
+    "bank": "Banka hesabı",
+    "gift_cards": "Hediye Kartları",
+    "others": "Diğer",
+    "popular": "POPÜLER"
   }
 }

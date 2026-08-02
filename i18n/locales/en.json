@@ -392,5 +392,21 @@
     "my_bets": "My Bets",
     "bet_slip": "Bet Slip",
     "search": "Search"
+  },
+  "wallet": {
+    "title": "Wallet",
+    "deposit": "Deposit",
+    "withdraw": "Withdraw",
+    "two_factor_disabled": "2FA is currently disabled",
+    "enable_2fa": "Enable 2FA",
+    "deposit_options": "Deposit Options",
+    "withdraw_options": "Withdraw Options",
+    "crypto_deposit": "Crypto Deposit",
+    "crypto_withdraw": "Crypto Withdraw",
+    "exchanges": "Exchanges and Wallets",
+    "bank": "Bank Account",
+    "gift_cards": "Gift Cards",
+    "others": "Other",
+    "popular": "POPULAR"
   }
 }

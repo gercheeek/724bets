@@ -91,7 +91,7 @@ export default function ChickenRunView({ siteUser, setSiteUser, onAuthRequired }
 
     const handlePlay = () => {
         if (!siteUser) return onAuthRequired();
-        if (siteUser.balance < betAmount) {
+        if ((siteUser && siteUser.balance < betAmount)) {
             alert('Yetersiz Bakiye');
             return;
         }

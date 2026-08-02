@@ -10,9 +10,9 @@ interface VIPClubViewProps {
 const VIPClubView: React.FC<VIPClubViewProps> = ({ onNavigate, siteUser }) => {
   const { t } = useTranslation();
   // Mock Data for Gamification
-  const currentXP = 4250;
-  const nextLevelXP = 5000;
-  const progressPercent = (currentXP / nextLevelXP) * 100;
+  const currentDeposit = 12500;
+  const nextLevelDeposit = 20000;
+  const progressPercent = (currentDeposit / nextLevelDeposit) * 100;
   
   const currentLevel = { name: 'Gold', color: 'from-yellow-400 to-yellow-600', icon: Crown };
   const nextLevel = { name: 'Platinum', color: 'from-slate-300 to-slate-500', icon: Diamond };
@@ -80,11 +80,11 @@ const VIPClubView: React.FC<VIPClubViewProps> = ({ onNavigate, siteUser }) => {
   ];
 
   const benefits = [
-    { level: 'Bronze', req: '0 XP', cashback: '%0', support: t('vip.support_standard'), withdrawal: t('vip.withdrawal_normal') },
-    { level: 'Silver', req: '1,000 XP', cashback: '%2', support: t('vip.support_priority'), withdrawal: t('vip.withdrawal_fast') },
-    { level: 'Gold', req: '3,000 XP', cashback: '%5', support: t('vip.support_vip'), withdrawal: t('vip.withdrawal_very_fast') },
-    { level: 'Platinum', req: '5,000 XP', cashback: '%10', support: t('vip.support_manager'), withdrawal: t('vip.withdrawal_instant') },
-    { level: 'Diamond', req: '15,000 XP', cashback: '%15', support: t('vip.support_manager'), withdrawal: t('vip.withdrawal_unlimited') },
+    { level: 'Bronze', req: '0 ₺', cashback: '%0', support: t('vip.support_standard'), withdrawal: t('vip.withdrawal_normal') },
+    { level: 'Silver', req: '25.000 ₺', cashback: '%2', support: t('vip.support_priority'), withdrawal: t('vip.withdrawal_fast') },
+    { level: 'Gold', req: '100.000 ₺', cashback: '%5', support: t('vip.support_vip'), withdrawal: t('vip.withdrawal_very_fast') },
+    { level: 'Platinum', req: '250.000 ₺', cashback: '%10', support: t('vip.support_manager'), withdrawal: t('vip.withdrawal_instant') },
+    { level: 'Diamond', req: '750.000 ₺', cashback: '%15', support: t('vip.support_manager'), withdrawal: t('vip.withdrawal_unlimited') },
   ];
 
   return (
@@ -277,7 +277,7 @@ const VIPClubView: React.FC<VIPClubViewProps> = ({ onNavigate, siteUser }) => {
                 <div>
                   <span className="text-zinc-500 font-bold uppercase tracking-widest text-[9px] block mb-1">{t('vip.current_level')}</span>
                   <h2 className="text-2xl font-black text-white tracking-tight">{currentLevel.name}</h2>
-                  <span className="text-emerald-400 font-bold text-xs">{currentXP.toLocaleString()} XP</span>
+                  <span className="text-emerald-400 font-bold text-xs">{currentDeposit.toLocaleString()} ₺ Toplam Yatırım</span>
                 </div>
               </div>
 
@@ -301,7 +301,7 @@ const VIPClubView: React.FC<VIPClubViewProps> = ({ onNavigate, siteUser }) => {
                   ></div>
                 </div>
                 <p className="text-zinc-500 text-[11px] font-medium mt-3 text-right">
-                  {t('vip.xp_left')} <strong className="text-white font-bold">{(nextLevelXP - currentXP).toLocaleString()} XP</strong> {t('vip.xp_left_2')}
+                  Sonraki seviyeye <strong className="text-white font-bold">{(nextLevelDeposit - currentDeposit).toLocaleString()} ₺ Yatırım</strong> kaldı
                 </p>
               </div>
             </div>
@@ -380,13 +380,15 @@ const VIPClubView: React.FC<VIPClubViewProps> = ({ onNavigate, siteUser }) => {
                       {/* Pedestal Base Line */}
                       <div className="absolute bottom-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-30 group-hover:opacity-80 transition-opacity duration-500"></div>
                       
-                      {/* Level Name & XP */}
+                      {/* Level Name & Requirement */}
                       <div className="flex flex-col items-center mt-1 z-10 w-full text-center">
-                        <span className={`text-[10px] lg:text-xs font-black uppercase tracking-[0.3em] text-transparent bg-clip-text bg-gradient-to-br ${gradientText} mb-2 drop-shadow-sm`}>
+                        <span className={`text-[10px] lg:text-[11px] font-black uppercase tracking-[0.25em] text-transparent bg-clip-text bg-gradient-to-br ${gradientText} mb-2 drop-shadow-sm`}>
                           {tier.level.toUpperCase()}
                         </span>
-                        <div className="h-[1px] w-6 bg-white/20 mb-2"></div>
-                        <span className="text-[8px] lg:text-[9px] text-zinc-500 font-bold uppercase tracking-[0.2em]">{tier.req}</span>
+                        <div className="flex flex-col items-center bg-black/40 px-3 py-1.5 rounded-md border border-white/5 w-[85%] mx-auto backdrop-blur-sm">
+                           <span className="text-[10px] lg:text-[11px] font-mono font-bold text-zinc-300 tracking-wider drop-shadow-md">{tier.req}</span>
+                           <span className="text-[6px] lg:text-[7px] text-zinc-500 uppercase tracking-[0.3em] mt-0.5">Yatırım Şartı</span>
+                        </div>
                       </div>
 
                       {/* Cashback Metric - Huge Typography */}

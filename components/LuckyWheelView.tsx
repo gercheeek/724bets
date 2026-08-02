@@ -679,12 +679,12 @@ const LuckyWheelView: React.FC<LuckyWheelViewProps> = ({ config, siteUser, onNav
                 className={`w-full h-14 rounded-xl font-black text-sm tracking-[0.2em] uppercase transition-all duration-300 flex items-center justify-center gap-2 ${
                   isSpinning 
                     ? 'bg-emerald-900/50 text-emerald-700 cursor-not-allowed' 
-                    : siteUser && siteUser.balance < betAmount
+                    : siteUser && (siteUser && siteUser.balance < betAmount)
                       ? 'bg-red-500/20 text-red-400 border border-red-500/30'
                       : 'bg-gradient-to-r from-emerald-500 to-emerald-400 hover:from-emerald-400 hover:to-emerald-300 text-white shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(16,185,129,0.6)]'
                 }`}
               >
-                {isSpinning ? 'Çevriliyor...' : siteUser && siteUser.balance < betAmount ? 'Yetersiz Bakiye' : 'ÇEVİR VE KAZAN'}
+                {isSpinning ? 'Çevriliyor...' : siteUser && (siteUser && siteUser.balance < betAmount) ? 'Yetersiz Bakiye' : 'ÇEVİR VE KAZAN'}
               </button>
             </div>
 

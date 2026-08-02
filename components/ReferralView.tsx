@@ -26,7 +26,7 @@ const ReferralView: React.FC<ReferralViewProps> = ({ siteUser, onNavigate }) => 
   }, [siteUser]);
 
   const fetchReferrals = async () => {
-    if (!siteUser) return;
+    
     try {
       const { data, error } = await supabase
         .from('referral_history')

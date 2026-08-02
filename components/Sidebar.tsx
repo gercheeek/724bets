@@ -5,7 +5,7 @@ import {
 } from 'lucide-react';
 import SportsSidebarContent from './SportsSidebarContent';
 import { useTranslation } from 'react-i18next';
-import LanguageSelectorModal from './LanguageSelectorModal';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -15,8 +15,34 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, activeView, onViewChange }) => {
-  const { t } = useTranslation();
-  const [isLangModalOpen, setIsLangModalOpen] = React.useState(false);
+  const { t, i18n } = useTranslation();
+  const { setLanguage } = useLanguage();
+  const [showLangMenu, setShowLangMenu] = React.useState(false);
+  const langMenuRef = React.useRef<HTMLDivElement>(null);
+
+  const languages = [
+    { code: 'tr', label: 'Türkçe', flag: '🇹🇷' },
+    { code: 'en', label: 'English', flag: '🇬🇧' },
+    { code: 'pt-BR', label: 'Português', flag: '🇧🇷' },
+    { code: 'es', label: 'Español', flag: '🇪🇸' },
+  ];
+
+  const handleLanguageSelect = (code: string) => {
+    i18n.changeLanguage(code);
+    const legacyCode = code === 'pt-BR' ? 'pt' : code;
+    setLanguage(legacyCode as any);
+    setShowLangMenu(false);
+  };
+
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (langMenuRef.current && !langMenuRef.current.contains(event.target as Node)) {
+        setShowLangMenu(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const isSportsView = ['sports', 'spor724', 'gercek', 'upcomingMatches'].includes(activeView);
   const isCasinoView = ['casino', 'slots', 'live-casino', 'originals'].includes(activeView);
@@ -28,7 +54,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, activeView, onViewC
     if (route === 'openChat') {
       window.dispatchEvent(new CustomEvent('openSupportChat'));
     } else if (route === 'openLang') {
-      setIsLangModalOpen(true);
+      setShowLangMenu(!showLangMenu);
     } else {
       onViewChange(route);
     }
@@ -83,13 +109,33 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, activeView, onViewC
         <span className={`ml-4 font-medium text-[14px] tracking-tight whitespace-nowrap transition-all duration-300 ${!isOpen ? 'opacity-0 translate-x-4' : 'opacity-100 translate-x-0'}`}>
           {item.label}
         </span>
+
+        {/* Language Popover Menu */}
+        {item.route === 'openLang' && showLangMenu && (
+          <div 
+            ref={langMenuRef}
+            className="absolute left-full bottom-0 ml-2 w-40 bg-[#0a0f16] border border-white/10 rounded-xl overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.8)] z-[999999] animate-in fade-in zoom-in-95 duration-200"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {languages.map((lang) => (
+              <button
+                key={lang.code}
+                onClick={() => handleLanguageSelect(lang.code)}
+                className={`w-full flex items-center px-4 py-3 text-sm transition-colors ${i18n.language === lang.code ? 'bg-[#00E5FF]/10 text-[#00E5FF] font-bold' : 'text-slate-300 hover:bg-white/5 hover:text-white'}`}
+              >
+                <span className="mr-3 text-lg leading-none">{lang.flag}</span>
+                {lang.label}
+              </button>
+            ))}
+          </div>
+        )}
       </a>
     );
   };
 
   return (
     <div className={`relative z-[99999] h-full shrink-0 transition-[width] duration-300 ${isOpen ? 'w-[280px]' : 'w-[78px]'}`}>
-      <div className={`group absolute top-0 left-0 flex flex-col h-full bg-[#05070a]/60 backdrop-blur-xl border-r border-white/5 transition-[width] duration-300 overflow-hidden shadow-[4px_0_30px_rgba(0,0,0,0.1)] ${isOpen ? 'w-[280px]' : 'w-[78px]'}`}>
+      <div className={`group absolute top-0 left-0 flex flex-col h-full bg-[#05070a]/60 backdrop-blur-xl border-r border-white/5 transition-[width] duration-300 overflow-visible shadow-[4px_0_30px_rgba(0,0,0,0.1)] ${isOpen ? 'w-[280px]' : 'w-[78px]'}`}>
       
       {/* Top Header: Menu Toggle + Horizontal Nav Toggle */}
       <div className={`h-[72px] flex items-center px-4 shrink-0 transition-all duration-300 relative z-[99999] pointer-events-auto gap-3 w-[280px]`}>
@@ -175,12 +221,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, activeView, onViewC
       </div>
 
       </div>
-
-      {/* Language Modal */}
-      <LanguageSelectorModal 
-        isOpen={isLangModalOpen} 
-        onClose={() => setIsLangModalOpen(false)} 
-      />
     </div>
   );
 };

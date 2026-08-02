@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { X, Send, Shield, Smile, Cpu, Target, ChevronDown } from 'lucide-react';
+import { X, Send, Shield, Smile, Cpu, Target, ChevronDown, MessageCircle, MoreVertical, Heart, CornerUpLeft, Trash2, VolumeX, Ban, User, Check, Star } from 'lucide-react';
 import { supabase, getGlobalConfig, updateGlobalConfig } from '../utils/supabase';
+import { triggerGlobalToast } from './GlobalToaster';
 import { useTranslation } from 'react-i18next';
 import { SiteUser } from '../types';
 import { BetShareModal } from './BetShareModal';
@@ -81,6 +82,175 @@ const RainDropMessage = ({ rainMsg }: { rainMsg: string }) => {
     );
 };
 
+const SharedBetCard = ({ payload, replies, onReply }: any) => {
+    const [showComments, setShowComments] = useState(false);
+    const [showDetails, setShowDetails] = useState(false);
+    const [replyText, setReplyText] = useState('');
+
+    useEffect(() => {
+        if (showDetails || showComments) {
+            setTimeout(() => {
+                const wrapper = document.getElementById('modern-chat-wrapper');
+                if (wrapper) {
+                    wrapper.scrollTo({
+                        top: wrapper.scrollHeight,
+                        behavior: 'smooth'
+                    });
+                }
+            }, 50);
+        }
+    }, [showDetails, showComments]);
+
+    return (
+        <div className="bg-gradient-to-b from-[#161922] to-[#0f1117] border border-white/10 border-l-[3px] border-l-[#00E5FF] rounded-xl overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.6)] mt-1 w-full max-w-sm relative transition-all duration-500 hover:border-white/20 hover:shadow-[0_8px_40px_rgba(0,229,255,0.15)] hover:-translate-y-0.5">
+            {/* Glowing Accent Line */}
+            <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-[#00E5FF]/50 via-[#00E5FF]/10 to-transparent"></div>
+            
+            {/* Bet Header (Clickable for details) */}
+            <div 
+                className="px-4 py-3 border-b border-white/5 bg-gradient-to-r from-white/[0.03] to-transparent flex items-center justify-between cursor-pointer hover:bg-white/[0.05] transition-colors relative"
+                onClick={() => setShowDetails(!showDetails)}
+            >
+                <div className="flex items-center gap-2">
+                    <Target className="w-4 h-4 text-[#00E5FF] drop-shadow-[0_0_8px_rgba(0,229,255,0.6)]" />
+                    <span className="text-[#00E5FF] text-[12px] font-black tracking-widest uppercase drop-shadow-[0_0_5px_rgba(0,229,255,0.4)]">{payload.type || 'SPOR'}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                    <span className="text-zinc-400/80 text-[10px] font-black tracking-[0.2em]">KUPON #{payload.id?.split('-').pop()}</span>
+                    <ChevronDown className={`w-4 h-4 text-zinc-400 transition-transform duration-300 ${showDetails ? 'rotate-180 text-white drop-shadow-md' : ''}`} />
+                </div>
+            </div>
+            
+            {/* Bet Details (Hidden when collapsed) */}
+            {showDetails && (
+                <div className="p-4 pt-3 animate-in fade-in slide-in-from-top-2 duration-300">
+                    <div className="mb-4">
+                        <div className="flex items-center gap-2 mb-1.5">
+                             <span className="text-zinc-400 text-[9px] uppercase font-bold tracking-widest">{payload.league || 'İSPANYA LA LIGA'}</span>
+                             <span className="text-zinc-600 text-[10px]">•</span>
+                             {(() => {
+                                 const timeStr = payload.time || '';
+                                 const isLive = timeStr.toUpperCase().includes('CANLI');
+                                 return (
+                                     <span className={`${isLive ? 'text-rose-500' : 'text-[#00E5FF]'} text-[9px] uppercase font-bold tracking-widest flex items-center gap-1.5`}>
+                                         <div className={`w-1.5 h-1.5 rounded-full ${isLive ? 'bg-rose-500 animate-pulse shadow-[0_0_8px_rgba(244,63,94,0.8)]' : 'bg-[#00E5FF] opacity-80'}`}></div>
+                                         {timeStr || 'Bugün 22:00'}
+                                     </span>
+                                 );
+                             })()}
+                        </div>
+                        <h4 className="text-white font-bold text-[14px] leading-snug">{payload.title}</h4>
+                    </div>
+                    
+                    <div className="flex flex-col gap-2 pl-3 border-l-2 border-white/10 mb-5 relative">
+                        {payload.picks && payload.picks.map((pick:any, i:number) => (
+                            <div key={i} className="bg-gradient-to-r from-black/60 to-black/20 px-3.5 py-3 rounded-lg border border-white/5 flex items-center justify-between group backdrop-blur-sm shadow-inner transition-colors hover:border-white/10">
+                                <div>
+                                    <span className="text-white text-[13.5px] font-bold block leading-tight mb-1">{pick.name || pick.text}</span>
+                                    <span className="text-[#00E5FF]/90 text-[9.5px] font-black tracking-[0.15em] uppercase">{pick.market || pick.detail}</span>
+                                </div>
+                                <div className="flex items-center justify-center bg-gradient-to-b from-[#1a1d24] to-[#12141a] border border-white/10 rounded-md px-3.5 py-1.5 min-w-[50px] shadow-[0_2px_10px_rgba(0,0,0,0.5)] group-hover:border-[#00E5FF]/40 transition-colors">
+                                    <span className="text-white font-black text-[14px]">{pick.odd ? pick.odd.toFixed(2) : (payload.totalOdds || payload.odds)}</span>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                    
+                    <div className="flex items-center justify-between bg-gradient-to-r from-[#101218] via-[#141822] to-[#101218] p-4 rounded-xl border border-white/10 relative overflow-hidden shadow-[inset_0_0_20px_rgba(0,0,0,0.8)]">
+                        <div className="absolute top-0 left-0 w-full h-full bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+PHBhdGggZD0iTTAgMGg0MHY0MEgweiIgZmlsbD0ibm9uZSIvPjxwYXRoIGQ9Ik0wIDEwaDQwTTEwIDB2NDBNMCAzMGg0ME0zMCAwdjQwIiBzdHJva2U9InJnYmEoMjU1LCAyNTUsIDI1NSwgMC4wMikiIHN0cm9rZS13aWR0aD0iMSIvPjwvc3ZnPg==')] opacity-50 pointer-events-none"></div>
+                        <div className="flex flex-col relative z-10">
+                            <span className="text-zinc-500 text-[9px] uppercase font-bold tracking-[0.2em] mb-1">Toplam Oran</span>
+                            <span className="text-white font-black text-[18px] tracking-tight drop-shadow-md">{payload.totalOdds || payload.odds}</span>
+                        </div>
+                        <div className="flex flex-col text-right relative z-10">
+                            <span className="text-zinc-500 text-[9px] uppercase font-bold tracking-[0.2em] mb-1">Olası Kazanç</span>
+                            <span className="text-[#00E676] font-black text-[19px] tracking-tight drop-shadow-[0_0_10px_rgba(0,230,118,0.4)]">{payload.potentialWin ? `₺${payload.potentialWin.toLocaleString()}` : payload.win}</span>
+                        </div>
+                    </div>
+
+                    <button className="w-full mt-4 bg-gradient-to-r from-[#00E5FF] to-[#00b3cc] hover:brightness-110 text-[#0A0D14] text-[12px] font-black py-3.5 rounded-xl shadow-[0_0_15px_rgba(0,229,255,0.3)] hover:shadow-[0_0_25px_rgba(0,229,255,0.5)] transition-all uppercase tracking-[0.2em] flex items-center justify-center gap-2 transform active:scale-[0.98]">
+                        BU KUPONU OYNA
+                        <ChevronDown className="w-4 h-4 -rotate-90" strokeWidth={3} />
+                    </button>
+                </div>
+            )}
+
+            {/* Comments Toggle */}
+            <div className={`p-2.5 bg-transparent hover:bg-white/[0.02] transition-colors ${showDetails ? 'border-t border-white/5' : ''}`}>
+                <button 
+                    onClick={() => setShowComments(!showComments)}
+                    className="w-full flex items-center justify-center gap-1.5 text-zinc-400 hover:text-white text-[12px] font-bold transition-all py-1 group"
+                >
+                    <MessageCircle className="w-3.5 h-3.5 group-hover:text-[#00E5FF] transition-colors" />
+                    {showComments ? 'Yorumları Gizle' : `Yorumlar (${replies.length})`}
+                </button>
+            </div>
+
+            {/* Comments Area */}
+            {showComments && (
+                <div className="border-t border-white/5 bg-black/40 p-2.5 flex flex-col gap-2.5">
+                    <div className="max-h-40 overflow-y-auto space-y-2 pr-1 custom-scrollbar">
+                        {replies.length === 0 && <span className="text-zinc-500 text-[10px] italic pl-1 block text-center py-2">Henüz yorum yok. İlk yorumu sen yap!</span>}
+                        {replies.map((r:any) => {
+                             const isMod = r.role?.toUpperCase() === 'ADMIN' || r.role?.toUpperCase() === 'MODERATOR';
+                             return (
+                            <div key={r.id} className="bg-white/[0.03] rounded-lg p-2 border border-white/5 flex gap-1.5 backdrop-blur-sm">
+                                <span className={`text-[10px] font-black shrink-0 ${isMod ? 'text-[#10b981]' : 'text-[#00E5FF]'}`}>{r.username}:</span>
+                                <span className="text-zinc-300 text-[11px] leading-relaxed break-words">{r.message.replace(`[BET_REPLY:${payload.id}] `, '')}</span>
+                            </div>
+                        )})}
+                    </div>
+                    <div className="flex items-center gap-2 mt-1 relative">
+                        <input 
+                            type="text" 
+                            value={replyText}
+                            onChange={(e) => setReplyText(e.target.value)}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter' && replyText.trim()) {
+                                    onReply(payload.id, replyText);
+                                    setReplyText('');
+                                }
+                            }}
+                            placeholder="Yorum yaz..."
+                            className="flex-1 bg-black/60 border border-white/10 rounded-lg pl-3 pr-2 py-2 text-[11px] text-white focus:border-[#00E5FF]/50 focus:bg-black outline-none transition-all focus:shadow-[0_0_15px_rgba(0,229,255,0.1)]"
+                        />
+                        <button 
+                            onClick={() => {
+                                if(replyText.trim()){
+                                    onReply(payload.id, replyText);
+                                    setReplyText('');
+                                }
+                            }}
+                            className="absolute right-1 top-1 bottom-1 bg-[#00E5FF]/10 hover:bg-[#00E5FF]/20 text-[#00E5FF] px-3 rounded-md font-black text-[10px] uppercase transition-colors"
+                        >
+                            Gönder
+                        </button>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+};
+
+export const getUserColor = (username: string) => {
+    if (!username) return '#05D9E8'; // Default Cyan
+    const colors = [
+        '#FF2A6D', // Neon Pink
+        '#05D9E8', // Cyan
+        '#FFC000', // Gold/Yellow
+        '#B026FF', // Neon Purple
+        '#FF9D00', // Orange
+        '#00FF9D', // Mint
+        '#FF3366', // Rose
+        '#33CCFF'  // Light Blue
+    ];
+    let hash = 0;
+    for (let i = 0; i < username.length; i++) {
+        hash = username.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    return colors[Math.abs(hash) % colors.length];
+};
+
 const renderMessageText = (msg: any, onBetClick?: (betId: string, user: string, type: 'Casino'|'Spor') => void) => {
   let text = msg.message;
   if (!text || typeof text !== 'string') return '';
@@ -98,11 +268,12 @@ const renderMessageText = (msg: any, onBetClick?: (betId: string, user: string, 
           <div className="flex flex-col gap-1.5 mt-0.5">
               <div 
                   onClick={() => onBetClick(betId, msg.username, type)}
-                  className="inline-flex items-center gap-1.5 bg-[#050505] hover:bg-[#111] transition-colors rounded px-2.5 py-1 text-sm font-semibold cursor-pointer select-none text-white border border-emerald-500/20 text-emerald-400 w-fit"
+                  className="inline-flex items-center gap-1.5 bg-[#050505] hover:bg-[#111] transition-colors rounded px-2.5 py-1 text-sm font-semibold cursor-pointer select-none text-emerald-400 border border-emerald-500/20 w-fit"
+                  style={{ borderColor: `${getUserColor(msg.username)}40`, color: getUserColor(msg.username) }}
               >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M4 6H20M4 12H20M4 18H20" stroke="#00e701" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
+                  <div className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold text-white uppercase" style={{ backgroundColor: getUserColor(msg.username) }}>
+                      {msg.username?.charAt(0)}
+                  </div>
                   {type}: #{betId}
               </div>
               <span className="mt-1">{remainingText}</span>
@@ -144,7 +315,17 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
     const [showLangMenu, setShowLangMenu] = useState(false);
     const chatContainerRef = useRef<HTMLDivElement>(null);
 
-    const [selectedBet, setSelectedBet] = useState<{ id: string, user: string, type: 'Casino' | 'Spor' } | null>(null);
+    const [selectedBet, setSelectedBet] = useState<{ id: string | number, user: string, type?: string } | null>(null);
+    
+    // Admin context menu state
+    const [adminMenu, setAdminMenu] = useState<{msgId: string, username: string, x: number, y: number} | null>(null);
+
+    // Global click listener to close admin menu
+    useEffect(() => {
+        const handleClickOutside = () => setAdminMenu(null);
+        window.addEventListener('click', handleClickOutside);
+        return () => window.removeEventListener('click', handleClickOutside);
+    }, []);
     const [activeAnnouncement, setActiveAnnouncement] = useState<{ id?: string, text: string, timestamp: number } | null>(null);
 
     const isSystemOrCountdown = (msg: any) => {
@@ -166,6 +347,21 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
             /^⏳\s*\d+/i.test(text)
         );
     };
+
+    useEffect(() => {
+        const handleShare = (e: any) => {
+            if (e.detail?.message) {
+                setNewMessage(e.detail.message);
+                const chatWrapper = document.getElementById('modern-chat-wrapper');
+                if (chatWrapper) {
+                    chatWrapper.classList.add('ring-2', 'ring-[#06b6d4]', 'ring-offset-2', 'ring-offset-[#0A0D14]');
+                    setTimeout(() => chatWrapper.classList.remove('ring-2', 'ring-[#06b6d4]', 'ring-offset-2', 'ring-offset-[#0A0D14]'), 2000);
+                }
+            }
+        };
+        window.addEventListener('shareBetEvent', handleShare);
+        return () => window.removeEventListener('shareBetEvent', handleShare);
+    }, []);
 
     useEffect(() => {
         if (!open) {
@@ -193,6 +389,20 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
                     setMessages(prev => {
                         const localBots = prev.filter(m => m.id && (m.id.startsWith('group_bot_') || m.id.startsWith('tip_')));
                         const merged = [...(data || []), ...localBots];
+                        
+                        const mockBettingChat = [
+                            { id: 'mock1', username: 'Kaan1907', role: 'USER', message: 'Fenerbahçe maçı üst biter mi beyler?', created_at: new Date(Date.now() - 60000).toISOString() },
+                            { id: 'mock2', username: 'BetMaster', role: 'USER', message: 'İlk yarı 1.5 üst garanti, rahat oyna', created_at: new Date(Date.now() - 50000).toISOString() },
+                            { id: 'mock4', username: 'KralVip', role: 'VIP', message: 'Kasa katlama kuponu olan var mı?', created_at: new Date(Date.now() - 30000).toISOString() },
+                            { id: 'mock5', username: 'BetMaster', role: 'USER', message: '[BET_SHARE:{"id":"mock-bet-1","type":"Spor","league":"İspanya La Liga","time":"Bugün 22:00","title":"Real Madrid vs. Barcelona","picks":[{"name":"Real Madrid","market":"Maç Sonucu","odd":2.10}],"totalOdds":2.10,"potentialWin":2100}]', created_at: new Date(Date.now() - 20000).toISOString() },
+                            { id: 'mock6', username: 'Kaan1907', role: 'USER', message: 'Kupon efsane duruyor, bastım 1000 TL', created_at: new Date(Date.now() - 15000).toISOString() },
+                            { id: 'mock7', username: 'KralVip', role: 'VIP', message: '[BET_SHARE:{"id":"mock-bet-2","type":"Canlı Kombine","league":"FUTBOL KOMBİNE","time":"CANLI","title":"🔥 3\'LÜ SÜPER CANLI KUPON","picks":[{"name":"Arsenal vs. Chelsea","market":"Sıradaki Gol: Arsenal","odd":2.40},{"name":"Juventus vs. Milan","market":"Karşılıklı Gol: Var","odd":1.85},{"name":"Galatasaray vs. Fenerbahçe","market":"Toplam Gol: 2.5 Üst","odd":1.70}],"totalOdds":7.54,"potentialWin":7540}]', created_at: new Date(Date.now() - 5000).toISOString() },
+                        ];
+                        
+                        if (!merged.some(m => m.id === 'mock1')) {
+                            merged.push(...mockBettingChat);
+                        }
+
                         return merged.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
                     });
                     setIsConnected(true);
@@ -416,6 +626,36 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
         }
     };
 
+    const handleSendReply = async (betId: string, replyText: string) => {
+        if (!siteUser) return;
+        
+        const myUserId = siteUser.id || `anon_${Math.random().toString(36).substr(2, 9)}`;
+        const myUsername = siteUser.username || siteUser.email?.split('@')[0] || 'Misafir';
+        const role = userRole || (siteUser.role?.toLowerCase() === 'admin' ? 'admin' : 'user');
+
+        const finalMessage = sanitize(`[BET_REPLY:${betId}] ${replyText.trim()}`);
+
+        const msgObj = {
+            channel_id: activeLang.id,
+            user_id: myUserId,
+            username: myUsername,
+            message: finalMessage,
+            role: role
+        };
+
+        try {
+            const { data, error } = await supabase.from('tv_chat').insert(msgObj).select();
+            if (!error && data && data[0]) {
+                setMessages(prev => {
+                    if (prev.some(msg => msg.id === data[0].id)) return prev;
+                    return [...prev, data[0]];
+                });
+            }
+        } catch (err) {
+            console.error("Global chat reply error:", err);
+        }
+    };
+
     useEffect(() => {
         if (!messages || messages.length === 0) return;
         const systemMsgs = messages.filter(isSystemOrCountdown);
@@ -437,6 +677,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
     }
 
     const displayMessages = messages.filter(m => !isSystemOrCountdown(m) && m.role !== 'system_win');
+    const mainMessages = displayMessages.filter(m => !(m.message || '').startsWith('[BET_REPLY:'));
 
     return (
         <div id="tour-chat" className="h-full w-full flex flex-col bg-[#0A0D14] font-sans text-left relative shadow-[-5px_0_30px_rgba(0,0,0,0.5)]">
@@ -502,8 +743,8 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
             {/* Messages Area */}
             <div 
                 ref={chatContainerRef} 
-                id="new-chat-container" 
-                className="flex-1 overflow-y-auto p-3 space-y-2 custom-scrollbar bg-[#0A0D14]"
+                id="modern-chat-wrapper" 
+                className="flex-1 overflow-y-auto p-3 space-y-2 custom-scrollbar bg-[#0A0D14] transition-all"
                 style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(255,255,255,0.05) transparent' }}
             >
                 {!isConnected ? (
@@ -513,38 +754,161 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
                             Bağlanıyor...
                         </p>
                     </div>
-                ) : displayMessages.length === 0 ? (
+                ) : mainMessages.length === 0 ? (
                     <div className="flex items-center justify-center py-8">
                         <p className="text-xs text-gray-500">Henüz mesaj yok.</p>
                     </div>
                 ) : (
-                    displayMessages.map((msg, i) => {
-                        const isMod = msg.role?.toUpperCase() === 'ADMIN' || msg.role?.toUpperCase() === 'MODERATOR';
+                    mainMessages.map((msg, i) => {
+                        const isMod = msg.role?.toUpperCase() === 'ADMIN' || msg.role?.toUpperCase() === 'MODERATOR' || (msg.username || '').toLowerCase() === 'yönetici' || (msg.username || '').toLowerCase() === 'admin';
+                        const isSystem = msg.role?.toUpperCase() === 'SYSTEM';
+                        const isVip = msg.role?.toUpperCase() === 'VIP';
+                        const isBetShare = (msg.message || '').startsWith('[BET_SHARE:');
+                        const isMentioned = siteUser && (msg.message || '').includes(`@${siteUser.username}`);
                         
+                        const userName = msg.username || 'Misafir';
+                        const userColor = isMod ? '#10b981' : getUserColor(userName);
+                        const initial = userName.charAt(0).toUpperCase();
+
+                        if (isBetShare) {
+                            let payload = null;
+                            try {
+                                const jsonStr = msg.message.replace('[BET_SHARE:', '').replace(/\]$/, '');
+                                payload = JSON.parse(jsonStr);
+                            } catch(e) {}
+                            
+                            if (payload) {
+                                const replies = messages.filter(m => (m.message || '').startsWith(`[BET_REPLY:${payload.id}]`));
+                                return (
+                                    <div key={msg.id || i} className="mb-4">
+                                        <div className="flex items-center gap-1.5 px-2 mb-1">
+                                            {isMod ? (
+                                                <span className="inline-flex items-center gap-1 bg-[#10b981]/10 text-[#10b981] px-1.5 py-0.5 rounded flex-shrink-0 text-[10px] font-black tracking-widest leading-none border border-[#10b981]/20 uppercase drop-shadow-[0_0_5px_rgba(16,185,129,0.3)]">
+                                                    <Shield className="w-3 h-3" /> MOD
+                                                </span>
+                                            ) : isVip ? (
+                                                <span className="inline-flex items-center gap-1 bg-yellow-500/10 text-yellow-500 px-1.5 py-0.5 rounded flex-shrink-0 text-[10px] font-black tracking-widest leading-none border border-yellow-500/20 uppercase drop-shadow-[0_0_5px_rgba(234,179,8,0.3)]">
+                                                    <Star className="w-3 h-3 fill-yellow-500" /> VIP
+                                                </span>
+                                            ) : (
+                                                <div 
+                                                    className="w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-black shrink-0 shadow-lg"
+                                                    style={{ backgroundColor: `${userColor}20`, color: userColor, border: `1px solid ${userColor}50` }}
+                                                >
+                                                    {initial}
+                                                </div>
+                                            )}
+                                            <span 
+                                                className="font-black tracking-tight text-[13.5px]" 
+                                                style={{ color: userColor, textShadow: `0 0 5px ${userColor}66` }}
+                                            >
+                                                {userName}
+                                            </span>
+                                            <span className="text-slate-400 text-[11px] ml-1">bir kupon paylaştı</span>
+                                        </div>
+                                        <div className="ml-1">
+                                            <SharedBetCard 
+                                                payload={payload} 
+                                                replies={replies} 
+                                                onReply={handleSendReply} 
+                                            />
+                                        </div>
+                                    </div>
+                                );
+                            }
+                        }
+
                         return (
                         <div 
                             key={msg.id || i} 
-                            className="px-4 py-3 bg-[#161A24] border border-white/5 rounded-2xl text-left text-[13px] text-slate-300 leading-relaxed shadow-[0_4px_15px_rgba(0,0,0,0.4)] transition-all hover:bg-[#1b202c] hover:border-white/10 mb-2.5"
+                            onClick={(e) => {
+                                if (isMod && siteUser && isAuthorized(siteUser.role) && userName !== siteUser.username) {
+                                    e.stopPropagation();
+                                    setAdminMenu({
+                                        msgId: msg.id || String(i),
+                                        username: userName,
+                                        x: e.clientX,
+                                        y: e.clientY
+                                    });
+                                }
+                            }}
+                            className={`px-4 py-3 bg-white/[0.02] border border-white/5 rounded-2xl text-left text-[13px] leading-relaxed shadow-[0_4px_15px_rgba(0,0,0,0.4)] transition-all hover:bg-white/[0.04] hover:border-white/10 mb-2.5 backdrop-blur-md relative overflow-hidden border-l-[3px] ${isMentioned ? 'bg-[#00E5FF]/[0.08] shadow-[0_0_15px_rgba(0,229,255,0.2)]' : ''} ${(isMod && siteUser && isAuthorized(siteUser.role) && userName !== siteUser.username) ? 'cursor-pointer' : ''}`}
+                            style={{ borderLeftColor: isVip ? '#FFD700' : userColor }}
                         >
                             <span className="inline-flex items-center gap-1.5 mr-1.5 align-middle">
                                 {isMod ? (
-                                    <span className="inline-flex items-center gap-1 bg-[#1a2e20] text-[#10b981] px-1.5 py-0.5 rounded-md flex-shrink-0 text-[10px] font-black tracking-wider leading-none border border-[#10b981]/20 uppercase">
+                                    <span className="inline-flex items-center gap-1 bg-[#10b981]/10 text-[#10b981] px-1.5 py-0.5 rounded flex-shrink-0 text-[10px] font-black tracking-widest leading-none border border-[#10b981]/20 uppercase drop-shadow-[0_0_5px_rgba(16,185,129,0.3)]">
                                         <Shield className="w-3 h-3" /> MOD
                                     </span>
+                                ) : isVip ? (
+                                    <span className="inline-flex items-center gap-1 bg-yellow-500/10 text-yellow-500 px-1.5 py-0.5 rounded flex-shrink-0 text-[10px] font-black tracking-widest leading-none border border-yellow-500/20 uppercase drop-shadow-[0_0_5px_rgba(234,179,8,0.3)]">
+                                        <Star className="w-3 h-3 fill-yellow-500" /> VIP
+                                    </span>
                                 ) : (
-                                    <span className="text-slate-600 flex-shrink-0"><Target className="w-3.5 h-3.5" /></span>
+                                    <div 
+                                        className="w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-black shrink-0 shadow-lg"
+                                        style={{ backgroundColor: `${userColor}20`, color: userColor, border: `1px solid ${userColor}50` }}
+                                    >
+                                        {initial}
+                                    </div>
                                 )}
-                                <span className={`font-black tracking-tight text-[13.5px] ${isMod ? 'text-[#10b981]' : 'text-[#d4af37]'}`}>
-                                    {msg.username || 'Misafir'}
+                                <span 
+                                    className="font-black tracking-tight text-[13.5px] hover:underline decoration-white/20 underline-offset-2"
+                                    style={{ color: isVip ? '#FFD700' : userColor, textShadow: `0 0 5px ${isVip ? '#FFD700' : userColor}66` }}
+                                >
+                                    {userName}
                                 </span>
                             </span>
-                            <span className="break-words antialiased text-slate-300 ml-1">
+                            <span className={`break-words antialiased ml-1 text-[13px] md:text-[14px] leading-relaxed ${isVip ? 'text-yellow-500/90 font-medium' : isSystem ? 'text-amber-400 font-bold' : 'text-slate-200'}`}>
                                 {renderMessageText(msg, (betId, user, type) => setSelectedBet({ id: betId, user, type }))}
                             </span>
                         </div>
                     )})
                 )}
             </div>
+
+            {/* Admin Context Menu */}
+            {adminMenu && (
+                <div 
+                    className="fixed z-[9999] bg-[#0A0D14]/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.8)] overflow-hidden w-44 animate-in fade-in zoom-in-95 duration-200"
+                    style={{ top: Math.min(adminMenu.y, window.innerHeight - 200), left: Math.min(adminMenu.x, window.innerWidth - 180) }}
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    <div className="px-3 py-2 border-b border-white/5 bg-white/[0.02]">
+                        <span className="text-[10px] uppercase font-black tracking-widest text-zinc-500">İşlem:</span>
+                        <div className="text-[12px] font-bold text-white truncate">@{adminMenu.username}</div>
+                    </div>
+                    <div className="flex flex-col py-1">
+                        <button 
+                            onClick={() => {
+                                triggerGlobalToast(`Mesaj silindi: ${adminMenu.username}`, 'success');
+                                setAdminMenu(null);
+                            }}
+                            className="w-full flex items-center gap-2 px-3 py-2 text-[12px] font-semibold text-zinc-300 hover:text-white hover:bg-white/5 transition-colors"
+                        >
+                            <Trash2 className="w-3.5 h-3.5 text-rose-400" /> Mesajı Sil
+                        </button>
+                        <button 
+                            onClick={() => {
+                                triggerGlobalToast(`${adminMenu.username} 10 dakika susturuldu.`, 'success');
+                                setAdminMenu(null);
+                            }}
+                            className="w-full flex items-center gap-2 px-3 py-2 text-[12px] font-semibold text-zinc-300 hover:text-white hover:bg-white/5 transition-colors"
+                        >
+                            <VolumeX className="w-3.5 h-3.5 text-amber-400" /> Sustur (10dk)
+                        </button>
+                        <button 
+                            onClick={() => {
+                                triggerGlobalToast(`${adminMenu.username} kalıcı olarak yasaklandı!`, 'error');
+                                setAdminMenu(null);
+                            }}
+                            className="w-full flex items-center gap-2 px-3 py-2 text-[12px] font-semibold text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 transition-colors border-t border-white/5"
+                        >
+                            <Ban className="w-3.5 h-3.5" /> Kullanıcıyı Yasakla
+                        </button>
+                    </div>
+                </div>
+            )}
 
             {/* Input Footer Area */}
             <div className="p-4 bg-[#0A0D14] flex-shrink-0 z-10 relative border-t border-white/5">
@@ -556,27 +920,31 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
                         className="w-full bg-[#0a0d14] border border-white/10 text-[12px] font-semibold text-center text-slate-500 rounded-full px-5 py-3.5 cursor-not-allowed shadow-inner"
                     />
                 ) : (
-                    <form onSubmit={handleSendMessage} className="relative flex items-center bg-[#0a0d14] border border-white/10 focus-within:border-blue-500/50 rounded-full overflow-hidden transition-all h-[46px] shadow-inner">
-                        <input
-                            type="text"
-                            value={newMessage}
-                            onChange={(e) => setNewMessage(e.target.value)}
-                            placeholder={t('chat.placeholder', 'Bir mesaj gönder...')}
-                            className="flex-1 bg-transparent text-[13px] font-medium text-white focus:outline-none placeholder-zinc-600 pl-5 pr-3"
-                        />
-                        <div className="flex items-center pr-1.5 gap-1 h-full shrink-0">
-                            <button type="button" className="text-zinc-500 hover:text-white transition-colors p-1.5 rounded-full hover:bg-white/5">
-                                <Smile className="w-4 h-4" />
-                            </button>
-                            <button
-                                type="submit"
-                                disabled={!newMessage.trim()}
-                                className="text-[#0A0D14] bg-gradient-to-br from-[#00E5FF] to-[#00b3cc] disabled:bg-none disabled:bg-[#121212] disabled:text-gray-600 hover:brightness-110 transition-all p-2 rounded-full shadow-[0_2px_10px_rgba(0,229,255,0.3)]"
-                            >
-                                <Send className="w-4 h-4 ml-0.5" />
-                            </button>
-                        </div>
-                    </form>
+                    <div className="flex flex-col gap-2">
+                        {/* Tip & Rain Toolbar Removed - Will be moved to admin panel later */}
+                        
+                        <form onSubmit={handleSendMessage} className="relative flex items-center bg-[#161A24] border border-white/10 focus-within:border-[#00E5FF]/50 focus-within:bg-[#0A0D14] focus-within:shadow-[0_0_20px_rgba(0,229,255,0.1)] rounded-full overflow-hidden transition-all duration-300 h-[46px]">
+                            <input
+                                type="text"
+                                value={newMessage}
+                                onChange={(e) => setNewMessage(e.target.value)}
+                                placeholder={t('chat.placeholder', 'Bir mesaj gönder...')}
+                                className="flex-1 bg-transparent text-[13px] font-medium text-white focus:outline-none placeholder-zinc-500 pl-5 pr-3"
+                            />
+                            <div className="flex items-center pr-1.5 gap-1 h-full shrink-0">
+                                <button type="button" className="text-zinc-500 hover:text-white transition-colors p-1.5 rounded-full hover:bg-white/5">
+                                    <Smile className="w-4 h-4" />
+                                </button>
+                                <button
+                                    type="submit"
+                                    disabled={!newMessage.trim()}
+                                    className="text-[#0A0D14] bg-gradient-to-br from-[#00E5FF] to-[#00b3cc] disabled:bg-none disabled:bg-[#121212] disabled:text-gray-600 hover:brightness-110 transition-all p-2 rounded-full shadow-[0_2px_10px_rgba(0,229,255,0.3)]"
+                                >
+                                    <Send className="w-4 h-4 ml-0.5" />
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 )}
             </div>
             
