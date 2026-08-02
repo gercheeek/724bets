@@ -5,6 +5,10 @@ import { supabase } from '../utils/supabase';
 interface UserContextProps {
   siteUser: SiteUser | null;
   setSiteUser: React.Dispatch<React.SetStateAction<SiteUser | null>>;
+  isFunMode: boolean;
+  setIsFunMode: React.Dispatch<React.SetStateAction<boolean>>;
+  demoBalance: number;
+  setDemoBalance: React.Dispatch<React.SetStateAction<number>>;
   placeBet: (amount: number, selections: any[], totalOdds: number) => Promise<void>;
   processGameBet: (betAmount: number, winAmount: number, gameName: string) => Promise<number>;
   playInstantGame: (betAmount: number, gameName: string, target?: number, condition?: string, payload?: any) => Promise<any>;
@@ -16,6 +20,9 @@ interface UserContextProps {
 const UserContext = createContext<UserContextProps | undefined>(undefined);
 
 export const UserProvider: React.FC<{ children: ReactNode, siteUser: SiteUser | null, setSiteUser: React.Dispatch<React.SetStateAction<SiteUser | null>> }> = ({ children, siteUser, setSiteUser }) => {
+  const [isFunMode, setIsFunMode] = React.useState<boolean>(true); // Default to Eğlence Modu
+  const [demoBalance, setDemoBalance] = React.useState<number>(10000); // 10.000 ₺ Demo Balance
+
   
   const sendDiscordNotification = async (payload: any) => {
     try {
@@ -208,7 +215,7 @@ export const UserProvider: React.FC<{ children: ReactNode, siteUser: SiteUser | 
   };
 
   return (
-    <UserContext.Provider value={{ siteUser, setSiteUser, placeBet, processGameBet, playInstantGame, startSessionGame, playSessionMove, cashoutSessionGame }}>
+    <UserContext.Provider value={{ siteUser, setSiteUser, isFunMode, setIsFunMode, demoBalance, setDemoBalance, placeBet, processGameBet, playInstantGame, startSessionGame, playSessionMove, cashoutSessionGame }}>
       {children}
     </UserContext.Provider>
   );

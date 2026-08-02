@@ -7,7 +7,10 @@ import { useTranslation } from 'react-i18next';
 import LanguageTransition from './components/LanguageTransition';
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
+import CasinoSection from './components/CasinoSection';
+import GamificationPanel from './components/GamificationPanel';
 import Header from './components/Header';
+import { DemoBalanceDisplay } from './components/DemoBalanceDisplay';
 import { Crown, Trophy, Calendar, TrendingUp, Clock, ArrowRight, Shield, CheckCircle2, Target, X, Dribbble, PlayCircle, Gamepad2, Diamond, Dices, PieChart, MonitorPlay, ChevronDown, Lock, ShieldCheck, Wallet, Club, Search, Menu } from 'lucide-react';
 import { getFlagUrl } from './components/MatchResultsWidget';
 import AppLoader from './components/AppLoader';
@@ -2234,21 +2237,10 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
                     </>
                   ) : (
                     <>
-                      {/* Gamdom Style Mobile Auth Buttons */}
-                      <div className="flex items-center gap-1.5 sm:gap-2 shrink-0 ml-1">
-                        <button
-                          onClick={() => setAuthModalMode('member')}
-                          className="flex items-center justify-center h-[34px] md:h-[36px] bg-[#1b1e28] hover:bg-white/5 text-white border border-white/5 rounded-md font-bold text-[12px] sm:text-[13px] px-3 transition-colors whitespace-nowrap"
-                        >
-                          Giriş yap
-                        </button>
-                        <button
-                          onClick={() => setAuthModalMode('register')}
-                          className="flex items-center justify-center h-[34px] md:h-[36px] bg-gradient-to-r from-[#00E5FF] to-[#00b3cc] hover:brightness-110 text-[#0A0D14] border border-transparent rounded-md font-extrabold text-[12px] sm:text-[13px] px-3 sm:px-4 transition-all whitespace-nowrap shadow-[0_0_15px_rgba(0,229,255,0.4)] hover:shadow-[0_0_25px_rgba(0,229,255,0.6)]"
-                        >
-                          Kaydolun
-                        </button>
-                      </div>
+                      <DemoBalanceDisplay 
+                        onLoginClick={() => setAuthModalMode('member')} 
+                        onRegisterClick={() => setAuthModalMode('register')} 
+                      />
                     </>
                   )}
                 </div>

@@ -8,7 +8,7 @@ const RED_NUMBERS = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 
 type BetType = 'red' | 'black' | 'even' | 'odd' | 'low' | 'high';
 
 export default function RouletteView({ siteUser, onAuthRequired }: any) {
-    const { playInstantGame } = useUser();
+    const { playInstantGame, isFunMode, demoBalance, setDemoBalance } = useUser();
     const [betAmount, setBetAmount] = useState<number>(0);
     const [selectedBet, setSelectedBet] = useState<BetType | null>(null);
     const [isPlaying, setIsPlaying] = useState(false);
@@ -18,9 +18,14 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
     const [winAmount, setWinAmount] = useState<number | null>(null);
 
     const handlePlay = async () => {
-        if (!siteUser) return onAuthRequired();
+        if (!isFunMode && !siteUser) return onAuthRequired();
         if (!selectedBet) {
             alert('Lütfen bir bahis türü seçin.');
+            return;
+        }
+        
+        if (isFunMode && betAmount > demoBalance) {
+            alert('Yetersiz demo bakiye.');
             return;
         }
 
@@ -29,24 +34,52 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
         setWinAmount(null);
 
         try {
-            // Convert selectedBet to payload format
-            let betPayload = {};
-            if (['red', 'black'].includes(selectedBet)) {
-                betPayload = { type: 'color', value: selectedBet, amount: betAmount };
-            } else {
-                // For simplicity, we can expand backend logic later for even/odd/low/high.
-                // Our current SQL backend only handles color/number.
-                // We'll treat unsupported as 0 win for now unless we update SQL.
-                // Actually, let's just send it. If SQL doesn't handle, win=0.
-                betPayload = { type: 'outside', value: selectedBet, amount: betAmount };
-            }
+            let winningNum: number;
+            let payout: number = 0;
 
-            const data = await playInstantGame(betAmount, 'Roulette', 0, 'none', { bets: [betPayload] });
-            const winningNum = data.result.number;
-            const payout = data.win_amount;
+            if (isFunMode) {
+                // --- DEMO (MOCK) LOGIC ---
+                setDemoBalance(prev => prev - betAmount);
+                winningNum = Math.floor(Math.random() * 37);
+                
+                // Demo Payout Calculation
+                if (['red', 'black'].includes(selectedBet)) {
+                    if (winningNum !== 0) {
+                        const isRedResult = RED_NUMBERS.includes(winningNum);
+                        if ((selectedBet === 'red' && isRedResult) || (selectedBet === 'black' && !isRedResult)) {
+                            payout = betAmount * 2;
+                        }
+                    }
+                } else if (['even', 'odd'].includes(selectedBet)) {
+                    if (winningNum !== 0) {
+                        const isEven = winningNum % 2 === 0;
+                        if ((selectedBet === 'even' && isEven) || (selectedBet === 'odd' && !isEven)) {
+                            payout = betAmount * 2;
+                        }
+                    }
+                } else if (['low', 'high'].includes(selectedBet)) {
+                    if (winningNum !== 0) {
+                        const isLow = winningNum >= 1 && winningNum <= 18;
+                        if ((selectedBet === 'low' && isLow) || (selectedBet === 'high' && !isLow)) {
+                            payout = betAmount * 2;
+                        }
+                    }
+                }
+            } else {
+                // --- REAL MONEY LOGIC ---
+                let betPayload = {};
+                if (['red', 'black'].includes(selectedBet)) {
+                    betPayload = { type: 'color', value: selectedBet, amount: betAmount };
+                } else {
+                    betPayload = { type: 'outside', value: selectedBet, amount: betAmount };
+                }
+
+                const data = await playInstantGame(betAmount, 'Roulette', 0, 'none', { bets: [betPayload] });
+                winningNum = data.result.number;
+                payout = data.win_amount;
+            }
             
             const winningIndex = ROULETTE_NUMBERS.indexOf(winningNum);
-            
             const segmentAngle = 360 / ROULETTE_NUMBERS.length;
             const spins = 5;
             const targetRotation = (spins * 360) - (winningIndex * segmentAngle);
@@ -56,6 +89,9 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
             setTimeout(() => {
                 setResultNumber(winningNum);
                 setWinAmount(payout);
+                if (isFunMode && payout > 0) {
+                    setDemoBalance(prev => prev + payout);
+                }
                 setIsPlaying(false);
             }, 4000);
             

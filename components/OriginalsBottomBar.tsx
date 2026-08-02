@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Maximize, Monitor, Star, BarChart2, Settings } from 'lucide-react';
+import { useUser } from '../contexts/UserContext';
 
 interface OriginalsBottomBarProps {
   gameName: string;
@@ -24,13 +25,13 @@ const OriginalsBottomBar: React.FC<OriginalsBottomBarProps> = ({
   onFavorite,
   onStats,
 }) => {
-  // Default: Eğlence Modu açık (false = demo)
-  const [isRealMoney, setIsRealMoney] = useState(false);
+  const { isFunMode, setIsFunMode } = useUser();
+  const isRealMoney = !isFunMode;
 
   const handleToggle = () => {
     if (isRealMoney) {
       // Gerçek paradan demo'ya geç — her zaman serbest
-      setIsRealMoney(false);
+      setIsFunMode(true);
       return;
     }
 
@@ -48,7 +49,7 @@ const OriginalsBottomBar: React.FC<OriginalsBottomBarProps> = ({
     }
 
     // Bakiye var → geç
-    setIsRealMoney(true);
+    setIsFunMode(false);
   };
 
   return (
