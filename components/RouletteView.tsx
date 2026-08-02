@@ -19,10 +19,12 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
     const [placedBets, setPlacedBets] = useState<PlacedBet[]>([]);
     const [selectedNumber, setSelectedNumber] = useState<number>(0);
     const [isPlaying, setIsPlaying] = useState(false);
+    const [isFastSpinning, setIsFastSpinning] = useState(false);
     
     const [spinRotation, setSpinRotation] = useState<number>(0);
     const [resultNumber, setResultNumber] = useState<number | null>(null);
     const [winAmount, setWinAmount] = useState<number | null>(null);
+    const [resultDetails, setResultDetails] = useState<{label: string, won: boolean, amount: number}[]>([]);
 
     const totalBetAmount = placedBets.reduce((sum, bet) => sum + bet.amount, 0);
 
@@ -64,8 +66,11 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
         }
 
         setIsPlaying(true);
+        setIsFastSpinning(true);
         setResultNumber(null);
         setWinAmount(null);
+        setResultDetails([]);
+        if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate([100, 50, 100]);
 
         try {
             let winningNum: number;
@@ -142,14 +147,59 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
             
             setSpinRotation(prev => prev + targetRotation + (360 - (prev % 360)));
 
+            const generateResultDetails = (winningNum: number) => {
+                return placedBets.map(bet => {
+                    let won = false;
+                    if (['red', 'black'].includes(bet.type)) {
+                        const isRedResult = RED_NUMBERS.includes(winningNum);
+                        won = winningNum !== 0 && ((bet.type === 'red' && isRedResult) || (bet.type === 'black' && !isRedResult));
+                    } else if (['even', 'odd'].includes(bet.type)) {
+                        const isEven = winningNum % 2 === 0;
+                        won = winningNum !== 0 && ((bet.type === 'even' && isEven) || (bet.type === 'odd' && !isEven));
+                    } else if (['low', 'high'].includes(bet.type)) {
+                        const isLow = winningNum >= 1 && winningNum <= 18;
+                        won = winningNum !== 0 && ((bet.type === 'low' && isLow) || (bet.type === 'high' && !isLow));
+                    } else if (['1st12', '2nd12', '3rd12'].includes(bet.type)) {
+                        const is1st = winningNum >= 1 && winningNum <= 12;
+                        const is2nd = winningNum >= 13 && winningNum <= 24;
+                        const is3rd = winningNum >= 25 && winningNum <= 36;
+                        won = winningNum !== 0 && ((bet.type === '1st12' && is1st) || (bet.type === '2nd12' && is2nd) || (bet.type === '3rd12' && is3rd));
+                    } else if (bet.type === 'number') {
+                        won = winningNum === bet.value;
+                    }
+                    
+                    let label = bet.type;
+                    if (bet.type === 'red') label = 'Kırmızı';
+                    if (bet.type === 'black') label = 'Siyah';
+                    if (bet.type === 'even') label = 'Çift';
+                    if (bet.type === 'odd') label = 'Tek';
+                    if (bet.type === 'low') label = '1-18';
+                    if (bet.type === 'high') label = '19-36';
+                    if (bet.type === '1st12') label = '1. Düzine';
+                    if (bet.type === '2nd12') label = '2. Düzine';
+                    if (bet.type === '3rd12') label = '3. Düzine';
+                    if (bet.type === 'number') label = `${bet.value}`;
+
+                    return { label, won, amount: bet.amount };
+                });
+            };
+
+            setTimeout(() => {
+                setIsFastSpinning(false);
+            }, 3000);
+
             setTimeout(() => {
                 setResultNumber(winningNum);
                 setWinAmount(totalPayout);
+                setResultDetails(generateResultDetails(winningNum));
                 if (isFunMode && totalPayout > 0) {
                     setDemoBalance(prev => prev + totalPayout);
                 }
                 setIsPlaying(false);
-            }, 4000);
+                if (typeof navigator !== 'undefined' && navigator.vibrate) {
+                    navigator.vibrate(totalPayout > 0 ? [200, 100, 200] : 200);
+                }
+            }, 5000);
             
         } catch (e: any) {
             alert(e.message || 'Hata oluştu');
@@ -428,7 +478,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                                         style={{ 
                                             transform: `rotate(${spinRotation}deg)`, 
                                             transformOrigin: '250px 250px',
-                                            transition: isPlaying ? 'transform 4000ms cubic-bezier(0.15, 0.9, 0.15, 1)' : 'none'
+                                            transition: isPlaying ? 'transform 5000ms cubic-bezier(0.4, 0, 0.2, 1)' : 'none'
                                         }}
                                     >
                                         {/* Sectors */}
@@ -499,6 +549,28 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                                         
                                         {/* Tiny Center Dot */}
                                         <circle cx="250" cy="250" r="15" fill="#00E5FF" opacity="0.8" filter="url(#neon-glow)" />
+
+                                        {/* Fast Spinning 724bets Logo overlay */}
+                                        <text
+                                            x="250"
+                                            y="250"
+                                            textAnchor="middle"
+                                            dominantBaseline="middle"
+                                            fill="#00E5FF"
+                                            fontSize="32"
+                                            fontWeight="900"
+                                            letterSpacing="2"
+                                            style={{
+                                                opacity: isFastSpinning ? 1 : 0,
+                                                transition: 'opacity 0.5s ease-in-out',
+                                                textShadow: '0 0 15px rgba(0,229,255,0.8)',
+                                                transform: `rotate(-${spinRotation}deg)`, // Counter-rotate so it stays readable or just spin wildly
+                                                transformOrigin: '250px 250px'
+                                            }}
+                                            filter="url(#neon-glow)"
+                                        >
+                                            724bets
+                                        </text>
                                     </g>
                                 </svg>
                             </div>
@@ -521,16 +593,30 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
 
                     {/* Result Display */}
                     {resultNumber !== null && !isPlaying && (
-                        <div className="absolute bottom-12 flex flex-col items-center animate-pop-in z-20">
-                            <div className={`w-28 h-28 rounded-full border-[6px] shadow-[0_20px_50px_rgba(0,0,0,0.8),inset_0_0_20px_rgba(0,0,0,0.5)] flex items-center justify-center text-5xl font-black text-white ${
+                        <div className="absolute bottom-8 flex flex-col items-center animate-pop-in z-20">
+                            <div className={`w-24 h-24 md:w-28 md:h-28 rounded-full border-[6px] shadow-[0_20px_50px_rgba(0,0,0,0.8),inset_0_0_20px_rgba(0,0,0,0.5)] flex items-center justify-center text-4xl md:text-5xl font-black text-white ${
                                 resultNumber === 0 ? 'bg-gradient-to-b from-[#00E5FF] to-[#0099aa] border-[#0A0D14] text-[#0A0D14] drop-shadow-[0_0_10px_rgba(0,229,255,0.8)]' : isRed(resultNumber) ? 'bg-gradient-to-b from-[#E11D48] to-[#9f1239] border-[#0A0D14]' : 'bg-gradient-to-b from-[#1F2937] to-[#111827] border-[#0A0D14]'
                             }`}>
                                 {resultNumber}
                             </div>
                             
-                            {winAmount !== null && winAmount > 0 && (
-                                <div className="mt-6 bg-[#00E5FF] text-[#0A0D14] font-black px-8 py-3 rounded-full uppercase tracking-[0.2em] text-sm animate-[pulse_2s_ease-in-out_infinite] border-2 border-white shadow-[0_0_30px_rgba(0,229,255,0.6)]">
+                            {winAmount !== null && winAmount > 0 ? (
+                                <div className="mt-4 bg-[#00E5FF] text-[#0A0D14] font-black px-6 md:px-8 py-2 md:py-3 rounded-full uppercase tracking-[0.2em] text-xs md:text-sm animate-[pulse_2s_ease-in-out_infinite] border-2 border-white shadow-[0_0_30px_rgba(0,229,255,0.6)]">
                                     Kazandın +₺{winAmount.toFixed(2)}
+                                </div>
+                            ) : (
+                                <div className="mt-4 bg-rose-500/90 text-white font-black px-6 md:px-8 py-2 md:py-3 rounded-full uppercase tracking-[0.2em] text-xs md:text-sm border border-rose-400 shadow-[0_0_20px_rgba(225,29,72,0.4)]">
+                                    Kaybettin
+                                </div>
+                            )}
+                            
+                            {resultDetails.length > 0 && (
+                                <div className="mt-3 bg-[#0A0D14]/95 border border-white/10 rounded-xl p-3 backdrop-blur-md shadow-xl flex flex-wrap gap-2 justify-center max-w-[90%] md:max-w-md">
+                                    {resultDetails.map((det, idx) => (
+                                        <div key={idx} className={`text-[10px] md:text-xs font-bold px-2.5 py-1 rounded-md ${det.won ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-rose-500/20 text-rose-400 border border-rose-500/30'}`}>
+                                            {det.label} {det.won ? '✅' : '❌'}
+                                        </div>
+                                    ))}
                                 </div>
                             )}
                         </div>
