@@ -2986,7 +2986,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
       </div>
       </div>
       
-      {view !== 'admin' && view !== 'sports' && view !== 'spor724' && view !== 'upcomingMatches' && (view === 'originals' ? <RetroFooter /> : <Footer />)}
+      {view !== 'admin' && view !== 'sports' && view !== 'spor724' && view !== 'upcomingMatches' && !['blackjack-pro', 'limbo', 'chicken-run', 'plinko', 'dice', 'mines', 'keno', 'war', 'hilo', 'roulette', 'crash-turbo', 'turbo-mines', 'hacksaw', 'redtiger', 'crash', '724tv'].includes(view) && (view === 'originals' ? <RetroFooter /> : <Footer />)}
           </main>
 
 
