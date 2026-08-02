@@ -421,22 +421,7 @@ export default function CrashGameView({ siteUser, setSiteUser, onAuthRequired, o
                     </div>
 
                     {/* Bottom Footer bar */}
-                    <div className="h-12 border-t border-[#1E2336] bg-[#0B0E14] flex items-center justify-between px-4 md:px-6 z-30 shrink-0">
-                        <button className="flex items-center justify-center w-8 h-8 rounded hover:bg-white/5 text-zinc-500 hover:text-white transition-colors group">
-                            <Settings className="w-4 h-4 group-hover:rotate-90 transition-transform" />
-                        </button>
-                        
-                        <div className="text-zinc-700 font-black text-lg md:text-xl tracking-tighter opacity-30 absolute left-1/2 -translate-x-1/2 flex flex-col items-center leading-none" style={{ fontFamily: 'Arial, sans-serif' }}>
-                            CRYPTO<span className="font-light text-[10px] md:text-xs tracking-widest mt-0.5">CASINO</span>
-                        </div>
 
-                        <div className="flex gap-2">
-                            <span className="text-zinc-500 text-[10px] md:text-xs font-bold mr-4 self-center">{t('Fairness', 'Fairness')}</span>
-                            <div className="w-8 h-8 rounded-full bg-[#00E5FF] text-black font-black flex items-center justify-center shadow-[0_0_10px_rgba(0,229,255,0.3)] text-[10px] cursor-pointer hover:bg-[#33edff] transition-colors">
-                                CHAT
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
     );

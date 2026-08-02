@@ -2437,6 +2437,9 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
                 'redtiger': 'RedTiger Slot',
                 'crash': 'Crash',
               }[view] || '724bets Originals'}
+              siteUser={siteUser}
+              onAuthRequired={() => setAuthModalMode('member')}
+              onDepositRequired={() => handleViewChange('profile')}
             />
           </div>
         )}

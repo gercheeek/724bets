@@ -207,6 +207,12 @@ export default function BlackjackProView({ siteUser, setSiteUser, onAuthRequired
     
     useEffect(() => { setDeck(shuffleDeck(buildShoe(6))); }, []);
 
+    useEffect(() => {
+        const handleOpenRules = () => setShowRules(true);
+        window.addEventListener('open-game-rules', handleOpenRules);
+        return () => window.removeEventListener('open-game-rules', handleOpenRules);
+    }, []);
+
     // Active hand reference
     const activeHand = playerHands[activeHandIndex];
 
@@ -808,17 +814,7 @@ export default function BlackjackProView({ siteUser, setSiteUser, onAuthRequired
 
             </div>
 
-            {/* Bottom Footer bar */}
-            <div className="absolute bottom-0 left-0 right-0 h-10 md:h-12 border-t border-[#2C3145] bg-[#1A1D29] flex items-center justify-between px-4 md:px-6 z-30">
-                <button onClick={() => setShowRules(true)} className="flex items-center gap-2 text-zinc-500 hover:text-white transition-colors group">
-                    <Settings className="w-4 h-4 group-hover:rotate-90 transition-transform" />
-                    <span className="text-xs font-bold uppercase tracking-wider hidden md:inline">{t('Kurallar', 'Kurallar')}</span>
-                </button>
-                <div className="text-zinc-600 font-black text-lg md:text-xl tracking-tighter" style={{ fontFamily: 'Arial, sans-serif' }}>
-                    724<span className="font-light opacity-50">BETS</span>
-                </div>
-                <span className="text-zinc-500 text-[10px] md:text-xs font-bold">{t('Fairness', 'Fairness')}</span>
-            </div>
+
 
             {/* Rules Modal */}
             {showRules && (
