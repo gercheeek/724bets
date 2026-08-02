@@ -472,6 +472,27 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                                             <stop offset="100%" stopColor="rgba(0,0,0,0.8)" />
                                         </radialGradient>
                                         <path id="wheel-text-path" d="M 250, 250 m -195, 0 a 195,195 0 1,1 390,0 a 195,195 0 1,1 -390,0" />
+                                        
+                                        <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" stopColor="#FDE047" />
+                                            <stop offset="50%" stopColor="#EAB308" />
+                                            <stop offset="100%" stopColor="#713F12" />
+                                        </linearGradient>
+                                        <linearGradient id="red-slice" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" stopColor="#ef4444" />
+                                            <stop offset="50%" stopColor="#be123c" />
+                                            <stop offset="100%" stopColor="#881337" />
+                                        </linearGradient>
+                                        <linearGradient id="black-slice" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" stopColor="#374151" />
+                                            <stop offset="50%" stopColor="#111827" />
+                                            <stop offset="100%" stopColor="#030712" />
+                                        </linearGradient>
+                                        <linearGradient id="green-slice" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" stopColor="#2dd4bf" />
+                                            <stop offset="50%" stopColor="#0f766e" />
+                                            <stop offset="100%" stopColor="#042f2e" />
+                                        </linearGradient>
                                     </defs>
                                     
                                     {/* Wheel Group - This rotates */}
