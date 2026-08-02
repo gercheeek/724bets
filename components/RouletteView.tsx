@@ -142,7 +142,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
             
             const winningIndex = ROULETTE_NUMBERS.indexOf(winningNum);
             const segmentAngle = 360 / ROULETTE_NUMBERS.length;
-            const spins = 5;
+            const spins = 12;
             const targetRotation = (spins * 360) - (winningIndex * segmentAngle);
             
             setSpinRotation(prev => prev + targetRotation + (360 - (prev % 360)));
@@ -186,7 +186,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
 
             setTimeout(() => {
                 setIsFastSpinning(false);
-            }, 3000);
+            }, 5500);
 
             setTimeout(() => {
                 setResultNumber(winningNum);
@@ -199,7 +199,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                 if (typeof navigator !== 'undefined' && navigator.vibrate) {
                     navigator.vibrate(totalPayout > 0 ? [200, 100, 200] : 200);
                 }
-            }, 5000);
+            }, 8000);
             
         } catch (e: any) {
             alert(e.message || 'Hata oluştu');
@@ -471,6 +471,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                                             <stop offset="95%" stopColor="rgba(255,255,255,0.05)" />
                                             <stop offset="100%" stopColor="rgba(0,0,0,0.8)" />
                                         </radialGradient>
+                                        <path id="wheel-text-path" d="M 250, 250 m -195, 0 a 195,195 0 1,1 390,0 a 195,195 0 1,1 -390,0" />
                                     </defs>
                                     
                                     {/* Wheel Group - This rotates */}
@@ -478,7 +479,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                                         style={{ 
                                             transform: `rotate(${spinRotation}deg)`, 
                                             transformOrigin: '250px 250px',
-                                            transition: isPlaying ? 'transform 5000ms cubic-bezier(0.4, 0, 0.2, 1)' : 'none'
+                                            transition: isPlaying ? 'transform 8000ms cubic-bezier(0.4, 0, 0.1, 1)' : 'none'
                                         }}
                                     >
                                         {/* Sectors */}
@@ -550,26 +551,22 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                                         {/* Tiny Center Dot */}
                                         <circle cx="250" cy="250" r="15" fill="#00E5FF" opacity="0.8" filter="url(#neon-glow)" />
 
-                                        {/* Fast Spinning 724bets Logo overlay */}
+                                        {/* Fast Spinning 724bets Logo overlay on Numbers */}
                                         <text
-                                            x="250"
-                                            y="250"
-                                            textAnchor="middle"
-                                            dominantBaseline="middle"
                                             fill="#00E5FF"
-                                            fontSize="32"
+                                            fontSize="22"
                                             fontWeight="900"
-                                            letterSpacing="2"
+                                            letterSpacing="8"
                                             style={{
-                                                opacity: isFastSpinning ? 1 : 0,
-                                                transition: 'opacity 0.5s ease-in-out',
-                                                textShadow: '0 0 15px rgba(0,229,255,0.8)',
-                                                transform: `rotate(-${spinRotation}deg)`, // Counter-rotate so it stays readable or just spin wildly
-                                                transformOrigin: '250px 250px'
+                                                opacity: isFastSpinning ? 1 : 0.05,
+                                                transition: 'opacity 1.5s ease-in-out',
+                                                textShadow: '0 0 10px rgba(0,229,255,0.8)'
                                             }}
                                             filter="url(#neon-glow)"
                                         >
-                                            724bets
+                                            <textPath href="#wheel-text-path" startOffset="0%">
+                                                724BETS  •  724BETS  •  724BETS  •  724BETS  •  724BETS  •  724BETS  •  724BETS  •  724BETS  •  
+                                            </textPath>
                                         </text>
                                     </g>
                                 </svg>
