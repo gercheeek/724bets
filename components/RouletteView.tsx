@@ -421,35 +421,35 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
             <div className="flex-1 flex flex-col w-full max-w-7xl mx-auto p-4 md:p-8">
                 
                 {/* ── HISTORY & STATS BAR ── */}
-                <div className="w-full flex justify-between items-center mb-6 pl-4">
+                <div className="w-full flex justify-between items-center mb-4 sm:mb-6 px-2 sm:px-4 gap-2">
                     {/* Left: Jackpot Chest */}
-                    <div className="relative flex items-center h-10 min-w-[140px] cursor-pointer hover:brightness-110 transition-all group">
+                    <div className="relative flex items-center h-8 sm:h-10 min-w-[100px] sm:min-w-[140px] cursor-pointer hover:brightness-110 transition-all group shrink-0">
                         <div 
-                            className="absolute right-0 h-[40px] w-full rounded-lg shadow-lg"
+                            className="absolute right-0 h-[32px] sm:h-[40px] w-full rounded-lg shadow-lg"
                             style={{ backgroundImage: `url(${ASSETS.amountPlaceholder})`, backgroundSize: '100% 100%', backgroundPosition: 'center' }}
                         ></div>
-                        <div className="relative z-10 w-full text-center pl-6 pr-2 font-black text-white text-[15px] drop-shadow-md">
+                        <div className="relative z-10 w-full text-center pl-4 sm:pl-6 pr-1 sm:pr-2 font-black text-white text-[12px] sm:text-[15px] drop-shadow-md">
                             ${jackpot.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
                         </div>
                         <img 
                             src={ASSETS.jackpotIcon} 
                             alt="Jackpot"
-                            className="absolute left-[-20px] top-1/2 -translate-y-1/2 h-14 z-20 drop-shadow-[0_5px_15px_rgba(0,0,0,0.5)] group-hover:scale-110 transition-transform" 
+                            className="absolute left-[-15px] sm:left-[-20px] top-1/2 -translate-y-1/2 h-10 sm:h-14 z-20 drop-shadow-[0_5px_15px_rgba(0,0,0,0.5)] group-hover:scale-110 transition-transform" 
                         />
                     </div>
                     
                     {/* Center: History Hexagons */}
-                    <div className="flex items-center gap-1.5 bg-[#0a0c10]/50 p-2 rounded-full border border-white/5">
+                    <div className="flex items-center gap-1 sm:gap-1.5 bg-[#0a0c10]/50 p-1.5 sm:p-2 rounded-full border border-white/5 overflow-x-auto custom-scrollbar flex-1 justify-end sm:justify-center mx-2">
                         {history.map((color, i) => (
                             <div 
                                 key={i} 
-                                className={`w-5 h-5 rounded-full shadow-inner ${color === 'red' ? 'bg-red-500' : (color === 'green' ? 'bg-green-500' : 'bg-gray-500')}`}
+                                className={`w-4 h-4 sm:w-5 sm:h-5 rounded-full shadow-inner shrink-0 ${color === 'red' ? 'bg-red-500' : (color === 'green' ? 'bg-green-500' : 'bg-gray-500')}`}
                             ></div>
                         ))}
                     </div>
 
-                    {/* Right: Last 100 Stats */}
-                    <div className="flex items-center gap-4 bg-[#171a21] border border-white/10 px-4 py-1.5 rounded-full shadow-lg text-sm font-bold">
+                    {/* Right: Last 100 Stats (Hidden on very small screens) */}
+                    <div className="hidden sm:flex items-center gap-4 bg-[#171a21] border border-white/10 px-4 py-1.5 rounded-full shadow-lg text-sm font-bold shrink-0">
                         <div className="flex items-center gap-1.5"><div className="w-3 h-3 rounded-sm bg-red-500"></div>48</div>
                         <div className="flex items-center gap-1.5"><div className="w-3 h-3 rounded-sm bg-green-500"></div>2</div>
                         <div className="flex items-center gap-1.5"><div className="w-3 h-3 rounded-sm bg-gray-500"></div>50</div>
@@ -457,7 +457,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                 </div>
 
                 {/* ── REEL CONTAINER ── */}
-                <div className="w-full relative h-[180px] bg-[#0a0c10] rounded-xl overflow-hidden border border-white/5 shadow-[0_15px_40px_rgba(0,0,0,0.6)] mb-4 flex items-center justify-center">
+                <div className="w-full relative h-[140px] sm:h-[180px] bg-[#0a0c10] rounded-xl overflow-hidden border border-white/5 shadow-[0_15px_40px_rgba(0,0,0,0.6)] mb-4 flex items-center justify-center">
                     
                     <div className="absolute inset-y-0 left-0 w-40 bg-gradient-to-r from-[#0a0c10] to-transparent z-10 pointer-events-none"></div>
                     <div className="absolute inset-y-0 right-0 w-40 bg-gradient-to-l from-[#0a0c10] to-transparent z-10 pointer-events-none"></div>
@@ -478,9 +478,9 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                                         <img 
                                             src={brick.color === 'red' ? ASSETS.brickRed : (brick.color === 'green' ? ASSETS.brickGreen : ASSETS.brickGrey)} 
                                             alt={brick.color} 
-                                            className={`w-[85px] object-contain drop-shadow-[0_10px_15px_rgba(0,0,0,0.5)] ${gameState === 'result' && idx !== 90 ? 'opacity-30' : ''} transition-opacity duration-500`} 
+                                            className={`w-[65px] sm:w-[85px] object-contain drop-shadow-[0_10px_15px_rgba(0,0,0,0.5)] ${gameState === 'result' && idx !== 90 ? 'opacity-30' : ''} transition-opacity duration-500`} 
                                         />
-                                        <div className="absolute inset-0 flex items-center justify-center font-black text-2xl text-white/90 drop-shadow-[0_3px_5px_rgba(0,0,0,0.9)]">
+                                        <div className="absolute inset-0 flex items-center justify-center font-black text-xl sm:text-2xl text-white/90 drop-shadow-[0_3px_5px_rgba(0,0,0,0.9)]">
                                             {brick.number}
                                         </div>
                                     </div>
@@ -511,7 +511,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
 
                 {/* ── BET CONTROLS ── */}
                 <div className={`w-full mb-6 flex flex-col items-center transition-opacity duration-300 ${gameState !== 'betting' ? 'opacity-40 pointer-events-none' : ''}`}>
-                    <div className="flex flex-wrap items-center gap-3 bg-[#171a21] p-3 rounded-xl border border-white/5 w-full shadow-xl">
+                    <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 bg-[#171a21] p-3 rounded-xl border border-white/5 w-full shadow-xl">
                         
                         <div className="flex-1 flex bg-[#0f1215] rounded-lg border border-white/10 overflow-hidden min-w-[200px]">
                             <div className="px-4 flex items-center justify-center bg-white/5"><img src={ASSETS.tanzanite} alt="$" className="h-4" /></div>
@@ -520,27 +520,28 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                                 value={betAmount}
                                 onChange={(e) => setBetAmount(Number(e.target.value))}
                                 placeholder="Tutar..."
-                                className="flex-1 bg-transparent text-white font-bold text-sm py-3 px-2 outline-none"
+                                className="flex-1 bg-transparent text-white font-bold text-sm py-3 px-2 outline-none w-full"
                             />
                         </div>
 
-                        <div className="flex flex-wrap gap-2 shrink-0">
-                            <button className="px-4 py-3 text-xs font-bold text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors bg-[#222730] shadow-inner" onClick={() => handleClearBets()}>Temizle</button>
-                            <button className="px-4 py-3 text-xs font-bold text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition-colors bg-[#222730] shadow-inner" onClick={() => setBetAmount(prev => prev + 10)}>+$10</button>
-                            <button className="px-4 py-3 text-xs font-bold text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition-colors bg-[#222730] shadow-inner" onClick={() => setBetAmount(prev => prev + 50)}>+$50</button>
-                            <button className="px-4 py-3 text-xs font-bold text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition-colors bg-[#222730] shadow-inner" onClick={() => setBetAmount(prev => prev + 100)}>+$100</button>
-                            <button className="px-4 py-3 text-xs font-bold text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition-colors bg-[#222730] shadow-inner" onClick={() => setBetAmount(prev => Math.max(1, prev / 2))}>1/2</button>
-                            <button className="px-4 py-3 text-xs font-bold text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition-colors bg-[#222730] shadow-inner" onClick={() => setBetAmount(prev => prev * 2)}>x2</button>
-                            <button className="px-4 py-3 text-xs font-bold text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition-colors bg-[#222730] shadow-inner" onClick={() => {
+                        <div className="grid grid-cols-4 sm:flex sm:flex-wrap gap-2 shrink-0">
+                            <button className="px-2 py-2 sm:px-4 sm:py-3 text-[10px] sm:text-xs font-bold text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors bg-[#222730] shadow-inner" onClick={() => handleClearBets()}>Temizle</button>
+                            <button className="px-2 py-2 sm:px-4 sm:py-3 text-[10px] sm:text-xs font-bold text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition-colors bg-[#222730] shadow-inner" onClick={() => setBetAmount(prev => prev + 10)}>+$10</button>
+                            <button className="px-2 py-2 sm:px-4 sm:py-3 text-[10px] sm:text-xs font-bold text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition-colors bg-[#222730] shadow-inner" onClick={() => setBetAmount(prev => prev + 50)}>+$50</button>
+                            <button className="px-2 py-2 sm:px-4 sm:py-3 text-[10px] sm:text-xs font-bold text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition-colors bg-[#222730] shadow-inner" onClick={() => setBetAmount(prev => prev + 100)}>+$100</button>
+                            <button className="px-2 py-2 sm:px-4 sm:py-3 text-[10px] sm:text-xs font-bold text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition-colors bg-[#222730] shadow-inner" onClick={() => setBetAmount(prev => Math.max(1, prev / 2))}>1/2</button>
+                            <button className="px-2 py-2 sm:px-4 sm:py-3 text-[10px] sm:text-xs font-bold text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition-colors bg-[#222730] shadow-inner" onClick={() => setBetAmount(prev => prev * 2)}>x2</button>
+                            <button className="px-2 py-2 sm:px-4 sm:py-3 text-[10px] sm:text-xs font-bold text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition-colors bg-[#222730] shadow-inner" onClick={() => {
                                 const bal = isFunMode ? demoBalance : (siteUser?.balance || 0);
                                 setBetAmount(Math.min(bal, MAX_BET));
                             }}>Max</button>
                             <button 
-                                className={`px-4 py-3 text-xs font-bold rounded-lg transition-colors border ml-2 flex items-center gap-2 ${isAutoBetOpen ? 'text-gray-300 bg-[#222730] border-white/10 hover:bg-white/10' : 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20 hover:text-emerald-300'}`}
+                                className={`px-2 py-2 sm:px-4 sm:py-3 text-[10px] sm:text-xs font-bold rounded-lg transition-colors border flex items-center justify-center gap-1 sm:gap-2 ${isAutoBetOpen ? 'text-gray-300 bg-[#222730] border-white/10 hover:bg-white/10' : 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20 hover:text-emerald-300'}`}
                                 onClick={() => setIsAutoBetOpen(!isAutoBetOpen)}
                             >
                                 <span>{isAutoBetOpen ? '-' : '+'}</span>
-                                Otomatik bahis
+                                <span className="hidden sm:inline">Otomatik bahis</span>
+                                <span className="sm:hidden">Oto</span>
                             </button>
                         </div>
                     </div>
@@ -764,7 +765,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                                 </div>
                             </div>
                             
-                            <div className="flex-1 overflow-y-auto pr-1 space-y-1 h-[140px] custom-scrollbar">
+                            <div className="flex-1 overflow-y-auto pr-1 space-y-1 h-[100px] sm:h-[140px] custom-scrollbar">
                                 {/* User Bet */}
                                 {getBetAmount('red') > 0 && (
                                     <div className="flex justify-between items-center py-1">
@@ -816,7 +817,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                                 </div>
                             </div>
                             
-                            <div className="flex-1 overflow-y-auto pr-1 space-y-1 h-[140px] custom-scrollbar">
+                            <div className="flex-1 overflow-y-auto pr-1 space-y-1 h-[100px] sm:h-[140px] custom-scrollbar">
                                 {/* User Bet */}
                                 {getBetAmount('green') > 0 && (
                                     <div className="flex justify-between items-center py-1">
@@ -868,7 +869,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                                 </div>
                             </div>
                             
-                            <div className="flex-1 overflow-y-auto pr-1 space-y-1 h-[140px] custom-scrollbar">
+                            <div className="flex-1 overflow-y-auto pr-1 space-y-1 h-[100px] sm:h-[140px] custom-scrollbar">
                                 {/* User Bet */}
                                 {getBetAmount('black') > 0 && (
                                     <div className="flex justify-between items-center py-1">
