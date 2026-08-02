@@ -458,19 +458,6 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                     </div>
                 </div>
 
-                {/* ── GAMECHECK & TRUSTPILOT BOTTOM AREA ── */}
-                <div className="w-full flex flex-col md:flex-row items-center justify-center gap-8 mt-12 py-8 border-t border-white/5">
-                    <div className="flex items-center gap-2 px-6 py-2 rounded-full border border-green-900/50 bg-[#0a0c10] opacity-80 hover:opacity-100 transition-opacity cursor-pointer">
-                        <div className="w-8 h-8 rounded-full bg-green-900/50 flex items-center justify-center">
-                            <span className="text-green-500 font-bold text-xl">✓</span>
-                        </div>
-                        <span className="font-black text-gray-400 tracking-wider text-sm">GAME<span className="text-gray-600">CHECK</span></span>
-                    </div>
-                    <div className="flex items-center opacity-50 hover:opacity-100 transition-opacity cursor-pointer">
-                        <img src="https://gamdom.com/static/img/trustpilot-logo.svg" alt="Trustpilot" className="h-6" />
-                    </div>
-                </div>
-
                 {/* WIN/LOSS Overlay */}
                 {gameState === 'result' && winAmount !== null && (
                     <div className="fixed top-[30%] left-1/2 -translate-x-1/2 z-50 animate-pop-in pointer-events-none">
