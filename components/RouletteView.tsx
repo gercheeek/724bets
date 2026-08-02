@@ -436,9 +436,37 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                         <span className="text-gray-300 font-bold text-xs uppercase tracking-wider">Adil Oyun</span>
                     </div>
 
-                    {/* Premium Wheel Container */}
-                    <div className="relative w-[340px] h-[340px] md:w-[600px] md:h-[600px] mt-10 mb-6 flex-1 shrink-0">
-                        <svg width="100%" height="100%" viewBox="0 0 600 600" className="drop-shadow-2xl" style={{ filter: 'drop-shadow(0 0 40px rgba(0,0,0,0.9))' }}>
+                    {/* Premium 3D Wheel Container */}
+                    <div 
+                        className="relative w-[340px] h-[340px] md:w-[600px] md:h-[600px] mt-10 mb-12 flex-1 shrink-0 flex items-center justify-center"
+                        style={{ perspective: '1500px' }}
+                    >
+                        {/* The 3D Tilted Base */}
+                        <div 
+                            className="relative w-full h-full"
+                            style={{ 
+                                transform: 'rotateX(55deg) translateY(-20px)', 
+                                transformStyle: 'preserve-3d',
+                            }}
+                        >
+                            {/* Table Cast Shadow */}
+                            <div 
+                                className="absolute inset-0 rounded-full bg-black blur-2xl" 
+                                style={{ transform: 'translateZ(-60px) scale(1.05)' }} 
+                            />
+                            {/* 3D Cylinder Thickness (Under the wheel) */}
+                            <div 
+                                className="absolute inset-0 rounded-full bg-gradient-to-b from-[#3a1d0b] to-[#0d0501] shadow-[inset_0_-10px_30px_rgba(0,0,0,0.9)]" 
+                                style={{ transform: 'translateZ(-40px)' }} 
+                            />
+                            <div 
+                                className="absolute inset-0 rounded-full bg-[#1a0b02]" 
+                                style={{ transform: 'translateZ(-20px)' }} 
+                            />
+                            
+                            {/* The Actual Wheel SVG on top */}
+                            <div className="absolute inset-0 rounded-full" style={{ transform: 'translateZ(0px)', transformStyle: 'preserve-3d' }}>
+                                <svg width="100%" height="100%" viewBox="0 0 600 600" className="drop-shadow-2xl" style={{ filter: 'drop-shadow(0 0 20px rgba(0,0,0,0.9))' }}>
                             <defs>
                                 <radialGradient id="wood-frame" cx="50%" cy="50%" r="50%">
                                     <stop offset="70%" stopColor="#2c1405" />
@@ -583,7 +611,9 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                                     style={{ transition: isPlaying ? 'cy 0.1s, r 0.1s' : 'cy 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), r 0.4s ease-out' }}
                                 />
                             </g>
-                        </svg>
+                                </svg>
+                            </div>
+                        </div>
                     </div>
 
                     {/* Result Display */}
