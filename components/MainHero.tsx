@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, ChevronDown, Gamepad2, Trophy } from 'lucide-react';
+import { ArrowRight, ChevronDown, Gamepad2, Trophy, Bitcoin, Wallet } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 interface MainHeroProps {
@@ -14,12 +14,19 @@ export default function MainHero({ onRegisterClick, onNavigate }: MainHeroProps)
       
       {/* Left Content Area (Text + Buttons) */}
       <div className="w-full xl:w-[50%] min-w-0 flex flex-col items-start text-left pr-0 xl:pr-8 relative z-10">
-        {/* Ambient Blue Orb Behind Text */}
-        <div className="absolute top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[150px] h-[150px] lg:w-[300px] lg:h-[300px] bg-[#00E5FF]/20 rounded-full blur-[60px] lg:blur-[80px] pointer-events-none animate-pulse-slow" />
+        {/* Ambient Orb Behind Text - Mixed Cyan/Gold */}
+        <div className="absolute top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[150px] h-[150px] lg:w-[300px] lg:h-[300px] bg-[#00E5FF]/10 rounded-full blur-[60px] lg:blur-[80px] pointer-events-none animate-pulse-slow" />
+        <div className="absolute top-1/4 left-1/3 -translate-x-1/2 -translate-y-1/2 w-[150px] h-[150px] lg:w-[250px] lg:h-[250px] bg-yellow-500/15 rounded-full blur-[60px] lg:blur-[80px] pointer-events-none animate-pulse-slow" style={{ animationDelay: '2s' }} />
         
+        {/* Crypto Badge */}
+        <div className="flex items-center gap-2 mb-3 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/20 w-fit px-3 py-1.5 rounded-full opacity-0 animate-[fade-in-up_0.8s_ease-out_forwards]">
+          <Bitcoin className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-500" />
+          <span className="text-yellow-500 text-[10px] sm:text-xs font-bold uppercase tracking-wider drop-shadow-md">Kripto ile Anında İşlem</span>
+        </div>
+
         {/* Title */}
         <h1 
-          className="text-[28px] sm:text-4xl xl:text-[40px] 2xl:text-[50px] font-black leading-[1.15] xl:leading-[1.2] mb-3 xl:mb-4 font-sans tracking-tight w-full drop-shadow-[0_0_30px_rgba(0,229,255,0.15)] relative z-10 bg-clip-text text-transparent bg-gradient-to-br from-white via-[#f0f8ff] to-[#a0c4ff] bg-[length:200%_auto] animate-[bg-gradient_5s_ease-in-out_infinite,fade-in-up_0.8s_ease-out_forwards] opacity-0"
+          className="text-[28px] sm:text-4xl xl:text-[40px] 2xl:text-[50px] font-black leading-[1.15] xl:leading-[1.2] mb-3 xl:mb-4 font-sans tracking-tight w-full drop-shadow-[0_0_30px_rgba(234,179,8,0.15)] relative z-10 bg-clip-text text-transparent bg-gradient-to-br from-white via-yellow-100 to-yellow-400 bg-[length:200%_auto] animate-[bg-gradient_5s_ease-in-out_infinite,fade-in-up_0.8s_ease-out_forwards] opacity-0"
         >
         {t('home.hero_title_1')} <br className="hidden md:block" /> {t('home.hero_title_2')}
       </h1>
