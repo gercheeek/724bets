@@ -243,22 +243,13 @@ export default function CasinoLobby({
     return arr;
   };
 
-  const getBaseGames = () => {
-    return [...ALL_GAMES, ...DEMO_GAMES, ...dynamicOriginals, ...customGames.map(cg => ({ ...cg, img: cg.image, category: cg.lobbyCategory || 'slots' }))]
-      .filter(g => {
-        const cat = (g.category || '').toLowerCase();
-        const isSport = cat.includes('sport') || cat.includes('virtual') || cat === 'spor';
-        const isSportImage = g.img && g.img.includes('sports_');
-        return !isSport && !isSportImage;
-      });
-  };
-
   const handleShuffle = () => {
-    setShuffledAllGames(shuffleGamesList(getBaseGames()));
+    const games = [...ALL_GAMES, ...DEMO_GAMES, ...dynamicOriginals, ...customGames.map(cg => ({ ...cg, img: cg.image, category: cg.lobbyCategory || 'slots' }))];
+    setShuffledAllGames(shuffleGamesList(games));
   };
 
   useEffect(() => {
-    const games = getBaseGames();
+    const games = [...ALL_GAMES, ...DEMO_GAMES, ...dynamicOriginals, ...customGames.map(cg => ({ ...cg, img: cg.image, category: cg.lobbyCategory || 'slots' }))];
     const newPool = games.filter(g => g.category === 'new' || g.isNew);
     const popularPool = games.filter(g => g.isPopular);
     
@@ -312,7 +303,7 @@ export default function CasinoLobby({
   };
 
   // Combine ALL_GAMES, DEMO_GAMES, dynamicOriginals, and customGames
-  const allGames = getBaseGames();
+  const allGames = [...ALL_GAMES, ...DEMO_GAMES, ...dynamicOriginals, ...customGames.map(cg => ({ ...cg, img: cg.image, category: cg.lobbyCategory || 'slots' }))];
 
   const filteredGames = (activeTab === 'all' && shuffledAllGames.length > 0 ? shuffledAllGames : allGames).filter(game => {
     let matchesTab = false;
