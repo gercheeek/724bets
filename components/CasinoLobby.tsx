@@ -225,6 +225,7 @@ export default function CasinoLobby({
     }
   }, [initialTab]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [showProviders, setShowProviders] = useState(false);
   const [currentBanner, setCurrentBanner] = useState(0);
   const [selectedGame, setSelectedGame] = useState<any>(null);
   const [showDemoIframe, setShowDemoIframe] = useState(false);
@@ -317,7 +318,9 @@ export default function CasinoLobby({
     } else {
       matchesTab = game.category === activeTab;
     }
-    const matchesSearch = !searchQuery || (game.name && game.name.toLowerCase().includes(searchQuery.toLowerCase()));
+    const matchesSearch = !searchQuery || 
+      (game.name && game.name.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (game.provider && game.provider.toLowerCase().includes(searchQuery.toLowerCase()));
     return matchesTab && matchesSearch;
   });
 
@@ -436,39 +439,44 @@ export default function CasinoLobby({
           </div>
         )}
 
-        {/* 2.5 PROVIDERS SLIDER */}
-        {activeTab === 'all' && !searchQuery && (
-          <div className="mb-8">
-            <div className="flex items-center justify-between mb-4 mt-4">
-              <div className="flex items-center gap-2">
-                <div className="text-[#00E5FF] drop-shadow-[0_0_8px_rgba(0,229,255,0.5)]"><Sparkles size={18} /></div>
-                <h2 className="text-white text-lg font-black tracking-tight drop-shadow-md">Oyun Sağlayıcıları</h2>
-              </div>
-            </div>
-            <div className="flex gap-4 overflow-x-auto hide-scrollbar snap-x snap-mandatory pb-4">
-              {[
-                { id: 'pragmatic', name: 'Pragmatic Play', img: '/images/providers/pragmatic.svg', fallback: 'PRAGMATIC' },
-                { id: 'egt', name: 'Amusnet (EGT)', img: '/images/providers/egt.svg', fallback: 'AMUSNET' },
-                { id: 'hacksaw', name: 'Hacksaw Gaming', img: '/images/providers/hacksaw.svg', fallback: 'HACKSAW' },
-                { id: 'evolution', name: 'Evolution', img: '/images/providers/evolution.svg', fallback: 'EVOLUTION' },
-                { id: 'netent', name: 'NetEnt', img: '/images/providers/netent.svg', fallback: 'NETENT' },
-                { id: 'nolimit', name: 'Nolimit City', img: '/images/providers/nolimit.svg', fallback: 'NOLIMIT' },
-                { id: 'playngo', name: 'Play\'n GO', img: '/images/providers/playngo.svg', fallback: 'PLAYNGO' }
-              ].map(p => (
-                <button key={p.id} onClick={() => setSearchQuery(p.name)} className="snap-start shrink-0 w-32 h-16 bg-[#0A0D14] border border-white/5 hover:border-[#00E5FF]/30 hover:shadow-[0_0_15px_rgba(0,229,255,0.2)] rounded-lg flex items-center justify-center transition-all duration-300 group">
-                  <span className="font-black text-[#848B9D] group-hover:text-white transition-colors">{p.fallback}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-
         {/* 3. FILTERS AND SEARCH */}
-        <div className="flex flex-col md:flex-row items-center justify-center gap-4 mb-8">
-          <button className="w-full md:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-[#0A0D14] hover:bg-[#111622] border border-white/5 hover:border-[#00E5FF]/30 shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)] rounded-lg text-white font-bold transition-all duration-300">
-            <Filter size={18} className="text-[#00E5FF]" />
-            Sağlayıcılar
-          </button>
+        <div className="flex flex-col md:flex-row items-center justify-center gap-4 mb-8 relative z-50">
+          <div className="relative w-full md:w-auto">
+            <button 
+              onClick={() => setShowProviders(!showProviders)}
+              className="w-full md:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-[#0A0D14] hover:bg-[#111622] border border-white/5 hover:border-[#00E5FF]/30 shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)] rounded-lg text-white font-bold transition-all duration-300"
+            >
+              <Filter size={18} className="text-[#00E5FF]" />
+              Sağlayıcılar
+            </button>
+            
+            {showProviders && (
+              <div className="absolute top-full left-0 md:left-auto md:right-auto mt-2 w-full md:w-64 bg-[#0F121A] border border-white/10 rounded-lg shadow-[0_10px_40px_rgba(0,0,0,0.8)] py-2 z-50 animate-fade-in backdrop-blur-xl">
+                {[
+                  { id: 'all', name: 'Tüm Sağlayıcılar', search: '' },
+                  { id: 'pragmatic', name: 'Pragmatic Play', search: 'Pragmatic' },
+                  { id: 'egt', name: 'Amusnet (EGT)', search: 'Amusnet' },
+                  { id: 'hacksaw', name: 'Hacksaw Gaming', search: 'Hacksaw' },
+                  { id: 'evolution', name: 'Evolution', search: 'Evolution' },
+                  { id: 'netent', name: 'NetEnt', search: 'NetEnt' },
+                  { id: 'nolimit', name: 'Nolimit City', search: 'Nolimit' },
+                  { id: 'playngo', name: 'Play\'n GO', search: 'Play' }
+                ].map(p => (
+                  <button 
+                    key={p.id}
+                    onClick={() => {
+                      setSearchQuery(p.search);
+                      setShowProviders(false);
+                    }}
+                    className="w-full text-left px-4 py-3 text-sm font-bold text-[#848B9D] hover:text-white hover:bg-[#1A1F2D] hover:pl-6 transition-all duration-300 flex items-center gap-3 border-l-2 border-transparent hover:border-[#00E5FF]"
+                  >
+                    <div className="w-1.5 h-1.5 rounded-full bg-[#00E5FF]/50 shadow-[0_0_5px_#00E5FF]" />
+                    {p.name}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
 
           {activeTab === 'all' && (
             <button 
