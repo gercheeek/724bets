@@ -299,7 +299,10 @@ const InGameLayout: React.FC<InGameLayoutProps> = ({ children, siteUser, onViewC
               <ModernChat 
                 open={true}
                 onOpen={() => {}}
-                onClose={() => {}}
+                onClose={() => {
+                  setIsMobileRightOpen(false);
+                  setShowRightPanel(false);
+                }}
                 siteUser={siteUser}
                 userRole={siteUser?.role || 'user'}
                 isMobile={false}

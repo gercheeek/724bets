@@ -368,8 +368,8 @@ const Header: React.FC<HeaderProps> = ({
           }
         `}</style>
 
-      <div className="header-topbar relative w-full h-[72px] bg-[#05070a]/60 backdrop-blur-xl border-b border-white/5 flex z-50 transition-colors duration-300 shadow-[0_4px_30px_rgba(0,0,0,0.1)]">
-        <div className="w-full max-w-[1280px] mx-auto h-full flex items-center justify-between relative px-2 md:px-6">
+      <div className="header-topbar relative w-full h-[72px] bg-[#0A0D14] border-b border-white/5 flex z-50 transition-colors duration-300 shadow-[0_4px_30px_rgba(0,0,0,0.1)]">
+        <div className="w-full max-w-[1280px] mx-auto h-full flex items-center justify-between relative px-4 md:px-8 xl:px-12">
             
             {/* Left Section: Logo */}
             <div className="flex items-center h-full shrink-0">
@@ -483,10 +483,7 @@ const Header: React.FC<HeaderProps> = ({
                 </button>
               </div>
 
-              {/* Chat Icon */}
-              <button onClick={onSupportClick} className="hidden lg:flex w-10 h-10 items-center justify-center bg-[#1b2230] hover:bg-[#252e42] transition-colors rounded-lg text-gray-400 hover:text-white ml-2">
-                <MessageSquare className="w-5 h-5" />
-              </button>
+
 
               <div className="relative" ref={profileRef}>
                 {/* User Avatar Block */}
@@ -593,10 +590,6 @@ const Header: React.FC<HeaderProps> = ({
                 {tI18n('header.register')}
               </button>
 
-              {/* Chat Icon */}
-              <button onClick={onSupportClick} className="hidden lg:flex w-11 h-full items-center justify-center bg-[#1b2230] hover:bg-[#252e42] transition-colors rounded-[8px] text-gray-400 hover:text-white">
-                <MessageSquare className="w-5 h-5" />
-              </button>
             </div>
           )}
         </div>

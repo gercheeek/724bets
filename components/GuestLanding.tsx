@@ -20,12 +20,13 @@ import AnimatedCyberBackground from './AnimatedCyberBackground';
 import LiveWinsTicker from './LiveWinsTicker';
 import DynamicNewGames from './DynamicNewGames';
 import DynamicPopularGames from './DynamicPopularGames';
+import DynamicSlotsGames from './DynamicSlotsGames';
 import EmptySectionX from './EmptySectionX';
-import VIPHeroBanner from './VIPHeroBanner';
 import { PopularLiveWidget } from './PopularLiveWidget';
-import MainHero from './MainHero';
+import EsportsPromoBanner from './EsportsPromoBanner';
 import FeaturedCombos from './sports/FeaturedCombos';
 import { UpcomingTournamentsWidget } from './UpcomingTournamentsWidget';
+import { TopMatchesWidget } from './sports/TopMatchesWidget';
 import { useBetting } from '../contexts/BettingContext';
 
 const getDemoUrl = (game: any): string | null => {
@@ -148,7 +149,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
   const [heroImageIndex, setHeroImageIndex] = useState(0);
   const { t } = useLanguage();
   const { events } = useBetting();
-  const matches: any[] = []; // Fallback for featured combos in guest view
+  const matches = events || []; // Use real betting events for widgets
   const setSelectedMatch = (m: any) => {};
     useEffect(() => {
         const timer = setInterval(() => {
@@ -411,19 +412,21 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
         </>
       ) : (
         // GUEST VIEW (NEW DESIGN - Matches reference)
-        <div className="w-full max-w-[1400px] mx-auto px-4 lg:px-6 pt-2 md:pt-3 pb-2 md:pb-4 flex flex-col">
-            {/* MAIN HERO SECTION */}
-            <MainHero 
-              onRegisterClick={onMemberRegisterClick} 
-              onNavigate={(v) => onViewChange?.(v)} 
-            />
+        <div className="w-full max-w-[1280px] mx-auto px-4 md:px-8 xl:px-12 pt-1 pb-6 flex flex-col">
+            <EsportsPromoBanner onRegisterClick={onMemberRegisterClick} />
 
             {/* Banners moved to sports section as requested */}
 
 
 
-            <div className="w-full mt-2 mb-6 sm:mt-4 sm:mb-8 flex flex-col gap-8 md:gap-12">
+            <div className="w-full mt-2 mb-6 sm:mt-4 sm:mb-8 flex flex-col gap-3 md:gap-5">
               <LiveWinsTicker />
+              <OriginalsSlider onNavigate={onViewChange} />
+              
+              <div className="w-full">
+                <LiveGamesSlider onPlayGame={(game) => { setSelectedGame(game); setShowDemoIframe(true); }} />
+              </div>
+              
               <DynamicPopularGames onGameSelect={(game) => {
                 setSelectedGame({
                   ...game,
@@ -437,7 +440,18 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                 setShowDemoIframe(true);
               }} onViewChange={onViewChange} />
               
-              <OriginalsSlider onNavigate={onViewChange} />
+              <DynamicSlotsGames onGameSelect={(game) => {
+                setSelectedGame({
+                  ...game,
+                  img: game.image || game.img,
+                  category: 'slots',
+                  players: game.players,
+                  customDemoUrl: game.customDemoUrl,
+                  demoUrl: game.customDemoUrl,
+                  demoSymbol: game.demoSymbol
+                } as any);
+                setShowDemoIframe(true);
+              }} onViewChange={onViewChange} />
               
               <DynamicNewGames onGameSelect={(game) => {
                 setSelectedGame({
@@ -463,7 +477,21 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                 />
               </div>
               
+              <div className="w-full">
+                <TopMatchesWidget 
+                  matches={matches}
+                  onSelectMatch={(m) => {
+                    setSelectedMatch(m);
+                    onViewChange('sports');
+                  }}
+                />
+              </div>
+              
               <UpcomingTournamentsWidget onViewChange={onViewChange} />
+              
+              <div className="w-full">
+                <LiveBetsTable />
+              </div>
             </div>
 
 
@@ -486,10 +514,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
         }} 
       />
 
-      {/* Live Games Slider */}
-      <div className="w-full">
-        <LiveGamesSlider onPlayGame={(game) => { setSelectedGame(game); setShowDemoIframe(true); }} />
-      </div>
+
 
       {/* Live Bets and Leaderboards */}
       {/* Removed empty pb-8 div to fix giant gap */}

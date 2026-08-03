@@ -158,7 +158,8 @@ export const DualRightPanel: React.FC<{
   language: string;
   isOpenMobile?: boolean;
   onCloseMobile?: () => void;
-}> = ({ language, isOpenMobile, onCloseMobile }) => {
+  currentView?: string;
+}> = ({ language, isOpenMobile, onCloseMobile, currentView }) => {
   const { t } = useTranslation();
   const { betSlip, betAmount, setBetAmount, removeSelection, clearBetSlip, totalOdds, potentialPayout, accumulatorBoost, betType, setBetType, isLocked } = useBetSlip();
   const { siteUser, placeBet } = useUser();
@@ -167,9 +168,17 @@ export const DualRightPanel: React.FC<{
   const [showStamp, setShowStamp] = useState(false);
   const [isConfirmingBet, setIsConfirmingBet] = useState(false);
 
+  const isSports = ['sports', 'spor724', 'canli-bahis', 'gercek', 'spor', 'upcomingMatches'].includes(currentView || 'sports');
+
   React.useEffect(() => {
     setIsConfirmingBet(false);
   }, [betSlip, betAmount]);
+
+  React.useEffect(() => {
+    if (!isSports) {
+      setActivePanel('chat');
+    }
+  }, [isSports]);
 
   const prevBetSlipLen = React.useRef(betSlip.length);
   React.useEffect(() => {
@@ -506,7 +515,9 @@ export const DualRightPanel: React.FC<{
         ) : (
           <ModernChat 
             open={true}
-            onClose={() => {}}
+            onClose={() => {
+              if (onCloseMobile) onCloseMobile();
+            }}
             siteUser={siteUser}
             userRole={null}
             isMobile={true}
@@ -515,52 +526,45 @@ export const DualRightPanel: React.FC<{
         )}
       </div>
 
-      {/* ═══════════ STICKY BOTTOM TOGGLE BAR ═══════════ */}
-      <div className={`shrink-0 bg-[#0A0D14] border-t border-white/5 relative z-50 shadow-[0_-10px_30px_rgba(0,0,0,0.8)] transition-all duration-300 overflow-hidden ${activePanel === 'coupon' && betSlip.length > 0 ? 'h-0 p-0 border-t-0 opacity-0' : 'h-[70px] p-3 opacity-100'}`}>
-        {activePanel === 'coupon' ? (
-          <button onClick={() => setActivePanel('chat')} className="w-full h-[46px] bg-gradient-to-r from-[#00E5FF] to-[#00b3cc] rounded-xl flex items-center justify-center gap-2 transition-all shadow-[0_4px_15px_rgba(0,229,255,0.4)] hover:shadow-[0_4px_25px_rgba(0,229,255,0.6)] group relative overflow-hidden active:scale-[0.98]">
-            <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-            <MessageCircle className="w-5 h-5 text-[#0A0D14] group-hover:scale-110 transition-transform relative z-10" />
-            <span className="text-[#0A0D14] text-[14px] font-black tracking-wide uppercase relative z-10">{t('bet_slip.chat_button')}</span>
-          </button>
-        ) : (
-          <div className="flex items-center justify-between w-full h-full px-2 pb-2">
-            <button className="flex flex-col items-center justify-center gap-1 text-zinc-500 hover:text-white transition-colors flex-1">
-              <Home className="w-[18px] h-[18px]" />
-              <span className="text-[9px] font-medium tracking-wide">{t('nav.lobby', 'Lobi')}</span>
+      {/* ═══════════ STICKY BOTTOM TOGGLE BAR (SPORTS ONLY) ═══════════ */}
+      {isSports && (
+        <div className={`shrink-0 bg-[#0A0D14] border-t border-white/5 relative z-50 shadow-[0_-10px_30px_rgba(0,0,0,0.8)] transition-all duration-300 overflow-hidden h-[70px] p-3 opacity-100`}>
+          <div className="flex items-center justify-between w-full h-full bg-[#131823] p-1 rounded-xl border border-white/5">
+            
+            <button 
+              onClick={() => setActivePanel('chat')}
+              className={`flex items-center justify-center gap-2 flex-1 h-full rounded-lg transition-all ${activePanel === 'chat' ? 'bg-[#00E5FF]/20 text-[#00E5FF] shadow-[inset_0_0_15px_rgba(0,229,255,0.2)] font-bold' : 'text-zinc-500 hover:text-zinc-300 font-medium'}`}
+            >
+              <MessageCircle className={`w-[18px] h-[18px] ${activePanel === 'chat' ? 'text-[#00E5FF]' : ''}`} />
+              <span className="text-[12px] tracking-wide">Sohbet</span>
             </button>
-            <button className="flex flex-col items-center justify-center gap-1 text-zinc-500 hover:text-white transition-colors flex-1">
-              <Gamepad2 className="w-[18px] h-[18px]" />
-              <span className="text-[9px] font-medium tracking-wide">{t('nav.esports', 'E-Sporlar')}</span>
-            </button>
+            
             <button 
               onClick={() => setActivePanel('mybets')}
-              className="flex flex-col items-center justify-center gap-1 text-zinc-500 hover:text-white transition-colors flex-1"
+              className={`flex items-center justify-center gap-2 flex-1 h-full rounded-lg transition-all ${activePanel === 'mybets' ? 'bg-[#00E5FF]/20 text-[#00E5FF] shadow-[inset_0_0_15px_rgba(0,229,255,0.2)] font-bold' : 'text-zinc-500 hover:text-zinc-300 font-medium'}`}
             >
               <Flag className={`w-[18px] h-[18px] ${activePanel === 'mybets' ? 'text-[#00E5FF]' : ''}`} />
-              <span className={`text-[9px] font-medium tracking-wide ${activePanel === 'mybets' ? 'text-[#00E5FF]' : ''}`}>{t('nav.my_bets', 'Bahislerim')}</span>
+              <span className="text-[12px] tracking-wide">{t('nav.my_bets', 'Bahislerim')}</span>
             </button>
+            
             <button 
               onClick={() => setActivePanel('coupon')}
-              className="flex flex-col items-center justify-center gap-1 text-zinc-500 hover:text-white transition-colors flex-1 relative group"
+              className={`flex items-center justify-center gap-2 flex-1 h-full rounded-lg transition-all relative ${activePanel === 'coupon' ? 'bg-[#10b981]/20 text-[#10b981] shadow-[inset_0_0_15px_rgba(16,185,129,0.2)] font-bold' : 'text-zinc-500 hover:text-zinc-300 font-medium'}`}
             >
               <div className="relative">
-                <FileText className="w-[18px] h-[18px] group-hover:text-[#10b981] transition-colors" />
+                <FileText className={`w-[18px] h-[18px] ${activePanel === 'coupon' ? 'text-[#10b981]' : ''}`} />
                 {betSlip.length > 0 && (
                   <span className="absolute -top-2 -right-2.5 w-3.5 h-3.5 bg-[#10b981] text-black text-[9px] font-black rounded-full flex items-center justify-center shadow-[0_0_8px_rgba(16,185,129,0.5)]">
                     {betSlip.length}
                   </span>
                 )}
               </div>
-              <span className="text-[9px] font-medium tracking-wide group-hover:text-[#10b981] transition-colors">{t('nav.bet_slip', 'Bahis kuponu')}</span>
+              <span className="text-[12px] tracking-wide">{t('nav.bet_slip', 'Kupon')}</span>
             </button>
-            <button className="flex flex-col items-center justify-center gap-1 text-zinc-500 hover:text-white transition-colors flex-1">
-              <Search className="w-[18px] h-[18px]" />
-              <span className="text-[9px] font-medium tracking-wide">{t('nav.search', 'Ara')}</span>
-            </button>
+            
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
     </>
   );

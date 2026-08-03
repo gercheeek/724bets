@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Play, Sparkles, ShieldCheck, MonitorPlay, Gift, Flame, Trophy, Users, ChevronRight } from 'lucide-react';
+import { Play, Sparkles, ShieldCheck, MonitorPlay, Gift, Flame, Trophy, Users, ChevronRight, Zap, Crown, Star } from 'lucide-react';
 import { GamificationPanel } from './GamificationPanel';
 import { GameDetailModal, GameData } from './GameDetailModal';
 import VIPHeroBanner from './VIPHeroBanner';
@@ -47,7 +47,7 @@ export default function OriginalsHub({ onNavigate, isLoggedIn, siteUser, setSite
         <div 
             ref={hubRef}
             onMouseMove={handleMouseMove}
-            className="w-full min-h-[calc(100vh-60px)] bg-[#050505] p-4 md:p-8 relative overflow-hidden font-sans flex flex-col items-center selection:bg-fuchsia-500/30 arcade-cursor-global"
+            className="w-full min-h-[calc(100vh-60px)] bg-[#050505] p-4 md:p-8 relative overflow-hidden font-sans flex flex-col items-center selection:bg-fuchsia-500/30"
         >
             {/* Global Cursor Spotlight (Flashlight Effect) */}
             <div 
@@ -73,78 +73,96 @@ export default function OriginalsHub({ onNavigate, isLoggedIn, siteUser, setSite
                    </div>
                 </div>
 
-                {/* Arcade Header */}
-                <div className="flex items-center justify-between mt-4 mb-2 relative">
-                    <div className="flex items-center gap-4">
-                        <h2 className="arcade-header">PREMİUM OYUNLAR</h2>
-                        <div className="hidden sm:block h-[4px] w-32 bg-[repeating-linear-gradient(90deg,#ff00ff_0,#ff00ff_10px,transparent_10px,transparent_20px)] opacity-50 shadow-[0_0_10px_#ff00ff]"></div>
+                {/* Modern Header */}
+                <div className="flex items-center justify-between mt-6 mb-4 relative">
+                    <div className="flex items-center gap-3">
+                        <h2 className="text-2xl md:text-3xl font-black text-white tracking-tight uppercase">
+                            PREMİUM <span className="text-[#00ff88]">OYUNLAR</span>
+                        </h2>
                     </div>
                 </div>
 
-                {/* Retro Arcade Game Cards */}
-                <div className="flex gap-6 overflow-x-auto pb-6 snap-x snap-mandatory scrollbar-hide w-full pt-2 px-2" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+                {/* Modern Premium Game Cards */}
+                <div className="flex gap-4 overflow-x-auto pb-6 snap-x snap-mandatory scrollbar-hide w-full" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
                     {ORIGINALS.map((game, i) => (
-                        <div key={game.id} className="shrink-0 snap-start flex flex-col items-center">
+                        <div key={game.id} className="shrink-0 snap-start">
                             <div 
                                 onClick={() => handleInternalPlay(game.path)}
-                                className="retro-game-card w-[150px] md:w-[170px] cursor-pointer flex flex-col overflow-hidden pb-4"
+                                className="group w-[150px] md:w-[170px] bg-[#15171e] border border-white/5 rounded-xl overflow-hidden cursor-pointer hover:border-[#00ff88]/30 hover:shadow-[0_0_20px_rgba(0,255,136,0.15)] transition-all"
                             >
-                                <div className="retro-game-img-wrapper h-[140px] md:h-[160px] w-full overflow-hidden bg-black flex items-center justify-center">
-                                    <img src={game.image} alt={game.name} className="w-full h-full object-cover opacity-90 transition-transform duration-500" style={{ imageRendering: 'pixelated' }} />
+                                <div className="h-[140px] md:h-[160px] w-full overflow-hidden relative">
+                                    <img src={game.image} alt={game.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
                                     {/* Play button overlay */}
-                                    <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 transition-opacity hover-play-overlay">
-                                       <div className="w-0 h-0 border-t-[12px] border-t-transparent border-l-[20px] border-l-[#00ffff] border-b-[12px] border-b-transparent drop-shadow-[0_0_10px_#00ffff] ml-2"></div>
+                                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-[2px]">
+                                       <div className="w-12 h-12 rounded-full bg-[#00ff88] flex items-center justify-center shadow-[0_0_15px_rgba(0,255,136,0.5)] transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                                            <div className="w-0 h-0 border-t-[8px] border-t-transparent border-l-[12px] border-l-black border-b-[8px] border-b-transparent ml-1"></div>
+                                       </div>
                                     </div>
                                 </div>
-                                <h3 className="retro-game-title px-2 truncate w-full">{game.name}</h3>
+                                <div className="p-3 bg-[#15171e]">
+                                    <h3 className="text-sm font-bold text-white truncate group-hover:text-[#00ff88] transition-colors">{game.name}</h3>
+                                </div>
                             </div>
                         </div>
                     ))}
                 </div>
 
-                {/* 2-Column Grid: Terminal and Quests */}
-
+                {/* 2-Column Grid: Modern Live Feed and Quests */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full mb-4">
-                    {/* Live Feed Terminal */}
-                    <div className="retro-terminal">
-                        <div className="terminal-header">
-                            <span>root@724bets:~/live_feed$ ./start_feed.sh</span>
+                    {/* Live Feed Panel */}
+                    <div className="bg-[#15171e] border border-white/5 rounded-xl overflow-hidden relative group">
+                        <div className="bg-white/5 px-4 py-3 border-b border-white/5 flex items-center justify-between">
+                            <span className="text-sm font-semibold text-white/80">Canlı Feed</span>
+                            <div className="flex gap-1.5">
+                                <div className="w-2 h-2 rounded-full bg-emerald-500/50"></div>
+                                <div className="w-2 h-2 rounded-full bg-emerald-500/70"></div>
+                                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                            </div>
                         </div>
-                        <div className="terminal-body">
-                            <div className="terminal-scroller">
-                                <p><span className="text-[#00ffff]">[SİSTEM]</span> @Ahmet34 'Casino Noir' oyununda 12.500₺ KAZANDI!</p>
-                                <p><span className="text-[#ff00ff] font-bold animate-pulse">[JACKPOT]</span> @Vip_Memo BÜYÜK KASA'YA ULAŞTI!</p>
-                                <p><span className="text-[#00ffff]">[SİSTEM]</span> @Kral77 'Galactic Spin' ile 500x çarpan yakaladı.</p>
-                                <p><span className="text-[#00ffff]">[SİSTEM]</span> @Mehmet_88 'Seka Çark' 1.000₺ KAZANDI!</p>
-                                <p><span className="text-[#ff00ff] font-bold animate-pulse">[JACKPOT]</span> @Deli_Dolu VIP Club'a Katıldı!</p>
+                        <div className="p-4 h-[200px] overflow-hidden relative">
+                            {/* Fade out top and bottom */}
+                            <div className="absolute top-0 left-0 right-0 h-4 bg-gradient-to-b from-[#15171e] to-transparent z-10"></div>
+                            <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-[#15171e] to-transparent z-10"></div>
+                            
+                            <div className="animate-[feed-scroll_15s_linear_infinite] flex flex-col gap-3">
+                                <p className="text-sm"><span className="text-emerald-400 font-medium">@Ahmet34</span> 'Casino Noir' oyununda <span className="text-white font-bold">12.500₺</span> KAZANDI!</p>
+                                <p className="text-sm"><span className="text-[#a855f7] font-medium animate-pulse flex items-center gap-1 inline-flex"><Zap size={14}/> BÜYÜK KASA</span> @Vip_Memo'ya VURDU!</p>
+                                <p className="text-sm"><span className="text-emerald-400 font-medium">@Kral77</span> 'Galactic Spin' ile <span className="text-[#00ff88] font-bold">500x</span> çarpan yakaladı.</p>
+                                <p className="text-sm"><span className="text-emerald-400 font-medium">@Mehmet_88</span> 'Seka Çark' <span className="text-white font-bold">1.000₺</span> KAZANDI!</p>
+                                <p className="text-sm"><span className="text-yellow-400 font-medium flex items-center gap-1 inline-flex"><Crown size={14}/> VIP</span> @Deli_Dolu VIP Club'a Katıldı!</p>
                             </div>
                         </div>
                     </div>
 
-                    {/* Cyber Contracts (Daily Quests) */}
-                    <div className="cyber-contracts">
-                        <div className="contracts-header">SİBER KONTRATLAR</div>
+                    {/* Premium Contracts (Daily Quests) */}
+                    <div className="bg-[#15171e] border border-white/5 rounded-xl p-5 relative overflow-hidden group hover:border-[#a855f7]/30 transition-colors">
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-[#a855f7]/10 blur-[50px] rounded-full pointer-events-none group-hover:bg-[#a855f7]/20 transition-all"></div>
                         
-                        <div className="contract-card">
+                        <div className="text-sm font-semibold text-white/80 mb-5 flex items-center gap-2">
+                            <Star size={16} className="text-[#a855f7]" />
+                            GÜNLÜK GÖREVLER
+                        </div>
+                        
+                        <div className="bg-black/30 border border-white/5 p-4 rounded-lg relative z-10">
                             <div className="flex justify-between items-center mb-3">
-                                <span className="contract-title">Görev: Galactic Spin</span>
-                                <span className="contract-reward">+500₺</span>
+                                <span className="text-sm font-medium text-white">Görev: Galactic Spin</span>
+                                <span className="text-xs font-bold text-[#00ff88] bg-[#00ff88]/10 px-2 py-1 rounded">+500₺</span>
                             </div>
-                            <div className="progress-bar-bg">
-                                <div className="progress-bar-fill" style={{ width: '60%' }}></div>
+                            <div className="w-full h-2 bg-black rounded-full overflow-hidden">
+                                <div className="h-full bg-gradient-to-r from-[#00ff88] to-emerald-400" style={{ width: '60%' }}></div>
                             </div>
-                            <div className="text-right text-[9px] mt-2 text-[#00ffff] font-mono">60/100 Döndürme</div>
+                            <div className="text-right text-[10px] mt-1.5 text-white/50">60/100 Döndürme</div>
                         </div>
 
-                        <div className="contract-card mt-4">
+                        <div className="bg-black/30 border border-white/5 p-4 rounded-lg mt-3 relative z-10">
                             <div className="flex justify-between items-center mb-3">
-                                <span className="contract-title">Görev: Casino Noir</span>
-                                <span className="contract-reward">+10 FreeSpin</span>
+                                <span className="text-sm font-medium text-white">Görev: Casino Noir</span>
+                                <span className="text-xs font-bold text-[#a855f7] bg-[#a855f7]/10 px-2 py-1 rounded">+10 FreeSpin</span>
                             </div>
-                            <div className="progress-bar-bg">
-                                <div className="progress-bar-fill bg-[#ff00ff] shadow-[0_0_10px_#ff00ff]" style={{ width: '30%' }}></div>
+                            <div className="w-full h-2 bg-black rounded-full overflow-hidden">
+                                <div className="h-full bg-gradient-to-r from-[#a855f7] to-purple-400" style={{ width: '30%' }}></div>
                             </div>
-                            <div className="text-right text-[9px] mt-2 text-[#ff00ff] font-mono">3/10 Kazanç</div>
+                            <div className="text-right text-[10px] mt-1.5 text-white/50">3/10 Kazanç</div>
                         </div>
                     </div>
                 </div>
@@ -358,99 +376,9 @@ export default function OriginalsHub({ onNavigate, isLoggedIn, siteUser, setSite
                     cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%2300ffff' d='M11 0h2v11h11v2H13v11h-2V13H0v-2h11V0z'/%3E%3C/svg%3E") 12 12, crosshair !important;
                 }
 
-                .retro-terminal {
-                    background: #020205;
-                    border: 4px solid #333;
-                    border-radius: 8px;
-                    overflow: hidden;
-                    box-shadow: 0 10px 0 #000, inset 0 0 20px rgba(0,255,255,0.05);
-                }
-                .terminal-header {
-                    background: #222;
-                    padding: 8px 12px;
-                    font-family: monospace;
-                    font-size: 12px;
-                    color: #aaa;
-                    border-bottom: 2px solid #444;
-                }
-                .terminal-body {
-                    padding: 16px;
-                    height: 200px;
-                    overflow: hidden;
-                    position: relative;
-                }
-                .terminal-body::after {
-                    content: '';
-                    position: absolute;
-                    inset: 0;
-                    background: repeating-linear-gradient(to bottom, transparent 0px, rgba(0,255,255,0.02) 1px, transparent 2px);
-                    pointer-events: none;
-                }
-                .terminal-scroller {
-                    animation: terminal-scroll 15s linear infinite;
-                    display: flex;
-                    flex-direction: column;
-                    gap: 12px;
-                }
-                .terminal-scroller p {
-                    font-family: 'Courier New', Courier, monospace;
-                    font-size: 13px;
-                    color: #88cc88;
-                    margin: 0;
-                    text-shadow: 0 0 3px rgba(136,204,136,0.5);
-                }
-                @keyframes terminal-scroll {
+                @keyframes feed-scroll {
                     0% { transform: translateY(200px); }
                     100% { transform: translateY(-300px); }
-                }
-
-                .cyber-contracts {
-                    background: #050510;
-                    border: 4px solid #880088;
-                    border-radius: 8px;
-                    padding: 20px;
-                    box-shadow: inset 0 0 20px rgba(255,0,255,0.1), 0 10px 0 #000;
-                }
-                .contracts-header {
-                    font-family: 'Press Start 2P', monospace;
-                    font-size: 12px;
-                    color: #ff00ff;
-                    text-shadow: 2px 2px 0 #550055;
-                    margin-bottom: 20px;
-                    text-align: center;
-                }
-                .contract-card {
-                    background: rgba(255,0,255,0.05);
-                    border: 2px solid #ff00ff;
-                    padding: 12px;
-                    border-radius: 6px;
-                }
-                .contract-title {
-                    font-family: monospace;
-                    font-size: 14px;
-                    color: #fff;
-                    font-weight: bold;
-                }
-                .contract-reward {
-                    font-family: 'Press Start 2P', monospace;
-                    font-size: 8px;
-                    color: #00ffff;
-                    background: rgba(0,255,255,0.1);
-                    padding: 4px 6px;
-                    border: 1px solid #00ffff;
-                }
-                .progress-bar-bg {
-                    width: 100%;
-                    height: 12px;
-                    background: #111;
-                    border: 2px solid #333;
-                    border-radius: 4px;
-                    overflow: hidden;
-                }
-                .progress-bar-fill {
-                    height: 100%;
-                    background: #00ffff;
-                    box-shadow: 0 0 10px #00ffff;
                 }
             `}</style>
         </div>

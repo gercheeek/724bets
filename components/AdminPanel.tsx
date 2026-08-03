@@ -14,6 +14,7 @@ import AdminDashboardTab from './AdminDashboardTab';
 import AdminWhaleTab from './AdminWhaleTab';
 import AdminLiquidityTab from './AdminLiquidityTab';
 import AdminProviderTab from './AdminProviderTab';
+import { AdminWalletsTab } from './AdminWalletsTab';
 import AdminCommunityTab from './AdminCommunityTab';
 import AdminKralTab from './AdminKralTab';
 import { LuckyWheelConfig } from '../types';
@@ -37,7 +38,7 @@ export default function AdminPanel(props: AdminPanelProps) {
     
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
-    const [activeTab, setActiveTab] = useState<'dashboard' | 'bot' | 'luckywheel' | 'members' | 'risk' | 'radar' | 'marketing' | 'withdrawals' | 'deposits' | 'audit' | 'sports' | 'tv' | 'whale' | 'liquidity' | 'provider' | 'community' | 'kral' | 'odds'>('dashboard');
+    const [activeTab, setActiveTab] = useState<'dashboard' | 'bot' | 'luckywheel' | 'members' | 'risk' | 'radar' | 'marketing' | 'withdrawals' | 'deposits' | 'audit' | 'sports' | 'tv' | 'whale' | 'liquidity' | 'provider' | 'community' | 'kral' | 'odds' | 'bonus' | 'affiliate' | 'sports-risk' | 'fraud' | 'wallets'>('dashboard');
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     const [expandedGroups, setExpandedGroups] = useState<string[]>(['CASINO YÖNETİMİ', 'PAZARLAMA & BONUS', 'SPOR YÖNETİMİ', 'GÜVENLİK & FRAUD', 'FİNANS & MÜŞTERİ', 'SİSTEM', 'DİĞER']);
@@ -98,27 +99,27 @@ export default function AdminPanel(props: AdminPanelProps) {
                         <div className="p-1.5 md:p-2 bg-emerald-500/20 rounded-lg">
                             <Settings className="w-4 h-4 md:w-5 md:h-5 text-emerald-400" />
                         </div>
-                        <h2 className="text-lg md:text-xl font-bold text-white hidden sm:block">Yönetim Paneli</h2>
-                        
+                        <div>
+                            <h1 className="text-lg md:text-2xl font-black text-white tracking-tight uppercase">Yönetim <span className="text-emerald-500">Merkezi</span></h1>
+                            <div className="text-[10px] md:text-xs text-gray-500 font-medium">v2.4.0 • Sistemsel Kontrol Paneli</div>
+                        </div>
+                    </div>
+                    
+                    <div className="flex items-center gap-2 md:gap-3 w-full md:w-auto justify-end">
                         <button 
-                            onClick={() => { setActiveTab('kral'); setIsSidebarOpen(false); }} 
-                            className={`ml-1 md:ml-4 px-3 md:px-4 py-1.5 rounded-xl font-black italic tracking-widest text-[10px] md:text-sm transition-all flex items-center gap-1.5 md:gap-2 shadow-lg hover:-translate-y-0.5 ${activeTab === 'kral' ? 'bg-gradient-to-r from-yellow-600 to-yellow-400 text-black shadow-[0_0_20px_rgba(234,179,8,0.4)]' : 'bg-[#1e2330] hover:bg-yellow-500/20 border border-yellow-500/30 text-yellow-500'}`}
+                            onClick={handleGoToSite}
+                            className="flex-1 md:flex-none flex items-center justify-center gap-2 px-3 md:px-4 py-2 bg-white/5 hover:bg-white/10 text-white rounded-lg transition-colors text-xs md:text-sm font-semibold"
                         >
-                            👑 <span className="hidden sm:inline">KRAL</span>
+                            <Globe className="w-4 h-4" /> 
+                            <span className="hidden md:inline">Siteye Dön</span>
                         </button>
-
                         <button 
-                            onClick={handleGoToSite} 
-                            className="ml-2 md:ml-3 px-2.5 md:px-3.5 py-1.5 bg-[#1e2330] hover:bg-emerald-500/20 border border-[#2b3548] hover:border-emerald-500/40 text-slate-200 hover:text-emerald-400 rounded-xl text-[10px] md:text-xs font-bold transition-all flex items-center gap-1.5 md:gap-2 shadow-sm group cursor-pointer"
-                            title="Siteye Git / Paneli Kapat"
+                            onClick={onClose}
+                            className="w-10 h-10 flex items-center justify-center rounded-lg bg-red-500/10 text-red-400 hover:bg-red-500/20 transition-colors"
                         >
-                            <Globe className="w-3.5 h-3.5 text-emerald-400 group-hover:rotate-12 transition-transform" />
-                            <span className="hidden sm:inline">Siteye Git</span>
+                            <X className="w-5 h-5" />
                         </button>
                     </div>
-                    <button onClick={onClose} className="p-1.5 md:p-2 hover:bg-white/5 rounded-lg transition-colors text-gray-400 hover:text-white ml-auto">
-                        <X className="w-5 h-5" />
-                    </button>
                 </div>
 
                 {/* Content */}
@@ -133,20 +134,23 @@ export default function AdminPanel(props: AdminPanelProps) {
                         ></div>
                     )}
                     
-                    <div className={`absolute md:relative z-50 h-full w-56 bg-[#090a0f] border-r border-white/5 p-3 flex flex-col gap-1 overflow-y-auto shrink-0 shadow-[4px_0_24px_rgba(0,0,0,0.5)] custom-scrollbar select-none transition-transform duration-300 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
+                    <div className={`${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 absolute md:relative z-50 h-full w-64 bg-[#0a0c10] border-r border-gray-800 p-3 flex flex-col gap-1 overflow-y-auto shrink-0 shadow-[4px_0_24px_rgba(0,0,0,0.5)] custom-scrollbar select-none transition-transform duration-300`}>
                         
                         {/* CASINO YÖNETİMİ */}
-                        <div onClick={() => toggleGroup('CASINO YÖNETİMİ')} className="flex items-center justify-between cursor-pointer group mt-2 mb-1 px-2">
+                        <div onClick={() => toggleGroup('CASINO YÖNETİMİ')} className="flex items-center justify-between cursor-pointer group mb-1 px-2">
                             <div className="text-[9px] font-black text-zinc-600 tracking-[0.2em] group-hover:text-zinc-400 transition-colors">CASINO YÖNETİMİ</div>
                             {expandedGroups.includes('CASINO YÖNETİMİ') ? <ChevronDown className="w-3.5 h-3.5 text-zinc-600 group-hover:text-zinc-400" /> : <ChevronRight className="w-3.5 h-3.5 text-zinc-600 group-hover:text-zinc-400" />}
                         </div>
                         {expandedGroups.includes('CASINO YÖNETİMİ') && (
                             <div className="flex flex-col gap-1 mb-2 animate-in slide-in-from-top-2 duration-200">
-                                <button onClick={() => { setActiveTab('dashboard'); setIsSidebarOpen(false); }} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'dashboard' ? 'bg-[#00ff88]/10 text-[#00ff88] border border-[#00ff88]/30 shadow-[0_0_10px_rgba(0,255,136,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
-                                    <Activity className="w-3.5 h-3.5" /> Casino Komuta
+                                <button onClick={() => { setActiveTab('dashboard'); setIsSidebarOpen(false); }} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'dashboard' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 shadow-[0_0_10px_rgba(52,211,153,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
+                                    <Activity className="w-3.5 h-3.5" /> Platform Analitiği
                                 </button>
-                                <button onClick={() => { setActiveTab('provider'); setIsSidebarOpen(false); }} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'provider' ? 'bg-[#a855f7]/10 text-[#a855f7] border border-[#a855f7]/30 shadow-[0_0_10px_rgba(168,85,247,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
-                                    <Gamepad2 className="w-3.5 h-3.5" /> Sağlayıcı RTP
+                                <button onClick={() => { setActiveTab('bot'); setIsSidebarOpen(false); }} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'bot' ? 'bg-[#3b82f6]/10 text-[#3b82f6] border border-[#3b82f6]/30 shadow-[0_0_10px_rgba(59,130,246,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
+                                    <MessageSquare className="w-3.5 h-3.5" /> Sohbet Botu
+                                </button>
+                                <button onClick={() => { setActiveTab('provider'); setIsSidebarOpen(false); }} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'provider' ? 'bg-[#8b5cf6]/10 text-[#8b5cf6] border border-[#8b5cf6]/30 shadow-[0_0_10px_rgba(139,92,246,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
+                                    <Gamepad2 className="w-3.5 h-3.5" /> Sağlayıcı Yön.
                                 </button>
                                 <button onClick={() => { setActiveTab('risk'); setIsSidebarOpen(false); }} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'risk' ? 'bg-[#ef4444]/10 text-[#ef4444] border border-[#ef4444]/30 shadow-[0_0_10px_rgba(239,68,68,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
                                     <ShieldCheck className="w-3.5 h-3.5" /> Casino Risk
@@ -164,7 +168,7 @@ export default function AdminPanel(props: AdminPanelProps) {
                                 <button onClick={() => { setActiveTab('bonus'); setIsSidebarOpen(false); }} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'bonus' ? 'bg-[#f43f5e]/10 text-[#f43f5e] border border-[#f43f5e]/30 shadow-[0_0_10px_rgba(244,63,94,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
                                     <Gift className="w-3.5 h-3.5" /> Bonus & Kampanya
                                 </button>
-                                <button onClick={() => setActiveTab('affiliate')} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'affiliate' ? 'bg-[#f43f5e]/10 text-[#f43f5e] border border-[#f43f5e]/30 shadow-[0_0_10px_rgba(244,63,94,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
+                                <button onClick={() => { setActiveTab('affiliate'); setIsSidebarOpen(false); }} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'affiliate' ? 'bg-[#f43f5e]/10 text-[#f43f5e] border border-[#f43f5e]/30 shadow-[0_0_10px_rgba(244,63,94,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
                                     <Network className="w-3.5 h-3.5" /> Affiliate (Bayi)
                                 </button>
                             </div>
@@ -177,16 +181,16 @@ export default function AdminPanel(props: AdminPanelProps) {
                         </div>
                         {expandedGroups.includes('SPOR YÖNETİMİ') && (
                             <div className="flex flex-col gap-1 mb-2 animate-in slide-in-from-top-2 duration-200">
-                                <button onClick={() => setActiveTab('sports')} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'sports' ? 'bg-[#10b981]/10 text-[#10b981] border border-[#10b981]/30 shadow-[0_0_10px_rgba(16,185,129,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
+                                <button onClick={() => { setActiveTab('sports'); setIsSidebarOpen(false); }} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'sports' ? 'bg-[#10b981]/10 text-[#10b981] border border-[#10b981]/30 shadow-[0_0_10px_rgba(16,185,129,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
                                     <Trophy className="w-4 h-4" /> SPOR YÖNETİMİ
                                 </button>
-                                <button onClick={() => setActiveTab('odds')} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'odds' ? 'bg-[#06b6d4]/10 text-[#06b6d4] border border-[#06b6d4]/30 shadow-[0_0_10px_rgba(6,182,212,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
+                                <button onClick={() => { setActiveTab('odds'); setIsSidebarOpen(false); }} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'odds' ? 'bg-[#06b6d4]/10 text-[#06b6d4] border border-[#06b6d4]/30 shadow-[0_0_10px_rgba(6,182,212,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
                                     <Settings className="w-4 h-4" /> ORAN MOTORU
                                 </button>
-                                <button onClick={() => setActiveTab('radar')} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'radar' ? 'bg-[#8b5cf6]/10 text-[#8b5cf6] border border-[#8b5cf6]/30 shadow-[0_0_10px_rgba(139,92,246,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
+                                <button onClick={() => { setActiveTab('radar'); setIsSidebarOpen(false); }} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'radar' ? 'bg-[#8b5cf6]/10 text-[#8b5cf6] border border-[#8b5cf6]/30 shadow-[0_0_10px_rgba(139,92,246,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
                                     <Target className="w-3.5 h-3.5" /> Canlı Oran Takip
                                 </button>
-                                <button onClick={() => setActiveTab('sports-risk')} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'sports-risk' ? 'bg-[#ef4444]/10 text-[#ef4444] border border-[#ef4444]/30 shadow-[0_0_10px_rgba(239,68,68,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
+                                <button onClick={() => { setActiveTab('sports-risk'); setIsSidebarOpen(false); }} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'sports-risk' ? 'bg-[#ef4444]/10 text-[#ef4444] border border-[#ef4444]/30 shadow-[0_0_10px_rgba(239,68,68,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
                                     <ShieldAlert className="w-3.5 h-3.5" /> Kupon Radarı
                                 </button>
                             </div>
@@ -199,7 +203,7 @@ export default function AdminPanel(props: AdminPanelProps) {
                         </div>
                         {expandedGroups.includes('GÜVENLİK & FRAUD') && (
                             <div className="flex flex-col gap-1 mb-2 animate-in slide-in-from-top-2 duration-200">
-                                <button onClick={() => setActiveTab('fraud')} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'fraud' ? 'bg-[#dc2626]/10 text-[#dc2626] border border-[#dc2626]/30 shadow-[0_0_10px_rgba(220,38,38,0.2)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
+                                <button onClick={() => { setActiveTab('fraud'); setIsSidebarOpen(false); }} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'fraud' ? 'bg-[#dc2626]/10 text-[#dc2626] border border-[#dc2626]/30 shadow-[0_0_10px_rgba(220,38,38,0.2)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
                                     <Lock className="w-3.5 h-3.5" /> Fraud Radarı
                                 </button>
                             </div>
@@ -213,14 +217,14 @@ export default function AdminPanel(props: AdminPanelProps) {
                         {expandedGroups.includes('FİNANS & MÜŞTERİ') && (
                             <div className="flex flex-col gap-1 mb-2 animate-in slide-in-from-top-2 duration-200">
                                 {currentAdminRole === 'SUPER_ADMIN' && (
-                                    <button onClick={() => setActiveTab('liquidity')} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'liquidity' ? 'bg-[#26a17b]/10 text-[#26a17b] border border-[#26a17b]/30 shadow-[0_0_10px_rgba(38,161,123,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
+                                    <button onClick={() => { setActiveTab('liquidity'); setIsSidebarOpen(false); }} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'liquidity' ? 'bg-[#26a17b]/10 text-[#26a17b] border border-[#26a17b]/30 shadow-[0_0_10px_rgba(38,161,123,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
                                         <Wallet className="w-3.5 h-3.5" /> Likidite Matrisi
                                     </button>
                                 )}
-                                <button onClick={() => setActiveTab('whale')} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'whale' ? 'bg-[#3b82f6]/10 text-[#3b82f6] border border-[#3b82f6]/30 shadow-[0_0_10px_rgba(59,130,246,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
+                                <button onClick={() => { setActiveTab('whale'); setIsSidebarOpen(false); }} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'whale' ? 'bg-[#3b82f6]/10 text-[#3b82f6] border border-[#3b82f6]/30 shadow-[0_0_10px_rgba(59,130,246,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
                                     <Target className="w-3.5 h-3.5" /> VIP Balina Radarı
                                 </button>
-                                <button onClick={() => setActiveTab('members')} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'members' ? 'bg-[#3b82f6]/10 text-[#3b82f6] border border-[#3b82f6]/30 shadow-[0_0_10px_rgba(59,130,246,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
+                                <button onClick={() => { setActiveTab('members'); setIsSidebarOpen(false); }} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'members' ? 'bg-[#3b82f6]/10 text-[#3b82f6] border border-[#3b82f6]/30 shadow-[0_0_10px_rgba(59,130,246,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
                                     <Users className="w-3.5 h-3.5" /> Müşteri & KYC
                                 </button>
                             </div>
@@ -235,13 +239,16 @@ export default function AdminPanel(props: AdminPanelProps) {
                             <div className="flex flex-col gap-1 mb-2 animate-in slide-in-from-top-2 duration-200">
                                 {currentAdminRole === 'SUPER_ADMIN' && (
                                     <>
-                                        <button onClick={() => setActiveTab('withdrawals')} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'withdrawals' ? 'bg-[#f59e0b]/10 text-[#f59e0b] border border-[#f59e0b]/30 shadow-[0_0_10px_rgba(245,158,11,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
+                                        <button onClick={() => { setActiveTab('withdrawals'); setIsSidebarOpen(false); }} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'withdrawals' ? 'bg-[#f59e0b]/10 text-[#f59e0b] border border-[#f59e0b]/30 shadow-[0_0_10px_rgba(245,158,11,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
                                             <TrendingUp className="w-3.5 h-3.5" /> Çekim Talepleri
                                         </button>
-                                        <button onClick={() => setActiveTab('deposits')} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'deposits' ? 'bg-[#10b981]/10 text-[#10b981] border border-[#10b981]/30 shadow-[0_0_10px_rgba(16,185,129,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
+                                        <button onClick={() => { setActiveTab('deposits'); setIsSidebarOpen(false); }} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'deposits' ? 'bg-[#10b981]/10 text-[#10b981] border border-[#10b981]/30 shadow-[0_0_10px_rgba(16,185,129,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
                                             <ArrowDownToLine className="w-3.5 h-3.5" /> Yatırım Talepleri
                                         </button>
-                                        <button onClick={() => setActiveTab('audit')} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'audit' ? 'bg-zinc-100/10 text-white border border-white/30' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
+                                        <button onClick={() => { setActiveTab('wallets'); setIsSidebarOpen(false); }} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'wallets' ? 'bg-[#8b5cf6]/10 text-[#8b5cf6] border border-[#8b5cf6]/30 shadow-[0_0_10px_rgba(139,92,246,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
+                                            <Wallet className="w-3.5 h-3.5" /> Kripto Cüzdanlar
+                                        </button>
+                                        <button onClick={() => { setActiveTab('audit'); setIsSidebarOpen(false); }} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'audit' ? 'bg-zinc-100/10 text-white border border-white/30' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
                                             <Monitor className="w-3.5 h-3.5" /> İşlem Kayıtları
                                         </button>
                                     </>
@@ -361,6 +368,10 @@ export default function AdminPanel(props: AdminPanelProps) {
 
                                 {activeTab === 'liquidity' && (
                                     <AdminLiquidityTab />
+                                )}
+
+                                {activeTab === 'wallets' && (
+                                    <AdminWalletsTab />
                                 )}
 
                                 {activeTab === 'provider' && (

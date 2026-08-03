@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, Copy, Share2, Star } from 'lucide-react';
+import { X, Copy, Heart, Share2, ChevronRight, CheckCircle2 } from 'lucide-react';
 
 interface BetShareModalProps {
     isOpen: boolean;
@@ -10,7 +10,7 @@ interface BetShareModalProps {
 }
 
 const CASINO_GAMES = [
-    'Wanted Dead or a Wild', 'Gates of Olympus', 'Sweet Bonanza', 
+    'Wanted Dead or a Wild', 'Crash', 'Gates of Olympus', 'Sweet Bonanza', 
     'Sugar Rush', 'The Dog House Megaways', 'Starlight Princess',
     'Big Bass Splash', 'Book of Dead'
 ];
@@ -36,105 +36,109 @@ export const BetShareModal: React.FC<BetShareModalProps> = ({ isOpen, onClose, b
         ? CASINO_GAMES[seed % CASINO_GAMES.length] 
         : 'Çoklu Bahis (Kombine)';
 
-    // Random bet amount between 10.00 and 5000.00
-    const betAmount = ((seed % 500000) / 100 + 10).toFixed(2);
+    // Random bet amount between 10.00 and 500.00
+    const betAmount = ((seed % 50000) / 100 + 10).toFixed(2);
     
-    // Random multiplier (e.g. 1.50x to 5000x)
+    // Random multiplier
     const rawMulti = (seed % 100) < 80 
         ? (seed % 500) / 100 + 1.1 
-        : (seed % 50000) / 10 + 10;
+        : (seed % 5000) / 10 + 10;
     const multiplier = rawMulti.toFixed(2);
     
-    // Payout
-    const payout = (parseFloat(betAmount) * parseFloat(multiplier)).toFixed(2);
+    // Payout (Profit in this context based on screenshot)
+    const profitCrypto = (parseFloat(betAmount) * parseFloat(multiplier) * 0.0023).toFixed(6);
+    const profitFiat = (parseFloat(betAmount) * parseFloat(multiplier)).toFixed(2);
     
-    const dateStr = new Date().toLocaleDateString('tr-TR') + ' saat ' + new Date().toLocaleTimeString('tr-TR', {hour: '2-digit', minute:'2-digit'});
+    const dateStr = new Date().toLocaleDateString('tr-TR', {day: '2-digit', month: '2-digit', year: 'numeric'}) + ' ' + new Date().toLocaleTimeString('tr-TR', {hour: '2-digit', minute:'2-digit', second: '2-digit'});
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-            <div className="bg-[#1a2c38] rounded-lg shadow-2xl w-full max-w-md border border-[#2f4553] overflow-hidden flex flex-col">
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200" onClick={onClose}>
+            <div 
+                className="bg-[#24262b] rounded-2xl shadow-2xl w-full max-w-[400px] flex flex-col font-sans"
+                onClick={e => e.stopPropagation()}
+            >
                 
                 {/* Header */}
-                <div className="flex items-center justify-between p-4 bg-[#1f3643] border-b border-[#2f4553]">
-                    <div className="flex items-center gap-2">
-                        <div className="bg-[#0f1923] p-1.5 rounded">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M4 6H20M4 12H20M4 18H20" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                            </svg>
-                        </div>
-                        <span className="text-white font-bold text-lg tracking-wide">Bahis</span>
-                    </div>
-                    <button onClick={onClose} className="text-gray-400 hover:text-white transition-colors">
-                        <X size={20} />
+                <div className="flex items-center justify-between px-5 py-4 border-b border-white/[0.03]">
+                    <span className="text-white font-bold text-[16px]">Bahis Kuponu</span>
+                    <button onClick={onClose} className="text-slate-400 hover:text-white transition-colors bg-white/5 rounded-full p-1">
+                        <X size={18} />
                     </button>
                 </div>
 
                 {/* Body */}
-                <div className="p-6 flex flex-col items-center">
-                    <h2 className="text-2xl font-bold text-white mb-2 text-center">{gameName}</h2>
+                <div className="p-5 flex flex-col">
                     
-                    <div className="flex items-center gap-2 mb-2">
-                        <span className="text-gray-400 text-sm">Kullanıcı:</span>
-                        <div className="flex items-center gap-1">
-                            <Star size={14} className="text-[#00e701] fill-[#00e701]" />
-                            <span className="text-white font-medium">{username}</span>
+                    {/* Top Profit Section */}
+                    <div className="flex flex-col items-center mb-6">
+                        <span className="text-slate-400 text-[14px] font-medium mb-1">Kar</span>
+                        <div className="flex items-center justify-center gap-2 mb-1">
+                            <Share2 className="w-4 h-4 text-slate-400 absolute right-6 cursor-pointer hover:text-white" />
+                            <div className="w-5 h-5 bg-[#00E676] rounded-full flex items-center justify-center shrink-0">
+                                <span className="text-black text-[10px] font-black">₺</span>
+                            </div>
+                            <span className="text-[#00E676] text-[22px] font-black tracking-tight">{profitCrypto} TRY</span>
+                        </div>
+                        <span className="text-slate-500 text-[13px] font-medium">£{profitFiat}</span>
+                    </div>
+                    
+                    {/* Bet & Payout Stats */}
+                    <div className="flex justify-between items-center w-full px-4 mb-6">
+                        <div className="flex flex-col items-center flex-1">
+                            <span className="text-slate-400 text-[12px] font-medium mb-1">Bahis Miktarı</span>
+                            <span className="text-white text-[14px] font-bold">£{betAmount}</span>
+                        </div>
+                        <div className="flex flex-col items-center flex-1">
+                            <span className="text-slate-400 text-[12px] font-medium mb-1">Ödeme</span>
+                            <span className="text-white text-[14px] font-bold">{multiplier}x</span>
                         </div>
                     </div>
-                    
-                    <div className="text-gray-400 text-sm mb-4">
-                        {dateStr}
-                    </div>
 
-                    <div className="flex items-center gap-3 text-gray-400 text-sm mb-6">
-                        <span>Bahis No: {betId}</span>
-                        <button className="hover:text-white transition-colors" title="Kopyala"><Copy size={14} /></button>
-                        <button className="hover:text-white transition-colors" title="Paylaş"><Share2 size={14} /></button>
-                    </div>
+                    {/* Dotted Divider */}
+                    <div className="w-full border-b-2 border-dashed border-white/5 mb-6"></div>
 
-                    {/* Logo Divider */}
-                    <div className="w-full relative flex justify-center items-center mb-6">
-                        <div className="absolute w-full h-[1px] bg-[#2f4553]"></div>
-                        <div className="bg-[#1a2c38] px-4 relative z-10 text-white font-bold italic text-xl tracking-wider">
-                            724BETS
+                    {/* User & Bet Info */}
+                    <div className="flex items-center gap-3 mb-6 bg-white/[0.02] p-3 rounded-xl border border-white/[0.03]">
+                        <div className="w-10 h-10 rounded-full bg-[#1C1E22] overflow-hidden shrink-0 flex items-center justify-center border border-white/5">
+                            <img src={`https://api.dicebear.com/7.x/bottts/svg?seed=${username}&backgroundColor=7e22ce`} alt={username} className="w-full h-full object-cover" />
                         </div>
-                    </div>
-
-                    {/* Stats Box */}
-                    <div className="w-full bg-[#0f1923] rounded flex justify-between p-4 mb-6">
-                        <div className="flex flex-col items-center">
-                            <span className="text-gray-400 text-xs mb-1 font-medium">Bahis</span>
-                            <div className="flex items-center gap-1 text-white font-mono font-medium">
-                                {betAmount} <span className="text-[#ff1f44] text-xs">💎</span>
+                        <div className="flex flex-col gap-0.5 min-w-0 flex-1">
+                            <div className="flex items-center gap-1.5 text-[12px]">
+                                <span className="text-slate-300 font-semibold truncate">{username}</span>
+                                <span className="text-slate-500 font-medium">On {dateStr}</span>
+                            </div>
+                            <div className="flex items-center gap-1 text-[11px] text-slate-400">
+                                <span>Bahis Kimliği:</span>
+                                <CheckCircle2 className="w-3.5 h-3.5 text-[#00E676]" />
+                                <span className="truncate">{betId}</span>
+                                <Copy className="w-3 h-3 text-slate-500 cursor-pointer hover:text-white shrink-0 ml-1" />
                             </div>
                         </div>
-                        <div className="w-[1px] bg-[#2f4553]"></div>
-                        <div className="flex flex-col items-center">
-                            <span className="text-gray-400 text-xs mb-1 font-medium">Çarpan</span>
-                            <span className="text-white font-mono font-medium">{multiplier}×</span>
-                        </div>
-                        <div className="w-[1px] bg-[#2f4553]"></div>
-                        <div className="flex flex-col items-center">
-                            <span className="text-gray-400 text-xs mb-1 font-medium">Ödeme</span>
-                            <div className="flex items-center gap-1 text-[#00e701] font-mono font-medium">
-                                {payout} <span className="text-[#ff1f44] text-xs">💎</span>
+                    </div>
+
+                    {/* Game Link */}
+                    <div className="flex items-center justify-between bg-[#1C1E22] p-3 rounded-xl border border-white/5 cursor-pointer hover:bg-white/[0.04] transition-colors mb-4">
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 bg-purple-600 rounded-lg flex items-center justify-center font-black text-white text-[10px] uppercase shadow-inner text-center leading-tight p-1">
+                                {gameName.split(' ')[0]}
                             </div>
+                            <div className="flex flex-col">
+                                <span className="text-white font-bold text-[14px]">{gameName}</span>
+                                <span className="text-slate-500 text-[12px] font-medium">Orijinal Oyun</span>
+                            </div>
+                        </div>
+                        <div className="flex items-center text-slate-400 text-[12px] font-medium group-hover:text-white transition-colors">
+                            şimdi oyna <ChevronRight className="w-4 h-4 ml-0.5" />
                         </div>
                     </div>
 
-                    {/* Play Button */}
-                    <button className="w-full bg-[#2f4553] hover:bg-[#3d5668] transition-colors text-white font-semibold py-3 rounded text-sm mb-3">
-                        {gameName} oyununu oyna
-                    </button>
-                    
-                    {/* Replay Button */}
-                    <button className="w-[60%] bg-[#2f4553] hover:bg-[#3d5668] transition-colors text-white font-semibold py-2 rounded text-sm flex items-center justify-center gap-2">
-                        Tekrarı Görüntüle 
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                            <polyline points="15 3 21 3 21 9"></polyline>
-                            <line x1="10" y1="14" x2="21" y2="3"></line>
-                        </svg>
-                    </button>
+                    {/* Footer Detail Link */}
+                    <div className="w-full border-t border-white/[0.03] pt-4 mt-2">
+                        <div className="flex items-center justify-between text-slate-300 text-[13px] font-semibold cursor-pointer hover:text-white transition-colors">
+                            Oyun Detayı <ChevronRight className="w-4 h-4" />
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>

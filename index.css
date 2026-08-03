@@ -1754,3 +1754,14 @@ input:-webkit-autofill:active{
   animation: float-card 6s ease-in-out infinite;
 }
 
+@keyframes treasure-drop {
+  0% { transform: translateY(-50px) rotate(0deg) scale(0.5); opacity: 0; }
+  10% { opacity: 1; transform: translateY(0) rotate(10deg) scale(1); }
+  90% { opacity: 1; transform: translateY(80vh) rotate(350deg) scale(1); }
+  100% { transform: translateY(90vh) rotate(360deg) scale(0.5); opacity: 0; }
+}
+.animate-treasure-drop {
+  animation-name: treasure-drop;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}

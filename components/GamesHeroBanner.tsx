@@ -203,9 +203,6 @@ const HeroBanner = ({ onNavigate, isLoggedIn, onAuthRequired, setSiteUser }: { o
          <div className={`absolute top-[-20%] left-[-10%] w-[50%] h-[120%] bg-emerald-500/10 rounded-[100%] animate-[slow-pan_10s_ease-in-out_infinite] mix-blend-screen transition-all duration-700 ${isHovering ? 'blur-[100px] opacity-100' : 'blur-[120px] opacity-70'}`}></div>
          <div className={`absolute bottom-[-20%] right-[-10%] w-[60%] h-[120%] bg-purple-600/10 rounded-[100%] animate-[slow-pan_15s_ease-in-out_infinite_reverse] mix-blend-screen transition-all duration-700 ${isHovering ? 'blur-[120px] opacity-100' : 'blur-[150px] opacity-70'}`}></div>
          
-         {/* Retro CRT Scanlines Overlay */}
-         <div className="absolute inset-0 z-10 pointer-events-none mix-blend-overlay opacity-30" style={{ background: 'repeating-linear-gradient(transparent, transparent 2px, rgba(0, 255, 255, 0.1) 2px, rgba(0, 255, 255, 0.1) 4px)' }}></div>
-         
          {/* Noise overlay for texture */}
          <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.04] mix-blend-overlay z-10"></div>
       </div>
@@ -219,15 +216,15 @@ const HeroBanner = ({ onNavigate, isLoggedIn, onAuthRequired, setSiteUser }: { o
           <h1 className="text-xl md:text-2xl lg:text-3xl font-black tracking-tight text-white leading-[1.1] drop-shadow-[0_0_15px_rgba(0,255,136,0.5)] cursor-default">
             EN ÇOK KAZANDIRAN <br className="hidden md:block"/> 
             
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00ff88] via-white to-[#00ff88] drop-shadow-[0_0_20px_rgba(0,255,136,0.4)] ml-2 md:ml-0 glint-text hover:brightness-125 transition-all text-2xl md:text-3xl lg:text-4xl inline-block mt-1 font-arcade tracking-wider">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00ff88] via-white to-[#00ff88] drop-shadow-[0_0_20px_rgba(0,255,136,0.4)] ml-2 md:ml-0 glint-text hover:brightness-125 transition-all text-2xl md:text-3xl lg:text-5xl inline-block mt-2 font-bold tracking-tight">
               OYUNLAR
             </span>
           </h1>
           
           {/* Animated Jackpot */}
-          <div className="mt-2 mb-1 flex flex-col items-start gap-1">
-             <div className="text-[10px] text-zinc-500 font-arcade uppercase" style={{ fontFamily: "'Press Start 2P', monospace" }}>Toplam Dağıtılan Ödül</div>
-             <div className="text-xl md:text-2xl lg:text-3xl font-arcade text-transparent bg-clip-text bg-gradient-to-r from-[#00ff88] to-[#a855f7] drop-shadow-[0_0_10px_rgba(255,0,255,0.8)] tracking-wider" style={{ fontFamily: "'Press Start 2P', monospace" }}>
+          <div className="mt-4 mb-2 flex flex-col items-start gap-1">
+             <div className="text-[12px] text-zinc-400 font-semibold uppercase tracking-wider">Toplam Dağıtılan Ödül</div>
+             <div className="text-2xl md:text-3xl lg:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#00ff88] to-[#a855f7] drop-shadow-[0_0_10px_rgba(255,0,255,0.8)] tracking-tight">
                <AnimatedJackpot />
              </div>
           </div>
@@ -237,12 +234,12 @@ const HeroBanner = ({ onNavigate, isLoggedIn, onAuthRequired, setSiteUser }: { o
         <div className="flex flex-col justify-center gap-1.5 w-full max-w-sm mx-auto md:ml-auto perspective-1000 mt-10 md:mt-0 relative z-20">
           
           {[
-            { id: 'crash', name: 'CRASH', color: 'text-[#00E5FF]', image: '/images/new-mission.webp', players: 4521, maxWin: '5000x' },
-            { id: 'plinko', name: 'PLINKO', color: 'text-[#00ff88]', image: '/images/flat-plinko.jpg', players: 1245, maxWin: '1000x' },
-            { id: 'limbo', name: 'LIMBO', color: 'text-[#a855f7]', image: '/images/flat-mission.jpg', players: 843, maxWin: '10,000x' },
-            { id: 'roulette', name: 'ROULETTE', color: 'text-emerald-400', image: '/images/flat-roulette.jpg', players: 3201, maxWin: '36x' },
-            { id: 'blackjack-pro', name: 'BLACKJACK', color: 'text-white', image: '/images/flat-blackjack.jpg', players: 2150, maxWin: '2.5x' },
-            { id: 'keno', name: 'KENO', color: 'text-yellow-400', image: '/images/flat-keno.webp', players: 540, maxWin: '500x' },
+            { id: 'crash', name: 'CRASH', color: 'text-[#00E5FF]', image: '/images/crash_premium.jpg', players: 4521, maxWin: '5000x' },
+            { id: 'plinko', name: 'PLINKO', color: 'text-[#00ff88]', image: '/images/plinko_premium.jpg', players: 1245, maxWin: '1000x' },
+            { id: 'limbo', name: 'LIMBO', color: 'text-[#a855f7]', image: '/images/mission_premium.jpg', players: 843, maxWin: '10,000x' },
+            { id: 'roulette', name: 'ROULETTE', color: 'text-emerald-400', image: '/images/roulette_premium.jpg', players: 3201, maxWin: '36x' },
+            { id: 'blackjack-pro', name: 'BLACKJACK', color: 'text-white', image: '/images/blackjack_premium.jpg', players: 2150, maxWin: '2.5x' },
+            { id: 'keno', name: 'KENO', color: 'text-yellow-400', image: '/images/keno_premium.jpg', players: 540, maxWin: '500x' },
           ].map((game, idx) => {
             const isHovered = hoveredGameId ? game.id === hoveredGameId : idx === 0;
             

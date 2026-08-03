@@ -9,9 +9,15 @@ export interface ToastEvent {
   duration?: number;
 }
 
-export const triggerGlobalToast = (toast: Omit<ToastEvent, 'id'>) => {
+export const triggerGlobalToast = (toastOrMessage: Omit<ToastEvent, 'id'> | string, typeOrNone?: 'info' | 'success' | 'warning' | 'vip' | 'error') => {
+  let toastObj: Omit<ToastEvent, 'id'>;
+  if (typeof toastOrMessage === 'string') {
+      toastObj = { message: toastOrMessage, type: (typeOrNone as any) || 'info' };
+  } else {
+      toastObj = toastOrMessage;
+  }
   const event = new CustomEvent('globalToast', {
-    detail: { ...toast, id: Math.random().toString(36).substr(2, 9) }
+    detail: { ...toastObj, id: Math.random().toString(36).substr(2, 9) }
   });
   window.dispatchEvent(event);
 };

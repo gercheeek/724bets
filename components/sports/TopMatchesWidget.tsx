@@ -221,7 +221,7 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onS
               <span className="text-xs font-bold">$</span>
             </div>
           )}
-          <h2 className="text-sm font-bold text-white tracking-wide">{title}</h2>
+          <h2 className="text-xs font-bold text-white tracking-wide">{title}</h2>
         <div className="ml-auto flex items-center gap-1.5">
           <button 
             onClick={prevSlide}
@@ -262,14 +262,14 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onS
               <div 
                 key={match.id} 
                 onClick={() => onSelectMatch && onSelectMatch(match)}
-                className="cursor-pointer min-w-[280px] w-[280px] shrink-0 bg-gradient-to-b from-[#121722]/95 to-[#0b0e14]/95 md:from-[#121722]/90 md:to-[#0b0e14]/90 md:backdrop-blur-md rounded-xl border border-white/5 p-3 flex flex-col shadow-md md:shadow-xl hover:border-[#00E5FF]/20 hover:shadow-lg md:hover:shadow-[0_8px_30px_rgba(0,229,255,0.1)] transition-all duration-300 relative group/card transform-gpu"
+                className="cursor-pointer min-w-[240px] w-[240px] shrink-0 bg-gradient-to-b from-[#121722]/95 to-[#0b0e14]/95 md:from-[#121722]/90 md:to-[#0b0e14]/90 md:backdrop-blur-md rounded-xl border border-white/5 p-2.5 flex flex-col shadow-md md:shadow-xl hover:border-[#00E5FF]/20 hover:shadow-lg md:hover:shadow-[0_8px_30px_rgba(0,229,255,0.1)] transition-all duration-300 relative group/card transform-gpu"
               >
                 <div className="flex items-start mb-3 relative z-10 flex-col gap-1">
                   <div className="flex items-center justify-between w-full">
-                    <span className="bg-[#00E5FF]/10 text-[#00E5FF] border border-[#00E5FF]/20 px-2 py-0.5 rounded text-[11px] font-bold self-start whitespace-nowrap">
+                    <span className="bg-[#00E5FF]/10 text-[#00E5FF] border border-[#00E5FF]/20 px-2 py-0.5 rounded text-[10px] font-bold self-start whitespace-nowrap">
                       {getCountdown(ts, !!match.isLive)}
                     </span>
-                    <span className="text-[10px] text-zinc-500 font-semibold truncate text-right ml-2" title={match.league}>
+                    <span className="text-[9px] text-zinc-500 font-semibold truncate text-right ml-2" title={match.league}>
                       {match.league}
                     </span>
                   </div>
@@ -284,10 +284,10 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onS
 
                 <div className="flex items-start justify-between mb-3 px-1">
                   <div className="flex flex-col items-center flex-1 w-0">
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center p-0.5 mb-1.5 overflow-hidden relative border border-transparent">
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center p-0.5 mb-1.5 overflow-hidden relative border border-transparent">
                        <PlayerLogo name={match.home} fallbackLogo={match.homeLogo} sport={match.sport} />
                     </div>
-                    <div className="text-[11px] sm:text-[12px] font-bold text-center text-white leading-[1.2] line-clamp-2 px-1 flex flex-col items-center gap-0.5">
+                    <div className="text-[10px] sm:text-[11px] font-bold text-center text-white leading-[1.2] line-clamp-2 px-1 flex flex-col items-center gap-0.5">
                       {isTennis && (() => {
                           const hash = match.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
                           return (hash % 2) === 0 ? <span className="w-1.5 h-1.5 rounded-full bg-[#bef264] animate-pulse shadow-[0_0_5px_rgba(190,242,100,0.8)]" title="Servis Atıyor" /> : null;
@@ -348,10 +348,10 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onS
                   </div>
 
                   <div className="flex flex-col items-center flex-1 w-0">
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center p-0.5 mb-1.5 overflow-hidden relative border border-transparent">
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center p-0.5 mb-1.5 overflow-hidden relative border border-transparent">
                        <PlayerLogo name={match.away} fallbackLogo={match.awayLogo} sport={match.sport} />
                     </div>
-                    <div className="text-[11px] sm:text-[12px] font-bold text-center text-white leading-[1.2] line-clamp-2 px-1 flex flex-col items-center gap-0.5">
+                    <div className="text-[10px] sm:text-[11px] font-bold text-center text-white leading-[1.2] line-clamp-2 px-1 flex flex-col items-center gap-0.5">
                       {isTennis && (() => {
                           const hash = match.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
                           return (hash % 2) !== 0 ? <span className="w-1.5 h-1.5 rounded-full bg-[#bef264] animate-pulse shadow-[0_0_5px_rgba(190,242,100,0.8)]" title="Servis Atıyor" /> : null;

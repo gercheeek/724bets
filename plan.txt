@@ -1,0 +1,4 @@
+User wants:
+- Right sidebar bottom menu (currently showing Lobi, E-Sporlar, Bahislerim, Bahis kuponu, Ara) to ONLY be active in Sports section.
+- In Sports section, the bottom menu should show Chat and Bet slip together.
+- In Casino/other sections, it should ONLY show Chat (no bottom menu).

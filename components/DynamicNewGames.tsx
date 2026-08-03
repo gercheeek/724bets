@@ -32,7 +32,7 @@ export default function DynamicNewGames({ onGameSelect }: { onGameSelect: (game:
   if (dynamicNewGames.length === 0) return null;
 
   return (
-    <div className="mb-4 mt-8 w-full">
+    <div className="w-full">
       <div className="flex items-center justify-between mb-4 px-2">
         <div className="flex items-center gap-2">
           <Flame size={24} className="text-[#00E5FF] animate-pulse" />
