@@ -10,7 +10,7 @@ interface MainHeroProps {
 export default function MainHero({ onRegisterClick, onNavigate }: MainHeroProps) {
   const { t } = useTranslation();
   return (
-    <div className="w-full max-w-[1300px] mx-auto flex flex-col xl:flex-row items-start xl:items-center justify-between pt-2 pb-0 xl:pt-6 xl:pb-2 relative z-20 px-4 xl:px-8 gap-5 xl:gap-8">
+    <div className="w-full max-w-[1300px] mx-auto flex flex-col xl:flex-row items-start xl:items-center justify-between pt-4 pb-4 xl:pt-6 xl:pb-6 relative z-20 px-4 xl:px-8 gap-5 xl:gap-8 bg-gradient-to-br from-[#121824] to-[#0a0d14] border border-white/[0.03] rounded-[24px] shadow-2xl">
       
       {/* Left Content Area (Text + Buttons) */}
       <div className="w-full xl:w-[50%] min-w-0 flex flex-col items-start text-left pr-0 xl:pr-8 relative">
