@@ -67,7 +67,7 @@ export default function MainHero({ onRegisterClick, onNavigate }: MainHeroProps)
              {/* Using mosaic_casino_bg.webp if exists, else fallback gradient */}
             <div 
               className="absolute inset-0 bg-center transition-transform duration-700 group-hover:scale-[1.1] opacity-90" 
-              style={{ backgroundImage: "url('/images/advanced_casino_bg.jpg')", backgroundSize: "cover" }} 
+              style={{ backgroundImage: "url('/images/simple_premium_casino_bg.jpg')", backgroundSize: "cover" }} 
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#00E5FF]/40 to-transparent" />
           </div>
@@ -91,7 +91,7 @@ export default function MainHero({ onRegisterClick, onNavigate }: MainHeroProps)
             <div className="flex-1 relative overflow-hidden bg-[#1a1f2c]">
               <div 
                 className="absolute inset-0 bg-center transition-transform duration-700 group-hover:scale-[1.1] opacity-90" 
-                style={{ backgroundImage: "url('/images/advanced_sports_bg.jpg')", backgroundSize: "cover" }} 
+                style={{ backgroundImage: "url('/images/simple_premium_sports_bg.jpg')", backgroundSize: "cover" }} 
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#c6ff00]/40 to-transparent" />
             </div>
