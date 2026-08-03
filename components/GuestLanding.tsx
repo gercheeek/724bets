@@ -411,7 +411,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
         </>
       ) : (
         // GUEST VIEW (NEW DESIGN - Matches reference)
-        <div className="w-full max-w-[1400px] mx-auto px-4 lg:px-6 pt-2 md:pt-3 pb-6 md:pb-16 flex flex-col">
+        <div className="w-full max-w-[1400px] mx-auto px-4 lg:px-6 pt-2 md:pt-3 pb-2 md:pb-4 flex flex-col">
             {/* MAIN HERO SECTION */}
             <MainHero 
               onRegisterClick={onMemberRegisterClick} 
@@ -422,7 +422,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
 
 
 
-            <div className="w-full mt-6 mb-6 sm:mt-10 sm:mb-8 flex flex-col gap-8 md:gap-12">
+            <div className="w-full mt-2 mb-6 sm:mt-4 sm:mb-8 flex flex-col gap-8 md:gap-12">
               <LiveWinsTicker />
               <DynamicPopularGames onGameSelect={(game) => {
                 setSelectedGame({

@@ -10,7 +10,7 @@ interface MainHeroProps {
 export default function MainHero({ onRegisterClick, onNavigate }: MainHeroProps) {
   const { t } = useTranslation();
   return (
-    <div className="w-full max-w-[1300px] mx-auto flex flex-col xl:flex-row items-start xl:items-center justify-between pt-4 pb-2 xl:pt-14 xl:pb-6 relative z-20 px-4 xl:px-8 gap-5 xl:gap-12">
+    <div className="w-full max-w-[1300px] mx-auto flex flex-col xl:flex-row items-start xl:items-center justify-between pt-2 pb-0 xl:pt-6 xl:pb-2 relative z-20 px-4 xl:px-8 gap-5 xl:gap-8">
       
       {/* Left Content Area (Text + Buttons) */}
       <div className="w-full xl:w-[50%] min-w-0 flex flex-col items-start text-left pr-0 xl:pr-8 relative">
@@ -19,17 +19,17 @@ export default function MainHero({ onRegisterClick, onNavigate }: MainHeroProps)
         
         {/* Title */}
         <h1 
-          className="text-[26px] sm:text-3xl xl:text-[36px] 2xl:text-[46px] font-black leading-snug xl:leading-[1.25] mb-3 xl:mb-6 font-sans tracking-tighter w-full drop-shadow-[0_4px_24px_rgba(255,255,255,0.15)] relative z-10 bg-clip-text text-transparent bg-gradient-to-r from-white via-[#b3d4ff] to-white bg-[length:200%_auto] animate-[bg-gradient_4s_linear_infinite,fade-in-up_0.8s_ease-out_forwards] opacity-0"
+          className="text-[26px] sm:text-3xl xl:text-[36px] 2xl:text-[46px] font-black leading-snug xl:leading-[1.25] mb-2 xl:mb-3 font-sans tracking-tighter w-full drop-shadow-[0_4px_24px_rgba(255,255,255,0.15)] relative z-10 bg-clip-text text-transparent bg-gradient-to-r from-white via-[#b3d4ff] to-white bg-[length:200%_auto] animate-[bg-gradient_4s_linear_infinite,fade-in-up_0.8s_ease-out_forwards] opacity-0"
         >
         {t('home.hero_title_1')} <br className="hidden md:block" /> {t('home.hero_title_2')}
       </h1>
 
-        <p className="text-zinc-300 text-sm xl:text-base mb-6 xl:mb-10 font-medium max-w-lg leading-relaxed opacity-0 animate-[fade-in-up_0.8s_ease-out_0.1s_forwards]">
+        <p className="text-zinc-300 text-sm xl:text-base mb-3 xl:mb-5 font-medium max-w-lg leading-relaxed opacity-0 animate-[fade-in-up_0.8s_ease-out_0.1s_forwards]">
           Kripto odaklı, limitsiz ve kesintisiz bahis dünyasına adım atın. Favori oyunlarınızı oynarken sürpriz bonuslarla kazancınızı anında katlayın!
         </p>
       {/* Action Row */}
       <div 
-        className="flex flex-row items-center gap-2 sm:gap-6 mb-6 xl:mb-14 w-full opacity-0 animate-[fade-in-up_0.8s_ease-out_0.2s_forwards]"
+        className="flex flex-row items-center gap-2 sm:gap-6 mb-2 xl:mb-6 w-full opacity-0 animate-[fade-in-up_0.8s_ease-out_0.2s_forwards]"
       >
         {/* Register Button */}
         <button 
@@ -66,7 +66,7 @@ export default function MainHero({ onRegisterClick, onNavigate }: MainHeroProps)
           {/* Casino Card */}
           <div 
             onClick={() => onNavigate('casino')} 
-            className="group relative w-full aspect-[4/3] xl:aspect-square rounded-xl xl:rounded-2xl overflow-hidden cursor-pointer shadow-2xl flex flex-col border border-white/5 transition-all duration-300 hover:-translate-y-3 hover:scale-[1.04] hover:shadow-[0_20px_50px_rgba(0,229,255,0.4)] hover:border-[#00E5FF]/60 z-0 hover:z-10"
+            className="group relative w-full aspect-[4/3] xl:aspect-[4/3] rounded-xl xl:rounded-2xl overflow-hidden cursor-pointer shadow-2xl flex flex-col border border-white/5 transition-all duration-300 hover:-translate-y-3 hover:scale-[1.04] hover:shadow-[0_20px_50px_rgba(0,229,255,0.4)] hover:border-[#00E5FF]/60 z-0 hover:z-10"
           >
           {/* Main Image Area */}
           <div className="flex-1 relative overflow-hidden bg-[#0d1421]">
@@ -91,7 +91,7 @@ export default function MainHero({ onRegisterClick, onNavigate }: MainHeroProps)
           {/* Sports Card */}
           <div 
             onClick={() => onNavigate('sports')} 
-            className="group relative w-full aspect-[4/3] xl:aspect-square rounded-xl xl:rounded-2xl overflow-hidden cursor-pointer shadow-2xl flex flex-col border border-white/5 transition-all duration-300 hover:-translate-y-3 hover:scale-[1.04] hover:shadow-[0_20px_50px_rgba(198,255,0,0.4)] hover:border-[#c6ff00]/60 z-0 hover:z-10"
+            className="group relative w-full aspect-[4/3] xl:aspect-[4/3] rounded-xl xl:rounded-2xl overflow-hidden cursor-pointer shadow-2xl flex flex-col border border-white/5 transition-all duration-300 hover:-translate-y-3 hover:scale-[1.04] hover:shadow-[0_20px_50px_rgba(198,255,0,0.4)] hover:border-[#c6ff00]/60 z-0 hover:z-10"
           >
             {/* Main Image Area */}
             <div className="flex-1 relative overflow-hidden bg-[#1a1f2c]">
