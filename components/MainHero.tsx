@@ -24,8 +24,8 @@ export default function MainHero({ onRegisterClick, onNavigate }: MainHeroProps)
         {t('home.hero_title_1')} <br className="hidden md:block" /> {t('home.hero_title_2')}
       </h1>
 
-        <p className="text-zinc-300 text-sm xl:text-base mb-3 xl:mb-5 font-medium max-w-lg leading-relaxed opacity-0 animate-[fade-in-up_0.8s_ease-out_0.1s_forwards]">
-          Kripto odaklı, limitsiz ve kesintisiz bahis dünyasına adım atın. Favori oyunlarınızı oynarken sürpriz bonuslarla kazancınızı anında katlayın!
+        <p className="text-zinc-400 text-sm xl:text-base mb-4 xl:mb-6 font-medium max-w-md leading-relaxed opacity-0 animate-[fade-in-up_0.8s_ease-out_0.1s_forwards]">
+          Kripto ile limitsiz bahis dünyasına adım atın ve anında kazanmaya başlayın.
         </p>
       {/* Action Row */}
       <div 
@@ -34,18 +34,16 @@ export default function MainHero({ onRegisterClick, onNavigate }: MainHeroProps)
         {/* Register Button */}
         <button 
           onClick={onRegisterClick} 
-          className="relative overflow-hidden bg-gradient-to-r from-[#00E5FF] to-[#00b3cc] hover:brightness-110 text-[#0A0D14] font-black py-3 px-5 xl:py-4 xl:px-10 rounded-xl flex items-center gap-1.5 xl:gap-2 transition-all shadow-[0_0_20px_rgba(0,229,255,0.4)] xl:shadow-[0_0_30px_rgba(0,229,255,0.4)] hover:shadow-[0_0_50px_rgba(0,229,255,0.6)] hover:-translate-y-1 active:scale-95 text-[13px] xl:text-[15px] uppercase tracking-wide group z-10 shrink-0"
+          className="bg-[#00E5FF] hover:bg-[#00d0e6] text-black font-bold py-3 px-6 xl:py-3.5 xl:px-8 rounded-lg flex items-center gap-2 transition-colors active:scale-95 text-sm xl:text-base tracking-wide group z-10 shrink-0"
         >
-          <span className="relative z-10 flex items-center gap-1 xl:gap-2">{t('home.register')} <ArrowRight className="w-4 h-4 xl:w-5 xl:h-5 ml-0.5 xl:ml-1 group-hover:translate-x-1 transition-transform" /></span>
-          {/* Shimmer Effect overlay */}
-          <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent group-hover:animate-[shine-sweep_1.5s_ease-in-out_infinite]" />
+          <span className="flex items-center gap-1.5">{t('home.register')} <ArrowRight className="w-4 h-4 xl:w-5 xl:h-5 group-hover:translate-x-1 transition-transform" /></span>
         </button>
         
         {/* Or Text */}
         <span className="text-zinc-500 font-bold text-[11px] lg:text-sm px-2 uppercase tracking-widest shrink-0">{t('home.or')}</span>
         
         {/* Social Login Select */}
-        <button className="bg-[#131823]/80 backdrop-blur-md hover:bg-[#1a2130] rounded-xl px-4 py-3 lg:px-6 lg:py-4 flex items-center gap-3 lg:gap-5 border border-white/10 transition-all shadow-xl group hover:border-white/20 hover:shadow-[0_0_20px_rgba(255,255,255,0.1)] active:scale-95 flex-1 max-w-[160px] lg:max-w-none justify-center">
+        <button className="bg-zinc-900/80 hover:bg-zinc-800 rounded-lg px-4 py-3 xl:py-3.5 flex items-center gap-3 lg:gap-4 border border-zinc-800 hover:border-zinc-700 transition-colors active:scale-95 flex-1 max-w-[160px] lg:max-w-none justify-center group">
            <div className="flex items-center gap-3 lg:gap-5">
              {/* Steam */}
              <svg viewBox="0 0 24 24" className="w-5 h-5 lg:w-6 lg:h-6 text-zinc-400 group-hover:text-white transition-colors" fill="currentColor"><path d="M11.979 0C5.353 0 0 5.373 0 12.012c0 4.887 2.915 9.096 7.07 10.985l3.208-9.155a3.342 3.342 0 0 1-1.393-2.617c0-1.849 1.488-3.348 3.325-3.348 1.838 0 3.326 1.5 3.326 3.348 0 1.583-1.096 2.909-2.583 3.256l-3.346 9.489A11.968 11.968 0 0 0 23.958 12.01C23.958 5.373 18.605 0 11.979 0zm.23 7.854c-1.127 0-2.043.923-2.043 2.057 0 1.135.916 2.058 2.043 2.058 1.127 0 2.043-.923 2.043-2.058 0-1.134-.916-2.057-2.043-2.057z"/></svg>
