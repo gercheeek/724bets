@@ -401,7 +401,7 @@ export default function CasinoLobby({
       <div className="w-full max-w-[1600px] mx-auto px-4 md:px-8 pt-6 min-w-0">
         {/* 2. HERO BANNER */}
         {activeTab === 'all' && !searchQuery && (
-          <div className="relative w-full aspect-[21/9] md:aspect-[32/9] rounded-xl overflow-hidden mb-8 group bg-[#111111]">
+          <div className="relative w-full h-[200px] md:h-[250px] lg:h-[280px] rounded-xl overflow-hidden mb-8 group bg-[#111111]">
             {BANNERS.map((banner, idx) => (
               <div 
                 key={banner.id}
@@ -431,6 +431,33 @@ export default function CasinoLobby({
                   onClick={() => setCurrentBanner(idx)}
                   className={`h-1.5 rounded-full transition-all ${currentBanner === idx ? 'w-6 bg-[#00E5FF] shadow-[0_0_8px_#00E5FF]' : 'w-2 bg-white/20'}`}
                 />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* 2.5 PROVIDERS SLIDER */}
+        {activeTab === 'all' && !searchQuery && (
+          <div className="mb-8">
+            <div className="flex items-center justify-between mb-4 mt-4">
+              <div className="flex items-center gap-2">
+                <div className="text-[#00E5FF] drop-shadow-[0_0_8px_rgba(0,229,255,0.5)]"><Sparkles size={18} /></div>
+                <h2 className="text-white text-lg font-black tracking-tight drop-shadow-md">Oyun Sağlayıcıları</h2>
+              </div>
+            </div>
+            <div className="flex gap-4 overflow-x-auto hide-scrollbar snap-x snap-mandatory pb-4">
+              {[
+                { id: 'pragmatic', name: 'Pragmatic Play', img: '/images/providers/pragmatic.svg', fallback: 'PRAGMATIC' },
+                { id: 'egt', name: 'Amusnet (EGT)', img: '/images/providers/egt.svg', fallback: 'AMUSNET' },
+                { id: 'hacksaw', name: 'Hacksaw Gaming', img: '/images/providers/hacksaw.svg', fallback: 'HACKSAW' },
+                { id: 'evolution', name: 'Evolution', img: '/images/providers/evolution.svg', fallback: 'EVOLUTION' },
+                { id: 'netent', name: 'NetEnt', img: '/images/providers/netent.svg', fallback: 'NETENT' },
+                { id: 'nolimit', name: 'Nolimit City', img: '/images/providers/nolimit.svg', fallback: 'NOLIMIT' },
+                { id: 'playngo', name: 'Play\'n GO', img: '/images/providers/playngo.svg', fallback: 'PLAYNGO' }
+              ].map(p => (
+                <button key={p.id} onClick={() => setSearchQuery(p.name)} className="snap-start shrink-0 w-32 h-16 bg-[#0A0D14] border border-white/5 hover:border-[#00E5FF]/30 hover:shadow-[0_0_15px_rgba(0,229,255,0.2)] rounded-lg flex items-center justify-center transition-all duration-300 group">
+                  <span className="font-black text-[#848B9D] group-hover:text-white transition-colors">{p.fallback}</span>
+                </button>
               ))}
             </div>
           </div>

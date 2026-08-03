@@ -1459,7 +1459,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
       } else if (cleanPath === '/trusted-detail') {
         setView('trusted-detail');
       } else if (cleanPath === '/casino') {
-        setView('blackjack');
+        setView('casino');
       } else if (cleanPath.startsWith('/spor')) {
         setView('spor724');
       } else if (cleanPath === '/canli') {

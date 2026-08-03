@@ -142,7 +142,7 @@ const Header: React.FC<HeaderProps> = ({
     { key: 'brands', view: 'brands', label: t('header_siteler'), icon: <Shield className={ICON_SIZE} />, visKey: 'brands' },
     { key: 'trusted-sites', view: 'trusted-sites', label: t('header_guvenilir'), icon: <Shield className={ICON_SIZE} />, visKey: 'trustedSites' },
     { key: 'pool', view: 'pool', label: t('header_toto'), icon: <Target className={ICON_SIZE} />, visKey: 'pool' },
-    { key: 'blackjack', view: 'blackjack', label: t('header_casino'), icon: <Spade className={ICON_SIZE} />, visKey: 'blackjack' },
+    { key: 'casino', view: 'casino', label: t('header_casino'), icon: <Spade className={ICON_SIZE} />, visKey: 'casino' },
     { key: 'loyalty', view: 'loyalty', label: t('header_gorevler'), icon: <Trophy className={ICON_SIZE} />, visKey: 'loyalty' },
   ];
 
