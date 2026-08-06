@@ -44,7 +44,7 @@ const GameCard = ({ game, onClick }: { game: PromoGame, onClick: () => void }) =
       {game.hasDropsAndWins && (
         <div className="absolute top-0 left-0 z-20">
           <div className="w-10 h-10 overflow-hidden relative rounded-tl-2xl">
-             <div className="absolute top-2 -left-3 w-16 bg-black text-white text-[4px] font-black uppercase tracking-widest text-center py-0.5 -rotate-45 shadow-lg border-y border-white/20 flex flex-col items-center justify-center leading-none gap-0.5">
+             <div className="absolute top-2 -left-3 w-16 bg-[#0A0C10] text-white text-[4px] font-black uppercase tracking-widest text-center py-0.5 -rotate-45 shadow-lg border-y border-white/20 flex flex-col items-center justify-center leading-none gap-0.5">
                <span>DROPS</span>
                <span>& WINS</span>
              </div>

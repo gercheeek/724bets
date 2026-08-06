@@ -200,7 +200,7 @@ const CouponsView: React.FC<CouponsViewProps> = ({
                 
                 {/* Action Button */}
                 {cashedOutBets.includes(bet.id) ? (
-                  <button disabled className="w-full py-3.5 bg-[#00E676]/20 border border-[#00E676]/30 text-[#00E676] font-black uppercase tracking-wide text-sm rounded-lg flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(0,230,118,0.1)]">
+                  <button disabled className="w-full py-3.5 bg-[#00E5FF]/20 border border-[#00E676]/30 text-[#00E5FF] font-black uppercase tracking-wide text-sm rounded-lg flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(0,230,118,0.1)]">
                     <CheckCircle2 className="w-5 h-5" />
                     <span>BAHİS BOZDURULDU</span>
                   </button>

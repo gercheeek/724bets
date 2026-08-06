@@ -78,7 +78,7 @@ const PromoPopup: React.FC<PromoPopupProps> = ({ onClose, config }) => {
                             style={{ background: 'linear-gradient(90deg, #f0b90b, #ffd357)' }}>
                             🥇 ANA SPONSORUMUZ
                         </span>
-                        <span className="px-2.5 py-1 text-[9px] font-black uppercase tracking-widest rounded-full border text-amber-400"
+                        <span className="px-2.5 py-1 text-[9px] font-black uppercase tracking-widest rounded-full border text-zinc-300"
                             style={{ borderColor: 'rgba(240,185,11,0.4)' }}>
                             🟢 CANLI
                         </span>

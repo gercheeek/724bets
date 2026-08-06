@@ -47,7 +47,7 @@ export default function OriginalsHub({ onNavigate, isLoggedIn, siteUser, setSite
         <div 
             ref={hubRef}
             onMouseMove={handleMouseMove}
-            className="w-full min-h-[calc(100vh-60px)] bg-[#050505] p-4 md:p-8 relative overflow-hidden font-sans flex flex-col items-center selection:bg-fuchsia-500/30"
+            className="w-full min-h-[calc(100vh-60px)] bg-[#0A0C10] p-4 md:p-8 relative overflow-hidden font-sans flex flex-col items-center selection:bg-fuchsia-500/30"
         >
             {/* Global Cursor Spotlight (Flashlight Effect) */}
             <div 
@@ -114,9 +114,9 @@ export default function OriginalsHub({ onNavigate, isLoggedIn, siteUser, setSite
                         <div className="bg-white/5 px-4 py-3 border-b border-white/5 flex items-center justify-between">
                             <span className="text-sm font-semibold text-white/80">Canlı Feed</span>
                             <div className="flex gap-1.5">
-                                <div className="w-2 h-2 rounded-full bg-emerald-500/50"></div>
-                                <div className="w-2 h-2 rounded-full bg-emerald-500/70"></div>
-                                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                                <div className="w-2 h-2 rounded-full bg-[#00E5FF]/50"></div>
+                                <div className="w-2 h-2 rounded-full bg-[#00E5FF]/70"></div>
+                                <div className="w-2 h-2 rounded-full bg-[#00E5FF] animate-pulse"></div>
                             </div>
                         </div>
                         <div className="p-4 h-[200px] overflow-hidden relative">
@@ -125,11 +125,11 @@ export default function OriginalsHub({ onNavigate, isLoggedIn, siteUser, setSite
                             <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-[#15171e] to-transparent z-10"></div>
                             
                             <div className="animate-[feed-scroll_15s_linear_infinite] flex flex-col gap-3">
-                                <p className="text-sm"><span className="text-emerald-400 font-medium">@Ahmet34</span> 'Casino Noir' oyununda <span className="text-white font-bold">12.500₺</span> KAZANDI!</p>
+                                <p className="text-sm"><span className="text-[#00E5FF] font-medium">@Ahmet34</span> 'Casino Noir' oyununda <span className="text-white font-bold">12.500₺</span> KAZANDI!</p>
                                 <p className="text-sm"><span className="text-[#a855f7] font-medium animate-pulse flex items-center gap-1 inline-flex"><Zap size={14}/> BÜYÜK KASA</span> @Vip_Memo'ya VURDU!</p>
-                                <p className="text-sm"><span className="text-emerald-400 font-medium">@Kral77</span> 'Galactic Spin' ile <span className="text-[#00ff88] font-bold">500x</span> çarpan yakaladı.</p>
-                                <p className="text-sm"><span className="text-emerald-400 font-medium">@Mehmet_88</span> 'Seka Çark' <span className="text-white font-bold">1.000₺</span> KAZANDI!</p>
-                                <p className="text-sm"><span className="text-yellow-400 font-medium flex items-center gap-1 inline-flex"><Crown size={14}/> VIP</span> @Deli_Dolu VIP Club'a Katıldı!</p>
+                                <p className="text-sm"><span className="text-[#00E5FF] font-medium">@Kral77</span> 'Galactic Spin' ile <span className="text-[#00ff88] font-bold">500x</span> çarpan yakaladı.</p>
+                                <p className="text-sm"><span className="text-[#00E5FF] font-medium">@Mehmet_88</span> 'Seka Çark' <span className="text-white font-bold">1.000₺</span> KAZANDI!</p>
+                                <p className="text-sm"><span className="text-zinc-300 font-medium flex items-center gap-1 inline-flex"><Crown size={14}/> VIP</span> @Deli_Dolu VIP Club'a Katıldı!</p>
                             </div>
                         </div>
                     </div>
@@ -148,7 +148,7 @@ export default function OriginalsHub({ onNavigate, isLoggedIn, siteUser, setSite
                                 <span className="text-sm font-medium text-white">Görev: Galactic Spin</span>
                                 <span className="text-xs font-bold text-[#00ff88] bg-[#00ff88]/10 px-2 py-1 rounded">+500₺</span>
                             </div>
-                            <div className="w-full h-2 bg-black rounded-full overflow-hidden">
+                            <div className="w-full h-2 bg-[#0A0C10] rounded-full overflow-hidden">
                                 <div className="h-full bg-gradient-to-r from-[#00ff88] to-emerald-400" style={{ width: '60%' }}></div>
                             </div>
                             <div className="text-right text-[10px] mt-1.5 text-white/50">60/100 Döndürme</div>
@@ -159,7 +159,7 @@ export default function OriginalsHub({ onNavigate, isLoggedIn, siteUser, setSite
                                 <span className="text-sm font-medium text-white">Görev: Casino Noir</span>
                                 <span className="text-xs font-bold text-[#a855f7] bg-[#a855f7]/10 px-2 py-1 rounded">+10 FreeSpin</span>
                             </div>
-                            <div className="w-full h-2 bg-black rounded-full overflow-hidden">
+                            <div className="w-full h-2 bg-[#0A0C10] rounded-full overflow-hidden">
                                 <div className="h-full bg-gradient-to-r from-[#a855f7] to-purple-400" style={{ width: '30%' }}></div>
                             </div>
                             <div className="text-right text-[10px] mt-1.5 text-white/50">3/10 Kazanç</div>

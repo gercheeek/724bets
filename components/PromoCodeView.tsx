@@ -17,8 +17,8 @@ const PromoCodeView: React.FC<PromoCodeViewProps> = ({ siteUser, onNavigate, isE
 
   const promos = [
     { title: 'Gece Bonusu (Çevrimsiz)', desc: 'Saat 02:00-05:00 arası yatırımlarınız freespinlerle ödüllendiriliyor.', icon: <Clock className="w-6 h-6 text-indigo-400" />, image: '/images/promos/promo_night.webp' },
-    { title: 'Hoş Geldin Bonusu (Çevrimsiz)', desc: '724BETS\'te yeniyseniz 100 Freespin ve 5.000 TL ekstra çekim hakkınız var.', icon: <PartyPopper className="w-6 h-6 text-yellow-400" />, image: '/images/promos/promo_welcome.webp' },
-    { title: 'İlk Çekime 2 Katı Ödeme (Çevrimsiz)', desc: 'İlk çekiminizi yaparken kazancınızın 2 katını gönderiyoruz.', icon: <Wallet className="w-6 h-6 text-emerald-400" />, image: '/images/promos/promo_2x.webp' },
+    { title: 'Hoş Geldin Bonusu (Çevrimsiz)', desc: '724BETS\'te yeniyseniz 100 Freespin ve 5.000 TL ekstra çekim hakkınız var.', icon: <PartyPopper className="w-6 h-6 text-zinc-300" />, image: '/images/promos/promo_welcome.webp' },
+    { title: 'İlk Çekime 2 Katı Ödeme (Çevrimsiz)', desc: 'İlk çekiminizi yaparken kazancınızın 2 katını gönderiyoruz.', icon: <Wallet className="w-6 h-6 text-[#00E5FF]" />, image: '/images/promos/promo_2x.webp' },
     { title: 'Günlük Prim (Çevrimsiz)', desc: 'Aktifliğinize göre hesabınızda her gün nakit bonuslar yatıyor.', icon: <Gift className="w-6 h-6 text-pink-400" />, image: '/images/promos/promo_gift.webp' },
     { title: 'Haftalık Jest Bonusu (Çevrimsiz)', desc: 'Tüm haftaki performansınız her cumartesi ödüllendiriliyor.', icon: <Calendar className="w-6 h-6 text-blue-400" />, image: '/images/promos/promo_gift.webp' },
     { title: 'Seviye Atlama Bonusu (Çevrimsiz)', desc: 'VIP seviyeniz yükseldikçe daha fazla ödül ve ayrıcalık sizi bekliyor.', icon: <TrendingUp className="w-6 h-6 text-green-400" />, image: '/images/promos/promo_levelup.webp' },
@@ -144,7 +144,7 @@ const PromoCodeView: React.FC<PromoCodeViewProps> = ({ siteUser, onNavigate, isE
         
         {/* HERO SECTION */}
         {isEmbedded ? (
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-8 w-full bg-[#0A0D14]/60 backdrop-blur-3xl border border-white/5 rounded-3xl p-3 shadow-2xl relative overflow-hidden group">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-8 w-full bg-[#0A0C10]/60 backdrop-blur-3xl border border-white/5 rounded-3xl p-3 shadow-2xl relative overflow-hidden group">
             <div className="absolute inset-0 bg-gradient-to-r from-[#00E5FF]/10 via-transparent to-transparent pointer-events-none" />
             
             <div className="flex items-center gap-4 pl-4 z-10">
@@ -202,7 +202,7 @@ const PromoCodeView: React.FC<PromoCodeViewProps> = ({ siteUser, onNavigate, isE
               <div className="absolute -inset-1 rounded-[2.5rem] bg-gradient-to-r from-[#00E5FF]/0 via-[#00E5FF]/50 to-[#00E5FF]/0 opacity-30 group-hover/form:opacity-100 blur-lg transition-all duration-1000 animate-spin-slow"></div>
               <div className="absolute -inset-1 rounded-[2.5rem] bg-gradient-to-b from-[#00E5FF]/0 via-[#00E5FF]/30 to-[#00E5FF]/0 opacity-30 group-hover/form:opacity-100 blur-md transition-all duration-1000 animate-spin-slow" style={{ animationDirection: 'reverse' }}></div>
 
-              <div className="bg-[#0A0D14]/90 backdrop-blur-3xl border border-white/10 p-6 sm:p-10 rounded-3xl shadow-[0_20px_80px_rgba(0,0,0,0.9),inset_0_0_30px_rgba(0,229,255,0.05)] relative overflow-hidden z-10">
+              <div className="bg-[#0A0C10]/90 backdrop-blur-3xl border border-white/10 p-6 sm:p-10 rounded-3xl shadow-[0_20px_80px_rgba(0,0,0,0.9),inset_0_0_30px_rgba(0,229,255,0.05)] relative overflow-hidden z-10">
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#00E5FF]/50 group-hover/form:via-[#00E5FF] to-transparent transition-all duration-700"></div>
                 <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
                 
@@ -237,10 +237,10 @@ const PromoCodeView: React.FC<PromoCodeViewProps> = ({ siteUser, onNavigate, isE
                   <div className={`mt-6 p-5 rounded-2xl border ${result.success ? 'bg-[#00E5FF]/10 border-[#00E5FF]/30' : 'bg-red-500/10 border-red-500/30'} flex flex-col items-center justify-center text-center animate-in fade-in slide-in-from-bottom-2 duration-300 relative z-10`}>
                     {result.success ? (
                       <>
-                        <div className="w-14 h-14 bg-emerald-500/20 rounded-full flex items-center justify-center mb-3 shadow-[0_0_20px_rgba(16,185,129,0.3)]">
-                          <Gift className="w-7 h-7 text-emerald-400" />
+                        <div className="w-14 h-14 bg-[#00E5FF]/20 rounded-full flex items-center justify-center mb-3 shadow-[0_0_20px_rgba(16,185,129,0.3)]">
+                          <Gift className="w-7 h-7 text-[#00E5FF]" />
                         </div>
-                        <h3 className="text-emerald-400 font-black text-lg mb-1">{result.message}</h3>
+                        <h3 className="text-[#00E5FF] font-black text-lg mb-1">{result.message}</h3>
                         <p className="text-zinc-400 text-xs">Ödül anında hesabınıza yansıtıldı. İyi oyunlar dileriz!</p>
                       </>
                     ) : (

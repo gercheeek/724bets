@@ -79,7 +79,7 @@ const AdminReferralTab: React.FC = () => {
                     </td>
                     <td className="px-4 py-3">
                       {r.deposit_status === 'completed' ? (
-                        <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-emerald-500 bg-emerald-500/10 text-xs font-bold">
+                        <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[#00E5FF] bg-[#00E5FF]/10 text-xs font-bold">
                           <CheckCircle2 className="w-3.5 h-3.5" /> Yatırım Yaptı
                         </span>
                       ) : (

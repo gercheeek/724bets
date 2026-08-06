@@ -36,7 +36,7 @@ const KralView = ({
       </div>
 
       {/* Top Navbar */}
-      <div className="flex items-center justify-between p-6 z-10 border-b border-white/5 bg-[#0A0D14]/80 backdrop-blur-md">
+      <div className="flex items-center justify-between p-6 z-10 border-b border-white/5 bg-[#0A0C10]/80 backdrop-blur-md">
         <div className="flex items-center gap-4">
           <button 
             onClick={onBack}

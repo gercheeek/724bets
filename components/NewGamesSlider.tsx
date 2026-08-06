@@ -39,10 +39,10 @@ export default function NewGamesSlider() {
                 </div>
                 <div className="flex items-center gap-2">
                     <span className="text-gray-400 text-sm font-semibold cursor-pointer hover:text-white transition-colors mr-2">Tümünü gör</span>
-                    <button onClick={() => scroll('left')} className="bg-[#111111] hover:bg-white/10 text-white p-1.5 rounded-[4px] transition-colors shadow-sm">
+                    <button onClick={() => scroll('left')} className="bg-[#0A0C10] hover:bg-white/10 text-white p-1.5 rounded-[4px] transition-colors shadow-sm">
                         <ChevronLeft className="w-4 h-4" />
                     </button>
-                    <button onClick={() => scroll('right')} className="bg-[#111111] hover:bg-white/10 text-white p-1.5 rounded-[4px] transition-colors shadow-sm">
+                    <button onClick={() => scroll('right')} className="bg-[#0A0C10] hover:bg-white/10 text-white p-1.5 rounded-[4px] transition-colors shadow-sm">
                         <ChevronRight className="w-4 h-4" />
                     </button>
                 </div>

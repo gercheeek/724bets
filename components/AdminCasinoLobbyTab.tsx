@@ -159,11 +159,11 @@ const AdminCasinoLobbyTab: React.FC<AdminCasinoLobbyTabProps> = ({ games = [], o
           onClick={() => setActiveSubTab('live')}
           className={`px-6 py-3 font-black text-xs uppercase tracking-widest border-b-2 transition-all flex items-center gap-2 ${
             activeSubTab === 'live' 
-              ? 'border-[#00E676] text-[#00E676]' 
+              ? 'border-[#00E676] text-[#00E5FF]' 
               : 'border-transparent text-zinc-500 hover:text-white'
           }`}
         >
-          <span className="w-1.5 h-1.5 rounded-full bg-[#00E676] animate-pulse" />
+          <span className="w-1.5 h-1.5 rounded-full bg-[#00E5FF] animate-pulse" />
           CANLI CASINO ({localGames.filter(g => g.type === 'live').length})
         </button>
         <button
@@ -214,8 +214,8 @@ const AdminCasinoLobbyTab: React.FC<AdminCasinoLobbyTabProps> = ({ games = [], o
                   <div className="absolute inset-0 flex flex-col items-center justify-center p-2 z-10 bg-black/30">
                     {game.type === 'live' && (
                       <div className="flex items-center gap-1 mb-0.5">
-                        <span className="w-1 h-1 rounded-full bg-[#00E676]" />
-                        <span className="text-[6px] font-bold text-[#00E676] uppercase">CANLI</span>
+                        <span className="w-1 h-1 rounded-full bg-[#00E5FF]" />
+                        <span className="text-[6px] font-bold text-[#00E5FF] uppercase">CANLI</span>
                       </div>
                     )}
                     <span className="text-center font-black text-white text-[10px] tracking-tight uppercase leading-tight">{game.name || 'İSİMSİZ'}</span>
@@ -240,7 +240,7 @@ const AdminCasinoLobbyTab: React.FC<AdminCasinoLobbyTabProps> = ({ games = [], o
                     type="text"
                     value={game.image}
                     onChange={(e) => updateGame(game.id, 'image', e.target.value)}
-                    className="w-full bg-black border border-zinc-850 rounded-lg px-3 py-2 text-[10px] text-white outline-none focus:border-amber-500/50 transition-all"
+                    className="w-full bg-[#0A0C10] border border-zinc-850 rounded-lg px-3 py-2 text-[10px] text-white outline-none focus:border-amber-500/50 transition-all"
                     placeholder="Veya Görsel URL Linki Girin"
                   />
                 </div>
@@ -256,7 +256,7 @@ const AdminCasinoLobbyTab: React.FC<AdminCasinoLobbyTabProps> = ({ games = [], o
                     type="text"
                     value={game.name}
                     onChange={(e) => updateGame(game.id, 'name', e.target.value)}
-                    className="w-full bg-black border border-zinc-850 rounded-lg px-4 py-3 text-xs text-white outline-none focus:border-amber-500/50 transition-all"
+                    className="w-full bg-[#0A0C10] border border-zinc-850 rounded-lg px-4 py-3 text-xs text-white outline-none focus:border-amber-500/50 transition-all"
                     placeholder="Örn: Fruit Party"
                   />
                 </div>
@@ -268,7 +268,7 @@ const AdminCasinoLobbyTab: React.FC<AdminCasinoLobbyTabProps> = ({ games = [], o
                     type="text"
                     value={game.provider}
                     onChange={(e) => updateGame(game.id, 'provider', e.target.value)}
-                    className="w-full bg-black border border-zinc-850 rounded-lg px-4 py-3 text-xs text-white outline-none focus:border-amber-500/50 transition-all"
+                    className="w-full bg-[#0A0C10] border border-zinc-850 rounded-lg px-4 py-3 text-xs text-white outline-none focus:border-amber-500/50 transition-all"
                     placeholder="Örn: PRAGMATIC PLAY"
                   />
                 </div>
@@ -283,7 +283,7 @@ const AdminCasinoLobbyTab: React.FC<AdminCasinoLobbyTabProps> = ({ games = [], o
                     type="text"
                     value={game.link}
                     onChange={(e) => updateGame(game.id, 'link', e.target.value)}
-                    className="w-full bg-black border border-zinc-850 rounded-lg px-4 py-3 text-xs text-emerald-400 font-mono outline-none focus:border-amber-500/50 transition-all"
+                    className="w-full bg-[#0A0C10] border border-zinc-850 rounded-lg px-4 py-3 text-xs text-[#00E5FF] font-mono outline-none focus:border-amber-500/50 transition-all"
                     placeholder="https://gidecegi-sponsor-site.com/..."
                   />
                 </div>
@@ -295,7 +295,7 @@ const AdminCasinoLobbyTab: React.FC<AdminCasinoLobbyTabProps> = ({ games = [], o
                     type="text"
                     value={game.image.startsWith('data:') ? '' : game.image}
                     onChange={(e) => updateGame(game.id, 'image', e.target.value)}
-                    className="w-full bg-black border border-zinc-850 rounded-lg px-4 py-3 text-xs text-white outline-none focus:border-amber-500/50 transition-all"
+                    className="w-full bg-[#0A0C10] border border-zinc-850 rounded-lg px-4 py-3 text-xs text-white outline-none focus:border-amber-500/50 transition-all"
                     placeholder="https://resimler.com/afis.jpg"
                   />
                 </div>
@@ -306,7 +306,7 @@ const AdminCasinoLobbyTab: React.FC<AdminCasinoLobbyTabProps> = ({ games = [], o
                   <select
                     value={game.themeColor}
                     onChange={(e) => updateGame(game.id, 'themeColor', e.target.value)}
-                    className="w-full bg-black border border-zinc-850 rounded-lg px-4 py-3 text-xs text-white outline-none focus:border-amber-500/50 transition-all"
+                    className="w-full bg-[#0A0C10] border border-zinc-850 rounded-lg px-4 py-3 text-xs text-white outline-none focus:border-amber-500/50 transition-all"
                   >
                     {GRADIENT_THEMES.map(theme => (
                       <option key={theme.value} value={theme.value}>{theme.name}</option>
@@ -320,7 +320,7 @@ const AdminCasinoLobbyTab: React.FC<AdminCasinoLobbyTabProps> = ({ games = [], o
                   <select
                     value={game.lobbyCategory || 'popular'}
                     onChange={(e) => updateGame(game.id, 'lobbyCategory', e.target.value)}
-                    className="w-full bg-black border border-zinc-850 rounded-lg px-4 py-3 text-xs text-white outline-none focus:border-amber-500/50 transition-all"
+                    className="w-full bg-[#0A0C10] border border-zinc-850 rounded-lg px-4 py-3 text-xs text-white outline-none focus:border-amber-500/50 transition-all"
                   >
                     <option value="popular">Popüler (Ana Vitrin)</option>
                     <option value="pragmatic">Pragmatic Play Serisi</option>
@@ -342,7 +342,7 @@ const AdminCasinoLobbyTab: React.FC<AdminCasinoLobbyTabProps> = ({ games = [], o
                       type="text"
                       value={game.badgeText || ''}
                       onChange={(e) => updateGame(game.id, 'badgeText', e.target.value)}
-                      className="w-full bg-black border border-zinc-850 rounded-lg px-4 py-3 text-xs text-white outline-none focus:border-amber-500/50 transition-all"
+                      className="w-full bg-[#0A0C10] border border-zinc-850 rounded-lg px-4 py-3 text-xs text-white outline-none focus:border-amber-500/50 transition-all"
                       placeholder="Örn: EN İYİ, PİYANGO, YENİ"
                     />
                   </div>
@@ -351,12 +351,12 @@ const AdminCasinoLobbyTab: React.FC<AdminCasinoLobbyTabProps> = ({ games = [], o
                     <select
                       value={game.badgeColor || 'bg-purple-600'}
                       onChange={(e) => updateGame(game.id, 'badgeColor', e.target.value)}
-                      className="w-full bg-black border border-zinc-850 rounded-lg px-4 py-3 text-xs text-white outline-none focus:border-amber-500/50 transition-all"
+                      className="w-full bg-[#0A0C10] border border-zinc-850 rounded-lg px-4 py-3 text-xs text-white outline-none focus:border-amber-500/50 transition-all"
                     >
                       <option value="bg-purple-600">Mor</option>
                       <option value="bg-[#10b981]">Mavi</option>
                       <option value="bg-orange-500">Turuncu</option>
-                      <option value="bg-emerald-500">Yeşil</option>
+                      <option value="bg-[#00E5FF]">Yeşil</option>
                       <option value="bg-red-500">Kırmızı</option>
                     </select>
                   </div>
@@ -372,7 +372,7 @@ const AdminCasinoLobbyTab: React.FC<AdminCasinoLobbyTabProps> = ({ games = [], o
                   onClick={() => updateGame(game.id, 'isActive', !game.isActive)}
                   className={`px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-wider border transition-all ${
                     game.isActive 
-                      ? 'bg-emerald-500/10 border-emerald-500/20 text-[#00E676]' 
+                      ? 'bg-[#00E5FF]/10 border-emerald-500/20 text-[#00E5FF]' 
                       : 'bg-zinc-800 border-zinc-700 text-zinc-500'
                   }`}
                 >

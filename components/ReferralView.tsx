@@ -85,7 +85,7 @@ const ReferralView: React.FC<ReferralViewProps> = ({ siteUser, onNavigate }) => 
           <div className="w-full md:w-auto bg-zinc-900/80 p-6 rounded-2xl border border-zinc-800 shadow-2xl backdrop-blur-sm">
             <div className="mb-4">
               <label className="block text-xs font-bold text-zinc-500 uppercase tracking-widest mb-2">Senin Özel Davet Linkin</label>
-              <div className="flex items-center bg-black border border-zinc-800 rounded-lg p-1">
+              <div className="flex items-center bg-[#0A0C10] border border-zinc-800 rounded-lg p-1">
                 <input 
                   type="text" 
                   readOnly 
@@ -128,8 +128,8 @@ const ReferralView: React.FC<ReferralViewProps> = ({ siteUser, onNavigate }) => 
           </div>
           
           <div className="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl flex items-center gap-4">
-            <div className="w-12 h-12 bg-emerald-500/10 rounded-xl flex items-center justify-center border border-emerald-500/20">
-              <CheckCircle2 className="w-6 h-6 text-emerald-400" />
+            <div className="w-12 h-12 bg-[#00E5FF]/10 rounded-xl flex items-center justify-center border border-emerald-500/20">
+              <CheckCircle2 className="w-6 h-6 text-[#00E5FF]" />
             </div>
             <div>
               <p className="text-xs text-zinc-500 font-bold uppercase tracking-wider mb-1">Yatırım Yapanlar</p>
@@ -184,7 +184,7 @@ const ReferralView: React.FC<ReferralViewProps> = ({ siteUser, onNavigate }) => 
                       </td>
                       <td className="p-4">
                         {ref.deposit_status === 'completed' ? (
-                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-500 text-xs font-bold border border-emerald-500/20">
+                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#00E5FF]/10 text-[#00E5FF] text-xs font-bold border border-emerald-500/20">
                             <CheckCircle2 className="w-3.5 h-3.5" /> Yatırım Yaptı
                           </span>
                         ) : (

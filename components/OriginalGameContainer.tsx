@@ -35,7 +35,7 @@ export default function OriginalGameContainer({
         <div 
             ref={containerRef}
             onMouseMove={handleMouseMove}
-            className="w-full relative flex flex-col bg-[#050505] overflow-hidden font-sans min-h-[calc(100vh-60px)] arcade-cursor-global"
+            className="w-full relative flex flex-col bg-[#0A0C10] overflow-hidden font-sans min-h-[calc(100vh-60px)] arcade-cursor-global"
         >
             
             {/* Global Cursor Spotlight (Flashlight Effect) */}
@@ -118,7 +118,7 @@ export default function OriginalGameContainer({
                             <>
                                 <span className="text-gray-500 text-[10px] font-bold uppercase tracking-widest md:mb-1">Bakiye</span>
                                 <div className="bg-black/80 px-4 md:px-5 py-2 md:py-2.5 rounded-full border border-white/10 shadow-inner flex items-center gap-2">
-                                    <span className="text-emerald-400 font-black text-base md:text-lg">
+                                    <span className="text-[#00E5FF] font-black text-base md:text-lg">
                                         ${siteUser ? siteUser.balance.toFixed(2) : '0.00'}
                                     </span>
                                 </div>

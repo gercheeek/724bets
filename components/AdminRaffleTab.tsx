@@ -107,7 +107,7 @@ const AdminRaffleTab: React.FC<AdminRaffleTabProps> = ({ config, onSave }) => {
                                     type="datetime-local" 
                                     value={localConfig.drawDate.slice(0, 16)} 
                                     onChange={e => setLocalConfig({...localConfig, drawDate: e.target.value})}
-                                    className="w-full bg-black border border-zinc-800 rounded-lg p-3 text-sm text-white focus:border-[#f0b90b]/50 outline-none" 
+                                    className="w-full bg-[#0A0C10] border border-zinc-800 rounded-lg p-3 text-sm text-white focus:border-[#f0b90b]/50 outline-none" 
                                 />
                             </div>
                             <div className="flex items-center justify-between p-3 bg-black/40 rounded-lg border border-zinc-800">
@@ -177,7 +177,7 @@ const AdminRaffleTab: React.FC<AdminRaffleTabProps> = ({ config, onSave }) => {
                                         className={`h-8 rounded cursor-pointer transition-all flex items-center justify-center text-[8px] font-black border
                                             ${found 
                                                 ? 'bg-[#f0b90b] border-[#f0b90b] text-black shadow-[0_0_8px_rgba(240,185,11,0.2)]' 
-                                                : 'bg-black border-zinc-800 text-zinc-700 hover:border-zinc-500'}`}
+                                                : 'bg-[#0A0C10] border-zinc-800 text-zinc-700 hover:border-zinc-500'}`}
                                         title={found ? found.username : `Boş Slot #${i+1}`}
                                     >
                                         {i + 1}

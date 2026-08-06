@@ -1,8 +1,8 @@
 const WebSocket = require('ws');
 const fs = require('fs');
 
-const url = 'wss://eu-swarm-newm.atekbet273.com/ws?language=tur';
-const headers = { 'Origin': 'https://atekbet273.com', 'User-Agent': 'Mozilla/5.0' };
+const url = 'wss://eu-swarm-newm.atekbet274.com/ws?language=tur';
+const headers = { 'Origin': 'https://atekbet274.com', 'User-Agent': 'Mozilla/5.0' };
 const ws = new WebSocket(url, { headers });
 
 const formattedEventsMap = new Map();
@@ -39,6 +39,7 @@ ws.on('message', (d) => {
         if (!sport.region) return;
         const sportName = (sport.name || '').trim();
         const sName = sportName.toLowerCase();
+        if (sName !== 'futbol' && sName !== 'soccer' && sName !== 'football') return;
         Object.values(sport.region).forEach(region => {
            regionsToFetch.push({ sportName, regionId: region.id, regionName: region.name });
         });

@@ -134,14 +134,14 @@ const MatchResultsWidget: React.FC = () => {
       {/* Desktop Navigation Arrows */}
       <button 
         onClick={scrollLeft}
-        className="hidden md:flex absolute -left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-[#111111] rounded-full items-center justify-center z-10 text-gray-400 hover:text-white hover:bg-[#22262F] transition-colors shadow-lg shadow-black/50 opacity-0 group-hover:opacity-100"
+        className="hidden md:flex absolute -left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-[#0A0C10] rounded-full items-center justify-center z-10 text-gray-400 hover:text-white hover:bg-[#22262F] transition-colors shadow-lg shadow-black/50 opacity-0 group-hover:opacity-100"
       >
         <ChevronLeft className="w-5 h-5" />
       </button>
 
       <button 
         onClick={scrollRight}
-        className="hidden md:flex absolute -right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-[#111111] rounded-full items-center justify-center z-10 text-gray-400 hover:text-white hover:bg-[#22262F] transition-colors shadow-lg shadow-black/50 opacity-0 group-hover:opacity-100"
+        className="hidden md:flex absolute -right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-[#0A0C10] rounded-full items-center justify-center z-10 text-gray-400 hover:text-white hover:bg-[#22262F] transition-colors shadow-lg shadow-black/50 opacity-0 group-hover:opacity-100"
       >
         <ChevronRight className="w-5 h-5" />
       </button>
@@ -154,7 +154,7 @@ const MatchResultsWidget: React.FC = () => {
       >
         {Object.entries(groupedMatches).map(([date, dayMatches]) => (
           <React.Fragment key={date}>
-            <div className="flex flex-col items-center justify-center shrink-0 min-w-[55px] bg-[#111111]/80 backdrop-blur-md rounded-lg snap-center h-[90px] self-center shadow-lg">
+            <div className="flex flex-col items-center justify-center shrink-0 min-w-[55px] bg-[#0A0C10]/80 backdrop-blur-md rounded-lg snap-center h-[90px] self-center shadow-lg">
               <span className="text-[10px] font-bold text-gray-500 mb-1">{getDayShort(date)}</span>
               <span className="text-xs font-black text-white text-center leading-tight">{date.split(' ')[0]}<br/>{date.split(' ')[1]}</span>
             </div>
@@ -163,7 +163,7 @@ const MatchResultsWidget: React.FC = () => {
             {dayMatches.map((m, idx) => (
               <div 
                 key={`${date}-${idx}`} 
-                className="flex flex-col items-center p-5 bg-[#111111] rounded-lg min-w-[270px] max-w-[270px] shrink-0 snap-center shadow-lg shadow-black/40 hover:bg-[#22262F] transition-colors cursor-pointer"
+                className="flex flex-col items-center p-5 bg-[#0A0C10] rounded-lg min-w-[270px] max-w-[270px] shrink-0 snap-center shadow-lg shadow-black/40 hover:bg-[#22262F] transition-colors cursor-pointer"
               >
                 {/* Top Info */}
                 <div className="text-[9px] font-bold text-gray-500 mb-3 uppercase tracking-wider">

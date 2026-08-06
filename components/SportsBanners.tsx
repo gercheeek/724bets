@@ -21,7 +21,7 @@ const getBanners = (t: any) => [
   {
     id: 'vip',
     bgImage: '/images/vip_casino_card.webp',
-    title: <><span className="text-yellow-500">{t('home.banner_vip')}</span> {t('home.banner_vip_privileges')}</>,
+    title: <><span className="text-zinc-300">{t('home.banner_vip')}</span> {t('home.banner_vip_privileges')}</>,
     subtitle: t('home.banner_vip_desc'),
     buttonText: t('home.banner_explore'),
     hoverShadow: 'hover:shadow-yellow-500/30',

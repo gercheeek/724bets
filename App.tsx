@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { useLocation, useNavigate, Routes, Route, Navigate } from 'react-router-dom';
 import { viewToPath, pathToView } from './utils/routes';
 
@@ -13,12 +14,12 @@ import CasinoSection from './components/CasinoSection';
 import GamificationPanel from './components/GamificationPanel';
 import Header from './components/Header';
 import { DemoBalanceDisplay } from './components/DemoBalanceDisplay';
-import { Crown, Trophy, Calendar, TrendingUp, Clock, ArrowRight, Shield, CheckCircle2, Target, X, Dribbble, PlayCircle, Gamepad2, Diamond, Dices, PieChart, MonitorPlay, ChevronDown, Lock, ShieldCheck, Wallet, Club, Search, Menu } from 'lucide-react';
+import { Crown, Trophy, Calendar, TrendingUp, Clock, ArrowRight, Shield, CheckCircle2, Target, X, Dribbble, PlayCircle, Gamepad2, Diamond, Dices, PieChart, MonitorPlay, ChevronDown, Lock, ShieldCheck, Wallet, Club, Search, Menu, MessageSquare } from 'lucide-react';
 import { getFlagUrl } from './components/MatchResultsWidget';
 import AppLoader from './components/AppLoader';
 import BrandCard from './components/BrandCard';
-import AdminPanel from './components/AdminPanel';
-import FinanceDashboard from './components/FinanceDashboard';
+const AdminPanel = React.lazy(() => import('./components/AdminPanel'));
+const FinanceDashboard = React.lazy(() => import('./components/FinanceDashboard'));
 import ErrorBoundary from './components/ErrorBoundary';
 import AuthModal from './components/AuthModal';
 import OnboardingPopup from './components/OnboardingPopup';
@@ -66,8 +67,8 @@ import RetroFooter from './components/RetroFooter';
 import ModernChat from './components/ModernChat';
 import { DualRightPanel } from './components/sports/DualRightPanel';
 
-import LiveBetsFeed from './components/LiveBetsFeed';
-import CasinoLobby from './components/CasinoLobby';
+const LiveBetsFeed = React.lazy(() => import('./components/LiveBetsFeed'));
+const CasinoLobby = React.lazy(() => import('./components/CasinoLobby'));
 import { UserProvider } from './contexts/UserContext';
 import { BetSlipProvider } from './contexts/BetSlipContext';
 
@@ -77,9 +78,9 @@ import CouponsView from './components/CouponsView';
 import MobileQuickLinks from './components/MobileQuickLinks';
 import Slider2 from './components/Slider2';
 import PopularBets from './components/PopularBets';
-import ProfileDashboard from './components/ProfileDashboard';
+const ProfileDashboard = React.lazy(() => import('./components/ProfileDashboard'));
 import GameLobbyTeaser from './components/GameLobbyTeaser';
-import TV724View from './components/TV724View';
+const TV724View = React.lazy(() => import('./components/TV724View'));
 import LiveMatches from './components/LiveMatches';
 import OriginalsHub from './components/OriginalsHub';
 import RetroLayout from './components/retro/RetroLayout';
@@ -90,15 +91,15 @@ import { DepositHistory } from './components/DepositHistory';
 import { LiveSportsBulletin } from './components/LiveSportsBulletin';
 import MobileBulletinView from './components/MobileBulletinView';
 import { UpcomingMatchesView } from './components/UpcomingMatchesView';
-import GameLobbyGrid from './components/GameLobbyGrid';
+const GameLobbyGrid = React.lazy(() => import('./components/GameLobbyGrid'));
 import Sidebar from './components/Sidebar';
-import GuestLanding from './components/GuestLanding';
+const GuestLanding = React.lazy(() => import('./components/GuestLanding'));
 import HeroSection from './components/HeroSection';
 import PromotionsView from './components/PromotionsView';
 import PromoView from './components/PromoView';
 import PromoCodeView from './components/PromoCodeView';
 import ReferralView from './components/ReferralView';
-import Spor724View from './components/Spor724View';
+const Spor724View = React.lazy(() => import('./components/Spor724View'));
 import AffiliateView from './components/AffiliateView';
 import VIPClubView from './components/VIPClubView';
 
@@ -132,7 +133,7 @@ const formatDateTR = (dateStr: string) => {
 };
 
 const getConfidenceColor = (confidence: number) => {
-    if (confidence >= 85) return { text: 'text-[#00E676]', bg: 'bg-[#00E676]/10', border: 'border-[#00E676]/30' };
+    if (confidence >= 85) return { text: 'text-[#00E5FF]', bg: 'bg-[#00E5FF]/10', border: 'border-[#00E676]/30' };
     if (confidence >= 70) return { text: 'text-[#f2a900]', bg: 'bg-[#f2a900]/10', border: 'border-[#f2a900]/30' };
     return { text: 'text-[#ff3d00]', bg: 'bg-[#ff3d00]/10', border: 'border-[#ff3d00]/30' };
 };
@@ -193,9 +194,15 @@ const MatchCountdown: React.FC<{ dateStr: string; timeStr: string }> = ({ dateSt
   return <span style={{ fontFamily: 'monospace', fontWeight: 900, color: '#10B981' }}>{text}</span>;
 };
 
+// Transition Screen Component
+const TransitionScreen = ({ isActive }: { isActive: boolean }) => {
+  return null;
+};
+
 export default function App() {
   const location = useLocation();
   const navigate = useNavigate();
+  const [isBypassed, setIsBypassed] = useState(true);
 
   const currentPath = location.pathname.substring(1); // remove leading slash
   // Determine view from URL. If empty or /anasayfa, it's home. Otherwise map it, or fallback to exact path.
@@ -254,7 +261,7 @@ export default function App() {
 }
 
 const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({ setIsAdminPanelOpen }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const sports2ContainerRef = useRef<HTMLDivElement>(null);
   const sportsContainerRef = useRef<HTMLDivElement>(null);
   const sports3ContainerRef = useRef<HTMLDivElement>(null);
@@ -266,19 +273,55 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
   const [ipBlocked, setIpBlocked] = useState(false);
   const [fadeOutLoader, setFadeOutLoader] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
-  const [view, setView] = useState<'home' | 'sports' | 'sports2' | 'sports3' | 'sports4' | 'sports5' | 'admin' | 'login' | 'brands' | 'analysis' | 'blackjack' | 'blackjack-pro' | 'casino2' | 'loyalty' | 'raffle' | 'cekilis' | 'pool' | 'wheel' | 'luckywheel' | 'giveaway' | 'coupons' | '724tv' | 'trusted-sites' | 'trusted-detail' | 'demo' | 'kral' | 'promo' | 'referral' | 'profile' | 'slotra' | 'slotra2' | 'mobile-bulletin' | 'spor724' | 'plinko' | 'limbo' | 'chicken-run' | 'dice' | 'mines' | 'keno' | 'war' | 'hilo' | 'roulette' | 'crash-turbo' | 'turbo-mines' | 'hacksaw' | 'redtiger' | 'upcomingMatches' | 'rewards'>(window.location.pathname.startsWith('/spor') ? 'spor724' : window.location.pathname.includes('lucky') ? 'luckywheel' : 'home');
+  const [view, setView] = useState<'home' | 'sports' | 'sports2' | 'sports3' | 'sports4' | 'sports5' | 'admin' | 'login' | 'brands' | 'analysis' | 'blackjack' | 'blackjack-pro' | 'casino2' | 'loyalty' | 'raffle' | 'cekilis' | 'pool' | 'wheel' | 'luckywheel' | 'giveaway' | 'coupons' | '724tv' | 'trusted-sites' | 'trusted-detail' | 'demo' | 'kral' | 'promo' | 'referral' | 'profile' | 'slotra' | 'slotra2' | 'mobile-bulletin' | 'spor724' | 'plinko' | 'limbo' | 'chicken-run' | 'dice' | 'mines' | 'keno' | 'war' | 'hilo' | 'roulette' | 'crash-turbo' | 'turbo-mines' | 'hacksaw' | 'redtiger' | 'upcomingMatches' | 'rewards' | 'xslot' | 'xlot' | 'bulten'>(window.location.pathname.startsWith('/spor') ? 'spor724' : window.location.pathname.includes('lucky') ? 'luckywheel' : (window.location.pathname.includes('xslot') || window.location.pathname.includes('xlot')) ? 'xslot' : 'home');
+  const [bultenLoading, setBultenLoading] = useState(true);
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const [iframeLoading, setIframeLoading] = useState(true);
   const [isContentReady, setIsContentReady] = useState(true);
   const [loadId, setLoadId] = useState(0);
   const [activeCasinoGame, setActiveCasinoGame] = useState<string | null>(null);
   const [currentTime, setCurrentTime] = useState(new Date());
-  const [isChatOpen, setIsChatOpen] = useState(true);
+  
+  // Initialize chat state: true on desktop, but check first visit
+  const [isChatOpen, setIsChatOpen] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const isMobileDevice = window.innerWidth < 1280;
+      if (!isMobileDevice) return true; // Always open on desktop by default
+    }
+    return false;
+  });
+
+  useEffect(() => {
+    // First visit logic
+    const hasVisited = localStorage.getItem('site_first_visit_chat');
+    if (!hasVisited) {
+      localStorage.setItem('site_first_visit_chat', 'true');
+      const isMobileDevice = window.innerWidth < 1280;
+      if (!isMobileDevice) {
+        setIsChatOpen(true);
+      } else {
+        // Trigger a fake "unread message" indicator or pop open support chat on mobile?
+        // We'll just dispatch an event that MobileBottomNav could listen to for a badge, or open chat modal if one existed.
+        // For now, we leave it closed to not annoy mobile users, but set the state.
+      }
+    }
+  }, []);
 
   useEffect(() => {
     if (view === 'raffle' || view === 'cekilis') {
       setIsChatOpen(false);
     }
   }, [view]);
+
+  useEffect(() => {
+    const handleBetAdded = () => {
+      setIsChatOpen(true);
+    };
+    window.addEventListener('betSlipSelectionAdded', handleBetAdded);
+    return () => {
+      window.removeEventListener('betSlipSelectionAdded', handleBetAdded);
+    };
+  }, []);
   
   // Custom URL for Sports2 iframe (to handle custom header navigation)
   const [sports2Url, setSports2Url] = useState("https://bahisbey1438.com/tr/sport/sports/football/flt-1-1239-52530/?btag=59649488_330539");
@@ -344,14 +387,10 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
   // Responsive sidebar state - open by default on PC / TV (>= 1280px)
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth < 1200) {
-        setIsSidebarOpen(false);
-      } else {
-        setIsSidebarOpen(true);
-      }
+      // Menüler varsayılan olarak kapalı (78px) gelsin (kullanıcı isteği)
+      setIsSidebarOpen(false);
     };
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
@@ -919,9 +958,9 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
             color: 16750848, // Orange (#FFA500)
             fields: [
               { name: "👤 Kullanıcı", value: siteUser?.username || 'Bilinmeyen Kullanıcı', inline: true },
-              { name: "💵 Kupon Tutarı", value: `${bet.amount.toFixed(2)} ₺`, inline: true },
+              { name: "💵 Kupon Tutarı", value: `$${bet.amount.toFixed(2)}`, inline: true },
               { name: "📈 Toplam Oran", value: bet.totalOdds.toFixed(2), inline: true },
-              { name: "💰 Olası Kazanç", value: `${bet.potentialPayout.toFixed(2)} ₺`, inline: true }
+              { name: "💰 Olası Kazanç", value: `$${bet.potentialPayout.toFixed(2)}`, inline: true }
             ],
             description: `⚽ **Bahis Detayları:**\n\n${selectionsText}`,
             timestamp: new Date().toISOString(),
@@ -1428,11 +1467,32 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
     updateGlobalConfig('site_hero', newHero);
   };
 
-  // URL path synchronization
+  // URL path synchronization & i18n
   useEffect(() => {
     const syncViewWithUrl = () => {
-      const path = window.location.pathname;
-      const cleanPath = path.replace(/\/$/, '') || '/';
+      const pathParts = window.location.pathname.split('/').filter(Boolean);
+      const validLangs = ['tr', 'en', 'pt', 'es'];
+      const urlLang = pathParts[0] && validLangs.includes(pathParts[0]) ? pathParts[0] : null;
+
+      let actualUrlLang = urlLang;
+
+      if (!urlLang) {
+        // If no language in URL, redirect to localized URL
+        const browserLang = i18n.language ? i18n.language.split('-')[0] : 'tr';
+        const targetLang = validLangs.includes(browserLang) ? browserLang : 'tr';
+        const newPath = `/${targetLang}${window.location.pathname === '/' ? '' : window.location.pathname}`;
+        window.history.replaceState(null, '', newPath);
+        if (i18n.language !== targetLang) i18n.changeLanguage(targetLang);
+        actualUrlLang = targetLang;
+      } else if (i18n.language !== urlLang) {
+        i18n.changeLanguage(urlLang);
+      }
+
+      // Re-calculate cleanPath without the language prefix for internal routing logic
+      const actualPathParts = urlLang ? pathParts.slice(1) : pathParts;
+      const pathWithoutLang = '/' + actualPathParts.join('/');
+      const cleanPath = pathWithoutLang.replace(/\/$/, '') || '/';
+
       if (cleanPath === '/demo-oyunlar' || cleanPath === '/casino/demo' || cleanPath === '/demo') {
         setView('demo');
       } else if (cleanPath === '/raffles') {
@@ -1441,7 +1501,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
         setView('raffle');
       } else if (cleanPath === '/deposit' || cleanPath === '/withdraw') {
         window.dispatchEvent(new CustomEvent('openDepositModal', { detail: { tab: cleanPath.substring(1) } }));
-        window.history.replaceState(null, '', '/');
+        window.history.replaceState(null, '', `/${actualUrlLang || 'tr'}`);
         setView('home');
       } else if (cleanPath === '/admin') {
         setView('admin');
@@ -1467,9 +1527,11 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
         setView('sports');
       } else if (cleanPath === '/lucky-wheel' || cleanPath === '/luckywheel' || cleanPath === '/cark') {
         setView('luckywheel');
+      } else if (cleanPath === '/bulten') {
+        setView('bulten');
       } else {
         const viewName = cleanPath.substring(1);
-        const validViews = ['adventure', 'blackjack', 'blackjack-pro', 'casino2', 'loyalty', 'pool', 'wheel', 'luckywheel', 'giveaway', 'sports', 'sports2', 'sports3', 'sports4', 'sports5', 'demo', 'kral', 'analysis', 'plinko', 'limbo', 'chicken-run', 'dice', 'mines', 'keno', 'war', 'hilo', 'roulette', 'crash-turbo', 'turbo-mines', 'hacksaw', 'redtiger', 'upcomingMatches'];
+        const validViews = ['adventure', 'blackjack', 'blackjack-pro', 'casino2', 'loyalty', 'pool', 'wheel', 'luckywheel', 'giveaway', 'sports', 'sports2', 'sports3', 'sports4', 'sports5', 'demo', 'kral', 'analysis', 'plinko', 'limbo', 'chicken-run', 'dice', 'mines', 'keno', 'war', 'hilo', 'roulette', 'crash-turbo', 'turbo-mines', 'hacksaw', 'redtiger', 'upcomingMatches', 'xslot', 'xlot', 'bulten'];
         if (validViews.includes(viewName)) {
           setView(viewName as any);
         } else {
@@ -1482,7 +1544,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
     syncViewWithUrl(); // Run once on mount
 
     return () => window.removeEventListener('popstate', syncViewWithUrl);
-  }, []);
+  }, [i18n]);
 
   // SEO dynamic title and meta logic
   useEffect(() => {
@@ -1518,6 +1580,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
       case 'sports5':
       case 'spor724':
       case 'mobile-bulletin':
+      case 'bulten':
         title = "724bets | Spor Bahisleri ve Yüksek Oranlı Canlı Bahis";
         desc = "Dünyanın her yerinden futbol, basketbol, tenis ve daha fazla spor dalına maç öncesi ve canlı bahis yapma fırsatı 724bets'te.";
         break;
@@ -1780,80 +1843,91 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
 }
 
   const handleViewChange = (v: string) => {
-    // Update URL without reloading
-    const newUrl = v === 'home' ? '/' : (v === 'spor724' || v === 'sports' ? '/spor' : `/${v}`);
-    window.history.pushState(null, '', newUrl);
+    if (v === 'bulten') {
+      setBultenLoading(true);
+    }
+    if (v === view || isTransitioning) return;
+    setIsTransitioning(true);
+    const delay = (v === 'sports' || v === 'spor724') ? 5000 : 3000;
 
-    const sportsViews = ['gercek', 'sports', 'spor724', 'slotra', 'spor'];
-    if (sportsViews.includes(v)) {
-      setIsChatOpen(true);
-    }
+    setTimeout(() => {
+      setIsTransitioning(false);
+      
+      // Update URL without reloading, preserving i18n lang prefix
+      const currentLang = i18n.language ? i18n.language.split('-')[0] : 'tr';
+      const langPrefix = ['tr', 'en', 'pt', 'es'].includes(currentLang) ? currentLang : 'tr';
+      
+      const newUrl = v === 'home' ? `/${langPrefix}` : (v === 'spor724' || v === 'sports' ? `/${langPrefix}/spor` : `/${langPrefix}/${v}`);
+      window.history.pushState(null, '', newUrl);
 
-    if (v === 'sports2' || v === 'sports3' || v === 'sports4' || v === 'sports5') {
-      setShowLoader(true);
-      setFadeOutLoader(false);
-      setIframeLoading(true);
-      setTimeout(() => {
-        setFadeOutLoader(true);
-        setIframeLoading(false);
-        setTimeout(() => setShowLoader(false), 500);
-      }, 2500);
-    }
-    if (v !== 'analysis') {
-      setActiveAnalysisId(null);
-    }
-    if (v !== 'blackjack' && v !== 'blackjack-pro') {
-      setActiveCasinoGame(null);
-    }
-    // Lucky Wheel is members-only
-    // Disabled login block to allow instant preview of WheelDashboard
+      const sportsViews = ['gercek', 'sports', 'spor724', 'slotra', 'spor'];
+      if (sportsViews.includes(v)) {
+        setIsChatOpen(true);
+      }
 
-    // Push new history state
-    let path = '/';
-    if (v === 'home') {
-      path = '/';
-    } else if (v === 'raffle') {
-      path = '/bilet';
-    } else if (v === 'cekilis') {
-      path = '/raffles';
-    } else if (v === 'admin') {
-      path = '/admin';
-    } else if (v === 'brands') {
-      path = '/trusted-sites';
-    } else if (v === 'analysis') {
-      path = '/analysis';
-    } else if (v === 'coupons') {
-      path = '/coupons';
-    } else if (v === '724tv') {
-      path = '/724tv';
-    } else if (v === 'trusted-sites') {
-      path = '/trusted-sites';
-    } else if (v === 'trusted-detail') {
-      path = '/trusted-detail';
-    } else if (v === 'blackjack') {
-      path = '/casino';
-    } else if (v === 'spor724') {
-      path = '/spor';
-    } else {
-      path = `/${v}`;
-    }
+      if (v === 'sports2' || v === 'sports3' || v === 'sports4' || v === 'sports5') {
+        setShowLoader(true);
+        setFadeOutLoader(false);
+        setIframeLoading(true);
+        setTimeout(() => {
+          setFadeOutLoader(true);
+          setIframeLoading(false);
+          setTimeout(() => setShowLoader(false), 500);
+        }, 2500);
+      }
+      if (v !== 'analysis') {
+        setActiveAnalysisId(null);
+      }
+      if (v !== 'blackjack' && v !== 'blackjack-pro') {
+        setActiveCasinoGame(null);
+      }
 
-    if (window.location.pathname !== path) {
-      window.history.pushState(null, '', path);
-    }
+      // Push new history state
+      let path = '/';
+      if (v === 'home') {
+        path = '/';
+      } else if (v === 'raffle') {
+        path = '/bilet';
+      } else if (v === 'cekilis') {
+        path = '/raffles';
+      } else if (v === 'admin') {
+        path = '/admin';
+      } else if (v === 'brands') {
+        path = '/trusted-sites';
+      } else if (v === 'analysis') {
+        path = '/analysis';
+      } else if (v === 'coupons') {
+        path = '/coupons';
+      } else if (v === '724tv') {
+        path = '/724tv';
+      } else if (v === 'trusted-sites') {
+        path = '/trusted-sites';
+      } else if (v === 'trusted-detail') {
+        path = '/trusted-detail';
+      } else if (v === 'blackjack') {
+        path = '/casino';
+      } else if (v === 'spor724') {
+        path = '/spor';
+      } else {
+        path = `/${v}`;
+      }
 
-    if (v === 'trusted-sites' || v === 'brands') {
-      // Refresh company list from localStorage on navigate
-      setTrustedCompanies(loadTrustedCompanies());
-      setView('trusted-sites');
-      window.scrollTo({ top: 0, behavior: 'auto' });
-    } else if (v === 'home') {
-      setView('home');
-      window.scrollTo({ top: 0, behavior: 'auto' });
-    } else {
-      setView(v as any);
-      window.scrollTo({ top: 0, behavior: 'auto' });
-    }
+      if (window.location.pathname !== path) {
+        window.history.pushState(null, '', path);
+      }
+
+      if (v === 'trusted-sites' || v === 'brands') {
+        setTrustedCompanies(loadTrustedCompanies());
+        setView('trusted-sites');
+        window.scrollTo({ top: 0, behavior: 'auto' });
+      } else if (v === 'home') {
+        setView('home');
+        window.scrollTo({ top: 0, behavior: 'auto' });
+      } else {
+        setView(v as any);
+        window.scrollTo({ top: 0, behavior: 'auto' });
+      }
+    }, delay);
   };
 
   const isLocalhost = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
@@ -1934,7 +2008,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
   if (isMaintenanceActive && view !== 'admin') {
     return (
       <UserProvider siteUser={siteUser} setSiteUser={setSiteUser}>
-        <div className="relative w-full h-[100dvh] bg-[#050505] overflow-hidden">
+        <div className="relative w-full h-[100dvh] bg-[#0A0C10] overflow-hidden">
           {authModalMode && (
             <AuthModal
               mode={authModalMode === 'admin' ? 'admin' : 'member'}
@@ -1987,9 +2061,25 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
     );
   }
 
+  if (view === 'xslot' || view === 'xlot') {
+    return (
+      <div className="w-screen h-screen overflow-hidden bg-black relative">
+        <iframe 
+          src="https://xslotlive2.xyz/channel?id=b2" 
+          className="absolute top-0 left-0 w-full h-[calc(100%+60px)] border-none"
+          scrolling="no"
+          allowFullScreen
+          allow="autoplay; encrypted-media; fullscreen"
+          title="Xslot Canlı Yayın"
+        />
+      </div>
+    );
+  }
+
   return (
     <UserProvider siteUser={siteUser} setSiteUser={setSiteUser}>
       <BetSlipProvider>
+      <React.Suspense fallback={<AppLoader />}>
         <>
           {/* Onboarding Popup Overlay */}
       {showOnboardingPopup && (
@@ -2056,16 +2146,25 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
             setIsSidebarOpen(true);
 
             setAuthModalMode(null);
-            if (isGuest) {
-              setView('home');
-            } else {
-              setView('admin');
-            }
+            
+            setIsTransitioning(true);
+            setTimeout(() => {
+                setIsTransitioning(false);
+                if (isGuest) {
+                    setView('home');
+                } else {
+                    setView('admin');
+                }
+            }, 3000);
           }}
           onClose={() => setAuthModalMode(null)}
           hideMemberLogin={isMaintenanceActive && authModalMode === 'admin'}
         />
       )}
+
+
+      {/* Transition Screen */}
+      <TransitionScreen isActive={isTransitioning} />
 
       {showDepositModal && (
         <WalletModal initialTab={walletInitialTab} onClose={() => setShowDepositModal(false)} />
@@ -2076,7 +2175,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
         <></>
       ) : (
         <div 
-          className="relative flex flex-col h-[100dvh] w-full bg-[#050505] text-white overflow-hidden" 
+          className="relative flex flex-col h-[100dvh] w-full bg-[#0A0C10] text-white overflow-hidden" 
           onPointerDown={() => setIsLogoSpinning(true)}
           onPointerUp={() => setIsLogoSpinning(false)}
           onPointerCancel={() => setIsLogoSpinning(false)}
@@ -2088,17 +2187,23 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
           {showLoader && <AppLoader fadeOut={fadeOutLoader} onComplete={() => setFadeOutLoader(true)} isReady={!iframeLoading && isContentReady} />}
           
           {/* MAIN FLEX LAYOUT (Sidebar + Content + Chat) */}
-          <div className="flex flex-col lg:flex-row w-full h-full relative overflow-hidden">
+          <div className="flex flex-col lg:flex-row w-full h-full relative overflow-hidden justify-center bg-[#000000]">
 
             {/* 1. SOL MENÜ (Masaüstünde Açılır/Kapanır, Mobilde Gizli) */}
-            {!(view === 'giveaway') && (
+            {!(view === 'giveaway' || view === 'bulten') && (
               <aside 
-                className={`hidden lg:flex flex-col bg-[#0A0D14] shadow-[5px_0_15px_rgba(0,0,0,0.5)] h-full overflow-visible flex-shrink-0 relative z-[99999] pointer-events-auto transition-[width,box-shadow] duration-300 ${isSidebarOpen ? 'w-[280px]' : 'w-[78px]'}`}
+                className={`hidden lg:flex flex-col bg-[#0A0D15]/90 backdrop-blur-xl border-r border-white/5 shadow-[5px_0_30px_rgba(0,0,0,0.8)] h-full overflow-visible flex-shrink-0 relative z-[99999] pointer-events-auto transition-[width,box-shadow,background-color] duration-300 ${isSidebarOpen ? 'w-[280px]' : 'w-[80px]'}`}
                 style={{ willChange: 'width' }}
               >
                   <Sidebar
                     isOpen={isSidebarOpen}
-                    onToggle={() => setIsSidebarOpen(!isSidebarOpen)}
+                    onToggle={() => {
+                      setIsSidebarOpen(prev => {
+                        const next = !prev;
+                        if (next && window.innerWidth < 1600) setIsChatOpen(false);
+                        return next;
+                      });
+                    }}
                     activeView={view}
                     onViewChange={handleViewChange}
                     userRole={userRole}
@@ -2112,9 +2217,9 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
             {/* MOBİL DRAWER - SOL MENÜ */}
             {isMobileMenuOpen && (
               <div className="fixed inset-0 z-50 flex lg:hidden">
-                <div className="fixed inset-0 bg-black/70 backdrop-blur-md transition-opacity" onClick={() => setIsMobileMenuOpen(false)}></div>
-                <aside className="w-[280px] bg-[#0A0D14] border-r border-white/5 h-full shadow-[20px_0_50px_rgba(0,0,0,0.9),inset_0_1px_0_rgba(255,255,255,0.03)] flex-shrink-0 relative z-10 animate-slide-in-left">
-                  <button onClick={() => setIsMobileMenuOpen(false)} className="absolute top-4 -right-12 w-10 h-10 bg-[#0A0D14] border border-[#111111] rounded-r-xl flex items-center justify-center text-gray-400 hover:text-white shadow-[5px_0_15px_rgba(0,0,0,0.3)]"><X className="w-5 h-5"/></button>
+                <div className="fixed inset-0 bg-[#0A0C10]/70 backdrop-blur-md transition-opacity" onClick={() => setIsMobileMenuOpen(false)}></div>
+                <aside className="w-[280px] bg-[#0A0C10] border-r border-white/5 h-full shadow-[20px_0_50px_rgba(0,0,0,0.9),inset_0_1px_0_rgba(255,255,255,0.03)] flex-shrink-0 relative z-10 animate-slide-in-left">
+                  <button onClick={() => setIsMobileMenuOpen(false)} className="absolute top-4 -right-12 w-10 h-10 bg-[#0A0C10] border border-[#111111] rounded-r-xl flex items-center justify-center text-gray-400 hover:text-white shadow-[5px_0_15px_rgba(0,0,0,0.3)]"><X className="w-5 h-5"/></button>
                   <Sidebar
                     isOpen={true}
                     onToggle={() => setIsMobileMenuOpen(false)}
@@ -2130,14 +2235,14 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
             )}
 
              {/* 2. ORTA İÇERİK */}
-            <div className={appStage !== 'loading' ? `app-reveal-mask flex-1 flex flex-col min-w-0 bg-[#050505] relative overflow-hidden shadow-[inset_0_0_100px_rgba(0,0,0,1)]` : `app-hidden-initial flex-1 flex flex-col min-w-0 bg-[#050505] relative overflow-hidden shadow-[inset_0_0_100px_rgba(0,0,0,1)]`}>
+            <div className={appStage !== 'loading' ? `app-reveal-mask flex-1 flex flex-col min-w-0 bg-[#0A0C10] relative overflow-hidden shadow-[inset_0_0_100px_rgba(0,0,0,1)] w-full` : `app-hidden-initial flex-1 flex flex-col min-w-0 bg-[#0A0C10] relative overflow-hidden shadow-[inset_0_0_100px_rgba(0,0,0,1)] w-full`}>
              
              {/* Glossy overlay for the entire center */}
              <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+PHBhdGggZD0iTTAgMGg0MHY0MEgweiIgZmlsbD0ibm9uZSIvPjxwYXRoIGQ9Ik0wIDEwaDQwTTEwIDB2NDBNMCAzMGg0ME0zMCAwdjQwIiBzdHJva2U9InJnYmEoMjU1LCAyNTUsIDI1NSwgMC4wMSkiIHN0cm9rZS13aWR0aD0iMSIvPjwvc3ZnPg==')] pointer-events-none z-0 opacity-30 mix-blend-screen"></div>
 
              {/* MASAÜSTÜ HEADER */}
              {view !== 'kral' && (
-               <div className="hidden lg:block shrink-0 z-50 relative w-full border-b border-white/5 bg-[#0A0D14] shadow-lg">
+               <div className="hidden lg:block shrink-0 z-50 relative w-full border-b border-white/5 bg-[#0A0C10] shadow-lg">
                  <Header
                    onAdminClick={() => {
                      if (userRole) setView('admin');
@@ -2154,7 +2259,18 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
                    onSearchClick={() => setShowSearch(true)}
                    onSupportClick={() => {
                      if (!isMobile && ['gercek', 'sports', 'spor724', 'slotra', 'spor'].includes(view)) return;
-                     setIsChatOpen(prev => !prev);
+                     setIsChatOpen(prev => {
+                       const next = !prev;
+                       if (next && window.innerWidth < 1600) setIsSidebarOpen(false);
+                       return next;
+                     });
+                   }}
+                   onToggleChat={() => {
+                     setIsChatOpen(prev => {
+                       const next = !prev;
+                       if (next && window.innerWidth < 1600) setIsSidebarOpen(false);
+                       return next;
+                     });
                    }}
                    navVisibility={navVisibility}
                    marqueeConfig={marqueeConfig}
@@ -2162,7 +2278,11 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
                    isSidebarOpen={isSidebarOpen || (!isMobile && ['gercek', 'sports', 'spor724', 'slotra', 'spor'].includes(view))}
                    onToggleSidebar={() => {
                      if (!isMobile && ['gercek', 'sports', 'spor724', 'slotra', 'spor'].includes(view)) return;
-                     setIsSidebarOpen(!isSidebarOpen);
+                     setIsSidebarOpen(prev => {
+                       const next = !prev;
+                       if (next && window.innerWidth < 1600) setIsChatOpen(false);
+                       return next;
+                     });
                    }}
                    showFakeBetButton={view === 'sports2'}
                    onFakeBetClick={() => {
@@ -2177,12 +2297,12 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
             {view !== 'kral' && (
               <header 
                 id="mobile-top-header"
-                className="flex lg:hidden items-center justify-between p-3 px-4 bg-black/95 bg-gradient-to-b from-white/[0.03] to-transparent backdrop-blur-xl border-b border-white/10 shrink-0 sticky top-0 z-40 shadow-[0_4px_30px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.05)] overflow-hidden gap-1"
+                className="flex lg:hidden items-center justify-between p-3 px-4 bg-[#0A0C10]/95 bg-gradient-to-b from-white/[0.03] to-transparent backdrop-blur-xl border-b border-white/10 shrink-0 sticky top-0 z-40 shadow-[0_4px_30px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.05)] overflow-hidden gap-1"
               >
                 <div className="flex items-center gap-2">
                   <div 
-                    className="flex items-center cursor-pointer select-none ml-2 group font-black text-2xl sm:text-3xl tracking-tight"
-                    onClick={() => setView('home')}
+                    className="flex items-center cursor-pointer select-none ml-2 group font-black text-xl sm:text-2xl tracking-tight"
+                    onClick={() => handleViewChange('home')}
                     style={{ fontFamily: "'Inter', sans-serif", letterSpacing: '-0.03em', WebkitFontSmoothing: 'antialiased', textRendering: 'optimizeLegibility' }}
                   >
                     {/* 724 in Crisp White */}
@@ -2205,13 +2325,13 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
                     <>
                       {/* 1. Gamdom Style Wallet (Pill) */}
                       <div 
-                        className="flex items-center bg-[#111111] rounded-lg p-1.5 pr-3 cursor-pointer border border-white/5 hover:bg-[#202632] transition-colors shadow-inner balance-intro-fade"
+                        className="flex items-center bg-[#0A0C10] rounded-lg p-1.5 pr-3 cursor-pointer border border-white/5 hover:bg-[#202632] transition-colors shadow-inner balance-intro-fade"
                         onClick={() => window.dispatchEvent(new Event('openDepositModal'))}
                       >
                         <div className="w-7 h-7 rounded bg-gradient-to-br from-[#00E5FF] to-[#00b3cc] text-[#0A0D14] flex items-center justify-center font-bold mr-2 shadow-[0_0_8px_rgba(0,229,255,0.4)]">
-                          <span className="text-[14px]">₺</span>
+                          <span className="text-[14px]">$</span>
                         </div>
-                        <span className="text-white font-bold text-sm sm:text-base tracking-tight mr-1.5">₺{Number(siteUser.balance || 0).toFixed(2)}</span>
+                        <span className="text-white font-bold text-sm sm:text-base tracking-tight mr-1.5">${Number(siteUser.balance || 0).toFixed(2)}</span>
                         <svg className="w-4 h-4 text-gray-400" viewBox="0 0 24 24" fill="currentColor">
                           <path d="M7 10l5 5 5-5z" />
                         </svg>
@@ -2231,7 +2351,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
                       
                       {/* 3. Profil Avatarı - HIDDEN ON MOBILE PER USER REQUEST */}
                       {/*
-                      <button onClick={() => handleViewChange('profile')} className="w-10 h-10 rounded-full border border-white/10 bg-[#111111] overflow-hidden shrink-0 hover:border-white/20 transition-colors ml-2 active:scale-95" title="Profile Git">
+                      <button onClick={() => handleViewChange('profile')} className="w-10 h-10 rounded-full border border-white/10 bg-[#0A0C10] overflow-hidden shrink-0 hover:border-white/20 transition-colors ml-2 active:scale-95" title="Profile Git">
                         <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${siteUser.username}`} alt="Avatar" className="w-full h-full object-cover" />
                       </button>
                       */}
@@ -2251,13 +2371,30 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
                       </button>
                     </>
                   ) : (
-                    <>
-                      <DemoBalanceDisplay 
-                        onLoginClick={() => setAuthModalMode('member')} 
-                        onRegisterClick={() => setAuthModalMode('register')} 
-                      />
-                    </>
+                    <div className="flex items-center gap-1.5 mr-1">
+                      <button 
+                        onClick={() => setAuthModalMode('member')}
+                        className="bg-[#1b1e28] hover:bg-[#202632] text-white border border-white/5 rounded-lg font-bold text-[12.5px] h-[34px] px-3.5 transition-all active:scale-95 whitespace-nowrap"
+                      >
+                        Giriş Yap
+                      </button>
+                      <button 
+                        onClick={() => setAuthModalMode('register')}
+                        className="bg-[#00E5FF] hover:bg-[#00c9e0] border border-transparent text-black rounded-lg font-extrabold text-[12.5px] h-[34px] px-3.5 transition-all active:scale-95 whitespace-nowrap shadow-[0_0_10px_rgba(0,229,255,0.2)]"
+                      >
+                        Kayıt Ol
+                      </button>
+                    </div>
                   )}
+                  
+                  {/* Mobile Chat Button */}
+                  <button 
+                    onClick={() => setIsChatOpen(prev => !prev)}
+                    className={`w-[34px] h-[34px] sm:w-[36px] sm:h-[36px] flex items-center justify-center rounded-lg transition-colors ml-1 sm:ml-2 border ${isChatOpen ? 'bg-[#00E5FF]/10 text-[#00E5FF] border-[#00E5FF]/20' : 'bg-[#1b1e28] hover:bg-[#202632] text-zinc-400 border-white/5 hover:text-white'}`}
+                    title="Sohbet"
+                  >
+                    <MessageSquare className="w-[18px] h-[18px]" />
+                  </button>
                 </div>
               </header>
             )}
@@ -2267,7 +2404,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
           <div className="flex flex-1 w-full overflow-hidden relative">
             <main 
               id="main-scroll-container"
-              className={`flex-1 min-w-0 h-full overflow-x-hidden relative flex flex-col ${['724tv', 'blackjack-pro', 'limbo', 'chicken-run', 'plinko', 'dice', 'mines', 'keno', 'war', 'hilo', 'roulette', 'crash-turbo', 'turbo-mines', 'hacksaw', 'redtiger', 'crash'].includes(view) ? 'overflow-hidden' : 'overflow-y-auto'}`}
+              className={`flex-1 min-w-0 h-full overflow-x-hidden relative flex flex-col ${['724tv', 'blackjack-pro', 'limbo', 'chicken-run', 'plinko', 'dice', 'mines', 'keno', 'war', 'hilo', 'roulette', 'crash-turbo', 'turbo-mines', 'hacksaw', 'redtiger', 'crash', 'bulten'].includes(view) ? 'overflow-hidden' : 'overflow-y-auto'}`}
               style={{ transform: view === '724tv' ? 'none' : 'translateZ(0)' }}
             >
             {/* Gamdom Style Global Ambient Shading / Glows */}
@@ -2282,7 +2419,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
       <div 
         id="tour-main"
         className={`site-main-content flex-1 flex flex-col ${view === 'admin' ? 'admin-layout' : ''} ${
-          (view === 'gercek' || view === 'sports' || view === 'sports2' || view === 'sports3' || view === 'sports4' || view === 'sports5' || view === 'spor724' || view === 'upcomingMatches' || view === 'limbo' || view === 'chicken-run' || view === 'originals' || view === 'blackjack' || view === 'slots' || view === 'live-casino' || view === 'favorites' || view === '724tv' || view === 'luckywheel' || view === 'raffle' || view === 'cekilis' || ['blackjack-pro', 'limbo', 'chicken-run', 'plinko', 'dice', 'mines', 'keno', 'war', 'hilo', 'roulette', 'crash-turbo', 'turbo-mines', 'hacksaw', 'redtiger', 'crash'].includes(view)) 
+          (view === 'gercek' || view === 'sports' || view === 'sports2' || view === 'sports3' || view === 'sports4' || view === 'sports5' || view === 'spor724' || view === 'upcomingMatches' || view === 'limbo' || view === 'chicken-run' || view === 'originals' || view === 'blackjack' || view === 'slots' || view === 'live-casino' || view === 'favorites' || view === '724tv' || view === 'luckywheel' || view === 'raffle' || view === 'cekilis' || view === 'bulten' || ['blackjack-pro', 'limbo', 'chicken-run', 'plinko', 'dice', 'mines', 'keno', 'war', 'hilo', 'roulette', 'crash-turbo', 'turbo-mines', 'hacksaw', 'redtiger', 'crash'].includes(view)) 
             ? 'p-0 w-full pb-[70px] md:pb-0' 
             : 'w-full pb-[80px] md:pb-0'
         }`}
@@ -2291,11 +2428,11 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
           zIndex: view === '724tv' ? 'auto' : 10, 
           filter: appStage === 'popup' ? 'blur(10px)' : 'none', 
           pointerEvents: appStage === 'popup' ? 'none' : 'auto',
-          paddingBottom: ['blackjack-pro', 'limbo', 'chicken-run', 'plinko', 'dice', 'mines', 'keno', 'war', 'hilo', 'roulette', 'crash-turbo', 'turbo-mines', 'hacksaw', 'redtiger', 'crash', '724tv'].includes(view) ? '0px' : 'calc(env(safe-area-inset-bottom, 0px) + 80px)'
+          paddingBottom: ['blackjack-pro', 'limbo', 'chicken-run', 'plinko', 'dice', 'mines', 'keno', 'war', 'hilo', 'roulette', 'crash-turbo', 'turbo-mines', 'hacksaw', 'redtiger', 'crash', '724tv', 'bulten'].includes(view) ? '0px' : 'calc(env(safe-area-inset-bottom, 0px) + 80px)'
         } as React.CSSProperties}
       >
 
-        <div className={`orchestrator-content flex-1 flex flex-col ${isContentReady ? 'content-ready' : ''}`} style={{ visibility: appStage === 'ready' ? 'visible' : 'hidden', height: appStage === 'ready' ? '100%' : '100dvh' }}>
+        <div className={`orchestrator-content flex-1 flex flex-col ${isContentReady ? 'content-ready' : ''} ${['bulten', 'spor724', '724tv', 'slotra', 'slots', 'live-casino'].includes(view) ? 'w-full max-w-none' : 'max-w-[1200px] mx-auto w-full'}`} style={{ visibility: appStage === 'ready' ? 'visible' : 'hidden', height: appStage === 'ready' ? '100%' : '100dvh' }}>
 
           {view === 'home' && (
           <div className="animate-fade-in w-full h-full min-h-screen">
@@ -2377,7 +2514,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
 
         {/* --- ORIGINAL GAMES RENDERED IN MAIN LAYOUT --- */}
         {['blackjack-pro', 'limbo', 'chicken-run', 'plinko', 'dice', 'mines', 'keno', 'war', 'hilo', 'roulette', 'crash-turbo', 'turbo-mines', 'hacksaw', 'redtiger', 'crash'].includes(view) && (
-          <div className="animate-fade-in w-full h-full flex flex-col relative z-[50] bg-[#0A0D14]">
+          <div className="animate-fade-in w-full h-full flex flex-col relative z-[50] bg-[#0A0C10]">
             <div className="flex-1 relative overflow-hidden w-full">
               <div className="absolute inset-0 w-full h-full overflow-hidden">
                {view === 'blackjack-pro' && (
@@ -2566,7 +2703,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
           <div className="animate-fade-in w-full relative flex flex-col" style={{ height: 'calc(100vh - var(--header-height))' }}>
             
             {/* ── GAMDOM STYLE BANNER & MATCHES ── */}
-            <div className="w-full shrink-0 px-4 md:px-6 max-w-[1280px] mx-auto hidden md:block">
+            <div className="w-full shrink-0 px-4 md:px-6 max-w-[1720px] mx-auto hidden md:block">
               <WorldCupTeaser />
             </div>
 
@@ -2574,7 +2711,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
             {/* Iframe Container */}
             <div 
               ref={sports2ContainerRef}
-              className="w-full flex-1 shadow-2xl bg-[#050505] relative rounded-b-2xl z-10"
+              className="w-full flex-1 shadow-2xl bg-[#0A0C10] relative rounded-b-2xl z-10"
               style={{
                 overflowX: isMobile ? 'auto' : 'hidden',
                 overflowY: 'hidden',
@@ -2586,7 +2723,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
                   <div className="absolute inset-0 z-50 flex items-center justify-center bg-[#09090b]">
                     <div className="flex flex-col items-center gap-4">
                       <div className="w-12 h-12 border-4 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
-                      <div className="text-amber-500 font-bold text-lg animate-pulse tracking-wider">VERİLER YÜKLENİYOR...</div>
+                      <div className="text-zinc-300 font-bold text-lg animate-pulse tracking-wider">VERİLER YÜKLENİYOR...</div>
                     </div>
                   </div>
                 )}
@@ -2617,8 +2754,8 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
               </div>
 
               {/* Site theme color overlay (tinting the grey background to slate) */}
-              <div className="absolute inset-0 z-10 pointer-events-none mix-blend-overlay bg-[#050505]/40" />
-              <div className="absolute inset-0 z-10 pointer-events-none mix-blend-color bg-[#050505]/20" />
+              <div className="absolute inset-0 z-10 pointer-events-none mix-blend-overlay bg-[#0A0C10]/40" />
+              <div className="absolute inset-0 z-10 pointer-events-none mix-blend-color bg-[#0A0C10]/20" />
             </div>
           </div>
         )}
@@ -2635,11 +2772,11 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
               <div className="absolute inset-0 z-50 flex items-center justify-center bg-[#09090b] rounded-lg" style={{ height: 'calc(100vh - var(--header-height))' }}>
                 <div className="flex flex-col items-center gap-4">
                   <div className="w-12 h-12 border-4 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
-                  <div className="text-amber-500 font-bold text-lg animate-pulse tracking-wider">VERİLER YÜKLENİYOR...</div>
+                  <div className="text-zinc-300 font-bold text-lg animate-pulse tracking-wider">VERİLER YÜKLENİYOR...</div>
                 </div>
               </div>
             )}
-            <div className="w-full rounded-lg overflow-hidden shadow-2xl bg-[#050505] relative" style={{ height: 'calc(100vh - var(--header-height))' }}>
+            <div className="w-full rounded-lg overflow-hidden shadow-2xl bg-[#0A0C10] relative" style={{ height: 'calc(100vh - var(--header-height))' }}>
               <iframe 
                 src="https://sport.megobocteb.com/SportsBook/Home"
                 frameBorder="0"
@@ -2657,7 +2794,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
 
               {/* Site theme color overlay (tinting the grey background to slate) */}
               <div 
-                className="absolute inset-0 z-10 pointer-events-none mix-blend-overlay bg-[#050505]/40" 
+                className="absolute inset-0 z-10 pointer-events-none mix-blend-overlay bg-[#0A0C10]/40" 
                 style={{ 
                   clipPath: isMobile 
                     ? 'polygon(0% 0%, 100% 0%, 100% calc(100% - 60px), 0% calc(100% - 60px))' 
@@ -2665,7 +2802,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
                 }} 
               />
               <div 
-                className="absolute inset-0 z-10 pointer-events-none mix-blend-color bg-[#050505]/20" 
+                className="absolute inset-0 z-10 pointer-events-none mix-blend-color bg-[#0A0C10]/20" 
                 style={{ 
                   clipPath: isMobile 
                     ? 'polygon(0% 0%, 100% 0%, 100% calc(100% - 60px), 0% calc(100% - 60px))' 
@@ -2682,11 +2819,11 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
               <div className="absolute inset-0 z-50 flex items-center justify-center bg-[#09090b]">
                 <div className="flex flex-col items-center gap-4">
                   <div className="w-12 h-12 border-4 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
-                  <div className="text-amber-500 font-bold text-lg animate-pulse tracking-wider">VERİLER YÜKLENİYOR...</div>
+                  <div className="text-zinc-300 font-bold text-lg animate-pulse tracking-wider">VERİLER YÜKLENİYOR...</div>
                 </div>
               </div>
             )}
-            <div className="w-full h-full bg-black relative overflow-hidden flex flex-col items-center">
+            <div className="w-full h-full bg-[#0A0C10] relative overflow-hidden flex flex-col items-center">
               <iframe 
                 src="https://xslotlive2.xyz/"
                 frameBorder="0"
@@ -2708,22 +2845,22 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
               <div className="absolute inset-0 z-40 flex flex-col pointer-events-none items-center">
                 
                 {/* Top Mask - Hides anything above the video box */}
-                <div className="w-full bg-black pointer-events-auto" style={{ height: isMobile ? '0px' : '30px' }}></div>
+                <div className="w-full bg-[#0A0C10] pointer-events-auto" style={{ height: isMobile ? '0px' : '30px' }}></div>
                 
                 {/* Center Row */}
                 <div className="flex w-full justify-center" style={{ height: isMobile ? '100%' : '520px' }}>
                   {/* Left Mask - Blocks side banners & grey background */}
-                  <div className="h-full bg-black pointer-events-auto flex-1"></div>
+                  <div className="h-full bg-[#0A0C10] pointer-events-auto flex-1"></div>
                   
                   {/* Transparent Center Hole (Video Box & Channel List only) */}
                   <div className="h-full bg-transparent pointer-events-none" style={{ width: '100%', maxWidth: '980px' }}></div>
                   
                   {/* Right Mask - Blocks side banners & grey background */}
-                  <div className="h-full bg-black pointer-events-auto flex-1"></div>
+                  <div className="h-full bg-[#0A0C10] pointer-events-auto flex-1"></div>
                 </div>
                 
                 {/* Bottom Mask - Hides everything below the video box (orange banners) */}
-                {!isMobile && <div className="w-full bg-black pointer-events-auto flex-1"></div>}
+                {!isMobile && <div className="w-full bg-[#0A0C10] pointer-events-auto flex-1"></div>}
               </div>
             </div>
           </div>
@@ -2778,7 +2915,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
               <div className="absolute inset-0 z-50 flex items-center justify-center bg-[#0a0a0a]">
                 <div className="flex flex-col items-center gap-4">
                   <div className="w-16 h-16 border-4 border-emerald-500/20 border-t-emerald-500 rounded-full animate-spin"></div>
-                  <div className="text-emerald-500 font-black text-sm uppercase tracking-widest animate-pulse">Lobi Yükleniyor...</div>
+                  <div className="text-[#00E5FF] font-black text-sm uppercase tracking-widest animate-pulse">Lobi Yükleniyor...</div>
                 </div>
               </div>
             )}
@@ -2808,7 +2945,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
                 onNavigate={handleViewChange}
               />
             ) : (
-              <div className="min-h-screen flex flex-col items-center justify-center gap-6 bg-black">
+              <div className="min-h-screen flex flex-col items-center justify-center gap-6 bg-[#0A0C10]">
                 <div className="text-7xl">🎯</div>
                 <h2 className="text-black font-black text-3xl uppercase tracking-tight">Günlük Görevler</h2>
                 <p className="text-zinc-500 font-bold text-sm">Coin kazanmak ve marketi kullanmak için üye girişi gereklidir.</p>
@@ -2967,6 +3104,49 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
         {view === 'mobile-bulletin' && (
           <MobileBulletinView onBack={() => setView('home')} />
         )}
+        {view === 'bulten' && (
+          <div className="animate-fade-in w-full relative overflow-hidden" style={{ height: 'calc(100vh - 72px)' }}>
+            <style>{`
+              iframe::-webkit-scrollbar {
+                display: none !important;
+              }
+              iframe {
+                -ms-overflow-style: none !important;
+                scrollbar-width: none !important;
+              }
+              #main-scroll-container::-webkit-scrollbar {
+                display: none !important;
+              }
+              #main-scroll-container {
+                -ms-overflow-style: none !important;
+                scrollbar-width: none !important;
+              }
+            `}</style>
+            <iframe 
+              src="https://demo.betby.com/sportsbook/classic/" 
+              onLoad={() => {
+                setBultenLoading(false);
+                // Listen to Betby iframe messages for login/bet requests
+                window.addEventListener('message', (e) => {
+                  try {
+                    // Check if the message asks for login (like placing a bet without auth)
+                    if (e.data && (e.data.type === 'login' || e.data.action === 'login' || e.data.type === 'auth' || (typeof e.data === 'string' && e.data.includes('login')))) {
+                       setAuthModalMode('register');
+                    }
+                  } catch(err) {}
+                });
+              }}
+              className="absolute border-none bg-[#0F172A]"
+              style={{
+                top: '-48px',
+                left: '0px',
+                width: '100%',
+                height: 'calc(100% + 200px)'
+              }}
+              title="Bülten"
+            />
+          </div>
+        )}
         {view === 'slotra' && (
           <div className="animate-fade-in w-full h-full min-h-screen">
             <iframe 
@@ -3003,39 +3183,38 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
         </div>
 
         {/* 3. SAĞ SOHBET PANELİ (Tüm Boy) */}
-        {view !== 'admin' && !showLiveScoreModal && !isMobile && (
+        {view !== 'admin' && !showLiveScoreModal && (
           <>
-            {/* Floating Action Button for Chat */}
-            {!isChatOpen && (
-              <button 
-                onClick={() => setIsChatOpen(!isChatOpen)}
-                className="fixed bottom-6 right-6 z-40 w-[60px] h-[60px] bg-[#00E676] rounded-full flex items-center justify-center shadow-[0_8px_30px_rgba(0,230,118,0.4)] hover:shadow-[0_12px_40px_rgba(0,230,118,0.6)] hover:-translate-y-1 transition-all duration-300 group"
-              >
-                {/* Subtle Pulse Ring */}
-                <div className="absolute inset-0 rounded-full border-2 border-[#00E676] opacity-0 group-hover:animate-[ping_1.5s_cubic-bezier(0,0,0.2,1)_infinite]"></div>
-                
-                {/* Chat Icon */}
-                <svg className="w-[28px] h-[28px] text-[#0A0D14] relative z-10 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                </svg>
-              </button>
+            {/* Masaüstü Spacer (Layout'u ezmeden iter) */}
+            {!isMobile && (
+              <aside 
+                className={`hidden xl:block flex-shrink-0 transition-[width] duration-300 ease-in-out ${isChatOpen ? 'w-[350px]' : 'w-0'}`}
+                style={{ willChange: 'width' }}
+              />
             )}
 
-            {/* Chat Sidebar (Pushes the layout instead of floating) */}
-            <aside 
-              className={`hidden xl:flex flex-col flex-shrink-0 relative z-[99999] transition-[width,box-shadow] duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${isChatOpen ? 'w-[350px]' : 'w-0'} ${view === '724tv' ? 'bg-[#0A0D14]/70 backdrop-blur-md border-l border-white/5 shadow-[-10px_0_30px_rgba(0,0,0,0.6)]' : 'bg-[#0A0D14] shadow-[-5px_0_15px_rgba(0,0,0,0.5)]'}`}
-              style={{ willChange: 'width' }}
+            {/* Mobil Backdrop */}
+            {isMobile && isChatOpen && (
+              <div 
+                className="fixed inset-0 bg-[#0A0C10]/60 backdrop-blur-sm z-[99998] transition-opacity duration-300"
+                onClick={() => setIsChatOpen(false)}
+              ></div>
+            )}
+
+            {/* Chat Paneli (Translate-X Slide Animasyonu) */}
+            <div 
+              className={`fixed top-0 right-0 bottom-0 z-[99999] w-[100vw] sm:w-[350px] xl:w-[350px] bg-[#0A0C10] border-l border-white/5 shadow-[-5px_0_25px_rgba(0,0,0,0.8)] transform transition-transform duration-300 ease-in-out ${isChatOpen ? 'translate-x-0' : 'translate-x-full'}`}
             >
-              <div className={`flex-1 overflow-hidden relative transition-opacity duration-300 ${isChatOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
-                <DualRightPanel 
-                  popularMatches={[]} 
-                  language={'tr'} 
-                  isOpenMobile={false} 
-                  onCloseMobile={() => setIsChatOpen(false)} 
+              <div className="w-full h-full flex flex-col relative overflow-hidden">
+                <DualRightPanel
+                  language={i18n.language || 'tr'}
+                  isOpenMobile={isMobile && isChatOpen}
+                  onCloseMobile={() => setIsChatOpen(false)}
                   currentView={view}
+                  userRole={userRole}
                 />
               </div>
-            </aside>
+            </div>
           </>
         )}
 
@@ -3066,17 +3245,17 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
       {/* ── Canlı Skor Modal ── */}
       {showLiveScoreModal && (
         <div 
-          className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 md:p-6"
+          className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#0A0C10]/80 backdrop-blur-sm p-4 md:p-6"
           onClick={() => setShowLiveScoreModal(false)}
         >
           <div 
-            className="relative w-full max-w-5xl h-[85vh] bg-[#111111] rounded-lg shadow-2xl overflow-hidden flex flex-col"
+            className="relative w-full max-w-5xl h-[85vh] bg-[#0A0C10] rounded-lg shadow-2xl overflow-hidden flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header */}
-            <div className="flex items-center justify-between px-6 py-4 bg-[#050505]">
+            <div className="flex items-center justify-between px-6 py-4 bg-[#0A0C10]">
               <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-emerald-500 rounded-full animate-ping" />
+                <div className="w-2 h-2 bg-[#00E5FF] rounded-full animate-ping" />
                 <span className="text-black font-black text-xs uppercase tracking-widest italic">CANLI SKOR & SONUÇLAR</span>
               </div>
               <button 
@@ -3087,7 +3266,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
               </button>
             </div>
             {/* Modal Content */}
-            <div className="flex-1 w-full overflow-hidden bg-[#050505] relative">
+            <div className="flex-1 w-full overflow-hidden bg-[#0A0C10] relative">
               <iframe 
                 src="https://statsinfo.co/live?guid=a886190e-e01a-4155-85f4-e6daee231c8d&lg=en" 
                 frameBorder="0" 
@@ -3138,7 +3317,8 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
       <GlobalToaster />
       <LanguageTransition />
         </>
-      </BetSlipProvider>
+            </React.Suspense>
+    </BetSlipProvider>
     </UserProvider>
   );
 };

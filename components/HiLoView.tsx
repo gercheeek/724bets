@@ -127,10 +127,10 @@ export default function HiLoView({ siteUser, onAuthRequired }: any) {
                 <div className="mb-4 relative">
                     <div className="flex justify-between items-end mb-2">
                         <label className="text-xs text-gray-400 font-semibold">Bahis Tutarı</label>
-                        <span className="text-xs text-[#ffd700] font-mono font-bold">₺{siteUser ? siteUser.balance.toFixed(2) : '0.00'}</span>
+                        <span className="text-xs text-[#ffd700] font-mono font-bold">${siteUser ? siteUser.balance.toFixed(2) : '0.00'}</span>
                     </div>
                     <div className="flex bg-[#151D24] rounded-md border border-[#2A3744] overflow-hidden focus-within:border-[#3D82F6] transition-colors">
-                        <div className="px-3 flex items-center justify-center text-gray-400">₺</div>
+                        <div className="px-3 flex items-center justify-center text-gray-400">$</div>
                         <input 
                             type="number" 
                             value={betAmount || ''}
@@ -150,7 +150,7 @@ export default function HiLoView({ siteUser, onAuthRequired }: any) {
                 {isPlaying && (
                     <div className="mb-6 bg-[#151D24] p-3 rounded-md border border-[#2A3744] flex justify-between items-center">
                         <span className="text-xs font-bold text-gray-400 uppercase">Toplam Çarpan</span>
-                        <span className="text-xl font-bold text-emerald-400">{currentMultiplier.toFixed(2)}x</span>
+                        <span className="text-xl font-bold text-[#00E5FF]">{currentMultiplier.toFixed(2)}x</span>
                     </div>
                 )}
 
@@ -179,9 +179,9 @@ export default function HiLoView({ siteUser, onAuthRequired }: any) {
                             </button>
                             <button 
                                 onClick={handleCashout}
-                                className="col-span-2 bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 rounded-md transition-colors shadow-[0_0_15px_rgba(16,185,129,0.3)] mt-2"
+                                className="col-span-2 bg-[#00E5FF] hover:bg-emerald-600 text-white font-bold py-3 rounded-md transition-colors shadow-[0_0_15px_rgba(16,185,129,0.3)] mt-2"
                             >
-                                Bozdur ({(betAmount * currentMultiplier).toFixed(2)}₺)
+                                Bozdur (${(betAmount * currentMultiplier).toFixed(2)})
                             </button>
                         </div>
                     )}
@@ -191,8 +191,8 @@ export default function HiLoView({ siteUser, onAuthRequired }: any) {
                 {winAmount !== null && (
                     <div className={`mt-4 bg-[#151D24] rounded-md border px-3 py-3 flex items-center justify-between transition-colors ${winAmount > 0 ? 'border-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.3)]' : 'border-red-500 shadow-[0_0_10px_rgba(239,68,68,0.3)]'}`}>
                         <span className="text-gray-400 text-xs font-bold uppercase">{winAmount > 0 ? 'Kazanç' : 'Kayıp'}</span>
-                        <span className={`font-mono text-sm font-bold ${winAmount > 0 ? 'text-emerald-400' : 'text-red-400'}`}>
-                            {winAmount > 0 ? `+₺${winAmount.toFixed(2)}` : `-₺${betAmount.toFixed(2)}`}
+                        <span className={`font-mono text-sm font-bold ${winAmount > 0 ? 'text-[#00E5FF]' : 'text-red-400'}`}>
+                            {winAmount > 0 ? `+$${winAmount.toFixed(2)}` : `-$${betAmount.toFixed(2)}`}
                         </span>
                     </div>
                 )}
@@ -216,7 +216,7 @@ export default function HiLoView({ siteUser, onAuthRequired }: any) {
                         </span>
                     </div>
                     
-                    <div className="absolute top-6 right-6 flex items-center gap-2 bg-[#111111]/50 px-3 py-1.5 rounded-full border border-white/10 z-20">
+                    <div className="absolute top-6 right-6 flex items-center gap-2 bg-[#0A0C10]/50 px-3 py-1.5 rounded-full border border-white/10 z-20">
                         <ShieldCheck className="w-4 h-4 text-gray-400" />
                         <span className="text-gray-300 font-semibold text-xs">Adil Oyun</span>
                     </div>
@@ -259,8 +259,8 @@ export default function HiLoView({ siteUser, onAuthRequired }: any) {
                                      <h2 className="text-6xl md:text-8xl font-black uppercase tracking-tighter mb-2 text-transparent bg-clip-text bg-gradient-to-b from-pink-400 to-purple-600 drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)]">
                                          KAZANDIN
                                      </h2>
-                                     <div className="text-4xl text-emerald-400 font-black tracking-widest drop-shadow-[0_0_20px_rgba(52,211,153,0.6)]">
-                                         +₺{winAmount.toFixed(2)}
+                                     <div className="text-4xl text-[#00E5FF] font-black tracking-widest drop-shadow-[0_0_20px_rgba(52,211,153,0.6)]">
+                                         +${winAmount.toFixed(2)}
                                      </div>
                                  </div>
                              ) : (

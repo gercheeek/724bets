@@ -23,7 +23,7 @@ export default function AdminWithdrawalsTab() {
     
     // Mock Hot Wallet Balances
     const hotWallets = [
-        { name: 'USDT (Tether)', balance: 145250.50, usdValue: 145250.50, color: 'text-emerald-400', bg: 'bg-emerald-500/10' },
+        { name: 'USDT (Tether)', balance: 145250.50, usdValue: 145250.50, color: 'text-[#00E5FF]', bg: 'bg-[#00E5FF]/10' },
         { name: 'Bitcoin (BTC)', balance: 2.45, usdValue: 165000.00, color: 'text-orange-400', bg: 'bg-orange-500/10' },
         { name: 'Ethereum (ETH)', balance: 34.2, usdValue: 112000.00, color: 'text-blue-400', bg: 'bg-blue-500/10' },
     ];
@@ -114,10 +114,10 @@ export default function AdminWithdrawalsTab() {
             <div className="flex-1 flex flex-col min-h-0 bg-[#111318] border border-zinc-800 rounded-2xl shadow-lg overflow-hidden">
                 <div className="px-6 py-4 border-b border-zinc-800 bg-[#15171e] flex items-center justify-between">
                     <h3 className="font-bold text-zinc-300 text-sm flex items-center gap-2 uppercase tracking-wider">
-                        <ArrowUpFromLine className="w-4 h-4 text-amber-400" /> 
+                        <ArrowUpFromLine className="w-4 h-4 text-zinc-300" /> 
                         Onay Bekleyen Talepler
                     </h3>
-                    <div className="bg-amber-500/10 text-amber-500 text-xs font-black px-2 py-1 rounded border border-amber-500/20">
+                    <div className="bg-amber-500/10 text-zinc-300 text-xs font-black px-2 py-1 rounded border border-amber-500/20">
                         {requests.filter(r => r.status === 'pending').length} TALEP
                     </div>
                 </div>
@@ -138,7 +138,7 @@ export default function AdminWithdrawalsTab() {
                             {requests.length === 0 ? (
                                 <tr>
                                     <td colSpan={6} className="py-16 text-center text-zinc-500">
-                                        <Check className="w-8 h-8 text-emerald-500/50 mx-auto mb-3" />
+                                        <Check className="w-8 h-8 text-[#00E5FF]/50 mx-auto mb-3" />
                                         <p className="font-medium">Tüm çekim talepleri onaylandı.</p>
                                     </td>
                                 </tr>
@@ -147,7 +147,7 @@ export default function AdminWithdrawalsTab() {
                                     <tr 
                                         key={req.id} 
                                         className={`transition-all duration-500 ${
-                                            req.status === 'approved' ? 'bg-emerald-500/20 border-l-4 border-emerald-500' : 
+                                            req.status === 'approved' ? 'bg-[#00E5FF]/20 border-l-4 border-emerald-500' : 
                                             req.status === 'rejected' ? 'bg-red-500/20 border-l-4 border-red-500' :
                                             req.status === 'processing' ? 'bg-zinc-800/50 opacity-50' :
                                             'hover:bg-white/[0.02]'
@@ -208,7 +208,7 @@ export default function AdminWithdrawalsTab() {
                                                         className={`px-3 py-2 rounded-lg font-bold flex items-center gap-2 transition-all ${
                                                             req.riskScore === 'safe' 
                                                             ? 'bg-[#00ff88]/20 text-[#00ff88] hover:bg-[#00ff88] hover:text-black border border-[#00ff88]/50 shadow-[0_0_10px_rgba(0,255,136,0.3)]' 
-                                                            : 'bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500 hover:text-white border border-emerald-500/30'
+                                                            : 'bg-[#00E5FF]/10 text-[#00E5FF] hover:bg-[#00E5FF] hover:text-white border border-emerald-500/30'
                                                         }`}
                                                     >
                                                         <Check className="w-4 h-4" />
@@ -221,7 +221,7 @@ export default function AdminWithdrawalsTab() {
                                                     İşleniyor...
                                                 </div>
                                             ) : req.status === 'approved' ? (
-                                                <div className="inline-flex items-center gap-2 text-emerald-400 font-bold text-sm">
+                                                <div className="inline-flex items-center gap-2 text-[#00E5FF] font-bold text-sm">
                                                     <Check className="w-4 h-4" /> Onaylandı
                                                 </div>
                                             ) : (

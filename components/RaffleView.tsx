@@ -110,11 +110,11 @@ const TicketSlot = React.memo(({ index, isSold, isMe, username, onSelect, isHigh
         >
             {isSold ? (
                 <>
-                    {isMe ? <Ticket className="w-5 h-5 mb-1 text-emerald-950" /> : <Lock className="w-4 h-4 mb-1 text-zinc-600 group-hover:text-amber-400 transition-colors" />}
-                    <div className={`font-black text-[9px] text-center tracking-wider uppercase ${isMe ? 'text-emerald-950' : 'text-zinc-500 group-hover:text-amber-400'}`}>
+                    {isMe ? <Ticket className="w-5 h-5 mb-1 text-emerald-950" /> : <Lock className="w-4 h-4 mb-1 text-zinc-600 group-hover:text-zinc-300 transition-colors" />}
+                    <div className={`font-black text-[9px] text-center tracking-wider uppercase ${isMe ? 'text-emerald-950' : 'text-zinc-500 group-hover:text-zinc-300'}`}>
                         {isMe ? t('raffle.yours', 'SİZİN') : t('raffle.taken', 'DOLU')}
                     </div>
-                    <div className={`text-[8px] font-mono mt-0.5 ${isMe ? 'text-emerald-900/70 font-bold' : 'text-white/20 group-hover:text-amber-400/50'}`}>#{String(index + 1).padStart(3, '0')}</div>
+                    <div className={`text-[8px] font-mono mt-0.5 ${isMe ? 'text-emerald-900/70 font-bold' : 'text-white/20 group-hover:text-zinc-300/50'}`}>#{String(index + 1).padStart(3, '0')}</div>
                     
                     {/* Tooltip for others' tickets */}
                     {!isMe && !isWinner && (
@@ -393,9 +393,9 @@ const RaffleView: React.FC<RaffleViewProps> = ({ config, loyaltyConfig, userId, 
                         <div className="w-full flex flex-col gap-8">
                         <div className="flex items-center justify-between px-6">
                             <h3 className="text-[#A0A0AB] text-[11px] font-semibold uppercase tracking-widest flex items-center gap-2">
-                                <Shield className="w-4 h-4 text-amber-500/70" /> Lüks Bilet Kasam
+                                <Shield className="w-4 h-4 text-zinc-300/70" /> Lüks Bilet Kasam
                             </h3>
-                            <div className="bg-amber-500/10 border border-amber-500/20 px-3 py-1 rounded-lg text-amber-400 text-xs font-bold shadow-[0_0_10px_rgba(245,166,35,0.1)]">
+                            <div className="bg-amber-500/10 border border-amber-500/20 px-3 py-1 rounded-lg text-zinc-300 text-xs font-bold shadow-[0_0_10px_rgba(245,166,35,0.1)]">
                                 {myTickets.length} BİLET
                             </div>
                         </div>
@@ -408,8 +408,8 @@ const RaffleView: React.FC<RaffleViewProps> = ({ config, loyaltyConfig, userId, 
                                     <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wNSkiLz48L3N2Zz4=')] opacity-50 mix-blend-overlay" />
                                     
                                     <div className="absolute top-4 left-4 right-4 flex justify-between items-start z-10">
-                                        <div className="text-amber-500/80 text-[9px] font-black uppercase tracking-widest">VIP Bilet</div>
-                                        <CheckCircle className="w-4 h-4 text-emerald-400 drop-shadow-[0_0_5px_rgba(52,211,153,0.8)]" />
+                                        <div className="text-zinc-300/80 text-[9px] font-black uppercase tracking-widest">VIP Bilet</div>
+                                        <CheckCircle className="w-4 h-4 text-[#00E5FF] drop-shadow-[0_0_5px_rgba(52,211,153,0.8)]" />
                                     </div>
                                     <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between z-10">
                                         <div>
@@ -419,7 +419,7 @@ const RaffleView: React.FC<RaffleViewProps> = ({ config, loyaltyConfig, userId, 
                                             </div>
                                         </div>
                                         <div className="w-8 h-8 rounded-full border border-amber-500/30 flex items-center justify-center bg-amber-500/10 group-hover:scale-110 transition-transform">
-                                            <Ticket className="w-4 h-4 text-amber-400" />
+                                            <Ticket className="w-4 h-4 text-zinc-300" />
                                         </div>
                                     </div>
                                 </div>
@@ -430,7 +430,7 @@ const RaffleView: React.FC<RaffleViewProps> = ({ config, loyaltyConfig, userId, 
 
                     {/* ═══ The Arena: Ticket Matrix ═══ */}
                     <div className="w-full flex flex-col gap-8">
-                        <div className="w-full bg-[#050505]/95 backdrop-blur-3xl border border-white/10 rounded-3xl shadow-2xl flex flex-col relative overflow-hidden">
+                        <div className="w-full bg-[#0A0C10]/95 backdrop-blur-3xl border border-white/10 rounded-3xl shadow-2xl flex flex-col relative overflow-hidden">
                         
                         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-6 border-b border-white/5 bg-white/[0.02] gap-5 relative z-10">
                             <h3 className="text-white text-xl font-black uppercase tracking-wider flex items-center gap-2">
@@ -456,7 +456,7 @@ const RaffleView: React.FC<RaffleViewProps> = ({ config, loyaltyConfig, userId, 
                                         <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider hidden sm:inline">Dolu</span>
                                     </div>
                                     <div className="flex items-center gap-2">
-                                        <div className="w-3.5 h-3.5 rounded bg-emerald-500/20 border border-emerald-500/50" />
+                                        <div className="w-3.5 h-3.5 rounded bg-[#00E5FF]/20 border border-emerald-500/50" />
                                         <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider hidden sm:inline">Sizin</span>
                                     </div>
                                     <div className="flex items-center gap-2">
@@ -472,7 +472,7 @@ const RaffleView: React.FC<RaffleViewProps> = ({ config, loyaltyConfig, userId, 
 
                         {/* Animated Arena Background */}
                         <div className="absolute inset-0 z-0 pointer-events-none opacity-20">
-                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-emerald-500/10 rounded-full blur-[120px]" />
+                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#00E5FF]/10 rounded-full blur-[120px]" />
                         </div>
 
                         <div className="p-6 sm:p-8 overflow-y-auto max-h-[800px] custom-scrollbar relative z-10">
@@ -547,15 +547,15 @@ const RaffleView: React.FC<RaffleViewProps> = ({ config, loyaltyConfig, userId, 
                             
                             <div className="flex items-center justify-between mb-6">
                                 <h3 className="text-white text-lg font-black uppercase tracking-wider flex items-center gap-2">
-                                    <Ticket className="text-emerald-400 w-5 h-5" /> Bilet Talep Et
+                                    <Ticket className="text-[#00E5FF] w-5 h-5" /> Bilet Talep Et
                                 </h3>
                                 <button onClick={() => setIsDepositModalOpen(false)} className="text-zinc-500 hover:text-white transition-colors p-1">
                                     ✕
                                 </button>
                             </div>
 
-                            <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-3 mb-6 flex items-start gap-3">
-                                <Info className="text-emerald-400 w-5 h-5 shrink-0 mt-0.5" />
+                            <div className="bg-[#00E5FF]/10 border border-emerald-500/20 rounded-xl p-3 mb-6 flex items-start gap-3">
+                                <Info className="text-[#00E5FF] w-5 h-5 shrink-0 mt-0.5" />
                                 <span className="text-emerald-200 text-xs font-medium leading-relaxed">500 TL yatırım yaparak havuzdan bilet seçme hakkı (1 Bilet) kazanabilirsiniz.</span>
                             </div>
 
@@ -563,7 +563,7 @@ const RaffleView: React.FC<RaffleViewProps> = ({ config, loyaltyConfig, userId, 
                                 <div>
                                     <label className="block text-zinc-400 text-[10px] font-black uppercase tracking-widest mb-1.5">Kullanıcı Adı</label>
                                     <input type="text" value={depositUsername} onChange={e => setDepositUsername(e.target.value)}
-                                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500/50 focus:bg-emerald-500/5 transition-colors"
+                                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500/50 focus:bg-[#00E5FF]/5 transition-colors"
                                         placeholder="Kullanıcı adınızı girin"
                                     />
                                 </div>
@@ -572,14 +572,14 @@ const RaffleView: React.FC<RaffleViewProps> = ({ config, loyaltyConfig, userId, 
                                     <div>
                                         <label className="block text-zinc-400 text-[10px] font-black uppercase tracking-widest mb-1.5">Tutar (TL)</label>
                                         <input type="number" value={depositAmount} onChange={e => setDepositAmount(e.target.value)}
-                                            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500/50 focus:bg-emerald-500/5 transition-colors"
+                                            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500/50 focus:bg-[#00E5FF]/5 transition-colors"
                                             placeholder="0.00"
                                         />
                                     </div>
                                     <div>
                                         <label className="block text-zinc-400 text-[10px] font-black uppercase tracking-widest mb-1.5">İstenilen Bilet No</label>
                                         <input type="number" value={depositTicket} onChange={e => setDepositTicket(e.target.value)}
-                                            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500/50 focus:bg-emerald-500/5 transition-colors"
+                                            className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500/50 focus:bg-[#00E5FF]/5 transition-colors"
                                             placeholder="Örn: 42"
                                         />
                                     </div>
@@ -588,7 +588,7 @@ const RaffleView: React.FC<RaffleViewProps> = ({ config, loyaltyConfig, userId, 
                                 <div>
                                     <label className="block text-zinc-400 text-[10px] font-black uppercase tracking-widest mb-1.5">Yatırım Tarihi</label>
                                     <input type="datetime-local" value={depositDate} onChange={e => setDepositDate(e.target.value)}
-                                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500/50 focus:bg-emerald-500/5 transition-colors"
+                                        className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500/50 focus:bg-[#00E5FF]/5 transition-colors"
                                         style={{ colorScheme: 'dark' }}
                                     />
                                 </div>
@@ -775,7 +775,7 @@ const RaffleView: React.FC<RaffleViewProps> = ({ config, loyaltyConfig, userId, 
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
                     <div className="absolute inset-0 bg-black/80 backdrop-blur-xl" onClick={() => setIsArenaModalOpen(false)} />
                     
-                    <div className="relative w-full max-w-5xl bg-[#0a0d14]/95 backdrop-blur-3xl border border-white/10 rounded-3xl shadow-[0_0_60px_rgba(0,0,0,0.8)] flex flex-col max-h-[90vh] overflow-hidden animate-[scaleIn_0.3s_ease-out]">
+                    <div className="relative w-full max-w-5xl bg-[#0A0C10]/95 backdrop-blur-3xl border border-white/10 rounded-3xl shadow-[0_0_60px_rgba(0,0,0,0.8)] flex flex-col max-h-[90vh] overflow-hidden animate-[scaleIn_0.3s_ease-out]">
                         
                         {/* Header & Search */}
                         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-6 border-b border-white/5 bg-white/[0.02] gap-4 shrink-0">
@@ -844,7 +844,7 @@ const RaffleView: React.FC<RaffleViewProps> = ({ config, loyaltyConfig, userId, 
                                 <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Dolu</span>
                             </div>
                             <div className="flex items-center gap-2">
-                                <div className="w-3 h-3 rounded bg-emerald-500/20 border border-emerald-500/50" />
+                                <div className="w-3 h-3 rounded bg-[#00E5FF]/20 border border-emerald-500/50" />
                                 <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Sizin</span>
                             </div>
                             <div className="flex items-center gap-2">

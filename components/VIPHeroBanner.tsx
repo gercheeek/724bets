@@ -43,7 +43,7 @@ const VIPHeroBanner = () => {
         <div className="absolute inset-0 pointer-events-none opacity-10 z-0" style={{ backgroundImage: 'linear-gradient(#00ffff 1px, transparent 1px), linear-gradient(90deg, #00ffff 1px, transparent 1px)', backgroundSize: '30px 30px' }}></div>
 
         {/* ── LEFT SIDE: TERMINAL / INFO ── */}
-        <div className="flex-1 relative z-10 flex flex-col justify-between bg-black border-2 border-[#00ffff] p-3 md:p-4 shadow-[inset_0_0_20px_rgba(0,255,255,0.2)]">
+        <div className="flex-1 relative z-10 flex flex-col justify-between bg-[#0A0C10] border-2 border-[#00ffff] p-3 md:p-4 shadow-[inset_0_0_20px_rgba(0,255,255,0.2)]">
            
            <div>
                <div className="flex items-center gap-3 mb-4 border-b-2 border-dashed border-[#00ffff]/50 pb-2">
@@ -80,10 +80,10 @@ const VIPHeroBanner = () => {
         </div>
 
         {/* ── RIGHT SIDE: RANK PROGRESS ── */}
-        <div className="flex-1 relative z-10 flex flex-col bg-black border-2 border-white/10 p-3 md:p-4 ">
+        <div className="flex-1 relative z-10 flex flex-col bg-[#0A0C10] border-2 border-white/10 p-3 md:p-4 ">
             
             <h3 className="text-white text-[10px] md:text-xs mb-4 border-b-2 border-dashed border-white/20 pb-2 flex items-center gap-3">
-                <Trophy className="w-5 h-5 text-yellow-400" /> RÜTBE_DURUMU
+                <Trophy className="w-5 h-5 text-zinc-300" /> RÜTBE_DURUMU
             </h3>
             
             <div className="flex flex-col gap-2 justify-center flex-1">
@@ -105,7 +105,7 @@ const VIPHeroBanner = () => {
                                  <span><AnimatedCounter value={rank.currentXp || 0} /> / {rank.reqXp} XP</span>
                              </div>
                              {/* Pixel Progress Bar */}
-                             <div className="w-full h-2 border-[2px] border-[#00ffff] bg-black p-[2px]">
+                             <div className="w-full h-2 border-[2px] border-[#00ffff] bg-[#0A0C10] p-[2px]">
                                  <div className="h-full bg-[#00ffff]" style={{ width: `${rank.progress}%`, backgroundImage: 'repeating-linear-gradient(90deg, transparent, transparent 4px, rgba(0,0,0,0.5) 4px, rgba(0,0,0,0.5) 6px)' }} />
                              </div>
                          </div>

@@ -47,11 +47,11 @@ const BettingBulletin: React.FC<BettingBulletinProps> = ({ matches }) => {
 
               {/* Teams */}
               <div className="flex-1 flex flex-row justify-center md:justify-start items-center w-full gap-2">
-                <div className="text-white font-bold text-sm group-hover:text-amber-400 transition-colors text-right flex-1 md:flex-none md:w-32 truncate">
+                <div className="text-white font-bold text-sm group-hover:text-zinc-300 transition-colors text-right flex-1 md:flex-none md:w-32 truncate">
                   {match.homeTeam}
                 </div>
                 <div className="text-gray-500 font-black text-[9px] tracking-widest italic shrink-0">VS</div>
-                <div className="text-white font-bold text-sm group-hover:text-amber-400 transition-colors text-left flex-1 md:flex-none md:w-32 truncate">
+                <div className="text-white font-bold text-sm group-hover:text-zinc-300 transition-colors text-left flex-1 md:flex-none md:w-32 truncate">
                   {match.awayTeam}
                 </div>
               </div>

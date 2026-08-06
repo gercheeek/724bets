@@ -75,7 +75,7 @@ const InGameLayout: React.FC<InGameLayoutProps> = ({ children, siteUser, onViewC
                      <Wallet className="w-4 h-4 text-white" />
                   </div>
                </div>
-               <button className="w-10 h-10 rounded-full bg-[#111111] border border-white/5 flex items-center justify-center hover:bg-white/10 transition-colors">
+               <button className="w-10 h-10 rounded-full bg-[#0A0C10] border border-white/5 flex items-center justify-center hover:bg-white/10 transition-colors">
                   <User className="w-5 h-5 text-gray-300" />
                </button>
              </>
@@ -139,12 +139,12 @@ const InGameLayout: React.FC<InGameLayoutProps> = ({ children, siteUser, onViewC
               {/* Leaderboard Widget */}
               <div className="bg-black/20 rounded-xl p-4 border border-[#10b981]/15 hover:border-[#10b981]/30 shadow-[0_8px_30px_rgba(0,0,0,0.5)] transition-colors">
                  <div className="flex items-center gap-2 mb-4">
-                    <Trophy className="w-4 h-4 text-yellow-500" />
+                    <Trophy className="w-4 h-4 text-zinc-300" />
                     <h3 className="font-bold text-sm text-gray-200 tracking-wider uppercase">Lider Tablosu</h3>
                  </div>
                  <div className="flex flex-col gap-2">
                     {[
-                      { rank: 1, name: 'CryptoKing', amount: '₺45,200', color: 'text-yellow-400', bg: 'bg-yellow-400/10' },
+                      { rank: 1, name: 'CryptoKing', amount: '₺45,200', color: 'text-zinc-300', bg: 'bg-yellow-400/10' },
                       { rank: 2, name: 'BetMaster', amount: '₺28,900', color: 'text-gray-300', bg: 'bg-gray-300/10' },
                       { rank: 3, name: 'LuckyStrike', amount: '₺15,400', color: 'text-[#CD7F32]', bg: 'bg-[#CD7F32]/10' },
                     ].map((winner) => (
@@ -269,7 +269,7 @@ const InGameLayout: React.FC<InGameLayoutProps> = ({ children, siteUser, onViewC
               <div className="absolute top-4 right-4 z-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                  <button 
                    onClick={() => setIsFullscreen(!isFullscreen)}
-                   className="p-2.5 bg-black/60 hover:bg-black backdrop-blur-sm border border-white/10 hover:border-[#06b6d4]/50 rounded-lg transition-all text-gray-300 hover:text-white shadow-lg"
+                   className="p-2.5 bg-black/60 hover:bg-[#0A0C10] backdrop-blur-sm border border-white/10 hover:border-[#06b6d4]/50 rounded-lg transition-all text-gray-300 hover:text-white shadow-lg"
                  >
                    {isFullscreen ? <Minimize2 className="w-5 h-5" /> : <Maximize2 className="w-5 h-5" />}
                  </button>

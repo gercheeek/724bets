@@ -1,4 +1,5 @@
 import { WebSocketServer, WebSocket } from 'ws';
+import { spawn } from 'child_process';
 import express from 'express';
 import http from 'http';
 import cors from 'cors';
@@ -37,11 +38,11 @@ const wss = new WebSocketServer({ server });
 let globalLiveEvents = new Map();
 
 // Atekbet Swarm Connection
-const SWARM_URL = 'wss://eu-swarm-newm.atekbet273.com/ws?language=tur';
+const SWARM_URL = 'wss://eu-swarm-newm.atekbet274.com/ws?language=tur';
 
 function startSwarmConnection() {
     const ws = new WebSocket(SWARM_URL, {
-        headers: { 'Origin': 'https://atekbet273.com', 'User-Agent': 'Mozilla/5.0' }
+        headers: { 'Origin': 'https://atekbet274.com', 'User-Agent': 'Mozilla/5.0' }
     });
     
     let pollInterval;
@@ -74,7 +75,7 @@ function startSwarmConnection() {
                                 event: ['id', 'name', 'price']
                             },
                             where: {
-                                game: { type: 1 } // LIVE
+                                game: { type: { '@in': [0, 1] } } // PRE-MATCH and LIVE
                             }
                         },
                         rid: 'get_live'
@@ -88,9 +89,8 @@ function startSwarmConnection() {
             if (data.sport) {
                 Object.values(data.sport).forEach(sport => {
                     const sportName = sport.name || 'Futbol';
-                    
-                    // Bütün sporlara izin ver, filtreyi kaldırdık.
                     const sName = sportName.toLowerCase();
+                    if (sName !== 'futbol' && sName !== 'soccer' && sName !== 'football') return;
 
                     if (!sport.region) return;
                     Object.values(sport.region).forEach(region => {
@@ -124,80 +124,124 @@ function startSwarmConnection() {
                                     return; // Skip console/esports player matches
                                 }
                                 
-                                let oddsStr = null;
+                                let groupMarkets = { 'full_event|0': [] };
+                                let rawHomeOdd = '-';
+                                let rawDrawOdd = '-';
+                                let rawAwayOdd = '-';
+                                let allMarkets = {};
+
                                 if (game.market) {
-                                    const mainMarket = Object.values(game.market).find(m => {
+                                    allMarkets = game.market; // pass the raw markets explicitly
+                                    Object.values(game.market).forEach(m => {
                                         const t = (m.type_name || '').toLowerCase();
                                         const n = (m.name || '').toLowerCase();
-                                        return t === 'p1p2' || t === 'p1x2' || t === 'matchresult' || t === '1x2' ||
-                                               n === 'match result' || n === 'maç sonucu' || n === '1x2' || n === 'winner' || n === 'kazanan' || n === 'maçın kazananı';
-                                    });
-                                    if (mainMarket && mainMarket.event) {
-                                        const evs = Object.values(mainMarket.event);
-                                        const p1 = evs.find(e => {
-                                            const en = (e.name || '').toLowerCase().trim();
-                                            return en === 'w1' || en === '1' || en === 'p1' || en === 'team 1' || en === 'ev sahibi';
-                                        })?.price;
-                                        const px = evs.find(e => {
-                                            const en = (e.name || '').toLowerCase().trim();
-                                            return en === 'x' || en === 'draw' || en === 'beraberlik';
-                                        })?.price;
-                                        const p2 = evs.find(e => {
-                                            const en = (e.name || '').toLowerCase().trim();
-                                            return en === 'w2' || en === '2' || en === 'p2' || en === 'team 2' || en === 'deplasman';
-                                        })?.price;
-                                        if (p1 || px || p2) {
-                                            oddsStr = `|1x2|~home~${p1||'-'}!~draw~${px||'-'}!~away~${p2||'-'}`;
+                                        const evs = m.event ? Object.values(m.event) : [];
+                                        
+                                        // Maç Sonucu (1x2)
+                                        if (t === 'p1p2' || t === 'p1x2' || t === 'matchresult' || t === '1x2' ||
+                                            n === 'match result' || n === 'maç sonucu' || n === 'winner' || n === 'kazanan') {
+                                            const p1 = evs.find(e => ['w1', '1', 'p1', 'team 1', 'ev sahibi'].includes((e.name || '').toLowerCase().trim()))?.price;
+                                            const px = evs.find(e => ['x', 'draw', 'beraberlik'].includes((e.name || '').toLowerCase().trim()))?.price;
+                                            const p2 = evs.find(e => ['w2', '2', 'p2', 'team 2', 'deplasman'].includes((e.name || '').toLowerCase().trim()))?.price;
+                                            if (p1 || px || p2) groupMarkets["full_event|0"].push(`|1x2|~home~${p1||'-'}!~draw~${px||'-'}!~away~${p2||'-'}`);
+                                            
+                                            // Extract base odds for the root object
+                                            if (p1) rawHomeOdd = parseFloat(p1).toFixed(2);
+                                            if (px) rawDrawOdd = parseFloat(px).toFixed(2);
+                                            if (p2) rawAwayOdd = parseFloat(p2).toFixed(2);
                                         }
-                                    }
+                                        // Toplam Goller (Alt/Üst)
+                                        else if (n === 'toplam goller' || n === 'toplam' || t === 'totalgoals' || t === 'underover') {
+                                            const over = evs.find(e => (e.name||'').toLowerCase().includes('üst') || (e.name||'').toLowerCase().includes('over'))?.price;
+                                            const under = evs.find(e => (e.name||'').toLowerCase().includes('alt') || (e.name||'').toLowerCase().includes('under'))?.price;
+                                            if (over || under) {
+                                                const matchLine = n.match(/([0-9]+\.5)/) || m.base;
+                                                const arg = matchLine ? (matchLine[1] || matchLine) : '2.5';
+                                                groupMarkets["full_event|0"].push(`|ou|${arg}|~üstü~${over||'-'}!~altı~${under||'-'}`);
+                                            }
+                                        }
+                                        // Karşılıklı Gol (BTTS)
+                                        else if (n === 'her iki takımda gol atar' || n.includes('karşılıklı gol')) {
+                                            const yes = evs.find(e => ['var', 'evet', 'yes'].includes((e.name || '').toLowerCase().trim()))?.price;
+                                            const no = evs.find(e => ['yok', 'hayır', 'no'].includes((e.name || '').toLowerCase().trim()))?.price;
+                                            if (yes || no) groupMarkets["full_event|0"].push(`|gg||~var~${yes||'-'}!~yok~${no||'-'}`);
+                                        }
+                                        // Çifte Şans
+                                        else if (n === 'çifte şans' || t === 'doublechance') {
+                                            const p1x = evs.find(e => ['1x', '1 x'].includes((e.name || '').toLowerCase().trim()))?.price;
+                                            const p12 = evs.find(e => ['12', '1 2'].includes((e.name || '').toLowerCase().trim()))?.price;
+                                            const px2 = evs.find(e => ['x2', 'x 2', '2x', '2 x'].includes((e.name || '').toLowerCase().trim()))?.price;
+                                            if (p1x || p12 || px2) groupMarkets["full_event|0"].push(`|Double_Chance||~1X~${p1x||'-'}!~12~${p12||'-'}!~X2~${px2||'-'}`);
+                                        }
+                                        // İlk Yarı Sonucu
+                                        else if (n === '1.yarı sonucu' || n === '1. yarı sonucu') {
+                                            const p1 = evs.find(e => ['w1', '1', 'p1'].includes((e.name || '').toLowerCase().trim()))?.price;
+                                            const px = evs.find(e => ['x', 'draw', 'beraberlik'].includes((e.name || '').toLowerCase().trim()))?.price;
+                                            const p2 = evs.find(e => ['w2', '2', 'p2'].includes((e.name || '').toLowerCase().trim()))?.price;
+                                            if (p1 || px || p2) groupMarkets["full_event|0"].push(`|Half_Time_Result||~1~${p1||'-'}!~X~${px||'-'}!~2~${p2||'-'}`);
+                                        }
+                                    });
                                 }
 
-                                // 🚨 STRICT LIVE FILTERING (Gerçek Canlı Kontrolleri)
                                 const nowTs = Date.now();
                                 const matchStartTs = game.start_ts ? game.start_ts * 1000 : 0;
                                 
-                                // 1. ZAMAN KONTROLU: Maç saati gelecekteyse canlı olamaz (60 sn tolerans)
-                                if (matchStartTs > nowTs + 60000) {
-                                    return; // SKIP: Henüz başlamamış
-                                }
+                                let isLive = game.type === 1; // 1 = Live, 0 = Pre-match
 
-                                // 2. BİTMİŞ MAÇ KONTROLU: Maç bittiyse veya iptal edildiyse atla
-                                const matchPhase = (game.info?.current_game_state || '').toLowerCase();
-                                if (matchPhase === 'finished' || matchPhase === 'ended' || matchPhase === 'ft' || matchPhase === 'abandoned' || matchPhase === 'canceled' || matchPhase === 'not_started') {
-                                    return; // SKIP: Biten veya iptal olan maçlar
-                                }
+                                // 🚨 STRICT LIVE FILTERING (Gerçek Canlı Kontrolleri) for live games only
+                                if (isLive) {
+                                    // 1. ZAMAN KONTROLU: Maç saati gelecekteyse canlı olamaz (60 sn tolerans)
+                                    if (matchStartTs > nowTs + 60000) {
+                                        isLive = false; 
+                                    }
 
-                                // 3. ZAMANLAYICI (TIMER) KONTROLU: Futbol ve Basketbolda zaman akmıyor ve skor yoksa (sıfırsa) başlamamıştır
-                                const isFootballOrBasketball = sportName.toLowerCase().includes('futbol') || sportName.toLowerCase().includes('basket');
-                                const matchTimer = game.info?.current_game_time || 0;
-                                const score1 = game.info?.score1;
-                                const score2 = game.info?.score2;
+                                    // 2. BİTMİŞ MAÇ KONTROLU: Maç bittiyse veya iptal edildiyse atla
+                                    const matchPhase = (game.info?.current_game_state || '').toLowerCase();
+                                    if (matchPhase === 'finished' || matchPhase === 'ended' || matchPhase === 'ft' || matchPhase === 'abandoned' || matchPhase === 'canceled' || matchPhase === 'not_started') {
+                                        return; // SKIP: Biten veya iptal olan maçlar
+                                    }
 
-                                if (isFootballOrBasketball) {
-                                    if ((!matchTimer || parseInt(matchTimer) === 0) && (!score1 || parseInt(score1) === 0) && (!score2 || parseInt(score2) === 0)) {
-                                        return; // SKIP: Zaman ilerlemiyor ve skor yok (Muhtemelen maça saatler var ama is_live=true gönderilmiş)
+                                    // 3. ZAMANLAYICI (TIMER) KONTROLU: Futbol ve Basketbolda zaman akmıyor ve skor yoksa (sıfırsa) başlamamıştır
+                                    const isFootballOrBasketball = sportName.toLowerCase().includes('futbol') || sportName.toLowerCase().includes('basket');
+                                    const matchTimer = game.info?.current_game_time || 0;
+                                    const score1 = game.info?.score1;
+                                    const score2 = game.info?.score2;
+
+                                    if (isFootballOrBasketball) {
+                                        if ((!matchTimer || parseInt(matchTimer) === 0) && (!score1 || parseInt(score1) === 0) && (!score2 || parseInt(score2) === 0)) {
+                                            isLive = false; // Muhtemelen maça saatler var ama is_live=true gönderilmiş
+                                        }
+                                    }
+                                } else {
+                                    // Pre-match game that already started or is in the past
+                                    if (matchStartTs < nowTs - 180000) { // 3 min tolerance
+                                        return; // SKIP: Pre-match game that should have started already (or is old)
                                     }
                                 }
                                 
                                 const ev = {
                                     id: String(game.id),
+                                    homeOdd: rawHomeOdd,
+                                    drawOdd: rawDrawOdd,
+                                    awayOdd: rawAwayOdd,
+                                    all_markets: allMarkets,
                                     data: {
-                                        status: 'started',
+                                        status: isLive ? 'started' : 'not_started',
                                         sport: { name: sportName },
                                         tournament: { name: tournamentName },
                                         country: { name: regionName },
                                         participants: { home: game.team1_name, away: game.team2_name, home_id: game.team1_id, away_id: game.team2_id },
                                         start_time: game.start_ts ? new Date(game.start_ts * 1000).toISOString() : new Date().toISOString(),
                                         score: game.info ? `${game.info.score1 || 0}:${game.info.score2 || 0}` : '0:0',
-                                        minute: game.info ? game.info.current_game_time : 0,
-                                        isLive: true,
-                                        extended_status: 'live'
+                                        minute: game.info?.current_game_time || (isLive ? 0 : ''),
+                                        isLive: isLive,
+                                        extended_status: isLive ? 'live' : 'not_started'
                                     }
                                 };
                                 
-                                if (oddsStr) {
-                                    ev.data.group_markets = { 'full_event|0': [oddsStr] };
-                                    ev.group_markets = { 'full_event|0': [oddsStr] };
+                                if (groupMarkets && groupMarkets['full_event|0'].length > 0) {
+                                    ev.data.group_markets = groupMarkets;
+                                    ev.group_markets = groupMarkets;
                                 }
                                 
                                 newEvents.set(ev.id, ev);
@@ -313,7 +357,22 @@ app.get('/api/marsbahis-tv', async (req, res) => {
 
 app.get('/api/xslot-tv', async (req, res) => {
     try {
-        const targetUrl = req.query.url || 'https://xslot116.live/';
+        const targetUrl = req.query.url || 'https://xslotlive2.xyz/';
+        
+        let baseUrl = 'https://tzy.zirvedesin236.cfd/';
+        try {
+            const domainRes = await fetch('https://data-reality.com/domain.php');
+            if (domainRes.ok) {
+                const domainData = await domainRes.json();
+                if (domainData && domainData.baseurl) {
+                    baseUrl = domainData.baseurl;
+                }
+            }
+        } catch (e) {
+            console.error('Error fetching domain.php:', e);
+        }
+        if (!baseUrl.endsWith('/')) baseUrl += '/';
+
         const response = await fetch(targetUrl);
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const html = await response.text();
@@ -351,6 +410,9 @@ app.get('/api/xslot-tv', async (req, res) => {
             if (awayText) name += ' vs ' + awayText;
             
             const thumbnailUrl = awayImg ? (awayImg.startsWith('http') ? awayImg : targetUrl.replace(/\/$/, '') + '/' + awayImg) : '';
+            const host = req.get('host') || 'localhost:4000';
+            const protocol = req.protocol || 'http';
+            const streamUrl = `${protocol}://${host}/api/stream-proxy/${id}/mono.m3u8`;
             
             channels.push({
                 id: `xs_${id}`,
@@ -361,7 +423,9 @@ app.get('/api/xslot-tv', async (req, res) => {
                 tags: [category, time].filter(Boolean),
                 is_live: true,
                 is_vip: false,
-                source_type: 'iframe',
+                source_type: 'm3u8',
+                video_url: streamUrl,
+                stream_url: streamUrl,
                 iframe_url: targetUrl.replace(/\/$/, '') + '/channel?id=' + id,
                 order_index: order++
             });
@@ -371,6 +435,48 @@ app.get('/api/xslot-tv', async (req, res) => {
     } catch (err) {
         console.error('Xslot fetch error:', err);
         res.status(500).json({ success: false, error: err.message });
+    }
+});
+
+app.get('/api/stream-proxy/*splat', async (req, res) => {
+    try {
+        const streamPath = req.params.splat;
+        if (!streamPath) return res.status(400).send('Path required');
+
+        let baseUrl = 'https://tzy.zirvedesin236.cfd/';
+        try {
+            const domainRes = await fetch('https://data-reality.com/domain.php');
+            if (domainRes.ok) {
+                const domainData = await domainRes.json();
+                if (domainData && domainData.baseurl) baseUrl = domainData.baseurl;
+            }
+        } catch (e) {}
+        if (!baseUrl.endsWith('/')) baseUrl += '/';
+
+        const targetUrl = baseUrl + streamPath;
+        const response = await fetch(targetUrl, {
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                'Referer': 'https://xslotlive2.xyz/'
+            }
+        });
+
+        if (!response.ok) return res.status(response.status).send('Stream fetch error');
+
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+        res.setHeader('Access-Control-Allow-Headers', '*');
+        
+        const contentType = response.headers.get('content-type');
+        if (contentType) res.setHeader('Content-Type', contentType);
+        else if (streamPath.endsWith('.m3u8')) res.setHeader('Content-Type', 'application/x-mpegURL');
+        else if (streamPath.endsWith('.ts')) res.setHeader('Content-Type', 'video/MP2T');
+
+        const arrayBuffer = await response.arrayBuffer();
+        res.send(Buffer.from(arrayBuffer));
+    } catch (err) {
+        console.error('Stream proxy error:', err);
+        res.status(500).send('Proxy error');
     }
 });
 app.get('/api/logo', async (req, res) => {
@@ -596,6 +702,18 @@ app.get('/api/league-logo', async (req, res) => {
         return res.status(500).json({ success: false, error: err.message });
     }
 });
+
+// Background pre-match odds updater task (keeps odds fully in sync with Atekbet)
+function runPrematchUpdater() {
+    console.log('🔄 [Background] Starting pre-match odds sync (Soccer only)...');
+    const child = spawn('node', ['fetch_atekbet_prematch.cjs'], { stdio: 'ignore' });
+    child.on('close', (code) => {
+        console.log(`✅ [Background] Pre-match odds sync finished (Code: ${code})`);
+    });
+}
+// Run first update after 5s, then repeat every 60s
+setTimeout(runPrematchUpdater, 5000);
+setInterval(runPrematchUpdater, 60000);
 
 const PORT = process.env.PORT || 4000;
 server.listen(PORT, '0.0.0.0', () => {

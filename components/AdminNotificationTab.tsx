@@ -185,7 +185,7 @@ const AdminNotificationTab: React.FC<AdminNotificationTabProps> = ({ botsConfig,
                 {/* Global Toast */}
                 <div className="bg-[#1A2332] p-6 rounded-lg border border-white/5">
                     <div className="flex items-center gap-2 mb-4">
-                        <Zap className="w-4 h-4 text-emerald-400" />
+                        <Zap className="w-4 h-4 text-[#00E5FF]" />
                         <h4 className="text-md font-bold text-white">Global Pop-up (Toast) Fırlat</h4>
                     </div>
                     <div className="space-y-4">
@@ -235,7 +235,7 @@ const AdminNotificationTab: React.FC<AdminNotificationTabProps> = ({ botsConfig,
                         </div>
                         <button
                             onClick={handleSendToast}
-                            className="w-full bg-emerald-500 text-white font-bold p-2 rounded-lg hover:bg-emerald-600 flex items-center justify-center gap-2 transition-all shadow-[0_0_15px_rgba(16,185,129,0.3)]"
+                            className="w-full bg-[#00E5FF] text-white font-bold p-2 rounded-lg hover:bg-emerald-600 flex items-center justify-center gap-2 transition-all shadow-[0_0_15px_rgba(16,185,129,0.3)]"
                         >
                             <Zap className="w-4 h-4" /> Global Pop-up Fırlat
                         </button>
@@ -344,7 +344,7 @@ const AdminNotificationTab: React.FC<AdminNotificationTabProps> = ({ botsConfig,
                                                     <div className="pt-1">
                                                         <button 
                                                             onClick={() => updateScenario(bot.id, scen.id, 'isActive', !scen.isActive)}
-                                                            className={`w-3.5 h-3.5 rounded-sm flex items-center justify-center border transition-colors ${scen.isActive ? 'bg-emerald-500 border-emerald-500' : 'border-gray-600'}`}
+                                                            className={`w-3.5 h-3.5 rounded-sm flex items-center justify-center border transition-colors ${scen.isActive ? 'bg-[#00E5FF] border-emerald-500' : 'border-gray-600'}`}
                                                         >
                                                             {scen.isActive && <Check className="w-2.5 h-2.5 text-black" />}
                                                         </button>

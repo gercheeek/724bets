@@ -102,7 +102,7 @@ const FakeBetModal: React.FC<FakeBetModalProps> = ({ isOpen, onClose, userBalanc
                 {/* Header */}
                 <div className="bg-slate-900/50 px-5 py-4 border-b border-zinc-800/50 flex justify-between items-center">
                     <h3 className="text-white font-black uppercase tracking-wider text-sm flex items-center gap-2">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                        <CheckCircle2 className="w-4 h-4 text-[#00E5FF]" />
                         Kuponu Onayla
                     </h3>
                     <button onClick={onClose} disabled={loading} className="text-zinc-500 hover:text-white transition-colors">
@@ -122,7 +122,7 @@ const FakeBetModal: React.FC<FakeBetModalProps> = ({ isOpen, onClose, userBalanc
                                         <span className="text-zinc-400 text-[10px] truncate">{match.market}</span>
                                     </div>
                                     <div className="w-[30%] text-right">
-                                        <span className="text-emerald-400 font-black text-sm">{match.odds.toFixed(2)}</span>
+                                        <span className="text-[#00E5FF] font-black text-sm">{match.odds.toFixed(2)}</span>
                                     </div>
                                 </div>
                             ))}
@@ -133,25 +133,25 @@ const FakeBetModal: React.FC<FakeBetModalProps> = ({ isOpen, onClose, userBalanc
                     {betData && (
                         <div className="flex items-center justify-between text-xs font-bold bg-slate-900/50 px-3 py-2 rounded-lg border border-white/5">
                             <span className="text-zinc-400">Toplam Oran:</span>
-                            <span className="text-emerald-400 font-mono text-sm">{betData.totalOdds.toFixed(2)}</span>
+                            <span className="text-[#00E5FF] font-mono text-sm">{betData.totalOdds.toFixed(2)}</span>
                         </div>
                     )}
 
                     <form onSubmit={handleSubmit} className="space-y-4 pt-2">
                         <div className="flex items-center justify-between text-xs font-bold text-zinc-400 bg-slate-900/50 px-3 py-2 rounded-lg">
                             <span>Mevcut Bakiye:</span>
-                            <span className="text-emerald-400 font-mono">{userBalance.toFixed(2)} ₺</span>
+                            <span className="text-[#00E5FF] font-mono">{userBalance.toFixed(2)} ₺</span>
                         </div>
 
                         <div className="space-y-1">
                             <div className="flex justify-between items-center">
                                 <label className="text-xs font-bold text-zinc-400">Yatırmak İstediğiniz Tutar (₺)</label>
                                 {parsedAmount > 0 && betData && (
-                                    <span className="text-[10px] text-zinc-500 font-medium">Kazanç: <span className="text-emerald-400 font-bold">{potentialWin.toFixed(2)} ₺</span></span>
+                                    <span className="text-[10px] text-zinc-500 font-medium">Kazanç: <span className="text-[#00E5FF] font-bold">{potentialWin.toFixed(2)} ₺</span></span>
                                 )}
                             </div>
                             <div className="relative">
-                                <Wallet className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-emerald-500" />
+                                <Wallet className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#00E5FF]" />
                                 <input 
                                     type="number" 
                                     step="0.01"
@@ -166,7 +166,7 @@ const FakeBetModal: React.FC<FakeBetModalProps> = ({ isOpen, onClose, userBalanc
                         </div>
 
                         {error && <div className="text-red-400 text-[11px] font-bold bg-red-500/10 px-3 py-2 rounded-lg border border-red-500/20">{error}</div>}
-                        {success && <div className="text-emerald-400 text-xs font-bold bg-emerald-500/10 px-3 py-2 rounded-lg border border-emerald-500/20 text-center">{success}</div>}
+                        {success && <div className="text-[#00E5FF] text-xs font-bold bg-[#00E5FF]/10 px-3 py-2 rounded-lg border border-emerald-500/20 text-center">{success}</div>}
 
                         <button 
                             type="submit" 

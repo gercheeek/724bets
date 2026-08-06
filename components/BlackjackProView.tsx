@@ -92,7 +92,7 @@ function isBlackjack(hand: Card[]): boolean {
 
 // ─────────────────────────── CARD UI COMPONENT ──────────────────────────────
 const CardBackDesign = () => (
-    <div className="absolute inset-0 rounded-lg overflow-hidden bg-[#0A0D14] border-[1px] border-[#00E5FF]/20 shadow-[0_4px_12px_rgba(0,0,0,0.8),inset_0_0_20px_rgba(0,0,0,1)] flex flex-col items-center justify-center">
+    <div className="absolute inset-0 rounded-lg overflow-hidden bg-[#0A0C10] border-[1px] border-[#00E5FF]/20 shadow-[0_4px_12px_rgba(0,0,0,0.8),inset_0_0_20px_rgba(0,0,0,1)] flex flex-col items-center justify-center">
         {/* Deep background glow */}
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(198,255,0,0.06)_0%,_rgba(0,229,255,0.03)_40%,_transparent_70%)]"></div>
         
@@ -581,7 +581,7 @@ export default function BlackjackProView({ siteUser, setSiteUser, onAuthRequired
                 <div className="mb-6">
                     <div className="flex justify-between items-center mb-2">
                         <label className="text-[13px] text-white font-bold tracking-wide">{t('Bet Amount', 'Bet Amount')}</label>
-                        <span className="text-zinc-500 text-[10px] font-bold uppercase tracking-wider">EUR</span>
+                        <span className="text-zinc-500 text-[10px] font-bold uppercase tracking-wider">USD</span>
                     </div>
                     <div className="flex flex-col gap-2">
                         <div className="flex bg-[#05070A] border-[2px] border-[#1E2336] rounded-lg overflow-hidden h-14 focus-within:border-[#c6ff00]/50 focus-within:shadow-[0_0_15px_rgba(198,255,0,0.1)] transition-all">
@@ -610,7 +610,7 @@ export default function BlackjackProView({ siteUser, setSiteUser, onAuthRequired
                                 className="w-full bg-[#c6ff00] hover:bg-[#a6d900] disabled:opacity-50 text-black font-black text-sm md:text-base py-3 md:py-3.5 rounded-md transition-all shadow-[0_0_15px_rgba(198,255,0,0.3)] active:scale-95 uppercase tracking-wide flex items-center justify-center gap-2"
                             >
                                 <span>Hit</span>
-                                <div className="w-3 h-4 md:w-2.5 md:h-3 bg-black rounded-[1px] opacity-70"></div>
+                                <div className="w-3 h-4 md:w-2.5 md:h-3 bg-[#0A0C10] rounded-[1px] opacity-70"></div>
                             </button>
                             <button 
                                 disabled={isDealing || !activeHand}
@@ -662,7 +662,7 @@ export default function BlackjackProView({ siteUser, setSiteUser, onAuthRequired
                         <div className="flex bg-[#05070A] border border-[#1E2336] rounded-md h-10 overflow-hidden">
                             <input type="text" placeholder="0.00" disabled className="flex-1 bg-transparent px-3 text-sm text-zinc-500 font-bold outline-none disabled:opacity-50" />
                             <div className="flex items-center">
-                                <span className="text-zinc-600 text-[10px] font-bold mr-2">EUR</span>
+                                <span className="text-zinc-600 text-[10px] font-bold mr-2">USD</span>
                                 <div className="flex h-full border-l border-[#1E2336]">
                                     <button disabled className="px-3 hover:bg-white/5 text-zinc-600 text-xs font-bold transition-colors">½</button>
                                     <div className="w-[1px] h-full bg-[#1E2336]"></div>
@@ -680,7 +680,7 @@ export default function BlackjackProView({ siteUser, setSiteUser, onAuthRequired
                         <div className="flex bg-[#05070A] border border-[#1E2336] rounded-md h-10 overflow-hidden">
                             <input type="text" placeholder="0.00" disabled className="flex-1 bg-transparent px-3 text-sm text-zinc-500 font-bold outline-none disabled:opacity-50" />
                             <div className="flex items-center">
-                                <span className="text-zinc-600 text-[10px] font-bold mr-2">EUR</span>
+                                <span className="text-zinc-600 text-[10px] font-bold mr-2">USD</span>
                                 <div className="flex h-full border-l border-[#1E2336]">
                                     <button disabled className="px-3 hover:bg-white/5 text-zinc-600 text-xs font-bold transition-colors">½</button>
                                     <div className="w-[1px] h-full bg-[#1E2336]"></div>
@@ -702,7 +702,7 @@ export default function BlackjackProView({ siteUser, setSiteUser, onAuthRequired
 
                 {/* Floating Balance */}
                 <div className="absolute top-4 left-4 md:top-6 md:left-6 bg-[#131620]/80 backdrop-blur-md border border-[#1E2336] px-3 md:px-4 py-1.5 rounded-full z-10 shadow-md">
-                    <span className="text-white text-[11px] md:text-xs font-bold">{siteUser ? siteUser.balance.toFixed(2) : '0.00'} EUR</span>
+                    <span className="text-white text-[11px] md:text-xs font-bold">${siteUser ? siteUser.balance.toFixed(2) : '0.00'} USD</span>
                 </div>
 
                 {/* Card Deck visual (Shoe) */}
@@ -787,7 +787,7 @@ export default function BlackjackProView({ siteUser, setSiteUser, onAuthRequired
                                     {/* Hand Info / Result */}
                                     <div className="mt-4 flex flex-col items-center min-h-[40px]">
                                         {pHand.hasDoubled && (
-                                            <span className="text-[10px] bg-amber-500/20 text-amber-500 px-2 py-0.5 rounded border border-amber-500/50 mb-1 uppercase tracking-wider font-bold">Doubled (x2)</span>
+                                            <span className="text-[10px] bg-amber-500/20 text-zinc-300 px-2 py-0.5 rounded border border-amber-500/50 mb-1 uppercase tracking-wider font-bold">Doubled (x2)</span>
                                         )}
                                         {gameState === 'ended' && pHand.result && (
                                             <div className="flex flex-col items-center animate-fade-in-up bg-black/40 backdrop-blur-sm px-4 py-1.5 rounded-lg border border-white/5 shadow-xl">
@@ -801,7 +801,7 @@ export default function BlackjackProView({ siteUser, setSiteUser, onAuthRequired
                                                      pHand.result === 'push' ? 'PUSH' : 'LOSE'}
                                                 </span>
                                                 {pHand.payout > 0 && (
-                                                    <span className="text-[#c6ff00] font-bold text-xs md:text-sm mt-0.5">+{pHand.payout.toFixed(2)} EUR</span>
+                                                    <span className="text-[#c6ff00] font-bold text-xs md:text-sm mt-0.5">+${pHand.payout.toFixed(2)}</span>
                                                 )}
                                             </div>
                                         )}

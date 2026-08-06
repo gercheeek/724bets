@@ -342,9 +342,10 @@ export const parseMatchData = (ev: any, language: string): MatchInfo | null => {
       }
   }
 
-  if (homeOdd === '-' && awayOdd === '-') {
-    return null;
-  }
+  // Allow matches without odds to be parsed and displayed
+  // if (homeOdd === '-' && awayOdd === '-') {
+  //   return null;
+  // }
 
   const matchObj: MatchInfo = {
     id: ev.id,
@@ -361,9 +362,9 @@ export const parseMatchData = (ev: any, language: string): MatchInfo | null => {
     league,
     sport,
     country,
-    homeOdd,
-    drawOdd,
-    awayOdd,
+    homeOdd: ev.homeOdd && ev.homeOdd !== '-' ? ev.homeOdd : homeOdd,
+    drawOdd: ev.drawOdd && ev.drawOdd !== '-' ? ev.drawOdd : drawOdd,
+    awayOdd: ev.awayOdd && ev.awayOdd !== '-' ? ev.awayOdd : awayOdd,
     homeId,
     drawId,
     awayId,
@@ -941,7 +942,7 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
                         </>
                     ) : (
                         <>
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" className="text-amber-500"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" className="text-zinc-300"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg>
                             <h2 className="text-white text-xl font-bold tracking-wide">Popüler</h2>
                         </>
                     )}

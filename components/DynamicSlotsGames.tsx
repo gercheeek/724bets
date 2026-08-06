@@ -39,7 +39,10 @@ export default function DynamicSlotsGames({ onGameSelect, onViewChange }: { onGa
           <h2 className="text-xl md:text-2xl font-black text-white">Slotlar</h2>
         </div>
         <div className="flex items-center gap-2">
-          <button onClick={() => onViewChange?.('casino')} className="text-sm font-medium text-[#848B9D] hidden sm:block hover:text-white transition-colors">Tümünü Gör</button>
+          <button onClick={() => onViewChange?.('casino')} className="text-[11px] md:text-xs font-black text-white hover:text-white transition-all flex items-center gap-1 group cursor-pointer border border-[#00E5FF]/30 bg-[#00E5FF]/20 hover:bg-[#00E5FF]/30 px-3.5 py-1.5 rounded-full shadow-[0_0_10px_rgba(0,229,255,0.2)] hover:shadow-[0_0_15px_rgba(0,229,255,0.4)] uppercase tracking-wider">
+            <span>Tümünü Gör</span>
+            <ChevronRight size={14} className="group-hover:translate-x-0.5 transition-transform text-[#00E5FF] drop-shadow-[0_0_3px_#00E5FF]" />
+          </button>
           <div className="flex items-center gap-1">
             <button className="w-8 h-8 rounded bg-white/5 hover:bg-white/10 flex items-center justify-center text-[#848B9D] hover:text-white transition-colors">
               <ChevronLeft size={16} />

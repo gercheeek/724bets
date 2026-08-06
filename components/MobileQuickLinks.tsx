@@ -20,7 +20,7 @@ const MobileQuickLinks: React.FC<MobileQuickLinksProps> = ({ onSearchClick, onVi
           <div className="flex flex-col items-start justify-center">
             <span className="text-white font-black text-sm tracking-wide leading-tight">CASINO</span>
             <div className="flex items-center gap-1.5 mt-0.5">
-              <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_5px_rgba(16,185,129,0.8)] animate-pulse"></div>
+              <div className="w-1.5 h-1.5 rounded-full bg-[#00E5FF] shadow-[0_0_5px_rgba(16,185,129,0.8)] animate-pulse"></div>
               <span className="text-zinc-400 text-[11px] font-bold tracking-tight">17.221 Oynuyor</span>
             </div>
           </div>
@@ -35,7 +35,7 @@ const MobileQuickLinks: React.FC<MobileQuickLinksProps> = ({ onSearchClick, onVi
           <div className="flex flex-col items-start justify-center">
             <span className="text-white font-black text-sm tracking-wide leading-tight">SPOR</span>
             <div className="flex items-center gap-1.5 mt-0.5">
-              <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_5px_rgba(16,185,129,0.8)] animate-pulse"></div>
+              <div className="w-1.5 h-1.5 rounded-full bg-[#00E5FF] shadow-[0_0_5px_rgba(16,185,129,0.8)] animate-pulse"></div>
               <span className="text-zinc-400 text-[11px] font-bold tracking-tight">7.409 Oynuyor</span>
             </div>
           </div>
@@ -45,7 +45,7 @@ const MobileQuickLinks: React.FC<MobileQuickLinksProps> = ({ onSearchClick, onVi
       {/* Search Bar */}
       <div 
         onClick={onSearchClick}
-        className="w-full bg-[#0A0D14] border border-[#161920] rounded-xl p-3.5 flex items-center gap-3 cursor-pointer hover:border-[#242933] transition-colors shadow-inner"
+        className="w-full bg-[#0A0C10] border border-[#161920] rounded-xl p-3.5 flex items-center gap-3 cursor-pointer hover:border-[#242933] transition-colors shadow-inner"
       >
         <Search className="w-5 h-5 text-zinc-500" strokeWidth={2.5} />
         <span className="text-zinc-500 text-sm font-bold tracking-wide">Oyunları Ara</span>

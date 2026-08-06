@@ -107,7 +107,7 @@ export const UpcomingTournamentsWidget = ({ onViewChange }: { onViewChange?: (vi
                   </div>
                   <div className="flex gap-2 w-full">
                     {parsedTime.map((p, i) => (
-                      <div key={i} className="flex-1 flex flex-col items-center justify-center rounded-lg py-1.5 bg-[#0A0D14] border border-white/5 shadow-inner">
+                      <div key={i} className="flex-1 flex flex-col items-center justify-center rounded-lg py-1.5 bg-[#0A0C10] border border-white/5 shadow-inner">
                         <span className="font-mono text-[15px] font-black text-white tracking-wider">{p.value}</span>
                         <span className="text-[7px] font-bold mt-0.5 uppercase tracking-[0.15em] text-[#848B9D]">{p.label}</span>
                       </div>

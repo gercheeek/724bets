@@ -490,13 +490,13 @@ const FeaturedCombos: React.FC<FeaturedCombosProps> = ({ activeSport = 'Tüm Spo
                     className={`flex flex-col p-1.5 -mx-1.5 rounded transition-colors ${leg.originalMatch ? 'cursor-pointer hover:bg-white/5' : ''}`}
                   >
                     <div className="flex items-start gap-2 mb-0.5">
-                      <div className="w-3.5 h-3.5 mt-0.5 rounded-full bg-white/10 flex items-center justify-center shrink-0">
-                        <div className="w-1.5 h-1.5 rounded-full bg-white/50"></div>
+                      <div className="w-3.5 h-3.5 mt-0.5 rounded-full bg-[#00E5FF]/20 flex items-center justify-center shrink-0 border border-[#00E5FF]/40">
+                        <div className="w-1.5 h-1.5 rounded-full bg-[#00E5FF]"></div>
                       </div>
-                      <div className="text-[12px] text-white/90 font-bold leading-tight">{leg.match}</div>
+                      <div className="text-[12px] text-white font-extrabold leading-tight tracking-wide">{leg.match}</div>
                     </div>
-                    <div className="text-[11px] text-zinc-400 font-medium pl-5.5 leading-snug">
-                      <span className="text-white/70">{leg.selection}</span> • {leg.market}
+                    <div className="text-[11px] text-[#E5E7EB] font-semibold pl-5.5 leading-snug">
+                      <span className="text-[#00E5FF] font-bold">{leg.selection}</span> • <span className="text-[#E5E7EB]">{leg.market}</span>
                     </div>
                   </div>
                 ))}

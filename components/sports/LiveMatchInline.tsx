@@ -8,7 +8,7 @@ import { useBetSlip } from '../../contexts/BetSlipContext';
 import { generateDetailedMarkets } from '../../utils/oddsGenerator';
 import { 
   PlayCircle, Clock, ChevronDown, ChevronUp, Star, Tv, Activity, Flame, 
-  MapPin, Trophy, Flag, Pin, BarChart2, Scale
+  MapPin, Trophy, Flag, Pin, BarChart2, Scale, Info
 } from 'lucide-react';
 import { isEliteTeam } from '../../utils/eliteTeams';
 
@@ -97,15 +97,104 @@ export const LiveMatchInline: React.FC<LiveMatchInlineProps> = ({
   const yellowCards = getStat('YellowCard');
   const redCards = getStat('RedCard');
   
-  const groupMarkets = data.group_markets || raw.group_markets || {};
-  let allMarkets: string[] = [];
-  if (groupMarkets && typeof groupMarkets === 'object') {
-    Object.values(groupMarkets).forEach((group) => {
-      if (Array.isArray(group)) allMarkets = [...allMarkets, ...group];
-    });
+  const allMarketsObj = match.rawEvent?.all_markets || {};
+  const marketsArray = Object.values(allMarketsObj) as any[];
+
+  const getMarket = (typeNames: string[], names: string[]) => {
+    return marketsArray.find(m => 
+      (m.type_name && typeNames.includes(m.type_name.toLowerCase())) || 
+      (m.name && names.includes(m.name.toLowerCase()))
+    );
+  };
+
+  const getEventOdd = (market: any, eventNames: string[], fallback: string = '-') => {
+    if (!market || !market.event) return fallback;
+    const ev: any = Object.values(market.event).find((e: any) => e.name && eventNames.some(n => e.name.toLowerCase().includes(n)));
+    return ev && ev.price ? parseFloat(ev.price).toFixed(2) : fallback;
+  };
+
+  // Support fallback for static pre-match matches
+  const groupMarkets = data.group_markets?.["full_event|0"] || raw.group_markets?.["full_event|0"] || [];
+
+  let dc1x_fallback = '-';
+  let dc12_fallback = '-';
+  let dcx2_fallback = '-';
+  const dcStr = groupMarkets.find((s: string) => s.startsWith('|Double_Chance|'));
+  if (dcStr) {
+     const match1X = dcStr.match(/~1X~([^!]+)/);
+     const match12 = dcStr.match(/~12~([^!]+)/);
+     const matchX2 = dcStr.match(/~X2~([^!]+)/);
+     if (match1X) dc1x_fallback = parseFloat(match1X[1]).toFixed(2);
+     if (match12) dc12_fallback = parseFloat(match12[1]).toFixed(2);
+     if (matchX2) dcx2_fallback = parseFloat(matchX2[1]).toFixed(2);
   }
+
+  let ggVar_fallback = '-';
+  let ggYok_fallback = '-';
+  const ggStr = groupMarkets.find((s: string) => s.startsWith('|gg|'));
+  if (ggStr) {
+     const matchVar = ggStr.match(/~var~([^!]+)/);
+     const matchYok = ggStr.match(/~yok~([^!]+)/);
+     if (matchVar) ggVar_fallback = parseFloat(matchVar[1]).toFixed(2);
+     if (matchYok) ggYok_fallback = parseFloat(matchYok[1]).toFixed(2);
+  }
+
+  const ouLines_fallback: any[] = [];
+  groupMarkets.forEach((s: string) => {
+     if (s.startsWith('|ou|')) {
+        const parts = s.split('|');
+        const base = parts[2];
+        const rest = parts[3] || '';
+        const matchOver = rest.match(/~(?:üstü|üst|over)~([^!]+)/);
+        const matchUnder = rest.match(/~(?:altı|alt|under)~([^!]+)/);
+        if (base && (matchOver || matchUnder)) {
+           ouLines_fallback.push({
+              id: `${match.id}_ou_${base}`,
+              base: parseFloat(base).toFixed(1),
+              over: matchOver ? parseFloat(matchOver[1]).toFixed(2) : '-',
+              under: matchUnder ? parseFloat(matchUnder[1]).toFixed(2) : '-'
+           });
+        }
+     }
+  });
+
+  // 1. 1x2 Odds
+  const m1x2 = getMarket(['p1p2', 'p1x2', 'matchresult', '1x2'], ['match result', 'maç sonucu', 'winner']);
+  const hOdd = getEventOdd(m1x2, ['w1', '1', 'p1', 'ev sahibi'], match.homeOdd || '-');
+  const xOdd = getEventOdd(m1x2, ['x', 'draw', 'beraberlik'], match.drawOdd || '-');
+  const aOdd = getEventOdd(m1x2, ['w2', '2', 'p2', 'deplasman'], match.awayOdd || '-');
+
+  // 2. Double Chance
+  const mDC = getMarket(['doublechance'], ['çifte şans']);
+  const dc1x = getEventOdd(mDC, ['1x', '1 x'], dc1x_fallback);
+  const dc12 = getEventOdd(mDC, ['12', '1 2'], dc12_fallback);
+  const dcx2 = getEventOdd(mDC, ['x2', '2x', 'x 2', '2 x'], dcx2_fallback);
+
+  // 3. Over/Under (Toplam)
+  const mOU_list = marketsArray.filter(m => 
+    (m.type_name && (m.type_name.toLowerCase() === 'totalgoals' || m.type_name.toLowerCase() === 'underover')) ||
+    (m.name && (m.name.toLowerCase().includes('toplam gol') || m.name.toLowerCase() === 'toplam'))
+  );
   
-  let markets = Array.from(new Set(allMarkets)).filter(m => m && typeof m === 'string' && m.includes('|'));
+  const ouLines = mOU_list.length > 0 ? mOU_list.map(m => {
+     let base = m.base || '';
+     if (!base) {
+        const matchLine = (m.name || '').match(/([0-9]+\.5)/);
+        if (matchLine) base = matchLine[1];
+     }
+     if (!base) return null;
+     return {
+        id: m.id,
+        base: parseFloat(base).toFixed(1),
+        over: getEventOdd(m, ['üst', 'over']),
+        under: getEventOdd(m, ['alt', 'under'])
+     };
+  }).filter(item => item !== null).sort((a, b) => parseFloat(a!.base) - parseFloat(b!.base)) : ouLines_fallback.sort((a, b) => parseFloat(a.base) - parseFloat(b.base));
+
+  // 4. GG/NG
+  const mGG = getMarket(['btts'], ['karşılıklı gol', 'her iki takımda gol atar']);
+  const ggVar = getEventOdd(mGG, ['var', 'evet', 'yes'], ggVar_fallback);
+  const ggYok = getEventOdd(mGG, ['yok', 'hayır', 'no'], ggYok_fallback);
   
   // Calculate current total goals for dynamic odds generation
   let currentTotalGoals = 0;
@@ -124,27 +213,7 @@ export const LiveMatchInline: React.FC<LiveMatchInlineProps> = ({
   const totalCorners = (parseInt(corners.home) || 0) + (parseInt(corners.away) || 0);
 
   // Procedural generation disabled as we now fetch native markets.
-  
-
-
-  // State for expanded accordions
-  const [expandedMarkets, setExpandedMarkets] = useState<Record<number, boolean>>({});
-  
-  useEffect(() => {
-    // Expand top 5 by default
-    const initialExpanded: Record<number, boolean> = {};
-    markets.forEach((_, idx) => {
-        initialExpanded[idx] = idx < 5;
-    });
-    setExpandedMarkets(initialExpanded);
-  }, [match.id]);
-
-  const toggleMarket = (idx: number) => {
-    setExpandedMarkets(prev => ({ ...prev, [idx]: !prev[idx] }));
-  };
-
-
-  const isLowTierMatch = () => {
+    const isLowTierMatch = () => {
     if (isEliteTeam(match.home) || isEliteTeam(match.away)) return false;
     const l = (match.league || '').toLowerCase();
     const lowTierKeywords = ['u19', 'u20', 'u21', 'u22', 'u23', 'youth', 'genç', 'women', 'kadınlar', 'bayanlar', 'friendly', 'hazırlık', 'amateur', 'amatör', 'reserve', 'rezerv', '2. lig', '3. lig', 'division 2', 'division 3', 'league 2', 'league 3', 'serie b', 'serie c', 'liga 2', 'liga 3', 'championship', 'segunda', 'b ligi', 'masters league', 'liga pro', 'tt cup', 'atp challenger', 'wtt', 'itf'];
@@ -390,115 +459,205 @@ export const LiveMatchInline: React.FC<LiveMatchInlineProps> = ({
                   </p>
                </div>
             ) : (
-               <div className="flex flex-col gap-3">
-               {markets.filter(market => {
-                  const parts = market.split('|');
-                  const marketName = translateMarket(parts[1] || '');
-                  if (activeCategory === 'Ana Seçenekler') return ['1x2', 'Çifte Şans', 'Beraberlikte iade', 'Handikap', 'Karşılıklı Gol', 'Maç Sonucu', 'Toplam Alt/Üst'].includes(marketName);
-                  if (activeCategory === 'Toplam') return marketName.includes('Toplam') || marketName.includes('Alt/Üst');
-                  if (activeCategory === 'Yarılar') return marketName.includes('Yarı');
-                  if (activeCategory === 'Kornerler') return marketName.includes('Korner');
-                  if (activeCategory === 'İstatistikler') return marketName.includes('Kart') || marketName.includes('İstatistik') || marketName.includes('Oyuncu');
-                  if (activeCategory === 'Oyuncular' || activeCategory === 'Oyuncu') return marketName.includes('Oyuncu');
-                  if (activeCategory === 'Setler') return marketName.includes('Set');
-                  if (activeCategory === 'Oyunlar') return marketName.includes('Oyun') || marketName.includes('Game');
-                  if (activeCategory === 'Çeyrekler') return marketName.includes('Çeyrek');
-                  if (activeCategory === 'Sihirbaz') return false; // Sihirbaz is a custom builder, usually empty for now
-                  return false; // Hide if it doesn't match the tab
-               }).map((market: string, idx: number) => {
-                  const parts = market.split('|');
-                  const rawMarketName = parts[1] || 'Bahis Türü';
-                  let marketName = translateMarket(rawMarketName);
-                  const arg = parts[2];
-                  if (arg && !arg.includes('~')) {
-                     marketName = `${marketName} (${arg})`;
-                  }
-                  const isExpanded = expandedMarkets[idx] !== false;
+               <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 items-start">
                   
-                  const selectionsPart = parts.find((p: string) => p.includes('~'));
-                  if (!selectionsPart) return null;
-                  
-                  const selections = selectionsPart.split('!');
-                  
-                  // determine layout cols
-                  let colsClass = "grid-cols-2";
-                  if (marketName === '1x2' || selections.length === 3) colsClass = "grid-cols-3";
-                  if (selections.length > 4) colsClass = "grid-cols-2 md:grid-cols-2"; // 1x2 uses 3 but others can use 2
+                  {/* LEFT COLUMN */}
+                  <div className="flex flex-col w-full gap-4">
+                     
+                     {/* 1x2 Panel */}
+                     <div className="bg-[#1C2028] rounded-xl border border-white/5 p-4 flex flex-col w-full hover:border-white/10 transition-colors">
+                        <div className="flex items-center gap-2 mb-4">
+                           <h3 className="text-zinc-300 font-bold text-[14px]">Maç Sonucu (1x2)</h3>
+                           <div className="w-4 h-4 rounded-full bg-white/5 flex items-center justify-center text-zinc-500 cursor-pointer hover:bg-white/10">
+                              <Info size={10} strokeWidth={3} />
+                           </div>
+                        </div>
+                        <div className="grid grid-cols-3 gap-2">
+                            <button 
+                              onClick={() => addSelection({
+                                 id: match.homeId || match.id + '_1',
+                                 matchId: match.id,
+                                 matchName: `${match.home} vs ${match.away}`,
+                                 selectionName: `Maç Sonucu: 1`,
+                                 odd: parseFloat(hOdd) || 1.00
+                              })}
+                              className={`bg-[#232833] hover:bg-[#2A2F3D] border border-white/5 rounded-lg flex flex-col items-center justify-center transition-colors min-h-[64px] ${betSlip.some(s => s.id === (match.homeId || match.id+'_1')) ? 'bg-[#06b6d4]/10 border-[#06b6d4]/40 shadow-[0_0_10px_rgba(6,182,212,0.15)]' : ''}`}
+                            >
+                               <span className="text-zinc-400 text-xs font-bold mb-1">1</span>
+                               <span className="text-[#06b6d4] font-black text-lg">
+                                 <AnimatedOdd value={hOdd} />
+                               </span>
+                            </button>
+                            <button 
+                              onClick={() => addSelection({
+                                 id: match.drawId || match.id + '_x',
+                                 matchId: match.id,
+                                 matchName: `${match.home} vs ${match.away}`,
+                                 selectionName: `Maç Sonucu: X`,
+                                 odd: parseFloat(xOdd) || 1.00
+                              })}
+                              className={`bg-[#232833] hover:bg-[#2A2F3D] border border-white/5 rounded-lg flex flex-col items-center justify-center transition-colors min-h-[64px] ${betSlip.some(s => s.id === (match.drawId || match.id+'_x')) ? 'bg-[#06b6d4]/10 border-[#06b6d4]/40 shadow-[0_0_10px_rgba(6,182,212,0.15)]' : ''}`}
+                            >
+                               <span className="text-zinc-400 text-xs font-bold mb-1">X</span>
+                               <span className="text-[#06b6d4] font-black text-lg">
+                                 <AnimatedOdd value={xOdd} />
+                               </span>
+                            </button>
+                            <button 
+                              onClick={() => addSelection({
+                                 id: match.awayId || match.id + '_2',
+                                 matchId: match.id,
+                                 matchName: `${match.home} vs ${match.away}`,
+                                 selectionName: `Maç Sonucu: 2`,
+                                 odd: parseFloat(aOdd) || 1.00
+                              })}
+                              className={`bg-[#232833] hover:bg-[#2A2F3D] border border-white/5 rounded-lg flex flex-col items-center justify-center transition-colors min-h-[64px] ${betSlip.some(s => s.id === (match.awayId || match.id+'_2')) ? 'bg-[#06b6d4]/10 border-[#06b6d4]/40 shadow-[0_0_10px_rgba(6,182,212,0.15)]' : ''}`}
+                            >
+                               <span className="text-zinc-400 text-xs font-bold mb-1">2</span>
+                               <span className="text-[#06b6d4] font-black text-lg">
+                                 <AnimatedOdd value={aOdd} />
+                               </span>
+                            </button>
+                         </div>
+                     </div>
 
-                  return (
-                    <div key={idx} className="bg-[#12141c] rounded-xl overflow-hidden shadow-md">
-                       {/* Accordion Header */}
-                       <button 
-                         onClick={() => toggleMarket(idx)}
-                         className="w-full flex items-center justify-between p-4 bg-gradient-to-r from-[#151a25] to-[#11131a] hover:from-[#1a202d] hover:to-[#151821] transition-colors group border-b border-white/[0.02]"
-                       >
-                          <div className="flex items-center gap-2">
-                             <Pin className="w-4 h-4 text-zinc-500 group-hover:text-zinc-300 -rotate-45" />
-                             <span className="font-bold text-[13px] md:text-[14px] text-white">{marketName}</span>
-                          </div>
-                          <div className="w-6 h-6 rounded bg-white/5 flex items-center justify-center">
-                             {isExpanded ? <ChevronUp className="w-4 h-4 text-white" /> : <ChevronDown className="w-4 h-4 text-zinc-400" />}
-                          </div>
-                       </button>
+                     {/* İki takım da gol atar Panel */}
+                     <div className="bg-[#1C2028] rounded-xl border border-white/5 p-4 flex flex-col w-full hover:border-white/10 transition-colors">
+                        <div className="flex items-center gap-2 mb-4">
+                           <h3 className="text-zinc-300 font-bold text-[14px]">İki takım da gol atar</h3>
+                        </div>
+                        <div className="grid grid-cols-2 gap-2">
+                           <button 
+                              onClick={() => addSelection({
+                                 id: match.id + '_gg_var',
+                                 matchId: match.id,
+                                 matchName: `${match.home} vs ${match.away}`,
+                                 selectionName: 'Karşılıklı Gol: Evet',
+                                 odd: parseFloat(ggVar) || 1.00
+                              })}
+                              className={`bg-[#232833] hover:bg-[#2A2F3D] border border-white/5 rounded-lg flex flex-col items-center justify-center transition-colors min-h-[64px] ${betSlip.some(s => s.id === (match.id + '_gg_var')) ? 'bg-[#06b6d4]/10 border-[#06b6d4]/40 shadow-[0_0_10px_rgba(6,182,212,0.15)]' : ''}`}
+                           >
+                              <span className="text-zinc-400 text-xs font-bold mb-1">Evet</span>
+                              <span className="text-[#06b6d4] font-black text-lg">
+                                 <AnimatedOdd value={ggVar} />
+                              </span>
+                           </button>
+                           <button 
+                              onClick={() => addSelection({
+                                 id: match.id + '_gg_yok',
+                                 matchId: match.id,
+                                 matchName: `${match.home} vs ${match.away}`,
+                                 selectionName: 'Karşılıklı Gol: Hayır',
+                                 odd: parseFloat(ggYok) || 1.00
+                              })}
+                              className={`bg-[#232833] hover:bg-[#2A2F3D] border border-white/5 rounded-lg flex flex-col items-center justify-center transition-colors min-h-[64px] ${betSlip.some(s => s.id === (match.id + '_gg_yok')) ? 'bg-[#06b6d4]/10 border-[#06b6d4]/40 shadow-[0_0_10px_rgba(6,182,212,0.15)]' : ''}`}
+                           >
+                              <span className="text-zinc-400 text-xs font-bold mb-1">Hayır</span>
+                              <span className="text-[#06b6d4] font-black text-lg">
+                                 <AnimatedOdd value={ggYok} />
+                              </span>
+                           </button>
+                        </div>
+                     </div>
+                  </div>
 
-                       {/* Accordion Body */}
-                       <div className={`transition-all duration-300 ease-in-out origin-top ${isExpanded ? 'max-h-[1000px] opacity-100 p-4' : 'max-h-0 opacity-0 overflow-hidden py-0 px-4'}`}>
-                          <div className={`grid ${colsClass} gap-2`}>
-                             {selections.map((sel: string, sIdx: number) => {
-                               const sParts = sel.split('~');
-                               if (sParts.length < 3) return null;
-                               
-                               let rawType = sParts[1];
-                               
-                               // If it's a draw and the sport is tennis or basketball, skip it!
-                               if ((isTennis || isBasketball) && (rawType.toLowerCase() === 'draw' || rawType.toLowerCase() === 'x' || rawType.toLowerCase() === 'beraberlik')) {
-                                 return null;
-                               }
-                               
-                               let oddValue = parseFloat(sParts[2]);
-                               let typeLabel = formatSelectionLabel(marketName, rawType, match.home, match.away);
-                               
-                               // Append extra dynamic string if it's there (like score "1-0" in CS)
-                               if (sParts.length > 3 && sParts[3]) {
-                                  typeLabel = `${typeLabel} ${sParts[3]}`.trim();
-                               }
-                               
-                               const selId = sParts[0]; 
-                               const isSelected = betSlip.some(s => s.id === selId);
-                               
-                               return (
-                                 <button
-                                   key={sIdx}
-                                   onClick={() => {
-                                     addSelection({
-                                       id: selId,
-                                       matchId: match.id,
-                                       matchName: `${match.home} vs ${match.away}`,
-                                       selectionName: `${marketName}: ${typeLabel}`,
-                                       odd: oddValue
-                                     });
-                                   }}
-                                   className={`min-h-[46px] rounded-md flex items-center justify-between px-3 md:px-4 transition-all duration-300 group cursor-pointer active:scale-[0.98] ${
-                                     isSelected 
-                                       ? 'bg-gradient-to-b from-[#00E5FF]/20 to-[#00E5FF]/5 border border-[#00E5FF] shadow-[0_0_15px_rgba(0,229,255,0.2)]' 
-                                       : 'bg-gradient-to-b from-[#151a25] to-[#0d1017] border border-white/5 hover:border-[#00E5FF]/40 hover:shadow-[inset_0_0_15px_rgba(0,229,255,0.1)]'
-                                   }`}
-                                 >
-                                   <span className={`text-[11px] md:text-[12px] font-bold leading-tight text-left pr-2 transition-colors ${isSelected ? 'text-[#00E5FF]' : 'text-[#8e939d] group-hover:text-[#00E5FF]'}`}>
-                                     {typeLabel}
-                                   </span>
-                                   <span className={`text-[13px] md:text-[14px] font-black tabular-nums shrink-0 transition-colors ${isSelected ? 'text-[#00E5FF] drop-shadow-[0_0_8px_rgba(0,229,255,0.5)]' : 'text-white group-hover:text-white'}`}>
-                                     <AnimatedOdd value={oddValue.toFixed(2)} />
-                                   </span>
-                                 </button>
-                               );
+                  {/* RIGHT COLUMN */}
+                  <div className="flex flex-col w-full gap-4">
+                     
+                     {/* Çifte şans Panel */}
+                     <div className="bg-[#1C2028] rounded-xl border border-white/5 p-4 flex flex-col w-full hover:border-white/10 transition-colors">
+                        <div className="flex items-center gap-2 mb-4">
+                           <h3 className="text-zinc-300 font-bold text-[14px]">Çifte şans</h3>
+                        </div>
+                        <div className="grid grid-cols-3 gap-2">
+                           <button 
+                             onClick={() => addSelection({
+                                id: match.id + '_dc_1x',
+                                matchId: match.id,
+                                matchName: `${match.home} vs ${match.away}`,
+                                selectionName: 'Çifte Şans: 1X',
+                                odd: parseFloat(dc1x) || 1.00
                              })}
-                          </div>
-                       </div>
-                    </div>
-                  );
-               })}
-            </div>
+                             className={`bg-[#232833] hover:bg-[#2A2F3D] border border-white/5 rounded-lg flex flex-col items-center justify-center transition-colors min-h-[64px] ${betSlip.some(s => s.id === (match.id + '_dc_1x')) ? 'bg-[#06b6d4]/10 border-[#06b6d4]/40 shadow-[0_0_10px_rgba(6,182,212,0.15)]' : ''}`}
+                           >
+                             <span className="text-zinc-400 text-xs font-bold mb-1">1X</span>
+                             <span className="text-[#06b6d4] font-black text-lg"><AnimatedOdd value={dc1x} /></span>
+                           </button>
+                           <button 
+                             onClick={() => addSelection({
+                                id: match.id + '_dc_12',
+                                matchId: match.id,
+                                matchName: `${match.home} vs ${match.away}`,
+                                selectionName: 'Çifte Şans: 12',
+                                odd: parseFloat(dc12) || 1.00
+                             })}
+                             className={`bg-[#232833] hover:bg-[#2A2F3D] border border-white/5 rounded-lg flex flex-col items-center justify-center transition-colors min-h-[64px] ${betSlip.some(s => s.id === (match.id + '_dc_12')) ? 'bg-[#06b6d4]/10 border-[#06b6d4]/40 shadow-[0_0_10px_rgba(6,182,212,0.15)]' : ''}`}
+                           >
+                             <span className="text-zinc-400 text-xs font-bold mb-1">12</span>
+                             <span className="text-[#06b6d4] font-black text-lg"><AnimatedOdd value={dc12} /></span>
+                           </button>
+                           <button 
+                             onClick={() => addSelection({
+                                id: match.id + '_dc_x2',
+                                matchId: match.id,
+                                matchName: `${match.home} vs ${match.away}`,
+                                selectionName: 'Çifte Şans: X2',
+                                odd: parseFloat(dcx2) || 1.00
+                             })}
+                             className={`bg-[#232833] hover:bg-[#2A2F3D] border border-white/5 rounded-lg flex flex-col items-center justify-center transition-colors min-h-[64px] ${betSlip.some(s => s.id === (match.id + '_dc_x2')) ? 'bg-[#06b6d4]/10 border-[#06b6d4]/40 shadow-[0_0_10px_rgba(6,182,212,0.15)]' : ''}`}
+                           >
+                             <span className="text-zinc-400 text-xs font-bold mb-1">X2</span>
+                             <span className="text-[#06b6d4] font-black text-lg"><AnimatedOdd value={dcx2} /></span>
+                           </button>
+                        </div>
+                     </div>
+
+                     {/* Toplam Panel */}
+                     <div className="bg-[#1C2028] rounded-xl border border-white/5 p-4 flex flex-col w-full hover:border-white/10 transition-colors">
+                        <div className="flex items-center gap-2 mb-4">
+                           <h3 className="text-zinc-300 font-bold text-[14px]">Toplam Goller</h3>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4 mb-2">
+                           <span className="text-center text-zinc-500 text-[11px] font-bold uppercase tracking-wider">Üstü</span>
+                           <span className="text-center text-zinc-500 text-[11px] font-bold uppercase tracking-wider">Altı</span>
+                        </div>
+                        <div className="grid grid-cols-2 gap-x-4 gap-y-2 mb-3">
+                           {ouLines.length > 0 ? ouLines.slice(0, 10).map((line, idx) => (
+                              <React.Fragment key={idx}>
+                                 <button 
+                                   onClick={() => addSelection({
+                                      id: `${match.id}_ou_${line?.id}_over`,
+                                      matchId: match.id,
+                                      matchName: `${match.home} vs ${match.away}`,
+                                      selectionName: `Toplam ${line?.base} Üst`,
+                                      odd: parseFloat(line?.over || '0')
+                                   })}
+                                   className={`bg-[#232833] hover:bg-[#2A2F3D] border border-white/5 rounded-lg flex flex-col items-center justify-center transition-colors min-h-[56px] ${betSlip.some(s => s.id === `${match.id}_ou_${line?.id}_over`) ? 'bg-[#06b6d4]/10 border-[#06b6d4]/40 shadow-[0_0_10px_rgba(6,182,212,0.15)]' : ''}`}
+                                 >
+                                   <span className="text-zinc-400 text-[11px] font-bold mb-0.5">{line?.base}</span>
+                                   <span className="text-[#06b6d4] font-black text-[15px] tracking-wide"><AnimatedOdd value={line?.over || '-'} /></span>
+                                 </button>
+                                 <button 
+                                   onClick={() => addSelection({
+                                      id: `${match.id}_ou_${line?.id}_under`,
+                                      matchId: match.id,
+                                      matchName: `${match.home} vs ${match.away}`,
+                                      selectionName: `Toplam ${line?.base} Alt`,
+                                      odd: parseFloat(line?.under || '0')
+                                   })}
+                                   className={`bg-[#232833] hover:bg-[#2A2F3D] border border-white/5 rounded-lg flex flex-col items-center justify-center transition-colors min-h-[56px] ${betSlip.some(s => s.id === `${match.id}_ou_${line?.id}_under`) ? 'bg-[#06b6d4]/10 border-[#06b6d4]/40 shadow-[0_0_10px_rgba(6,182,212,0.15)]' : ''}`}
+                                 >
+                                   <span className="text-zinc-400 text-[11px] font-bold mb-0.5">{line?.base}</span>
+                                   <span className="text-[#06b6d4] font-black text-[15px] tracking-wide"><AnimatedOdd value={line?.under || '-'} /></span>
+                                 </button>
+                              </React.Fragment>
+                           )) : (
+                              <div className="col-span-2 text-center text-zinc-500 text-[12px] py-4">Şu an için bahis seçeneği bulunmamaktadır.</div>
+                           )}
+                        </div>
+                     </div>
+                  </div>
+               </div>
             )}
 
          </div>

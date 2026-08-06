@@ -15,7 +15,7 @@ export default function RewardsView({ siteUser }: RewardsViewProps) {
       {/* Top Banner - 7 Day Bonus */}
       <div className="relative w-full rounded-2xl bg-gradient-to-r from-[#17213D] to-[#121930] border border-white/5 overflow-hidden flex flex-col md:flex-row items-center justify-between p-6 md:p-10 shadow-2xl mb-8">
         {/* Background Accents */}
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/3"></div>
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#00E5FF]/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/3"></div>
         <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-purple-500/10 rounded-full blur-[80px] translate-y-1/2 -translate-x-1/2"></div>
         
         <div className="relative z-10 flex flex-col items-start gap-4 max-w-xl">
@@ -32,13 +32,13 @@ export default function RewardsView({ siteUser }: RewardsViewProps) {
               </div>
               <div className="h-8 w-px bg-white/10"></div>
               <div className="flex flex-col">
-                <span className="text-xs text-zinc-400 font-semibold mb-0.5 flex items-center gap-1"><Timer className="w-3 h-3 text-emerald-400" /> 02:34:00</span>
-                <span className="text-lg font-bold text-emerald-400">$200,44</span>
+                <span className="text-xs text-zinc-400 font-semibold mb-0.5 flex items-center gap-1"><Timer className="w-3 h-3 text-[#00E5FF]" /> 02:34:00</span>
+                <span className="text-lg font-bold text-[#00E5FF]">$200,44</span>
               </div>
             </div>
           </div>
           
-          <button className="bg-[#00E676] hover:bg-[#00C853] text-black font-black px-8 py-3.5 rounded-lg mt-2 transition-all shadow-[0_0_20px_rgba(0,230,118,0.3)] hover:shadow-[0_0_30px_rgba(0,230,118,0.5)]">
+          <button className="bg-[#00E5FF] hover:bg-[#00C853] text-black font-black px-8 py-3.5 rounded-lg mt-2 transition-all shadow-[0_0_20px_rgba(0,230,118,0.3)] hover:shadow-[0_0_30px_rgba(0,230,118,0.5)]">
             Sign up
           </button>
           
@@ -66,20 +66,20 @@ export default function RewardsView({ siteUser }: RewardsViewProps) {
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-400 to-emerald-600"></div>
             <div className="flex items-center gap-3 mb-5">
               <div className="w-10 h-10 rounded-lg bg-[#1D294B] flex items-center justify-center">
-                 <Calendar className="w-5 h-5 text-emerald-400" />
+                 <Calendar className="w-5 h-5 text-[#00E5FF]" />
               </div>
               <div>
                 <h3 className="text-white font-bold text-lg">Thursday</h3>
-                <span className="text-emerald-400 text-xs font-semibold">2/3 Claimed</span>
+                <span className="text-[#00E5FF] text-xs font-semibold">2/3 Claimed</span>
               </div>
             </div>
             <div className="space-y-2">
               <div className="bg-[#1C2646] rounded-xl p-3 flex items-center justify-between">
                  <div className="flex flex-col">
                    <span className="text-xs text-zinc-400 flex items-center gap-1"><Timer className="w-3 h-3" /> 3h 39s</span>
-                   <span className="text-sm font-bold text-white">$200,44 <span className="text-emerald-400">claimed</span></span>
+                   <span className="text-sm font-bold text-white">$200,44 <span className="text-[#00E5FF]">claimed</span></span>
                  </div>
-                 <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+                 <CheckCircle2 className="w-5 h-5 text-[#00E5FF]" />
               </div>
               <div className="bg-[#1C2646] rounded-xl p-3 flex items-center justify-between opacity-50">
                  <div className="flex flex-col">
@@ -150,7 +150,7 @@ export default function RewardsView({ siteUser }: RewardsViewProps) {
             <div className="w-32 h-32 mb-6 relative z-10">
               <img src="/images/slots/chest_instant.jpg" alt="Instant Chest" className="w-full h-full object-cover rounded-xl drop-shadow-[0_10px_20px_rgba(59,130,246,0.3)] group-hover:scale-110 transition-transform duration-500" onError={(e) => { e.currentTarget.style.display='none'; }} />
             </div>
-            <button className="w-full bg-[#00E676] hover:bg-[#00C853] text-black font-black py-3.5 rounded-xl transition-all shadow-[0_0_15px_rgba(0,230,118,0.2)] z-10">
+            <button className="w-full bg-[#00E5FF] hover:bg-[#00C853] text-black font-black py-3.5 rounded-xl transition-all shadow-[0_0_15px_rgba(0,230,118,0.2)] z-10">
               Claim bonus
             </button>
           </div>
@@ -205,7 +205,7 @@ export default function RewardsView({ siteUser }: RewardsViewProps) {
             <div className="flex flex-col items-center text-center mb-6 relative z-10">
               <div className="w-20 h-20 mb-3 relative">
                 <div className="absolute inset-0 bg-yellow-500/20 rounded-full blur-xl animate-pulse"></div>
-                <Star className="w-full h-full text-yellow-400 fill-yellow-400 drop-shadow-[0_0_15px_rgba(250,204,21,0.5)]" />
+                <Star className="w-full h-full text-zinc-300 fill-yellow-400 drop-shadow-[0_0_15px_rgba(250,204,21,0.5)]" />
                 <span className="absolute inset-0 flex items-center justify-center text-2xl font-black text-[#111827]">2</span>
               </div>
               <span className="text-zinc-400 font-medium text-sm">Current level</span>
@@ -218,14 +218,14 @@ export default function RewardsView({ siteUser }: RewardsViewProps) {
                 <span className="text-white">$3,225.00 <span className="text-zinc-500">Left to next level</span></span>
               </div>
               <div className="w-full h-2 bg-[#1F2937] rounded-full overflow-hidden">
-                <div className="h-full bg-[#00E676] w-[40%] rounded-full shadow-[0_0_10px_rgba(0,230,118,0.5)]"></div>
+                <div className="h-full bg-[#00E5FF] w-[40%] rounded-full shadow-[0_0_10px_rgba(0,230,118,0.5)]"></div>
               </div>
             </div>
             
             <div className="mt-6 pt-4 border-t border-white/5 flex items-center justify-between relative z-10">
               <span className="text-zinc-400 font-medium text-sm">Your reward</span>
               <div className="flex items-center gap-1.5 font-bold text-white bg-[#1F2937] px-3 py-1.5 rounded-lg">
-                <div className="w-4 h-4 rounded-full bg-emerald-500 flex items-center justify-center text-[10px] text-black">T</div>
+                <div className="w-4 h-4 rounded-full bg-[#00E5FF] flex items-center justify-center text-[10px] text-black">T</div>
                 900.54
               </div>
             </div>

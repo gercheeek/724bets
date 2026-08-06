@@ -151,8 +151,8 @@ export default function AdminRiskTab() {
                         <div className="p-6 space-y-6">
                             {success ? (
                                 <div className="py-8 text-center space-y-3 animate-in slide-in-from-bottom-4">
-                                    <CheckCircle2 className="w-16 h-16 text-emerald-500 mx-auto" />
-                                    <h4 className="text-xl font-bold text-emerald-400">Başarılı!</h4>
+                                    <CheckCircle2 className="w-16 h-16 text-[#00E5FF] mx-auto" />
+                                    <h4 className="text-xl font-bold text-[#00E5FF]">Başarılı!</h4>
                                     <p className="text-gray-400 text-sm">RTP oranı başarıyla güncellendi.</p>
                                 </div>
                             ) : (

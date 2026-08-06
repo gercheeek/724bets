@@ -100,7 +100,7 @@ export default function AdminTVTab() {
                             className={`p-4 rounded-xl border text-left transition-all ${
                                 tvServer === 'xslot' 
                                 ? 'bg-blue-600/20 border-blue-500 text-white' 
-                                : 'bg-black border-gray-800 text-gray-400 hover:border-gray-600'
+                                : 'bg-[#0A0C10] border-gray-800 text-gray-400 hover:border-gray-600'
                             }`}
                         >
                             <div className="font-bold text-lg mb-1">Xslot TV</div>
@@ -112,7 +112,7 @@ export default function AdminTVTab() {
                             className={`p-4 rounded-xl border text-left transition-all ${
                                 tvServer === 'marsbahis' 
                                 ? 'bg-orange-600/20 border-orange-500 text-white' 
-                                : 'bg-black border-gray-800 text-gray-400 hover:border-gray-600'
+                                : 'bg-[#0A0C10] border-gray-800 text-gray-400 hover:border-gray-600'
                             }`}
                         >
                             <div className="font-bold text-lg mb-1">Marsbahis TV</div>
@@ -131,7 +131,7 @@ export default function AdminTVTab() {
                                 value={xslotUrl}
                                 onChange={(e) => setXslotUrl(e.target.value)}
                                 placeholder="Örn: https://xslot116.live/"
-                                className="w-full bg-black border border-gray-800 rounded-lg px-4 py-2 text-white focus:border-blue-500 outline-none"
+                                className="w-full bg-[#0A0C10] border border-gray-800 rounded-lg px-4 py-2 text-white focus:border-blue-500 outline-none"
                             />
                             <p className="text-xs text-gray-500 mt-1">Xslot'un güncel domain adresi (sonunda / bırakmanız tavsiye edilir)</p>
                         </div>
@@ -143,7 +143,7 @@ export default function AdminTVTab() {
                                 value={marsbahisUrl}
                                 onChange={(e) => setMarsbahisUrl(e.target.value)}
                                 placeholder="Örn: https://www.marsbahistv400.com/"
-                                className="w-full bg-black border border-gray-800 rounded-lg px-4 py-2 text-white focus:border-orange-500 outline-none"
+                                className="w-full bg-[#0A0C10] border border-gray-800 rounded-lg px-4 py-2 text-white focus:border-orange-500 outline-none"
                             />
                         </div>
                     </div>

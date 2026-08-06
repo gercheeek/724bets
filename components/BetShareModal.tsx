@@ -74,10 +74,10 @@ export const BetShareModal: React.FC<BetShareModalProps> = ({ isOpen, onClose, b
                         <span className="text-slate-400 text-[14px] font-medium mb-1">Kar</span>
                         <div className="flex items-center justify-center gap-2 mb-1">
                             <Share2 className="w-4 h-4 text-slate-400 absolute right-6 cursor-pointer hover:text-white" />
-                            <div className="w-5 h-5 bg-[#00E676] rounded-full flex items-center justify-center shrink-0">
+                            <div className="w-5 h-5 bg-[#00E5FF] rounded-full flex items-center justify-center shrink-0">
                                 <span className="text-black text-[10px] font-black">₺</span>
                             </div>
-                            <span className="text-[#00E676] text-[22px] font-black tracking-tight">{profitCrypto} TRY</span>
+                            <span className="text-[#00E5FF] text-[22px] font-black tracking-tight">{profitCrypto} TRY</span>
                         </div>
                         <span className="text-slate-500 text-[13px] font-medium">£{profitFiat}</span>
                     </div>
@@ -109,7 +109,7 @@ export const BetShareModal: React.FC<BetShareModalProps> = ({ isOpen, onClose, b
                             </div>
                             <div className="flex items-center gap-1 text-[11px] text-slate-400">
                                 <span>Bahis Kimliği:</span>
-                                <CheckCircle2 className="w-3.5 h-3.5 text-[#00E676]" />
+                                <CheckCircle2 className="w-3.5 h-3.5 text-[#00E5FF]" />
                                 <span className="truncate">{betId}</span>
                                 <Copy className="w-3 h-3 text-slate-500 cursor-pointer hover:text-white shrink-0 ml-1" />
                             </div>

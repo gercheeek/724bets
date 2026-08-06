@@ -33,9 +33,9 @@ export const DemoBalanceDisplay: React.FC<Props> = ({ onLoginClick, onRegisterCl
 
   return (
     <div className="flex items-center gap-2">
-      <div className="flex items-center bg-[#111111] rounded-lg p-1.5 pr-3 cursor-default border border-[#00E5FF]/20 shadow-[0_0_10px_rgba(0,229,255,0.1)]">
+      <div className="flex items-center bg-[#0A0C10] rounded-lg p-1.5 pr-3 cursor-default border border-[#00E5FF]/20 shadow-[0_0_10px_rgba(0,229,255,0.1)]">
         <div className="w-7 h-7 rounded bg-gradient-to-br from-[#00E5FF] to-[#00b3cc] text-[#0A0D14] flex items-center justify-center font-bold mr-2 shadow-[0_0_8px_rgba(0,229,255,0.4)]">
-          <span className="text-[14px]">₺</span>
+          <span className="text-[14px]">$</span>
         </div>
         <div className="flex flex-col items-start leading-none mr-1.5">
           <span className="text-[#00E5FF] text-[9px] font-bold uppercase tracking-widest mb-0.5">Demo Bakiye</span>

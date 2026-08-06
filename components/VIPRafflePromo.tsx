@@ -41,10 +41,10 @@ const VIPRafflePromo: React.FC<VIPRafflePromoProps> = ({
   ];
 
   const toasts = [
-    { icon: '•', text: <><span className="text-white font-bold font-mono">u***k</span> {t('raffle.toast_just')} <span className="text-[#10b981] font-bold drop-shadow-[0_0_5px_rgba(16,185,129,0.5)]">$150</span> {t('raffle.toast_deposited')} <span className="text-amber-400 font-bold drop-shadow-[0_0_5px_rgba(251,191,36,0.5)]">3 {t('raffle.toast_tickets')}</span> {t('raffle.toast_won')}</> },
-    { icon: '•', text: <><span className="text-white font-bold font-mono">a***r</span> {t('raffle.toast_just')} <span className="text-[#10b981] font-bold drop-shadow-[0_0_5px_rgba(16,185,129,0.5)]">$50</span> {t('raffle.toast_deposited')} <span className="text-amber-400 font-bold drop-shadow-[0_0_5px_rgba(251,191,36,0.5)]">1 {t('raffle.toast_tickets')}</span> {t('raffle.toast_won')}</> },
-    { icon: '•', text: <><span className="text-white font-bold font-mono">k***9</span> {t('raffle.toast_just')} <span className="text-[#10b981] font-bold drop-shadow-[0_0_5px_rgba(16,185,129,0.5)]">$500</span> {t('raffle.toast_deposited')} <span className="text-amber-400 font-bold drop-shadow-[0_0_5px_rgba(251,191,36,0.5)]">10 {t('raffle.toast_tickets')}</span> {t('raffle.toast_won')}</> },
-    { icon: '•', text: <><span className="text-white font-bold font-mono">m***t</span> {t('raffle.toast_just')} <span className="text-[#10b981] font-bold drop-shadow-[0_0_5px_rgba(16,185,129,0.5)]">$100</span> {t('raffle.toast_deposited')} <span className="text-amber-400 font-bold drop-shadow-[0_0_5px_rgba(251,191,36,0.5)]">2 {t('raffle.toast_tickets')}</span> {t('raffle.toast_won')}</> },
+    { icon: '•', text: <><span className="text-white font-bold font-mono">u***k</span> {t('raffle.toast_just')} <span className="text-[#10b981] font-bold drop-shadow-[0_0_5px_rgba(16,185,129,0.5)]">$150</span> {t('raffle.toast_deposited')} <span className="text-zinc-300 font-bold drop-shadow-[0_0_5px_rgba(251,191,36,0.5)]">3 {t('raffle.toast_tickets')}</span> {t('raffle.toast_won')}</> },
+    { icon: '•', text: <><span className="text-white font-bold font-mono">a***r</span> {t('raffle.toast_just')} <span className="text-[#10b981] font-bold drop-shadow-[0_0_5px_rgba(16,185,129,0.5)]">$50</span> {t('raffle.toast_deposited')} <span className="text-zinc-300 font-bold drop-shadow-[0_0_5px_rgba(251,191,36,0.5)]">1 {t('raffle.toast_tickets')}</span> {t('raffle.toast_won')}</> },
+    { icon: '•', text: <><span className="text-white font-bold font-mono">k***9</span> {t('raffle.toast_just')} <span className="text-[#10b981] font-bold drop-shadow-[0_0_5px_rgba(16,185,129,0.5)]">$500</span> {t('raffle.toast_deposited')} <span className="text-zinc-300 font-bold drop-shadow-[0_0_5px_rgba(251,191,36,0.5)]">10 {t('raffle.toast_tickets')}</span> {t('raffle.toast_won')}</> },
+    { icon: '•', text: <><span className="text-white font-bold font-mono">m***t</span> {t('raffle.toast_just')} <span className="text-[#10b981] font-bold drop-shadow-[0_0_5px_rgba(16,185,129,0.5)]">$100</span> {t('raffle.toast_deposited')} <span className="text-zinc-300 font-bold drop-shadow-[0_0_5px_rgba(251,191,36,0.5)]">2 {t('raffle.toast_tickets')}</span> {t('raffle.toast_won')}</> },
   ];
 
   const progressPercent = (totalSoldInMatrix / totalPoolSize) * 100;
@@ -386,7 +386,7 @@ const VIPRafflePromo: React.FC<VIPRafflePromoProps> = ({
                                     </div>
                                     <div className="text-zinc-400 text-[10px] leading-tight">
                                         <span className="text-[#10b981] font-bold">{purchase.amount}</span> yatırdı, 
-                                        <span className="text-amber-400 font-bold ml-1">{purchase.tickets} Bilet</span> aldı.
+                                        <span className="text-zinc-300 font-bold ml-1">{purchase.tickets} Bilet</span> aldı.
                                     </div>
                                 </div>
                             </div>

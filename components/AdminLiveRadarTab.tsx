@@ -136,7 +136,7 @@ export default function AdminLiveRadarTab() {
                 </div>
                 
                 <div className="flex items-center gap-4 text-xs font-semibold text-zinc-500">
-                    <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-emerald-500"></div> Sinyal Alınıyor</div>
+                    <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-[#00E5FF]"></div> Sinyal Alınıyor</div>
                     <div className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full bg-indigo-500"></div> AI Devrede</div>
                 </div>
             </div>
@@ -147,7 +147,7 @@ export default function AdminLiveRadarTab() {
                 {/* LEFT COLUMN: Live Bets Feed */}
                 <div className="bg-[#111318] border border-zinc-800 rounded-2xl p-5 flex flex-col h-full shadow-lg shadow-black/50 overflow-hidden">
                     <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-4 flex items-center gap-2">
-                        <Activity className="w-4 h-4 text-emerald-400" />
+                        <Activity className="w-4 h-4 text-[#00E5FF]" />
                         Canlı Bahis Akışı
                     </h3>
                     
@@ -169,8 +169,8 @@ export default function AdminLiveRadarTab() {
                                             <span className="text-zinc-400">{formatCurrency(bet.wager)}</span>
                                             {bet.isWin ? (
                                                 <>
-                                                    <span className="text-emerald-400 font-bold bg-emerald-500/10 px-1.5 py-0.5 rounded">{bet.multiplier}x</span>
-                                                    <span className="text-emerald-400 font-black">{formatCurrency(bet.payout)}</span>
+                                                    <span className="text-[#00E5FF] font-bold bg-[#00E5FF]/10 px-1.5 py-0.5 rounded">{bet.multiplier}x</span>
+                                                    <span className="text-[#00E5FF] font-black">{formatCurrency(bet.payout)}</span>
                                                 </>
                                             ) : (
                                                 <>
@@ -212,12 +212,12 @@ export default function AdminLiveRadarTab() {
                                     <div className="mt-1">
                                         {alert.severity === 'red' 
                                             ? <AlertCircle className="w-5 h-5 text-red-400" />
-                                            : <AlertTriangle className="w-5 h-5 text-amber-400" />
+                                            : <AlertTriangle className="w-5 h-5 text-zinc-300" />
                                         }
                                     </div>
                                     <div className="flex-1">
                                         <div className="flex items-center justify-between mb-1">
-                                            <h4 className={`font-bold text-sm ${alert.severity === 'red' ? 'text-red-400' : 'text-amber-400'}`}>
+                                            <h4 className={`font-bold text-sm ${alert.severity === 'red' ? 'text-red-400' : 'text-zinc-300'}`}>
                                                 {alert.title}
                                             </h4>
                                             <span className="text-xs font-mono opacity-50 text-white">

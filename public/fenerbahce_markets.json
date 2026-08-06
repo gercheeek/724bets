@@ -1,0 +1,122 @@
+[
+  {
+    "market": "Maç Sonucu",
+    "rawData": [
+      "Fenerbahçe",
+      "1.15",
+      "Beraberlik",
+      "6.80",
+      "SK Sturm Graz",
+      "17.00"
+    ]
+  },
+  {
+    "market": "Çifte Şans",
+    "rawData": [
+      "1X",
+      "1.01",
+      "12",
+      "1.08",
+      "X2",
+      "5.40"
+    ]
+  },
+  {
+    "market": "Beraberlikte İade",
+    "rawData": [
+      "Fenerbahçe",
+      "1.02",
+      "SK Sturm Graz",
+      "11.00"
+    ]
+  },
+  {
+    "market": "Toplam Goller",
+    "rawData": [
+      "1.5",
+      "üst",
+      "1.11",
+      "alt",
+      "5.80",
+      "2.5",
+      "üst",
+      "1.53",
+      "alt",
+      "2.35",
+      "3.5",
+      "üst",
+      "2.35",
+      "alt",
+      "1.53"
+    ]
+  },
+  {
+    "market": "Fenerbahçe Toplam Gol",
+    "rawData": [
+      "1.5",
+      "üst",
+      "1.20",
+      "alt",
+      "4.00",
+      "2.5",
+      "üst",
+      "2.05",
+      "alt",
+      "1.70"
+    ]
+  },
+  {
+    "market": "SK Sturm Graz Toplam Gol",
+    "rawData": [
+      "0.5",
+      "üst",
+      "2.10",
+      "alt",
+      "1.65"
+    ]
+  },
+  {
+    "market": "Her İki Takımda Gol Atar",
+    "rawData": [
+      "Evet",
+      "2.30",
+      "Hayır",
+      "1.57"
+    ]
+  },
+  {
+    "market": "Asya Handikap",
+    "rawData": [
+      "Fenerbahçe -1.5",
+      "1.53",
+      "SK Sturm Graz +1.5",
+      "2.35"
+    ]
+  },
+  {
+    "market": "Doğru Skor",
+    "rawData": [
+      "1:0",
+      "6.80",
+      "2:0",
+      "5.20",
+      "2:1",
+      "7.60",
+      "3:0",
+      "6.20",
+      "3:1",
+      "9.50"
+    ]
+  },
+  {
+    "market": "Köşe Vuruşları - Sonuç",
+    "rawData": [
+      "Fenerbahçe",
+      "1.31",
+      "Beraberlik",
+      "7.80",
+      "SK Sturm Graz",
+      "4.70"
+    ]
+  }
+]

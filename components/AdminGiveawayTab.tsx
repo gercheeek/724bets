@@ -243,7 +243,7 @@ const AdminGiveawayTab: React.FC<AdminGiveawayTabProps> = ({ config, onConfigCha
             </div>
 
             {importMsg && (
-                <div className="p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm font-bold">
+                <div className="p-3 rounded-lg bg-[#00E5FF]/10 border border-emerald-500/20 text-[#00E5FF] text-sm font-bold">
                     ✅ {importMsg}
                 </div>
             )}
@@ -259,7 +259,7 @@ const AdminGiveawayTab: React.FC<AdminGiveawayTabProps> = ({ config, onConfigCha
                         <div key={g.id} style={cardStyle}>
                             <div className="flex items-center justify-between mb-4">
                                 <div className="flex items-center gap-3">
-                                    <span className={`px-2 py-1 rounded-lg text-[10px] font-black uppercase ${g.status === 'active' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
+                                    <span className={`px-2 py-1 rounded-lg text-[10px] font-black uppercase ${g.status === 'active' ? 'bg-[#00E5FF]/10 text-[#00E5FF] border border-emerald-500/20' :
                                             g.status === 'completed' ? 'bg-[#10b981]/10 text-blue-400 border border-[#10b981]/20' :
                                                 'bg-zinc-800 text-zinc-500 border border-zinc-700'
                                         }`}>

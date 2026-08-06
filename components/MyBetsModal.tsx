@@ -40,7 +40,7 @@ const MyBetsModal: React.FC<MyBetsModalProps> = ({ isOpen, onClose }) => {
         {/* Header */}
         <div className="bg-slate-900/50 px-6 py-4 border-b border-zinc-800/50 flex justify-between items-center relative z-10">
           <h3 className="text-white font-black uppercase tracking-wider text-sm flex items-center gap-2">
-            <Ticket className="w-4 h-4 text-amber-500" />
+            <Ticket className="w-4 h-4 text-zinc-300" />
             Açık & Geçmiş Bahislerim
           </h3>
           <button 
@@ -80,7 +80,7 @@ const MyBetsModal: React.FC<MyBetsModalProps> = ({ isOpen, onClose }) => {
                       {new Date(bet.timestamp).toLocaleString('tr-TR')}
                     </div>
                   </div>
-                  <span className="px-2.5 py-1 rounded-lg bg-amber-500/10 text-amber-500 border border-amber-500/20 text-[10px] font-black uppercase tracking-wider flex items-center gap-1">
+                  <span className="px-2.5 py-1 rounded-lg bg-amber-500/10 text-zinc-300 border border-amber-500/20 text-[10px] font-black uppercase tracking-wider flex items-center gap-1">
                     <Clock size={10} className="animate-spin-slow" /> Devam Ediyor
                   </span>
                 </div>
@@ -92,7 +92,7 @@ const MyBetsModal: React.FC<MyBetsModalProps> = ({ isOpen, onClose }) => {
                       <span className="text-zinc-300 max-w-[70%] truncate">{sel.mac_adi}</span>
                       <div className="flex items-center gap-2">
                         <span className="text-zinc-500 font-medium">{sel.bahis}</span>
-                        <span className="text-amber-500 font-mono">{sel.oran.toFixed(2)}</span>
+                        <span className="text-zinc-300 font-mono">{sel.oran.toFixed(2)}</span>
                       </div>
                     </div>
                   ))}
@@ -106,11 +106,11 @@ const MyBetsModal: React.FC<MyBetsModalProps> = ({ isOpen, onClose }) => {
                   </div>
                   <div className="space-y-1 text-center">
                     <span className="text-zinc-500 block">Toplam Oran:</span>
-                    <span className="text-amber-500 font-mono">{bet.totalOdds.toFixed(2)}</span>
+                    <span className="text-zinc-300 font-mono">{bet.totalOdds.toFixed(2)}</span>
                   </div>
                   <div className="space-y-1 text-right">
                     <span className="text-zinc-500 block">Olası Kazanç:</span>
-                    <span className="text-emerald-400 font-mono">{bet.potentialPayout.toFixed(2)} ₺</span>
+                    <span className="text-[#00E5FF] font-mono">{bet.potentialPayout.toFixed(2)} ₺</span>
                   </div>
                 </div>
               </div>

@@ -158,7 +158,7 @@ export default function AdminMembersTab() {
                 <div>
                     <h2 className="text-2xl font-bold text-white flex items-center gap-2">
                         Kullanıcı Yönetimi
-                        <span className="text-xs font-medium bg-emerald-500/10 text-emerald-400 px-2 py-1 rounded-full border border-emerald-500/20">
+                        <span className="text-xs font-medium bg-[#00E5FF]/10 text-[#00E5FF] px-2 py-1 rounded-full border border-emerald-500/20">
                             {members.length} Toplam
                         </span>
                     </h2>
@@ -244,7 +244,7 @@ export default function AdminMembersTab() {
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             {m.netPnl! > 0 ? (
-                                                <span className="text-emerald-400 font-mono flex items-center gap-1"><ArrowUpRight className="w-3 h-3"/> {formatCurrency(m.netPnl!)}</span>
+                                                <span className="text-[#00E5FF] font-mono flex items-center gap-1"><ArrowUpRight className="w-3 h-3"/> {formatCurrency(m.netPnl!)}</span>
                                             ) : (
                                                 <span className="text-zinc-500 font-mono">{formatCurrency(0)}</span>
                                             )}
@@ -292,7 +292,7 @@ export default function AdminMembersTab() {
                                 <div>
                                     <h3 className="text-lg font-bold text-white leading-tight">{selectedUser.username}</h3>
                                     <div className="flex items-center gap-2 text-xs font-medium">
-                                        <span className={selectedUser.status === 'suspended' ? 'text-red-400' : 'text-emerald-400'}>
+                                        <span className={selectedUser.status === 'suspended' ? 'text-red-400' : 'text-[#00E5FF]'}>
                                             {selectedUser.status === 'suspended' ? 'Askıda' : 'Aktif'}
                                         </span>
                                         <span className="text-zinc-600">•</span>
@@ -312,7 +312,7 @@ export default function AdminMembersTab() {
                             
                             {/* Message Toast inside sheet */}
                             {message && (
-                                <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-lg text-emerald-400 text-sm font-medium flex items-center gap-2 animate-in slide-in-from-top-2">
+                                <div className="p-3 bg-[#00E5FF]/10 border border-emerald-500/20 rounded-lg text-[#00E5FF] text-sm font-medium flex items-center gap-2 animate-in slide-in-from-top-2">
                                     <CheckCircle2 className="w-4 h-4" /> {message}
                                 </div>
                             )}
@@ -330,7 +330,7 @@ export default function AdminMembersTab() {
                                     </div>
                                     <div className="text-right">
                                         <div className="text-zinc-500 text-xs font-semibold mb-1">Net PNL (Kasa Karı)</div>
-                                        <div className="text-emerald-400 font-bold font-mono">+{formatCurrency(selectedUser.netPnl!)}</div>
+                                        <div className="text-[#00E5FF] font-bold font-mono">+{formatCurrency(selectedUser.netPnl!)}</div>
                                     </div>
                                 </div>
 
@@ -353,7 +353,7 @@ export default function AdminMembersTab() {
                                     <button 
                                         onClick={() => handleUpdateBalance('add')}
                                         disabled={actionLoading}
-                                        className="px-3 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-500 border border-emerald-500/20 rounded-lg font-bold transition-colors disabled:opacity-50"
+                                        className="px-3 bg-[#00E5FF]/10 hover:bg-[#00E5FF]/20 text-[#00E5FF] border border-emerald-500/20 rounded-lg font-bold transition-colors disabled:opacity-50"
                                     >
                                         Ekle
                                     </button>
@@ -428,7 +428,7 @@ export default function AdminMembersTab() {
                                 disabled={actionLoading}
                                 className={`w-full py-3 mt-2 rounded-xl font-bold flex items-center justify-center gap-2 transition-all shadow-lg ${
                                     selectedUser.status === 'suspended' 
-                                    ? 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-600/20' 
+                                    ? 'bg-emerald-600 hover:bg-[#00E5FF] text-white shadow-emerald-600/20' 
                                     : 'bg-red-600 hover:bg-red-500 text-white shadow-red-600/20'
                                 } disabled:opacity-50`}
                             >

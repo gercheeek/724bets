@@ -72,7 +72,7 @@ const WheelDashboard: React.FC = () => {
           transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
         >
           {/* Card Inner */}
-          <div className="w-full h-full bg-[#050505] rounded-[22px] p-6 flex flex-col justify-between relative overflow-hidden">
+          <div className="w-full h-full bg-[#0A0C10] rounded-[22px] p-6 flex flex-col justify-between relative overflow-hidden">
             {/* Glossy Overlay */}
             <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-white/10 to-transparent skew-y-12 origin-top-left"></div>
             
@@ -132,7 +132,7 @@ const WheelDashboard: React.FC = () => {
             })}
             
             {/* Inner Wheel Container */}
-            <div className="relative w-full h-full rounded-full overflow-hidden border-4 border-[#050505] bg-[#050505]">
+            <div className="relative w-full h-full rounded-full overflow-hidden border-4 border-[#050505] bg-[#0A0C10]">
               <motion.div 
                 className="w-full h-full relative"
                 animate={controls}

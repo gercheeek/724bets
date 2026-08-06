@@ -71,7 +71,7 @@ export default function AdminBlackjackTab() {
 
         <div className="bg-[#151821] p-6 rounded-xl border border-white/5 relative overflow-hidden">
           <div className="absolute top-0 right-0 p-4 opacity-20">
-             <TrendingUp className="w-12 h-12 text-yellow-500" />
+             <TrendingUp className="w-12 h-12 text-zinc-300" />
           </div>
           <p className="text-gray-400 text-sm font-semibold mb-2">Toplam Hacim</p>
           <p className="text-3xl font-black text-white">${stats.volume.toFixed(2)}</p>
@@ -98,7 +98,7 @@ export default function AdminBlackjackTab() {
 
       {/* Logs Table */}
       <div className="bg-[#151821] rounded-xl border border-white/5 overflow-hidden">
-        <div className="p-4 border-b border-white/5 bg-[#111111]">
+        <div className="p-4 border-b border-white/5 bg-[#0A0C10]">
           <h3 className="text-white font-bold">Son Oynanan Eller (Log)</h3>
         </div>
         <div className="overflow-x-auto">

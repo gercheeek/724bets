@@ -42,8 +42,8 @@ const FaqItem = ({ question, answer }: { question: string, answer: string }) => 
     <div className="bg-zinc-900/50 backdrop-blur-sm border border-white/5 rounded-xl overflow-hidden mb-3 hover:border-emerald-500/20 hover:bg-zinc-900/80 transition-all duration-300">
       <button onClick={() => setIsOpen(!isOpen)} className="w-full px-6 py-5 flex items-center justify-between text-left focus:outline-none">
         <span className="font-bold text-white text-[15px]">{question}</span>
-        <div className={`w-8 h-8 rounded-full flex items-center justify-center bg-white/5 transition-colors ${isOpen ? 'bg-emerald-500/20' : ''}`}>
-          <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${isOpen ? 'rotate-180 text-emerald-400' : 'text-zinc-400'}`} />
+        <div className={`w-8 h-8 rounded-full flex items-center justify-center bg-white/5 transition-colors ${isOpen ? 'bg-[#00E5FF]/20' : ''}`}>
+          <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${isOpen ? 'rotate-180 text-[#00E5FF]' : 'text-zinc-400'}`} />
         </div>
       </button>
       {isOpen && (
@@ -67,7 +67,7 @@ const RewardsPage: React.FC<RewardsPageProps> = ({ onBack, siteUser }) => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white overflow-y-auto pb-24 font-sans selection:bg-[#2dd4bf]/30">
+    <div className="min-h-screen bg-[#0A0C10] text-white overflow-y-auto pb-24 font-sans selection:bg-[#2dd4bf]/30">
       
       {/* Global Background Ambient */}
       <div className="fixed inset-0 pointer-events-none z-0">
@@ -91,7 +91,7 @@ const RewardsPage: React.FC<RewardsPageProps> = ({ onBack, siteUser }) => {
           <div className="flex items-end justify-between mb-8">
              <div>
                <h2 className="text-3xl md:text-4xl font-black text-white tracking-tight drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">Dahası da var!</h2>
-               <p className="text-yellow-500 text-sm font-bold mt-2 tracking-[0.15em] uppercase flex items-center gap-2">
+               <p className="text-zinc-300 text-sm font-bold mt-2 tracking-[0.15em] uppercase flex items-center gap-2">
                  <Zap className="w-4 h-4" /> Sınırları zorlayan etkinlikler
                </p>
              </div>
@@ -109,7 +109,7 @@ const RewardsPage: React.FC<RewardsPageProps> = ({ onBack, siteUser }) => {
                {/* Animated Gradient Border Layer */}
                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] h-[150%] bg-gradient-to-br from-yellow-500/0 via-white/30 to-yellow-500/0 opacity-0 group-hover:opacity-100 animate-[spin-slow_4s_linear_infinite_reverse] transition-opacity duration-700 pointer-events-none"></div>
                
-               <div className="absolute inset-[2px] rounded-[calc(2rem-2px)] bg-[#050505] z-10 overflow-hidden">
+               <div className="absolute inset-[2px] rounded-[calc(2rem-2px)] bg-[#0A0C10] z-10 overflow-hidden">
                   {/* Background Image */}
                   <img src="/images/limited_promo_bg_vibrant.jpg" className="w-full h-full object-cover opacity-30 group-hover:opacity-50 transition-opacity duration-700 mix-blend-screen group-hover:scale-110" />
                   <div className="absolute inset-0 bg-gradient-to-r from-[#000000] via-[#050505]/90 to-transparent"></div>
@@ -142,8 +142,8 @@ const RewardsPage: React.FC<RewardsPageProps> = ({ onBack, siteUser }) => {
              </div>
           </div>
           <div className="flex gap-8 border-b border-white/10 mb-10">
-             <button onClick={() => setFaqTab('siralamalar')} className={`pb-4 text-sm font-extrabold transition-all border-b-2 uppercase tracking-wide ${faqTab === 'siralamalar' ? 'text-yellow-500 border-yellow-500' : 'text-zinc-500 border-transparent hover:text-zinc-300'}`}>Sıralamalar</button>
-             <button onClick={() => setFaqTab('oduller')} className={`pb-4 text-sm font-extrabold transition-all border-b-2 uppercase tracking-wide ${faqTab === 'oduller' ? 'text-yellow-500 border-yellow-500' : 'text-zinc-500 border-transparent hover:text-zinc-300'}`}>Ödüller</button>
+             <button onClick={() => setFaqTab('siralamalar')} className={`pb-4 text-sm font-extrabold transition-all border-b-2 uppercase tracking-wide ${faqTab === 'siralamalar' ? 'text-zinc-300 border-yellow-500' : 'text-zinc-500 border-transparent hover:text-zinc-300'}`}>Sıralamalar</button>
+             <button onClick={() => setFaqTab('oduller')} className={`pb-4 text-sm font-extrabold transition-all border-b-2 uppercase tracking-wide ${faqTab === 'oduller' ? 'text-zinc-300 border-yellow-500' : 'text-zinc-500 border-transparent hover:text-zinc-300'}`}>Ödüller</button>
           </div>
           <div className="space-y-2">
              <FaqItem question="724Bets Sıralamaları nedir ve nasıl çalışır?" answer="Sıralamalar, sadakat programımızın bir parçasıdır. Her rütbe, size daha iyi ödüller ve VIP avantajlar sunar. VIP kulübüne dahil olduğunuzda sadece oynamakla kalmaz, kazancınızı katlarsınız." />

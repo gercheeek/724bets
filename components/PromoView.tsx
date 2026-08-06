@@ -30,7 +30,7 @@ const getTournaments = (t: any): Tournament[] => [
     status: 'active',
     timeInfo: '05g 20s 01d',
     participants: 273,
-    image: '/images/promos/gates_of_olympus_promo_1785470699172.webp',
+    image: '/images/slots/bigbass.webp',
   },
   {
     id: '2',
@@ -40,7 +40,7 @@ const getTournaments = (t: any): Tournament[] => [
     status: 'active',
     timeInfo: '05g 20s 01d',
     participants: 36,
-    image: '/images/promos/sweet_bonanza_promo_1785470716975.webp',
+    image: '/images/slots/doghouse.webp',
   },
   {
     id: '3',
@@ -50,7 +50,7 @@ const getTournaments = (t: any): Tournament[] => [
     status: 'upcoming',
     timeInfo: '17s 01d',
     participants: 142,
-    image: '/images/promos/weekend_multiplier_promo_1785470757275.webp',
+    image: '/images/slots/fruitshop.webp',
   },
   {
     id: '4',
@@ -60,7 +60,7 @@ const getTournaments = (t: any): Tournament[] => [
     status: 'upcoming',
     timeInfo: '17s 32d',
     participants: 89,
-    image: '/images/promos/hacksaw_promo_1785470736175.webp',
+    image: '/images/slots/legiongold.webp',
   },
   {
     id: '5',
@@ -70,7 +70,7 @@ const getTournaments = (t: any): Tournament[] => [
     status: 'upcoming',
     timeInfo: '06g 03s 02d',
     participants: 412,
-    image: '/images/promos/gates_of_olympus_promo_1785470699172.webp',
+    image: '/images/slots/bigbass.webp',
   },
   {
     id: '6',
@@ -80,7 +80,7 @@ const getTournaments = (t: any): Tournament[] => [
     status: 'upcoming',
     timeInfo: '06g 05s 32d',
     participants: 67,
-    image: '/images/promos/sweet_bonanza_promo_1785470716975.webp',
+    image: '/images/slots/doghouse.webp',
   },
   {
     id: '7',
@@ -90,7 +90,7 @@ const getTournaments = (t: any): Tournament[] => [
     status: 'ended',
     timeInfo: '2026.07.26',
     participants: 843,
-    image: '/images/promos/weekend_multiplier_promo_1785470757275.webp',
+    image: '/images/slots/fruitshop.webp',
   },
   {
     id: '8',
@@ -100,7 +100,7 @@ const getTournaments = (t: any): Tournament[] => [
     status: 'ended',
     timeInfo: '2026.07.30',
     participants: 512,
-    image: '/images/promos/hacksaw_promo_1785470736175.webp',
+    image: '/images/slots/legiongold.webp',
   },
   {
     id: '9',
@@ -110,7 +110,7 @@ const getTournaments = (t: any): Tournament[] => [
     status: 'ended',
     timeInfo: '2026.07.29',
     participants: 310,
-    image: '/images/promos/gates_of_olympus_promo_1785470699172.webp',
+    image: '/images/slots/bigbass.webp',
   }
 ];
 
@@ -194,12 +194,12 @@ const TournamentCard = ({ tournament, onClick }: { tournament: Tournament, onCli
   return (
     <div 
       onClick={onClick}
-      className={`flex flex-col sm:flex-row bg-[#0a0a0a]/90 backdrop-blur-xl rounded-[20px] sm:rounded-[24px] relative overflow-hidden group shadow-2xl ring-1 ring-white/5 hover:ring-white/10 hover:-translate-y-1 hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.8)] transition-all duration-300 cursor-pointer ${tournament.status === 'ended' ? 'opacity-50 grayscale hover:grayscale-0' : ''}`}
+      className={`flex flex-col sm:flex-row bg-[#0d1017] backdrop-blur-xl rounded-[20px] sm:rounded-[24px] relative overflow-hidden group shadow-2xl border border-[#00E5FF]/20 hover:border-[#00E5FF]/50 hover:-translate-y-1 hover:shadow-[0_20px_40px_-10px_rgba(0,229,255,0.2)] transition-all duration-300 cursor-pointer ${tournament.status === 'ended' ? 'opacity-50 grayscale hover:grayscale-0 border-white/10 hover:border-white/20' : ''}`}
     >
       <div className="absolute inset-0 rounded-[20px] sm:rounded-[24px] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.03)] pointer-events-none z-20" />
 
       {/* Image Side */}
-      <div className="w-full sm:w-[150px] md:w-[180px] h-[160px] sm:h-auto relative overflow-hidden shrink-0 bg-black">
+      <div className="w-full sm:w-[150px] md:w-[180px] h-[160px] sm:h-auto relative overflow-hidden shrink-0 bg-[#0A0C10]">
         <img 
           src={tournament.image} 
           alt={tournament.title} 
@@ -224,18 +224,18 @@ const TournamentCard = ({ tournament, onClick }: { tournament: Tournament, onCli
           <div className="absolute inset-0 bg-black/80 backdrop-blur-sm flex flex-col justify-center p-3 sm:p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-30">
              <div className="text-[9px] sm:text-[10px] font-bold text-white/90 uppercase tracking-widest mb-3 flex items-center justify-between">
                <span>{t('promo_view.live_leaderboard')}</span>
-               <span className="text-emerald-400 text-[7px] sm:text-[8px] animate-pulse flex items-center gap-1.5">
-                 <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full inline-block shadow-[0_0_8px_rgba(16,185,129,0.8)]"></span> {t('promo_view.live')}
+               <span className="text-[#00E5FF] text-[7px] sm:text-[8px] animate-pulse flex items-center gap-1.5">
+                 <span className="w-1.5 h-1.5 bg-[#00E5FF] rounded-full inline-block shadow-[0_0_8px_rgba(16,185,129,0.8)]"></span> {t('promo_view.live')}
                </span>
              </div>
              <div className="space-y-1.5 sm:space-y-2">
              {leaderboard.slice(0, 3).map((player, idx) => (
                <div key={player.id} className="flex items-center justify-between bg-white/5 border border-white/10 rounded-md sm:rounded-lg px-2 sm:px-3 py-1 sm:py-1.5">
                   <div className="flex items-center gap-1.5 sm:gap-2">
-                    <span className={`text-[8px] sm:text-[10px] font-black w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full flex items-center justify-center ${idx === 0 ? 'bg-amber-500/20 text-amber-400 shadow-[0_0_8px_rgba(255,191,0,0.4)]' : 'bg-white/10 text-white'}`}>{idx + 1}</span>
+                    <span className={`text-[8px] sm:text-[10px] font-black w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full flex items-center justify-center ${idx === 0 ? 'bg-amber-500/20 text-zinc-300 shadow-[0_0_8px_rgba(255,191,0,0.4)]' : 'bg-white/10 text-white'}`}>{idx + 1}</span>
                     <span className="text-[10px] sm:text-[11px] text-zinc-100 font-medium truncate max-w-[60px] sm:max-w-[70px]">{player.name}</span>
                   </div>
-                  <div className="text-[10px] sm:text-[11px] font-mono font-bold text-emerald-400">
+                  <div className="text-[10px] sm:text-[11px] font-mono font-bold text-[#00E5FF]">
                     {player.score.toLocaleString()} <span className="text-[7px] sm:text-[8px] opacity-60">{t('promo_view.pts')}</span>
                   </div>
                </div>
@@ -280,9 +280,9 @@ const getSliderData = (t: any) => [
     heading2: t('promo_view.slide1_h2'),
     subHeading: t('promo_view.slide1_sub'),
     desc: t('promo_view.slide1_desc'),
-    image: "/images/promos/weekend_multiplier_promo_1785470757275.webp",
+    image: "/images/slots/fruitshop.webp",
     themeColor: "text-[#00E5FF]",
-    highlightColor: "text-emerald-400",
+    highlightColor: "text-[#00E5FF]",
   },
   {
     id: 2,
@@ -292,9 +292,9 @@ const getSliderData = (t: any) => [
     heading2: t('promo_view.slide2_h2'),
     subHeading: t('promo_view.slide2_sub'),
     desc: t('promo_view.slide2_desc'),
-    image: "/images/promos/gates_of_olympus_promo_1785470699172.webp",
+    image: "/images/slots/bigbass.webp",
     themeColor: "text-[#FF9F1C]",
-    highlightColor: "text-[#FFD700]",
+    highlightColor: "text-white",
   },
   {
     id: 3,
@@ -304,7 +304,7 @@ const getSliderData = (t: any) => [
     heading2: t('promo_view.slide3_h2'),
     subHeading: t('promo_view.slide3_sub'),
     desc: t('promo_view.slide3_desc'),
-    image: "/images/promos/sweet_bonanza_promo_1785470716975.webp",
+    image: "/images/slots/doghouse.webp",
     themeColor: "text-[#EC4899]",
     highlightColor: "text-pink-400",
   },
@@ -316,7 +316,7 @@ const getSliderData = (t: any) => [
     heading2: t('promo_view.slide4_h2'),
     subHeading: t('promo_view.slide4_sub'),
     desc: t('promo_view.slide4_desc'),
-    image: "/images/promos/hacksaw_promo_1785470736175.webp",
+    image: "/images/slots/legiongold.webp",
     themeColor: "text-[#EF4444]",
     highlightColor: "text-red-500",
   }
@@ -400,13 +400,12 @@ export default function PromoView() {
   }
 
   return (
-    <div className="flex-1 w-full min-h-screen bg-[#06080D] text-white p-4 md:p-6 lg:p-8 font-sans pb-32 relative overflow-hidden">
+    <div className="flex-1 w-full min-h-screen bg-[#0A0C10] text-white p-4 md:p-6 lg:p-8 font-sans pb-32 relative overflow-hidden">
       
       {/* Background Ambience */}
       <div className="absolute inset-0 pointer-events-none z-0">
-        <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[120px]" />
-        <div className="absolute top-[30%] right-[-5%] w-[400px] h-[400px] bg-[#00E5FF]/5 rounded-full blur-[100px]" />
-        <div className="absolute bottom-[-10%] left-[20%] w-[600px] h-[600px] bg-emerald-600/5 rounded-full blur-[150px]" />
+        <div className="absolute top-[-10%] left-[-10%] w-[600px] h-[600px] bg-[#00E5FF]/5 rounded-full blur-[120px] mix-blend-screen" />
+        <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-[#10B981]/5 rounded-full blur-[100px] mix-blend-screen" />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto">

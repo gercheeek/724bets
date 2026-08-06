@@ -1117,6 +1117,8 @@ input:-webkit-autofill:active{
 /* Global card premium hover – for any card-like element */
 [class*="rounded-2xl"][class*="border"][class*="bg-"]:hover,
 [class*="rounded-xl"][class*="border"][class*="bg-"]:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3), 0 0 20px rgba(0, 229, 255, 0.1);
   transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
@@ -1657,7 +1659,7 @@ input:-webkit-autofill:active{
 }
 
 /* The main Bet buttons */
-.atari-game-mode button[class*="bg-emerald-500"],
+.atari-game-mode button[class*="bg-[#00E5FF]"],
 .atari-game-mode button[class*="bg-[#00E701]"] {
     background-color: transparent !important;
     border: 3px solid #00ffff !important;
@@ -1666,7 +1668,7 @@ input:-webkit-autofill:active{
     text-shadow: 0 0 5px rgba(0,255,255,0.5);
 }
 
-.atari-game-mode button[class*="bg-emerald-500"]:active,
+.atari-game-mode button[class*="bg-[#00E5FF]"]:active,
 .atari-game-mode button[class*="bg-[#00E701]"]:active {
     box-shadow: 0px 0px 0px rgba(0, 255, 255, 0.7) !important;
     transform: translate(4px, 4px);
@@ -1764,4 +1766,44 @@ input:-webkit-autofill:active{
   animation-name: treasure-drop;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
+}
+
+/* ===== Modern Site-Wide Button Styles ===== */
+.btn-icon-modern {
+  @apply w-[40px] h-[40px] rounded-[10px] flex items-center justify-center bg-white/5 border border-white/5 text-zinc-400 shadow-sm transition-all duration-300 cursor-pointer flex-shrink-0;
+}
+.btn-icon-modern:hover {
+  @apply bg-white/10 text-white border-white/10;
+}
+.btn-icon-modern.active {
+  @apply bg-white/5 text-[#00E5FF] border-2 border-[#00E5FF] shadow-[0_0_10px_rgba(0,229,255,0.15)];
+}
+
+.btn-secondary-modern {
+  @apply h-[40px] px-3 md:px-4 rounded-[10px] flex items-center justify-center gap-2 bg-white/5 border border-white/5 text-zinc-400 shadow-sm font-bold text-[12px] md:text-[13px] tracking-wide transition-all duration-300 cursor-pointer flex-shrink-0 whitespace-nowrap;
+}
+.btn-secondary-modern:hover {
+  @apply bg-white/10 text-white border-white/10;
+}
+.btn-secondary-modern.active {
+  @apply bg-white/5 text-[#00E5FF] border-2 border-[#00E5FF] shadow-[0_0_10px_rgba(0,229,255,0.15)];
+}
+
+/* Video iframe'ini tutan ana kapsayıcı */
+.video-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden; /* Dışarı taşan logoların siyah alanda kalmasını sağlar */
+  background: #000;
+}
+
+/* Çerçeveyi bozmadan iframe'i ham görüntüsüyle dışarı taşıyan ayar */
+.video-container iframe, .video-container video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
 }

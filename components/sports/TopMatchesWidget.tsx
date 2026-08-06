@@ -36,28 +36,29 @@ const getDummyFireStats = (match: MatchInfo) => {
   return { pct, team };
 };
 
-// Helper to generate mock odds for Over/Under and GG/NG based on match ID
-const getMockOdds = (match: MatchInfo, type: 'ou' | 'gg') => {
-  let hash = 0;
-  for (let i = 0; i < match.id.length; i++) {
-    hash = match.id.charCodeAt(i) + ((hash << 5) - hash);
-  }
+// Helper to extract true market odds from group_markets if available
+const extractMarketOdd = (match: MatchInfo, type: 'ou' | 'gg') => {
+  const gms = match.rawEvent?.group_markets?.['full_event|0'] || match.group_markets?.['full_event|0'];
+  if (!gms) return type === 'ou' ? { over: '-', under: '-' } : { gg: '-', ng: '-' };
   
-  if (type === 'ou') {
-    const baseOver = 1.40 + (Math.abs(hash) % 100) / 100;
-    const baseUnder = 3.50 - (Math.abs(hash) % 100) / 100;
-    return {
-      over: baseOver.toFixed(2),
-      under: baseUnder.toFixed(2)
-    };
-  } else {
-    const baseGg = 1.60 + (Math.abs(hash) % 80) / 100;
-    const baseNg = 2.80 - (Math.abs(hash) % 80) / 100;
-    return {
-      gg: baseGg.toFixed(2),
-      ng: baseNg.toFixed(2)
-    };
+  for (const m of gms) {
+    if (type === 'ou' && m.startsWith('|ou|2.5|')) {
+      const sels = m.split('|').find((p: string) => p.includes('~üstü~') || p.includes('~over~'));
+      if (sels) {
+        const over = sels.split(/üstü~|over~/)[1]?.split('!')[0] || '-';
+        const under = sels.split(/altı~|under~/)[1]?.split('!')[0] || '-';
+        return { over, under };
+      }
+    } else if (type === 'gg' && m.startsWith('|gg|')) {
+      const sels = m.split('|').find((p: string) => p.includes('~var~') || p.includes('~yes~'));
+      if (sels) {
+        const gg = sels.split(/var~|yes~/)[1]?.split('!')[0] || '-';
+        const ng = sels.split(/yok~|no~/)[1]?.split('!')[0] || '-';
+        return { gg, ng };
+      }
+    }
   }
+  return type === 'ou' ? { over: '-', under: '-' } : { gg: '-', ng: '-' };
 };
 
 // Top tier leagues whitelist
@@ -72,7 +73,6 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onS
   const [now, setNow] = useState(Date.now());
   const [scrollIdx, setScrollIdx] = useState(0);
   const [activeMarket, setActiveMarket] = useState(0); // 0: 1x2, 1: Alt/Üst, 2: KG
-  const [oddsOverride, setOddsOverride] = useState<Record<string, any>>({});
 
   useEffect(() => {
     const marketTimer = setInterval(() => {
@@ -83,46 +83,8 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onS
 
   useEffect(() => {
     const timer = setInterval(() => setNow(Date.now()), 1000);
-    
-    // Simulate live odds changing
-    const oddsTimer = setInterval(() => {
-      setOddsOverride(prev => {
-        const next = { ...prev };
-        topMatches.filter(m => m.isLive).forEach(m => {
-          // 30% chance to change odds every 4 seconds for a live match
-          if (Math.random() < 0.3) {
-             const baseH = parseFloat(next[m.id]?.home || m.homeOdd);
-             const baseD = parseFloat(next[m.id]?.draw || m.drawOdd);
-             const baseA = parseFloat(next[m.id]?.away || m.awayOdd);
-             const baseOu = getMockOdds(m, 'ou');
-             const baseGg = getMockOdds(m, 'gg');
-             const baseOver = parseFloat(next[m.id]?.over || baseOu.over);
-             const baseUnder = parseFloat(next[m.id]?.under || baseOu.under);
-             const baseGgVal = parseFloat(next[m.id]?.gg || baseGg.gg);
-             const baseNgVal = parseFloat(next[m.id]?.ng || baseGg.ng);
-
-             const bump = (val: number) => (val + (Math.random() > 0.5 ? 0.04 : -0.04)).toFixed(2);
-             
-             next[m.id] = {
-               home: bump(baseH),
-               draw: bump(baseD),
-               away: bump(baseA),
-               over: bump(baseOver),
-               under: bump(baseUnder),
-               gg: bump(baseGgVal),
-               ng: bump(baseNgVal),
-             };
-          }
-        });
-        return next;
-      });
-    }, 4000);
-    
-    return () => {
-      clearInterval(timer);
-      clearInterval(oddsTimer);
-    };
-  }, [matches]); // re-bind when matches change
+    return () => clearInterval(timer);
+  }, []);
 
   // Filter and pick Top 15
   const topMatches = React.useMemo(() => {
@@ -246,16 +208,15 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onS
           {topMatches.map((match) => {
             const ts = match.timestamp || (Date.now() + 1000 * 60 * 60 * 2);
             const isTennis = match.sport?.toLowerCase().includes('tenis') || match.sport?.toLowerCase().includes('tennis');
-            const ov = oddsOverride[match.id];
-            const hOdd = ov?.home || match.homeOdd;
-            const dOdd = ov?.draw || match.drawOdd;
-            const aOdd = ov?.away || match.awayOdd;
-            const baseOu = getMockOdds(match, 'ou');
-            const baseGg = getMockOdds(match, 'gg');
-            const overOdd = ov?.over || baseOu.over;
-            const underOdd = ov?.under || baseOu.under;
-            const ggOdd = ov?.gg || baseGg.gg;
-            const ngOdd = ov?.ng || baseGg.ng;
+            const hOdd = match.homeOdd;
+            const dOdd = match.drawOdd;
+            const aOdd = match.awayOdd;
+            const baseOu = extractMarketOdd(match, 'ou');
+            const baseGg = extractMarketOdd(match, 'gg');
+            const overOdd = baseOu.over;
+            const underOdd = baseOu.under;
+            const ggOdd = baseGg.gg;
+            const ngOdd = baseGg.ng;
             const scoreParts = (match.score || '0-0').split('-');
 
             return (

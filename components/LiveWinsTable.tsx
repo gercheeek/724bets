@@ -117,7 +117,7 @@ export default function LiveWinsTable() {
 
             {/* User */}
             <div className="col-span-1 md:col-span-3 flex items-center gap-3">
-              <div className={`w-6 h-6 rounded flex items-center justify-center text-[10px] ${win.isHidden ? 'bg-[#00E676] text-black' : 'bg-[#2c313c] text-white'}`}>
+              <div className={`w-6 h-6 rounded flex items-center justify-center text-[10px] ${win.isHidden ? 'bg-[#00E5FF] text-black' : 'bg-[#2c313c] text-white'}`}>
                 {win.isHidden ? '👤' : win.user.charAt(0)}
               </div>
               {win.isHighRoller && !win.isHidden && (
@@ -140,7 +140,7 @@ export default function LiveWinsTable() {
             <div className="col-span-1 md:col-span-1 flex items-center gap-2">
               <span className="md:hidden text-[#5c677d] text-xs font-bold uppercase w-16">Bahis:</span>
               <div className="flex items-center gap-1">
-                 <div className="w-4 h-4 rounded-full bg-[#00E676] text-black font-black flex items-center justify-center text-[9px]">$</div>
+                 <div className="w-4 h-4 rounded-full bg-[#00E5FF] text-black font-black flex items-center justify-center text-[9px]">$</div>
                  <span className="text-white font-black text-sm">{win.bet.toFixed(2)}</span>
               </div>
             </div>
@@ -149,7 +149,7 @@ export default function LiveWinsTable() {
             <div className="col-span-1 md:col-span-1 flex items-center">
               <span className="md:hidden text-[#5c677d] text-xs font-bold uppercase w-16">Çarpan:</span>
               {win.multiplier > 0 ? (
-                <span className="text-[#00E676] font-black text-xs bg-[#00E676]/10 px-2 py-0.5 rounded-full border border-[#00E676]/20">
+                <span className="text-[#00E5FF] font-black text-xs bg-[#00E5FF]/10 px-2 py-0.5 rounded-full border border-[#00E676]/20">
                   x{win.multiplier.toFixed(2)}
                 </span>
               ) : (
@@ -161,8 +161,8 @@ export default function LiveWinsTable() {
             <div className="col-span-1 md:col-span-2 flex items-center md:justify-end gap-2">
               <span className="md:hidden text-[#5c677d] text-xs font-bold uppercase w-16">Ödeme:</span>
               <div className="flex items-center gap-1.5">
-                <div className="w-5 h-5 rounded-full bg-[#00E676] text-black font-black flex items-center justify-center text-[11px] shadow-[0_0_8px_rgba(0,230,118,0.4)]">$</div>
-                <span className={`font-black ${win.payout > 0 ? 'text-[#00E676]' : 'text-white'} text-base`}>
+                <div className="w-5 h-5 rounded-full bg-[#00E5FF] text-black font-black flex items-center justify-center text-[11px] shadow-[0_0_8px_rgba(0,230,118,0.4)]">$</div>
+                <span className={`font-black ${win.payout > 0 ? 'text-[#00E5FF]' : 'text-white'} text-base`}>
                   {win.payout > 0 ? '+' : ''}{win.payout.toFixed(2)}
                 </span>
               </div>

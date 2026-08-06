@@ -59,7 +59,7 @@ export default function GifPicker({ onSelect }: GifPickerProps) {
 
     return (
         <div className="absolute bottom-[50px] right-0 bg-[#161a24] border border-white/10 rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.8)] z-[100] w-[280px] overflow-hidden flex flex-col">
-            <div className="p-2 border-b border-white/5 relative bg-[#0A0D14]">
+            <div className="p-2 border-b border-white/5 relative bg-[#0A0C10]">
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-zinc-500" />
                 <input 
                     type="text" 
@@ -84,7 +84,7 @@ export default function GifPicker({ onSelect }: GifPickerProps) {
                     </div>
                 )}
             </div>
-            <div className="px-3 py-1.5 bg-[#0A0D14] border-t border-white/5 flex justify-between items-center">
+            <div className="px-3 py-1.5 bg-[#0A0C10] border-t border-white/5 flex justify-between items-center">
                 <span className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest flex items-center gap-1">
                     Powered by 
                     <span className="text-white font-black tracking-normal">GIPHY</span>

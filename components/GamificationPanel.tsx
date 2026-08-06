@@ -24,12 +24,12 @@ export const GamificationPanel: React.FC<GamificationPanelProps> = ({
 
   return (
     <div 
-      className={`w-full bg-[#050505] rounded-2xl md:rounded-3xl border border-white/5 hover:border-emerald-500/30 shadow-2xl overflow-hidden flex flex-col relative group cursor-pointer transition-colors duration-500 ${className}`}
+      className={`w-full bg-[#0A0C10] rounded-2xl md:rounded-3xl border border-white/5 hover:border-emerald-500/30 shadow-2xl overflow-hidden flex flex-col relative group cursor-pointer transition-colors duration-500 ${className}`}
       onClick={isLoggedIn ? onAdventureClick : onLoginClick}
     >
       {/* Background FX - Solid Dark with Subtle Glow */}
       <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-      <div className="absolute top-[-50%] right-[-10%] w-[300px] h-[300px] bg-emerald-500/10 rounded-full blur-[80px] group-hover:scale-110 transition-transform duration-1000" />
+      <div className="absolute top-[-50%] right-[-10%] w-[300px] h-[300px] bg-[#00E5FF]/10 rounded-full blur-[80px] group-hover:scale-110 transition-transform duration-1000" />
       <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-10 mix-blend-screen" />
       
       {/* Animated Path Preview */}
@@ -40,14 +40,14 @@ export const GamificationPanel: React.FC<GamificationPanelProps> = ({
         {/* Left Side: Icon & Titles */}
         <div className="flex items-center gap-5 w-full md:w-auto">
           <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-500 to-cyan-500 p-[1px] shadow-[0_0_30px_rgba(16,185,129,0.3)] shrink-0 group-hover:shadow-[0_0_40px_rgba(16,185,129,0.5)] transition-shadow">
-            <div className="w-full h-full bg-[#0A0D14] rounded-2xl flex items-center justify-center">
-               <Map className="w-8 h-8 text-emerald-400" />
+            <div className="w-full h-full bg-[#0A0C10] rounded-2xl flex items-center justify-center">
+               <Map className="w-8 h-8 text-[#00E5FF]" />
             </div>
           </div>
           <div className="flex flex-col">
             <div className="flex items-center gap-2 mb-1">
-              <Sparkles className="w-4 h-4 text-emerald-400" />
-              <span className="text-emerald-400 text-xs font-bold uppercase tracking-widest">Premium Hazine Haritası</span>
+              <Sparkles className="w-4 h-4 text-[#00E5FF]" />
+              <span className="text-[#00E5FF] text-xs font-bold uppercase tracking-widest">Premium Hazine Haritası</span>
             </div>
             <h2 className="text-2xl md:text-3xl font-black text-white tracking-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-emerald-400 group-hover:to-cyan-400 transition-all">
               724Bets Serüveni
@@ -65,9 +65,9 @@ export const GamificationPanel: React.FC<GamificationPanelProps> = ({
               <div key={stop} className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-[#141822] border border-white/10 flex items-center justify-center relative">
                    {stop === 1 ? (
-                     <div className="absolute inset-0 bg-emerald-500/20 rounded-full animate-ping"></div>
+                     <div className="absolute inset-0 bg-[#00E5FF]/20 rounded-full animate-ping"></div>
                    ) : null}
-                   <Lock className={`w-4 h-4 ${stop === 1 ? 'text-emerald-400' : 'text-gray-600'}`} />
+                   <Lock className={`w-4 h-4 ${stop === 1 ? 'text-[#00E5FF]' : 'text-gray-600'}`} />
                 </div>
                 {stop !== 3 && <div className="w-6 h-[2px] bg-white/10" />}
               </div>

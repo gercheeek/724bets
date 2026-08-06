@@ -97,17 +97,50 @@ export const GamePlayView: React.FC<GamePlayViewProps> = ({ game, demoUrl, onClo
 
         {/* Game Iframe Wrapper */}
         <div className={`w-full relative ${isFullscreen ? 'h-screen' : 'h-[60vh] md:h-[70vh] lg:h-[75vh]'}`}>
-          <iframe 
-            ref={iframeRef}
-            src={demoUrl} 
-            className="w-full h-full border-0"
-            allowFullScreen
-          />
+          {game.category === 'live' || game.provider === 'Live Casino' ? (
+            <div className="w-full h-full bg-[#0A0C10] flex flex-col items-center justify-center p-6 border-0 relative overflow-hidden">
+              <div className="absolute inset-0 z-0">
+                <img src={game.img || game.image} alt={game.name} className="w-full h-full object-cover opacity-20 blur-sm" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0A0D14] via-[#0A0D14]/80 to-[#0A0D14]/90" />
+              </div>
+              <div className="z-10 flex flex-col items-center text-center max-w-md animate-fade-in-up">
+                <div className="w-20 h-20 bg-gradient-to-br from-[#00E5FF]/20 to-transparent rounded-full flex items-center justify-center mb-6 ring-1 ring-[#00E5FF]/50 shadow-[0_0_30px_rgba(0,229,255,0.3)]">
+                  <span className="text-[#00E5FF] text-3xl">🔒</span>
+                </div>
+                {!siteUser ? (
+                  <>
+                    <h2 className="text-2xl font-black text-white mb-3 tracking-tight">Üye Olmanız Gerekiyor</h2>
+                    <p className="text-[#848B9D] mb-8 font-medium">Bu canlı casino oyununa katılmak ve gerçek krupiyelerle oynamak için lütfen giriş yapın veya üye olun.</p>
+                    <button 
+                      onClick={() => window.dispatchEvent(new CustomEvent('openAuthModal', { detail: 'register' }))}
+                      className="w-full sm:w-auto bg-gradient-to-r from-[#00E5FF] to-[#00b3cc] hover:brightness-110 text-[#0A0D14] px-10 py-4 rounded-xl font-black text-sm uppercase tracking-wider transition-all shadow-[0_0_20px_rgba(0,229,255,0.4)] hover:shadow-[0_0_30px_rgba(0,229,255,0.6)]"
+                    >
+                      Şimdi Üye Ol
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <h2 className="text-2xl font-black text-white mb-3 tracking-tight">Gerçek Bakiye Gerekiyor</h2>
+                    <p className="text-[#848B9D] mb-8 font-medium">Canlı casino oyunları demo modunda oynanamaz. Masaya oturmak ve oynamaya başlamak için lütfen kasanıza bakiye yükleyin.</p>
+                    <button 
+                      onClick={() => window.dispatchEvent(new CustomEvent('openDepositModal', { detail: { tab: 'deposit' } }))}
+                      className="w-full sm:w-auto bg-gradient-to-r from-[#00E676] to-[#00C853] hover:brightness-110 text-black px-10 py-4 rounded-xl font-black text-sm uppercase tracking-wider transition-all shadow-[0_0_20px_rgba(0,230,118,0.4)] hover:shadow-[0_0_30px_rgba(0,230,118,0.6)] flex items-center justify-center gap-2 mx-auto"
+                    >
+                      <Wallet className="w-5 h-5" /> Bakiye Yükle
+                    </button>
+                  </>
+                )}
+              </div>
+            </div>
+          ) : (
+            <iframe 
+              ref={iframeRef}
+              src={demoUrl} 
+              className="w-full h-full border-0"
+              allowFullScreen
+            />
+          )}
 
-          {/* Global Game Session ID (Serial) */}
-          <div className="absolute left-[108px] bottom-[3px] pointer-events-none z-20 opacity-50 flex items-end">
-            <span className="text-white text-[9.5px] font-mono tracking-widest drop-shadow-md leading-none">12321412431243242</span>
-          </div>
 
           {/* Insufficient Funds Modal Overlay */}
           {showInsufficientFunds && isRealMoney && (
@@ -260,19 +293,19 @@ export const GamePlayView: React.FC<GamePlayViewProps> = ({ game, demoUrl, onClo
             <div className="flex items-center gap-2 mb-6">
               <button 
                 onClick={() => setActiveTab('bigwins')}
-                className={`px-4 py-2 rounded-lg text-[13px] font-bold transition-colors ${activeTab === 'bigwins' ? 'bg-[#0f7bff] text-white shadow-lg' : 'bg-[#1b2230] text-zinc-400 hover:text-white'}`}
+                className={`px-4 py-2 rounded-lg text-[13px] font-bold transition-colors ${activeTab === 'bigwins' ? 'bg-[#0f7bff] text-white shadow-lg' : 'bg-[#0A0C10] text-zinc-400 hover:text-white'}`}
               >
                 Büyük Kazançlar
               </button>
               <button 
                 onClick={() => setActiveTab('luckywins')}
-                className={`px-4 py-2 rounded-lg text-[13px] font-bold transition-colors ${activeTab === 'luckywins' ? 'bg-[#0f7bff] text-white shadow-lg' : 'bg-[#1b2230] text-zinc-400 hover:text-white'}`}
+                className={`px-4 py-2 rounded-lg text-[13px] font-bold transition-colors ${activeTab === 'luckywins' ? 'bg-[#0f7bff] text-white shadow-lg' : 'bg-[#0A0C10] text-zinc-400 hover:text-white'}`}
               >
                 Şanslı Kazançlar
               </button>
               <button 
                 onClick={() => setActiveTab('desc')}
-                className={`px-4 py-2 rounded-lg text-[13px] font-bold transition-colors ${activeTab === 'desc' ? 'bg-[#0f7bff] text-white shadow-lg' : 'bg-[#1b2230] text-zinc-400 hover:text-white'}`}
+                className={`px-4 py-2 rounded-lg text-[13px] font-bold transition-colors ${activeTab === 'desc' ? 'bg-[#0f7bff] text-white shadow-lg' : 'bg-[#0A0C10] text-zinc-400 hover:text-white'}`}
               >
                 Açıklama
               </button>
@@ -296,7 +329,7 @@ export const GamePlayView: React.FC<GamePlayViewProps> = ({ game, demoUrl, onClo
                       <tr key={i} className="border-b border-white/5 hover:bg-white/5 transition-colors group">
                         <td className="py-4 px-6">
                           <div className={`w-6 h-6 flex items-center justify-center rounded text-xs font-black
-                            ${win.rank === 1 ? 'text-amber-400' : win.rank === 2 ? 'text-zinc-300' : win.rank === 3 ? 'text-amber-700' : 'text-zinc-500'}`}
+                            ${win.rank === 1 ? 'text-zinc-300' : win.rank === 2 ? 'text-zinc-300' : win.rank === 3 ? 'text-amber-700' : 'text-zinc-500'}`}
                           >
                             {win.rank}
                           </div>

@@ -39,7 +39,10 @@ export default function DynamicNewGames({ onGameSelect }: { onGameSelect: (game:
           <h2 className="text-xl md:text-2xl font-black text-white">Yeni</h2>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-sm font-medium text-[#848B9D] hidden sm:block">Tümünü Gör</span>
+          <button className="text-[11px] md:text-xs font-black text-white hover:text-white transition-all flex items-center gap-1 group cursor-pointer border border-[#00E5FF]/30 bg-[#00E5FF]/20 hover:bg-[#00E5FF]/30 px-3.5 py-1.5 rounded-full shadow-[0_0_10px_rgba(0,229,255,0.2)] hover:shadow-[0_0_15px_rgba(0,229,255,0.4)] uppercase tracking-wider">
+            <span>Tümünü Gör</span>
+            <ChevronRight size={14} className="group-hover:translate-x-0.5 transition-transform text-[#00E5FF] drop-shadow-[0_0_3px_#00E5FF]" />
+          </button>
           <div className="flex items-center gap-1">
             <button className="w-8 h-8 rounded bg-white/5 hover:bg-white/10 flex items-center justify-center text-[#848B9D] hover:text-white transition-colors">
               <ChevronLeft size={16} />
@@ -50,12 +53,14 @@ export default function DynamicNewGames({ onGameSelect }: { onGameSelect: (game:
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-2 md:gap-3 w-full animate-fade-in relative px-1 md:px-0">
-        {dynamicNewGames.map((game) => (
-          <div key={game.id} className="animate-in fade-in duration-500">
-            <GameCard game={game} onClick={() => onGameSelect(game)} />
-          </div>
-        ))}
+      <div className="w-full overflow-x-auto pb-4 snap-x snap-mandatory hide-scrollbar" style={{ scrollBehavior: 'smooth' }}>
+        <div className="grid grid-rows-2 grid-flow-col gap-2 md:gap-3 min-w-max animate-fade-in relative px-1 md:px-0">
+          {dynamicNewGames.map((game) => (
+            <div key={game.id} className="animate-in fade-in duration-500 w-[110px] sm:w-[130px] md:w-[150px] lg:w-[170px] shrink-0 snap-start">
+              <GameCard game={game} onClick={() => onGameSelect(game)} />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

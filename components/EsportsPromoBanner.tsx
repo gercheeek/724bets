@@ -1,74 +1,170 @@
-import React from 'react';
-import { Crown, UserPlus } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Crown, UserPlus, Trophy, Users, ChevronRight, Play } from 'lucide-react';
+import { PlayerLogo } from './sports/PlayerLogo';
 
 interface EsportsPromoBannerProps {
   onRegisterClick?: () => void;
+  onViewChange?: (view: string) => void;
 }
 
-export default function EsportsPromoBanner({ onRegisterClick }: EsportsPromoBannerProps) {
-  return (
-    <div className="w-full relative overflow-hidden bg-[#24262b] rounded-md md:rounded-[12px] mt-2 mb-4 flex flex-col md:flex-row items-center border border-white/5 shadow-2xl h-auto md:h-[280px] xl:h-[300px]">
-      
-      {/* Background Graphic Left (Large Abstraction like the 'B' in BC Game) */}
-      <div className="absolute -left-12 -top-12 opacity-5 pointer-events-none z-10 hidden md:block">
-         <Crown className="w-[300px] h-[300px] text-white -rotate-12" />
-      </div>
+export default function EsportsPromoBanner({ onRegisterClick, onViewChange }: EsportsPromoBannerProps) {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const totalSlides = 3;
 
-      {/* The Esports Team Image (Right Side) */}
-      <div 
-        className="absolute right-0 top-0 bottom-0 w-full md:w-[80%] xl:w-[75%] z-0 flex justify-end pointer-events-none"
-        style={{ maskImage: 'linear-gradient(to right, transparent 0%, black 15%)', WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 15%)' }}
-      >
-        <img 
-          src="/images/esports_team_wide_final.jpg" 
-          alt="724bets Esports Team" 
-          className="w-full h-full object-cover object-[right_10%] opacity-90"
-        />
-      </div>
+  // Maç geri sayımı (Örnek: 2 saat 14 dk 59 sn)
+  const [countdown, setCountdown] = useState({ h: 2, m: 14, s: 59 });
 
-      {/* Left Content Area (Centered Text & Buttons) */}
-      <div className="w-full md:w-[45%] relative z-20 flex flex-col items-center justify-center text-center px-6 py-10 md:py-0 h-full">
-         
-         <h2 className="text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-zinc-400 font-black text-[22px] md:text-[26px] xl:text-[30px] leading-[1.1] tracking-wide drop-shadow-[0_2px_10px_rgba(255,255,255,0.1)] mb-5 uppercase italic text-center">
-           Kazananların Adresi
-         </h2>
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % totalSlides);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
 
-         <button 
-           onClick={onRegisterClick}
-           className="group relative w-full max-w-[160px] overflow-hidden rounded-full font-bold text-[14px] py-2.5 transition-all duration-300 shadow-[0_0_20px_rgba(0,229,255,0.4)] hover:shadow-[0_0_30px_rgba(0,229,255,0.6)] hover:-translate-y-1 mb-4"
-         >
-           {/* Gradient Background */}
-           <div className="absolute inset-0 bg-gradient-to-r from-[#00E5FF] to-[#00b3cc] opacity-90 group-hover:opacity-100 transition-opacity"></div>
-           
-           {/* Shine effect */}
-           <div className="absolute inset-0 opacity-0 group-hover:opacity-20 bg-gradient-to-r from-transparent via-white to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]"></div>
-           
-           {/* Button Content */}
-           <div className="relative flex items-center justify-center gap-1.5 text-[#06080e] tracking-wide">
-             <UserPlus className="w-4 h-4" />
-             <span>Üye Ol</span>
-           </div>
-         </button>
-
-         <span className="text-gray-400 text-[12px] font-medium tracking-wide mb-3">Veya Hızlı Kayıt</span>
-         
-         <div className="flex gap-3 w-full max-w-[280px]">
-           <button className="flex-1 flex items-center justify-center gap-2 bg-[#1A1C20] hover:bg-[#2c3036] border border-white/5 rounded-lg py-2.5 transition-all shadow-md active:scale-95">
-             <svg viewBox="0 0 24 24" className="w-4 h-4"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-             <span className="text-zinc-200 font-semibold text-[13px] tracking-wide">Google</span>
-           </button>
-           <button className="flex-1 flex items-center justify-center gap-2 bg-[#1A1C20] hover:bg-[#2c3036] border border-white/5 rounded-lg py-2.5 transition-all shadow-md active:scale-95">
-             <svg viewBox="0 0 24 24" className="w-4 h-4"><path fill="#229ED9" d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
-             <span className="text-zinc-200 font-semibold text-[13px] tracking-wide">Telegram</span>
-           </button>
-         </div>
-      </div>
-       
-      <style>{`
-        @keyframes shimmer {
-          100% { transform: translateX(100%); }
+  useEffect(() => {
+    const countdownTimer = setInterval(() => {
+      setCountdown(prev => {
+        let { h, m, s } = prev;
+        if (h === 0 && m === 0 && s === 0) return { h: 2, m: 14, s: 59 };
+        s--;
+        if (s < 0) {
+          s = 59;
+          m--;
+          if (m < 0) {
+            m = 59;
+            h--;
+          }
         }
-      `}</style>
+        return { h, m, s };
+      });
+    }, 1000);
+    return () => clearInterval(countdownTimer);
+  }, []);
+
+  const renderSlide0 = () => (
+    <div className="w-full h-full relative overflow-hidden bg-[#0A101D] group cursor-pointer" onClick={onRegisterClick}>
+      <img 
+        src="/images/esports_team_wide_final.jpg" 
+        alt="724bets Esports Team" 
+        className="w-full h-full object-cover object-[center_top] opacity-100 transition-transform duration-1000 group-hover:scale-105"
+      />
+      <div className="absolute inset-0 bg-white/0 group-hover:bg-white/5 transition-colors duration-500 pointer-events-none"></div>
+    </div>
+  );
+
+  const topMatches = [
+    { id: 1, home: 'Galatasaray', away: 'Fenerbahçe', time: 'Bugün 20:00', odds: { '1': '2.10', 'X': '3.20', '2': '2.80' } },
+    { id: 2, home: 'Real Madrid', away: 'Barcelona', time: 'Bugün 22:30', odds: { '1': '1.95', 'X': '3.50', '2': '3.40' } },
+    { id: 3, home: 'Manchester City', away: 'Arsenal', time: 'Yarın 19:30', odds: { '1': '1.80', 'X': '3.60', '2': '4.10' } }
+  ];
+
+  const renderSlide1 = () => {
+    const match = topMatches[0];
+    
+    return (
+      <div className="w-full h-full flex flex-col bg-[#0A101D] overflow-hidden relative group cursor-pointer transition-colors duration-500 hover:bg-[#0c1322]" onClick={onRegisterClick}>
+        
+        {/* Backgrounds */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#10B981]/15 via-[#0A101D] to-[#0A101D] z-0 pointer-events-none" />
+        <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#10B981]/5 rounded-full blur-[120px] z-0 pointer-events-none" />
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:25px_25px] pointer-events-none z-0"></div>
+
+        {/* Featured Countdown Badge */}
+        <div className="absolute top-2 md:top-4 left-1/2 -translate-x-1/2 z-20 bg-gradient-to-r from-[#10b981]/20 to-[#059669]/10 border border-[#10b981]/40 rounded-b-xl md:rounded-lg px-6 py-1.5 md:py-2 shadow-[0_0_20px_rgba(16,185,129,0.3)] flex items-center gap-3 backdrop-blur-md">
+           <span className="w-2 h-2 rounded-full bg-[#10b981] animate-pulse"></span>
+           <span className="text-white font-black text-[12px] md:text-[16px] tracking-[0.2em] font-mono tabular-nums drop-shadow-md">
+             {String(countdown.h).padStart(2, '0')}:{String(countdown.m).padStart(2, '0')}:{String(countdown.s).padStart(2, '0')}
+           </span>
+        </div>
+
+        {/* Main Content - Full Height */}
+        <div className="w-full h-full flex flex-row items-center justify-center p-4 md:px-16 md:pt-8 md:pb-4 z-10 max-w-[1000px] mx-auto">
+            
+            {/* Odds Column (Left) */}
+            <div className="flex flex-col justify-center gap-3 md:gap-4 pr-6 md:pr-12 border-r border-white/10 w-[130px] md:w-[170px] shrink-0 h-full">
+              <div className="flex flex-col">
+                <span className="text-[9px] md:text-[10px] text-gray-400 font-bold uppercase tracking-widest truncate mb-0.5">{match.home}</span>
+                <span className="text-white font-black text-[20px] md:text-[24px] leading-none drop-shadow-md text-[#10b981]">{match.odds['1']}</span>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-[9px] md:text-[10px] text-gray-400 font-bold uppercase tracking-widest truncate mb-0.5">BERABERE</span>
+                <span className="text-white font-black text-[20px] md:text-[24px] leading-none drop-shadow-md">{match.odds['X']}</span>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-[9px] md:text-[10px] text-gray-400 font-bold uppercase tracking-widest truncate mb-0.5">{match.away}</span>
+                <span className="text-white font-black text-[20px] md:text-[24px] leading-none drop-shadow-md">{match.odds['2']}</span>
+              </div>
+            </div>
+
+            {/* Teams & Logos (Right) */}
+            <div className="flex flex-row items-center justify-center gap-5 md:gap-10 flex-1 h-full py-1">
+              
+              {/* Home */}
+              <div className="flex flex-col items-center gap-2 md:gap-3">
+                <div className="w-20 h-20 md:w-24 md:h-24 relative transition-transform duration-500 group-hover:scale-110 drop-shadow-[0_0_20px_rgba(255,255,255,0.15)]">
+                  <PlayerLogo name={match.home} sport="soccer" />
+                </div>
+                <div className="bg-black/60 border border-white/10 rounded-full px-4 md:px-5 py-1 md:py-1.5 shadow-inner">
+                  <span className="text-gray-200 font-black text-[9px] md:text-[12px] uppercase tracking-widest truncate block max-w-[90px] md:max-w-[140px] text-center group-hover:text-white transition-colors">{match.home}</span>
+                </div>
+              </div>
+              
+              {/* VS */}
+              <div className="flex flex-col items-center gap-1 md:gap-2 relative">
+                 <span className="text-[#10b981] font-black text-[10px] md:text-[11px] tracking-[0.2em] uppercase drop-shadow-[0_0_8px_rgba(16,185,129,0.5)] absolute -top-6 md:-top-8 whitespace-nowrap">
+                  {match.time}
+                 </span>
+                 <div className="w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-[#1A233A] to-[#0A101D] border border-white/10 rounded-xl flex items-center justify-center rotate-45 shadow-[0_0_20px_rgba(0,0,0,0.6)] group-hover:border-[#10b981]/50 transition-colors">
+                    <span className="text-white font-black text-[16px] md:text-[18px] italic -rotate-45 block transform opacity-90 drop-shadow-lg">VS</span>
+                 </div>
+              </div>
+
+              {/* Away */}
+              <div className="flex flex-col items-center gap-2 md:gap-3">
+                <div className="w-20 h-20 md:w-24 md:h-24 relative transition-transform duration-500 group-hover:scale-110 drop-shadow-[0_0_20px_rgba(255,255,255,0.15)]">
+                  <PlayerLogo name={match.away} sport="soccer" />
+                </div>
+                <div className="bg-black/60 border border-white/10 rounded-full px-4 md:px-5 py-1 md:py-1.5 shadow-inner">
+                  <span className="text-gray-200 font-black text-[9px] md:text-[12px] uppercase tracking-widest truncate block max-w-[90px] md:max-w-[140px] text-center group-hover:text-white transition-colors">{match.away}</span>
+                </div>
+              </div>
+
+            </div>
+            
+        </div>
+      </div>
+    );
+  };
+
+  const slides = [renderSlide0, renderSlide1];
+
+  return (
+    <div className="w-full relative overflow-hidden bg-[#24262b] rounded-md md:rounded-[12px] mt-2 mb-4 border border-white/5 shadow-2xl h-[380px] md:h-[220px] xl:h-[240px]">
+       
+       <div 
+          className="flex transition-transform duration-700 ease-in-out h-full"
+          style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+       >
+         {slides.map((renderSlide, idx) => (
+           <div key={idx} className="w-full h-full shrink-0 relative">
+             {renderSlide()}
+           </div>
+         ))}
+       </div>
+       
+       {/* Pagination Dots */}
+       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 z-30">
+         {slides.map((_, i) => (
+           <button 
+             key={i} 
+             onClick={() => setCurrentSlide(i)} 
+             className={`h-2 rounded-full transition-all duration-300 ${currentSlide === i ? 'bg-white w-6 shadow-[0_0_10px_white]' : 'bg-white/30 w-2 hover:bg-white/50'}`} 
+             aria-label={`Slide ${i + 1}`}
+           />
+         ))}
+       </div>
+       
     </div>
   );
 }
+

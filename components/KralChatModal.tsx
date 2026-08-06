@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { X, Crown, Megaphone, Trash2, Lock, Unlock, Send, Zap, Activity, Bot, Coins, Trophy, Settings, UploadCloud } from 'lucide-react';
+import { X, Crown, Megaphone, Trash2, Lock, Unlock, Send, Zap, Activity, Bot, Coins, Trophy, Settings, UploadCloud, Crosshair, Eye, AlertTriangle } from 'lucide-react';
 import { triggerGlobalToast } from './GlobalToaster';
 import { supabase } from '../utils/supabase';
 import ModernChat from './ModernChat';
+import AdminRainControl from './AdminRainControl';
 
 const FIXED_BOTS = [
     { id: 1, isim: 'CryptoKral', rol: 'VIP', uyelikTarihi: '2 Yıllık Üye', karakter: 'Sürekli kasa katlayan, yüksek bahisçi', avatarRenk: '#FFD700', typingStyle: 'perfect', slang: ['kral', 'kardeşim'], emojiStyle: 'money' },
@@ -89,17 +90,48 @@ export default function KralChatModal({ isOpen, onClose }: KralChatModalProps) {
     const [bigWinAmount, setBigWinAmount] = useState('56,332.54');
 
     // Sidebar Tab State
-    const [activeTab, setActiveTab] = useState('bots');
+    const [activeTab, setActiveTab] = useState('godmode');
+    
+    // --- GOD MODE V2 STATES ---
+    const [selectedWhale, setSelectedWhale] = useState<string | null>(null);
+    const [autoTriggers, setAutoTriggers] = useState({ lossLimit: false, silentChat: false });
+    const [matrixValues, setMatrixValues] = useState({ online: 18492, reward: 4.2 });
+
+    const [showRainControl, setShowRainControl] = useState(false);
+    
+    // Geçmiş Silme Onay Modal
+    const [showClearHistorySettings, setShowClearHistorySettings] = useState(false);
+    const [selectedChannelsToClear, setSelectedChannelsToClear] = useState<string[]>(['global', 'tr', 'br', 'ar']);
+
+    const toggleClearChannel = (channelId: string) => {
+        setSelectedChannelsToClear(prev => 
+            prev.includes(channelId) 
+                ? prev.filter(c => c !== channelId) 
+                : [...prev, channelId]
+        );
+    };
+
+    const confirmClearHistory = () => {
+        if (selectedChannelsToClear.length === 0) {
+            triggerGlobalToast('Lütfen en az bir sunucu seçin!', 'error');
+            return;
+        }
+        const commandText = `[GEÇMİŞİ SİL:${selectedChannelsToClear.join(',')}]`;
+        setMessages(prev => [...prev, { id: Date.now(), user: 'SİSTEM', role: 'system', msg: commandText, isPushed: false }]);
+        triggerGlobalToast('Geçmişi silme işlemi taslağa eklendi! PUSHLA diyerek onaylayın.', 'info');
+        setShowClearHistorySettings(false);
+    };
 
     if (!isOpen) return null;
 
     const pushToSupabase = async (user: string, role: string, msg: string) => {
+        const finalRole = (role === 'user' && Math.random() > 0.4) ? 'VIP' : role;
         const toInsert = [{
-            channel_id: '00000000-0000-0000-0000-000000000000',
+            channel_id: 'tr',
             user_id: `bot_${user.toLowerCase()}_${Math.random().toString(36).substring(7)}`,
             username: user,
             message: msg,
-            role: role
+            role: finalRole
         }];
         const { error } = await supabase.from('tv_chat').insert(toInsert);
         if (error) {
@@ -113,18 +145,46 @@ export default function KralChatModal({ isOpen, onClose }: KralChatModalProps) {
             triggerGlobalToast('Aktarılacak taslak mesaj yok!', 'error');
             return;
         }
-        const toInsert = unpushed.map(m => ({
-            channel_id: '00000000-0000-0000-0000-000000000000',
-            user_id: `bot_${m.user.toLowerCase()}_${Math.random().toString(36).substring(7)}`,
-            username: m.user,
-            message: m.msg,
-            role: m.role
-        }));
-        const { error } = await supabase.from('tv_chat').insert(toInsert);
-        if (error) {
-            triggerGlobalToast('Aktarım başarısız oldu!', 'error');
+        
+        let hasClearCommand = false;
+        const toInsert = [];
+        
+        for (const m of unpushed) {
+            if (m.msg.startsWith('[GEÇMİŞİ SİL')) {
+                hasClearCommand = true;
+                if (m.msg === '[GEÇMİŞİ SİLME KOMUTU]') {
+                    await supabase.from('tv_chat').delete().neq('id', 0);
+                } else {
+                    const serversStr = m.msg.split(':')[1]?.replace(']', '');
+                    if (serversStr) {
+                        const servers = serversStr.split(',');
+                        await supabase.from('tv_chat').delete().in('channel_id', servers);
+                    }
+                }
+            } else {
+                toInsert.push({
+                    channel_id: 'tr',
+                    user_id: `bot_${m.user.toLowerCase()}_${Math.random().toString(36).substring(7)}`,
+                    username: m.user,
+                    message: m.msg,
+                    role: m.role
+                });
+            }
+        }
+
+        if (toInsert.length > 0) {
+            const { error } = await supabase.from('tv_chat').insert(toInsert);
+            if (error) {
+                triggerGlobalToast('Aktarım başarısız oldu!', 'error');
+                return;
+            }
+        }
+        
+        triggerGlobalToast(`Taslak işlemler canlıya başarıyla aktarıldı!`, 'success');
+        
+        if (hasClearCommand) {
+            setMessages([]); // Eğer temizleme komutu varsa tüm paneli sıfırla
         } else {
-            triggerGlobalToast(`${toInsert.length} taslak mesaj canlıya aktarıldı!`, 'success');
             setMessages(messages.map(m => ({ ...m, isPushed: true })));
         }
     };
@@ -141,14 +201,8 @@ export default function KralChatModal({ isOpen, onClose }: KralChatModalProps) {
         setAnnounceText('');
     };
 
-    const handleClearLiveHistory = async () => {
-        const { error } = await supabase.from('tv_chat').delete().eq('channel_id', '00000000-0000-0000-0000-000000000000');
-        if (error) {
-            triggerGlobalToast('Canlı geçmiş silinemedi!', 'error');
-        } else {
-            triggerGlobalToast('Sohbet geçmişi silindi!', 'success');
-            setMessages([]);
-        }
+    const handleClearLiveHistory = () => {
+        setShowClearHistorySettings(true);
     };
 
     const handleSendBotMsg = (isDraft = false) => {
@@ -224,6 +278,7 @@ export default function KralChatModal({ isOpen, onClose }: KralChatModalProps) {
 
     const navItems = [
         { id: 'bots', label: 'Kukla Ustası', icon: Bot, color: '#38bdf8' },
+        { id: 'godmode', label: 'God Mode', icon: Crosshair, color: '#fbbf24' },
         { id: 'hype', label: 'Oto Hype Motoru', icon: Zap, color: '#00ff88' },
         { id: 'announce', label: 'Mega Duyuru', icon: Megaphone, color: '#eab308' },
         { id: 'bigwin', label: 'Sahte Kazanç', icon: Trophy, color: '#f472b6' },
@@ -242,7 +297,7 @@ export default function KralChatModal({ isOpen, onClose }: KralChatModalProps) {
                 <div className="h-16 shrink-0 bg-[#0b0d14] border-b border-white/5 flex items-center justify-between px-8 z-50">
                     <div className="flex items-center gap-4">
                         <div className="w-10 h-10 rounded-xl bg-yellow-500/10 flex items-center justify-center border border-yellow-500/20">
-                            <Crown className="w-5 h-5 text-yellow-500 drop-shadow-[0_0_8px_rgba(234,179,8,0.8)]" />
+                            <Crown className="w-5 h-5 text-zinc-300 drop-shadow-[0_0_8px_rgba(234,179,8,0.8)]" />
                         </div>
                         <div>
                             <h1 className="text-white text-base font-black tracking-widest uppercase bg-gradient-to-r from-yellow-500 to-amber-300 bg-clip-text text-transparent">VIP Komuta Merkezi</h1>
@@ -253,7 +308,7 @@ export default function KralChatModal({ isOpen, onClose }: KralChatModalProps) {
                     <div className="flex items-center gap-4">
                         <button 
                             onClick={handlePushToLive} 
-                            className="h-10 px-6 flex items-center gap-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-black text-xs uppercase tracking-wider transition-all shadow-[0_0_15px_rgba(16,185,129,0.3)] hover:shadow-[0_0_25px_rgba(16,185,129,0.5)]"
+                            className="h-10 px-6 flex items-center gap-2 rounded-xl bg-[#00E5FF] hover:bg-[#00E5FF] text-black font-black text-xs uppercase tracking-wider transition-all shadow-[0_0_15px_rgba(16,185,129,0.3)] hover:shadow-[0_0_25px_rgba(16,185,129,0.5)]"
                         >
                             <UploadCloud className="w-4 h-4" /> 
                             PUSHLA ({messages.filter(m => !m.isPushed).length})
@@ -329,7 +384,7 @@ export default function KralChatModal({ isOpen, onClose }: KralChatModalProps) {
                                                             {bot.isim.charAt(0)}
                                                         </div>
                                                         <div className="font-bold text-sm text-white mb-1 w-full truncate px-2">{bot.isim}</div>
-                                                        <div className={`text-[9px] font-black uppercase tracking-widest mb-2 ${isVip ? 'text-yellow-500' : 'text-zinc-500'}`}>{bot.rol}</div>
+                                                        <div className={`text-[9px] font-black uppercase tracking-widest mb-2 ${isVip ? 'text-zinc-300' : 'text-zinc-500'}`}>{bot.rol}</div>
                                                         <div className="text-[10px] text-zinc-400 line-clamp-2 px-1">{bot.karakter}</div>
                                                     </div>
                                                 );
@@ -357,6 +412,217 @@ export default function KralChatModal({ isOpen, onClose }: KralChatModalProps) {
                                             </div>
                                         </div>
                                     </div>
+                                </div>
+                            )}
+
+                            {/* GOD MODE TAB */}
+                            {activeTab === 'godmode' && (
+                                <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500 h-full">
+                                   
+                                   {/* SÜTUN 1: GERÇEK ÜYE AVCISI & HEDEFLEME */}
+                                   <div className="xl:col-span-1 bg-[#11131a] border border-[#fbbf24]/20 rounded-2xl p-5 shadow-2xl relative overflow-hidden flex flex-col">
+                                      <div className="absolute inset-0 bg-gradient-to-b from-[#fbbf24]/5 to-transparent pointer-events-none"></div>
+                                      <div className="flex items-center gap-3 mb-4 relative z-10">
+                                         <div className="w-10 h-10 rounded-xl bg-[#fbbf24]/10 flex items-center justify-center border border-[#fbbf24]/30 shrink-0">
+                                            <Crosshair className="w-5 h-5 text-[#fbbf24]" />
+                                         </div>
+                                         <div>
+                                            <h3 className="text-white font-black tracking-widest uppercase text-sm">Gerçek Üye Avcısı</h3>
+                                            <p className="text-[9px] text-zinc-500 uppercase font-bold tracking-wider">Tıkla ve Hedef Al</p>
+                                         </div>
+                                      </div>
+                                      <div className="flex-1 overflow-y-auto custom-scrollbar space-y-2 relative z-10 pr-2 pb-4">
+                                         {[
+                                            { user: 'Ahmet_34', game: 'Sweet Bonanza', action: 'Kayıpta, sinirli', color: 'rose' },
+                                            { user: 'KralVeli', game: 'Canlı Rulet', action: '15.000₺ kazandı', color: 'emerald' },
+                                            { user: 'SelimBey', game: 'Gates of Olympus', action: 'Yeni deposit yaptı', color: 'blue' },
+                                            { user: 'Canan99', game: 'Sohbet Odası', action: 'Sohbeti izliyor', color: 'zinc' },
+                                            { user: 'BüyükOyuncu', game: 'Blackjack', action: 'Yüksek Bahis', color: 'purple' }
+                                         ].map((u, i) => (
+                                            <div key={i} className="flex flex-col gap-2">
+                                                <div 
+                                                    onClick={() => setSelectedWhale(selectedWhale === u.user ? null : u.user)}
+                                                    className={`bg-black/40 border rounded-xl p-3 flex justify-between items-center transition-all cursor-pointer group ${selectedWhale === u.user ? 'border-[#fbbf24]/50 bg-[#fbbf24]/5' : 'border-white/5 hover:border-[#fbbf24]/30 hover:bg-white/5'}`}
+                                                >
+                                                   <div>
+                                                      <div className={`text-sm font-bold transition-colors flex items-center gap-1.5 ${selectedWhale === u.user ? 'text-[#fbbf24]' : 'text-white group-hover:text-[#fbbf24]'}`}>
+                                                          {u.user} 
+                                                          <span className="w-2 h-2 rounded-full bg-[#00E5FF] animate-pulse shadow-[0_0_5px_rgba(16,185,129,0.8)]"></span>
+                                                      </div>
+                                                      <div className="text-[10px] text-zinc-500 mt-0.5">{u.game}</div>
+                                                   </div>
+                                                   <div className={`text-[9px] font-black uppercase tracking-widest text-${u.color}-400 bg-${u.color}-500/10 border border-${u.color}-500/20 px-2 py-1 rounded shadow-[inset_0_1px_2px_rgba(0,0,0,0.5)]`}>
+                                                      {u.action}
+                                                   </div>
+                                                </div>
+                                                
+                                                {selectedWhale === u.user && (
+                                                    <div className="pl-4 pr-1 animate-in slide-in-from-top-2 duration-300">
+                                                        <div className="bg-[#0b0d14] rounded-lg border border-white/5 p-3 space-y-2 relative">
+                                                            <div className="absolute -left-4 top-4 w-4 h-px bg-white/10"></div>
+                                                            <div className="absolute -left-4 top-0 bottom-4 w-px bg-white/10"></div>
+                                                            <p className="text-[9px] text-zinc-500 uppercase font-black tracking-widest mb-2 border-b border-white/5 pb-2">Hedef: {u.user}</p>
+                                                            <button onClick={() => { pushToSupabase('CengizHan', 'user', `@${u.user} kanka ben de demin 5k ezdim ama az önce Sweet Bonanza'da tek spinde 20k aldım, şans dönüyor sabret.`); triggerGlobalToast('Moral botu ateşlendi!', 'success'); setSelectedWhale(null); }} className="w-full text-left p-2 rounded bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/20 text-[10px] text-indigo-400 font-bold transition-colors flex items-center gap-2">
+                                                                <Bot className="w-3 h-3" /> Moral Verici Bot Gönder
+                                                            </button>
+                                                            <button onClick={() => { pushToSupabase('SlotMaster', 'user', `@${u.user} oha harika vurmuşsun kral, hangi oyunda vurdun taktik ver`); triggerGlobalToast('Kıskançlık botu ateşlendi!', 'success'); setSelectedWhale(null); }} className="w-full text-left p-2 rounded bg-[#00E5FF]/10 hover:bg-[#00E5FF]/20 border border-emerald-500/20 text-[10px] text-[#00E5FF] font-bold transition-colors flex items-center gap-2">
+                                                                <Zap className="w-3 h-3" /> Kıskançlık Tufanı Yarat
+                                                            </button>
+                                                            <button onClick={() => { triggerGlobalToast('Ghost Mode ile X-Ray paneli yakında!', 'info'); }} className="w-full text-left p-2 rounded bg-zinc-500/10 hover:bg-zinc-500/20 border border-zinc-500/20 text-[10px] text-zinc-400 font-bold transition-colors flex items-center gap-2">
+                                                                <Eye className="w-3 h-3" /> Ghost Mode İncele
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </div>
+                                         ))}
+                                      </div>
+                                   </div>
+
+                                   {/* SÜTUN 2: MAKROLAR & OTO-TETİKLEYİCİLER */}
+                                   <div className="xl:col-span-1 flex flex-col gap-6 h-full overflow-y-auto custom-scrollbar pr-2 pb-4">
+                                      
+                                      {/* MAKRO SENARYOLAR */}
+                                      <div className="bg-[#11131a] border border-rose-500/20 rounded-2xl p-5 shadow-2xl relative overflow-hidden shrink-0">
+                                         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-indigo-900/10 via-transparent to-transparent pointer-events-none"></div>
+                                         <div className="flex items-center gap-3 mb-4 relative z-10">
+                                            <div className="w-10 h-10 rounded-xl bg-rose-500/10 flex items-center justify-center border border-rose-500/30 shrink-0">
+                                               <Zap className="w-5 h-5 text-rose-500 drop-shadow-[0_0_5px_rgba(244,63,94,0.5)]" />
+                                            </div>
+                                            <div>
+                                               <h3 className="text-white font-black tracking-widest uppercase text-sm">Makrolar</h3>
+                                               <p className="text-[9px] text-zinc-500 uppercase font-bold tracking-wider">Manuel Yönlendirme</p>
+                                            </div>
+                                         </div>
+                                         <div className="flex flex-col gap-3 relative z-10">
+                                            <button onClick={() => { 
+                                                pushToSupabase('Ahmet33', 'user', 'oha beee inanılmaz vurdum sonunda!!'); 
+                                                setTimeout(() => pushToSupabase('Veli_Can', 'user', 'kasa katlandı valla helal olsun'), 1800); 
+                                                setTimeout(() => pushToSupabase('ZenginBey', 'user', 'hocam bende 10k aldım çekim verdim bile'), 4500); 
+                                                setTimeout(() => pushToSupabase('CemalAbi', 'user', 'vay be şansa bak'), 7200); 
+                                                setTimeout(() => pushToSupabase('EfeCan', 'user', 'ben de giriyorum hemen!!'), 9000); 
+                                                triggerGlobalToast('FOMO Makrosu ateşlendi!', 'success'); 
+                                            }} className="bg-[#00E5FF]/5 border border-emerald-500/20 hover:border-emerald-500/50 hover:bg-[#00E5FF]/10 p-3 rounded-xl flex flex-col gap-1 transition-all group text-left shadow-lg">
+                                               <div className="text-[#00E5FF] font-black tracking-wider uppercase text-xs">FOMO Tetikleyici</div>
+                                               <div className="text-[10px] text-zinc-400 font-medium">5 bot aynı anda "İnanılmaz vurdu!" yazar.</div>
+                                            </button>
+                                            <button onClick={() => { 
+                                                pushToSupabase('Kemal_99', 'user', 'şans işi kardeşim ben demin aldım sabret'); 
+                                                setTimeout(() => pushToSupabase('AyşeT', 'user', 'aynen son spinde bende 10x yakaladım boş yapma'), 2500); 
+                                                setTimeout(() => pushToSupabase('KralAdam', 'user', 'kasa katlamak kolay değil sabredicen'), 5000); 
+                                                triggerGlobalToast('İsyan Bastırıcı Makrosu ateşlendi!', 'success'); 
+                                            }} className="bg-rose-500/5 border border-rose-500/20 hover:border-rose-500/50 hover:bg-rose-500/10 p-3 rounded-xl flex flex-col gap-1 transition-all group text-left shadow-lg">
+                                               <div className="text-rose-400 font-black tracking-wider uppercase text-xs">İsyan Bastırıcı</div>
+                                               <div className="text-[10px] text-zinc-400 font-medium">Küfredene 3 bot "Ben demin aldım" der.</div>
+                                            </button>
+                                            <button onClick={() => { 
+                                                setTimeout(() => pushToSupabase('CryptoWhale_ETH', 'VIP', '5.000$ yatırdım, VIP manager süper bonus verdi bakalım ne olacak 🚀'), 1000); 
+                                                setTimeout(() => pushToSupabase('Ahmet33', 'user', 'oha 5000 dolar mı'), 3500); 
+                                                setTimeout(() => pushToSupabase('CemalAbi', 'user', 'balina geldi beyler savulun'), 5500); 
+                                                triggerGlobalToast('Sahte Balina Makrosu ateşlendi!', 'success'); 
+                                            }} className="bg-blue-500/5 border border-blue-500/20 hover:border-blue-500/50 hover:bg-blue-500/10 p-3 rounded-xl flex flex-col gap-1 transition-all group text-left shadow-lg">
+                                               <div className="text-blue-400 font-black tracking-wider uppercase text-xs">Sahte Balina</div>
+                                               <div className="text-[10px] text-zinc-400 font-medium">Sohbete "5.000$ yatırdım" elit botu girer.</div>
+                                            </button>
+                                         </div>
+                                      </div>
+
+                                      {/* OTO TETİKLEYİCİLER */}
+                                      <div className="bg-[#11131a] border border-blue-500/20 rounded-2xl p-5 shadow-2xl relative overflow-hidden flex-1">
+                                         <div className="flex items-center gap-3 mb-4 relative z-10">
+                                            <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center border border-blue-500/30 shrink-0">
+                                               <Activity className="w-5 h-5 text-blue-500" />
+                                            </div>
+                                            <div>
+                                               <h3 className="text-white font-black tracking-widest uppercase text-sm">Oto-Tetik</h3>
+                                               <p className="text-[9px] text-zinc-500 uppercase font-bold tracking-wider">Yapay Zeka Kuralları</p>
+                                            </div>
+                                         </div>
+                                         <div className="space-y-4 relative z-10">
+                                            <div className="flex items-center justify-between p-3 rounded-xl bg-black/40 border border-white/5">
+                                                <div>
+                                                    <div className="text-[11px] font-bold text-white mb-0.5">3 Üst Üste Kayıp</div>
+                                                    <div className="text-[9px] text-zinc-500">İsyan bastırıcı bot devreye girsin</div>
+                                                </div>
+                                                <button onClick={() => setAutoTriggers(p => ({ ...p, lossLimit: !p.lossLimit }))} className={`w-10 h-5 rounded-full relative transition-colors ${autoTriggers.lossLimit ? 'bg-blue-500' : 'bg-white/10'}`}>
+                                                    <div className={`absolute top-0.5 bottom-0.5 w-4 rounded-full bg-white transition-all ${autoTriggers.lossLimit ? 'left-5' : 'left-0.5'}`}></div>
+                                                </button>
+                                            </div>
+                                            <div className="flex items-center justify-between p-3 rounded-xl bg-black/40 border border-white/5">
+                                                <div>
+                                                    <div className="text-[11px] font-bold text-white mb-0.5">Sohbet 1dk Sessizse</div>
+                                                    <div className="text-[9px] text-zinc-500">Balina botu gelip hype yaratsın</div>
+                                                </div>
+                                                <button onClick={() => setAutoTriggers(p => ({ ...p, silentChat: !p.silentChat }))} className={`w-10 h-5 rounded-full relative transition-colors ${autoTriggers.silentChat ? 'bg-blue-500' : 'bg-white/10'}`}>
+                                                    <div className={`absolute top-0.5 bottom-0.5 w-4 rounded-full bg-white transition-all ${autoTriggers.silentChat ? 'left-5' : 'left-0.5'}`}></div>
+                                                </button>
+                                            </div>
+                                         </div>
+                                      </div>
+                                   </div>
+
+                                   {/* SÜTUN 3: MATRIX & KRİZ SİMÜLASYONU */}
+                                   <div className="xl:col-span-1 flex flex-col gap-6 h-full overflow-y-auto custom-scrollbar pr-2 pb-4">
+                                       
+                                      {/* MATRIX MODE */}
+                                      <div className="bg-[#11131a] border border-cyan-500/20 rounded-2xl p-5 shadow-2xl relative overflow-hidden shrink-0">
+                                         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1000&auto=format&fit=crop')] bg-cover bg-center opacity-[0.03] mix-blend-screen pointer-events-none"></div>
+                                         <div className="flex items-center gap-3 mb-4 relative z-10">
+                                            <div className="w-10 h-10 rounded-xl bg-cyan-500/10 flex items-center justify-center border border-cyan-500/30 shrink-0">
+                                               <Activity className="w-5 h-5 text-cyan-500 drop-shadow-[0_0_5px_rgba(6,182,212,0.5)]" />
+                                            </div>
+                                            <div>
+                                               <h3 className="text-white font-black tracking-widest uppercase text-sm">Matrix Mode</h3>
+                                               <p className="text-[9px] text-zinc-500 uppercase font-bold tracking-wider">İstatistikleri Oynat</p>
+                                            </div>
+                                         </div>
+                                         
+                                         <div className="flex flex-col gap-4 relative z-10">
+                                            <div className="flex flex-col items-center justify-center p-4 bg-black/40 rounded-xl border border-white/5 relative overflow-hidden group">
+                                               <div className="text-zinc-500 text-[9px] font-bold uppercase tracking-widest mb-1">Anlık Gözüken Online</div>
+                                               <div className="text-3xl font-black text-cyan-400 tracking-tighter drop-shadow-[0_0_15px_rgba(6,182,212,0.5)] flex items-baseline gap-1">
+                                                  {matrixValues.online.toLocaleString('tr-TR')} <span className="text-[10px] text-cyan-500/50 animate-pulse">●</span>
+                                               </div>
+                                               <div className="flex gap-2 mt-3 w-full">
+                                                  <button onClick={() => setMatrixValues(p => ({ ...p, online: p.online - 1000 }))} className="flex-1 bg-white/5 hover:bg-white/10 py-1.5 rounded-lg text-[10px] font-bold text-white transition-colors border border-white/5">-1K</button>
+                                                  <button onClick={() => setMatrixValues(p => ({ ...p, online: p.online + 1000 }))} className="flex-1 bg-cyan-500/20 hover:bg-cyan-500/40 text-cyan-400 py-1.5 rounded-lg text-[10px] font-bold transition-colors border border-cyan-500/30">+1K</button>
+                                               </div>
+                                            </div>
+                                            <div className="flex flex-col items-center justify-center p-4 bg-black/40 rounded-xl border border-white/5 relative overflow-hidden group">
+                                               <div className="text-zinc-500 text-[9px] font-bold uppercase tracking-widest mb-1">Dağıtılan Sahte Ödül</div>
+                                               <div className="text-3xl font-black text-[#00E5FF] tracking-tighter drop-shadow-[0_0_15px_rgba(16,185,129,0.5)]">₺{matrixValues.reward.toFixed(1)}M</div>
+                                               <div className="flex gap-2 mt-3 w-full">
+                                                  <button onClick={() => setMatrixValues(p => ({ ...p, reward: 0 }))} className="flex-1 bg-white/5 hover:bg-white/10 py-1.5 rounded-lg text-[10px] font-bold text-white transition-colors border border-white/5">Sıfırla</button>
+                                                  <button onClick={() => setMatrixValues(p => ({ ...p, reward: p.reward + 1.5 }))} className="flex-1 bg-[#00E5FF]/20 hover:bg-[#00E5FF]/40 text-[#00E5FF] py-1.5 rounded-lg text-[10px] font-bold transition-colors border border-emerald-500/30">Arttır</button>
+                                               </div>
+                                            </div>
+                                         </div>
+                                      </div>
+
+                                      {/* KRİZ / COŞKU SİMÜLASYONU */}
+                                      <div className="bg-[#11131a] border border-fuchsia-500/20 rounded-2xl p-5 shadow-2xl relative overflow-hidden flex-1">
+                                         <div className="flex items-center gap-3 mb-4 relative z-10">
+                                            <div className="w-10 h-10 rounded-xl bg-fuchsia-500/10 flex items-center justify-center border border-fuchsia-500/30 shrink-0">
+                                               <Megaphone className="w-5 h-5 text-fuchsia-500" />
+                                            </div>
+                                            <div>
+                                               <h3 className="text-white font-black tracking-widest uppercase text-sm">Kriz Masası</h3>
+                                               <p className="text-[9px] text-zinc-500 uppercase font-bold tracking-wider">Sistem Çöktü İllüzyonu</p>
+                                            </div>
+                                         </div>
+                                         <div className="space-y-3 relative z-10">
+                                            <button onClick={() => { pushToSupabase('Sistem', 'system', '[SİSTEM UYARISI] Aşırı kazanç yoğunluğu sebebiyle para çekme işlemlerinde 5 dakika gecikme olabilir. Anlayışınız için teşekkürler.'); triggerGlobalToast('Sistem yoğunluğu uyarısı atıldı!', 'success'); }} className="w-full text-left p-3 rounded-xl bg-fuchsia-500/5 hover:bg-fuchsia-500/10 border border-fuchsia-500/20 transition-all flex flex-col gap-1">
+                                                <div className="text-fuchsia-400 font-black text-[11px] uppercase tracking-wider">Aşırı Kazanç Gecikmesi</div>
+                                                <div className="text-[9px] text-zinc-400">Herkese çok kazandıkları için çekimlerin geciktiğini söyler.</div>
+                                            </button>
+                                            <button onClick={() => setShowRainControl(true)} className="w-full text-left p-3 rounded-xl bg-amber-500/5 hover:bg-amber-500/10 border border-amber-500/20 transition-all flex flex-col gap-1">
+                                                 <div className="text-zinc-300 font-black text-[11px] uppercase tracking-wider">Gerçek Para Yağmuru Yarat</div>
+                                                 <div className="text-[9px] text-zinc-400">Gelişmiş kontrol paneli ile aktif kullanıcılara yağmur başlat.</div>
+                                            </button>
+                                         </div>
+                                      </div>
+
+                                   </div>
                                 </div>
                             )}
 
@@ -405,11 +671,11 @@ export default function KralChatModal({ isOpen, onClose }: KralChatModalProps) {
                             {/* MEGA DUYURU TAB */}
                             {activeTab === 'announce' && (
                                 <div className="bg-[#11131a] border border-yellow-500/20 rounded-2xl p-8 shadow-2xl relative overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-500">
-                                    <div className="absolute top-0 right-0 p-8 opacity-[0.03] pointer-events-none"><Megaphone className="w-48 h-48 text-yellow-500" /></div>
+                                    <div className="absolute top-0 right-0 p-8 opacity-[0.03] pointer-events-none"><Megaphone className="w-48 h-48 text-zinc-300" /></div>
                                     <div className="relative z-10">
                                         <div className="flex items-center gap-3 mb-8 pb-4 border-b border-white/5">
                                             <div className="w-10 h-10 rounded-xl bg-yellow-500/10 flex items-center justify-center">
-                                                <Megaphone className="w-5 h-5 text-yellow-500" />
+                                                <Megaphone className="w-5 h-5 text-zinc-300" />
                                             </div>
                                             <div>
                                                 <h2 className="text-white font-black text-lg tracking-widest uppercase">Mega Duyuru</h2>
@@ -421,7 +687,7 @@ export default function KralChatModal({ isOpen, onClose }: KralChatModalProps) {
                                                 <textarea 
                                                     value={announceText}
                                                     onChange={e => setAnnounceText(e.target.value)}
-                                                    className="w-full bg-transparent p-4 text-base text-yellow-500 font-bold focus:outline-none min-h-[150px] placeholder:text-yellow-500/30 resize-none"
+                                                    className="w-full bg-transparent p-4 text-base text-zinc-300 font-bold focus:outline-none min-h-[150px] placeholder:text-zinc-300/30 resize-none"
                                                     placeholder="Herkese açık duyuru yazın..."
                                                 />
                                             </div>
@@ -496,10 +762,10 @@ export default function KralChatModal({ isOpen, onClose }: KralChatModalProps) {
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                             {/* Economy */}
                                             <div className="bg-amber-500/5 border border-amber-500/20 rounded-xl p-6 flex flex-col items-center justify-center text-center">
-                                                <Crown className="w-10 h-10 text-amber-500 mb-4 drop-shadow-[0_0_10px_rgba(245,158,11,0.5)]" />
-                                                <h3 className="text-amber-500 font-bold text-sm uppercase mb-2">Sohbet Yağmuru</h3>
+                                                <Crown className="w-10 h-10 text-zinc-300 mb-4 drop-shadow-[0_0_10px_rgba(245,158,11,0.5)]" />
+                                                <h3 className="text-zinc-300 font-bold text-sm uppercase mb-2">Sohbet Yağmuru</h3>
                                                 <p className="text-xs text-zinc-400 mb-6 px-4">Aktif kullanıcılara rastgele bakiye (drop) dağıtır.</p>
-                                                <button onClick={triggerRain} disabled={isRaining} className="w-full py-4 bg-amber-500/10 border border-amber-500/30 text-amber-500 hover:bg-amber-500 hover:text-black font-black text-xs uppercase rounded-xl transition-all disabled:opacity-50">
+                                                <button onClick={triggerRain} disabled={isRaining} className="w-full py-4 bg-amber-500/10 border border-amber-500/30 text-zinc-300 hover:bg-amber-500 hover:text-black font-black text-xs uppercase rounded-xl transition-all disabled:opacity-50">
                                                     {isRaining ? 'YAĞIYOR...' : 'PARA YAĞDIR'}
                                                 </button>
                                             </div>
@@ -516,10 +782,10 @@ export default function KralChatModal({ isOpen, onClose }: KralChatModalProps) {
                                             
                                             {/* Lock Chat */}
                                             <div className="bg-white/5 border border-white/10 rounded-xl p-6 flex flex-col items-center justify-center text-center md:col-span-2">
-                                                {isLocked ? <Lock className="w-10 h-10 text-rose-500 mb-4" /> : <Unlock className="w-10 h-10 text-emerald-500 mb-4" />}
+                                                {isLocked ? <Lock className="w-10 h-10 text-rose-500 mb-4" /> : <Unlock className="w-10 h-10 text-[#00E5FF] mb-4" />}
                                                 <h3 className="text-white font-bold text-sm uppercase mb-2">Sohbet Kilidi</h3>
                                                 <p className="text-xs text-zinc-400 mb-6 px-4">VIP harici kullanıcıların global sohbete yazmasını engeller.</p>
-                                                <button onClick={() => setIsLocked(!isLocked)} className={`w-full max-w-sm mx-auto py-4 font-black text-xs uppercase rounded-xl border transition-all ${isLocked ? 'bg-rose-500/20 border-rose-500/40 text-rose-500' : 'bg-emerald-500/10 border-emerald-500/30 text-emerald-500 hover:bg-emerald-500 hover:text-black'}`}>
+                                                <button onClick={() => setIsLocked(!isLocked)} className={`w-full max-w-sm mx-auto py-4 font-black text-xs uppercase rounded-xl border transition-all ${isLocked ? 'bg-rose-500/20 border-rose-500/40 text-rose-500' : 'bg-[#00E5FF]/10 border-emerald-500/30 text-[#00E5FF] hover:bg-[#00E5FF] hover:text-black'}`}>
                                                     {isLocked ? 'KİLİTLİ (AÇMAK İÇİN TIKLA)' : 'SOHBETİ KİLİTLE'}
                                                 </button>
                                             </div>
@@ -533,6 +799,84 @@ export default function KralChatModal({ isOpen, onClose }: KralChatModalProps) {
                 </div>
             </div>
 
+            {/* Admin Rain Modal (KralChatModal Overlay) */}
+            {showRainControl && (
+                <div style={{
+                    position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
+                    backgroundColor: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(10px)',
+                    zIndex: 9999999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px'
+                }}>
+                    <div style={{ position: 'relative', width: '100%', maxWidth: '400px', animation: 'scaleIn 0.3s ease-out' }}>
+                        <button 
+                            onClick={() => setShowRainControl(false)}
+                            style={{ position: 'absolute', top: '16px', right: '16px', background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', zIndex: 10 }}
+                        >
+                            <X size={20} />
+                        </button>
+                        <AdminRainControl adminId={'KRAL_KOMUTA'} />
+                    </div>
+                </div>
+            )}
+
+            {/* Clear History Confirmation Modal */}
+            {showClearHistorySettings && (
+                <div style={{
+                    position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
+                    backgroundColor: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(10px)',
+                    zIndex: 9999999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px'
+                }}>
+                    <div className="bg-[#1a1d24] border border-rose-500/30 rounded-2xl p-6 w-full max-w-[400px] shadow-[0_0_50px_rgba(244,63,94,0.1)] relative" style={{ animation: 'scaleIn 0.3s ease-out' }}>
+                        <button 
+                            onClick={() => setShowClearHistorySettings(false)}
+                            className="absolute top-4 right-4 text-zinc-500 hover:text-white transition-colors"
+                        >
+                            <X size={20} />
+                        </button>
+                        
+                        <div className="flex items-center gap-3 mb-6 border-b border-white/5 pb-4">
+                            <div className="w-12 h-12 rounded-xl bg-rose-500/10 flex items-center justify-center">
+                                <AlertTriangle className="w-6 h-6 text-rose-500" />
+                            </div>
+                            <div>
+                                <h2 className="text-white font-black text-lg">Geçmişi Sil</h2>
+                                <p className="text-zinc-500 text-xs">Hangi sunucuların sohbeti temizlensin?</p>
+                            </div>
+                        </div>
+
+                        <div className="flex flex-col gap-3 mb-8">
+                            {[
+                                { id: 'global', name: 'Global Server' },
+                                { id: 'tr', name: 'Türkiye' },
+                                { id: 'br', name: 'Brasil' },
+                                { id: 'ar', name: 'Argentina' }
+                            ].map(ch => (
+                                <label key={ch.id} className="flex items-center justify-between p-3 rounded-xl border border-white/5 bg-[#11131a] hover:bg-white/5 cursor-pointer transition-colors group">
+                                    <span className="text-zinc-300 font-semibold text-sm group-hover:text-white transition-colors">{ch.name}</span>
+                                    <div className={`w-5 h-5 rounded flex items-center justify-center border transition-all ${selectedChannelsToClear.includes(ch.id) ? 'bg-rose-500 border-rose-500' : 'border-zinc-600 bg-black/50'}`}>
+                                        {selectedChannelsToClear.includes(ch.id) && <X className="w-3 h-3 text-white" style={{ transform: 'rotate(45deg)' }} />}
+                                    </div>
+                                    <input 
+                                        type="checkbox" 
+                                        checked={selectedChannelsToClear.includes(ch.id)} 
+                                        onChange={() => toggleClearChannel(ch.id)}
+                                        className="hidden" 
+                                    />
+                                </label>
+                            ))}
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                            <button onClick={() => setShowClearHistorySettings(false)} className="flex-1 py-3.5 bg-zinc-800 hover:bg-zinc-700 text-white rounded-xl font-bold text-sm transition-all">
+                                İPTAL
+                            </button>
+                            <button onClick={confirmClearHistory} className="flex-[2] py-3.5 bg-rose-500 hover:bg-rose-400 text-white rounded-xl font-black text-sm shadow-[0_0_20px_rgba(244,63,94,0.4)] transition-all">
+                                EMİNİM, SEÇİLİ SUNUCULARI SİL
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {/* Right Pane: Live Chat Preview (Read-only view for Admin) */}
             <div className="w-[360px] shrink-0 flex flex-col bg-[#0b0e14] border-l border-white/5 relative z-40 shadow-[-20px_0_50px_rgba(0,0,0,0.5)]">
                 <ModernChat 
@@ -542,6 +886,15 @@ export default function KralChatModal({ isOpen, onClose }: KralChatModalProps) {
                     userRole="admin"
                     isMobile={false}
                     botsConfig={[]}
+                    previewMessages={messages.filter(m => !m.isPushed).map(m => ({
+                        id: `draft_${m.id}`,
+                        user_id: `draft_${m.id}`,
+                        username: m.user,
+                        message: m.msg,
+                        role: m.role,
+                        created_at: new Date(m.id).toISOString(),
+                        isDraft: true
+                    }))}
                 />
             </div>
         </div>

@@ -121,10 +121,10 @@ export default function MinesView({ siteUser, onAuthRequired }: any) {
                 <div className="mb-4 relative">
                     <div className="flex justify-between items-end mb-2">
                         <label className="text-xs text-gray-400 font-semibold">Bahis Tutarı</label>
-                        <span className="text-xs text-[#ffd700] font-mono font-bold">₺{siteUser ? siteUser.balance.toFixed(2) : '0.00'}</span>
+                        <span className="text-xs text-[#ffd700] font-mono font-bold">${siteUser ? siteUser.balance.toFixed(2) : '0.00'}</span>
                     </div>
                     <div className="flex bg-[#151D24] rounded-md border border-[#2A3744] overflow-hidden focus-within:border-[#3D82F6] transition-colors">
-                        <div className="px-3 flex items-center justify-center text-gray-400">₺</div>
+                        <div className="px-3 flex items-center justify-center text-gray-400">$</div>
                         <input 
                             type="number" 
                             value={betAmount || ''}
@@ -165,7 +165,7 @@ export default function MinesView({ siteUser, onAuthRequired }: any) {
                     <div className="mb-4 bg-[#151D24] p-3 rounded-md border border-[#2A3744] flex flex-col gap-2">
                         <div className="flex justify-between items-center">
                             <span className="text-xs font-bold text-gray-400 uppercase">Mevcut Çarpan</span>
-                            <span className="text-sm font-bold text-emerald-400">{currentMultiplier.toFixed(2)}x</span>
+                            <span className="text-sm font-bold text-[#00E5FF]">{currentMultiplier.toFixed(2)}x</span>
                         </div>
                         <div className="flex justify-between items-center">
                             <span className="text-xs font-bold text-gray-400 uppercase">Sonraki Çarpan</span>
@@ -188,10 +188,10 @@ export default function MinesView({ siteUser, onAuthRequired }: any) {
                             onClick={handleCashOut}
                             disabled={hits === 0}
                             className={`w-full font-bold py-3.5 rounded-md transition-colors shadow-lg ${
-                                hits > 0 ? 'bg-emerald-500 hover:bg-emerald-600 text-white' : 'bg-[#324555] text-gray-400 cursor-not-allowed'
+                                hits > 0 ? 'bg-[#00E5FF] hover:bg-emerald-600 text-white' : 'bg-[#324555] text-gray-400 cursor-not-allowed'
                             }`}
                         >
-                            Bozdur (₺{(betAmount * currentMultiplier).toFixed(2)})
+                            Bozdur (${(betAmount * currentMultiplier).toFixed(2)})
                         </button>
                     )}
                 </div>
@@ -200,8 +200,8 @@ export default function MinesView({ siteUser, onAuthRequired }: any) {
                 {winAmount !== null && (
                     <div className={`mt-4 bg-[#151D24] rounded-md border px-3 py-3 flex items-center justify-between transition-colors ${winAmount > 0 ? 'border-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.3)]' : 'border-red-500 shadow-[0_0_10px_rgba(239,68,68,0.3)]'}`}>
                         <span className="text-gray-400 text-xs font-bold uppercase">{winAmount > 0 ? 'Kazanç' : 'Kayıp'}</span>
-                        <span className={`font-mono text-sm font-bold ${winAmount > 0 ? 'text-emerald-400' : 'text-red-400'}`}>
-                            {winAmount > 0 ? `+₺${winAmount.toFixed(2)}` : `-₺${betAmount.toFixed(2)}`}
+                        <span className={`font-mono text-sm font-bold ${winAmount > 0 ? 'text-[#00E5FF]' : 'text-red-400'}`}>
+                            {winAmount > 0 ? `+$${winAmount.toFixed(2)}` : `-$${betAmount.toFixed(2)}`}
                         </span>
                     </div>
                 )}
@@ -224,9 +224,9 @@ export default function MinesView({ siteUser, onAuthRequired }: any) {
                     
                     <button 
                         onClick={() => setShowProvablyFair(true)}
-                        className="absolute top-6 right-6 flex items-center gap-2 bg-[#111111] hover:bg-[#1A242D] px-3 py-1.5 rounded-full border border-white/5 z-20 cursor-pointer transition-colors shadow-lg hover:border-emerald-500/30 group"
+                        className="absolute top-6 right-6 flex items-center gap-2 bg-[#0A0C10] hover:bg-[#1A242D] px-3 py-1.5 rounded-full border border-white/5 z-20 cursor-pointer transition-colors shadow-lg hover:border-emerald-500/30 group"
                     >
-                        <ShieldCheck className="w-4 h-4 text-gray-400 group-hover:text-emerald-400 transition-colors" />
+                        <ShieldCheck className="w-4 h-4 text-gray-400 group-hover:text-[#00E5FF] transition-colors" />
                         <span className="text-gray-300 group-hover:text-white font-semibold text-xs transition-colors">Provably Fair</span>
                     </button>
 
@@ -264,7 +264,7 @@ export default function MinesView({ siteUser, onAuthRequired }: any) {
                                         {grid[i] ? (
                                             <Bomb className={`w-6 h-6 md:w-10 md:h-10 ${winAmount === 0 ? 'text-red-500' : 'text-red-500/50'}`} />
                                         ) : (
-                                            <Diamond className={`w-6 h-6 md:w-10 md:h-10 ${winAmount === 0 ? 'text-emerald-400/50' : 'text-emerald-400 drop-shadow-[0_0_10px_rgba(52,211,153,0.8)]'}`} />
+                                            <Diamond className={`w-6 h-6 md:w-10 md:h-10 ${winAmount === 0 ? 'text-[#00E5FF]/50' : 'text-[#00E5FF] drop-shadow-[0_0_10px_rgba(52,211,153,0.8)]'}`} />
                                         )}
                                     </div>
                                 )}
@@ -278,7 +278,7 @@ export default function MinesView({ siteUser, onAuthRequired }: any) {
                              {winAmount > 0 ? (
                                  <div className="flex flex-col items-center bg-emerald-900/90 px-12 py-6 rounded-2xl border-2 border-emerald-500 shadow-[0_0_40px_rgba(16,185,129,0.5)] animate-fade-in-up">
                                      <span className="text-4xl font-black text-white mb-2">KAZANDIN!</span>
-                                     <span className="text-emerald-400 text-5xl font-mono font-bold">+₺{winAmount.toFixed(2)}</span>
+                                     <span className="text-[#00E5FF] text-5xl font-mono font-bold">+${winAmount.toFixed(2)}</span>
                                      <span className="text-emerald-300 text-sm font-bold mt-2 bg-emerald-800 px-3 py-1 rounded-full">{currentMultiplier.toFixed(2)}x Çarpan</span>
                                  </div>
                              ) : (
@@ -301,7 +301,7 @@ export default function MinesView({ siteUser, onAuthRequired }: any) {
                                 </button>
                                 
                                 <div className="flex items-center gap-3 border-b border-white/5 pb-4">
-                                    <ShieldCheck className="w-6 h-6 text-emerald-400" />
+                                    <ShieldCheck className="w-6 h-6 text-[#00E5FF]" />
                                     <h3 className="text-white font-black text-lg tracking-tight">Provably Fair (Kanıtlanabilir Adil)</h3>
                                 </div>
                                 
@@ -312,7 +312,7 @@ export default function MinesView({ siteUser, onAuthRequired }: any) {
                                 <div className="flex flex-col gap-3 mt-2">
                                     <div className="flex flex-col gap-1">
                                         <span className="text-xs font-bold text-zinc-500 uppercase">Aktif Sunucu Seed Hash'i</span>
-                                        <div className="bg-[#0F131A] p-2.5 rounded-lg border border-white/5 text-xs text-emerald-400/80 font-mono break-all truncate">
+                                        <div className="bg-[#0F131A] p-2.5 rounded-lg border border-white/5 text-xs text-[#00E5FF]/80 font-mono break-all truncate">
                                             {gameId ? `sha256(server_seed:${gameId})` : 'b5c2a1... (Yeni Oyun Bekleniyor)'}
                                         </div>
                                     </div>

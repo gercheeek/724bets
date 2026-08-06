@@ -111,8 +111,8 @@ const FinanceDashboard: React.FC<FinanceDashboardProps> = ({ onClose }) => {
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-white/5">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-emerald-500/20 rounded-lg">
-              <Activity className="w-6 h-6 text-emerald-400" />
+            <div className="p-2 bg-[#00E5FF]/20 rounded-lg">
+              <Activity className="w-6 h-6 text-[#00E5FF]" />
             </div>
             <div>
               <h2 className="text-xl font-bold text-white tracking-wide">Finans & Analiz Paneli</h2>
@@ -142,7 +142,7 @@ const FinanceDashboard: React.FC<FinanceDashboardProps> = ({ onClose }) => {
           {/* Top Stats Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="bg-white/5 border border-white/10 rounded-xl p-5 relative overflow-hidden group hover:border-emerald-500/50 transition-colors">
-              <div className="absolute -right-6 -top-6 w-24 h-24 bg-emerald-500/10 rounded-full blur-2xl group-hover:bg-emerald-500/20 transition-all"></div>
+              <div className="absolute -right-6 -top-6 w-24 h-24 bg-[#00E5FF]/10 rounded-full blur-2xl group-hover:bg-[#00E5FF]/20 transition-all"></div>
               <div className="flex items-center gap-3 mb-2">
                 <DollarSign className="w-5 h-5 text-zinc-400" />
                 <h3 className="text-sm font-semibold text-zinc-400 uppercase tracking-wider">Toplam Hacim (Wager)</h3>
@@ -162,12 +162,12 @@ const FinanceDashboard: React.FC<FinanceDashboardProps> = ({ onClose }) => {
             </div>
 
             <div className={`bg-white/5 border border-white/10 rounded-xl p-5 relative overflow-hidden group ${stats.ggr >= 0 ? 'hover:border-emerald-500/50' : 'hover:border-red-500/50'} transition-colors`}>
-              <div className={`absolute -right-6 -top-6 w-24 h-24 rounded-full blur-2xl transition-all ${stats.ggr >= 0 ? 'bg-emerald-500/10 group-hover:bg-emerald-500/20' : 'bg-red-500/10 group-hover:bg-red-500/20'}`}></div>
+              <div className={`absolute -right-6 -top-6 w-24 h-24 rounded-full blur-2xl transition-all ${stats.ggr >= 0 ? 'bg-[#00E5FF]/10 group-hover:bg-[#00E5FF]/20' : 'bg-red-500/10 group-hover:bg-red-500/20'}`}></div>
               <div className="flex items-center gap-3 mb-2">
-                <TrendingUp className={`w-5 h-5 ${stats.ggr >= 0 ? 'text-emerald-400' : 'text-red-400'}`} />
+                <TrendingUp className={`w-5 h-5 ${stats.ggr >= 0 ? 'text-[#00E5FF]' : 'text-red-400'}`} />
                 <h3 className="text-sm font-semibold text-zinc-400 uppercase tracking-wider">Net Kasa Karı (GGR)</h3>
               </div>
-              <div className={`text-2xl font-black ${stats.ggr >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+              <div className={`text-2xl font-black ${stats.ggr >= 0 ? 'text-[#00E5FF]' : 'text-red-400'}`}>
                 {stats.ggr > 0 ? '+' : ''}{formatMoney(stats.ggr)}
               </div>
               <div className="mt-2 text-xs text-zinc-500 font-mono">Gross Gaming Revenue</div>
@@ -195,7 +195,7 @@ const FinanceDashboard: React.FC<FinanceDashboardProps> = ({ onClose }) => {
             {/* Main Area Chart */}
             <div className="lg:col-span-2 bg-white/5 border border-white/10 rounded-xl p-5">
               <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
-                <Activity className="w-5 h-5 text-emerald-400" />
+                <Activity className="w-5 h-5 text-[#00E5FF]" />
                 Günlük Kasa Performansı
               </h3>
               <div className="h-[300px] w-full">
@@ -267,7 +267,7 @@ const FinanceDashboard: React.FC<FinanceDashboardProps> = ({ onClose }) => {
                       <div className="w-2 h-2 rounded-full" style={{ backgroundColor: COLORS[idx % COLORS.length] }}></div>
                       <span className="text-zinc-300 font-medium">{game.name}</span>
                     </div>
-                    <span className={`font-mono font-bold ${game.ggr >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                    <span className={`font-mono font-bold ${game.ggr >= 0 ? 'text-[#00E5FF]' : 'text-red-400'}`}>
                       {formatMoney(game.ggr)}
                     </span>
                   </div>

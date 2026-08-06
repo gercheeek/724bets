@@ -33,8 +33,8 @@ const OnboardingPopup: React.FC<OnboardingPopupProps> = ({ onStartTour, onClose 
         </button>
 
         <div className="p-8 text-center">
-          <div className="w-20 h-20 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
-            <PlayCircle size={40} className="text-emerald-500" />
+          <div className="w-20 h-20 bg-[#00E5FF]/10 rounded-full flex items-center justify-center mx-auto mb-6">
+            <PlayCircle size={40} className="text-[#00E5FF]" />
           </div>
           
           <h2 className="text-2xl font-bold text-white mb-4">
@@ -51,7 +51,7 @@ const OnboardingPopup: React.FC<OnboardingPopupProps> = ({ onStartTour, onClose 
                 setIsVisible(false);
                 setTimeout(onStartTour, 300);
               }}
-              className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-4 px-6 rounded-lg transition-all flex items-center justify-center gap-2 group shadow-lg shadow-emerald-500/20"
+              className="w-full bg-[#00E5FF] hover:bg-emerald-600 text-white font-bold py-4 px-6 rounded-lg transition-all flex items-center justify-center gap-2 group shadow-lg shadow-emerald-500/20"
             >
               <PlayCircle className="group-hover:scale-110 transition-transform" />
               <span>Site Turuna Başla</span>
@@ -59,9 +59,15 @@ const OnboardingPopup: React.FC<OnboardingPopupProps> = ({ onStartTour, onClose 
             
             <button
               onClick={handleClose}
-              className="w-full bg-[#1a2235] hover:bg-[#232d45] text-white font-bold py-4 px-6 rounded-lg transition-all flex items-center justify-center gap-2 border border-gray-700"
+              className="w-full bg-[#1a2235] hover:bg-[#232d45] text-white font-bold py-4 px-6 rounded-lg transition-all flex items-center justify-center gap-3 border border-gray-700"
             >
-              <LogIn size={20} />
+              <div className="flex items-center font-black tracking-tighter select-none scale-110" style={{ fontFamily: 'Inter, sans-serif', letterSpacing: '-0.03em' }}>
+                <span className="text-white text-base">724</span>
+                <span className="text-[#00E5FF] ml-[1px] text-base flex">
+                  <span>b</span><span>e</span><span>t</span><span>s</span>
+                </span>
+              </div>
+              <span className="h-4 w-px bg-white/20"></span>
               <span>Normal Giriş Yap</span>
             </button>
           </div>

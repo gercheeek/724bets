@@ -179,7 +179,7 @@ const LiveBetsFeed: React.FC = () => {
           onClick={() => setActiveTab('recent')}
           className={`px-6 py-2 rounded-full text-[13px] font-bold transition-all ${
             activeTab === 'recent' 
-            ? 'bg-[#111111] text-white shadow-lg border border-[#2C2F3D]' 
+            ? 'bg-[#0A0C10] text-white shadow-lg border border-[#2C2F3D]' 
             : 'text-gray-400 hover:text-white hover:bg-white/5'
           }`}
         >
@@ -189,7 +189,7 @@ const LiveBetsFeed: React.FC = () => {
           onClick={() => setActiveTab('big')}
           className={`px-6 py-2 rounded-full text-[13px] font-bold transition-all ${
             activeTab === 'big' 
-            ? 'bg-[#111111] text-white shadow-lg border border-[#2C2F3D]' 
+            ? 'bg-[#0A0C10] text-white shadow-lg border border-[#2C2F3D]' 
             : 'text-gray-400 hover:text-white hover:bg-white/5'
           }`}
         >
@@ -201,7 +201,7 @@ const LiveBetsFeed: React.FC = () => {
       <div className="bg-[#12141A] rounded-xl border border-[#2C2F3D] overflow-hidden shadow-2xl">
         
         {/* Table Header */}
-        <div className="grid grid-cols-12 gap-4 px-6 py-4 bg-[#111111] border-b border-[#2C2F3D] text-[11px] font-bold text-gray-400 uppercase tracking-wider">
+        <div className="grid grid-cols-12 gap-4 px-6 py-4 bg-[#0A0C10] border-b border-[#2C2F3D] text-[11px] font-bold text-gray-400 uppercase tracking-wider">
           <div className="col-span-4">Oyun</div>
           <div className="col-span-3">Kullanıcı</div>
           <div className="col-span-2 text-right">Bahis miktarı</div>
@@ -214,8 +214,18 @@ const LiveBetsFeed: React.FC = () => {
           {displayBets.map((bet, index) => (
             <div 
               key={bet.id}
-              className="grid grid-cols-12 gap-4 px-6 py-3.5 border-b border-[#2C2F3D]/50 hover:bg-[#111111] transition-colors items-center animate-fade-in-down"
+              className="grid grid-cols-12 gap-4 px-6 py-3.5 border-b border-[#2C2F3D]/50 hover:bg-[#0A0C10] transition-colors items-center animate-fade-in-down group cursor-pointer relative"
+              onClick={() => {
+                if (bet.payout > 10000) {
+                  console.log(`Replying to huge win by ${bet.user}: "Beyler sakın hırs yapmayın bak, 500 lira attım tek spinde 10k çektim. Çıkmasını bileceksin siktirip gideceksin bu kadar basit 💸🚀"`);
+                }
+              }}
             >
+              {/* Reply Icon Overlay */}
+              <div className="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 z-10">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-300"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/><path d="M15 13 9 13 9 10 15 10Z"/></svg>
+              </div>
+
               {/* Oyun */}
               <div className="col-span-4 flex items-center gap-2">
                 <Dices size={14} className="text-gray-500" />
@@ -243,7 +253,7 @@ const LiveBetsFeed: React.FC = () => {
               </div>
 
               {/* Ödeme */}
-              <div className="col-span-2 flex items-center justify-end">
+              <div className="col-span-2 flex items-center justify-end group-hover:pr-10 transition-all">
                 <span className={`text-[13px] font-bold ${bet.payout > 0 ? 'text-[#06b6d4]' : 'text-white'}`}>
                   {bet.payout < 0 ? '-' : ''}{formatCurrency(bet.payout, bet.currency)}
                 </span>

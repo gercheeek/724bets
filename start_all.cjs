@@ -12,7 +12,8 @@ try {
 
 const services = [
   { name: 'Vite Frontend', cmd: 'npx', args: ['vite', '--host', '--port', '3002'] },
-  { name: 'Proxy Server', cmd: 'node', args: ['server.js'] }
+  { name: 'Proxy Server', cmd: 'node', args: ['server.js'] },
+  { name: 'Chat Bot Service', cmd: 'node', args: ['chatBotService.js'] }
 ];
 
 const children = [];

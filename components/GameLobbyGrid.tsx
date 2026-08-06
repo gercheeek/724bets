@@ -134,7 +134,7 @@ const GameBlock: React.FC<BlockProps> = ({ title, icon, games, showPlayers, isSp
                   <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none group-hover:pointer-events-auto bg-black/60 backdrop-blur-[2px]">
                       <button 
                          onClick={(e) => { e.stopPropagation(); onGameClick?.(game); }}
-                         className="w-[80%] flex items-center justify-center gap-2 bg-[#06b6d4] hover:bg-[#00E676] text-black font-black py-2.5 rounded-lg transition-transform hover:scale-105 shadow-[0_0_15px_rgba(0,255,163,0.4)] text-[11px] uppercase tracking-wider"
+                         className="w-[80%] flex items-center justify-center gap-2 bg-[#06b6d4] hover:bg-[#00E5FF] text-black font-black py-2.5 rounded-lg transition-transform hover:scale-105 shadow-[0_0_15px_rgba(0,255,163,0.4)] text-[11px] uppercase tracking-wider"
                       >
                          GERÇEK OYNA
                       </button>
@@ -242,7 +242,7 @@ const GameLobbyGrid: React.FC<GameLobbyGridProps> = ({ customGames = [] }) => {
           }}
         >
           {showDemoIframe && getDemoUrl(selectedGame) ? (
-            <div className="relative w-full max-w-[1600px] w-[95vw] h-[90vh] bg-black rounded-xl md:rounded-2xl overflow-hidden shadow-[0_0_100px_rgba(0,0,0,0.8)] flex flex-col border border-white/5">
+            <div className="relative w-full max-w-[1600px] w-[95vw] h-[90vh] bg-[#0A0C10] rounded-xl md:rounded-2xl overflow-hidden shadow-[0_0_100px_rgba(0,0,0,0.8)] flex flex-col border border-white/5">
                <div className="h-12 md:h-14 bg-[#0f172a] flex items-center justify-between px-4 md:px-6 border-b border-white/5 flex-shrink-0">
                   <div className="flex items-center gap-3">
                      <div className="flex gap-1.5 opacity-50 hover:opacity-100 transition-opacity hidden md:flex">

@@ -237,7 +237,7 @@ export default function CrashGameView({ siteUser, setSiteUser, onAuthRequired, o
                     <div>
                         <div className="flex justify-between items-center mb-1">
                             <label className="text-[12px] text-zinc-400 font-bold block">{t('Bet amount', 'Bet amount')}</label>
-                            <span className="text-[10px] text-zinc-500 font-bold">{siteUser ? siteUser.balance.toFixed(2) : '0.00'} EUR</span>
+                            <span className="text-[10px] text-zinc-500 font-bold">${siteUser ? siteUser.balance.toFixed(2) : '0.00'} USD</span>
                         </div>
                         <div className="flex bg-[#0B0E14] border border-[#1E2336] rounded-md overflow-hidden h-11 focus-within:border-[#00E5FF]/50 focus-within:shadow-[0_0_10px_rgba(0,229,255,0.1)] transition-all">
                             <input 
@@ -248,7 +248,7 @@ export default function CrashGameView({ siteUser, setSiteUser, onAuthRequired, o
                                 className="flex-1 bg-transparent px-3 text-sm text-white outline-none font-medium disabled:opacity-50"
                             />
                             <div className="flex items-center border-l border-[#1E2336]">
-                                <span className="text-zinc-500 text-xs font-bold px-2">EUR</span>
+                                <span className="text-zinc-500 text-xs font-bold px-2">USD</span>
                                 <div className="flex h-full border-l border-[#1E2336]">
                                     <button onClick={() => setBetAmount((parseFloat(betAmount)/2).toFixed(2))} className="px-3 hover:bg-white/5 text-zinc-400 text-xs font-bold transition-colors">½</button>
                                     <div className="w-[1px] h-full bg-[#1E2336]"></div>
@@ -290,7 +290,7 @@ export default function CrashGameView({ siteUser, setSiteUser, onAuthRequired, o
                                 className="flex-1 bg-transparent px-3 text-sm text-zinc-300 outline-none font-medium opacity-70"
                             />
                             <div className="flex items-center px-3 border-l border-[#1E2336]">
-                                <span className="text-zinc-500 text-xs font-bold">EUR</span>
+                                <span className="text-zinc-500 text-xs font-bold">USD</span>
                             </div>
                         </div>
                     </div>
@@ -315,7 +315,7 @@ export default function CrashGameView({ siteUser, setSiteUser, onAuthRequired, o
                 <div className="flex-1 flex flex-col mt-4 px-1">
                     <div className="flex justify-between items-center text-[10px] text-zinc-500 font-bold mb-3 pb-2 border-b border-[#1E2336]">
                         <div className="flex items-center gap-1"><Settings className="w-3 h-3" /> {mockPlayers.length}</div>
-                        <div>{mockPlayers.reduce((a,b)=>a+b.bet, 0).toFixed(2)} EUR</div>
+                        <div>${mockPlayers.reduce((a,b)=>a+b.bet, 0).toFixed(2)} USD</div>
                     </div>
                     
                     <div className="flex-1 overflow-y-auto pr-1 space-y-1.5 custom-scrollbar">

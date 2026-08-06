@@ -117,10 +117,10 @@ export default function LimboView({ siteUser, onAuthRequired }: any) {
                 <div className="mb-4 relative">
                     <div className="flex justify-between items-end mb-2">
                         <label className="text-xs text-gray-400 font-semibold">Bahis Tutarı</label>
-                        <span className="text-xs text-gray-300 font-mono">₺{siteUser ? siteUser.balance.toFixed(2) : '0.00'}</span>
+                        <span className="text-xs text-gray-300 font-mono">${siteUser ? siteUser.balance.toFixed(2) : '0.00'}</span>
                     </div>
                     <div className="flex bg-[#0B0E14] rounded-md border border-[#1E2336] overflow-hidden focus-within:border-[#00E5FF] transition-colors">
-                        <div className="px-3 flex items-center justify-center text-gray-400">₺</div>
+                        <div className="px-3 flex items-center justify-center text-gray-400">$</div>
                         <input 
                             type="number" 
                             value={betAmount || ''}
@@ -174,8 +174,8 @@ export default function LimboView({ siteUser, onAuthRequired }: any) {
                         <label className="text-xs text-gray-400 font-semibold">Kazanılacak Tutar</label>
                     </div>
                     <div className={`bg-[#0B0E14] rounded-md border px-3 py-3 flex items-center transition-colors ${isWinner ? 'border-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.3)]' : 'border-[#1E2336]'}`}>
-                        <span className="text-gray-400 mr-2">₺</span>
-                        <span className={`font-mono text-sm ${isWinner ? 'text-emerald-400 font-bold' : 'text-white'}`}>
+                        <span className="text-gray-400 mr-2">$</span>
+                        <span className={`font-mono text-sm ${isWinner ? 'text-[#00E5FF] font-bold' : 'text-white'}`}>
                             {winAmount !== null ? winAmount.toFixed(2) : (betAmount * targetMultiplier).toFixed(2)}
                         </span>
                     </div>
@@ -189,7 +189,7 @@ export default function LimboView({ siteUser, onAuthRequired }: any) {
                 <div className="absolute top-4 right-4 flex gap-2 z-30">
                     {history.map((mult, idx) => (
                         <div key={idx} className={`px-3 py-1 rounded-full text-xs font-mono font-bold shadow-md ${
-                            mult >= 2.0 ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/50' : 'bg-red-500/20 text-red-400 border border-red-500/50'
+                            mult >= 2.0 ? 'bg-[#00E5FF]/20 text-[#00E5FF] border border-emerald-500/50' : 'bg-red-500/20 text-red-400 border border-red-500/50'
                         }`}>
                             {mult.toFixed(2)}x
                         </div>

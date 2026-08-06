@@ -139,7 +139,7 @@ const DemoGames: React.FC = () => {
         </div>
 
         {/* The Game Iframe */}
-        <div className="relative w-full aspect-video min-height-[400px] md:min-height-[600px] bg-black">
+        <div className="relative w-full aspect-video min-height-[400px] md:min-height-[600px] bg-[#0A0C10]">
         <div className="w-full h-full">
           <iframe
             key={iframeSrc}

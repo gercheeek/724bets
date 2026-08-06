@@ -225,7 +225,7 @@ const LiveMatches: React.FC = () => {
             {/* Odds Buttons */}
             <div className="flex items-center gap-2 mb-4 relative">
               {match.isLocked && (
-                <div className="absolute inset-0 z-10 bg-[#111111]/80 backdrop-blur-[1px] flex items-center justify-center rounded-lg">
+                <div className="absolute inset-0 z-10 bg-[#0A0C10]/80 backdrop-blur-[1px] flex items-center justify-center rounded-lg">
                   <span className="text-white text-[10px] font-black bg-red-500/80 px-2 py-1 rounded flex items-center gap-1 uppercase tracking-widest shadow-[0_0_10px_rgba(239,68,68,0.5)]">
                     <Lock className="w-3 h-3" /> ASKIDA
                   </span>

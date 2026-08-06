@@ -44,7 +44,7 @@ const Footer: React.FC = () => {
   ];
 
   return (
-    <footer className="w-full bg-[#0A0D14] border-t border-white/5 pt-10 pb-28 md:py-12 px-6 lg:px-12 relative z-10 font-sans">
+    <footer className="w-full bg-[#0A0C10] border-t border-white/5 pt-10 pb-28 md:py-12 px-6 lg:px-12 relative z-10 font-sans">
       <div className="max-w-[1200px] mx-auto">
         
         {/* Top Section */}
@@ -56,21 +56,22 @@ const Footer: React.FC = () => {
               <span className="text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]">
                 724
               </span>
-              <span className="text-[#1075fc] flex ml-[1px]">
+              <span className="text-[#00E5FF] flex ml-[1px]">
                 <span>b</span><span>e</span><span>t</span><span>s</span>
               </span>
-              <div className="flex items-center justify-center w-5 h-5 ml-0 -mt-2">
-                <svg viewBox="0 0 100 100" fill="currentColor" className="w-full h-full text-[#1075fc] drop-shadow-[0_0_8px_rgba(16,117,252,0.3)]">
-                  <path d="M 50,45 C 35,25 40,10 50,18 C 60,10 65,25 50,45 Z" />
-                  <path d="M 47,48 C 25,35 15,45 25,55 C 15,65 25,75 47,48 Z" />
-                  <path d="M 53,48 C 75,35 85,45 75,55 C 85,65 75,75 53,48 Z" />
-                  <path d="M 50,50 C 45,65 40,75 35,70 C 45,70 50,60 50,50 Z" />
-                </svg>
-              </div>
             </div>
-            <p className="text-zinc-400 text-[13px] mb-8 leading-relaxed max-w-sm">
+            <p className="text-zinc-400 text-[13px] mb-6 leading-relaxed max-w-sm">
               {t('footer.about')}
             </p>
+
+            {/* Payment Methods */}
+            <div className="flex flex-wrap items-center gap-2 mb-8">
+               <div className="px-2.5 py-1 rounded-md border border-white/5 bg-white/[0.02] text-zinc-500 font-bold text-[10px] uppercase tracking-wider flex items-center gap-1 hover:text-white hover:bg-white/10 transition-colors cursor-default">BTC</div>
+               <div className="px-2.5 py-1 rounded-md border border-white/5 bg-white/[0.02] text-zinc-500 font-bold text-[10px] uppercase tracking-wider flex items-center gap-1 hover:text-white hover:bg-white/10 transition-colors cursor-default">ETH</div>
+               <div className="px-2.5 py-1 rounded-md border border-white/5 bg-white/[0.02] text-zinc-500 font-bold text-[10px] uppercase tracking-wider flex items-center gap-1 hover:text-white hover:bg-white/10 transition-colors cursor-default">USDT</div>
+               <div className="px-2.5 py-1 rounded-md border border-white/5 bg-white/[0.02] text-zinc-500 font-bold text-[10px] uppercase tracking-wider flex items-center gap-1 hover:text-white hover:bg-white/10 transition-colors cursor-default">HAVALE</div>
+               <div className="px-2.5 py-1 rounded-md border border-white/5 bg-white/[0.02] text-zinc-500 font-bold text-[10px] uppercase tracking-wider flex items-center gap-1 hover:text-white hover:bg-white/10 transition-colors cursor-default">PAPARA</div>
+            </div>
             
             <div className="flex flex-col gap-3 mb-8">
               <a href="mailto:support@724bets.com" className="flex items-center gap-2 text-zinc-400 hover:text-white transition-colors text-[13px]">
@@ -82,13 +83,13 @@ const Footer: React.FC = () => {
             </div>
 
             <div className="flex gap-4">
-              <a href="#" className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-zinc-400 hover:text-white hover:border-[#00E5FF]/50 transition-all hover:bg-[#00E5FF]/10 hover:shadow-[0_0_15px_rgba(0,229,255,0.2)]">
+              <a href="#" className="w-10 h-10 rounded-full bg-white/[0.03] flex items-center justify-center text-zinc-400 hover:text-[#0A0D14] hover:bg-[#00E5FF] transition-all duration-300 hover:shadow-[0_0_20px_rgba(0,229,255,0.4)] hover:-translate-y-1">
                 <Send className="w-4 h-4" /> {/* Telegram */}
               </a>
-              <a href="#" className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-zinc-400 hover:text-white hover:border-[#00E5FF]/50 transition-all hover:bg-[#00E5FF]/10 hover:shadow-[0_0_15px_rgba(0,229,255,0.2)]">
+              <a href="#" className="w-10 h-10 rounded-full bg-white/[0.03] flex items-center justify-center text-zinc-400 hover:text-[#0A0D14] hover:bg-[#00E5FF] transition-all duration-300 hover:shadow-[0_0_20px_rgba(0,229,255,0.4)] hover:-translate-y-1">
                 <Twitter className="w-4 h-4" /> {/* X */}
               </a>
-              <a href="#" className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-zinc-400 hover:text-white hover:border-[#00E5FF]/50 transition-all hover:bg-[#00E5FF]/10 hover:shadow-[0_0_15px_rgba(0,229,255,0.2)]">
+              <a href="#" className="w-10 h-10 rounded-full bg-white/[0.03] flex items-center justify-center text-zinc-400 hover:text-[#0A0D14] hover:bg-[#00E5FF] transition-all duration-300 hover:shadow-[0_0_20px_rgba(0,229,255,0.4)] hover:-translate-y-1">
                 <Instagram className="w-4 h-4" /> {/* Instagram */}
               </a>
             </div>

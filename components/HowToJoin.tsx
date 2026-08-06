@@ -70,7 +70,7 @@ export default function HowToJoin() {
       {/* Steps grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {steps.map((s, idx) => (
-          <div key={s.step} className="relative flex flex-col gap-4 p-5 rounded-lg border border-zinc-800 bg-[#111111] group hover:border-zinc-700 transition-colors">
+          <div key={s.step} className="relative flex flex-col gap-4 p-5 rounded-lg border border-zinc-800 bg-[#0A0C10] group hover:border-zinc-700 transition-colors">
             {/* Connector line (hidden on last) */}
             {idx < steps.length - 1 && (
               <div className="hidden lg:block absolute top-10 -right-2 w-4 border-t-2 border-dashed border-zinc-700 z-10" />

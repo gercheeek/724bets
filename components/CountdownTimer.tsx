@@ -77,7 +77,7 @@ export default function CountdownTimer({ endDate }: CountdownTimerProps) {
             </span>
           </div>
           {i < units.length - 1 && (
-            <span className="text-[#00E676] font-black text-xl mb-4 select-none">:</span>
+            <span className="text-[#00E5FF] font-black text-xl mb-4 select-none">:</span>
           )}
         </div>
       ))}

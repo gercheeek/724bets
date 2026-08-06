@@ -202,7 +202,7 @@ export const SportsHeroBanner: React.FC = () => {
 
   return (
     <div className="w-full relative px-4 pt-4 pb-2 group">
-      <div className="w-full h-[200px] md:h-[240px] lg:h-[280px] rounded-2xl bg-[#050505] relative overflow-hidden shadow-[0_15px_40px_rgba(0,0,0,0.8)] border border-white/[0.05] group/banner">
+      <div className="w-full h-[200px] md:h-[240px] lg:h-[280px] rounded-2xl bg-[#0A0C10] relative overflow-hidden shadow-[0_15px_40px_rgba(0,0,0,0.8)] border border-white/[0.05] group/banner">
         
         {/* Background Stadium */}
         <div 

@@ -132,7 +132,7 @@ const OriginalGameCard: React.FC<{ game: any, onClick: () => void }> = ({ game, 
             onClick={onClick}
             className="group relative flex flex-col cursor-pointer rounded-2xl overflow-hidden transition-all duration-300 border border-white/5 bg-[#1a1c22] shadow-[0_5px_15px_rgba(0,0,0,0.4)] hover:shadow-[0_10px_30px_rgba(0,229,255,0.2)] hover:-translate-y-2 w-full hover:border-[#00E5FF]/30"
         >
-            <div className="relative w-full aspect-[4/5] overflow-hidden rounded-2xl bg-[#0a0d14]">
+            <div className="relative w-full aspect-[4/5] overflow-hidden rounded-2xl bg-[#0A0C10]">
                 {/* Clean Flat Background Image */}
                 <img 
                     src={game.image || game.img} 
@@ -140,27 +140,7 @@ const OriginalGameCard: React.FC<{ game: any, onClick: () => void }> = ({ game, 
                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" 
                 />
                 
-                {/* Gradient overlay for better text contrast */}
-                <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/80 via-black/30 to-transparent pointer-events-none"></div>
 
-                {/* Massive Typography matching BC Game style */}
-                <div className="absolute inset-x-0 bottom-2 px-1 flex flex-col items-center justify-center pointer-events-none z-10">
-                    <h3 
-                        className="text-white font-black uppercase text-center w-full truncate leading-none tracking-tighter"
-                        style={{ 
-                            fontSize: 'clamp(14px, 8vw, 18px)', 
-                            textShadow: '0px 4px 10px rgba(0,0,0,0.8), 0px 2px 4px rgba(0,0,0,1)'
-                        }}
-                    >
-                        {game.name}
-                    </h3>
-                    <span 
-                        className="text-[#00E5FF] font-black uppercase tracking-widest mt-0.5 opacity-90 drop-shadow-[0_0_5px_rgba(0,229,255,0.5)]"
-                        style={{ fontSize: 'clamp(7px, 3vw, 9px)' }}
-                    >
-                        724BETS
-                    </span>
-                </div>
 
                 {/* Hover Glow */}
                 <div className="absolute inset-0 bg-gradient-to-t from-[#00E5FF]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 mix-blend-overlay z-20 pointer-events-none"></div>

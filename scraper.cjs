@@ -157,4 +157,75 @@ async function scrapeLogos() {
   }
 }
 
-scrapeLogos();
+async function scrapeSlotra() {
+  const OUTPUT_FILE = 'slotra_casino.json';
+  console.log("Slotra sitesine bağlanılıyor...");
+  
+  const browser = await puppeteer.launch({ 
+    headless: "new",
+    args: ['--no-sandbox', '--disable-setuid-sandbox']
+  });
+  const page = await browser.newPage();
+  await page.setUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
+  await page.setViewport({ width: 1280, height: 1080 });
+
+  try {
+    await page.goto('https://slotra.com/live-casino/online', { waitUntil: 'domcontentloaded', timeout: 90000 });
+    console.log("Sayfa yükleniyor, oyunlar için bekleniyor...");
+    
+    // Cloudflare vb. korumaları atlamak veya sayfanın tam oturmasını beklemek için 5 saniye bekle
+    await new Promise(r => setTimeout(r, 5000));
+    
+    await page.evaluate(async () => {
+      await new Promise((resolve) => {
+        let totalHeight = 0;
+        const distance = 300;
+        const timer = setInterval(() => {
+          const scrollHeight = document.body.scrollHeight;
+          window.scrollBy(0, distance);
+          totalHeight += distance;
+          if (totalHeight >= scrollHeight - window.innerHeight || totalHeight > 10000) {
+            clearInterval(timer);
+            resolve();
+          }
+        }, 150);
+      });
+    });
+    
+    await new Promise(r => setTimeout(r, 2000));
+
+    const scrapedData = await page.evaluate(() => {
+      const results = [];
+      const gameElements = document.querySelectorAll('img');
+      const seen = new Set();
+      
+      gameElements.forEach(img => {
+        const src = img.src || img.getAttribute('data-src');
+        const alt = img.alt || 'Bilinmeyen Oyun';
+        
+        if (src && !src.includes('.svg') && !src.includes('logo') && src.includes('zvrkntplm.com')) {
+          if (!seen.has(src)) {
+            seen.add(src);
+            results.push({ name: alt, image: src });
+          }
+        }
+      });
+      return results;
+    });
+
+    fs.writeFileSync(OUTPUT_FILE, JSON.stringify(scrapedData, null, 2), 'utf8');
+    console.log(`Veriler siteden çekildi. Toplam ${scrapedData.length} oyun bulundu ve ${OUTPUT_FILE} olarak kaydedildi.`);
+    
+  } catch (error) {
+    console.error("Kazıma sırasında bir hata oluştu:", error.message);
+  } finally {
+    await browser.close();
+  }
+}
+
+const mode = process.argv[2];
+if (mode === 'slotra') {
+  scrapeSlotra();
+} else {
+  scrapeLogos();
+}

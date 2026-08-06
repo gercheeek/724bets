@@ -111,7 +111,7 @@ const HYPE_ACTIONS = [
 const getColorClasses = (color: string) => {
   switch (color) {
     case 'red': return { border: 'border-red-500/40', bg: 'bg-red-500', glow: 'shadow-[0_0_40px_rgba(239,68,68,0.4)]', text: 'text-red-400', bgSoft: 'bg-red-500/10', gradient: 'from-red-500 to-rose-600' };
-    case 'gold': return { border: 'border-amber-400/40', bg: 'bg-amber-400', glow: 'shadow-[0_0_40px_rgba(251,191,36,0.4)]', text: 'text-amber-400', bgSoft: 'bg-amber-400/10', gradient: 'from-amber-400 to-yellow-500' };
+    case 'gold': return { border: 'border-amber-400/40', bg: 'bg-amber-400', glow: 'shadow-[0_0_40px_rgba(251,191,36,0.4)]', text: 'text-zinc-300', bgSoft: 'bg-amber-400/10', gradient: 'from-amber-400 to-yellow-500' };
     case 'cyan': return { border: 'border-cyan-400/40', bg: 'bg-cyan-400', glow: 'shadow-[0_0_40px_rgba(34,211,238,0.4)]', text: 'text-cyan-400', bgSoft: 'bg-cyan-400/10', gradient: 'from-cyan-400 to-blue-500' };
     case 'purple': return { border: 'border-purple-500/40', bg: 'bg-purple-500', glow: 'shadow-[0_0_40px_rgba(168,85,247,0.4)]', text: 'text-purple-400', bgSoft: 'bg-purple-500/10', gradient: 'from-purple-500 to-violet-600' };
     case 'orange': return { border: 'border-orange-500/40', bg: 'bg-orange-500', glow: 'shadow-[0_0_40px_rgba(249,115,22,0.4)]', text: 'text-orange-400', bgSoft: 'bg-orange-500/10', gradient: 'from-orange-500 to-red-500' };
@@ -242,8 +242,8 @@ const HypeFeed = () => {
     <div className="flex flex-col gap-1.5 max-h-[180px] overflow-hidden">
       {feed.map((item) => (
         <div key={item.id} className="flex items-center gap-2 text-xs" style={{ animation: 'hypeFeed 5s ease-in-out both' }}>
-          <Zap className="w-3 h-3 text-amber-400 shrink-0" />
-          <span className="text-amber-400 font-bold">{item.name}</span>
+          <Zap className="w-3 h-3 text-zinc-300 shrink-0" />
+          <span className="text-zinc-300 font-bold">{item.name}</span>
           <span className="text-gray-500">{item.action}</span>
         </div>
       ))}
@@ -385,8 +385,8 @@ export default function AdventureMap() {
                 <div className="absolute inset-0 bg-gradient-to-b from-amber-500/3 to-transparent" />
                 <div className="relative z-10">
                   <div className="flex items-center gap-2 mb-3">
-                    <Eye className="w-3.5 h-3.5 text-amber-400" />
-                    <span className="text-[9px] text-amber-400/80 font-bold uppercase tracking-[0.3em]">Canlı Akış</span>
+                    <Eye className="w-3.5 h-3.5 text-zinc-300" />
+                    <span className="text-[9px] text-zinc-300/80 font-bold uppercase tracking-[0.3em]">Canlı Akış</span>
                   </div>
                   <HypeFeed />
                 </div>
@@ -460,7 +460,7 @@ export default function AdventureMap() {
                   {/* CTA Button */}
                   <div className="mt-auto">
                     <button className={`w-full py-5 rounded-2xl font-black text-sm uppercase tracking-[0.25em] transition-all duration-300 flex items-center justify-center gap-3 active:scale-[0.97] relative overflow-hidden
-                      ${lock.status === 'completed' ? 'bg-white/5 text-emerald-400 cursor-not-allowed border border-emerald-500/20' :
+                      ${lock.status === 'completed' ? 'bg-white/5 text-[#00E5FF] cursor-not-allowed border border-emerald-500/20' :
                         lock.status === 'locked' ? 'bg-white/[0.03] text-gray-600 cursor-not-allowed border border-white/5' :
                         `bg-gradient-to-r ${colors.gradient} text-black ${colors.glow} hover:scale-[1.02]`}`}>
                       {lock.status === 'active' && (
@@ -526,14 +526,14 @@ export default function AdventureMap() {
                       {/* Lock Card */}
                       <div className={`flex-1 p-3.5 md:p-4 rounded-2xl border backdrop-blur-md transition-all duration-300
                         ${isSelected ? `${c.bgSoft} ${c.border} ${c.glow.replace('40px', '15px')}` :
-                          isCompleted ? 'bg-emerald-500/5 border-emerald-500/10' :
+                          isCompleted ? 'bg-[#00E5FF]/5 border-emerald-500/10' :
                           isActive ? `${c.bgSoft} ${c.border} group-hover:${c.border}` :
                           'bg-white/[0.02] border-white/[0.04] group-hover:border-white/10 group-hover:bg-white/[0.04]'}`}>
                         <div className="flex items-center justify-between">
                           <div>
                             <h3 className={`font-bold text-sm md:text-base transition-colors leading-tight
                               ${isSelected ? c.text :
-                                isCompleted ? 'text-emerald-400' :
+                                isCompleted ? 'text-[#00E5FF]' :
                                 isActive ? c.text :
                                 'text-gray-600 group-hover:text-gray-400'}`}>
                               {lockItem.title}
@@ -550,7 +550,7 @@ export default function AdventureMap() {
                                 </span>
                               )}
                               {lockItem.status === 'completed' && (
-                                <span className="text-[9px] text-emerald-400 font-bold uppercase tracking-wider">Tamamlandı</span>
+                                <span className="text-[9px] text-[#00E5FF] font-bold uppercase tracking-wider">Tamamlandı</span>
                               )}
                             </div>
                           </div>
@@ -570,8 +570,8 @@ export default function AdventureMap() {
         <div className="lg:hidden relative z-10 px-4 pb-4">
           <div className="bg-black/40 backdrop-blur-md border border-white/5 rounded-2xl p-4">
             <div className="flex items-center gap-2 mb-2">
-              <Eye className="w-3 h-3 text-amber-400" />
-              <span className="text-[9px] text-amber-400/80 font-bold uppercase tracking-[0.3em]">Canlı Akış</span>
+              <Eye className="w-3 h-3 text-zinc-300" />
+              <span className="text-[9px] text-zinc-300/80 font-bold uppercase tracking-[0.3em]">Canlı Akış</span>
             </div>
             <HypeFeed />
           </div>

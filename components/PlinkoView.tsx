@@ -94,7 +94,7 @@ export default function PlinkoView({ siteUser, onAuthRequired }: any) {
                 <div>
                     <div className="flex justify-between items-center mb-1">
                         <label className="text-[12px] text-zinc-400 font-bold block">Bet amount</label>
-                        <span className="text-[10px] text-zinc-500 font-bold">{siteUser ? siteUser.balance.toFixed(2) : demoBalance.toFixed(2)} EUR</span>
+                        <span className="text-[10px] text-zinc-500 font-bold">${siteUser ? siteUser.balance.toFixed(2) : demoBalance.toFixed(2)} USD</span>
                     </div>
                     <div className="flex bg-[#0B0E14] border border-[#1E2336] rounded-md overflow-hidden h-11 focus-within:border-[#00E5FF]/50 focus-within:shadow-[0_0_10px_rgba(0,229,255,0.1)] transition-all">
                         <input 
@@ -106,7 +106,7 @@ export default function PlinkoView({ siteUser, onAuthRequired }: any) {
                             className="flex-1 bg-transparent px-3 text-sm text-white outline-none font-medium disabled:opacity-50"
                         />
                         <div className="flex items-center border-l border-[#1E2336]">
-                            <span className="text-zinc-500 text-xs font-bold px-2">EUR</span>
+                            <span className="text-zinc-500 text-xs font-bold px-2">USD</span>
                             <div className="flex h-full border-l border-[#1E2336]">
                                 <button className="px-3 hover:bg-white/5 text-zinc-400 text-xs font-bold transition-colors" onClick={() => setBetAmount((parseFloat(betAmount) / 2).toFixed(2))}>½</button>
                                 <div className="w-[1px] h-full bg-[#1E2336]"></div>
@@ -179,7 +179,7 @@ export default function PlinkoView({ siteUser, onAuthRequired }: any) {
                     <div className="absolute top-6 right-6 z-50 animate-fade-in-up flex flex-col items-end">
                         <span className="text-zinc-500 text-[10px] font-bold uppercase tracking-widest block mb-0.5">KAZANÇ</span>
                         <span className={`text-2xl font-black ${lastPayout.multiplier > 1 ? 'text-[#c6ff00]' : 'text-zinc-300'}`}>
-                            {lastPayout.multiplier >= 1 ? '+' : ''}{lastPayout.amount.toFixed(2)} ₺
+                            {lastPayout.multiplier >= 1 ? '+' : ''}${lastPayout.amount.toFixed(2)}
                         </span>
                     </div>
                 )}

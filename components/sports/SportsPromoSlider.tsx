@@ -5,7 +5,7 @@ import { PlayerLogo, findBestLogoMatch } from './PlayerLogo';
 import { AnimatedOdd } from '../AnimatedOdd';
 import { LiveTimer } from './MatchCard';
 
-function MatchSlide({ matchData, theme, leagueName, compact = false }: { matchData: any, theme: 'fener'|'cl'|'el'|'conf', leagueName: string, compact?: boolean }) {
+function MatchSlide({ matchData, theme, leagueName, compact = false, onSelectMatch }: { matchData: any, theme: 'fener'|'cl'|'el'|'conf', leagueName: string, compact?: boolean, onSelectMatch?: (match: any) => void }) {
     const { toggleBetSelection } = useBetting();
     const themes: any = {
         'fener': {
@@ -43,7 +43,13 @@ function MatchSlide({ matchData, theme, leagueName, compact = false }: { matchDa
     return (
         <div 
             className="w-full h-full flex-shrink-0 relative overflow-hidden bg-[#0a0f1c] cursor-pointer"
-            onClick={() => toggleBetSelection(matchData.match, 'Maç Sonucu', matchData.home, parseFloat(matchData.homeOdd))}
+            onClick={() => {
+                if (onSelectMatch) {
+                    onSelectMatch(matchData.match);
+                } else {
+                    toggleBetSelection(matchData.match, 'Maç Sonucu', matchData.home, parseFloat(matchData.homeOdd));
+                }
+            }}
         >
             {/* PREMIUM BACKGROUND WITH GRID & GLOW */}
             <div className="absolute inset-0 z-0">
@@ -157,7 +163,7 @@ function MatchSlide({ matchData, theme, leagueName, compact = false }: { matchDa
     );
 }
 
-export default function SportsPromoSlider({ matches = [], compact = false }: { matches?: any[], compact?: boolean }) {
+export default function SportsPromoSlider({ matches = [], compact = false, onSelectMatch }: { matches?: any[], compact?: boolean, onSelectMatch?: (match: any) => void }) {
     const [currentSlide, setCurrentSlide] = useState(0);
 
     const dynamicSlides = useMemo(() => {
@@ -292,7 +298,7 @@ export default function SportsPromoSlider({ matches = [], compact = false }: { m
                     
                     {/* DYNAMIC LEAGUE MATCHES */}
                     {dynamicSlides.map((slide, i) => (
-                        <MatchSlide key={slide.id || i} matchData={slide.data} theme={slide.theme} leagueName={slide.name} compact={compact} />
+                        <MatchSlide key={slide.id || i} matchData={slide.data} theme={slide.theme} leagueName={slide.name} compact={compact} onSelectMatch={onSelectMatch} />
                     ))}
 
                     {/* ================= STATIC SLIDES ================= */}

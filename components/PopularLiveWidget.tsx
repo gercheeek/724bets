@@ -169,7 +169,7 @@ export const PopularLiveWidget: React.FC<PopularLiveWidgetProps> = ({ onNavigate
     return (
         <div className="w-full mb-8">
             <div className="flex items-center gap-2 mb-4 px-1">
-                <Flame className="w-5 h-5 text-emerald-400" />
+                <Flame className="w-5 h-5 text-[#00E5FF]" />
                 <h2 className="text-[17px] font-bold text-white tracking-wide">Popüler Canlı</h2>
             </div>
             
@@ -187,13 +187,13 @@ export const PopularLiveWidget: React.FC<PopularLiveWidgetProps> = ({ onNavigate
                             {/* Top row */}
                             <div className="flex items-center justify-between mb-4">
                                 <div className="flex items-center gap-1.5 text-zinc-300">
-                                    <Activity className="w-3.5 h-3.5 text-emerald-400/70" />
+                                    <Activity className="w-3.5 h-3.5 text-[#00E5FF]/70" />
                                     <span className="text-[11px] font-bold truncate max-w-[140px] tracking-wide">{match.league}</span>
                                 </div>
                                 <div className="flex items-center gap-1.5 bg-black/30 px-2 py-0.5 rounded-full border border-white/5 backdrop-blur-md">
-                                    <span className={`text-[10px] font-bold ${match.isUpcoming ? 'text-zinc-400' : 'text-emerald-400 drop-shadow-[0_0_5px_rgba(52,211,153,0.5)]'}`}>{match.time}</span>
+                                    <span className={`text-[10px] font-bold ${match.isUpcoming ? 'text-zinc-400' : 'text-[#00E5FF] drop-shadow-[0_0_5px_rgba(52,211,153,0.5)]'}`}>{match.time}</span>
                                     {!match.isUpcoming && (
-                                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
+                                        <span className="w-1.5 h-1.5 rounded-full bg-[#00E5FF] animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
                                     )}
                                 </div>
                             </div>
@@ -201,7 +201,7 @@ export const PopularLiveWidget: React.FC<PopularLiveWidgetProps> = ({ onNavigate
                             {/* Teams & Score */}
                             <div className="flex items-center justify-between px-2 mb-4 relative">
                                 {/* Soft glow behind score */}
-                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-emerald-500/10 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-[#00E5FF]/10 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
                                 <div className="flex flex-col items-center gap-2 w-[80px] z-10">
                                     <div className="w-14 h-14 rounded-full flex items-center justify-center overflow-hidden">
@@ -225,16 +225,16 @@ export const PopularLiveWidget: React.FC<PopularLiveWidgetProps> = ({ onNavigate
                             
                             {/* Odds Buttons */}
                             <div className="grid grid-cols-3 gap-2 mt-5">
-                                <button className="bg-black/40 hover:bg-emerald-500/10 transition-colors duration-300 border border-white/10 hover:border-emerald-500/50 rounded-xl py-2 flex flex-col items-center justify-center gap-0.5 backdrop-blur-md group/btn">
-                                    <span className="text-[10px] font-medium text-zinc-500 group-hover/btn:text-emerald-400/80 transition-colors">1</span>
+                                <button className="bg-black/40 hover:bg-[#00E5FF]/10 transition-colors duration-300 border border-white/10 hover:border-emerald-500/50 rounded-xl py-2 flex flex-col items-center justify-center gap-0.5 backdrop-blur-md group/btn">
+                                    <span className="text-[10px] font-medium text-zinc-500 group-hover/btn:text-[#00E5FF]/80 transition-colors">1</span>
                                     <div className="text-zinc-200 group-hover/btn:text-white font-bold"><AnimatedOdd value={match.homeOdd} /></div>
                                 </button>
-                                <button className="bg-black/40 hover:bg-emerald-500/10 transition-colors duration-300 border border-white/10 hover:border-emerald-500/50 rounded-xl py-2 flex flex-col items-center justify-center gap-0.5 backdrop-blur-md group/btn">
-                                    <span className="text-[10px] font-medium text-zinc-500 group-hover/btn:text-emerald-400/80 transition-colors">X</span>
+                                <button className="bg-black/40 hover:bg-[#00E5FF]/10 transition-colors duration-300 border border-white/10 hover:border-emerald-500/50 rounded-xl py-2 flex flex-col items-center justify-center gap-0.5 backdrop-blur-md group/btn">
+                                    <span className="text-[10px] font-medium text-zinc-500 group-hover/btn:text-[#00E5FF]/80 transition-colors">X</span>
                                     <div className="text-zinc-200 group-hover/btn:text-white font-bold"><AnimatedOdd value={match.drawOdd} /></div>
                                 </button>
-                                <button className="bg-black/40 hover:bg-emerald-500/10 transition-colors duration-300 border border-white/10 hover:border-emerald-500/50 rounded-xl py-2 flex flex-col items-center justify-center gap-0.5 backdrop-blur-md group/btn">
-                                    <span className="text-[10px] font-medium text-zinc-500 group-hover/btn:text-emerald-400/80 transition-colors">2</span>
+                                <button className="bg-black/40 hover:bg-[#00E5FF]/10 transition-colors duration-300 border border-white/10 hover:border-emerald-500/50 rounded-xl py-2 flex flex-col items-center justify-center gap-0.5 backdrop-blur-md group/btn">
+                                    <span className="text-[10px] font-medium text-zinc-500 group-hover/btn:text-[#00E5FF]/80 transition-colors">2</span>
                                     <div className="text-zinc-200 group-hover/btn:text-white font-bold"><AnimatedOdd value={match.awayOdd} /></div>
                                 </button>
                             </div>

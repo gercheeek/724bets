@@ -229,7 +229,7 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
                 <label className="text-zinc-400 font-bold text-sm">Avatar Seçimi</label>
                 <div className="bg-[#12161E] border border-[#202532] rounded-xl p-5 flex flex-col gap-4">
                   <div className="flex items-center gap-6 pb-4 border-b border-[#202532]">
-                    <div className="w-16 h-16 rounded-xl bg-black overflow-hidden border-2 border-zinc-800 shrink-0">
+                    <div className="w-16 h-16 rounded-xl bg-[#0A0C10] overflow-hidden border-2 border-zinc-800 shrink-0">
                       <img src={(siteUser as any).avatarUrl || `https://api.dicebear.com/7.x/avataaars/svg?seed=${siteUser.username}`} className="w-full h-full object-cover" />
                     </div>
                     <div className="flex flex-col gap-1">
@@ -377,7 +377,7 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
                       <p className="text-zinc-500 text-xs font-bold uppercase tracking-wider">Oynanan oyunlar</p>
                     </div>
                     <div className="w-10 h-10 bg-amber-900/30 rounded-lg flex items-center justify-center -rotate-12">
-                      <Gamepad2 className="w-6 h-6 text-amber-500" />
+                      <Gamepad2 className="w-6 h-6 text-zinc-300" />
                     </div>
                   </div>
                   <div className="bg-[#12161E] border border-[#202532] rounded-xl p-5 flex items-center justify-between">
@@ -386,7 +386,7 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
                       <p className="text-zinc-500 text-xs font-bold uppercase tracking-wider">Toplam Ücret</p>
                     </div>
                     <div className="w-10 h-10 bg-emerald-900/30 rounded-full flex items-center justify-center border border-emerald-500/20">
-                      <Coins className="w-5 h-5 text-emerald-500" />
+                      <Coins className="w-5 h-5 text-[#00E5FF]" />
                     </div>
                   </div>
                   <div className="bg-[#12161E] border border-[#202532] rounded-xl p-5 flex items-center justify-between">
@@ -395,7 +395,7 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
                       <p className="text-zinc-500 text-xs font-bold uppercase tracking-wider">Bugün Bahis Yapılan<br/>Tutar</p>
                     </div>
                     <div className="w-10 h-10 bg-yellow-900/30 rounded-full flex items-center justify-center border border-yellow-500/20">
-                      <Coins className="w-5 h-5 text-yellow-500" />
+                      <Coins className="w-5 h-5 text-zinc-300" />
                     </div>
                   </div>
                   <div className="bg-[#12161E] border border-[#202532] rounded-xl p-5 flex items-center justify-between">
@@ -404,7 +404,7 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
                       <p className="text-zinc-500 text-xs font-bold uppercase tracking-wider flex items-center gap-1">Net Kazanç <Info className="w-3.5 h-3.5" /></p>
                     </div>
                     <div className="w-10 h-10 bg-yellow-900/30 rounded-full flex items-center justify-center border border-yellow-500/20">
-                      <Coins className="w-5 h-5 text-yellow-500" />
+                      <Coins className="w-5 h-5 text-zinc-300" />
                     </div>
                   </div>
                 </div>
@@ -419,8 +419,8 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
               <h1 className="text-2xl font-black text-white tracking-tight">Gelen Kutusu</h1>
               
               <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-4 flex items-start gap-3 mb-2">
-                <AlertCircle className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
-                <p className="text-amber-500/90 text-sm font-medium leading-relaxed">
+                <AlertCircle className="w-5 h-5 text-zinc-300 shrink-0 mt-0.5" />
+                <p className="text-zinc-300/90 text-sm font-medium leading-relaxed">
                   Yeni mesajlarınız var! Yönetim ekibimizden veya sistemden gelen önemli duyuruları buradan takip edebilirsiniz.
                 </p>
               </div>
@@ -534,7 +534,7 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
                              }, 800);
                            }
                         }}
-                        className="bg-[#06b6d4] hover:bg-[#00E676] text-black font-black px-6 py-3 rounded-xl transition-colors h-full whitespace-nowrap"
+                        className="bg-[#06b6d4] hover:bg-[#00E5FF] text-black font-black px-6 py-3 rounded-xl transition-colors h-full whitespace-nowrap"
                       >
                         Kaydet
                       </button>
@@ -562,7 +562,7 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
                       <span className="text-white font-bold text-sm">Hesabınızı güvenceye alın</span>
                       <span className="text-zinc-500 text-xs">Para çekme işlemlerinde ve şüpheli girişlerde ek güvenlik sağlar.</span>
                     </div>
-                    <button onClick={() => setTwoFactorStep('setup')} className="bg-[#06b6d4] hover:bg-[#00E676] text-black font-black text-sm px-6 py-2.5 rounded-xl w-full md:w-max transition-colors whitespace-nowrap">
+                    <button onClick={() => setTwoFactorStep('setup')} className="bg-[#06b6d4] hover:bg-[#00E5FF] text-black font-black text-sm px-6 py-2.5 rounded-xl w-full md:w-max transition-colors whitespace-nowrap">
                       Etkinleştir
                     </button>
                   </div>
@@ -572,7 +572,7 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
                     <div className="flex flex-col md:flex-row items-start gap-6">
                       <div className="bg-white p-2 rounded-xl">
                         {/* Mock QR Code */}
-                        <div className="w-32 h-32 bg-black flex items-center justify-center text-white text-xs text-center border-4 border-white">
+                        <div className="w-32 h-32 bg-[#0A0C10] flex items-center justify-center text-white text-xs text-center border-4 border-white">
                           [QR KOD<br/>SİMÜLASYONU]
                         </div>
                       </div>
@@ -605,13 +605,13 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
                   </div>
                 )}
                 {twoFactorStep === 'active' && (
-                  <div className="bg-[#00E676]/10 border border-[#00E676]/30 rounded-xl p-5 flex items-center justify-between gap-4">
+                  <div className="bg-[#00E5FF]/10 border border-[#00E676]/30 rounded-xl p-5 flex items-center justify-between gap-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-[#00E676]/20 flex items-center justify-center text-[#00E676]">
+                      <div className="w-10 h-10 rounded-full bg-[#00E5FF]/20 flex items-center justify-center text-[#00E5FF]">
                         <CheckCircle2 className="w-6 h-6" />
                       </div>
                       <div className="flex flex-col">
-                        <span className="text-[#00E676] font-bold text-sm">2FA Aktif</span>
+                        <span className="text-[#00E5FF] font-bold text-sm">2FA Aktif</span>
                         <span className="text-zinc-400 text-xs">Hesabınız Google Authenticator ile korunuyor.</span>
                       </div>
                     </div>
@@ -673,7 +673,7 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
           {activeTab === 'verification' && (
             <div className="animate-fade-in flex flex-col w-full space-y-6">
               <h1 className="text-2xl font-black text-white tracking-tight flex items-center gap-3">
-                <ShieldCheck className="w-8 h-8 text-[#00E676]" /> 
+                <ShieldCheck className="w-8 h-8 text-[#00E5FF]" /> 
                 Doğrulamalar (KYC)
               </h1>
               
@@ -689,8 +689,8 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
                   {/* Status Indicator */}
                   <div className="flex items-center gap-4 bg-[#1A212D]/50 p-4 rounded-xl border border-white/5">
                     <div className={`w-12 h-12 rounded-full flex items-center justify-center shrink-0 ${
-                      kycStatus === 'verified' ? 'bg-[#00E676]/20 text-[#00E676]' : 
-                      kycStatus === 'pending' ? 'bg-amber-500/20 text-amber-500' : 'bg-red-500/20 text-red-500'
+                      kycStatus === 'verified' ? 'bg-[#00E5FF]/20 text-[#00E5FF]' : 
+                      kycStatus === 'pending' ? 'bg-amber-500/20 text-zinc-300' : 'bg-red-500/20 text-red-500'
                     }`}>
                       {kycStatus === 'verified' ? <CheckCircle2 className="w-6 h-6" /> : 
                        kycStatus === 'pending' ? <AlertCircle className="w-6 h-6" /> : <ShieldCheck className="w-6 h-6" />}
@@ -698,8 +698,8 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
                     <div className="flex flex-col">
                       <span className="text-white font-bold">Hesap Durumu</span>
                       <span className={`text-sm font-bold ${
-                        kycStatus === 'verified' ? 'text-[#00E676]' : 
-                        kycStatus === 'pending' ? 'text-amber-500' : 'text-red-500'
+                        kycStatus === 'verified' ? 'text-[#00E5FF]' : 
+                        kycStatus === 'pending' ? 'text-zinc-300' : 'text-red-500'
                       }`}>
                         {kycStatus === 'verified' ? 'Onaylandı - Sınırsız İşlem' : 
                          kycStatus === 'pending' ? 'İnceleniyor - Bekleyiniz' : 'Doğrulanmadı - İşlem Limitleri Geçerli'}
@@ -746,7 +746,7 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
                       </p>
                       <button 
                         onClick={() => setKycStatus('verified')}
-                        className="mt-6 text-amber-500 text-xs underline opacity-50 hover:opacity-100"
+                        className="mt-6 text-zinc-300 text-xs underline opacity-50 hover:opacity-100"
                       >
                         (Dev Test: Onaylandı Olarak İşaretle)
                       </button>
@@ -755,7 +755,7 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
                   
                   {kycStatus === 'verified' && (
                     <div className="flex flex-col items-center justify-center py-10 bg-gradient-to-b from-[#00E676]/10 to-transparent rounded-xl border border-[#00E676]/20">
-                      <CheckCircle2 className="w-20 h-20 text-[#00E676] mb-4 drop-shadow-[0_0_15px_rgba(0,230,118,0.5)]" />
+                      <CheckCircle2 className="w-20 h-20 text-[#00E5FF] mb-4 drop-shadow-[0_0_15px_rgba(0,230,118,0.5)]" />
                       <h4 className="text-white font-black text-xl mb-2">Hesabınız Tamamen Onaylandı</h4>
                       <p className="text-zinc-300 text-sm text-center max-w-md mb-6">
                         Tebrikler! Sınır olmaksızın para yatırabilir, çekebilir ve yüksek limitli oyunlar oynayabilirsiniz.
@@ -763,11 +763,11 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
                       <div className="grid grid-cols-2 gap-4 w-full max-w-md">
                         <div className="bg-[#1A212D] p-3 rounded-lg text-center">
                           <span className="block text-zinc-500 text-xs font-bold mb-1">Günlük Para Çekme</span>
-                          <span className="text-[#00E676] font-bold">Limitsiz</span>
+                          <span className="text-[#00E5FF] font-bold">Limitsiz</span>
                         </div>
                         <div className="bg-[#1A212D] p-3 rounded-lg text-center">
                           <span className="block text-zinc-500 text-xs font-bold mb-1">Kimlik Teyidi</span>
-                          <span className="text-[#00E676] font-bold">Onaylandı</span>
+                          <span className="text-[#00E5FF] font-bold">Onaylandı</span>
                         </div>
                       </div>
                     </div>
@@ -820,13 +820,13 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
                     </thead>
                     <tbody>
                       {[
-                        { crypto: '214.4', fiat: '214.35', date: '10.05.2026, 13:14', icon: 'T', color: 'bg-emerald-500' },
+                        { crypto: '214.4', fiat: '214.35', date: '10.05.2026, 13:14', icon: 'T', color: 'bg-[#00E5FF]' },
                         { crypto: '285.5', fiat: '100.24', date: '09.05.2026, 16:44', icon: 'TRX', color: 'bg-red-500' },
-                        { crypto: '149.4', fiat: '149.37', date: '03.05.2026, 14:23', icon: 'T', color: 'bg-emerald-500' },
-                        { crypto: '24.4', fiat: '24.40', date: '02.05.2026, 20:35', icon: 'T', color: 'bg-emerald-500' },
-                        { crypto: '99.99', fiat: '99.94', date: '30.04.2026, 20:31', icon: 'T', color: 'bg-emerald-500' },
-                        { crypto: '99.99', fiat: '99.98', date: '28.04.2026, 14:31', icon: 'T', color: 'bg-emerald-500' },
-                        { crypto: '9.99', fiat: '9.99', date: '27.04.2026, 18:01', icon: 'T', color: 'bg-emerald-500' },
+                        { crypto: '149.4', fiat: '149.37', date: '03.05.2026, 14:23', icon: 'T', color: 'bg-[#00E5FF]' },
+                        { crypto: '24.4', fiat: '24.40', date: '02.05.2026, 20:35', icon: 'T', color: 'bg-[#00E5FF]' },
+                        { crypto: '99.99', fiat: '99.94', date: '30.04.2026, 20:31', icon: 'T', color: 'bg-[#00E5FF]' },
+                        { crypto: '99.99', fiat: '99.98', date: '28.04.2026, 14:31', icon: 'T', color: 'bg-[#00E5FF]' },
+                        { crypto: '9.99', fiat: '9.99', date: '27.04.2026, 18:01', icon: 'T', color: 'bg-[#00E5FF]' },
                       ].map((tx, idx) => (
                         <tr key={idx} className="border-b border-[#202532] hover:bg-white/[0.02] transition-colors">
                           <td className="py-4 px-4">
@@ -838,7 +838,7 @@ const ProfileDashboard: React.FC<ProfileDashboardProps> = ({ siteUser, setSiteUs
                             </div>
                           </td>
                           <td className="py-4 px-4">
-                            <span className="bg-emerald-500/10 text-emerald-500 text-xs font-bold px-2 py-0.5 rounded border border-emerald-500/20">
+                            <span className="bg-[#00E5FF]/10 text-[#00E5FF] text-xs font-bold px-2 py-0.5 rounded border border-emerald-500/20">
                               $ {tx.fiat}
                             </span>
                           </td>

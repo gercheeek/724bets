@@ -31,7 +31,7 @@ export default function SecretCurtain() {
     return (
         <div 
             onClick={handleClick}
-            className="fixed inset-0 bg-black z-[99999] flex items-center justify-center cursor-default select-none"
+            className="fixed inset-0 bg-[#0A0C10] z-[99999] flex items-center justify-center cursor-default select-none"
             style={{ 
                 WebkitTapHighlightColor: 'transparent',
                 touchAction: 'manipulation' // Prevents double-tap zooming on mobile

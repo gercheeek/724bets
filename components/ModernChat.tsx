@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { X, Send, Shield, Smile, Cpu, Target, ChevronDown, MessageCircle, MoreVertical, Heart, CornerUpLeft, Trash2, VolumeX, Ban, User, Check, Star, Trophy, Settings, UserX, Flag, ExternalLink, Sparkles, Plus, Medal, ArrowRight, Activity, Ticket, Image as ImageIcon, ChevronRight, Share2 } from 'lucide-react';
+import { X, Send, Shield, Smile, Cpu, Target, ChevronDown, MessageCircle, MoreVertical, Heart, CornerUpLeft, Trash2, VolumeX, Ban, User, Check, Star, Trophy, Settings, UserX, Flag, ExternalLink, Sparkles, Plus, Medal, ArrowRight, Activity, Ticket, Image as ImageIcon, ChevronRight, Share2, Crown, Flame, Snowflake, Train } from 'lucide-react';
 import { supabase, getGlobalConfig, updateGlobalConfig } from '../utils/supabase';
 import { triggerGlobalToast } from './GlobalToaster';
 import { useTranslation } from 'react-i18next';
@@ -7,6 +7,11 @@ import { SiteUser } from '../types';
 import { BetShareModal } from './BetShareModal';
 import confetti from 'canvas-confetti';
 import GifPicker from './GifPicker';
+import CanvasRainEngine from './chat/CanvasRainEngine';
+import RainEventBanner from './chat/RainEventBanner';
+import SystemRainResultMessage from './chat/SystemRainResultMessage';
+import AdminRainControl from './AdminRainControl';
+import { useRainEvent } from '../hooks/useRainEvent';
 
 const POPULAR_EMOJIS = [
     '😀','😃','😄','😁','😆','😅','😂','🤣','🥲','☺️',
@@ -22,13 +27,10 @@ const POPULAR_EMOJIS = [
 
 const CHANNELS = [
     { id: 'global', name: 'Global', emoji: '🌐' },
-    { id: 'sports', name: 'Sports', emoji: '⚽' },
-    { id: 'en', name: 'English', emoji: '🇬🇧' },
-    { id: 'zh-Hant', name: '繁體中文', emoji: '🇹🇼' },
-    { id: 'zh-Hans', name: '简体中文', emoji: '🇨🇳' },
-    { id: 'pt', name: 'Português', emoji: '🇧🇷' },
-    { id: 'id', name: 'Indonesian', emoji: '🇮🇩' },
-    { id: 'tr', name: 'Türkçe', emoji: '🇹🇷' },
+    { id: 'tr', name: 'Türkiye', emoji: '🇹🇷' },
+    { id: 'br', name: 'Brezilya', emoji: '🇧🇷' },
+    { id: 'ar', name: 'Arjantin', emoji: '🇦🇷' },
+    { id: 'sports', name: 'Sport', emoji: '⚽' },
 ];
 
 interface ModernChatProps {
@@ -39,6 +41,7 @@ interface ModernChatProps {
     userRole: string | null;
     isMobile?: boolean;
     botsConfig?: any[];
+    previewMessages?: any[];
 }
 
 const GLOBAL_CHANNEL_ID = 'global';
@@ -49,7 +52,7 @@ const EMOTES: { [key: string]: string } = { ":hehe:": "/emotes/hehe.gif", ":dilM
 const isAuthorized = (role: string | null) => {
     if (!role) return false;
     const r = role.toUpperCase();
-    return ['KRAL', 'PATRON', 'ADMIN', 'MODERATOR'].includes(r);
+    return ['KRAL', 'PATRON', 'ADMIN', 'MODERATOR', 'YÖNETİCİ', 'YONETICI'].includes(r);
 };
 
 const RainDropMessage = ({ rainMsg }: { rainMsg: string }) => {
@@ -98,13 +101,13 @@ const RainDropMessage = ({ rainMsg }: { rainMsg: string }) => {
 const SharedBetCard = ({ payload, replies, onReply }: any) => {
     const [showDetails, setShowDetails] = useState(false);
 
-    const seed = parseInt(payload.id?.split('-').pop()?.replace(/\D/g,'') || '123', 10);
+    const seed = parseInt(String(payload.id)?.split('-').pop()?.replace(/\D/g,'') || '123', 10);
     const winAmount = ((seed % 1000) / 100 + 0.1).toFixed(7);
     const multiplier = ((seed % 500) / 100 + 1.1).toFixed(2);
     const gameTitle = payload.type === 'Casino' ? `${payload.title || 'Crash'} Vay Anasına` : payload.title || 'Spor Bahsi';
 
     return (
-        <div className="bg-[#222429] rounded-2xl overflow-hidden shadow-lg mt-1 w-full max-w-[320px] relative font-sans border border-white/[0.02]">
+        <div className="bg-[#161B26] rounded-2xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.5)] mt-1 w-full max-w-[320px] relative font-sans border border-[#00E5FF]/10">
             <div 
                 className="p-4 cursor-pointer transition-colors"
                 onClick={() => setShowDetails(!showDetails)}
@@ -121,10 +124,10 @@ const SharedBetCard = ({ payload, replies, onReply }: any) => {
                     </span>
                 </div>
                 
-                <div className="bg-[#2D3035] rounded-xl px-4 py-3.5 flex items-center justify-between mb-4 hover:bg-[#32363b] transition-colors shadow-inner">
+                <div className="bg-[#0A0C10] rounded-xl px-4 py-3.5 flex items-center justify-between mb-4 hover:bg-white/5 transition-colors shadow-inner">
                     <div className="flex items-center gap-2">
-                        <div className="w-6 h-6 bg-[#00E676] rounded-full flex items-center justify-center text-[#1A2C38] font-black text-[12px] shadow-sm">₺</div>
-                        <span className="text-[#00E676] font-bold text-[16px] tracking-tight">{winAmount} TRY</span>
+                        <div className="w-6 h-6 bg-[#00E5FF] rounded-full flex items-center justify-center text-[#1A2C38] font-black text-[12px] shadow-sm">₺</div>
+                        <span className="text-[#00E5FF] font-bold text-[16px] tracking-tight">{winAmount} TRY</span>
                     </div>
                     <ChevronRight className="w-4 h-4 text-white font-bold opacity-80" />
                 </div>
@@ -144,9 +147,9 @@ const SharedBetCard = ({ payload, replies, onReply }: any) => {
 };
 
 export const getUserColor = (username: string) => {
-    if (!username) return '#05D9E8';
+    if (!username) return '#00E5FF';
     const colors = [
-        '#FF2A6D', '#05D9E8', '#FFC000', '#B026FF', '#FF9D00', '#00FF9D', '#FF3366', '#33CCFF'
+        '#00E5FF', '#00BFFF', '#87CEFA', '#F0F8FF', '#D3D3D3', '#00FF9D', '#05D9E8', '#33CCFF'
     ];
     let hash = 0;
     for (let i = 0; i < username.length; i++) {
@@ -172,7 +175,7 @@ const renderMessageText = (msg: any, onBetClick?: (betId: string, user: string, 
           <div className="flex flex-col gap-1.5 mt-0.5">
               <div 
                   onClick={() => onBetClick(betId, msg.username, type)}
-                  className="inline-flex items-center gap-1.5 bg-[#050505] hover:bg-[#111] transition-colors rounded px-2.5 py-1 text-sm font-semibold cursor-pointer select-none text-emerald-400 border border-emerald-500/20 w-fit"
+                  className="inline-flex items-center gap-1.5 bg-[#0A0C10] hover:bg-[#111] transition-colors rounded px-2.5 py-1 text-sm font-semibold cursor-pointer select-none text-[#00E5FF] border border-emerald-500/20 w-fit"
                   style={{ borderColor: `${getUserColor(msg.username)}40`, color: getUserColor(msg.username) }}
               >
                   <div className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold text-white uppercase" style={{ backgroundColor: getUserColor(msg.username) }}>
@@ -190,23 +193,9 @@ const renderMessageText = (msg: any, onBetClick?: (betId: string, user: string, 
       return <RainDropMessage rainMsg={rainMsg} />;
   }
 
-  const isGif = text.includes('.giphy.com/') || text.includes('.tenor.com/');
-  if (isGif) {
-      return (
-          <div className="mt-1 overflow-hidden rounded-xl border border-white/5 bg-black/40 inline-block w-full max-w-[200px]">
-              <img src={text} alt="gif" className="w-full h-auto object-cover" />
-          </div>
-      );
-  }
-
-  if (text === '[GIF]') {
-      return (
-          <div className="mt-1.5 w-[140px] h-[90px] bg-white/5 rounded-lg border border-white/10 flex items-center justify-center relative overflow-hidden shrink-0">
-              <span className="text-[14px] font-black text-white/30 tracking-widest uppercase">GIF</span>
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full animate-[shimmer_2s_infinite]"></div>
-          </div>
-      );
-  }
+    if (text === '[GIF]') {
+        return null;
+    }
 
   const parts = text.split(/(:\w+:)/g);
   return parts.map((part, index) => {
@@ -224,7 +213,7 @@ const renderMessageText = (msg: any, onBetClick?: (betId: string, user: string, 
   });
 };
 
-const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRole, isMobile, botsConfig }) => {
+const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRole, isMobile, botsConfig, previewMessages }) => {
     const { t } = useTranslation();
     const [messages, setMessages] = useState<any[]>([]);
     const [newMessage, setNewMessage] = useState('');
@@ -237,8 +226,10 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
     const [showLangMenu, setShowLangMenu] = useState(false);
     const chatContainerRef = useRef<HTMLDivElement>(null);
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-    const [showGifPicker, setShowGifPicker] = useState(false);
+    const [showChannelDropdown, setShowChannelDropdown] = useState(false);
     const emojiPickerRef = useRef<HTMLDivElement>(null);
+    
+    const { activeEvent } = useRainEvent();
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -258,6 +249,9 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
     const [isTreasureDropping, setIsTreasureDropping] = useState(false);
     const isScrolledUpRef = useRef(false);
     
+    // Admin Panel State
+    const [showAdminRainControl, setShowAdminRainControl] = useState(false);
+
     // Top Winners State
     const [showTopWinners, setShowTopWinners] = useState(false);
     const MOCK_TOP_WINNERS = [
@@ -475,49 +469,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
         };
     }, [open, activeChannel.id]);
 
-    useEffect(() => {
-        if (!open || !botsConfig || botsConfig.length === 0) return;
-        
-        const intervals: NodeJS.Timeout[] = [];
 
-        botsConfig.forEach(bot => {
-            if (!bot.isActive) return;
-            
-            bot.scenarios.forEach((scen: any) => {
-                if (!scen.isActive) return;
-                
-                const ms = (scen.intervalMinutes || 1) * 60 * 1000;
-                
-                const interval = setInterval(() => {
-                    const newBotMsg = {
-                        id: `bot_${Date.now()}_${Math.random().toString(36).substr(2,9)}`,
-                        username: bot.name,
-                        role: bot.role,
-                        message: scen.text,
-                        botColor: bot.color,
-                        created_at: new Date().toISOString(),
-                        channel_id: GLOBAL_CHANNEL_ID
-                    };
-                    
-                    setMessages(prev => {
-                        const updated = [...prev, newBotMsg];
-                        setTimeout(() => {
-                            if (chatContainerRef.current) {
-                                chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
-                            }
-                        }, 50);
-                        return updated;
-                    });
-                }, ms);
-                
-                intervals.push(interval);
-            });
-        });
-
-        return () => {
-            intervals.forEach(clearInterval);
-        };
-    }, [open, botsConfig]);
 
 
 
@@ -526,7 +478,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
         if (!newMessage.trim()) return;
 
         const myUserId = siteUser?.id || userRole || 'guest';
-        const myUsername = siteUser?.username || 'Misafir';
+        const myUsername = siteUser?.username || (userRole === 'admin' ? 'Yönetici' : 'Misafir');
         const role = userRole || 'user';
 
         if (!siteUser && userRole !== 'admin') {
@@ -653,59 +605,94 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
         return null;
     }
 
-    const displayMessages = messages.filter(m => !isSystemOrCountdown(m) && m.role !== 'system_win');
+    const allMessages = [...messages, ...(previewMessages || [])].sort((a, b) => {
+        const timeA = a.created_at ? new Date(a.created_at).getTime() : a.id;
+        const timeB = b.created_at ? new Date(b.created_at).getTime() : b.id;
+        return timeA - timeB;
+    });
+    const displayMessages = allMessages.filter(m => !isSystemOrCountdown(m) && m.role !== 'system_win').slice(-60); // 🚀 Performans: Sadece son 60 mesaj render edilecek
     const mainMessages = displayMessages.filter(m => !(m.message || '').startsWith('[BET_REPLY:'));
 
     return (
-        <div id="modern-chat-wrapper" className="flex flex-col h-full bg-[#0a0d14] relative transition-shadow duration-300">
+        <div id="modern-chat-wrapper" className="flex flex-col h-full bg-[#0f172a]/60 backdrop-blur-xl relative transition-shadow duration-300 border-l border-white/5">
+            <CanvasRainEngine active={!!activeEvent} />
+            <style>{`
+                @keyframes chatPopIn {
+                    0% { opacity: 0; transform: translateY(15px) scale(0.95); }
+                    100% { opacity: 1; transform: translateY(0) scale(1); }
+                }
+                .chat-msg-animate {
+                    animation: chatPopIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+                }
+            `}</style>
             
             {/* Chat Header */}
-            <div className="bg-[#0A0D14] px-4 h-[64px] text-white flex items-center justify-between flex-shrink-0 shadow-[0_4px_20px_rgba(0,0,0,0.3)] z-[100] border-b border-white/5 relative">
-                <div className="flex items-center gap-3 relative">
-                     <button className="flex items-center gap-2 bg-[#0a0d14] border border-white/5 hover:border-white/10 px-3 py-1.5 rounded-xl transition-all text-sm font-semibold text-zinc-300 hover:text-white" onClick={() => setShowLangMenu(!showLangMenu)}>
-                         <span className="w-4 h-4 rounded-full overflow-hidden flex items-center justify-center text-[12px] opacity-90">{activeChannel.emoji || '🇹🇷'}</span>
-                         {activeChannel.name || 'Türkçe'}
-                         <ChevronDown className="w-3.5 h-3.5 ml-1 text-zinc-500" />
-                     </button>
-                     {/* Info Icon Moved to Right Side */}
-                     {showLangMenu && (
-                        <div className="absolute top-full left-0 mt-2 bg-[#1a1f29] border border-white/10 rounded-xl shadow-2xl py-2 z-50 min-w-[160px]">
+            <div className="bg-[#0A0C10] pl-3 pr-2 h-[72px] text-white flex items-center justify-between flex-shrink-0 shadow-[0_4px_30px_rgba(0,0,0,0.8)] z-[100] border-b border-white/5 relative">
+                
+                {/* Channel Dropdown */}
+                <div className="relative w-full pr-4 z-50">
+                    <button 
+                        onClick={() => setShowChannelDropdown(!showChannelDropdown)}
+                        className="flex items-center justify-between w-full bg-[#121620] hover:bg-[#1a1f29] border border-white/5 rounded-lg px-3 py-2 transition-all"
+                    >
+                        <div className="flex items-center gap-2">
+                            <span className="text-[16px] leading-none">{activeChannel.emoji}</span>
+                            <span className="text-[13px] font-bold text-zinc-200">{activeChannel.name} Odası</span>
+                        </div>
+                        <ChevronDown className={`w-4 h-4 text-zinc-400 transition-transform ${showChannelDropdown ? 'rotate-180' : ''}`} />
+                    </button>
+
+                    {showChannelDropdown && (
+                        <div className="absolute top-full left-0 mt-2 w-full bg-[#0A0C10] border border-[#00E5FF]/20 shadow-[0_10px_30px_rgba(0,0,0,0.8)] rounded-xl overflow-hidden py-1">
                             {CHANNELS.map(ch => (
-                                <div 
-                                    key={ch.id} 
-                                    onClick={() => { setActiveChannel(ch); setShowLangMenu(false); }}
-                                    className={`px-3 py-2.5 hover:bg-white/5 cursor-pointer text-sm font-semibold transition-colors flex items-center justify-between gap-2 ${activeChannel.id === ch.id ? 'text-[#00e5ff] bg-white/[0.02]' : 'text-slate-300'}`}
+                                <button
+                                    key={ch.id}
+                                    onClick={() => { setActiveChannel(ch); setShowChannelDropdown(false); }}
+                                    className={`w-full flex items-center gap-3 px-4 py-2.5 transition-colors ${
+                                        activeChannel.id === ch.id 
+                                            ? 'bg-[#00E5FF]/10 text-[#00E5FF]' 
+                                            : 'text-zinc-400 hover:bg-white/5 hover:text-zinc-200'
+                                    }`}
                                 >
-                                    <div className="flex items-center gap-2">
-                                        <span className="text-[14px] opacity-90">{ch.emoji}</span>
-                                        {ch.name}
-                                    </div>
-                                    {activeChannel.id === ch.id && <div className="w-2 h-2 rounded-full bg-[#00e5ff]"></div>}
-                                </div>
+                                    <span className="text-[16px] leading-none">{ch.emoji}</span>
+                                    <span className="text-[13px] font-bold">{ch.name}</span>
+                                </button>
                             ))}
                         </div>
-                     )}
+                    )}
                 </div>
                 
-                <div className="flex items-center gap-1.5 pr-1 relative">
+                {/* Right Icons */}
+                <div className="flex items-center gap-1.5 pl-2 pr-1 relative shrink-0 bg-gradient-to-l from-[#06080C] via-[#06080C] to-transparent z-10 h-full">
                     {/* Global Rain Info Icon */}
                     <div className="relative group">
-                         <div className="w-8 h-8 rounded-[10px] bg-white/5 hover:bg-white/10 transition-colors flex items-center justify-center cursor-help">
+                         <div className="btn-icon-modern !w-8 !h-8 !rounded-lg cursor-help">
                              <div className="w-4 h-4 rounded-full border border-zinc-400 text-zinc-400 flex items-center justify-center text-[10px] font-bold transition-all duration-300 group-hover:border-white group-hover:text-white">i</div>
                          </div>
-                         <div className="absolute top-full right-0 mt-2 w-[220px] bg-[#0A0D14] border border-[#00E5FF]/20 shadow-[0_10px_30px_rgba(0,0,0,0.8)] rounded-xl p-3 text-slate-200 text-[11px] font-medium opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
-                             Her 1 saat içinde iki kez, günde toplam 48 kez <span className="text-[#00E676] font-bold">50$</span> (1 kişiye 25$, kalanı 5 kişiye 5'er$) sohbet katılımcılarına rastgele dağıtılır.
+                         <div className="absolute top-full right-0 mt-2 w-[220px] bg-[#0A0C10] border border-[#00E5FF]/20 shadow-[0_10px_30px_rgba(0,0,0,0.8)] rounded-xl p-3 text-slate-200 text-[11px] font-medium opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
+                            Her 1 saat içinde iki kez, günde toplam 48 kez <span className="text-[#00E5FF] font-bold">50$</span> (1 kişiye 25$, kalanı 5 kişiye 5'er$) sohbet katılımcılarına rastgele dağıtılır.
                          </div>
                      </div>
+
+                    {/* Admin Rain Control Button */}
+                    {isAuthorized(userRole) && (
+                        <button 
+                            onClick={() => setShowAdminRainControl(true)}
+                            className="btn-icon-modern !w-8 !h-8 !rounded-lg"
+                            title="Admin Yağmur Kontrolü"
+                        >
+                            <span className="text-xl">🌧️</span>
+                        </button>
+                    )}
 
                     {/* Top Winners Trophy */}
                     <div className="relative">
                         <button 
                             onClick={() => setShowTopWinners(!showTopWinners)}
-                            className={`w-8 h-8 rounded-[10px] flex items-center justify-center transition-colors ${showTopWinners ? 'bg-white/10' : 'bg-white/5 hover:bg-white/10'}`}
+                            className={`btn-icon-modern !w-8 !h-8 !rounded-lg ${showTopWinners ? 'active' : ''}`}
                             title="En Çok Kazananlar"
                         >
-                            <Trophy className="w-4 h-4 text-amber-400 drop-shadow-[0_0_5px_rgba(251,191,36,0.5)]" strokeWidth={2.5} />
+                            <Trophy className="w-4 h-4 text-zinc-300 drop-shadow-[0_0_5px_rgba(251,191,36,0.5)]" strokeWidth={2.5} />
                         </button>
 
                         {/* Top Winners Dropdown */}
@@ -724,7 +711,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
                                             <div className="flex items-center gap-2">
                                                 {/* Rank Medal */}
                                                 <div className="relative w-4 h-4 flex items-center justify-center">
-                                                    {winner.rank === 1 && <span className="text-amber-400 text-lg drop-shadow-sm leading-none">🏅</span>}
+                                                    {winner.rank === 1 && <span className="text-zinc-300 text-lg drop-shadow-sm leading-none">🏅</span>}
                                                     {winner.rank === 2 && <span className="text-slate-300 text-lg drop-shadow-sm leading-none">🥈</span>}
                                                     {winner.rank === 3 && <span className="text-amber-700 text-lg drop-shadow-sm leading-none">🥉</span>}
                                                 </div>
@@ -736,7 +723,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
                                                 <span className="text-white font-semibold text-[13px]">{winner.name}</span>
                                             </div>
                                             {/* Amount */}
-                                            <div className="bg-[#1C1F24] px-2.5 py-1.5 rounded text-[#00E676] font-bold text-[12px] tracking-wide shadow-inner border border-white/[0.02]">
+                                            <div className="bg-[#1C1F24] px-2.5 py-1.5 rounded text-[#00E5FF] font-bold text-[12px] tracking-wide shadow-inner border border-white/[0.02]">
                                                 {winner.amount}
                                             </div>
                                         </div>
@@ -748,39 +735,64 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
 
                     {/* Close Button */}
                     <button 
-                        onClick={onClose} 
-                        className="w-8 h-8 rounded-[10px] flex items-center justify-center bg-white/5 hover:bg-white/10 transition-colors text-zinc-400 hover:text-white ml-0.5"
+                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); onClose(); }} 
+                        className="btn-icon-modern !w-7 !h-7 !rounded-lg ml-1 shrink-0 relative z-[99] cursor-pointer pointer-events-auto"
                         title="Kapat"
                     >
-                        <X className="w-4 h-4" strokeWidth={2.5} />
+                        <X className="w-4 h-4 pointer-events-none" />
                     </button>
                 </div>
             </div>
 
+            {/* Admin Rain Modal */}
+            {showAdminRainControl && (
+                <div style={{
+                    position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
+                    backgroundColor: 'var(--bg-overlay)', backdropFilter: 'blur(5px)',
+                    zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px'
+                }}>
+                    <div style={{ position: 'relative', width: '100%', maxWidth: '400px' }}>
+                        <button 
+                            onClick={() => setShowAdminRainControl(false)}
+                            style={{ position: 'absolute', top: '16px', right: '16px', background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', zIndex: 10 }}
+                        >
+                            <X size={20} />
+                        </button>
+                        <AdminRainControl adminId={siteUser?.id || 'admin'} />
+                    </div>
+                </div>
+            )}
+
+            <RainEventBanner currentUserId={siteUser?.id || userRole || 'guest'} />
+
             {/* Sticky Announcement / Countdown Bar */}
             {activeAnnouncement && (
-                <div className="bg-[#0f0f0f] border-b border-white/5 px-3.5 py-2.5 flex items-center justify-between gap-2.5 shadow-lg relative z-20 shrink-0 animate-fade-in">
-                    <div className="flex items-center gap-2.5 min-w-0 flex-1">
-                        <div className="relative flex items-center justify-center w-7 h-7 rounded-lg bg-amber-500/10 border border-amber-500/30 shrink-0">
-                            <span className="animate-ping absolute inline-flex h-3.5 w-3.5 rounded-full bg-amber-400 opacity-60"></span>
-                            <span className="text-amber-400 text-xs font-bold relative z-10">⏳</span>
+                <div className="bg-[#0b0e14] border-b border-[#00E5FF]/20 px-4 py-3 flex items-center justify-between gap-3 shadow-[0_4px_20px_rgba(0,229,255,0.05)] relative z-20 shrink-0 animate-fade-in overflow-hidden">
+                    {/* Background glow */}
+                    <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#00E5FF]/50 to-transparent"></div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#00E5FF]/[0.03] to-transparent pointer-events-none"></div>
+                    
+                    <div className="flex items-center gap-3 min-w-0 flex-1 relative z-10">
+                        <div className="relative flex items-center justify-center w-8 h-8 rounded-xl bg-[#00E5FF]/10 border border-[#00E5FF]/30 shrink-0 shadow-[0_0_15px_rgba(0,229,255,0.1)]">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-xl bg-[#00E5FF] opacity-20"></span>
+                            <Crown className="text-[#00E5FF] w-4 h-4 relative z-10 drop-shadow-[0_0_8px_rgba(0,229,255,0.8)]" />
                         </div>
                         <div className="flex flex-col min-w-0 flex-1">
-                            <div className="flex items-center gap-1.5 mb-0.5">
-                                <span className="text-[10px] font-black text-amber-400 uppercase tracking-widest leading-none">Sistem Duyurusu</span>
-                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                            <div className="flex items-center gap-2 mb-1">
+                                <span className="text-[10px] font-black text-[#00E5FF] uppercase tracking-[0.2em] leading-none drop-shadow-md">SİSTEM DUYURUSU</span>
+                                <span className="w-1.5 h-1.5 rounded-full bg-[#00E5FF] animate-pulse shadow-[0_0_5px_rgba(16,185,129,0.8)]"></span>
                             </div>
-                            <p className="text-xs text-slate-200 font-semibold truncate leading-snug">
-                                {activeAnnouncement.text}
+                            <p className="text-[13px] text-white font-semibold truncate leading-snug tracking-wide">
+                                {activeAnnouncement.text.replace(/👑/g, '').trim()}
                             </p>
                         </div>
                     </div>
                     <button 
                         onClick={() => setActiveAnnouncement(null)} 
-                        className="text-slate-500 hover:text-slate-200 p-1.5 hover:bg-white/5 rounded-lg shrink-0 transition-colors"
+                        className="text-white/40 hover:text-white p-1.5 hover:bg-white/5 rounded-lg shrink-0 transition-colors relative z-10"
                         title="Duyuruyu Kapat"
                     >
-                        <X className="w-3.5 h-3.5" />
+                        <X className="w-4 h-4" />
                     </button>
                 </div>
             )}
@@ -789,7 +801,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
             <div 
                 ref={chatContainerRef} 
                 onScroll={handleScroll}
-                className="flex-1 overflow-y-auto p-3 space-y-2 custom-scrollbar bg-[#0A0D14] transition-all relative"
+                className="flex-1 overflow-y-auto p-2 space-y-0.5 custom-scrollbar bg-[#0A0C10] transition-all relative"
                 style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(255,255,255,0.05) transparent' }}
             >
                 {!isConnected ? (
@@ -805,16 +817,27 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
                     </div>
                 ) : (
                     mainMessages.map((msg, i) => {
-                        const isMod = msg.role?.toUpperCase() === 'ADMIN' || msg.role?.toUpperCase() === 'MODERATOR' || (msg.username || '').toLowerCase() === 'yönetici' || (msg.username || '').toLowerCase() === 'admin';
+                        const isAdmin = msg.role?.toUpperCase() === 'ADMIN' || (msg.username || '').toLowerCase() === 'yönetici' || (msg.username || '').toLowerCase() === 'admin';
+                        const isMod = msg.role?.toUpperCase() === 'MODERATOR' || msg.role?.toUpperCase() === 'MOD';
                         const isSystem = msg.role?.toUpperCase() === 'SYSTEM';
                         const isVip = msg.role?.toUpperCase() === 'VIP';
                         const isBetShare = (msg.message || '').startsWith('[BET_SHARE:');
-                        const isBigWin = (msg.message || '').startsWith('[BIG_WIN:');
                         const isMentioned = siteUser && (msg.message || '').includes(`@${siteUser.username}`);
+                        const isRealUser = msg.user_id && !msg.user_id.startsWith('bot_') && !isAdmin && !isMod && !isSystem;
                         
                         const userName = msg.username || 'Misafir';
-                        const userColor = isMod ? '#10b981' : getUserColor(userName);
-                        const initial = userName.charAt(0).toUpperCase();
+                        const userColor = isAdmin ? '#ef4444' : isMod ? '#00E5FF' : getUserColor(userName);
+
+                        // Roman numeral VIP calculation (I, II, III, IV, V)
+                        const romanLevels = ['I', 'II', 'III', 'IV', 'V'];
+                        let romanVip = 'I';
+                        if (msg.vipLevel && romanLevels.includes(String(msg.vipLevel).toUpperCase())) {
+                            romanVip = String(msg.vipLevel).toUpperCase();
+                        } else {
+                            let hash = 0;
+                            for (let chIdx = 0; chIdx < userName.length; chIdx++) hash = userName.charCodeAt(chIdx) + ((hash << 5) - hash);
+                            romanVip = romanLevels[Math.abs(hash) % 5];
+                        }
 
                         if (isBetShare) {
                             let payload = null;
@@ -826,33 +849,30 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
                             if (payload) {
                                 const replies = messages.filter(m => (m.message || '').startsWith(`[BET_REPLY:${payload.id}]`));
                                 return (
-                                    <div key={msg.id || i} className="mb-4">
-                                        <div className="flex items-center gap-1.5 px-2 mb-1">
-                                            {isMod ? (
-                                                <span className="inline-flex items-center gap-1 bg-[#10b981]/10 text-[#10b981] px-1.5 py-0.5 rounded flex-shrink-0 text-[10px] font-black tracking-widest leading-none border border-[#10b981]/20 uppercase drop-shadow-[0_0_5px_rgba(16,185,129,0.3)]">
-                                                    <Shield className="w-3 h-3" /> MOD
+                                    <div key={msg.id || i} className="mb-2 chat-msg-animate">
+                                        <div className="flex items-center gap-1.5 px-1 mb-0.5">
+                                            {isAdmin ? (
+                                                <span className="inline-flex items-center gap-1 bg-gradient-to-r from-red-600/30 to-rose-900/40 text-red-400 px-2 py-0.5 rounded text-[9px] font-black tracking-widest border border-red-500/50 uppercase shadow-sm flex-shrink-0 leading-none">
+                                                    <Crown className="w-2.5 h-2.5 text-red-400" /> KRAL
                                                 </span>
-                                            ) : isVip ? (
-                                                <span className="inline-flex items-center gap-1 bg-yellow-500/10 text-yellow-500 px-1.5 py-0.5 rounded flex-shrink-0 text-[10px] font-black tracking-widest leading-none border border-yellow-500/20 uppercase drop-shadow-[0_0_5px_rgba(234,179,8,0.3)]">
-                                                    <Star className="w-3 h-3 fill-yellow-500" /> VIP
+                                            ) : isMod ? (
+                                                <span className="inline-flex items-center gap-1 bg-gradient-to-r from-[#00E5FF]/20 to-transparent text-[#00E5FF] px-1.5 py-0.5 rounded text-[9px] font-black tracking-widest border border-[#00E5FF]/30 uppercase flex-shrink-0 leading-none">
+                                                    <Shield className="w-2.5 h-2.5" /> MOD
                                                 </span>
                                             ) : (
-                                                <div 
-                                                    className="w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-black shrink-0 shadow-lg"
-                                                    style={{ backgroundColor: `${userColor}20`, color: userColor, border: `1px solid ${userColor}50` }}
-                                                >
-                                                    {initial}
-                                                </div>
+                                                <span className="inline-flex items-center justify-center bg-[#181C24] text-amber-400/90 border border-amber-500/20 px-1 py-0.5 rounded text-[9px] font-black leading-none shrink-0">
+                                                    {romanVip}
+                                                </span>
                                             )}
                                             <span 
-                                                className="font-black tracking-tight text-[13.5px]" 
-                                                style={{ color: userColor, textShadow: `0 0 5px ${userColor}66` }}
+                                                className="font-black tracking-tight text-[12.5px]" 
+                                                style={{ color: userColor }}
                                             >
                                                 {userName}
                                             </span>
-                                            <span className="text-slate-400 text-[11px] ml-1">bir kupon paylaştı</span>
+                                            <span className="text-slate-400 text-[10.5px] ml-1">bir kupon paylaştı</span>
                                         </div>
-                                        <div className="ml-1">
+                                        <div className="ml-0.5">
                                             <SharedBetCard 
                                                 payload={payload} 
                                                 replies={replies} 
@@ -860,6 +880,21 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
                                             />
                                         </div>
                                     </div>
+                                );
+                            }
+                        } else if (msg.role === 'rain_result') {
+                            let payload: any = null;
+                            try {
+                                payload = JSON.parse(msg.message);
+                            } catch(e) {}
+                            
+                            if (payload) {
+                                return (
+                                    <SystemRainResultMessage 
+                                        key={msg.id || i} 
+                                        payload={payload} 
+                                        currentUserId={siteUser?.id || userRole || 'guest'} 
+                                    />
                                 );
                             }
                         } else if (msg.role === 'SYSTEM_WIN_RAIN') {
@@ -870,93 +905,25 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
                             
                             if (payload) {
                                 return (
-                                    <div key={msg.id || i} className="mb-3 mt-1 flex gap-3 px-1">
-                                        {/* Avatar */}
-                                        <div className="shrink-0">
-                                            <div className="w-10 h-10 rounded-full bg-[#1C1E22] overflow-hidden flex items-center justify-center border border-white/5 shadow-md">
-                                                <img src="https://api.dicebear.com/7.x/bottts/svg?seed=bcgame&backgroundColor=ff3366" alt="bc.game" className="w-full h-full object-cover" />
-                                            </div>
-                                        </div>
-                                        
+                                    <div key={msg.id || i} className="mb-2 mt-0.5 flex gap-2 px-1 chat-msg-animate">
                                         <div className="flex-1 flex flex-col min-w-0">
-                                            {/* Header */}
-                                            <div className="flex items-center gap-1.5 mb-1.5">
-                                                <span className="font-bold text-[#b0bec5] text-[13px]">724bot</span>
-                                                <span className="text-[10px] font-bold text-slate-500">
+                                            <div className="flex items-center gap-1.5 mb-1">
+                                                <span className="font-bold text-[#b0bec5] text-[12px]">724bot</span>
+                                                <span className="text-[9.5px] font-bold text-slate-500">
                                                     {new Date(msg.created_at || Date.now()).toLocaleTimeString('tr-TR', {hour: '2-digit', minute:'2-digit'})}
                                                 </span>
                                             </div>
-                                            
-                                            {/* Card Body */}
-                                            <div className="bg-[#1C1F24] rounded-xl overflow-hidden shadow-lg border border-white/5 relative group/card">
-                                                <div className="absolute inset-0 bg-gradient-to-b from-white/[0.02] to-transparent pointer-events-none" />
-                                                {/* Top Inner padding */}
-                                                <div className="p-3 flex flex-col gap-2.5 relative z-10">
-                                                    
-                                                    {/* Title Row */}
-                                                    <div className="flex items-center gap-2.5">
-                                                        <div className="w-8 h-8 shrink-0 bg-gradient-to-br from-purple-500 to-purple-700 rounded-full flex items-center justify-center shadow-[0_0_10px_rgba(168,85,247,0.4)] relative overflow-hidden">
-                                                            {/* Fake coins in circle */}
-                                                            <div className="absolute w-1.5 h-3 bg-yellow-400 rounded-full rotate-45 -ml-2 mb-1"></div>
-                                                            <div className="absolute w-2 h-4 bg-yellow-400 rounded-full -rotate-12"></div>
-                                                            <div className="absolute w-1.5 h-3 bg-yellow-400 rounded-full rotate-45 ml-2 mt-1"></div>
+                                            <div className="bg-[#161B26] rounded-xl overflow-hidden shadow-lg border border-[#00E5FF]/10 relative group/card">
+                                                <div className="p-2.5 flex flex-col gap-2 relative z-10">
+                                                    <div className="flex items-center gap-2">
+                                                        <div className="w-7 h-7 shrink-0 bg-gradient-to-br from-purple-500 to-purple-700 rounded-full flex items-center justify-center shadow-sm">
+                                                            <span className="text-white text-xs font-black">🏆</span>
                                                         </div>
                                                         <div className="flex flex-col">
-                                                            <span className="text-white font-black text-[13px] tracking-wide">Tebrikler!</span>
-                                                            <span className="text-[#00E676] font-bold text-[12px]">@{payload.winner}</span>
+                                                            <span className="text-white font-black text-[12px] tracking-wide">Tebrikler!</span>
+                                                            <span className="text-[#00E5FF] font-bold text-[11.5px]">@{payload.winner}</span>
                                                         </div>
                                                     </div>
-                                                    
-                                                    {/* Won In Box */}
-                                                    <div className="bg-black/20 rounded-lg py-2 flex flex-col items-center justify-center border border-white/5 shadow-inner">
-                                                        <div className="text-white text-[13px] font-bold flex items-center gap-1">
-                                                            Won <span className="text-[#00E676]">${payload.amount}</span>
-                                                        </div>
-                                                        <div className="text-slate-400 text-[11px] font-medium flex items-center gap-1">
-                                                            in <span className="text-[#00E676]">{payload.game}</span>
-                                                        </div>
-                                                    </div>
-                                                    
-                                                    {/* Rain Section */}
-                                                    <div className="flex flex-col gap-1.5 mt-1">
-                                                        <div className="text-[#00E5FF] text-[11px] font-bold flex items-center justify-center gap-1 relative group pb-1.5 border-b border-[#00E5FF]/10 w-full whitespace-nowrap">
-                                                            <div className="flex items-center gap-1">
-                                                                <span>💧</span>
-                                                                <span className="uppercase tracking-wider">İşte şanslı yağmur geliyor</span>
-                                                                <span>💧</span>
-                                                            </div>
-                                                        </div>
-                                                        <div className="flex flex-col gap-1 pt-0.5">
-                                                            {payload.rain && payload.rain.slice(0, 3).map((r: any, idx: number) => (
-                                                                <div key={idx} className="flex justify-between items-center px-1.5 py-1 rounded hover:bg-white/5 transition-colors">
-                                                                    <span className="text-[#00E676] font-bold text-[12px] truncate">@{r.user}</span>
-                                                                    <div className="flex items-center gap-1.5">
-                                                                        <span className="text-white font-black text-[12px]">{r.amount}</span>
-                                                                        <div className="w-3.5 h-3.5 bg-gradient-to-br from-[#00E676] to-emerald-600 rounded-full flex items-center justify-center shrink-0 shadow-sm">
-                                                                            <span className="text-black text-[8px] font-black leading-none">$</span>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            ))}
-                                                        </div>
-                                                        {payload.rain && payload.rain.length > 3 && (
-                                                            <button 
-                                                                onClick={() => setRainModalData(payload.rain)}
-                                                                className="relative overflow-hidden w-full bg-gradient-to-r from-[#2A2E35] to-[#22252b] hover:from-[#32373F] hover:to-[#2A2E35] border border-white/5 hover:border-white/10 transition-all text-slate-300 py-2 rounded-lg text-[11px] font-bold mt-1 flex items-center justify-center gap-1.5 group/btn shadow-sm"
-                                                            >
-                                                                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-[100%] group-hover/btn:translate-x-[100%] transition-transform duration-700" />
-                                                                <span className="relative z-10">Daha fazlasını görüntüle</span>
-                                                                <ChevronDown className="relative z-10 w-3.5 h-3.5 -rotate-90 text-[#00E5FF] group-hover/btn:text-white transition-colors group-hover/btn:translate-x-0.5 drop-shadow-[0_0_5px_rgba(0,229,255,0.4)]" />
-                                                            </button>
-                                                        )}
-                                                    </div>
-                                                    
-                                                </div>
-                                                
-                                                {/* Bottom Footer (Bet ID) */}
-                                                <div className="bg-[#131518] px-3 py-2 mt-0.5 flex justify-between items-center text-slate-500 text-[10px] font-semibold cursor-pointer hover:bg-[#1A1D21] hover:text-slate-400 transition-colors border-t border-[#00E676]/10 relative z-10">
-                                                    <span className="truncate">Bahis kimliği: {payload.betId}</span>
-                                                    <ChevronDown className="w-3 h-3 -rotate-90 shrink-0 opacity-50" />
                                                 </div>
                                             </div>
                                         </div>
@@ -979,56 +946,70 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
                                     });
                                 }
                             }}
-                            className={`px-3 py-2.5 bg-[#1C1F24]/80 border border-white/5 rounded-2xl text-left shadow-sm transition-all hover:bg-white/[0.04] hover:border-white/10 mb-2.5 backdrop-blur-md relative overflow-hidden flex gap-3 items-start ${isMentioned ? 'bg-[#00E5FF]/[0.08] shadow-[0_0_15px_rgba(0,229,255,0.2)]' : ''} ${(isMod && siteUser && isAuthorized(siteUser.role) && userName !== siteUser.username) ? 'cursor-pointer' : ''}`}
+                            className={`group px-2 py-1 bg-transparent rounded-lg text-left transition-colors duration-200 hover:bg-white/[0.02] mb-0.5 relative flex flex-col chat-msg-animate ${isMentioned ? 'bg-[#00E5FF]/5' : ''} ${isRealUser ? 'bg-white/[0.01]' : ''} ${(isMod && siteUser && isAuthorized(siteUser.role) && userName !== siteUser.username) ? 'cursor-pointer' : ''} ${msg.isDraft ? 'opacity-80 scale-[0.98]' : ''}`}
                         >
-                            {/* Avatar Column */}
-                            <div className="shrink-0 mt-0.5">
-                                {isMod ? (
-                                     <div className="w-8 h-8 rounded-full bg-[#10b981]/20 border border-[#10b981]/50 flex items-center justify-center">
-                                         <Shield className="w-4 h-4 text-[#10b981]" />
-                                     </div>
-                                ) : (
-                                     <div className="w-8 h-8 rounded-full bg-[#141822] border flex items-center justify-center overflow-hidden" style={{ borderColor: `${userColor}50` }}>
-                                         {msg.avatarUrl ? (
-                                             <img src={msg.avatarUrl} alt={userName} className="w-full h-full object-cover" />
-                                         ) : (
-                                             <span className="font-bold text-[11px]" style={{ color: userColor }}>{initial}</span>
-                                         )}
-                                     </div>
-                                )}
-                            </div>
-                            
-                            {/* Message Content Column */}
+                            {/* Message Content Column (Profil resimleri kaldırıldı, tam genişlik) */}
                             <div className="flex-1 flex flex-col min-w-0">
-                                <div className="flex items-center gap-1.5 mb-1 flex-wrap">
-                                    {isMod && (
-                                        <span className="inline-flex items-center gap-1 bg-[#10b981]/10 text-[#10b981] px-1.5 py-0.5 rounded text-[9px] font-black tracking-widest border border-[#10b981]/20 uppercase drop-shadow-[0_0_5px_rgba(16,185,129,0.3)]">
-                                            MOD
+                                <div className="flex items-center gap-1.5 mb-0.5 flex-wrap">
+                                    {isAdmin ? (
+                                        <span className="inline-flex items-center gap-1 bg-gradient-to-r from-[#00E5FF]/20 to-transparent text-[#00E5FF] px-2 py-0.5 rounded text-[9px] font-black tracking-widest border border-[#00E5FF]/50 uppercase shadow-sm">
+                                            <Crown className="w-2.5 h-2.5 text-[#00E5FF]" /> KRAL
+                                        </span>
+                                    ) : isMod ? (
+                                        <span className="inline-flex items-center gap-1 bg-gradient-to-r from-[#00E5FF]/20 to-transparent text-[#00E5FF] px-1.5 py-0.5 rounded text-[9px] font-black tracking-widest border border-[#00E5FF]/30 uppercase">
+                                            <Shield className="w-2.5 h-2.5" /> MOD
+                                        </span>
+                                    ) : isVip ? (
+                                        <span className="inline-flex items-center gap-1 bg-gradient-to-r from-amber-500/20 to-transparent text-zinc-300 px-1.5 py-0.5 rounded text-[8.5px] font-black tracking-widest border border-amber-500/30 uppercase">
+                                            <Star className="w-2 h-2 fill-amber-400" /> VIP
+                                        </span>
+                                    ) : (
+                                        <span className="inline-flex items-center justify-center bg-[#181C24] text-amber-400/90 border border-amber-500/20 px-1.5 py-0.5 rounded text-[9px] font-black leading-none shrink-0 shadow-sm">
+                                            {romanVip}
                                         </span>
                                     )}
-                                    {isVip && (
-                                        <span className="inline-flex items-center gap-1 bg-yellow-500/10 text-yellow-500 px-1.5 py-0.5 rounded text-[9px] font-black tracking-widest border border-yellow-500/20 uppercase drop-shadow-[0_0_5px_rgba(234,179,8,0.3)]">
-                                            VIP
-                                        </span>
-                                    )}
-                                    {!isMod && !isVip && msg.vipLevel && (
-                                        <span className="inline-flex items-center justify-center bg-gradient-to-br from-indigo-500/20 to-purple-500/20 text-indigo-300 px-1.5 py-0.5 rounded flex-shrink-0 text-[10px] font-black tracking-widest leading-none border border-indigo-500/20 shadow-sm">
-                                            {msg.vipLevel}
-                                        </span>
-                                    )}
+
                                     <span 
-                                        className="font-black tracking-tight text-[13px] hover:underline decoration-white/20 underline-offset-2 truncate max-w-full"
-                                        style={{ color: isVip ? '#FFD700' : userColor }}
+                                        className={`font-black tracking-tight text-[12.5px] hover:underline decoration-white/20 underline-offset-2 truncate max-w-full ${isAdmin ? 'drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]' : ''}`}
+                                        style={{ color: isAdmin ? '#ffffff' : isVip ? '#FFD700' : userColor }}
                                     >
                                         {userName}
                                     </span>
-                                    <span className="text-[10px] font-bold text-slate-500 ml-1.5 mt-0.5">
+                                    <span className="text-[9.5px] font-bold text-slate-500 ml-1">
                                         {new Date(msg.created_at || Date.now()).toLocaleTimeString('tr-TR', {hour: '2-digit', minute:'2-digit'})}
                                     </span>
                                 </div>
-                                <div className={`break-words antialiased text-[13px] leading-relaxed ${isVip ? 'text-yellow-500/90 font-medium' : isSystem ? 'text-amber-400 font-bold' : 'text-[#e2e8f0]'}`}>
+                                <div className={`break-words antialiased text-[12.5px] leading-snug ${isVip ? 'text-zinc-300/90 font-medium' : isSystem ? 'text-zinc-300 font-bold' : 'text-[#e2e8f0]'}`}>
                                     {renderMessageText(msg, (betId, user, type) => setSelectedBet({ id: betId, user, type }))}
                                 </div>
+                                
+                                {/* Hover Reply & Action Bar */}
+                                {!isSystem && (
+                                    <div className="flex justify-end items-center gap-1 mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        {['👍', '🔥', '🚀'].map(emoji => (
+                                            <button 
+                                                key={emoji}
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    triggerGlobalToast(`${emoji} Reaksiyon gönderildi`, 'success');
+                                                }}
+                                                className="text-zinc-400 hover:text-white text-[13px] transition-colors bg-white/5 hover:bg-white/10 px-2 py-0.5 rounded-lg border border-transparent hover:border-white/20 hover:scale-110 active:scale-95"
+                                            >
+                                                {emoji}
+                                            </button>
+                                        ))}
+                                        <button 
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setNewMessage(`@${userName} `);
+                                            }}
+                                            className="text-zinc-400 hover:text-[#00E5FF] text-[10px] font-bold uppercase tracking-wider flex items-center gap-1 transition-colors bg-white/5 hover:bg-[#00E5FF]/10 px-2.5 py-1 rounded-lg border border-transparent hover:border-[#00E5FF]/30 ml-1"
+                                            title="Yanıtla"
+                                        >
+                                            <MessageCircle className="w-3 h-3" /> Yanıtla
+                                        </button>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     )})
@@ -1038,7 +1019,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
     {/* Admin Context Menu */}
     {adminMenu && (
         <div 
-            className="fixed z-[9999] bg-[#0A0D14]/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.8)] overflow-hidden w-44 animate-in fade-in zoom-in-95 duration-200"
+            className="fixed z-[9999] bg-[#0A0C10]/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.8)] overflow-hidden w-44 animate-in fade-in zoom-in-95 duration-200"
             style={{ top: Math.min(adminMenu.y, window.innerHeight - 200), left: Math.min(adminMenu.x, window.innerWidth - 180) }}
             onClick={(e) => e.stopPropagation()}
         >
@@ -1048,8 +1029,14 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
             </div>
             <div className="flex flex-col py-1">
                 <button 
-                    onClick={() => {
-                        triggerGlobalToast(`Mesaj silindi: ${adminMenu.username}`, 'success');
+                    onClick={async () => {
+                        const { error } = await supabase.from('tv_chat').delete().eq('id', adminMenu.msgId);
+                        if (!error) {
+                            triggerGlobalToast(`Mesaj silindi: ${adminMenu.username}`, 'success');
+                            setMessages(prev => prev.filter(m => m.id !== adminMenu.msgId));
+                        } else {
+                            triggerGlobalToast('Mesaj silinemedi!', 'error');
+                        }
                         setAdminMenu(null);
                     }}
                     className="w-full flex items-center gap-2 px-3 py-2 text-[12px] font-semibold text-zinc-300 hover:text-white hover:bg-white/5 transition-colors"
@@ -1063,7 +1050,16 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
                     }}
                     className="w-full flex items-center gap-2 px-3 py-2 text-[12px] font-semibold text-zinc-300 hover:text-white hover:bg-white/5 transition-colors"
                 >
-                    <VolumeX className="w-3.5 h-3.5 text-amber-400" /> Sustur (10dk)
+                    <VolumeX className="w-3.5 h-3.5 text-zinc-300" /> Sustur (10dk)
+                </button>
+                <button 
+                    onClick={() => {
+                        triggerGlobalToast(`${adminMenu.username} sessizce gölgelendi (Shadowban).`, 'info');
+                        setAdminMenu(null);
+                    }}
+                    className="w-full flex items-center gap-2 px-3 py-2 text-[12px] font-semibold text-zinc-300 hover:text-white hover:bg-white/5 transition-colors"
+                >
+                    <VolumeX className="w-3.5 h-3.5 text-indigo-400" /> Gölge Sustur (Shadowban)
                 </button>
                 <button 
                     onClick={() => {
@@ -1079,14 +1075,14 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
     )}
 
     {/* Bottom Input Area */}
-    <div className="p-3 bg-[#0A0D14] border-t border-white/5 relative shrink-0">
+    <div className="p-3 bg-transparent border-t border-white/5 relative shrink-0">
         
         {/* Floating New Messages Button */}
         {isScrolledUp && unreadCount > 0 && (
             <div className="absolute -top-12 left-0 right-0 flex justify-center z-50 pointer-events-none">
                 <button 
                     onClick={scrollToBottom}
-                    className="pointer-events-auto bg-[#00E676] hover:bg-[#00c853] text-[#0A0D14] px-4 py-1.5 rounded-full text-[13px] font-black tracking-tight shadow-[0_4px_15px_rgba(0,230,118,0.4)] flex items-center gap-1.5 transition-all transform hover:scale-105 active:scale-95 animate-bounce"
+                    className="pointer-events-auto bg-[#00E5FF] hover:bg-[#00c853] text-[#0A0D14] px-4 py-1.5 rounded-full text-[13px] font-black tracking-tight shadow-[0_4px_15px_rgba(0,230,118,0.4)] flex items-center gap-1.5 transition-all transform hover:scale-105 active:scale-95 animate-bounce"
                 >
                     {unreadCount} yeni mesajlar <ChevronDown className="w-4 h-4" />
                 </button>
@@ -1098,13 +1094,13 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
                 type="text"
                 disabled
                 placeholder={t('chat.login_required', 'Mesaj göndermek için lütfen giriş yapın')}
-                className="w-full bg-[#0a0d14] border border-white/10 text-[12px] font-semibold text-center text-slate-500 rounded-full px-5 py-3.5 cursor-not-allowed shadow-inner"
+                className="w-full bg-[#0A0C10] border border-white/10 text-[12px] font-semibold text-center text-slate-500 rounded-full px-5 py-3.5 cursor-not-allowed shadow-inner"
             />
         ) : (
             <div className="flex flex-col gap-2">
                         {/* Tip & Rain Toolbar Removed - Will be moved to admin panel later */}
                         
-                        <form onSubmit={handleSendMessage} className="relative flex items-center bg-[#161A24] border border-white/10 focus-within:border-[#00E5FF]/50 focus-within:bg-[#0A0D14] focus-within:shadow-[0_0_20px_rgba(0,229,255,0.1)] rounded-full transition-all duration-300 h-[46px]">
+                        <form onSubmit={handleSendMessage} className="relative flex items-center bg-[#181B21] border border-transparent focus-within:bg-[#20242D] focus-within:border-white/5 rounded-full transition-all duration-300 h-[46px] overflow-hidden">
                             <input
                                 type="text"
                                 value={newMessage}
@@ -1113,10 +1109,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
                                 className="flex-1 bg-transparent text-[13px] font-medium text-white focus:outline-none placeholder-zinc-500 pl-5 pr-3"
                             />
                             <div className="flex items-center pr-1.5 gap-1 h-full shrink-0 relative" ref={emojiPickerRef}>
-                                <button type="button" onClick={() => { setShowGifPicker(!showGifPicker); setShowEmojiPicker(false); }} className="text-zinc-500 hover:text-white transition-colors px-1.5 py-1 rounded hover:bg-white/5 flex items-center justify-center">
-                                    <div className="border border-current rounded-[4px] px-1 text-[8px] font-black uppercase tracking-widest leading-none flex items-center h-[18px]">GIF</div>
-                                </button>
-                                <button type="button" onClick={() => { setShowEmojiPicker(!showEmojiPicker); setShowGifPicker(false); }} className="text-zinc-500 hover:text-white transition-colors p-1.5 rounded-full hover:bg-white/5">
+                                <button type="button" onClick={() => { setShowEmojiPicker(!showEmojiPicker); }} className="text-zinc-500 hover:text-white transition-colors p-1.5 rounded-full hover:bg-white/5">
                                     <Smile className="w-4 h-4" />
                                 </button>
                                 
@@ -1139,21 +1132,10 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
                                         </div>
                                     </div>
                                 )}
-
-                                {showGifPicker && (
-                                    <GifPicker onSelect={(gif) => {
-                                        setNewMessage(gif);
-                                        setShowGifPicker(false);
-                                        // Auto-submit gif if user wants, but currently we just set it in input.
-                                        // User can press Enter to send. Or we can auto-submit:
-                                        // Wait, the form submit uses newMessage state, which might not be updated synchronously.
-                                        // Best to just put it in input, but BC Game sends it immediately.
-                                    }} />
-                                )}
                                 <button
                                     type="submit"
                                     disabled={!newMessage.trim()}
-                                    className="text-[#0A0D14] bg-gradient-to-br from-[#00E5FF] to-[#00b3cc] disabled:bg-none disabled:bg-[#121212] disabled:text-gray-600 hover:brightness-110 transition-all p-2 rounded-full shadow-[0_2px_10px_rgba(0,229,255,0.3)]"
+                                    className="text-[#0A0D14] bg-[#00E5FF] disabled:bg-white/5 disabled:text-white/20 hover:brightness-110 transition-all p-2 rounded-full"
                                 >
                                     <Send className="w-4 h-4 ml-0.5" />
                                 </button>
@@ -1179,7 +1161,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
                             <span className="text-white font-bold text-[15px]">Tüm</span>
                             <button 
                                 onClick={() => setRainModalData(null)}
-                                className="text-slate-400 hover:text-white transition-colors"
+                                className="btn-icon-modern !w-8 !h-8 !rounded-lg shrink-0"
                             >
                                 <X className="w-5 h-5" />
                             </button>
@@ -1187,10 +1169,10 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
                         <div className="p-5 max-h-[60vh] overflow-y-auto custom-scrollbar flex flex-col gap-3">
                             {rainModalData.map((r: any, idx: number) => (
                                 <div key={idx} className="flex justify-between items-center bg-[#2A2C31] px-3 py-2.5 rounded-lg border border-white/[0.02]">
-                                    <span className="text-[#00E676] font-bold text-[14px]">@{r.user}</span>
+                                    <span className="text-[#00E5FF] font-bold text-[14px]">@{r.user}</span>
                                     <div className="flex items-center gap-1.5">
                                         <span className="text-white font-bold text-[14px]">{r.amount}</span>
-                                        <div className="w-4 h-4 bg-[#00E676] rounded-full flex items-center justify-center shrink-0 shadow-sm">
+                                        <div className="w-4 h-4 bg-[#00E5FF] rounded-full flex items-center justify-center shrink-0 shadow-sm">
                                             <span className="text-black text-[9px] font-black">₺</span>
                                         </div>
                                     </div>

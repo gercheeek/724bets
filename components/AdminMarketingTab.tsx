@@ -122,10 +122,10 @@ export default function AdminMarketingTab() {
                     <div className="flex-1 bg-[#111318] border border-zinc-800 rounded-2xl flex flex-col overflow-hidden shadow-lg shadow-black/50">
                         <div className="px-4 py-3 border-b border-zinc-800 bg-[#15171e] flex items-center justify-between">
                             <h3 className="font-bold text-zinc-300 text-sm flex items-center gap-2">
-                                <Target className="w-4 h-4 text-emerald-400" /> Canlı Chat Akışı
+                                <Target className="w-4 h-4 text-[#00E5FF]" /> Canlı Chat Akışı
                             </h3>
                             <span className="flex items-center gap-2 text-xs text-zinc-500 font-mono">
-                                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                                <div className="w-2 h-2 rounded-full bg-[#00E5FF] animate-pulse"></div>
                                 CANLI
                             </span>
                         </div>
@@ -146,7 +146,7 @@ export default function AdminMarketingTab() {
                                     
                                     {log.user !== 'SİSTEM' && (
                                         <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                            <button className="p-1.5 text-zinc-500 hover:text-amber-400 hover:bg-amber-400/10 rounded transition-colors" title="Sustur (Mute)">
+                                            <button className="p-1.5 text-zinc-500 hover:text-zinc-300 hover:bg-amber-400/10 rounded transition-colors" title="Sustur (Mute)">
                                                 <VolumeX className="w-4 h-4" />
                                             </button>
                                             <button className="p-1.5 text-zinc-500 hover:text-red-400 hover:bg-red-400/10 rounded transition-colors" title="Uzaklaştır (Ban)">
@@ -161,12 +161,12 @@ export default function AdminMarketingTab() {
                     </div>
 
                     {/* Rain Action */}
-                    <div className="bg-emerald-500/5 border border-emerald-500/20 rounded-2xl p-6 relative overflow-hidden group">
-                        <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl -mr-32 -mt-32 transition-all group-hover:bg-emerald-500/20"></div>
+                    <div className="bg-[#00E5FF]/5 border border-emerald-500/20 rounded-2xl p-6 relative overflow-hidden group">
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-[#00E5FF]/10 rounded-full blur-3xl -mr-32 -mt-32 transition-all group-hover:bg-[#00E5FF]/20"></div>
                         
                         <div className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-6">
                             <div>
-                                <h3 className="text-xl font-bold text-emerald-400 flex items-center gap-2 mb-2">
+                                <h3 className="text-xl font-bold text-[#00E5FF] flex items-center gap-2 mb-2">
                                     <CloudRain className="w-6 h-6" />
                                     Rain (Yağmur) Başlat
                                 </h3>
@@ -175,7 +175,7 @@ export default function AdminMarketingTab() {
                             
                             <button 
                                 onClick={() => setIsRainModalOpen(true)}
-                                className="w-full sm:w-auto px-8 py-4 bg-emerald-500 hover:bg-emerald-400 text-black font-black text-lg rounded-xl shadow-[0_0_25px_rgba(16,185,129,0.4)] hover:shadow-[0_0_35px_rgba(16,185,129,0.6)] transition-all flex items-center justify-center gap-3 shrink-0"
+                                className="w-full sm:w-auto px-8 py-4 bg-[#00E5FF] hover:bg-[#00E5FF] text-black font-black text-lg rounded-xl shadow-[0_0_25px_rgba(16,185,129,0.4)] hover:shadow-[0_0_35px_rgba(16,185,129,0.6)] transition-all flex items-center justify-center gap-3 shrink-0"
                             >
                                 <CloudRain className="w-6 h-6" />
                                 YENİ YAĞMUR
@@ -251,7 +251,7 @@ export default function AdminMarketingTab() {
                     <div className="bg-[#0f1115] border border-emerald-500/30 w-full max-w-md rounded-2xl shadow-2xl shadow-emerald-500/10 overflow-hidden animate-in zoom-in-95 duration-200">
                         <div className="px-6 py-4 border-b border-zinc-800 flex justify-between items-center bg-[#15171e]">
                             <div className="flex items-center gap-3">
-                                <CloudRain className="w-5 h-5 text-emerald-400" />
+                                <CloudRain className="w-5 h-5 text-[#00E5FF]" />
                                 <h3 className="text-lg font-bold text-white">Rain Başlat</h3>
                             </div>
                             <button onClick={() => setIsRainModalOpen(false)} className="text-zinc-500 hover:text-white transition-colors">
@@ -298,7 +298,7 @@ export default function AdminMarketingTab() {
                                 <button 
                                     onClick={handleRainStart}
                                     disabled={!rainAmount || !rainPeople}
-                                    className="flex-1 py-3 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 disabled:hover:bg-emerald-600 text-white rounded-xl font-bold shadow-[0_0_15px_rgba(16,185,129,0.3)] transition-all flex items-center justify-center gap-2"
+                                    className="flex-1 py-3 bg-emerald-600 hover:bg-[#00E5FF] disabled:opacity-50 disabled:hover:bg-emerald-600 text-white rounded-xl font-bold shadow-[0_0_15px_rgba(16,185,129,0.3)] transition-all flex items-center justify-center gap-2"
                                 >
                                     <CloudRain className="w-5 h-5" />
                                     Onayla
@@ -313,12 +313,12 @@ export default function AdminMarketingTab() {
             {showToast && (
                 <div className="absolute top-6 left-1/2 -translate-x-1/2 z-[300] animate-in slide-in-from-top-10 fade-in duration-300">
                     <div className="bg-[#111318] border border-emerald-500/30 shadow-[0_0_20px_rgba(16,185,129,0.2)] px-6 py-4 rounded-2xl flex items-center gap-3">
-                        <div className="p-2 bg-emerald-500/20 rounded-full">
-                            <CheckCircle2 className="w-6 h-6 text-emerald-400" />
+                        <div className="p-2 bg-[#00E5FF]/20 rounded-full">
+                            <CheckCircle2 className="w-6 h-6 text-[#00E5FF]" />
                         </div>
                         <div>
                             <h4 className="text-white font-bold text-sm">Yağmur Başarıyla Başlatıldı!</h4>
-                            <p className="text-emerald-400 text-xs font-mono mt-0.5">{rainAmount}₺ havuz, {rainPeople} kişiye dağıtılıyor.</p>
+                            <p className="text-[#00E5FF] text-xs font-mono mt-0.5">{rainAmount}₺ havuz, {rainPeople} kişiye dağıtılıyor.</p>
                         </div>
                     </div>
                 </div>

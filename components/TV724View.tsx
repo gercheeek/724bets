@@ -6,7 +6,7 @@ import {
     Send, Users, MessageSquare, Tv, Zap, Crown, Star, Shield, X, Lock, Unlock, Search,
     Flame, Award, Play, Pause, Volume2, VolumeX, Maximize, Minimize2,
     ChevronLeft, ChevronRight, ChevronDown, ChevronUp, Clock, Radio, Trophy, Calendar, TrendingUp, ArrowRight,
-    Bell, BellOff, Gift as GiftIcon, CheckCircle, AlertCircle, BarChart2,
+    Bell, BellOff, Gift as GiftIcon, CheckCircle, AlertCircle, BarChart2, ZoomIn, ZoomOut, RefreshCw, MoveUp, MoveDown, MoveLeft, MoveRight
 } from 'lucide-react';
 import { useBetting } from '../contexts/BettingContext';
 import SportsPromoSlider from './sports/SportsPromoSlider';
@@ -326,6 +326,11 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
     const [isMobile, setIsMobile] = useState(window.innerWidth < 900);
     const [tvServer, setTvServer] = useState<'default' | 'marsbahis'>('default');
     const [showSplash, setShowSplash] = useState(false);
+
+    // Zoom/Pan state
+    const [videoScale, setVideoScale] = useState(1);
+    const [videoOffsetX, setVideoOffsetX] = useState(0);
+    const [videoOffsetY, setVideoOffsetY] = useState(0);
     
     useEffect(() => {
         const handleResize = () => setIsMobile(window.innerWidth < 900);
@@ -661,7 +666,16 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
     // HLS Initialization Effect
     useEffect(() => {
         if (!activeChannel) return;
-        const url = activeChannel.streamUrl || activeChannel.iframeUrl || '';
+        let url = activeChannel.streamUrl || activeChannel.videoUrl || activeChannel.iframeUrl || '';
+        if (url.includes('channel?id=')) {
+            const m = url.match(/channel\?id=([^&]+)/);
+            if (m && m[1]) {
+                const host = window.location.hostname;
+                const proto = window.location.protocol;
+                const proxyUrl = host === 'localhost' ? 'http://localhost:4000' : `${proto}//${host}:4000`;
+                url = `${proxyUrl}/api/stream-proxy/${m[1]}/mono.m3u8`;
+            }
+        }
         const isM3u8 = url.includes('.m3u8');
         
         if (isM3u8 && videoRef.current) {
@@ -940,7 +954,16 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
             </div>
         );
 
-        const url = activeChannel.streamUrl || activeChannel.iframeUrl || '';
+        let url = activeChannel.streamUrl || activeChannel.videoUrl || activeChannel.iframeUrl || '';
+        if (url.includes('channel?id=')) {
+            const m = url.match(/channel\?id=([^&]+)/);
+            if (m && m[1]) {
+                const host = window.location.hostname;
+                const proto = window.location.protocol;
+                const proxyUrl = host === 'localhost' ? 'http://localhost:4000' : `${proto}//${host}:4000`;
+                url = `${proxyUrl}/api/stream-proxy/${m[1]}/mono.m3u8`;
+            }
+        }
         const isM3u8 = url.includes('.m3u8');
 
         if (isM3u8) {
@@ -1023,10 +1046,10 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                     finalUrl = `${mbUrl.replace(/\/$/, '')}/channel?id=${idMatch[1]}`;
                 }
             }
-            return <div style={{ width: '100%', height: '100%', position: 'relative' }}>{customLoader}{watermarkOverlay}<iframe src={finalUrl} style={{ width: '100%', height: '100%', border: 'none' }} allowFullScreen allow="autoplay; encrypted-media; fullscreen; picture-in-picture" onLoad={handleIframeLoad} title={activeChannel.name} /></div>;
+            return <div style={{ width: '100%', height: '100%', position: 'relative', overflow: 'hidden' }}>{customLoader}{watermarkOverlay}<iframe src={finalUrl} style={{ width: '100%', height: '130%', border: 'none', position: 'absolute', top: 0, left: 0 }} allowFullScreen allow="autoplay; encrypted-media; fullscreen; picture-in-picture" onLoad={handleIframeLoad} title={activeChannel.name} /></div>;
         }
         if (activeChannel.fallbackType === 'video' && activeChannel.fallbackVideoUrl) return <div style={{ width: '100%', height: '100%', background: '#000', position: 'relative' }}>{watermarkOverlay}<video ref={videoRef} src={activeChannel.fallbackVideoUrl} autoPlay={isPlaying} muted={isMuted} playsInline loop style={{ width: '100%', height: '100%', objectFit: 'contain' }} /></div>;
-        if (activeChannel.fallbackType === 'iframe' && activeChannel.fallbackIframeUrl) return <div style={{ width: '100%', height: '100%', position: 'relative' }}>{customLoader}{watermarkOverlay}<iframe src={activeChannel.fallbackIframeUrl} style={{ width: '100%', height: '100%', border: 'none' }} allowFullScreen allow="autoplay; encrypted-media; fullscreen; picture-in-picture" onLoad={handleIframeLoad} title={activeChannel.name} /></div>;
+        if (activeChannel.fallbackType === 'iframe' && activeChannel.fallbackIframeUrl) return <div style={{ width: '100%', height: '100%', position: 'relative', overflow: 'hidden' }}>{customLoader}{watermarkOverlay}<iframe src={activeChannel.fallbackIframeUrl} style={{ width: '100%', height: '130%', border: 'none', position: 'absolute', top: 0, left: 0 }} allowFullScreen allow="autoplay; encrypted-media; fullscreen; picture-in-picture" onLoad={handleIframeLoad} title={activeChannel.name} /></div>;
 
         return (
             <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: '#06b6d4', gap: '12px', background: 'radial-gradient(circle, #111118 0%, #040507 100%)' }}>
@@ -1085,7 +1108,7 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
 
     return (
         <div ref={wrapperRef} className="tv-redesign-wrapper animate-fade-in custom-scrollbar" style={{
-            flex: 1, width: '100%', height: '100%', position: 'relative', backgroundColor: '#050508', fontFamily: "'Inter', sans-serif", display: 'flex', flexDirection: 'column', overflowY: 'auto', overflowX: 'hidden'
+            position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: '#050508', fontFamily: "'Inter', sans-serif", display: 'flex', flexDirection: 'column', overflowY: 'auto', overflowX: 'hidden'
         }}>
             {/* Elegant dark edges */}
             <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', boxShadow: 'inset 0 0 100px rgba(0, 0, 0, 0.8)', zIndex: 0 }} />
@@ -1109,19 +1132,37 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
 
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', position: 'relative', zIndex: 10, overflow: 'visible' }}>
                 
-                {/* ─── SPORTS SLIDER ─── */}
-                {!isTheaterMode && (
-                    <div className="w-full pt-1 mb-2 shrink-0">
-                        <SportsPromoSlider matches={matches} compact={true} />
-                    </div>
-                )}
-
                 {/* Main Column Layout - fills remaining height */}
-                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'visible', minHeight: '600px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', overflow: 'visible', width: '100%', maxWidth: '1400px', margin: '0 auto', paddingBottom: '40px' }}>
                     
-                    {/* TOP: Video Player - fills all available space */}
-                    <div style={{ flex: 1, position: 'relative', overflow: 'hidden', minHeight: '400px' }}>
-                        <div ref={playerContainerRef} style={{ width: '100%', height: '100%', background: '#000', overflow: 'hidden', position: 'relative' }}>
+                    {/* TOP: Video Player Wrapper to center and size the video properly without breaking aspect ratio */}
+                    <div className="w-full flex justify-center items-center py-2 md:py-4 px-2 md:px-0">
+                        <div className="relative overflow-hidden bg-black shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/10 rounded-xl md:rounded-2xl w-full flex" style={{ maxWidth: '1120px' }}>
+                            
+                            {/* Left Side Vertical Ad (KAZANCINI İKİYE KATLA) */}
+                            <div className="hidden md:flex w-[110px] shrink-0 bg-[#050608] border-r border-white/5 z-[60] flex-col items-center justify-between py-4 shadow-[10px_0_30px_rgba(0,0,0,0.8)] pointer-events-auto cursor-pointer group hover:bg-[#0A0C10] transition-colors relative" onClick={(e) => { e.stopPropagation(); /* Prevent video click */ }}>
+                                {/* Subtle cyan glow */}
+                                <div className="absolute inset-0 bg-gradient-to-b from-[#06b6d4]/5 via-transparent to-[#06b6d4]/5 opacity-50"></div>
+                                
+                                <div className="flex flex-col items-center gap-3 w-full relative z-10 mt-2">
+                                    <div className="bg-[#06b6d4]/10 border border-[#06b6d4]/30 px-1.5 py-1 rounded text-[#06b6d4] text-[10px] font-black tracking-widest text-center">
+                                        VIP<br/>KAZANÇ
+                                    </div>
+                                </div>
+                                
+                                <div className="flex flex-col items-center justify-center flex-1 w-full relative z-10">
+                                    <div className="flex flex-col items-center gap-2 mb-4">
+                                        <span className="text-white font-black text-xl italic tracking-tighter" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>KAZANCINI</span>
+                                        <span className="text-[#06b6d4] font-black text-xl italic tracking-tighter" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>İ. KATLA</span>
+                                    </div>
+                                </div>
+                                
+                                <div className="flex flex-col items-center relative z-10 mb-2">
+                                    <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-zinc-400 font-black text-4xl italic tracking-tighter drop-shadow-lg">2X</span>
+                                </div>
+                            </div>
+
+                            <div ref={playerContainerRef} className="flex-1 relative overflow-hidden video-container" style={{ background: '#000', aspectRatio: '16/9' }}>
                             
                             {!activeChannel ? (
                                 <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: 'radial-gradient(circle at center, #0a110d 0%, #000 100%)' }}>
@@ -1156,10 +1197,36 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                                         </div>
                                     )}
 
-                                    {getStreamEmbed()}
+                                    {/* INTERACTIVE SCALED WRAPPER */}
+                                    <div style={{ 
+                                        position: 'absolute', 
+                                        inset: 0, 
+                                        transform: `scale(${videoScale}) translate(${videoOffsetX}px, ${videoOffsetY}px)`, 
+                                        transformOrigin: 'center center',
+                                        transition: 'transform 0.1s ease-out'
+                                    }}>
+                                        {getStreamEmbed()}
+                                    </div>
+                                    
+                                    {/* Video Pan/Zoom Custom Controls */}
+                                    <div style={{ position: 'absolute', top: '10px', right: '10px', zIndex: 60, display: 'flex', flexDirection: 'column', gap: '5px', background: 'rgba(0,0,0,0.6)', padding: '6px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.1)' }}>
+                                        <div style={{ display: 'flex', justifyContent: 'center', gap: '5px' }}>
+                                            <button onClick={() => setVideoScale(s => Math.min(2, s + 0.05))} className="w-8 h-8 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded text-white" title="Yakınlaştır"><ZoomIn size={16} /></button>
+                                            <button onClick={() => setVideoScale(s => Math.max(0.5, s - 0.05))} className="w-8 h-8 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded text-white" title="Uzaklaştır"><ZoomOut size={16} /></button>
+                                            <button onClick={() => { setVideoScale(1); setVideoOffsetX(0); setVideoOffsetY(0); }} className="w-8 h-8 flex items-center justify-center bg-white/10 hover:bg-red-500/50 rounded text-white" title="Sıfırla"><RefreshCw size={14} /></button>
+                                        </div>
+                                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px', marginTop: '2px' }}>
+                                            <button onClick={() => setVideoOffsetY(y => y + 10)} className="w-8 h-6 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded text-white"><ChevronUp size={16} /></button>
+                                            <div style={{ display: 'flex', gap: '16px' }}>
+                                                <button onClick={() => setVideoOffsetX(x => x + 10)} className="w-6 h-8 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded text-white"><ChevronLeft size={16} /></button>
+                                                <button onClick={() => setVideoOffsetX(x => x - 10)} className="w-6 h-8 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded text-white"><ChevronRight size={16} /></button>
+                                            </div>
+                                            <button onClick={() => setVideoOffsetY(y => y - 10)} className="w-8 h-6 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded text-white"><ChevronDown size={16} /></button>
+                                        </div>
+                                    </div>
                                     
                                     {/* Custom Controls Bar */}
-                                    <div className="ctrl-bar" style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '60px', background: 'linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 100%)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 20px', opacity: isMobile ? 1 : 0, transition: 'opacity 0.2s' }}>
+                                    <div className="ctrl-bar" style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '60px', background: 'linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 100%)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 20px', opacity: isMobile ? 1 : 0, transition: 'opacity 0.2s', zIndex: 50 }}>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
                                             <button onClick={() => setIsPlaying(!isPlaying)} style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer' }}>
                                                 {isPlaying ? <Pause style={{ width: 18, height: 18 }} /> : <Play style={{ width: 18, height: 18 }} />}
@@ -1182,103 +1249,90 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                                         </div>
                                     </div>
                                     
-                                    {/* Watermark */}
-                                    <div style={{ position: 'absolute', top: '20px', left: '130px', opacity: 0.8, pointerEvents: 'none', zIndex: 40 }}>
-                                        <span style={{ fontSize: '16px', fontWeight: 900, color: '#fff', textShadow: '0 2px 4px rgba(0,0,0,0.8)' }}>724<span style={{ color: '#10b981' }}>TV</span></span>
-                                    </div>
-
-                                    {/* Left Side Vertical Ad (KAZANCINI İKİYE KATLA) */}
-                                    <div className="absolute top-0 left-0 bottom-0 w-[80px] md:w-[110px] bg-[#050608] border-r border-white/5 z-[60] flex flex-col items-center justify-between py-4 shadow-[10px_0_30px_rgba(0,0,0,0.8)] pointer-events-auto cursor-pointer group hover:bg-[#0a0d14] transition-colors" onClick={(e) => { e.stopPropagation(); /* Prevent video click */ }}>
-                                        {/* Subtle cyan glow */}
-                                        <div className="absolute inset-0 bg-gradient-to-b from-[#06b6d4]/5 via-transparent to-[#06b6d4]/5 opacity-50"></div>
-                                        
-                                        <div className="flex flex-col items-center gap-3 w-full relative z-10 mt-2">
-                                            <div className="bg-[#06b6d4]/10 border border-[#06b6d4]/30 px-1.5 py-1 rounded text-[#06b6d4] text-[9px] md:text-[10px] font-black tracking-widest text-center">
-                                                VIP<br/>KAZANÇ
-                                            </div>
-                                        </div>
-                                        
-                                        <div className="flex flex-col items-center justify-center flex-1 w-full relative z-10">
-                                            <div className="flex flex-col items-center gap-2 mb-4">
-                                                <span className="text-white font-black text-lg md:text-xl italic tracking-tighter" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>KAZANCINI</span>
-                                                <span className="text-[#06b6d4] font-black text-lg md:text-xl italic tracking-tighter" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>İ. KATLA</span>
-                                            </div>
-                                        </div>
-                                        
-                                        <div className="flex flex-col items-center relative z-10 mb-2">
-                                            <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-zinc-400 font-black text-3xl md:text-4xl italic tracking-tighter drop-shadow-lg">2X</span>
+                                    {/* Watermark (Top Left) */}
+                                    <div className="scaled-overlays-container" style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 40 }}>
+                                        <div style={{ position: 'absolute', top: '20px', left: '130px', opacity: 0.8 }}>
+                                            <span style={{ fontSize: '16px', fontWeight: 900, color: '#fff', textShadow: '0 2px 4px rgba(0,0,0,0.8)' }}>724<span style={{ color: '#10b981' }}>TV</span></span>
                                         </div>
                                     </div>
 
-                                    {/* Right Side Vertical Ad (ERKEN ÖDEME) - Covers xslot and blocks clicks */}
-                                    <div className="absolute top-0 right-0 bottom-0 w-[80px] md:w-[110px] bg-[#050608] border-l border-white/5 z-[60] flex flex-col items-center justify-between py-4 shadow-[-10px_0_30px_rgba(0,0,0,0.8)] pointer-events-auto cursor-pointer group hover:bg-[#0a0d14] transition-colors" onClick={(e) => { e.stopPropagation(); /* Prevent video click */ }}>
-                                        {/* Subtle green glow */}
-                                        <div className="absolute inset-0 bg-gradient-to-b from-[#10b981]/5 via-transparent to-[#10b981]/5 opacity-50"></div>
-                                        
-                                        <div className="flex flex-col items-center gap-3 w-full relative z-10 mt-2">
-                                            <div className="bg-[#10b981]/10 border border-[#10b981]/30 px-1.5 py-1 rounded text-[#10b981] text-[9px] md:text-[10px] font-black tracking-widest text-center">
-                                                ANINDA<br/>NAKİT
-                                            </div>
-                                        </div>
-                                        
-                                        <div className="flex flex-col items-center justify-center flex-1 w-full relative z-10">
-                                            <div className="flex flex-col items-center gap-2 mb-4">
-                                                <span className="text-white font-black text-lg md:text-xl italic tracking-tighter" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>ERKEN</span>
-                                                <span className="text-white font-black text-lg md:text-xl italic tracking-tighter" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>ÖDEME</span>
-                                            </div>
-                                        </div>
-                                        
-                                        <div className="flex flex-col items-center relative z-10 mb-2">
-                                            <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-zinc-400 font-black text-3xl md:text-4xl italic tracking-tighter drop-shadow-lg">+2</span>
-                                            <span className="text-white font-black text-[10px] md:text-xs tracking-widest mt-0.5">GOL</span>
-                                        </div>
-                                    </div>
                                 </div>
                             )}
-                        </div>
-
-                        {/* Bonus & Watermark Buttons - Absolute overlay at bottom of player */}
-                        <div className="absolute bottom-0 left-0 right-0 z-[65] px-3 pb-2 pt-6 bg-gradient-to-t from-black/80 to-transparent" style={{ pointerEvents: 'auto' }}>
-                         <div className="w-full flex items-center justify-between gap-3 overflow-x-auto custom-scrollbar pb-1">
-                            <div className="flex gap-3 flex-1">
-                               {/* Bonus Button 3 */}
-                               <div className="flex-1 min-w-[120px] h-[36px] bg-[#12141a] rounded-lg border border-[#f59e0b]/30 shadow-sm overflow-hidden pointer-events-auto cursor-pointer flex items-center justify-center hover:bg-[#f59e0b]/10 transition-colors group relative">
-                                  <div className="absolute inset-0 bg-gradient-to-r from-[#f59e0b]/10 to-transparent opacity-60"></div>
-                                  <GiftIcon className="w-4 h-4 text-[#f59e0b] group-hover:scale-110 transition-transform mr-2 relative z-10" />
-                                  <span style={{ color: '#f59e0b', fontWeight: 800, fontSize: '11px', letterSpacing: '0.5px', position: 'relative', zIndex: 10 }}>%20 KAYIP</span>
-                               </div>
-                               
-                               {/* Bonus Button 2 */}
-                               <div className="flex-1 min-w-[120px] h-[36px] bg-[#12141a] rounded-lg border border-[#10b981]/30 shadow-sm overflow-hidden pointer-events-auto cursor-pointer flex items-center justify-center hover:bg-[#10b981]/10 transition-colors group relative">
-                                  <div className="absolute inset-0 bg-gradient-to-r from-[#10b981]/10 to-transparent opacity-60"></div>
-                                  <Award className="w-4 h-4 text-[#10b981] group-hover:scale-110 transition-transform mr-2 relative z-10" />
-                                  <span style={{ color: '#10b981', fontWeight: 800, fontSize: '11px', letterSpacing: '0.5px', position: 'relative', zIndex: 10 }}>%100 BONUS</span>
-                               </div>
-
-                               {/* Bonus Button 1 */}
-                               <div className="flex-1 min-w-[120px] h-[36px] bg-[#12141a] rounded-lg border border-[#8b5cf6]/30 shadow-sm overflow-hidden pointer-events-auto cursor-pointer flex items-center justify-center hover:bg-[#8b5cf6]/10 transition-colors group relative">
-                                  <div className="absolute inset-0 bg-gradient-to-r from-[#8b5cf6]/10 to-transparent opacity-60"></div>
-                                  <Flame className="w-4 h-4 text-[#8b5cf6] group-hover:scale-110 transition-transform mr-2 relative z-10" />
-                                  <span style={{ color: '#8b5cf6', fontWeight: 800, fontSize: '11px', letterSpacing: '0.5px', position: 'relative', zIndex: 10 }}>50 FREESPIN</span>
-                               </div>
                             </div>
 
-                           {/* Original Watermark */}
-                           <div className="min-w-[120px] h-[36px] bg-[#12141a] rounded-lg border border-white/5 shadow-sm overflow-hidden flex items-center justify-center pointer-events-auto cursor-pointer hover:bg-white/5 transition-colors relative">
-                               <div className="absolute inset-0 bg-gradient-to-r from-[#00E5FF]/10 to-[#10b981]/10 opacity-60"></div>
-                               <span style={{ color: '#00E5FF', fontWeight: 800, fontSize: '14px', letterSpacing: '0.5px', position: 'relative', zIndex: 10 }}>724</span>
-                               <span style={{ color: '#fff', fontWeight: 800, fontSize: '14px', letterSpacing: '0.5px', position: 'relative', zIndex: 10 }}>bets<span style={{ color: '#00E5FF' }}>*</span></span>
+                            {/* Right Side Vertical Ad (ERKEN ÖDEME) */}
+                            <div className="hidden md:flex w-[110px] shrink-0 bg-[#050608] border-l border-white/5 z-[60] flex-col items-center justify-between py-4 shadow-[-10px_0_30px_rgba(0,0,0,0.8)] pointer-events-auto cursor-pointer group hover:bg-[#0A0C10] transition-colors relative" onClick={(e) => { e.stopPropagation(); /* Prevent video click */ }}>
+                                {/* Subtle green glow */}
+                                <div className="absolute inset-0 bg-gradient-to-b from-[#10b981]/5 via-transparent to-[#10b981]/5 opacity-50"></div>
+                                
+                                <div className="flex flex-col items-center gap-3 w-full relative z-10 mt-2">
+                                    <div className="bg-[#10b981]/10 border border-[#10b981]/30 px-1.5 py-1 rounded text-[#10b981] text-[10px] font-black tracking-widest text-center">
+                                        ANINDA<br/>NAKİT
+                                    </div>
+                                </div>
+                                
+                                <div className="flex flex-col items-center justify-center flex-1 w-full relative z-10">
+                                    <div className="flex flex-col items-center gap-2 mb-4">
+                                        <span className="text-white font-black text-xl italic tracking-tighter" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>ERKEN</span>
+                                        <span className="text-white font-black text-xl italic tracking-tighter" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>ÖDEME</span>
+                                    </div>
+                                </div>
+                                
+                                <div className="flex flex-col items-center relative z-10 mb-2">
+                                    <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-zinc-400 font-black text-4xl italic tracking-tighter drop-shadow-lg">+2</span>
+                                    <span className="text-white font-black text-xs tracking-widest mt-0.5">GOL</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Bonus & Watermark Buttons - Moved below the player */}
+                    <div className="w-full bg-[#0a0c10] border-b border-white/5 py-3 px-4 z-50">
+                     <div className="w-full flex items-center justify-between gap-3 overflow-x-auto custom-scrollbar">
+                        <div className="flex gap-3 flex-1 min-w-max">
+                           {/* Bonus Button 3 */}
+                           <div className="flex-1 min-w-[120px] h-[40px] bg-[#12141a] rounded-lg border border-[#f59e0b]/30 shadow-sm overflow-hidden pointer-events-auto cursor-pointer flex items-center justify-center hover:bg-[#f59e0b]/10 transition-colors group relative">
+                              <div className="absolute inset-0 bg-gradient-to-r from-[#f59e0b]/10 to-transparent opacity-60"></div>
+                              <GiftIcon className="w-4 h-4 text-[#f59e0b] group-hover:scale-110 transition-transform mr-2 relative z-10" />
+                              <span style={{ color: '#f59e0b', fontWeight: 800, fontSize: '11px', letterSpacing: '0.5px', position: 'relative', zIndex: 10 }}>%20 KAYIP</span>
                            </div>
-                         </div>
+                           
+                           {/* Bonus Button 2 */}
+                           <div className="flex-1 min-w-[120px] h-[40px] bg-[#12141a] rounded-lg border border-[#10b981]/30 shadow-sm overflow-hidden pointer-events-auto cursor-pointer flex items-center justify-center hover:bg-[#10b981]/10 transition-colors group relative">
+                              <div className="absolute inset-0 bg-gradient-to-r from-[#10b981]/10 to-transparent opacity-60"></div>
+                              <Award className="w-4 h-4 text-[#10b981] group-hover:scale-110 transition-transform mr-2 relative z-10" />
+                              <span style={{ color: '#10b981', fontWeight: 800, fontSize: '11px', letterSpacing: '0.5px', position: 'relative', zIndex: 10 }}>%100 BONUS</span>
+                           </div>
+
+                           {/* Bonus Button 1 */}
+                           <div className="flex-1 min-w-[120px] h-[40px] bg-[#12141a] rounded-lg border border-[#8b5cf6]/30 shadow-sm overflow-hidden pointer-events-auto cursor-pointer flex items-center justify-center hover:bg-[#8b5cf6]/10 transition-colors group relative">
+                              <div className="absolute inset-0 bg-gradient-to-r from-[#8b5cf6]/10 to-transparent opacity-60"></div>
+                              <Flame className="w-4 h-4 text-[#8b5cf6] group-hover:scale-110 transition-transform mr-2 relative z-10" />
+                              <span style={{ color: '#8b5cf6', fontWeight: 800, fontSize: '11px', letterSpacing: '0.5px', position: 'relative', zIndex: 10 }}>50 FREESPIN</span>
+                           </div>
                         </div>
-                        </div>
+
+                       {/* Original Watermark */}
+                       <div className="min-w-[120px] h-[40px] bg-[#12141a] rounded-lg border border-white/5 shadow-sm overflow-hidden flex items-center justify-center pointer-events-auto cursor-pointer hover:bg-white/5 transition-colors relative">
+                           <div className="absolute inset-0 bg-gradient-to-r from-[#00E5FF]/10 to-[#10b981]/10 opacity-60"></div>
+                           <span style={{ color: '#00E5FF', fontWeight: 800, fontSize: '14px', letterSpacing: '0.5px', position: 'relative', zIndex: 10 }}>724</span>
+                           <span style={{ color: '#fff', fontWeight: 800, fontSize: '14px', letterSpacing: '0.5px', position: 'relative', zIndex: 10 }}>bets<span style={{ color: '#00E5FF' }}>*</span></span>
+                       </div>
+                     </div>
                     </div>
 
                     {/* Feature Banners - Hidden in full-screen mode */}
 
 
+                    {/* ─── SPORTS SLIDER (Restored) ─── */}
+                    {!isTheaterMode && (
+                        <div className="w-full py-4 shrink-0 px-2 lg:px-4">
+                            <SportsPromoSlider matches={matches} compact={true} />
+                        </div>
+                    )}
+
                     {/* Inline Channels Container */}
-                    <div className={`w-full overflow-hidden transition-all duration-500 ease-in-out ${isChannelsModalOpen ? 'max-h-[3000px] opacity-100 mt-2' : 'max-h-0 opacity-0 mt-0 pointer-events-none'}`}>
+                    <div className="w-full px-2 lg:px-4 pb-4">
                         <div className="bg-[#0a0c10] border border-[#10b981]/20 rounded-2xl w-full flex flex-col shadow-[0_0_50px_rgba(16,185,129,0.05)]">
                                 {/* Header & Search */}
                                 <div className="p-4 md:px-6 md:py-5 border-b border-white/5 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 bg-gradient-to-b from-[#10b981]/10 to-transparent shrink-0">
@@ -1425,7 +1479,7 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                 </div>
 
                 {/* 3. Live Matches List - Hidden in full-screen mode */}
-
+                </div>
             </div>
     );
 };
@@ -1450,16 +1504,16 @@ const LiveFeedTicker = () => {
   const msg = TOAST_MESSAGES[toastIndex];
 
   return (
-      <div className="w-full bg-[#0a0d14] border-t border-white/5 py-3 overflow-hidden shrink-0 mt-4 rounded-xl shadow-lg border border-white/10">
+      <div className="w-full bg-[#0A0C10] border-t border-white/5 py-3 overflow-hidden shrink-0 mt-4 rounded-xl shadow-lg border border-white/10">
           <div className="flex items-center gap-4 px-4 whitespace-nowrap overflow-hidden">
-              <span className="text-[10px] font-bold text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded flex items-center gap-1.5 shrink-0">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="text-[10px] font-bold text-[#00E5FF] bg-[#00E5FF]/10 px-2 py-0.5 rounded flex items-center gap-1.5 shrink-0">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#00E5FF] animate-pulse" />
                   CANLI AKIŞ
               </span>
               <div className="flex-1 flex items-center gap-2 text-sm text-zinc-300 min-w-0">
-                  <span className="text-amber-500 font-medium">⚡ {msg.user}</span>
+                  <span className="text-zinc-300 font-medium">⚡ {msg.user}</span>
                   <span className="text-zinc-400">az önce</span>
-                  <span className="text-emerald-400 font-medium">{msg.action}</span>
+                  <span className="text-[#00E5FF] font-medium">{msg.action}</span>
                   <span className="text-zinc-500">{msg.detail}</span>
               </div>
           </div>

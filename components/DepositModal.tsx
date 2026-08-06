@@ -120,7 +120,7 @@ export function DepositModal({ isOpen, onClose, username }: DepositModalProps) {
                   <div className="flex items-center justify-between bg-black/50 p-3 rounded-lg border border-zinc-800/80">
                     <span className="text-blue-400 font-mono text-sm tracking-wider">{bankConfig.iban}</span>
                     <button onClick={() => handleCopy(bankConfig.iban)} className="text-zinc-400 hover:text-white transition-colors">
-                      {copied ? <CheckCircle2 className="w-5 h-5 text-emerald-500" /> : <Copy className="w-5 h-5" />}
+                      {copied ? <CheckCircle2 className="w-5 h-5 text-[#00E5FF]" /> : <Copy className="w-5 h-5" />}
                     </button>
                   </div>
                 </div>
@@ -138,7 +138,7 @@ export function DepositModal({ isOpen, onClose, username }: DepositModalProps) {
                   <div className="flex items-center justify-between bg-black/50 p-3 rounded-lg border border-zinc-800/80">
                     <span className="text-blue-400 font-mono text-xs truncate mr-2">{cryptoConfig.address}</span>
                     <button onClick={() => handleCopy(cryptoConfig.address)} className="text-zinc-400 hover:text-white transition-colors shrink-0">
-                      {copied ? <CheckCircle2 className="w-5 h-5 text-emerald-500" /> : <Copy className="w-5 h-5" />}
+                      {copied ? <CheckCircle2 className="w-5 h-5 text-[#00E5FF]" /> : <Copy className="w-5 h-5" />}
                     </button>
                   </div>
                 </div>
@@ -187,9 +187,9 @@ export function DepositModal({ isOpen, onClose, username }: DepositModalProps) {
             )}
             
             {status === 'success' && (
-              <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-lg flex gap-3 items-start">
-                <ShieldCheck className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
-                <p className="text-emerald-400 text-sm font-medium">{message}</p>
+              <div className="p-4 bg-[#00E5FF]/10 border border-emerald-500/20 rounded-lg flex gap-3 items-start">
+                <ShieldCheck className="w-5 h-5 text-[#00E5FF] shrink-0 mt-0.5" />
+                <p className="text-[#00E5FF] text-sm font-medium">{message}</p>
               </div>
             )}
 

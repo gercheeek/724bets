@@ -115,18 +115,18 @@ const MiniVIPRaffleWidget: React.FC<MiniVIPRaffleWidgetProps> = ({ onViewChange 
                     <Flame className="w-3 h-3" /> En Popüler
                   </div>
                   
-                  <h3 className="text-lg font-black text-yellow-400 mb-1 drop-shadow-sm">MEGA AVANTAJ</h3>
+                  <h3 className="text-lg font-black text-zinc-300 mb-1 drop-shadow-sm">MEGA AVANTAJ</h3>
                   <div className="flex items-center gap-2 text-zinc-300 text-sm mb-4">
                     <span className="font-bold text-white">300$</span> Yatırım = 
-                    <span className="font-black text-emerald-400 px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20">
+                    <span className="font-black text-[#00E5FF] px-2 py-0.5 rounded bg-[#00E5FF]/10 border border-emerald-500/20">
                       5 Bilet
                     </span>
                   </div>
                   
-                  <div className="text-xs font-bold text-zinc-400 mb-3">(3 Bilet + <span className="text-emerald-400">2 BEDAVA</span>)</div>
+                  <div className="text-xs font-bold text-zinc-400 mb-3">(3 Bilet + <span className="text-[#00E5FF]">2 BEDAVA</span>)</div>
                   
                   <div className="w-12 h-12 rounded-full bg-gradient-to-br from-yellow-500/20 to-yellow-600/10 border border-yellow-500/30 flex items-center justify-center">
-                    <Star className="w-6 h-6 text-yellow-500" />
+                    <Star className="w-6 h-6 text-zinc-300" />
                   </div>
                 </div>
               </div>
@@ -137,7 +137,7 @@ const MiniVIPRaffleWidget: React.FC<MiniVIPRaffleWidgetProps> = ({ onViewChange 
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3">
                   <div className="flex items-center justify-between p-2 rounded-lg bg-yellow-500/10 border border-yellow-500/20">
-                    <span className="flex items-center gap-2 font-bold text-yellow-500"><Trophy className="w-4 h-4" /> 1. Kişi</span>
+                    <span className="flex items-center gap-2 font-bold text-zinc-300"><Trophy className="w-4 h-4" /> 1. Kişi</span>
                     <span className="font-black text-white">$5.000</span>
                   </div>
                   <div className="flex items-center justify-between p-2 rounded-lg bg-zinc-800/80 border border-zinc-700/50">
@@ -163,7 +163,7 @@ const MiniVIPRaffleWidget: React.FC<MiniVIPRaffleWidgetProps> = ({ onViewChange 
                 </div>
 
                 <div className="mt-4 text-center">
-                  <p className="inline-block px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-black text-sm tracking-wide">
+                  <p className="inline-block px-4 py-1.5 rounded-full bg-[#00E5FF]/10 border border-emerald-500/20 text-[#00E5FF] font-black text-sm tracking-wide">
                     Her 4 biletten 1'i KAZANIYOR!
                   </p>
                 </div>

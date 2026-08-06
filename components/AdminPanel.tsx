@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Settings, Bot, Activity, Save, Trophy, TrendingUp, ShieldCheck, Globe, Monitor, Users, ShieldAlert, Gift, Network, Lock, ArrowDownToLine, Gamepad2, MessageSquare, Wallet, Target, ChevronDown, ChevronRight } from 'lucide-react';
+import { X, Settings, Bot, Activity, Save, Trophy, TrendingUp, ShieldCheck, Globe, Monitor, Users, ShieldAlert, Gift, Network, Lock, ArrowDownToLine, Gamepad2, MessageSquare, Wallet, Target, ChevronDown, ChevronRight, Crown } from 'lucide-react';
 import AdminLuckyWheelTab from './AdminLuckyWheelTab';
 import AdminMembersTab from './AdminMembersTab';
 import AdminRiskTab from './AdminRiskTab';
@@ -96,12 +96,17 @@ export default function AdminPanel(props: AdminPanelProps) {
                         >
                             <Monitor className="w-5 h-5" />
                         </button>
-                        <div className="p-1.5 md:p-2 bg-emerald-500/20 rounded-lg">
-                            <Settings className="w-4 h-4 md:w-5 md:h-5 text-emerald-400" />
+                        <div className="p-1.5 md:p-2 bg-[#00E5FF]/20 rounded-lg">
+                            <Settings className="w-4 h-4 md:w-5 md:h-5 text-[#00E5FF]" />
                         </div>
                         <div>
-                            <h1 className="text-lg md:text-2xl font-black text-white tracking-tight uppercase">Yönetim <span className="text-emerald-500">Merkezi</span></h1>
-                            <div className="text-[10px] md:text-xs text-gray-500 font-medium">v2.4.0 • Sistemsel Kontrol Paneli</div>
+                            <div className="flex items-center gap-3">
+                                <h1 className="text-lg md:text-2xl font-black text-white tracking-tight uppercase">Yönetim <span className="text-[#00E5FF]">Merkezi</span></h1>
+                                <button onClick={() => { setActiveTab('kral'); setIsSidebarOpen(false); }} className={`flex items-center gap-1.5 px-2.5 py-1 text-[10px] md:text-xs font-black tracking-widest uppercase rounded-full transition-all ${activeTab === 'kral' ? 'bg-gradient-to-r from-yellow-500 to-yellow-600 text-black shadow-[0_0_15px_rgba(234,179,8,0.4)] scale-105' : 'bg-yellow-500/10 text-zinc-300 border border-yellow-500/30 hover:bg-yellow-500/20'}`}>
+                                    <Crown className="w-3.5 h-3.5" /> Kral Paneli
+                                </button>
+                            </div>
+                            <div className="text-[10px] md:text-xs text-gray-500 font-medium mt-0.5">v2.4.0 • Sistemsel Kontrol Paneli</div>
                         </div>
                     </div>
                     
@@ -143,7 +148,7 @@ export default function AdminPanel(props: AdminPanelProps) {
                         </div>
                         {expandedGroups.includes('CASINO YÖNETİMİ') && (
                             <div className="flex flex-col gap-1 mb-2 animate-in slide-in-from-top-2 duration-200">
-                                <button onClick={() => { setActiveTab('dashboard'); setIsSidebarOpen(false); }} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'dashboard' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 shadow-[0_0_10px_rgba(52,211,153,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
+                                <button onClick={() => { setActiveTab('dashboard'); setIsSidebarOpen(false); }} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'dashboard' ? 'bg-[#00E5FF]/10 text-[#00E5FF] border border-emerald-500/30 shadow-[0_0_10px_rgba(52,211,153,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
                                     <Activity className="w-3.5 h-3.5" /> Platform Analitiği
                                 </button>
                                 <button onClick={() => { setActiveTab('bot'); setIsSidebarOpen(false); }} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'bot' ? 'bg-[#3b82f6]/10 text-[#3b82f6] border border-[#3b82f6]/30 shadow-[0_0_10px_rgba(59,130,246,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
@@ -402,7 +407,7 @@ export default function AdminPanel(props: AdminPanelProps) {
 
                                 {activeTab === 'bot' && (
                                     <>
-                                        <div className="mb-6 flex items-center gap-2 text-emerald-400">
+                                        <div className="mb-6 flex items-center gap-2 text-[#00E5FF]">
                                             <Bot className="w-5 h-5" />
                                             <h3 className="text-lg font-semibold text-white">Sohbet Botu Yönetimi</h3>
                                         </div>
@@ -427,7 +432,7 @@ export default function AdminPanel(props: AdminPanelProps) {
                                                             checked={config.isActive}
                                                             onChange={(e) => setConfig({...config, isActive: e.target.checked})}
                                                         />
-                                                        <div className="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+                                                        <div className="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#00E5FF]"></div>
                                                     </label>
                                                 </div>
 
@@ -442,7 +447,7 @@ export default function AdminPanel(props: AdminPanelProps) {
                                                                     type="number" 
                                                                     value={config.speedMin}
                                                                     onChange={(e) => setConfig({...config, speedMin: parseInt(e.target.value)})}
-                                                                    className="w-full bg-black border border-gray-800 rounded-lg px-3 py-2 text-white focus:border-emerald-500 outline-none"
+                                                                    className="w-full bg-[#0A0C10] border border-gray-800 rounded-lg px-3 py-2 text-white focus:border-emerald-500 outline-none"
                                                                 />
                                                             </div>
                                                             <div>
@@ -451,7 +456,7 @@ export default function AdminPanel(props: AdminPanelProps) {
                                                                     type="number" 
                                                                     value={config.speedMax}
                                                                     onChange={(e) => setConfig({...config, speedMax: parseInt(e.target.value)})}
-                                                                    className="w-full bg-black border border-gray-800 rounded-lg px-3 py-2 text-white focus:border-emerald-500 outline-none"
+                                                                    className="w-full bg-[#0A0C10] border border-gray-800 rounded-lg px-3 py-2 text-white focus:border-emerald-500 outline-none"
                                                                 />
                                                             </div>
                                                         </div>
@@ -465,7 +470,7 @@ export default function AdminPanel(props: AdminPanelProps) {
                                                     <div className="mb-4">
                                                         <label className="text-xs text-gray-500 mb-1 flex justify-between">
                                                             <span>Gevşek/Sıradan Konuşma Oranı</span>
-                                                            <span className="text-emerald-400">{Math.round(config.sloppyRate * 100)}%</span>
+                                                            <span className="text-[#00E5FF]">{Math.round(config.sloppyRate * 100)}%</span>
                                                         </label>
                                                         <input 
                                                             type="range" 
@@ -480,7 +485,7 @@ export default function AdminPanel(props: AdminPanelProps) {
                                                     <div>
                                                         <label className="text-xs text-gray-500 mb-1 flex justify-between">
                                                             <span>Emoji Kullanım Oranı</span>
-                                                            <span className="text-emerald-400">{Math.round(config.emojiRate * 100)}%</span>
+                                                            <span className="text-[#00E5FF]">{Math.round(config.emojiRate * 100)}%</span>
                                                         </label>
                                                         <input 
                                                             type="range" 
@@ -509,7 +514,7 @@ export default function AdminPanel(props: AdminPanelProps) {
                         <button 
                             onClick={handleSave}
                             disabled={loading || saving}
-                            className="flex items-center gap-2 px-6 py-2.5 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 text-white font-medium rounded-lg transition-colors"
+                            className="flex items-center gap-2 px-6 py-2.5 bg-[#00E5FF] hover:bg-emerald-600 disabled:opacity-50 text-white font-medium rounded-lg transition-colors"
                         >
                             {saving ? <Activity className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
                             {saving ? 'Kaydediliyor...' : 'Ayarları Kaydet'}

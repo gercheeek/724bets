@@ -14,7 +14,7 @@ export const CustomBetSlip = () => {
       <div className="bg-[#232833] p-4 flex items-center justify-between border-b border-white/5 shrink-0">
         <div className="flex items-center gap-2">
           <DollarSign className="w-5 h-5 text-[#06b6d4]" />
-          <h2 className="text-white font-black text-sm uppercase tracking-wide">Bahis Kuponu</h2>
+          <h2 className="text-white font-black text-sm uppercase tracking-wide">Seçimlerim</h2>
         </div>
         {bets.length > 0 && (
           <span className="bg-[#06b6d4] text-black text-xs font-bold px-2 py-0.5 rounded-full">
@@ -28,8 +28,8 @@ export const CustomBetSlip = () => {
         {bets.length === 0 ? (
           <div className="h-full flex flex-col items-center justify-center text-zinc-500 opacity-60 min-h-[300px]">
             <TrendingUp className="w-12 h-12 mb-3 opacity-20" />
-            <p className="text-sm font-medium">Kuponunuzda maç bulunmuyor.</p>
-            <p className="text-xs text-center mt-1">Oranlara tıklayarak kuponunuza ekleyin.</p>
+            <p className="text-sm font-medium">Listenizde etkinlik bulunmuyor.</p>
+            <p className="text-xs text-center mt-1">Oranlara tıklayarak listenize ekleyin.</p>
           </div>
         ) : (
           bets.map((bet, idx) => (
@@ -81,8 +81,8 @@ export const CustomBetSlip = () => {
           </div>
 
           <div className="flex gap-2">
-            <button className="flex-1 bg-[#06b6d4] hover:bg-[#06b6d4]/90 text-black font-black uppercase tracking-wider py-4 rounded-xl transition-all shadow-[0_0_20px_rgba(0,255,163,0.2)]">
-              Bahis Yap
+            <button className="flex-1 bg-[#06b6d4] hover:bg-[#06b6d4]/90 text-black font-black text-[15px] uppercase tracking-wider py-4 rounded-xl transition-all shadow-[0_0_20px_rgba(6,182,212,0.4)] hover:shadow-[0_0_30px_rgba(6,182,212,0.6)] hover:-translate-y-0.5">
+              KUPON YAP
             </button>
             <button 
               onClick={() => {

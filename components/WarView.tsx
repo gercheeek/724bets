@@ -153,7 +153,7 @@ export default function WarView({ siteUser, onAuthRequired }: any) {
                         onClick={handlePlay}
                         disabled={isPlaying}
                         className={`w-full font-bold py-3.5 rounded-md transition-colors shadow-lg ${
-                            isPlaying ? 'bg-[#324555] text-gray-400 cursor-not-allowed' : 'bg-emerald-500 hover:bg-emerald-600 text-white'
+                            isPlaying ? 'bg-[#324555] text-gray-400 cursor-not-allowed' : 'bg-[#00E5FF] hover:bg-emerald-600 text-white'
                         }`}
                     >
                         {isPlaying ? 'Kartlar Dağıtılıyor...' : 'Bahis'}
@@ -171,7 +171,7 @@ export default function WarView({ siteUser, onAuthRequired }: any) {
                             {result === 'win' ? 'Kazanç' : result === 'tie' ? 'Beraberlik' : 'Kayıp'}
                         </span>
                         <span className={`font-mono text-sm font-bold ${
-                            result === 'win' ? 'text-emerald-400' : result === 'tie' ? 'text-orange-400' : 'text-red-400'
+                            result === 'win' ? 'text-[#00E5FF]' : result === 'tie' ? 'text-orange-400' : 'text-red-400'
                         }`}>
                             {result === 'win' ? `+₺${winAmount.toFixed(2)}` : result === 'tie' ? '+₺0.00' : `-₺${betAmount.toFixed(2)}`}
                         </span>
@@ -198,7 +198,7 @@ export default function WarView({ siteUser, onAuthRequired }: any) {
                         </span>
                     </div>
                     
-                    <div className="absolute top-6 right-6 flex items-center gap-2 bg-[#111111]/50 px-3 py-1.5 rounded-full border border-white/10 z-20">
+                    <div className="absolute top-6 right-6 flex items-center gap-2 bg-[#0A0C10]/50 px-3 py-1.5 rounded-full border border-white/10 z-20">
                         <ShieldCheck className="w-4 h-4 text-gray-400" />
                         <span className="text-gray-300 font-semibold text-xs">Adil Oyun</span>
                     </div>
@@ -247,7 +247,7 @@ export default function WarView({ siteUser, onAuthRequired }: any) {
                                      <h2 className="text-6xl md:text-8xl font-black uppercase tracking-tighter mb-2 text-transparent bg-clip-text bg-gradient-to-b from-[#ffd700] to-[#b8860b] drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)]">
                                          KAZANDIN
                                      </h2>
-                                     <div className="text-4xl text-emerald-400 font-black tracking-widest drop-shadow-[0_0_20px_rgba(52,211,153,0.6)]">
+                                     <div className="text-4xl text-[#00E5FF] font-black tracking-widest drop-shadow-[0_0_20px_rgba(52,211,153,0.6)]">
                                          +₺{winAmount?.toFixed(2)}
                                      </div>
                                  </div>

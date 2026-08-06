@@ -237,7 +237,7 @@ export default function SportsIconNav({ activeTab = 'home', onTabChange = () => 
 
             {/* Right Arrow (Fixed) */}
             <div className="absolute right-0 top-0 bg-gradient-to-l from-[#0a0d14] via-[#0a0d14]/80 to-transparent w-16 h-full flex justify-end items-center pr-2 pointer-events-none z-20">
-                <button className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center pointer-events-auto transition-all duration-300 shadow-[0_4px_10px_rgba(0,0,0,0.3)] hover:scale-110">
+                <button className="btn-icon-modern pointer-events-auto shadow-[0_4px_10px_rgba(0,0,0,0.3)]">
                     <ChevronRight className="w-5 h-5" />
                 </button>
             </div>

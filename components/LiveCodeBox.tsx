@@ -84,7 +84,7 @@ export default function LiveCodeBox({ userId }: { userId?: string }) {
 
   return (
     <div className="
-      relative rounded-lg border border-zinc-700/50 bg-[#111111]
+      relative rounded-lg border border-zinc-700/50 bg-[#0A0C10]
       overflow-hidden shadow-[0_0_40px_rgba(0,0,0,0.4)]
     ">
       {/* Header */}

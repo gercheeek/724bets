@@ -88,14 +88,14 @@ const VIPClubView: React.FC<VIPClubViewProps> = ({ onNavigate, siteUser }) => {
   ];
 
   return (
-    <div className="w-full h-full min-h-[calc(100vh-140px)] flex flex-col items-center relative overflow-hidden pb-24 bg-[#06080D]">
+    <div className="w-full h-full min-h-[calc(100vh-140px)] bg-[#0A0C10] flex flex-col items-center relative overflow-hidden pb-24">
       {/* Background Ambient Glows */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-0 right-1/4 w-[800px] h-[800px] bg-[#00E5FF]/5 rounded-full blur-[150px] mix-blend-screen" />
-        <div className="absolute bottom-1/4 left-1/4 w-[600px] h-[600px] bg-[#0077FF]/5 rounded-full blur-[150px] mix-blend-screen" />
+        <div className="absolute top-0 right-1/4 w-[600px] h-[600px] bg-[#fbbf24]/5 rounded-full blur-[120px] mix-blend-screen" />
+        <div className="absolute bottom-1/4 left-1/4 w-[500px] h-[500px] bg-[#00E5FF]/5 rounded-full blur-[120px] mix-blend-screen" />
       </div>
 
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pt-10 lg:pt-12">
+      <div className="w-full max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pt-10 lg:pt-12">
         
 
 
@@ -260,7 +260,7 @@ const VIPClubView: React.FC<VIPClubViewProps> = ({ onNavigate, siteUser }) => {
             </div>
           </div>
         ) : (
-          <div className="relative w-full max-w-4xl mx-auto rounded-[24px] p-6 lg:p-8 mb-16 bg-[#0a0a0a]/80 backdrop-blur-xl border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden">
+          <div className="relative w-full max-w-4xl mx-auto rounded-[24px] p-6 lg:p-8 mb-16 bg-[#0A0C10]/80 backdrop-blur-xl border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden">
             <div className="absolute top-0 right-0 w-64 h-64 bg-[#00E5FF]/10 rounded-full blur-[60px] pointer-events-none" />
             
             <div className="flex flex-col md:flex-row items-center gap-8 relative z-10">
@@ -270,14 +270,14 @@ const VIPClubView: React.FC<VIPClubViewProps> = ({ onNavigate, siteUser }) => {
                   <div className="w-16 h-16 rounded-full bg-[#00E5FF]/10 border border-[#00E5FF]/30 flex items-center justify-center shadow-[0_0_20px_rgba(0,229,255,0.2)]">
                     <currentLevel.icon className="w-8 h-8 text-[#00E5FF]" />
                   </div>
-                  <div className="absolute -bottom-2 -right-2 bg-black border border-[#00E5FF]/50 px-2.5 py-1 rounded-md text-[9px] font-black uppercase text-[#00E5FF] shadow-lg tracking-widest">
+                  <div className="absolute -bottom-2 -right-2 bg-[#0A0C10] border border-[#00E5FF]/50 px-2.5 py-1 rounded-md text-[9px] font-black uppercase text-[#00E5FF] shadow-lg tracking-widest">
                     LVL 3
                   </div>
                 </div>
                 <div>
                   <span className="text-zinc-500 font-bold uppercase tracking-widest text-[9px] block mb-1">{t('vip.current_level')}</span>
                   <h2 className="text-2xl font-black text-white tracking-tight">{currentLevel.name}</h2>
-                  <span className="text-emerald-400 font-bold text-xs">{currentDeposit.toLocaleString()} ₺ Toplam Yatırım</span>
+                  <span className="text-[#00E5FF] font-bold text-xs">{currentDeposit.toLocaleString()} ₺ Toplam Yatırım</span>
                 </div>
               </div>
 
@@ -372,7 +372,7 @@ const VIPClubView: React.FC<VIPClubViewProps> = ({ onNavigate, siteUser }) => {
                     {/* Hover Glow Behind Pillar */}
                     <div className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-1/2 ${glowColor}/5 rounded-full blur-[30px] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none`}></div>
 
-                    <div className={`w-full h-full relative rounded-t-sm border-t-2 border-l border-r ${borderColor} border-l-white/5 border-r-white/5 bg-gradient-to-b from-white/[0.04] to-[#0a0a0a]/80 backdrop-blur-md transition-all duration-500 group-hover:from-white/[0.08] flex flex-col items-center justify-between p-3 lg:p-4 overflow-hidden shadow-2xl`}>
+                    <div className={`w-full h-full relative rounded-t-sm border-t-2 border-l border-r ${borderColor} border-l-white/5 border-r-white/5 bg-gradient-to-b from-white/[0.04] to-[#0A0D14]/90 backdrop-blur-md transition-all duration-500 group-hover:from-white/[0.08] flex flex-col items-center justify-between p-3 lg:p-4 overflow-hidden shadow-2xl`}>
                       
                       {/* Top Accent Glow */}
                       <div className={`absolute top-0 left-1/2 -translate-x-1/2 w-full h-20 ${glowColor}/20 blur-[15px] transition-opacity opacity-50 group-hover:opacity-100`}></div>
@@ -420,7 +420,7 @@ const VIPClubView: React.FC<VIPClubViewProps> = ({ onNavigate, siteUser }) => {
           <div className="flex justify-center pb-12 mt-8">
             <button 
               onClick={() => onNavigate?.('deposit')}
-              className="relative inline-flex items-center justify-center px-10 py-5 font-black text-sm tracking-widest text-[#00E5FF] uppercase bg-[#0a0a0a]/90 backdrop-blur-xl border border-[#00E5FF]/30 rounded-full overflow-hidden shadow-[0_0_30px_rgba(0,229,255,0.15)] hover:shadow-[0_0_50px_rgba(0,229,255,0.3)] transition-all hover:bg-[#00E5FF]/10 group"
+              className="relative inline-flex items-center justify-center px-10 py-5 font-black text-sm tracking-widest text-[#00E5FF] uppercase bg-[#0A0C10]/90 backdrop-blur-xl border border-[#00E5FF]/30 rounded-full overflow-hidden shadow-[0_0_30px_rgba(0,229,255,0.15)] hover:shadow-[0_0_50px_rgba(0,229,255,0.3)] transition-all hover:bg-[#00E5FF]/10 group"
             >
               <div className="absolute inset-0 bg-[#00E5FF]/10 mix-blend-screen group-hover:translate-x-full transition-transform duration-700 ease-out -skew-x-12 -translate-x-full"></div>
               <span className="relative z-10 flex items-center gap-3">

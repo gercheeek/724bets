@@ -173,409 +173,376 @@ const supabaseUrl = process.env.VITE_SUPABASE_URL || 'https://eaxtuvjcanakaqetuq
 const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY || 'sb_publishable_nzbN9-CrSawHUxEZNYZBzg_WOlgQ9X0';
 
 const supabase = createClient(supabaseUrl, supabaseKey);
-const TR_CHANNEL_ID = '00000000-0000-0000-0000-000000000000';
+const GLOBAL_CHANNEL_ID = 'global';
 
-const users = [
-    // İngilizce / Global Tarz
-    "AceHunter", "RiverRat", "DealerBust", "Spin2Win", "JackpotJunkie", 
-    "BetMaverick", "CryptoWhale", "SlotSniper", "LuckyStrike777", "BlackJackKing", 
-    "VegasVibe", "NeonNights", "HighRollerZ", "AllInManiac", "ChipsNCoins", 
-    "RoyalFlushX", "DiceWhisperer", "SpinCartel", "MaxBetRider", "CardShark99",
-    "DoubleDownPro", "SplitTheEights", "BustTheDealer", "PitBoss", "WheelOfFortune",
-    // Türkçe Casino / Argo Tarzı
-    "KasaBuken", "MasaMubtelasi", "CarkCeviren", "AsGeldii", "Yirmibir21", 
-    "CiftSifir", "KirmiziSiyah", "SekerZengini", "DedeVurgunu", "KatlamaSanati", 
-    "KasaKatili", "ZarTutan", "MakineCildirdi", "SonSpinci", "BlackjackBasi", 
-    "RestCeken", "KartSayan", "BonusAvcisi", "PatlayanKasa", "KirmiziAs", 
-    "MacaKizi", "KupaBesi", "SinekVale", "OlymposYikicisi", "VurgunGecesi"
+const globalUsers = [
+    "Pushpa_007", "Rajesh__1", "Kalu_girl", "AllamaIqbal", "Ferozz_khan", "Shikari_3X",
+    "Dream_969K", "Mr___Hero", "BC_PRIME", "ALTO2026", "Dani1236", "Eswnlevlluac",
+    "BC_LEXTS3", "Danish Noori", "Sonia_Khan", "BC_KING_KONG_2", "BC_EXPORT544", "Captain010",
+    "SAMI__shehzadi654", "Nasro10", "Sohyel😎💓", "RxRobin", "TheReal_chif", "MiLaD1",
+    "Alina______Queen786", "Hoorbeauty_BCGAME", "Sedar_sy", "Riya__", "ZENITH_X12",
+    "JAGGU_KHAN90", "Manal______Queen786", "Mateus_BR7", "Lucas_SP", "Thiago_Rabelo",
+    "Fernanda_Vip", "Diego_Mex", "Carlos_Lima", "Gabriel_Pro", "Valentina_X",
+    "Rodrigo_BC", "Camila_Bet", "Santiago_Win", "Guillermo_99", "Nico_Apostador",
+    "Joao_Bet", "Bruno_Vip", "Arthur_C", "Felipe_Slots", "Rafael_High", "Mariana_G"
 ];
 
-const casinoMessages = [
-    // Blackjack Mesajları
-    "ulan kasaya 5 geldi yanına 16 çekti yine 21 yaptı, bu oyun adamı deli eder!",
-    "kasa hep mi 20 çeker arkadaş, 19'da kaldık patladık yine",
-    "ikiye katladık (double down) as geldi, masayı sildim süpürdüm valla",
-    "abi blackjackte yan bahis (side bet) girmeyen harbi kaybeder, perfect pairs candır",
-    "böl (split) baba böl, 8'leri bölmezsen ne anladın sen bu oyundan",
-    "krupiye resmen bizimle dalga geçiyor üst üste 3 kere blackjack mi yapar bi insan",
-    "masada ugursuz biri var arkadas adam yuzunden kasa 21 bulup duruyor",
-    "16'da çektim 5 geldi, ulan kalbim duracaktı az kalsın",
-    "evolution masaları yeminle kilitlendi, yer yok yer",
+const globalMessagesPool = [
+    // Portuguese (Brezilya / Portekiz)
+    "Boa sorte a todos rapaziada! 🚀",
+    "Hoje o bagulho ta insano no crash!!",
+    "Bora dobrar essa banca meu povo!",
+    "Alguém aí pegou essa vela de 50x?",
+    "Boa noite tropa, lucrando muito hoje 🔥",
+    "Caraca mano, essa rodada foi surreal!",
+    "Valeu pela força galera, bora pra cima!",
+    "Pagou lindo demais, multiplicador bruto!",
+    "Quem ta no lucro manda um GG no chat 😎",
+    "Hoje a sorte ta do nosso lado galera!",
+    "Jogo da bomba ta pagando muito hoje rapaziada 💣",
+    "Quem nao arrisca nao petisca bora subir a banca!",
+    "Mano que rodada insana, valeu demais!",
+    "Bateu a meta por hoje, ate amanha tropa! 🙏",
+    "Se essa vela passar de 10x eu pago um lanche pra geral hahaha",
+    "Esse jogo e bom demais pra quem tem paciencia!",
+    "Subi de 20 pra 500 em 10 minutos, slk!",
+    "Cuidado com a ganancia rapaziada, tira o lucro no verde! 💚",
 
-    // Slot Mesajları (Dede, Sweet Bonanza, Sugar Rush)
-    "dede (gates of olympus) bugün çok cimri, x100 atıp duruyor ama birleştirmiyor",
-    "sugar rush'ta x500 düştü kalbim duracaktı az kalsın yeminle",
-    "sweet bonanza yine boş geçiyor, free spinleri yedi bitirdi namussuz",
-    "abi max bet girdim makine çıldırdı, ekran coin doldu resmen!",
-    "spaceman'de tam 10x beklerken 1.1x'de patladık yine şaka gibi...",
-    "dog house megaways girmeyin beyler bugün fena yutuyor makine",
-    "ulan satın alma (bonus buy) yapıyorum 100 liralık ödeme veriyor dalga geçer gibi",
-    "pragmatic oyunlarında saat 12'den sonra bi bereket geliyor sanki",
-    "dede elini kaldırdı ama yıldırım atmadı, o anki hayal kırıklığı yeminle hiçbir şeyde yok",
-    "hacksaw oyunları bi açılırsa tam açılıyor, dünden beri x1000 kovalıyorum"
+    // Spanish (İspanyolca / Latin Amerika)
+    "La verdad es que este chat va demasiado rápido hoy jajaja",
+    "Buena suerte a todos amigos, a ganar en grande 🍀",
+    "Vamos por ese multiplicador alto hoy 🔥",
+    "Increíble cómo pagó esa ronda, felicidades a los ganadores!",
+    "Alguien jugando ruleta ahora mismo?",
+    "Buena racha hoy muchachos, no paremos!",
+    "Saludos desde México compas, mucha suerte a todos 🇲🇽",
+    "El juego está picante hoy ehhh 🔥",
+    "Vamos con toda hoy mi gente 🚀",
+    "Qué buena victoria hermano, a seguir sumando!",
+    "Aca reportandome desde Colombia, hoy se gana si o si 🇨🇴",
+    "Quien mas metio su apuesta en el multiplicador?",
+    "Excelente plataforma la verdad, de las mejores 👑",
+    "Vamos mi gente no se rindan que la suerte cambia en un segundo!",
+    "Hoy es noche de ganancias señores 😎",
+    "Que racha tan buena llevo en las tragamonedas hoy!",
+
+    // English (Global / İngilizce)
+    "Sending luck your way... good day!",
+    "Keep it up to you all! 👊",
+    "Just positive and keep winning 🚀",
+    "Best of luck to you tomorrow!",
+    "Love 💕💕💕 you all",
+    "That's awesome 👍",
+    "Cool 🆒🆒🆒😎",
+    "Wow that's a great idea",
+    "Good luck guys have fun 😊👍",
+    "Keep printing green 🤢🍏🍏🍏",
+    "May the odds be with you all ❤️",
+    "Big wins for everyone... enjoy best gaming experience 😉",
+    "Keep pushing, keep winning.. keep rolling bro!",
+    "Have a golden day everyone 🌟",
+    "Awesome platform, best experience so far 🎯",
+    "GG everyone, massive profit today!",
+    "Who is ready for the next big multiplier? 🚀",
+    "Stay blessed and keep winning!",
+    "To the moon 🚀🚀🚀",
+    "Nice catch bro, well deserved!",
+
+    // Hindi / Asian
+    "Bhai aaj to alag hi profit ho raha hai 🚂",
+    "Best of luck friends stay blessed 💕",
+    "Engine i like to invest, profit here 🎯 🎮",
+    "Good night friends sweet dreams 🌃",
+    "Aaj barish kab aayegi mod bhai 🌧️",
+    "Keep winning guys stay cool 👊",
+    "Bahut badhiya bhai aise hi win karte raho 👍",
+    "Good luck to all players, happy gaming 😊",
+    "Sabka time aayega doston khush raho 👑",
+    "Khush raho doston sabko badhai ho 🎉",
+    "Bhai mera bhi tukka lag gaya aaj mast profit 💸",
+    "Aap sabhi ko bohot bohot mubarak ho win 🎉",
+
+    // Mod & Bot Special Alerts
+    "XavierBCGAME [Mod]: ✅ Never share links not related to 724bets. ✅ Refrain from asking rains, drops, tips, loans. ✅ Respect everyone's space. 🟢 For deposit & withdrawal issues, visit Live Support.",
+    "BBCview: Crash Big Hit | 4570.48 USDT | Multiplier 10.00x!",
+    "BBCview: Crash Vay Anasına | 1488.03 USDT | Multiplier 2.22x",
+    "BC_70cr: Yağmur yağdı ve bir mesaj bıraktı: \"Rainer Rainer, Tavuk Yemeği\" @User1: 9.5 USDT | @User2: 0.1 USDT. Tebrikler! 🍗",
+    "bc.game: Tebrikler! @VIP_Player Won $4570.48 in Crash! 💧 İşte şanslı yağmur geliyor 💧"
 ];
-
-const emojis = ['😂', '🔥', '🚀', '💸', '🤑', '😅', '🤬', '🤦‍♂️', '👀', '⚽️', '🎯', '🎰', '🎲'];
-
-let lastCrypto = [];
-let lastNews = [];
-let usedNewsTitles = new Set(); 
-
-async function fetchLiveData() {
-    try {
-        console.log("Canlı veriler çekiliyor (Binance & Google News)...");
-        try {
-            const cryptoRes = await fetch('https://api.binance.com/api/v3/ticker/24hr?symbols=["BTCUSDT","ETHUSDT","BNBUSDT","SOLUSDT"]');
-            if (cryptoRes.ok) {
-                lastCrypto = await cryptoRes.json();
-            }
-        } catch (err) {}
-
-        try {
-            const parser = new Parser();
-            const feed = await parser.parseURL('https://news.google.com/rss/headlines/section/topic/SPORTS?hl=tr&gl=TR&ceid=TR:tr');
-            if (feed && feed.items) {
-                lastNews = feed.items; 
-            }
-        } catch (err) {}
-    } catch (e) {}
-}
-
-function sloppyfy(text) {
-    if (Math.random() > botConfig.sloppyRate) return text;
-    let t = text.toLowerCase();
-    t = t.replace(/ğ/g, 'g').replace(/ü/g, 'u').replace(/ş/g, 's').replace(/ı/g, 'i').replace(/ö/g, 'o').replace(/ç/g, 'c');
-    t = t.replace(/v/g, 'w').replace(/vallahi/g, 'walla').replace(/evet/g, 'aynen');
-    t = t.replace(/,/g, '').replace(/\./g, '').replace(/\?/g, '??').replace(/!/g, '!!');
-    t = t.replace(/kardeşim/g, 'kardesim').replace(/ne diyorsunuz/g, 'ne dionuz');
-    if (Math.random() > 0.5) t = t + t.slice(-1) + t.slice(-1);
-    return t;
-}
-
-function addEmoji(text) {
-    if (Math.random() < botConfig.emojiRate) {
-        const emoji = emojis[Math.random() * emojis.length | 0];
-        if (Math.random() > 0.5) return `${text} ${emoji}`;
-        return `${emoji} ${text}`;
-    }
-    return text;
-}
 
 function pick(arr) {
     return arr[Math.floor(Math.random() * arr.length)];
 }
 
-// =========================================================
-// CUSTOM SCENARIO GENERATOR (10 TOPICS x 1000s OF VARIATIONS)
-// =========================================================
-function getGenerativeSentence() {
-    const topics = [
-        'england_france', 'deschamps_zidane', 'world_cup_final', 'galatasaray_mctominay', 
-        'fener_david', 'besiktas_antony', 'trabzon_champ', 'argentina_referee', 
-        'crypto_boom', 'superlig_fixture', 'casino', 'finans'
-    ];
-    
-    // Rastgele konulardan birini veya canli veriyi sec
-    const chosenTopic = pick(topics);
-    
-    const intro = ['beyler', 'agalar', 'arkadaslar', 'valla', 'yeminle', 'harbiden', 'ulan', ''];
-    const reaction = ['saka gibi', 'inanamadim', 'yok artik', 'ne dionuz bu ise', 'sasirtmadi gerci', 'efsane valla', 'vay be'];
+// Dynamic Username Generator for Realistic Players
+const namePrefixes = ["Alex", "Mateus", "Pedro", "Lucas", "Javi", "Sandro", "David", "Chris", "John", "Carlos", "Tomi", "Leo", "Max", "Gabi", "Nico", "Diego", "Beto", "Felipe", "Kiko", "Zeca", "Toni", "Dani", "Sam", "Vic", "Marco", "Rafa", "Hugo", "Ivan", "Eric", "Alan"];
+const nameSuffixes = ["_99", "_BR", "_77", "_pro", "_win", "_x", "88", "95", "001", "_vip", "777", "_sp", "_mx", "12", "07", "_bet", "_play", "99", "_real", "23", "_king", ""];
 
-    if (chosenTopic === 'england_france') {
-        const statements = [
-            'abi dün ingiltere maçına 7+ gol bastım, 23 oran yakaladım borçları kapattım valla.',
-            'fransa ms1 girmiştim, 4 gol atıp nasıl yenildiler çıldıracağım yeminle.',
-            'o 4-6 biten çılgın ingiltere maçında karşılıklı gol girenler voleyi vurdu.',
-            'tarihi maç oldu yemin ediyorum, fransa nın 4 atıp yenilmesi şaka gibi.',
-            'ingiltere fransa maçı sayesinde hayatım kurtuldu 7+ gol ne demek abi ya.'
-        ];
-        return statements[Math.floor(Math.random() * statements.length)];
+function getRandomUsername() {
+    if (Math.random() < 0.35) {
+        return pick(globalUsers);
     }
-    
-    if (chosenTopic === 'deschamps_zidane') {
-        const desc = ['deschamps i', 'fransa teknik direktorunu', 'deschamps babayi', 'fransanin hocayi'];
-        const action = ['kovmuslar', 'paketlemisler', 'harcamislar 6 gol yiyince', 'kovdular mac biter bitmez'];
-        const zid = ['zidane', 'zizou', 'kel zidane', 'zinedine zidane'];
-        const zAction = ['parise ucuyomus diyolar.', 'takimin basina geciyormus.', 'anlasmis bile.', 'yeni hoca oluyormus.'];
-        return `${pick(intro)} ${pick(desc)} ${pick(action)} ${pick(zid)} ${pick(zAction)}`;
-    }
-    
-    if (chosenTopic === 'world_cup_final') {
-        const team1 = ['ispanya', 'yamal', 'ispanyollar'];
-        const team2 = ['arjantin', 'messi', 'messi nin son dansi'];
-        const act = ['kupa efsane olacak', 'final ne heyecanli olur', 'bahis siteleri kilitlenmis', 'bu aksam nefesler tutuldu'];
-        const guess = ['ben messi alir diyorum', 'ispanya parcalar bence', 'arjantin birakmaz', 'yamal sov yapar'];
-        return `${pick(intro)} ${pick(team1)} mi ${pick(team2)} mi? ${pick(act)} ${pick(guess)}.`;
-    }
-    
-    if (chosenTopic === 'galatasaray_mctominay') {
-        const gs = ['galatasaray', 'cim bom', 'gs', 'aslan'];
-        const player = ['mctominay icin', 'mctominayi almak icin', 'manchesterli mctominay a'];
-        const act = ['ingiltereye ucmus', 'cikaarma yapmis baskan', 'teklif yapmislar'];
-        const react = ['gelirse ortasaha ucar', 'torreira ile muthis olurlar', 'zor transfer bence', 'yok artik gelir mi sence'];
-        return `${pick(intro)} ${pick(gs)} ${pick(player)} ${pick(act)}... ${pick(react)}`;
-    }
-    
-    if (chosenTopic === 'fener_david') {
-        const fb = ['fener', 'fenerbahce', 'mourinho', 'mourinho baba'];
-        const act = ['jonathan david e', 'lille golcusu david e', 'david ile bizzat'];
-        const res = ['keseyi acmis diyolar.', 'gorusmus diyolar.', 'kancayi takmis.'];
-        const guess = ['gelse dzeko yedege duser.', 'efsane forvet olur valla.', 'forvet hatti inanilmaz olur.'];
-        return `${pick(intro)} ${pick(fb)} ${pick(act)} ${pick(res)} ${pick(guess)}`;
-    }
-    
-    if (chosenTopic === 'besiktas_antony') {
-        const bjk = ['besiktas', 'kartal', 'bjk'];
-        const p = ['manchesterli antony i', 'antony sürprizini', 'kanat icin antony i'];
-        const act = ['kiralik bitirmis', 'buyuk asama kaydetmis', 'anlasmaya varilmis diyolar'];
-        const r = ['sag kanat efsane olur', 'o adam tr de is yapar', 'pek umudum yok ama hayirlisi'];
-        return `${pick(intro)} ${pick(bjk)} ${pick(p)} ${pick(act)}... ${pick(r)}`;
-    }
-    
-    if (chosenTopic === 'trabzon_champ') {
-        const ts = ['trabzonspor', 'trabzon', 'ts yonetimi'];
-        const talk = ['sampiyonluk kupasi trabzona gelecek dedi', 'sampiyon biziz diyo', 'kupayi alacaz diyolar'];
-        const r = ['transferler fena gerci', 'takim cabuk uyum saglamis', 'bu sene yaris kizisacak valla', 'trabzon zorlar bu sezon'];
-        return `${pick(intro)} ${pick(ts)} ${pick(talk)}! ${pick(r)}`;
-    }
-    
-    if (chosenTopic === 'argentina_referee') {
-        const arg = ['arjantin basini', 'arjantin kampi', 'messiler'];
-        const blame = ['ispanya lobisi yapiyor demis', 'fifayi topa tutmus', 'hakemlere baski var diyomus'];
-        const r = ['mac oncesi algi yapiyolar', 'arjantin hakemlere agliyor', 'klasik final oncesi krizleri', 'hakem kurbani olmak istemiyolar'];
-        return `${pick(intro)} ${pick(arg)} ${pick(blame)}.. ${pick(r)}`;
-    }
-    
-    if (chosenTopic === 'crypto_boom') {
-        const btc = ['bitcoin', 'btc'];
-        const price = ['64 bin 600 leri', '64.600 usd uzerini', '64 bin bariyerini'];
-        const act = ['gorunce', 'test edince', 'kirdikca'];
-        const usdt = ['tether (usdt) hacmi', 'kripto yatirimlari', 'site bakiye hareketleri'];
-        const res = ['rekor kirmis diyolar', 'ucmus gitmis resmen', 'tavan yapmis'];
-        return `${pick(intro)} ${pick(btc)} ${pick(price)} ${pick(act)} ${pick(usdt)} ${pick(res)}!`;
-    }
-
-    if (chosenTopic === 'superlig_fixture') {
-        const fikstur = ['2026-2027 fiksturu', 'yeni sezon fiksturu', 'super lig kuralari'];
-        const derbi = ['5. haftadaki gs-trabzon', 'galatasaray trabzon 5. hafta', 'trabzon - gs derbisi ilk mactan'];
-        const r = ['efsane olacak', 'fikstur muthis valla', 'super bi sezon bizi bekliyor', 'baslasa da mac alsak artik'];
-        return `${pick(intro)} ${pick(fikstur)} cekilmis, ${pick(derbi)} ${pick(r)}`;
-    }
-
-    if (chosenTopic === 'casino') {
-        const game = ['sugar rush', 'sweet bonanza', 'gates of olympus', 'plinko', 'crazy time'];
-        const action = ['oynayan var mi', 'giren oldu mu', 'deneyen var mi'];
-        const outcome = ['cok iyi odeme veriyor suan', 'patladi iyice kazandirmiyor', 'x1000 verdi demin inanamadim'];
-        return `${pick(intro)} ${pick(game)} ${pick(action)}? ${pick(outcome)}`;
-    }
-    
-    if (chosenTopic === 'finans') {
-        const method = ['tether', 'papara', 'payco', 'banka havalesi', 'kripto'];
-        const action = ['ile para cektim', 'ile yatirim yaptim', 'cekimi verdim'];
-        const result = ['2 dakikada yatti', 'aninda gecti hesaba', 'hizi cok iyi'];
-        return `${pick(intro)} ${pick(method)} ${pick(action)} demin, ${pick(result)}.`;
-    }
+    const pre = pick(namePrefixes);
+    const suf = pick(nameSuffixes);
+    return `${pre}${suf}`;
 }
 
-function generateMessages() {
-    let baseMessages = [];
-    
-    // 2. Haber ve Veri Tüketim Mantığı (Queue Sistemi)
-    if (lastNews && lastNews.length > 0) {
-        let freshNews = lastNews.filter(n => !n.used);
-        if (freshNews.length > 0) {
-            const newsItem = pick(freshNews);
-            newsItem.used = true; // Veriyi 'kullanıldı' olarak işaretle
-            
-            const cleanTitle = newsItem.title.split(' - ')[0].replace(/["']/g, '');
-            const intros = ['Haberlere baktınız mı?', 'Gördünüz mü beyler', 'Şimdi okudum:', 'Yok artık:', 'Az önce düştü:', 'Son dakika diyolar:'];
-            baseMessages.push(`${pick(intros)} ${cleanTitle}`);
-        }
-    }
+// Rain Event Beggars / Trigger Words
+const rainTriggers = [
+    "rain", "rain pls", "rain 🌧️", "rain bot", "rain event", "pls rain", "rain rain", 
+    "free rain", "give rain", "rain drop", "rain 💸", "rain mod pls", "rain???", 
+    "rain rain rain", "rain drop plz", "rain 🌧️🌧️", "rain rain chicken dinner", 
+    "chova", "chuva", "chuva pls", "lluvia", "lluvia por fa", "rain ☔"
+];
 
-    // Üretken motordan farklı konular cekiyoruz
-    baseMessages.push(getGenerativeSentence());
-    baseMessages.push(getGenerativeSentence());
-    baseMessages.push(getGenerativeSentence());
-    baseMessages.push(getGenerativeSentence());
+// Swear & Rant at Site / Rigged Games
+const siteRants = [
+    "rigged", "rigged site", "scam", "scam site", "site lixo", "lixo de jogo", 
+    "scammm", "game is rigged ffs", "site de mda", "puta madre", "mierda de juego", 
+    "rigged game", "fck this site", "shitty game", "carajo", "site lixo dms", 
+    "estafa total", "jogo roubado", "nao paga nada", "que lixo", "fucking rigged", 
+    "scammmers", "worst luck ever ffs", "que estafa mano", "so rigged wtf",
+    "kasa hep yutuyor", "site lixo do krl", "toma no cu site lixo", "vai se foder",
+    "scam site don't play", "fake odds ffs"
+];
+
+// Short Words & Swears & Reactions
+const shortReactions = [
+    "wtf", "nooo", "fck", "omg", "bruh", "lol", "ffs", "shiiit", "puta", "mierda", 
+    "caramba", "pnc", "kkt", "wth", "smh", "gg", "nah", "pff", "mdr", "kkkkk", 
+    "jajaja", "afff", "nossa", "vtnc", "chora", "manooo", "mano", "queee", "ala"
+];
+
+// Pure Emoji Messages
+const emojiMessages = [
+    "🔥🔥🔥", "🌧️🌧️🌧️", "🤬🤬🤬", "🤡🤡🤡", "💩💩💩", "💸💸💸", "😭😂😭", "😡😡", 
+    "🖕🖕", "🚀🚀🚀", "👍👍", "🙏🙏", "💎💎💎", "🎉🎉🎉", "👀👀👀", "💔💔", "😴😴",
+    "💯💯", "💰💰💰", "👎👎"
+];
+
+function getRandomMessage() {
+    const roll = Math.random();
     
-    // Slot/Blackjack mesajlarını havuza ekliyoruz
-    baseMessages.push(pick(casinoMessages));
-    
-    // Bet Share Pop-up (Casino/Spor Bahis Paylaşımı)
-    if (Math.random() < 0.25) {
-        // %25 ihtimalle bir bahis paylaşımı ekle
-        const id1 = Math.floor(Math.random() * 900) + 100;
-        const id2 = Math.floor(Math.random() * 900) + 100;
-        const id3 = Math.floor(Math.random() * 900) + 100;
-        const id4 = Math.floor(Math.random() * 900) + 100;
-        const betId = `${id1}.${id2}.${id3}.${id4}`;
-        
-        const shareTexts = [
-            'tam 10k yiyor 10k atıyor yemeden atsana aq oyunu',
-            'beyler bu oyunda 65 carpan var sembol yok aq oyununda',
-            'sonunda be! max win geldi yeminle ellerim titriyor',
-            'abi 100x beklerken patladik yine, kasayi sifirladi',
-            'su oyunu oynayanin aklina sasarim',
-            'vurgun boyle yapilir agalar izleyin',
-            'bugun makine cok comert herkese dagitiyor'
-        ];
-        
-        const type = Math.random() < 0.8 ? 'Casino' : 'Spor';
-        baseMessages.push(`${type}: #${betId} ${pick(shareTexts)}`);
+    // 35% chance: Curated rich global messages
+    if (roll < 0.35) {
+        return pick(globalMessagesPool);
     }
-    
-    return baseMessages;
+    // 20% chance: Rain beggars / trigger words
+    if (roll < 0.55) {
+        return pick(rainTriggers);
+    }
+    // 15% chance: Swear / Rant at the site / game
+    if (roll < 0.70) {
+        return pick(siteRants);
+    }
+    // 15% chance: Short reactions & short swears
+    if (roll < 0.85) {
+        return pick(shortReactions);
+    }
+    // 15% chance: Pure emojis
+    return pick(emojiMessages);
 }
 
-let messageQueue = [];
-let mode = 'NORMAL';
-let normalMsgCount = 0;
-let fightIndex = 0;
-let postMuteIndex = 0;
-let recentSenders = [];
+const BR_CHANNEL_ID = 'br';
+const AR_CHANNEL_ID = 'ar';
 
-// Admin Kavgasi Senaryosu
-let fightQueue = [
-    { u: 'Kadir_Baba', m: 'abi bu Gates of Olympus yuzunden kupon bile yapamiyoruz artik kasa eridi bitti walla', r: 'MEMBER' },
-    { u: 'Tetikci_Kemal', m: '@Kadir_Baba oynamayi bilmiyosan oynama kardesim burasi bahis sitesi git baska yerde agla', r: 'MEMBER' },
-    { u: 'Kadir_Baba', m: '@Tetikci_Kemal ne agliycam birader gercekleri soyluyorum sen max bet vurdugun icin tuzu kuru takiliyosun heralde', r: 'MEMBER' },
-    { u: 'Ege_Efesi', m: 'beyler birbirinize girmeyin bosverin hafta sonu maclarinda gorusuruz', r: 'MEMBER' },
-    { u: 'Tetikci_Kemal', m: '@Ege_Efesi klavye delikanliligi yapmayin lan bana adamsaniz ozelden yazin numaranizi', r: 'MEMBER' },
-    { u: 'Kadir_Baba', m: 'sen kimsinde numara istiyosun oglum klavye basindan havlama', r: 'MEMBER' },
-    { u: 'SystemAdmin', m: 'Burada küfürleşmek ve kavga etmek KESİNLİKLE YASAKTIR! Herkese 2 dakika konuşma yasağı (MUTE) verdim. Herkes sakinleşsin.', r: 'ADMIN' }
+// --- BRAZIL (BR) DYNAMIC ENGINE & FOOTBALL FIGHTS ---
+const brUsers = [
+    "Mengao_King", "Verdao_SP", "Gamba_Lixo", "Vascaino_Depressao", "Tricolor_Tri", 
+    "Gabigol_BR", "Zezinho_SP", "Pedrinho_RJ", "Mateus_Musa", "Lucas_Tigrinho", 
+    "Fernanda_Minas", "Thiago_Carioca", "Bruninho_01", "Rafaela_Vip", "Carlos_Bahia", 
+    "Diego_Fut", "Vinicius_BR", "Marcelo_Palmeiras", "Rodrigo_Mengao", "Joao_Apostador", 
+    "Caio_Slots", "Guilherme_Fortuna", "Matheus_Pix", "Renan_Bet", "Leo_Flamengo",
+    "Urubu_Safado", "Gamba_Sem_Mundial", "Palmeiras_Nao_Tem", "Porra_Timao", "Vasco_SerieB"
 ];
 
-let postMuteQueue = [
-    { u: 'Umut_07', m: 'admin kardes sakin ya bisey demedik ki biz', r: 'MEMBER' },
-    { u: 'Yasar_Usta', m: 'admin abi haklisin ozur dileriz tansiyon yukseldi genclerde bi an', r: 'MEMBER' },
-    { u: 'Tetikci_Kemal', m: 'neyse maca donelim beyler bosverin..', r: 'MEMBER' },
-    { u: 'Zalim_Kuponcu', m: 'harbi iddaaya odaklanalim bence hic gerek yok kavgaya', r: 'MEMBER' }
+const brLaughs = ["kkkkkkkkkkkk", "kkkkkk", "ksksksksks", "huhuahuahua", "kkkkk", "hahahaha", "kkkkkkkkk!"];
+
+const brFootballFights = [
+    "palmeiras nao tem mundial kkkkkkkkkkkkk",
+    "vai se foder seu gamba do caralho timao e o maior do brasil!!",
+    "cheirinho de novo mengao lixo vtnc kkkkkk",
+    "lixo e a sua mae porra vasco vai cair pra serie b dnv",
+    "chora mulambo kkkkkkkkkk palmeiras e campeao de tudo",
+    "respeita o tri da libertadores caralho sao paulo e gigante",
+    "urubu safado roubado pelo juiz como sempre vsf",
+    "gambazeiro lixo paga as marmita kkkkkkk",
+    "porra de jogo chato do caralho mengao fregues",
+    "vai dar se mal seu merda respeita o maior do rio!",
+    "kkkkkkkkk os caras briga por futebol em site de aposta tmnc",
+    "corinthians vai falir kkkkkkkkk time endividado da porra",
+    "palmeiras comprou o juiz ctz vtnc fdp",
+    "mengao fregues do tricolor kkkkk chora mulambada",
+    "respeita a historia do vascao porra time de tradiçao!",
+    "gambazada chorona kkkkk leva goleada e culpa o juiz vsf"
 ];
 
-// 8 Saatlik simülasyon kontrolcüsü
-const SIMULATION_DURATION = 8 * 60 * 60 * 1000; // 8 saat
-const startTime = Date.now();
+const brNeatMessages = [
+    "Prezados, alguém saberia informar se o saque via Pix está processando normalmente no momento?",
+    "Uma boa noite a todos os apostadores da comunidade brasileira!",
+    "Recomendo a todos gerenciarem a banca com cautela, a ganância pode ser prejudicial aos lucros.",
+    "A partida entre Palmeiras e Flamengo no final de semana promete ser um grande espetáculo tático.",
+    "Excelente plataforma de entretenimento, pagamentos caindo rapidamente na conta bancária.",
+    "Consegui obter um excelente multiplicador na roleta ao vivo da Evolution agora há pouco.",
+    "Desejo uma excelente racha de vitórias e muito sucesso a todos os participantes do chat!"
+];
+
+const brSlangMessages = [
+    "Fala tropa, suave? Como tao os lucros hoje?",
+    "Mano o Jogo do Tigrinho soltou uma carta linda de 250x de tarde kkkkk",
+    "Alguem assistindo o jogo do Mengao hoje? Bati a aposta no primeiro tempo!",
+    "Caraca Zezinho, tu deu uma sorte danada naquela rodada do Spaceman em!",
+    "Pix caindo em menos de 1 minuto na conta, essa plataforma e diferenciada demais 🚀",
+    "Rapaziada quem ta no lucro manda um salve no chat 💚",
+    "Peguei x50 no Sweet Bonanza com compra de bonus, mt bom!",
+    "Ta voando baixo o saque irmao, fiz um de 1.2k caiu na hora!",
+    "Gente, chuva hoje na sala BR ou so na Global?",
+    "Mano essa roleta da Evolution me tirou 100 conto em 2 minutos seloco 🤦‍♂️",
+    "Dobrar a banca e meter o pe, essa e a regra de ouro!",
+    "Alguem ai jogando Crazy Time agr? A roleta ta girando insana!",
+    "Alguem recomenda um jogo bom pra apostar 50 reais?",
+    "Testa o Plinko no modo medio mano, costuma pagar bem!",
+    "Hoje o dia foi produtivo rapaziada, 300 de lucro limpo no bolso",
+    "Quem ai curte aposta esportiva de escanteios? Rendeu mt hj",
+    "Nossa senhora, que multiplicador foi esse de 120x?! Sensacional!"
+];
+
+function getDynamicBrMessage() {
+    const roll = Math.random();
+    const laugh = pick(brLaughs);
+    
+    // 35% chance: Football team fights & Swearing
+    if (roll < 0.35) {
+        return `${pick(brFootballFights)}`;
+    }
+    // 30% chance: Slang & Informal gaming chats
+    if (roll < 0.65) {
+        return `${pick(brSlangMessages)} ${Math.random() < 0.5 ? laugh : ''}`;
+    }
+    // 20% chance: Neat & Proper Portuguese sentences
+    if (roll < 0.85) {
+        return pick(brNeatMessages);
+    }
+    // 15% chance: Short laughs + Swears
+    const shortSwears = ["vtnc", "vsf", "pqp fdp", "slk krl", "tmnc", "porra kkkkkk", "que lixo", "timao porra"];
+    return `${pick(shortSwears)} ${laugh}`;
+}
+
+// --- ARGENTINA (AR) ROOM DATASET ---
+const arUsers = [
+    "Nico_Boca", "Luciano_River", "Santiago_Arg", "Tomas_BsAs", "Mateo_Rosario", 
+    "Valentina_Cordoba", "Joaquin_X", "Agustin_Aposta", "Guillermo_Copa", "Gonzalo_Scaloneta", 
+    "Facundo_Bet", "Franco_Mendoza", "Juan_Rojo", "Bautista_Vip", "Ezequiel_77"
+];
+
+const arMessagesPool = [
+    "Buenas noches banda, cómo vienen esas jugadas hoy?",
+    "Che alguno vio el golazo de River hoy? Me salvo el boleto a ultimo minuto!",
+    "Hermano meti 5 lucas en la Scaloneta y cobré hermoso jajaja",
+    "Alguien jugando al Crash? Vi una vela de 80x recién, tremendo!",
+    "Mercado Pago acreditando al instante, que golazo loco 🚀",
+    "Ojo con el casino de noche muchachos, jueguen con cabeza y retiren a tiempo",
+    "Boca juega el domingo y no me decido si meterle a victoria directa o a tiros de esquina",
+    "Nico amigo robaste lindo con ese multiplicador de Sweet Bonanza ehhh",
+    "Cual es el juego que mas esta pagando hoy che?",
+    "Spaceman viene metiendo unos multiplicadores zarpados hoy a la tarde!",
+    "Habra lluvia en la sala AR mas tarde o solo en Global?",
+    "Retiro aprobado en 2 minutos, Impecable el servicio la verdad 👏",
+    "Tranquilo Tomas que la suerte da vueltas, no te calientes que se recupera!",
+    "Hoy estamos todos de fiesta loco, que linda racha metimos!",
+    "Buenas vibras para todos en el chat, a ganar en grande hoy 🍀",
+    "Recomiendan jugar ruleta o meterle a la combinada de futbol?",
+    "La combinada de Champions pagó hermoso hoy hermano!",
+    "Un abrazo enorme a toda la comunidad argentina por aca!"
+];
 
 async function sendNextMessage() {
     try {
-        let sender, finalMsg, role = 'MEMBER', delay;
-        
-        if (Date.now() - startTime > SIMULATION_DURATION) {
-            console.log("8 saatlik sohbet simülasyonu tamamlandı.");
+        if (!botConfig.isActive) {
+            setTimeout(sendNextMessage, 3000);
             return;
         }
 
-        if (mode === 'NORMAL') {
-            // Eğer bot inaktifse, bir sonraki döngüde kontrol et (ama bekle)
-            if (!botConfig.isActive) {
-                setTimeout(sendNextMessage, 5000);
-                return;
-            }
-
-            if (messageQueue.length === 0) {
-                await fetchLiveData();
-                messageQueue = generateMessages().sort(() => 0.5 - Math.random());
-            }
-            let rawMsg = messageQueue.pop();
-            finalMsg = sloppyfy(rawMsg);
-            finalMsg = finalMsg.replace(/["']/g, ''); // Anti-Spiker Regex
-            finalMsg = addEmoji(finalMsg);
-            sender = pick(users);
-            
-            // Habere Anında Yanıt Sistemi (Etkileşim)
-            let isNews = ['Haberlere', 'Gördünüz mü', 'Şimdi okudum', 'Yok artık', 'Az önce', 'Son dakika'].some(k => finalMsg.includes(k));
-            if (isNews && Math.random() < 0.70) {
-                // Habere tepki veren birini sıraya hemen kaynak ekle! (Sıradaki pop() bunu alacak)
-                const followUps = ['ne o acikla aq diye merakta birakma', 'hangi gelisme la detay ver', 'link var mi beyler nedir olay', 'kolpa haber o gecin bunlari', 'hadi canim ordan harbiden mi', 'neler oluyo yeminle bi biz bilmiyoruz'];
-                messageQueue.push(`@${sender} ${pick(followUps)}`); 
-            } else if (Math.random() > 0.6 && recentSenders.length > 0) {
-                // Son konusanlara gercekci yanit
-                let targetUser = pick(recentSenders);
-                if (targetUser !== sender && !finalMsg.includes('@')) {
-                    finalMsg = `@${targetUser} ${finalMsg}`;
-                }
-            }
-
-            recentSenders.push(sender);
-            if (recentSenders.length > 5) recentSenders.shift();
-
-            normalMsgCount++;
-            if (normalMsgCount > 25) { 
-                mode = 'FIGHT';
-                fightIndex = 0;
-                normalMsgCount = 0;
-            }
-            // Delay mantığı: 2-3 dk aralarında bazen 5 (120 sn ile 300 sn arası)
-            const minDelay = 120 * 1000;
-            const maxDelay = 300 * 1000;
-            // %20 ihtimalle hızlı tartışma (30-90 sn)
-            delay = Math.random() < 0.20 
-                ? Math.floor(Math.random() * 60000) + 30000 // 30-90 sn
-                : Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
-
-        } else if (mode === 'FIGHT') {
-            let fightData = fightQueue[fightIndex];
-            sender = fightData.u;
-            finalMsg = addEmoji(sloppyfy(fightData.m));
-            role = fightData.r;
-            fightIndex++;
-            
-            if (role === 'ADMIN') {
-                mode = 'MUTED';
-                finalMsg = fightData.m;
-                delay = 120000; 
-                console.log('--- 2 DAKİKA MUTE BAŞLADI ---');
-            } else {
-                delay = Math.floor(Math.random() * 5000) + 3000;
-            }
-
-        } else if (mode === 'MUTED') {
-            mode = 'POST_MUTE';
-            postMuteIndex = 0;
-            let postData = postMuteQueue[postMuteIndex];
-            sender = postData.u;
-            finalMsg = addEmoji(sloppyfy(postData.m));
-            role = postData.r;
-            postMuteIndex++;
-            delay = 3000;
-            
-        } else if (mode === 'POST_MUTE') {
-            let postData = postMuteQueue[postMuteIndex];
-            sender = postData.u;
-            finalMsg = addEmoji(sloppyfy(postData.m));
-            role = postData.r;
-            postMuteIndex++;
-            delay = Math.floor(Math.random() * 15000) + 5000;
-            if (postMuteIndex >= postMuteQueue.length) {
-                mode = 'NORMAL';
-            }
-        }
+        const sender = getRandomUsername();
+        const finalMsg = getRandomMessage();
+        const role = sender.includes('[Mod]') ? 'MODERATOR' : (sender.includes('Admin') || sender === 'bc.game' || sender === 'BBCview' || sender === 'BC_70cr' ? 'ADMIN' : 'MEMBER');
 
         const payload = {
             username: sender,
             role: role,
             message: finalMsg,
-            channel_id: TR_CHANNEL_ID
+            channel_id: GLOBAL_CHANNEL_ID
         };
 
         const { error } = await supabase.from('tv_chat').insert(payload);
         if (!error) {
-            console.log(`[BOT] Gönderildi: ${sender} [${role}] -> ${finalMsg}`);
+            console.log(`[GLOBAL BOT] Gönderildi: ${sender} -> ${finalMsg}`);
         }
 
+        // Hyper-fast live stream delay (1.2 - 3.2 seconds)
+        const delay = Math.floor(Math.random() * 2000) + 1200;
         setTimeout(sendNextMessage, delay);
 
     } catch (err) {
         console.error('Bot loop error:', err);
-        setTimeout(sendNextMessage, 10000); 
+        setTimeout(sendNextMessage, 4000); 
     }
 }
 
-fetchLiveData().then(() => {
-    console.log('🤖 24/7 Chat Bot Başlatıldı (10 Güncel Senaryolu Sınırsız Üretken Motor)...');
-    sendNextMessage();
-});
+// Slower Brazil Chat Loop (4 - 9 seconds)
+async function sendNextBrMessage() {
+    try {
+        if (!botConfig.isActive) {
+            setTimeout(sendNextBrMessage, 5000);
+            return;
+        }
+        const sender = pick(brUsers);
+        const finalMsg = getDynamicBrMessage();
+
+        await supabase.from('tv_chat').insert({
+            username: sender,
+            role: 'MEMBER',
+            message: finalMsg,
+            channel_id: BR_CHANNEL_ID
+        });
+        console.log(`[BR BOT] ${sender}: ${finalMsg}`);
+
+        const delay = Math.floor(Math.random() * 5000) + 4000; // 4-9 sec
+        setTimeout(sendNextBrMessage, delay);
+    } catch (e) {
+        setTimeout(sendNextBrMessage, 6000);
+    }
+}
+
+// Slower Argentina Chat Loop (5 - 10 seconds)
+async function sendNextArMessage() {
+    try {
+        if (!botConfig.isActive) {
+            setTimeout(sendNextArMessage, 5000);
+            return;
+        }
+        const sender = pick(arUsers);
+        const finalMsg = pick(arMessagesPool);
+
+        await supabase.from('tv_chat').insert({
+            username: sender,
+            role: 'MEMBER',
+            message: finalMsg,
+            channel_id: AR_CHANNEL_ID
+        });
+        console.log(`[AR BOT] ${sender}: ${finalMsg}`);
+
+        const delay = Math.floor(Math.random() * 5000) + 5000; // 5-10 sec
+        setTimeout(sendNextArMessage, delay);
+    } catch (e) {
+        setTimeout(sendNextArMessage, 6000);
+    }
+}
+
+console.log('🤖 Multi-Room Chat Bot Başlatıldı (Global + Brazil + Argentina)...');
+sendNextMessage();
+sendNextBrMessage();
+sendNextArMessage();
 
 // --- YAĞMUR (HYPE) SİSTEMİ ---
 let isRainActive = false;

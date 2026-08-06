@@ -160,10 +160,10 @@ export default function ChickenRunView({ siteUser, setSiteUser, onAuthRequired }
                 <div className="mb-4 relative">
                     <div className="flex justify-between items-end mb-2">
                         <label className="text-xs text-gray-400 font-semibold">Bahis Tutarı</label>
-                        <span className="text-xs text-gray-300 font-mono">₺{siteUser ? siteUser.balance.toFixed(2) : '0.00'}</span>
+                        <span className="text-xs text-gray-300 font-mono">${siteUser ? siteUser.balance.toFixed(2) : '0.00'}</span>
                     </div>
                     <div className="flex bg-[#151D24] rounded-md border border-[#2A3744] overflow-hidden focus-within:border-[#3D82F6] transition-colors">
-                        <div className="px-3 flex items-center justify-center text-gray-400">₺</div>
+                        <div className="px-3 flex items-center justify-center text-gray-400">$</div>
                         <input 
                             type="number" 
                             value={betAmount || ''}
@@ -213,7 +213,7 @@ export default function ChickenRunView({ siteUser, setSiteUser, onAuthRequired }
                             <button 
                                 onClick={handleNextStep}
                                 disabled={crashed || step >= lanes}
-                                className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 rounded-md transition-colors shadow-lg"
+                                className="w-full bg-[#00E5FF] hover:bg-emerald-600 text-white font-bold py-3 rounded-md transition-colors shadow-lg"
                             >
                                 {step === 0 ? 'Başla' : 'İlerle'}
                             </button>
@@ -222,7 +222,7 @@ export default function ChickenRunView({ siteUser, setSiteUser, onAuthRequired }
                                 disabled={crashed || step === 0}
                                 className="w-full bg-[#324555] hover:bg-[#3d5466] text-white font-bold py-3 rounded-md transition-colors shadow-lg mt-2"
                             >
-                                Bozdur (₺{(betAmount * (step > 0 ? multipliers[step-1] : 0)).toFixed(2)})
+                                Bozdur (${(betAmount * (step > 0 ? multipliers[step-1] : 0)).toFixed(2)})
                             </button>
                         </>
                     )}
@@ -232,10 +232,10 @@ export default function ChickenRunView({ siteUser, setSiteUser, onAuthRequired }
                 <div className="mt-4 pt-4 border-t border-[#151D24]">
                     <div className="flex justify-between items-end mb-2">
                         <label className="text-xs text-gray-400 font-semibold">Toplam Kâr ({step > 0 && !crashed ? multipliers[step-1].toFixed(2) : '1.00'}x)</label>
-                        <span className="text-xs text-gray-300 font-mono">₺{winAmount ? winAmount.toFixed(2) : '0.00'}</span>
+                        <span className="text-xs text-gray-300 font-mono">${winAmount ? winAmount.toFixed(2) : '0.00'}</span>
                     </div>
                     <div className="bg-[#151D24] rounded-md border border-[#2A3744] px-3 py-3 flex items-center">
-                        <span className="text-gray-400 mr-2">₺</span>
+                        <span className="text-gray-400 mr-2">$</span>
                         <span className="text-white font-mono text-sm">{winAmount ? winAmount.toFixed(2) : '0.00'}</span>
                     </div>
                 </div>
@@ -370,7 +370,7 @@ export default function ChickenRunView({ siteUser, setSiteUser, onAuthRequired }
                         <div className="absolute inset-0 z-50 bg-emerald-900/40 flex items-center justify-center pointer-events-none">
                              <div className="flex flex-col items-center text-3xl font-black text-white bg-[#1A242D] px-12 py-6 rounded-xl border border-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.5)] whitespace-nowrap">
                                  KAZANDINIZ!
-                                 <span className="text-emerald-400 text-4xl mt-2 font-mono">₺{winAmount.toFixed(2)}</span>
+                                 <span className="text-[#00E5FF] text-4xl mt-2 font-mono">${winAmount.toFixed(2)}</span>
                              </div>
                         </div>
                     )}

@@ -232,7 +232,7 @@ const AdminPoolTab: React.FC = () => {
                                 onChange={e => setAiInput(e.target.value)}
                                 rows={12}
                                 placeholder={`Örnek:\n\n🗓 3 Mart 2026\n\nSüper Lig:\nGalatasaray - Fenerbahçe\nBeşiktaş - Trabzonspor\n\nPremier League:\nManchester City - Liverpool\nArsenal - Chelsea\n...`}
-                                className="w-full bg-black border border-zinc-800 rounded-lg p-4 text-sm text-white font-mono placeholder:text-zinc-700 focus:border-[#f0b90b]/40 focus:outline-none transition-colors resize-none"
+                                className="w-full bg-[#0A0C10] border border-zinc-800 rounded-lg p-4 text-sm text-white font-mono placeholder:text-zinc-700 focus:border-[#f0b90b]/40 focus:outline-none transition-colors resize-none"
                             />
 
                             <button
@@ -306,19 +306,19 @@ const AdminPoolTab: React.FC = () => {
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                         <div>
                             <label className="text-xs text-zinc-500 font-bold block mb-1">Toplam Ödül (₺)</label>
-                            <input type="number" value={prizePool} onChange={e => setPrizePool(Number(e.target.value))} className="w-full bg-black border border-zinc-800 rounded-lg p-3 text-[#f0b90b] font-black" />
+                            <input type="number" value={prizePool} onChange={e => setPrizePool(Number(e.target.value))} className="w-full bg-[#0A0C10] border border-zinc-800 rounded-lg p-3 text-[#f0b90b] font-black" />
                         </div>
                         <div>
                             <label className="text-xs text-zinc-500 font-bold block mb-1">15 Bilen (₺)</label>
-                            <input type="number" value={prize15} onChange={e => setPrize15(Number(e.target.value))} className="w-full bg-black border border-zinc-800 rounded-lg p-3 font-bold" />
+                            <input type="number" value={prize15} onChange={e => setPrize15(Number(e.target.value))} className="w-full bg-[#0A0C10] border border-zinc-800 rounded-lg p-3 font-bold" />
                         </div>
                         <div>
                             <label className="text-xs text-zinc-500 font-bold block mb-1">14 Bilen (₺)</label>
-                            <input type="number" value={prize14} onChange={e => setPrize14(Number(e.target.value))} className="w-full bg-black border border-zinc-800 rounded-lg p-3 font-bold" />
+                            <input type="number" value={prize14} onChange={e => setPrize14(Number(e.target.value))} className="w-full bg-[#0A0C10] border border-zinc-800 rounded-lg p-3 font-bold" />
                         </div>
                         <div>
                             <label className="text-xs text-zinc-500 font-bold block mb-1">13 Bilen (₺)</label>
-                            <input type="number" value={prize13} onChange={e => setPrize13(Number(e.target.value))} className="w-full bg-black border border-zinc-800 rounded-lg p-3 font-bold" />
+                            <input type="number" value={prize13} onChange={e => setPrize13(Number(e.target.value))} className="w-full bg-[#0A0C10] border border-zinc-800 rounded-lg p-3 font-bold" />
                         </div>
                     </div>
 
@@ -339,11 +339,11 @@ const AdminPoolTab: React.FC = () => {
                         {matches.map((m, idx) => (
                             <div key={m.id} className="flex items-center gap-2 bg-zinc-950 rounded-lg p-3 border border-zinc-800 group">
                                 <span className="text-zinc-600 text-xs font-black w-6">{idx + 1}</span>
-                                <input value={m.homeTeam} onChange={e => updateMatch(idx, 'homeTeam', e.target.value)} placeholder="Ev sahibi" className="flex-1 bg-black border border-zinc-800 rounded-lg p-2 text-sm" />
+                                <input value={m.homeTeam} onChange={e => updateMatch(idx, 'homeTeam', e.target.value)} placeholder="Ev sahibi" className="flex-1 bg-[#0A0C10] border border-zinc-800 rounded-lg p-2 text-sm" />
                                 <span className="text-zinc-600 text-xs font-bold">vs</span>
-                                <input value={m.awayTeam} onChange={e => updateMatch(idx, 'awayTeam', e.target.value)} placeholder="Deplasman" className="flex-1 bg-black border border-zinc-800 rounded-lg p-2 text-sm" />
-                                <input value={m.league} onChange={e => updateMatch(idx, 'league', e.target.value)} placeholder="Lig" className="w-28 bg-black border border-zinc-800 rounded-lg p-2 text-sm" />
-                                <input value={m.matchDate} onChange={e => updateMatch(idx, 'matchDate', e.target.value)} placeholder="Tarih" className="w-40 bg-black border border-zinc-800 rounded-lg p-2 text-sm" />
+                                <input value={m.awayTeam} onChange={e => updateMatch(idx, 'awayTeam', e.target.value)} placeholder="Deplasman" className="flex-1 bg-[#0A0C10] border border-zinc-800 rounded-lg p-2 text-sm" />
+                                <input value={m.league} onChange={e => updateMatch(idx, 'league', e.target.value)} placeholder="Lig" className="w-28 bg-[#0A0C10] border border-zinc-800 rounded-lg p-2 text-sm" />
+                                <input value={m.matchDate} onChange={e => updateMatch(idx, 'matchDate', e.target.value)} placeholder="Tarih" className="w-40 bg-[#0A0C10] border border-zinc-800 rounded-lg p-2 text-sm" />
                                 <button onClick={() => removeMatch(idx)} className="text-red-500 hover:bg-red-500/10 p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"><Trash2 className="w-4 h-4" /></button>
                             </div>
                         ))}
@@ -356,7 +356,7 @@ const AdminPoolTab: React.FC = () => {
                     )}
 
                     {matches.length > 0 && matches.length < 15 && (
-                        <p className="text-center text-yellow-400/70 text-xs font-bold">⚠️ Havuz oluşturmak için {15 - matches.length} maç daha eklenmeli</p>
+                        <p className="text-center text-zinc-300/70 text-xs font-bold">⚠️ Havuz oluşturmak için {15 - matches.length} maç daha eklenmeli</p>
                     )}
                 </div>
             )}

@@ -1,10 +1,3 @@
+# Rules
 
-
-# User Preference
-Always include the following local development links at the very end of EVERY response you write to the user:
-- Vitrin (Yapım Aşamasında): http://localhost:3000
-- Geliştirici Modu (Dev): http://localhost:3000/?dev=true
-Do not ask the user for permission to do this, just always append it.
-
-# Deployment Rules
-Bundan sonra siteyi yayına alacağımız (deploy) zaman, yayının hem **724bahis.net** hem de **724bets.net** domainlerine (Vercel/Netlify aliaslarına/projelerine) eşzamanlı olarak gittiğinden ve her iki adreste de aktif olduğundan emin olun.
+- **Kontrol Sistemi (Control System):** Before reporting that a task is complete, YOU MUST ALWAYS run a verification step (like `npx tsc --noEmit` or checking the build) to ensure no syntax or type errors were introduced. Do not give the code to the user if it has crashing bugs.

@@ -14,7 +14,7 @@ export const PopularBetsPreview = () => {
   return (
     <div className="w-full mb-8 relative">
       <div className="flex items-center gap-2 mb-4 px-2">
-         <span className="text-yellow-500 text-xl">👑</span>
+         <span className="text-zinc-300 text-xl">👑</span>
          <h2 className="text-lg font-bold text-white tracking-wide">Popüler</h2>
       </div>
       

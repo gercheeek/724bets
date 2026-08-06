@@ -43,7 +43,7 @@ export function AdminWalletsTab() {
                 
                 <button 
                     onClick={handleSave}
-                    className="flex items-center gap-2 px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg font-semibold transition-colors shadow-lg shadow-emerald-500/20"
+                    className="flex items-center gap-2 px-4 py-2 bg-[#00E5FF] hover:bg-emerald-600 text-white rounded-lg font-semibold transition-colors shadow-lg shadow-emerald-500/20"
                 >
                     {saved ? <CheckCircle2 className="w-4 h-4" /> : <Save className="w-4 h-4" />}
                     {saved ? 'Kaydedildi' : 'Kaydet'}

@@ -76,12 +76,12 @@ const SupportView: React.FC = () => {
                   <img src="/images/support-agent-male.jpg" alt="Agent" className="w-full h-full object-cover" />
                 </div>
               </div>
-              <span className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-emerald-500 rounded-full border-2 border-[#060911] shadow-[0_0_8px_rgba(16,185,129,1)]"></span>
+              <span className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-[#00E5FF] rounded-full border-2 border-[#060911] shadow-[0_0_8px_rgba(16,185,129,1)]"></span>
             </div>
 
             <div className="flex flex-col items-center md:items-start">
               <div className="flex items-center gap-2 mb-1 md:mb-0.5">
-                <ShieldCheck size={16} className="text-emerald-400" />
+                <ShieldCheck size={16} className="text-[#00E5FF]" />
                 <h3 className="text-white font-black tracking-tight text-lg md:text-xl">{t('support_live.title')}</h3>
               </div>
               <p className="text-[12px] md:text-[13px] text-zinc-400 font-medium px-2 md:px-0">

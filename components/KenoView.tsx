@@ -132,7 +132,7 @@ export default function KenoView({ siteUser, onAuthRequired }: any) {
                             className="flex-1 bg-transparent px-3 text-sm text-white outline-none font-medium disabled:opacity-50"
                         />
                         <div className="flex items-center border-l border-[#1E2336]">
-                            <span className="text-zinc-500 text-xs font-bold px-2">EUR</span>
+                            <span className="text-zinc-500 text-xs font-bold px-2">USD</span>
                             <div className="flex h-full border-l border-[#1E2336]">
                                 <button className="px-3 hover:bg-white/5 text-zinc-400 text-xs font-bold transition-colors" onClick={() => setBetAmount(betAmount / 2)}>½</button>
                                 <div className="w-[1px] h-full bg-[#1E2336]"></div>
@@ -200,7 +200,7 @@ export default function KenoView({ siteUser, onAuthRequired }: any) {
                 {/* Top Balance Bar */}
                 <div className="absolute top-6 left-6 z-20">
                     <div className="bg-[#131620] text-white text-xs font-semibold px-4 py-2 rounded-full border border-[#1E2336]">
-                        {siteUser ? siteUser.balance.toFixed(2) : '10000.00'} EUR
+                        ${siteUser ? siteUser.balance.toFixed(2) : '10000.00'} USD
                     </div>
                 </div>
 
@@ -239,7 +239,7 @@ export default function KenoView({ siteUser, onAuthRequired }: any) {
                     <div className="absolute top-6 right-6 z-50 animate-fade-in-up">
                         <div className="flex flex-col items-end">
                             <span className="text-zinc-500 text-[10px] font-bold uppercase tracking-widest block mb-0.5">KAZANÇ</span>
-                            <span className="text-[#ccff00] font-black text-2xl">+{winAmount.toFixed(2)} EUR</span>
+                            <span className="text-[#ccff00] font-black text-2xl">+${winAmount.toFixed(2)}</span>
                         </div>
                     </div>
                 )}

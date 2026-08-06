@@ -98,19 +98,19 @@ const AdminPromoTab: React.FC = () => {
             </h3>
 
             {error && <div className="bg-red-500/10 border border-red-500/30 text-red-500 text-sm p-3 rounded-lg mb-4 flex items-center gap-2"><AlertCircle className="w-4 h-4"/>{error}</div>}
-            {success && <div className="bg-emerald-500/10 border border-emerald-500/30 text-emerald-500 text-sm p-3 rounded-lg mb-4 flex items-center gap-2"><CheckCircle2 className="w-4 h-4"/>{success}</div>}
+            {success && <div className="bg-[#00E5FF]/10 border border-emerald-500/30 text-[#00E5FF] text-sm p-3 rounded-lg mb-4 flex items-center gap-2"><CheckCircle2 className="w-4 h-4"/>{success}</div>}
 
             <form onSubmit={handleCreate} className="space-y-4">
               <div>
                 <label className="block text-xs font-bold text-zinc-500 uppercase mb-1">Kod Adı</label>
                 <input type="text" required value={newCode.code} onChange={e => setNewCode({...newCode, code: e.target.value.toUpperCase()})}
-                  placeholder="ÖRN: HOŞGELDİN2026" className="w-full bg-black border border-zinc-700 rounded p-2 text-white" />
+                  placeholder="ÖRN: HOŞGELDİN2026" className="w-full bg-[#0A0C10] border border-zinc-700 rounded p-2 text-white" />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-bold text-zinc-500 uppercase mb-1">Ödül Türü</label>
                   <select value={newCode.reward_type} onChange={e => setNewCode({...newCode, reward_type: e.target.value})}
-                    className="w-full bg-black border border-zinc-700 rounded p-2 text-white">
+                    className="w-full bg-[#0A0C10] border border-zinc-700 rounded p-2 text-white">
                     <option value="balance">Nakit Bakiye (TL)</option>
                     <option value="freespin">Free Spin</option>
                   </select>
@@ -118,19 +118,19 @@ const AdminPromoTab: React.FC = () => {
                 <div>
                   <label className="block text-xs font-bold text-zinc-500 uppercase mb-1">Miktar</label>
                   <input type="number" required min="1" value={newCode.reward_amount} onChange={e => setNewCode({...newCode, reward_amount: Number(e.target.value)})}
-                    className="w-full bg-black border border-zinc-700 rounded p-2 text-white" />
+                    className="w-full bg-[#0A0C10] border border-zinc-700 rounded p-2 text-white" />
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-bold text-zinc-500 uppercase mb-1">Kullanım Limiti</label>
                   <input type="number" min="0" value={newCode.max_uses} onChange={e => setNewCode({...newCode, max_uses: Number(e.target.value)})}
-                    placeholder="Sınırsız için boş" className="w-full bg-black border border-zinc-700 rounded p-2 text-white" />
+                    placeholder="Sınırsız için boş" className="w-full bg-[#0A0C10] border border-zinc-700 rounded p-2 text-white" />
                 </div>
                 <div>
                   <label className="block text-xs font-bold text-zinc-500 uppercase mb-1">Son Kullanma</label>
                   <input type="datetime-local" value={newCode.expires_at} onChange={e => setNewCode({...newCode, expires_at: e.target.value})}
-                    className="w-full bg-black border border-zinc-700 rounded p-2 text-white text-sm" />
+                    className="w-full bg-[#0A0C10] border border-zinc-700 rounded p-2 text-white text-sm" />
                 </div>
               </div>
 

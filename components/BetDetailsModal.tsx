@@ -38,14 +38,14 @@ const BetDetailsModal: React.FC<Props> = ({ data, onClose }) => {
   if (!mounted) return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-black/60 backdrop-blur-[2px] animate-fade-in">
-      {/* Modal Container: #26293E is roughly the dark purple-gray from screenshot */}
-      <div className="bg-[#272B3E] w-full max-w-[440px] rounded-2xl shadow-2xl overflow-hidden flex flex-col transform transition-all my-auto border border-white/5 font-['Inter',sans-serif]">
+    <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-[#0A0D14]/90 backdrop-blur-[2px] animate-fade-in">
+      {/* Modal Container: Flat dark theme */}
+      <div className="bg-[#181B21] w-full max-w-[440px] rounded-2xl shadow-2xl overflow-hidden flex flex-col transform transition-all my-auto border border-white/5 font-['Inter',sans-serif]">
         
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-3.5 border-b border-white/5 relative z-10">
           <h2 className="text-white font-medium text-[15px]">Bahis Yap</h2>
-          <button onClick={onClose} className="w-7 h-7 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white transition-colors">
+          <button onClick={onClose} className="btn-icon-modern !w-8 !h-8 !rounded-lg">
             <X className="w-4 h-4" />
           </button>
         </div>
@@ -84,6 +84,14 @@ const BetDetailsModal: React.FC<Props> = ({ data, onClose }) => {
               </div>
             </div>
           </div>
+          
+          {/* Game Rules / Multipliers explanation */}
+          {data.rules && (
+            <div className="mb-5 p-3.5 bg-[#0A0D14] rounded-xl border border-white/5 text-[12px] text-gray-400 leading-relaxed font-sans">
+              <span className="font-bold text-[#00E5FF] block mb-1">Kurallar & Çarpanlar</span>
+              {data.rules}
+            </div>
+          )}
 
           {/* Logo Divider (Rainbet in screenshot, using 724bets) */}
           <div className="flex items-center justify-center mb-5">
@@ -91,8 +99,8 @@ const BetDetailsModal: React.FC<Props> = ({ data, onClose }) => {
           </div>
 
           {/* Amounts Table */}
-          <div className="bg-[#2E3349] rounded-lg overflow-hidden mb-5">
-             <div className="grid grid-cols-3 border-b border-[#26293E]">
+          <div className="bg-[#20242D] rounded-lg overflow-hidden mb-5">
+             <div className="grid grid-cols-3 border-b border-white/5">
                 <div className="text-center py-2.5">
                     <span className="text-gray-300 text-[13px] font-medium">Miktar</span>
                 </div>
@@ -103,7 +111,7 @@ const BetDetailsModal: React.FC<Props> = ({ data, onClose }) => {
                     <span className="text-gray-300 text-[13px] font-medium">Ödeme</span>
                 </div>
              </div>
-             <div className="grid grid-cols-3 bg-[#333852]">
+             <div className="grid grid-cols-3 bg-white/5">
                 <div className="text-center py-3">
                     <span className="text-gray-300 text-[13px] font-medium">{data.betAmount}</span>
                 </div>
@@ -117,28 +125,31 @@ const BetDetailsModal: React.FC<Props> = ({ data, onClose }) => {
           </div>
 
           {/* Large Multiplier Area */}
-          <div className="relative bg-[#1A1D29] rounded-xl flex items-center justify-center py-8 mb-5 border border-white/5 shadow-inner">
+          <div className="relative bg-[#0A0D14] rounded-xl flex items-center justify-center py-8 mb-5 border border-white/5 shadow-inner">
              {/* Badge floating top center */}
-             <div className="absolute -top-3.5 bg-[#1F2333] border border-[#2E3349] rounded-full px-4 py-1 text-[#00E676] text-sm font-semibold shadow-md">
+             <div className="absolute -top-3.5 bg-[#20242D] border border-white/5 rounded-full px-4 py-1 text-[#00E5FF] text-sm font-semibold shadow-md">
                  {data.payout}
              </div>
              
              {/* Giant Multiplier */}
-             <span className="text-[#00E676] text-[48px] font-black tracking-tight">{data.multiplier}</span>
+             <span className="text-[#00E5FF] text-[48px] font-black tracking-tight">{data.multiplier}</span>
           </div>
 
-          {/* Hedef Çarpan */}
-          <div className="flex flex-col items-center justify-center gap-2 mb-2">
-              <span className="text-gray-300 text-[13px]">Hedef Çarpan</span>
-              <div className="bg-[#1F2333] border border-white/5 rounded-md px-6 py-2 text-gray-300 text-[13px] font-medium min-w-[100px] text-center">
-                  2.00
-              </div>
+          {/* Play Action Area */}
+          <div className="flex flex-col gap-3 mt-4 mb-2">
+              <button 
+                onClick={onClose}
+                className="w-full bg-[#00E5FF] hover:brightness-110 text-[#0A0D14] font-black text-[15px] uppercase tracking-wider py-4 rounded-xl transition-all hover:-translate-y-0.5 flex items-center justify-center gap-2"
+              >
+                  {data.type === 'slot' || data.type === 'keno' ? 'HEMEN OYNA' : 'BAHİS AL'}
+                  <ExternalLink className="w-5 h-5" />
+              </button>
           </div>
 
         </div>
 
         {/* Footer */}
-        <div className="bg-[#2E3349]/50 border-t border-[#26293E] p-4 flex items-center justify-between cursor-pointer hover:bg-[#2E3349] transition-colors group">
+        <div className="bg-[#20242D]/50 border-t border-white/5 p-4 flex items-center justify-between cursor-pointer hover:bg-[#20242D] transition-colors group">
             <span className="text-gray-300 text-[13px] font-medium">Kanıtlanabilir Şekilde Adil</span>
             <ArrowRight className="w-4 h-4 text-gray-400 group-hover:text-white transition-colors" />
         </div>

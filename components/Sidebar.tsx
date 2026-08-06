@@ -45,7 +45,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, activeView, onViewC
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const isSportsView = ['sports', 'spor724', 'gercek', 'upcomingMatches'].includes(activeView);
+  const isSportsView = ['sports', 'spor724', 'gercek', 'upcomingMatches', 'bulten'].includes(activeView);
   const isCasinoView = ['casino', 'slots', 'live-casino', 'originals'].includes(activeView);
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, route: string) => {
@@ -77,7 +77,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, activeView, onViewC
   ];
 
   const bottomItems = [
-    { id: 'tv', label: t('sidebar.724tv', '724TV'), icon: Tv, route: '724tv' },
+    // { id: 'tv', label: t('sidebar.724tv', '724TV'), icon: Tv, route: '724tv' },
     { id: 'docs', label: t('sidebar.terms', 'Kullanım Şartları'), icon: FileText, route: 'docs' },
     { id: 'support', label: t('sidebar.live_support', 'Canlı Destek'), icon: Headphones, route: 'openChat' },
     { id: 'lang', label: t('sidebar.language', 'Dil'), icon: Globe, route: 'openLang' }
@@ -172,42 +172,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, activeView, onViewC
 
       <div className="flex-1 flex flex-col overflow-y-auto overflow-x-hidden pt-2 pb-4 relative z-[99999] pointer-events-auto">
         
-        {/* $20.000 HAFTALIK ÇEKİLİŞ Widget (Restored based on screenshot) */}
-        {!isSportsView && (
-          <div className={`px-4 py-2 transition-all duration-300 ${!isOpen ? 'opacity-0 h-0 hidden' : 'opacity-100'} mb-2`}>
-            <div 
-              className="bg-[#131823] rounded-xl p-3 border border-white/5 relative overflow-hidden group cursor-pointer hover:border-yellow-500/30 transition-colors shadow-sm"
-              onClick={() => onViewChange('raffle')}
-            >
-              <div className="flex items-center justify-between mb-3 relative z-10">
-                <div className="flex items-center gap-2">
-                  <Ticket className="w-5 h-5 text-yellow-500 shrink-0" />
-                  <div>
-                    <div className="text-white font-black text-[15px] leading-tight tracking-tight">$20.000</div>
-                    <div className="text-gray-400 text-[9px] font-bold tracking-wider uppercase">HAFTALIK ÇEKİLİŞ</div>
-                  </div>
-                </div>
-                <div className="bg-[#1b2230] text-gray-300 text-[11px] font-bold px-2 py-1 rounded-md shrink-0 border border-white/5">
-                  6g
-                </div>
-              </div>
-              <div className="flex items-center justify-between mt-2 relative z-10 px-1">
-                <div className="flex flex-col items-start">
-                  <div className="text-gray-500 text-[8px] font-bold mb-0.5 tracking-wider">GÜNLÜK</div>
-                  <div className="text-white text-[11px] font-bold">$25K</div>
-                </div>
-                <div className="flex flex-col items-center">
-                  <div className="text-gray-500 text-[8px] font-bold mb-0.5 tracking-wider">HAFTALIK</div>
-                  <div className="text-white text-[11px] font-bold">$100K</div>
-                </div>
-                <div className="flex flex-col items-end">
-                  <div className="text-gray-500 text-[8px] font-bold mb-0.5 tracking-wider">AYLIK</div>
-                  <div className="text-white text-[11px] font-bold">$500K</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+
 
         {/* Main Menu Items or Sports Content */}
         {isSportsView ? (

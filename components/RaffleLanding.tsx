@@ -3,7 +3,7 @@ import VIPRafflePromo from './VIPRafflePromo';
 
 export default function RaffleLanding({ onLoginRequired }: { onLoginRequired: () => void }) {
   return (
-    <div className="relative min-h-screen bg-[#050505] overflow-x-hidden flex flex-col items-center pb-20">
+    <div className="relative min-h-screen bg-[#0A0C10] overflow-x-hidden flex flex-col items-center pb-20">
       
       {/* Dynamic Background */}
       <div className="absolute inset-0 pointer-events-none">

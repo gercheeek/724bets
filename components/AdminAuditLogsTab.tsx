@@ -43,8 +43,8 @@ export default function AdminAuditLogsTab() {
 
     const getActionIcon = (type: string) => {
         switch(type) {
-            case 'BAKİYE_EKLEME': return <ArrowUpRight className="w-4 h-4 text-emerald-400" />;
-            case 'ÇEKİM_ONAYLAMA': return <CheckCircle2 className="w-4 h-4 text-amber-400" />;
+            case 'BAKİYE_EKLEME': return <ArrowUpRight className="w-4 h-4 text-[#00E5FF]" />;
+            case 'ÇEKİM_ONAYLAMA': return <CheckCircle2 className="w-4 h-4 text-zinc-300" />;
             case 'AYAR_DEĞİŞTİRME': return <Settings className="w-4 h-4 text-indigo-400" />;
             case 'KULLANICI_YASAKLAMA': return <ShieldAlert className="w-4 h-4 text-red-400" />;
             case 'RTP_GÜNCELLEME': return <AlertTriangle className="w-4 h-4 text-orange-400" />;
@@ -54,8 +54,8 @@ export default function AdminAuditLogsTab() {
 
     const getActionColor = (type: string) => {
         switch(type) {
-            case 'BAKİYE_EKLEME': return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
-            case 'ÇEKİM_ONAYLAMA': return 'bg-amber-500/10 text-amber-400 border-amber-500/20';
+            case 'BAKİYE_EKLEME': return 'bg-[#00E5FF]/10 text-[#00E5FF] border-emerald-500/20';
+            case 'ÇEKİM_ONAYLAMA': return 'bg-amber-500/10 text-zinc-300 border-amber-500/20';
             case 'AYAR_DEĞİŞTİRME': return 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20';
             case 'KULLANICI_YASAKLAMA': return 'bg-red-500/10 text-red-400 border-red-500/20';
             case 'RTP_GÜNCELLEME': return 'bg-orange-500/10 text-orange-400 border-orange-500/20';
@@ -145,7 +145,7 @@ export default function AdminAuditLogsTab() {
                                                     <div className="text-sm font-bold text-white">{log.adminName}</div>
                                                     <div className={`text-[10px] font-black tracking-wider ${
                                                         log.role === 'SUPER_ADMIN' ? 'text-indigo-400' : 
-                                                        log.role === 'SUPPORT' ? 'text-emerald-400' : 'text-amber-400'
+                                                        log.role === 'SUPPORT' ? 'text-[#00E5FF]' : 'text-zinc-300'
                                                     }`}>
                                                         {log.role}
                                                     </div>

@@ -24,7 +24,7 @@ const AdminOddsEngineTab = () => {
                     <p className="text-sm text-zinc-400 mt-1">Yapay zeka oran üretim motorunun ve elit takım yapılandırmalarının merkezi kontrol paneli.</p>
                 </div>
                 <div className="flex items-center gap-4">
-                    {savedMessage && <span className="text-emerald-400 text-sm font-bold animate-fade-in">{savedMessage}</span>}
+                    {savedMessage && <span className="text-[#00E5FF] text-sm font-bold animate-fade-in">{savedMessage}</span>}
                     <button 
                         onClick={handleSave}
                         className="px-6 py-2 bg-[#06b6d4] hover:bg-[#0891b2] text-white font-bold rounded-lg transition-colors flex items-center gap-2"
@@ -75,7 +75,7 @@ const AdminOddsEngineTab = () => {
                                 <div className="bg-[#0b0d14] p-3 rounded-lg border border-[#222635]">
                                     <label className="text-[10px] text-zinc-500 font-bold uppercase mb-1 block">Zaman Motoru</label>
                                     <div className="flex items-center gap-2">
-                                        <div className={`w-3 h-3 rounded-full ${config.rules.timeDecayEnabled ? 'bg-emerald-500 shadow-[0_0_8px_#10b981]' : 'bg-red-500'}`}></div>
+                                        <div className={`w-3 h-3 rounded-full ${config.rules.timeDecayEnabled ? 'bg-[#00E5FF] shadow-[0_0_8px_#10b981]' : 'bg-red-500'}`}></div>
                                         <span className="text-sm font-bold text-white">{config.rules.timeDecayEnabled ? 'AKTİF' : 'KAPALI'}</span>
                                     </div>
                                 </div>
@@ -96,11 +96,11 @@ const AdminOddsEngineTab = () => {
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="bg-[#0b0d14] p-3 rounded-lg border border-[#222635]">
                                     <label className="text-[10px] text-zinc-500 font-bold uppercase mb-1 block">Gol Taban Limiti (+x.5)</label>
-                                    <input type="number" step="0.1" value={config.rules.goalBaseMargin} readOnly className="bg-transparent text-emerald-400 font-black text-lg outline-none w-full" />
+                                    <input type="number" step="0.1" value={config.rules.goalBaseMargin} readOnly className="bg-transparent text-[#00E5FF] font-black text-lg outline-none w-full" />
                                 </div>
                                 <div className="bg-[#0b0d14] p-3 rounded-lg border border-[#222635]">
                                     <label className="text-[10px] text-zinc-500 font-bold uppercase mb-1 block">Başlangıç Korner Limiti</label>
-                                    <input type="number" step="0.1" value={config.rules.cornerBaseMargin} readOnly className="bg-transparent text-emerald-400 font-black text-lg outline-none w-full" />
+                                    <input type="number" step="0.1" value={config.rules.cornerBaseMargin} readOnly className="bg-transparent text-[#00E5FF] font-black text-lg outline-none w-full" />
                                 </div>
                                 <div className="col-span-2 grid grid-cols-4 gap-2 mt-2 border-t border-[#222635] pt-4">
                                     <div className="bg-[#0b0d14] p-2 rounded border border-[#222635]">

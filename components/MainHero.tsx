@@ -53,8 +53,8 @@ export default function MainHero({ onRegisterClick, onNavigate }: MainHeroProps)
         
         {/* Crypto Badge */}
         <div className="flex items-center gap-2 mb-3 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/20 w-fit px-3 py-1.5 rounded-full opacity-0 animate-[fade-in-up_0.8s_ease-out_forwards]">
-          <Bitcoin className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-500" />
-          <span className="text-yellow-500 text-[10px] sm:text-xs font-bold uppercase tracking-wider drop-shadow-md">Kripto ile Anında İşlem</span>
+          <Bitcoin className="w-4 h-4 sm:w-5 sm:h-5 text-zinc-300" />
+          <span className="text-zinc-300 text-[10px] sm:text-xs font-bold uppercase tracking-wider drop-shadow-md">Kripto ile Anında İşlem</span>
         </div>
 
         {/* Title */}

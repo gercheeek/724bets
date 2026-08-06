@@ -21,7 +21,7 @@ const UserContext = createContext<UserContextProps | undefined>(undefined);
 
 export const UserProvider: React.FC<{ children: ReactNode, siteUser: SiteUser | null, setSiteUser: React.Dispatch<React.SetStateAction<SiteUser | null>> }> = ({ children, siteUser, setSiteUser }) => {
   const [isFunMode, setIsFunMode] = React.useState<boolean>(true); // Default to Eğlence Modu
-  const [demoBalance, setDemoBalance] = React.useState<number>(10000); // 10.000 ₺ Demo Balance
+  const [demoBalance, setDemoBalance] = React.useState<number>(10000); // 10,000 USD Demo Balance
 
   
   const sendDiscordNotification = async (payload: any) => {

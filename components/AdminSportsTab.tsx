@@ -263,7 +263,7 @@ export default function AdminSportsTab() {
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 pb-4 border-b border-zinc-800 gap-4">
                 <div>
                     <h2 className="text-xl font-bold text-white tracking-wide uppercase flex items-center gap-2">
-                        <Activity className="w-6 h-6 text-emerald-500" />
+                        <Activity className="w-6 h-6 text-[#00E5FF]" />
                         Spor Yönetimi
                     </h2>
                     <p className="text-sm text-zinc-400 mt-1">Maç sağlayıcı entegrasyonu ve aktif maç yönetimi</p>
@@ -355,13 +355,13 @@ export default function AdminSportsTab() {
                         <div className="px-6 py-4 bg-[#161a22] border-b border-zinc-800 flex justify-between items-center">
                             <div className="flex items-center gap-2">
                                 <span className="relative flex h-3 w-3 mr-1">
-                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                                    <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00E5FF] opacity-75"></span>
+                                    <span className="relative inline-flex rounded-full h-3 w-3 bg-[#00E5FF]"></span>
                                 </span>
                                 <h3 className="text-base font-bold text-white tracking-wide uppercase flex items-center gap-2">
                                     Canlı Maçlar (Havuz)
                                 </h3>
-                                <span className="ml-2 bg-emerald-500/20 text-emerald-400 text-xs font-bold px-2.5 py-0.5 rounded-full border border-emerald-500/30">
+                                <span className="ml-2 bg-[#00E5FF]/20 text-[#00E5FF] text-xs font-bold px-2.5 py-0.5 rounded-full border border-emerald-500/30">
                                     {livePoolMatches.length} Maç
                                 </span>
                             </div>
@@ -371,12 +371,12 @@ export default function AdminSportsTab() {
                             >
                                 {isLiveWindowOpen ? (
                                     <>
-                                        <ChevronUp className="w-4 h-4 text-emerald-400" />
+                                        <ChevronUp className="w-4 h-4 text-[#00E5FF]" />
                                         <span>Pencereyi Kapat</span>
                                     </>
                                 ) : (
                                     <>
-                                        <ChevronDown className="w-4 h-4 text-emerald-400" />
+                                        <ChevronDown className="w-4 h-4 text-[#00E5FF]" />
                                         <span>Pencereyi Aç</span>
                                     </>
                                 )}
@@ -511,13 +511,13 @@ export default function AdminSportsTab() {
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap">
                                                 <div className="flex items-center justify-center gap-2 font-mono text-sm">
-                                                    <span className="bg-[#1a1c24] px-3 py-1 rounded border border-zinc-800 text-emerald-400">{m.odds?.["1"]?.toFixed(2) || '0.00'}</span>
-                                                    <span className="bg-[#1a1c24] px-3 py-1 rounded border border-zinc-800 text-amber-400">{m.odds?.["X"]?.toFixed(2) || '0.00'}</span>
-                                                    <span className="bg-[#1a1c24] px-3 py-1 rounded border border-zinc-800 text-emerald-400">{m.odds?.["2"]?.toFixed(2) || '0.00'}</span>
+                                                    <span className="bg-[#1a1c24] px-3 py-1 rounded border border-zinc-800 text-[#00E5FF]">{m.odds?.["1"]?.toFixed(2) || '0.00'}</span>
+                                                    <span className="bg-[#1a1c24] px-3 py-1 rounded border border-zinc-800 text-zinc-300">{m.odds?.["X"]?.toFixed(2) || '0.00'}</span>
+                                                    <span className="bg-[#1a1c24] px-3 py-1 rounded border border-zinc-800 text-[#00E5FF]">{m.odds?.["2"]?.toFixed(2) || '0.00'}</span>
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap">
-                                                {m.status === 'active' && <span className="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded border border-emerald-500/20">Bahse Açık</span>}
+                                                {m.status === 'active' && <span className="text-xs font-bold text-[#00E5FF] bg-[#00E5FF]/10 px-2.5 py-1 rounded border border-emerald-500/20">Bahse Açık</span>}
                                                 {m.status === 'suspended' && <span className="text-xs font-bold text-rose-400 bg-rose-500/10 px-2.5 py-1 rounded border border-rose-500/20 flex items-center gap-1.5 w-min"><div className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse"/> Askıda</span>}
                                                 {m.status === 'finished' && <span className="text-xs font-bold text-zinc-400 bg-zinc-800 px-2.5 py-1 rounded border border-zinc-700">Sonuçlandı</span>}
                                             </td>
@@ -561,7 +561,7 @@ export default function AdminSportsTab() {
                             <label 
                                 className={`flex items-center p-4 rounded-xl border cursor-pointer transition-all ${
                                     apiProvider === 'atekbet' 
-                                    ? 'bg-emerald-500/10 border-emerald-500/50 shadow-[0_0_15px_rgba(16,185,129,0.15)]' 
+                                    ? 'bg-[#00E5FF]/10 border-emerald-500/50 shadow-[0_0_15px_rgba(16,185,129,0.15)]' 
                                     : 'bg-[#1a1d24] border-zinc-800 hover:border-zinc-700'
                                 }`}
                             >
@@ -577,12 +577,12 @@ export default function AdminSportsTab() {
                                     <div className="flex items-center justify-between mb-1">
                                         <div className="flex items-center gap-2">
                                             <h4 className="font-bold text-white text-lg">Atekbet Swarm (Birincil Sunucu)</h4>
-                                            {apiProvider === 'atekbet' && <span className="bg-emerald-500/20 text-emerald-400 text-[10px] px-2 py-0.5 rounded uppercase tracking-wider font-bold">Aktif</span>}
+                                            {apiProvider === 'atekbet' && <span className="bg-[#00E5FF]/20 text-[#00E5FF] text-[10px] px-2 py-0.5 rounded uppercase tracking-wider font-bold">Aktif</span>}
                                         </div>
-                                        {apiProvider === 'atekbet' && <CheckCircle2 className="w-5 h-5 text-emerald-400" />}
+                                        {apiProvider === 'atekbet' && <CheckCircle2 className="w-5 h-5 text-[#00E5FF]" />}
                                     </div>
                                     <p className="text-sm text-zinc-400">Ana BetConstruct WSS beslemesi. Standart trafiği karşılar.</p>
-                                    <div className="mt-2 text-xs font-mono text-emerald-300/70 bg-emerald-500/10 inline-block px-2 py-1 rounded">wss://swarm.atekbet.com/</div>
+                                    <div className="mt-2 text-xs font-mono text-emerald-300/70 bg-[#00E5FF]/10 inline-block px-2 py-1 rounded">wss://swarm.atekbet.com/</div>
                                 </div>
                             </label>
 
@@ -624,7 +624,7 @@ export default function AdminSportsTab() {
                             </div>
                             <button 
                                 onClick={() => setAutoFailover(!autoFailover)}
-                                className={`w-12 h-6 rounded-full transition-colors relative flex items-center shrink-0 ${autoFailover ? 'bg-emerald-500' : 'bg-zinc-700'}`}
+                                className={`w-12 h-6 rounded-full transition-colors relative flex items-center shrink-0 ${autoFailover ? 'bg-[#00E5FF]' : 'bg-zinc-700'}`}
                             >
                                 <div className={`w-4 h-4 rounded-full bg-white absolute transition-transform ${autoFailover ? 'translate-x-7' : 'translate-x-1'}`}></div>
                             </button>
@@ -640,14 +640,14 @@ export default function AdminSportsTab() {
                                 </div>
                             ) : pushMessage ? (
                                 <div className="flex flex-col items-center gap-3 animate-in fade-in">
-                                    <div className="w-12 h-12 bg-emerald-500/20 rounded-full flex items-center justify-center">
-                                        <CheckCircle2 className="w-6 h-6 text-emerald-400" />
+                                    <div className="w-12 h-12 bg-[#00E5FF]/20 rounded-full flex items-center justify-center">
+                                        <CheckCircle2 className="w-6 h-6 text-[#00E5FF]" />
                                     </div>
-                                    <p className="text-sm font-bold text-emerald-400">{pushMessage}</p>
+                                    <p className="text-sm font-bold text-[#00E5FF]">{pushMessage}</p>
                                 </div>
                             ) : (
                                 <>
-                                    <AlertTriangle className="w-8 h-8 text-amber-500 mb-3 opacity-80" />
+                                    <AlertTriangle className="w-8 h-8 text-zinc-300 mb-3 opacity-80" />
                                     <h4 className="text-white font-bold mb-1">Sistemi Yeniden Başlat (Push)</h4>
                                     <p className="text-xs text-zinc-400 max-w-sm mb-4">
                                         Değişikliği onayladığınızda sistem mevcut tüm soket bağlantılarını kesecek, 1 dakika boyunca bekleme moduna geçecek ve ardından yeni sağlayıcıya bağlanacaktır.
@@ -681,7 +681,7 @@ export default function AdminSportsTab() {
                                 <div className="flex items-end justify-between mb-1">
                                     <span className="text-xs text-zinc-500 uppercase">Risk Merkezi</span>
                                     {data.risk === 'DENGELİ' 
-                                        ? <span className="text-xs font-black text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded">DENGELİ</span>
+                                        ? <span className="text-xs font-black text-[#00E5FF] bg-[#00E5FF]/10 px-2 py-0.5 rounded">DENGELİ</span>
                                         : <span className="text-xs font-black text-rose-400 bg-rose-500/10 px-2 py-0.5 rounded flex items-center gap-1"><ShieldAlert className="w-3 h-3"/> {data.risk} YÜKSEK</span>
                                     }
                                 </div>
@@ -728,7 +728,7 @@ export default function AdminSportsTab() {
                     <div className="bg-[#0f1115] border border-emerald-500/30 w-full max-w-xl rounded-2xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
                         <div className="px-6 py-4 border-b border-zinc-800 flex justify-between items-center bg-[#15171e]">
                             <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                                <Plus className="w-5 h-5 text-emerald-400" /> Maçı Bahse Aç
+                                <Plus className="w-5 h-5 text-[#00E5FF]" /> Maçı Bahse Aç
                             </h3>
                             <button onClick={() => setIsAddModalOpen(false)} className="text-zinc-500 hover:text-white transition-colors">
                                 <X className="w-5 h-5" />
@@ -760,22 +760,22 @@ export default function AdminSportsTab() {
                                 <div className="grid grid-cols-3 gap-4">
                                     <div>
                                         <div className="text-[10px] text-center text-zinc-500 mb-1">Ev Sahibi (1)</div>
-                                        <input type="number" step="0.01" value={newMatch.ms1} onChange={e => setNewMatch({...newMatch, ms1: Number(e.target.value)})} className="w-full bg-[#1a1c24] border border-zinc-800 rounded-lg px-4 py-2.5 text-emerald-400 font-mono text-center outline-none focus:border-emerald-500" />
+                                        <input type="number" step="0.01" value={newMatch.ms1} onChange={e => setNewMatch({...newMatch, ms1: Number(e.target.value)})} className="w-full bg-[#1a1c24] border border-zinc-800 rounded-lg px-4 py-2.5 text-[#00E5FF] font-mono text-center outline-none focus:border-emerald-500" />
                                     </div>
                                     <div>
                                         <div className="text-[10px] text-center text-zinc-500 mb-1">Beraberlik (X)</div>
-                                        <input type="number" step="0.01" value={newMatch.msx} onChange={e => setNewMatch({...newMatch, msx: Number(e.target.value)})} className="w-full bg-[#1a1c24] border border-zinc-800 rounded-lg px-4 py-2.5 text-amber-400 font-mono text-center outline-none focus:border-emerald-500" />
+                                        <input type="number" step="0.01" value={newMatch.msx} onChange={e => setNewMatch({...newMatch, msx: Number(e.target.value)})} className="w-full bg-[#1a1c24] border border-zinc-800 rounded-lg px-4 py-2.5 text-zinc-300 font-mono text-center outline-none focus:border-emerald-500" />
                                     </div>
                                     <div>
                                         <div className="text-[10px] text-center text-zinc-500 mb-1">Deplasman (2)</div>
-                                        <input type="number" step="0.01" value={newMatch.ms2} onChange={e => setNewMatch({...newMatch, ms2: Number(e.target.value)})} className="w-full bg-[#1a1c24] border border-zinc-800 rounded-lg px-4 py-2.5 text-emerald-400 font-mono text-center outline-none focus:border-emerald-500" />
+                                        <input type="number" step="0.01" value={newMatch.ms2} onChange={e => setNewMatch({...newMatch, ms2: Number(e.target.value)})} className="w-full bg-[#1a1c24] border border-zinc-800 rounded-lg px-4 py-2.5 text-[#00E5FF] font-mono text-center outline-none focus:border-emerald-500" />
                                     </div>
                                 </div>
                             </div>
 
                             <button 
                                 onClick={handleAddMatch}
-                                className="w-full py-3.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-bold shadow-[0_0_15px_rgba(16,185,129,0.3)] transition-all flex justify-center items-center gap-2"
+                                className="w-full py-3.5 bg-emerald-600 hover:bg-[#00E5FF] text-white rounded-xl font-bold shadow-[0_0_15px_rgba(16,185,129,0.3)] transition-all flex justify-center items-center gap-2"
                             >
                                 <Database className="w-5 h-5" />
                                 Kaydet ve Aktife Al
@@ -850,8 +850,8 @@ export default function AdminSportsTab() {
                                 <Activity className="w-6 h-6 text-cyan-500 animate-pulse" />
                                 WebSocket Canlı Hız Testi (Ping)
                             </h3>
-                            <div className="flex items-center gap-2 bg-emerald-500/10 text-emerald-500 px-4 py-2 rounded-lg border border-emerald-500/30 font-bold">
-                                <span className="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-pulse"></span>
+                            <div className="flex items-center gap-2 bg-[#00E5FF]/10 text-[#00E5FF] px-4 py-2 rounded-lg border border-emerald-500/30 font-bold">
+                                <span className="w-2.5 h-2.5 bg-[#00E5FF] rounded-full animate-pulse"></span>
                                 Proxy Bağlantısı Aktif
                             </div>
                         </div>

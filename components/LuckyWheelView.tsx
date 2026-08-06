@@ -56,12 +56,36 @@ const LuckyWheelView: React.FC<LuckyWheelViewProps> = ({ config, siteUser, onNav
   const [promoScrollEnabled, setPromoScrollEnabled] = useState(true);
   const [betAmount, setBetAmount] = useState(10);
   const [lastProvablyFair, setLastProvablyFair] = useState<any>(null);
+  const [cooldown, setCooldown] = useState<number>(0);
 
   const prizes = config.prizes;
   const numPrizes = prizes.length;
   const anglePerSlice = 360 / numPrizes;
 
   const wheelRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const lastSpin = localStorage.getItem('last_lucky_spin');
+    if (lastSpin) {
+      const elapsed = Date.now() - parseInt(lastSpin);
+      const remaining = 24 * 60 * 60 * 1000 - elapsed;
+      if (remaining > 0) {
+        setCooldown(remaining);
+      } else {
+        setCooldown(0);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    let interval: any;
+    if (cooldown > 0) {
+      interval = setInterval(() => {
+        setCooldown(prev => Math.max(0, prev - 1000));
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [cooldown]);
 
   /* ── Audio ────────────────────────────────────────── */
   const audioCtxRef = useRef<AudioContext | null>(null);
@@ -153,16 +177,24 @@ const LuckyWheelView: React.FC<LuckyWheelViewProps> = ({ config, siteUser, onNav
   }, [numPrizes, anglePerSlice]);
 
   /* ── Spin Logic ──────────────────────────────────── */
+  const formatTime = (ms: number) => {
+    const totalSeconds = Math.floor(ms / 1000);
+    const h = Math.floor(totalSeconds / 3600);
+    const m = Math.floor((totalSeconds % 3600) / 60);
+    const s = totalSeconds % 60;
+    return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+  };
+
   const handleSpin = async () => {
     try {
+
       if (isSpinning || !siteUser) {
         if (!siteUser) handleRegisterClick();
         return;
       }
 
-      if (betAmount <= 0 || (siteUser.balance || 0) < betAmount) {
-        alert("Yetersiz bakiye veya geçersiz bahis miktarı!");
-        return;
+      if (cooldown > 0) {
+        return; // Already spun in 24 hours
       }
 
     setIsSpinning(true);
@@ -173,7 +205,11 @@ const LuckyWheelView: React.FC<LuckyWheelViewProps> = ({ config, siteUser, onNav
     let winIndex = 0;
     let serverWinAmount = 0;
     
-    // Calculate expected winAmount locally to pass as target to our simple SQL wheel logic
+    // GÜNLÜK DENEME BONUSU - KIL PAYI (NEAR MISS) PSİKOLOJİSİ
+    // Gerçekte her zaman "PAS" veya "Ufak Bonus" kazandır.
+    // Ancak çarkın, büyük ödüle çok yakın durmasını sağla.
+    
+    // Normal ödül bulma mantığını tutuyoruz (test için random bırakabiliriz)
     const totalWeight = prizes.reduce((a, p) => a + (p.weight || 1), 0);
     let rand = Math.random() * totalWeight;
     for (let i = 0; i < prizes.length; i++) {
@@ -189,18 +225,16 @@ const LuckyWheelView: React.FC<LuckyWheelViewProps> = ({ config, siteUser, onNav
       const match = prizeName.match(/(\d+)/);
       if (match) serverWinAmount = parseInt(match[1], 10);
     } else if (prizeName.includes('X')) {
+      // Free spin olduğu için çarpanlar sabit verilebilir, örn 10TL
       const match = prizeName.match(/([0-9.]+)\s*X/);
-      if (match) serverWinAmount = betAmount * parseFloat(match[1]);
+      if (match) serverWinAmount = 10 * parseFloat(match[1]); // 10 base bet
     }
 
-    try {
-      const data = await playInstantGame(betAmount, 'Çarkıfelek', serverWinAmount, 'none');
-      // We still use our visually selected winIndex, but the balance is updated by the server!
-    } catch (err: any) {
-      alert(err.message || 'Bakiye düşülemedi!');
-      setIsSpinning(false);
-      return;
-    }
+    // Ücretsiz olduğu için bakiyeden DÜŞMÜYORUZ, backend onayı beklemiyoruz (sadece animasyon)
+    
+    // Günlük limiti başlat
+    localStorage.setItem('last_lucky_spin', Date.now().toString());
+    setCooldown(24 * 60 * 60 * 1000);
     
     // Mock Provably Fair data for UI
     setLastProvablyFair({
@@ -258,9 +292,9 @@ const LuckyWheelView: React.FC<LuckyWheelViewProps> = ({ config, siteUser, onNav
       setShowWinModal(true);
       playWinSound();
 
-      if (winAmount > 0) {
+      if (serverWinAmount > 0) {
         try {
-          processGameBet(0, winAmount, 'Çarkıfelek');
+          processGameBet(0, serverWinAmount, 'Çarkıfelek');
         } catch (e) {}
 
         if (siteUser.id !== 'admin-session') {
@@ -270,7 +304,7 @@ const LuckyWheelView: React.FC<LuckyWheelViewProps> = ({ config, siteUser, onNav
               user_id: siteUser.id,
               username: siteUser.username || siteUser.email,
               bet_amount: betAmount,
-              win_amount: winAmount,
+              win_amount: serverWinAmount,
               prize_name: prize.name,
               ip_address: data.ip
             }]).then();
@@ -279,7 +313,7 @@ const LuckyWheelView: React.FC<LuckyWheelViewProps> = ({ config, siteUser, onNav
               user_id: siteUser.id,
               username: siteUser.username || siteUser.email,
               bet_amount: betAmount,
-              win_amount: winAmount,
+              win_amount: serverWinAmount,
               prize_name: prize.name,
               ip_address: 'unknown'
             }]).then();
@@ -324,7 +358,7 @@ const LuckyWheelView: React.FC<LuckyWheelViewProps> = ({ config, siteUser, onNav
   }).slice(0, 3);
 
   return (
-    <div className="flex flex-col h-full max-h-[calc(100vh-80px)] bg-[#030712] text-gray-200 overflow-hidden relative font-sans selection:bg-emerald-500/30">
+    <div className="flex flex-col h-full max-h-[calc(100vh-80px)] bg-[#030712] text-gray-200 overflow-hidden relative font-sans selection:bg-[#00E5FF]/30">
 
       {/* Global background glow */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(16,185,129,0.08)_0%,_rgba(3,7,18,1)_70%)] pointer-events-none"></div>
@@ -634,7 +668,7 @@ const LuckyWheelView: React.FC<LuckyWheelViewProps> = ({ config, siteUser, onNav
                     <div className="absolute top-0 left-0 right-0 h-[45%] bg-gradient-to-b from-white/30 to-transparent rounded-t-full pointer-events-none z-0"></div>
                     <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent pointer-events-none z-0 mix-blend-overlay"></div>
 
-                    <svg viewBox="0 0 100 100" className="w-[55%] h-[55%] text-emerald-400 drop-shadow-[0_0_10px_rgba(16,185,129,0.8)] relative z-10" fill="currentColor">
+                    <svg viewBox="0 0 100 100" className="w-[55%] h-[55%] text-[#00E5FF] drop-shadow-[0_0_10px_rgba(16,185,129,0.8)] relative z-10" fill="currentColor">
                       {/* 3-leaf clover (Shamrock) */}
                       <path d="M 50,48 C 30,30 35,10 50,20 C 65,10 70,30 50,48 Z" />
                       <path d="M 46,52 C 30,35 10,40 20,55 C 10,70 30,75 46,52 Z" />
@@ -650,59 +684,31 @@ const LuckyWheelView: React.FC<LuckyWheelViewProps> = ({ config, siteUser, onNav
           {/* Controls Below Wheel (Glassmorphism & Betting Panel) */}
           <div className="flex flex-col items-center justify-center gap-4 mt-6 shrink-0 z-20 w-full max-w-lg px-4">
             
-            {/* Betting Panel (Stake Style) */}
-            <div className="w-full bg-slate-900/60 backdrop-blur-md border border-white/10 rounded-2xl p-4 flex flex-col gap-3 shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
-              <div className="flex justify-between items-center px-1">
-                <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Bahis Miktarı</span>
-                <span className="text-[11px] font-bold text-emerald-400 uppercase tracking-wider">Bakiye: {siteUser ? siteUser.balance.toLocaleString('tr-TR', { minimumFractionDigits: 2 }) : '0.00'} ₺</span>
+            {/* Daily Bonus Panel */}
+            <div className="w-full bg-slate-900/60 backdrop-blur-md border border-white/10 rounded-2xl p-6 flex flex-col gap-4 shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+              <div className="flex flex-col items-center justify-center text-center mb-2">
+                <h3 className="text-[#00E5FF] font-black tracking-widest uppercase text-sm mb-1">GÜNLÜK ÜCRETSİZ HAK</h3>
+                <p className="text-xs text-gray-400 font-medium">Her gün 1 kere bedava çevir, binlerce lira nakit, freespin veya hediye kazanma şansını yakala!</p>
               </div>
               
-              <div className="flex gap-2 h-14">
-                <div className="flex-1 relative bg-[#0f172a]/80 rounded-xl flex items-center px-4 border border-white/5 focus-within:border-emerald-500/50 transition-colors">
-                  <span className="text-emerald-500 font-bold mr-2">₺</span>
-                  <input 
-                    type="number" 
-                    value={betAmount}
-                    onChange={(e) => setBetAmount(Number(e.target.value))}
-                    className="bg-transparent w-full outline-none text-white font-black text-lg"
-                  />
-                </div>
-                <div className="flex gap-1">
-                  <button onClick={() => setBetAmount(Math.max(1, betAmount / 2))} className="h-full px-3 bg-white/5 hover:bg-white/10 rounded-lg text-xs font-bold text-gray-300 transition-colors">1/2</button>
-                  <button onClick={() => setBetAmount(betAmount * 2)} className="h-full px-3 bg-white/5 hover:bg-white/10 rounded-lg text-xs font-bold text-gray-300 transition-colors">2x</button>
-                  <button onClick={() => setBetAmount(siteUser?.balance || 10)} className="h-full px-3 bg-white/5 hover:bg-white/10 rounded-lg text-xs font-bold text-gray-300 transition-colors">MAX</button>
-                </div>
-              </div>
-
-              <button 
-                onClick={siteUser ? handleSpin : handleRegisterClick}
-                className={`w-full h-14 rounded-xl font-black text-sm tracking-[0.2em] uppercase transition-all duration-300 flex items-center justify-center gap-2 ${
-                  isSpinning 
-                    ? 'bg-emerald-900/50 text-emerald-700 cursor-not-allowed' 
-                    : siteUser && (siteUser && siteUser.balance < betAmount)
-                      ? 'bg-red-500/20 text-red-400 border border-red-500/30'
+              {cooldown > 0 ? (
+                <button disabled className="w-full h-16 rounded-xl font-black text-sm tracking-[0.2em] transition-all duration-300 flex flex-col items-center justify-center bg-slate-800/80 text-gray-400 border border-white/5 cursor-not-allowed">
+                  <span className="text-[10px] mb-1">YENİ HAK İÇİN KALAN SÜRE</span>
+                  <span className="text-[#00E5FF] font-mono text-lg">{formatTime(cooldown)}</span>
+                </button>
+              ) : (
+                <button 
+                  onClick={siteUser ? handleSpin : handleRegisterClick}
+                  disabled={isSpinning}
+                  className={`w-full h-16 rounded-xl font-black text-sm tracking-[0.2em] uppercase transition-all duration-300 flex items-center justify-center gap-2 ${
+                    isSpinning 
+                      ? 'bg-emerald-900/50 text-emerald-700 cursor-not-allowed' 
                       : 'bg-gradient-to-r from-emerald-500 to-emerald-400 hover:from-emerald-400 hover:to-emerald-300 text-white shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(16,185,129,0.6)]'
-                }`}
-              >
-                {isSpinning ? 'Çevriliyor...' : siteUser && (siteUser && siteUser.balance < betAmount) ? 'Yetersiz Bakiye' : 'ÇEVİR VE KAZAN'}
-              </button>
-            </div>
-
-            <div className="flex items-center justify-center gap-4 w-full">
-              <button
-                onClick={() => setIsAutoSpin(!isAutoSpin)}
-                className={`flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-xl border text-[11px] font-black uppercase tracking-widest transition-all duration-300 backdrop-blur-md ${isAutoSpin ? 'bg-emerald-500/20 border-emerald-400 text-emerald-300 shadow-[0_0_20px_rgba(16,185,129,0.3)]' : 'bg-slate-900/40 border-white/10 text-gray-400 hover:bg-slate-800/60 hover:text-white hover:border-white/20'}`}
-              >
-                <RotateCcw className="w-4 h-4" />
-                OTO SPİN
-              </button>
-              <button
-                onClick={() => setIsTurbo(!isTurbo)}
-                className={`flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-xl border text-[11px] font-black uppercase tracking-widest transition-all duration-300 backdrop-blur-md ${isTurbo ? 'bg-amber-500/20 border-amber-400 text-amber-300 shadow-[0_0_20px_rgba(251,191,36,0.3)]' : 'bg-slate-900/40 border-white/10 text-gray-400 hover:bg-slate-800/60 hover:text-white hover:border-white/20'}`}
-              >
-                <FastForward className="w-4 h-4" />
-                TURBO MODU
-              </button>
+                  }`}
+                >
+                  {isSpinning ? 'Çevriliyor...' : 'ÜCRETSİZ ŞANSINI DENE'}
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -723,7 +729,7 @@ const LuckyWheelView: React.FC<LuckyWheelViewProps> = ({ config, siteUser, onNav
             </div>
 
             <h3 className="text-3xl font-black text-white mb-2 tracking-wider drop-shadow-md">{wonPrize.name}</h3>
-            <p className="text-emerald-400 font-black tracking-[0.3em] mb-8 text-[10px] uppercase drop-shadow-[0_0_8px_rgba(16,185,129,0.6)]">KAZANDINIZ</p>
+            <p className="text-[#00E5FF] font-black tracking-[0.3em] mb-8 text-[10px] uppercase drop-shadow-[0_0_8px_rgba(16,185,129,0.6)]">KAZANDINIZ</p>
 
             {!siteUser ? (
               <div className="bg-black/40 border border-white/5 rounded-2xl p-6 shadow-inner">
@@ -742,7 +748,7 @@ const LuckyWheelView: React.FC<LuckyWheelViewProps> = ({ config, siteUser, onNav
               <div className="mt-4 pt-4 border-t border-white/10 flex flex-col gap-2 opacity-60 hover:opacity-100 transition-opacity">
                 <div className="flex items-center justify-between gap-4 text-[9px] font-mono">
                   <span className="text-gray-500 uppercase tracking-widest whitespace-nowrap">Server Seed Hash</span>
-                  <span className="text-emerald-400/80 truncate">{lastProvablyFair.serverSeedHash}</span>
+                  <span className="text-[#00E5FF]/80 truncate">{lastProvablyFair.serverSeedHash}</span>
                 </div>
                 <div className="flex items-center justify-between gap-4 text-[9px] font-mono">
                   <span className="text-gray-500 uppercase tracking-widest whitespace-nowrap">Client Seed</span>

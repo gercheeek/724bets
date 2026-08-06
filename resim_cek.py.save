@@ -1,0 +1,62 @@
+import os
+import requests
+from bs4 import BeautifulSoup
+from urllib.parse import urljoin
+
+# Hedef URL
+url = "https://betpanda1.io/tr/"
+
+# Resimlerin kaydedileceği klasör
+klasor_adi = "spor_kapaklari"
+if not os.path.exists(klasor_adi):
+    os.makedirs(klasor_adi)
+
+# Bot olarak algılanmamak için User-Agent ekliyoruz
+headers = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+}
+
+print("Sayfaya bağlanılıyor...")
+response = requests.get(url, headers=headers)
+
+if response.status_code == 200:
+    soup = BeautifulSoup(response.content, 'html.parser')
+    
+    # Sayfadaki tüm resim (img) etiketlerini bul
+    img_tags = soup.find_all('img')
+    print(f"Toplam {len(img_tags)} resim etiketi bulundu. İndirme başlıyor...")
+    
+    sayac = 1
+    for img in img_tags:
+        img_url = img.get('src')
+        
+        # Eğer src özelliği doluysa işlemi yap
+        if img_url:
+            # Bağıl (relative) URL'leri tam URL'ye çevir
+            tam_url = urljoin(url, img_url)
+            
+            try:
+                # Resmi indir
+                img_data = requests.get(tam_url, headers=headers).content
+                
+                # Dosya adını belirle ve kaydet
+                dosya_adi = tam_url.split("/")[-1]
+                if not dosya_adi: # Eğer dosya adı URL'den alınamazsa sayaç kullan
+                    dosya_adi = f"resim_{sayac}.jpg"
+                
+                dosya_yolu = os.path.join(klasor_adi, dosya_adi)
+                
+                with open(dosya_yolu, 'wb') as handler:
+                    handler.write(img_data)
+                
+                print(f"İndirildi: {dosya_yolu}")
+                sayac += 1
+                
+            except Exception as e:
+                print(f"İndirilemedi: {tam_url} - Hata: {e}")
+else:
+    print(f"Sayfaya ulaşılamadı. Hata Kodu: {response.status_code}")x
+Exit
+clear
+^x
+

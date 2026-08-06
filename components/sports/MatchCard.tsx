@@ -65,11 +65,11 @@ export const MatchCard: React.FC<MatchCardProps> = memo(({ match, isGoal, onSele
 
       {/* Header: League & Time */}
       <div className="flex flex-col gap-0.5 z-10">
-        <div className="flex items-center gap-1.5 text-[12px] font-medium text-slate-400">
-           <span className="opacity-80">⚽</span>
-           <span>{match.league}</span>
+        <div className="flex items-center gap-1.5 text-[12px] font-semibold text-[#D1D5DB]">
+           <span className="opacity-90">⚽</span>
+           <span className="text-[#D1D5DB] tracking-wide">{match.league}</span>
         </div>
-        <div className="flex items-center gap-2 text-[13px] font-bold text-slate-300">
+        <div className="flex items-center gap-2 text-[13px] font-bold text-white">
           {match.isLive ? (
             <span className="text-emerald-400 flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>

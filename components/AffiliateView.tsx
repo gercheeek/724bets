@@ -20,7 +20,7 @@ const AffiliateView: React.FC<AffiliateViewProps> = ({ onNavigate, onAuthRequire
   };
 
   return (
-    <div className="w-full h-full min-h-[calc(100vh-140px)] bg-[#0A0D14] flex flex-col items-center relative overflow-hidden pb-20">
+    <div className="w-full h-full min-h-[calc(100vh-140px)] bg-[#0A0C10] flex flex-col items-center relative overflow-hidden pb-20">
       {/* Dynamic Background Effects */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-[#00E5FF]/5 rounded-full blur-[120px] mix-blend-screen" />
@@ -34,14 +34,6 @@ const AffiliateView: React.FC<AffiliateViewProps> = ({ onNavigate, onAuthRequire
           
           {/* Left Content */}
           <div className="flex-1 flex flex-col w-full relative z-10">
-            {/* Advanced Animated Badge */}
-            <div className="relative inline-flex overflow-hidden rounded-full p-[1px] mb-6 shadow-[0_0_20px_rgba(0,229,255,0.2)] w-fit">
-              <span className="absolute inset-[-1000%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,#00E5FF_50%,transparent_100%)]" />
-              <div className="inline-flex h-full w-full items-center justify-center rounded-full bg-[#0A0D14] px-4 py-2 backdrop-blur-3xl gap-2">
-                <Users className="w-4 h-4 text-[#00E5FF] animate-pulse" />
-                <span className="text-[#00E5FF] text-[11px] font-black tracking-[0.2em] uppercase">{t('affiliate.badge')}</span>
-              </div>
-            </div>
 
             <h1 className="text-[38px] md:text-[56px] font-black leading-[1.1] tracking-tight text-white mb-5 drop-shadow-md">
               {t('affiliate.hero_title_1')} <br className="hidden lg:block" />
@@ -125,7 +117,7 @@ const AffiliateView: React.FC<AffiliateViewProps> = ({ onNavigate, onAuthRequire
               
               <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10 mix-blend-overlay"></div>
               
-              <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center p-6 bg-[#0a0d14]/40 backdrop-blur-[2px]">
+              <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center p-6 bg-[#0A0C10]/40 backdrop-blur-[2px]">
                 <div className="w-20 h-20 bg-gradient-to-tr from-[#00E5FF] to-[#10B981] rounded-full flex items-center justify-center shadow-[0_0_40px_rgba(0,229,255,0.4)] mb-5 cursor-pointer group-hover:scale-110 transition-transform duration-500 ease-out relative">
                   <div className="absolute inset-0 bg-[#00E5FF] rounded-full animate-ping opacity-30"></div>
                   <Play className="w-8 h-8 text-[#0A0D14] ml-1 relative z-10" fill="currentColor" />
@@ -135,16 +127,6 @@ const AffiliateView: React.FC<AffiliateViewProps> = ({ onNavigate, onAuthRequire
               </div>
             </div>
 
-            {/* Floating Earnings Box */}
-            <div className="absolute -bottom-6 -left-6 bg-[#131823]/90 p-4 rounded-xl border border-[#10B981]/20 shadow-[0_10px_30px_rgba(0,0,0,0.5)] backdrop-blur-xl animate-[bounce_4s_infinite_ease-in-out]">
-              <div className="flex items-center gap-2 mb-1">
-                <div className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse shadow-[0_0_5px_#10B981]"></div>
-                <span className="text-[9px] font-black text-[#8b92a5] uppercase tracking-widest">{t('affiliate.last_earning')}</span>
-              </div>
-              <div className="text-xl font-black text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
-                $4,250.<span className="text-[#8b92a5] text-sm">00</span>
-              </div>
-            </div>
           </div>
         </div>
 
@@ -163,7 +145,7 @@ const AffiliateView: React.FC<AffiliateViewProps> = ({ onNavigate, onAuthRequire
               <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-[#00E5FF]/10 to-transparent rounded-bl-full pointer-events-none group-hover:scale-110 transition-transform"></div>
               <div className="text-zinc-400 text-xs font-bold uppercase tracking-wider mb-1">Toplam Kazanç</div>
               <div className="text-3xl font-black text-white mb-2">$12,450<span className="text-zinc-500 text-lg">.00</span></div>
-              <div className="flex items-center gap-2 text-xs font-bold text-emerald-400">
+              <div className="flex items-center gap-2 text-xs font-bold text-[#00E5FF]">
                 <TrendingUp className="w-4 h-4" /> +14.5% bu ay
               </div>
             </div>
@@ -173,7 +155,7 @@ const AffiliateView: React.FC<AffiliateViewProps> = ({ onNavigate, onAuthRequire
               <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-[#10B981]/10 to-transparent rounded-bl-full pointer-events-none group-hover:scale-110 transition-transform"></div>
               <div className="text-zinc-400 text-xs font-bold uppercase tracking-wider mb-1">Aktif Oyuncular</div>
               <div className="text-3xl font-black text-white mb-2">1,204</div>
-              <div className="flex items-center gap-2 text-xs font-bold text-emerald-400">
+              <div className="flex items-center gap-2 text-xs font-bold text-[#00E5FF]">
                 <TrendingUp className="w-4 h-4" /> +82 yeni üye
               </div>
             </div>
@@ -183,7 +165,7 @@ const AffiliateView: React.FC<AffiliateViewProps> = ({ onNavigate, onAuthRequire
               <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-[#A855F7]/10 to-transparent rounded-bl-full pointer-events-none group-hover:scale-110 transition-transform"></div>
               <div className="text-zinc-400 text-xs font-bold uppercase tracking-wider mb-1">Dönüşüm Oranı</div>
               <div className="text-3xl font-black text-white mb-2">24.8%</div>
-              <div className="flex items-center gap-2 text-xs font-bold text-emerald-400">
+              <div className="flex items-center gap-2 text-xs font-bold text-[#00E5FF]">
                 <TrendingUp className="w-4 h-4" /> +2.1% artış
               </div>
             </div>
@@ -292,7 +274,7 @@ const AffiliateView: React.FC<AffiliateViewProps> = ({ onNavigate, onAuthRequire
              {/* Advanced Animated Badge */}
              <div className="relative inline-flex overflow-hidden rounded-full p-[1px] mb-6 shadow-[0_0_20px_rgba(0,229,255,0.2)]">
                <span className="absolute inset-[-1000%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,#00E5FF_50%,transparent_100%)]" />
-               <div className="inline-flex h-full w-full items-center justify-center rounded-full bg-[#0A0D14] px-4 py-2 backdrop-blur-3xl gap-2">
+               <div className="inline-flex h-full w-full items-center justify-center rounded-full bg-[#0A0C10] px-4 py-2 backdrop-blur-3xl gap-2">
                  <Zap className="w-4 h-4 text-[#00E5FF] animate-pulse" />
                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00E5FF] to-white text-[11px] font-black tracking-[0.2em] uppercase">{t('affiliate.cta_badge')}</span>
                </div>
@@ -326,12 +308,12 @@ const AffiliateView: React.FC<AffiliateViewProps> = ({ onNavigate, onAuthRequire
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 lg:p-12">
           {/* Backdrop */}
           <div 
-            className="absolute inset-0 bg-[#0A0D14]/90 backdrop-blur-xl transition-opacity"
+            className="absolute inset-0 bg-[#0A0C10]/90 backdrop-blur-xl transition-opacity"
             onClick={() => setIsVideoOpen(false)}
           ></div>
           
           {/* Video Container */}
-          <div className="relative w-full max-w-5xl aspect-[16/9] bg-black rounded-3xl overflow-hidden shadow-[0_0_100px_rgba(0,229,255,0.2)] border border-white/10 flex flex-col z-10 animate-[scaleIn_0.3s_ease-out]">
+          <div className="relative w-full max-w-5xl aspect-[16/9] bg-[#0A0C10] rounded-3xl overflow-hidden shadow-[0_0_100px_rgba(0,229,255,0.2)] border border-white/10 flex flex-col z-10 animate-[scaleIn_0.3s_ease-out]">
             {/* Close Button */}
             <button 
               onClick={() => setIsVideoOpen(false)}

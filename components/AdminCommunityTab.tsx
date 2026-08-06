@@ -144,7 +144,7 @@ export default function AdminCommunityTab() {
                                 </div>
                                 <div className="hidden group-hover:flex items-center gap-1 shrink-0 bg-[#0b0c10] p-1 rounded-md border border-white/10 shadow-lg">
                                     <button onClick={() => handleAction('delete', m.user, m.id)} className="p-1.5 hover:bg-white/10 rounded text-zinc-400 hover:text-white transition-colors" title="Sil"><Trash2 className="w-3.5 h-3.5" /></button>
-                                    <button onClick={() => handleAction('mute', m.user, m.id)} className="p-1.5 hover:bg-white/10 rounded text-zinc-400 hover:text-amber-400 transition-colors" title="Sustur"><VolumeX className="w-3.5 h-3.5" /></button>
+                                    <button onClick={() => handleAction('mute', m.user, m.id)} className="p-1.5 hover:bg-white/10 rounded text-zinc-400 hover:text-zinc-300 transition-colors" title="Sustur"><VolumeX className="w-3.5 h-3.5" /></button>
                                     <button onClick={() => handleAction('ban', m.user, m.id)} className="p-1.5 hover:bg-rose-500/20 rounded text-zinc-400 hover:text-rose-500 transition-colors" title="Banla"><Ban className="w-3.5 h-3.5" /></button>
                                 </div>
                             </div>
@@ -157,7 +157,7 @@ export default function AdminCommunityTab() {
                     {/* Command Center */}
                     <div className="bg-[#0b0c10] border border-white/5 rounded-xl p-5 shadow-lg">
                         <h3 className="text-zinc-400 text-sm font-bold uppercase tracking-wider mb-4 flex items-center gap-2">
-                            <Zap className="w-4 h-4 text-amber-400" /> Operasyon Merkezi
+                            <Zap className="w-4 h-4 text-zinc-300" /> Operasyon Merkezi
                         </h3>
                         
                         <div className="grid grid-cols-2 gap-4">

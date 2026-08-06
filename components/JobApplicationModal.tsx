@@ -197,8 +197,8 @@ const JobApplicationModal: React.FC<JobApplicationModalProps> = ({ isOpen, onClo
             </>
           ) : (
             <div className="flex flex-col items-center justify-center py-10 text-center animate-scale-in">
-              <div className="w-20 h-20 bg-emerald-500/10 border border-emerald-500/20 rounded-full flex items-center justify-center mb-6 shadow-[0_0_30px_rgba(16,185,129,0.2)]">
-                <CheckCircle2 size={40} className="text-emerald-400" />
+              <div className="w-20 h-20 bg-[#00E5FF]/10 border border-emerald-500/20 rounded-full flex items-center justify-center mb-6 shadow-[0_0_30px_rgba(16,185,129,0.2)]">
+                <CheckCircle2 size={40} className="text-[#00E5FF]" />
               </div>
               <h3 className="text-2xl font-black text-white mb-3">Başvurunuz Alındı!</h3>
               <p className="text-zinc-400 text-sm max-w-[300px] leading-relaxed mb-8">

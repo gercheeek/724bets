@@ -811,7 +811,7 @@ BUGÜNÜN GÜNDEMİ: ${dailyTopic}
             🚨 Sohbeti Temizle (Tümü)
           </button>
           {statusMessage && (
-            <div className="bg-gray-900 border border-gray-800 px-4 py-2 rounded-lg text-sm text-yellow-400 animate-pulse font-medium">
+            <div className="bg-gray-900 border border-gray-800 px-4 py-2 rounded-lg text-sm text-zinc-300 animate-pulse font-medium">
               {statusMessage}
             </div>
           )}
@@ -822,7 +822,7 @@ BUGÜNÜN GÜNDEMİ: ${dailyTopic}
       <div className="flex gap-2 mb-6 bg-gray-900 p-1.5 rounded-lg border border-gray-800 w-max">
         <button onClick={() => setActiveSubTab('overview')} className={`px-4 py-2 rounded-lg font-bold text-sm transition-all ${activeSubTab === 'overview' ? 'bg-gray-800 text-green-400 border border-gray-700' : 'text-gray-400 hover:text-gray-200'}`}>GENEL BAKIŞ</button>
         <button onClick={() => setActiveSubTab('simulator')} className={`px-4 py-2 rounded-lg font-bold text-sm transition-all ${activeSubTab === 'simulator' ? 'bg-gray-800 text-green-400 border border-gray-700' : 'text-gray-400 hover:text-gray-200'}`}>SENARYO SİMÜLATÖRÜ</button>
-        <button onClick={() => setActiveSubTab('interactives')} className={`px-4 py-2 rounded-lg font-bold text-sm transition-all ${activeSubTab === 'interactives' ? 'bg-gray-800 text-amber-400 border border-gray-700' : 'text-gray-400 hover:text-gray-200'}`}>ETKİNLİK & ANKET & SABİT</button>
+        <button onClick={() => setActiveSubTab('interactives')} className={`px-4 py-2 rounded-lg font-bold text-sm transition-all ${activeSubTab === 'interactives' ? 'bg-gray-800 text-zinc-300 border border-gray-700' : 'text-gray-400 hover:text-gray-200'}`}>ETKİNLİK & ANKET & SABİT</button>
         <button onClick={() => setActiveSubTab('punish')} className={`px-4 py-2 rounded-lg font-bold text-sm transition-all ${activeSubTab === 'punish' ? 'bg-gray-800 text-red-400' : 'text-gray-400'}`}>CEZA YÖNETİMİ</button>
         <button onClick={() => setActiveSubTab('logs')} className={`px-4 py-2 rounded-lg font-bold text-sm transition-all ${activeSubTab === 'logs' ? 'bg-gray-800 text-blue-400' : 'text-gray-400'}`}>CANLI LOG</button>
       </div>
@@ -929,7 +929,7 @@ BUGÜNÜN GÜNDEMİ: ${dailyTopic}
               {/* ANLIK KONU DEĞİŞTİRİCİ (SABOTAJ) */}
               {isAutopilotRunning && (
                 <div className="pt-2 border-t border-gray-800 space-y-2">
-                  <label className="block text-xs font-bold text-yellow-500">🎯 Anlık Sohbet Emri (Sabotaj)</label>
+                  <label className="block text-xs font-bold text-zinc-300">🎯 Anlık Sohbet Emri (Sabotaj)</label>
                   <div className="flex gap-2">
                     <input
                       type="text"
@@ -1034,7 +1034,7 @@ BUGÜNÜN GÜNDEMİ: ${dailyTopic}
             {/* ── YENİ ETKİNLİK PENCERESİ AYARLARI ── */}
             <div className="space-y-4">
               <div className="flex items-center justify-between border-b border-gray-800 pb-2">
-                <h3 className="text-md font-bold text-amber-400 flex items-center gap-2">🎫 YENİ ETKİNLİK PENCERESİ AYARLARI</h3>
+                <h3 className="text-md font-bold text-zinc-300 flex items-center gap-2">🎫 YENİ ETKİNLİK PENCERESİ AYARLARI</h3>
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input type="checkbox" checked={eventShow} onChange={(e) => setEventShow(e.target.checked)} className="rounded border-gray-700 bg-gray-950 text-green-500 focus:ring-0" />
                   <span className="text-xs text-gray-300 font-bold uppercase">Göster</span>

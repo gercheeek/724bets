@@ -68,6 +68,12 @@ const SportsSidebarContent: React.FC<SportsSidebarContentProps> = ({ isOpen, onV
     return () => window.removeEventListener('popstate', handleLocationChange);
   }, []);
 
+  useEffect(() => {
+    if (window.location.pathname.endsWith('/bulten')) {
+      setActiveMenu('bulten');
+    }
+  }, [currentPath]);
+
   const activeSlug = currentPath.startsWith('/spor/') ? currentPath.split('/')[2] : '';
 
   return (
@@ -158,6 +164,26 @@ const SportsSidebarContent: React.FC<SportsSidebarContentProps> = ({ isOpen, onV
             {!isOpen && (
                <div className="absolute left-[calc(100%+12px)] top-auto bg-[#1a1d29] text-white px-2.5 py-1.5 rounded shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible whitespace-nowrap z-[999] transition-all font-bold text-xs">
                  Takip Ettiklerim
+               </div>
+            )}
+          </button>
+
+          <button 
+            onClick={() => { 
+              setActiveMenu('bulten'); 
+              onViewChange('bulten'); 
+              if (window.innerWidth < 1024) onToggle?.();
+            }}
+            className={`flex items-center justify-between py-2.5 mb-1 cursor-pointer transition-all duration-300 relative group px-2 mx-3 rounded-lg ${activeMenu === 'bulten' ? 'bg-gradient-to-r from-[#00E5FF]/10 to-transparent text-[#00E5FF]' : 'text-[#8b92a5] hover:bg-white/5 hover:text-white'}`}
+          >
+            {activeMenu === 'bulten' && <div className="absolute left-0 top-1/2 -translate-y-1/2 h-3/4 w-[2px] bg-gradient-to-b from-transparent via-[#00E5FF] to-transparent shadow-[0_0_15px_#00E5FF] z-10"></div>}
+            <div className="flex items-center">
+              <Timer className={`w-5 h-5 min-w-[20px] transition-all duration-300 ml-2.5 ${activeMenu === 'bulten' ? 'text-[#00E5FF] drop-shadow-[0_0_8px_rgba(0,229,255,0.6)]' : 'text-[#8b92a5] group-hover:text-white'}`} strokeWidth={activeMenu === 'bulten' ? 2.5 : 2} />
+              {isOpen && <span className="ml-4 font-semibold text-[14px] tracking-tight whitespace-nowrap">Bülten</span>}
+            </div>
+            {!isOpen && (
+               <div className="absolute left-[calc(100%+12px)] top-auto bg-[#1a1d29] text-white px-2.5 py-1.5 rounded shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible whitespace-nowrap z-[999] transition-all font-bold text-xs">
+                 Bülten
                </div>
             )}
           </button>

@@ -260,7 +260,7 @@ const PoolGame: React.FC<PoolGameProps> = ({ userId, username, isLoggedIn, onLog
                     </h1>
                     <p className="text-[var(--text-muted)] font-bold text-[11px]">15 maçı doğru tahmin et, büyük ödülü kazan!</p>
                     <div className="flex items-center justify-center gap-3 mt-2">
-                        <span className={`px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest ${pool.status === 'open' ? 'bg-green-500/20 text-green-400 border border-green-500/30' : pool.status === 'live' ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30' : 'bg-[#10b981]/20 text-blue-400 border border-[#10b981]/30'}`}>
+                        <span className={`px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest ${pool.status === 'open' ? 'bg-green-500/20 text-green-400 border border-green-500/30' : pool.status === 'live' ? 'bg-yellow-500/20 text-zinc-300 border border-yellow-500/30' : 'bg-[#10b981]/20 text-blue-400 border border-[#10b981]/30'}`}>
                             {pool.status === 'open' ? '🟢 TAHMİNLER AÇIK' : pool.status === 'live' ? '🔴 CANLI' : '✅ TAMAMLANDI'}
                         </span>
                         <span className="text-[var(--text-dim)] text-[10px] font-bold">{pool.entries.length} Katılımcı</span>
@@ -293,8 +293,8 @@ const PoolGame: React.FC<PoolGameProps> = ({ userId, username, isLoggedIn, onLog
                     <div className="flex flex-col" style={{ gap: '8px' }}>
                         {!isFreeAvailable && !submitted && (
                             <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-2 flex items-center gap-2 mb-1">
-                                <Coins className="w-4 h-4 text-yellow-400 shrink-0" />
-                                <p className="text-yellow-400 text-[10px] font-bold">Ücretsiz hakkınızı kullandınız. Bu katılım <span className="text-white">1000 Coin</span> ücretlidir.</p>
+                                <Coins className="w-4 h-4 text-zinc-300 shrink-0" />
+                                <p className="text-zinc-300 text-[10px] font-bold">Ücretsiz hakkınızı kullandınız. Bu katılım <span className="text-white">1000 Coin</span> ücretlidir.</p>
                             </div>
                         )}
 

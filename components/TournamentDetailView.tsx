@@ -76,7 +76,7 @@ export default function TournamentDetailView({ tournament, onBack }: TournamentD
       </button>
 
       {/* Immersive Hero Banner */}
-      <div className="relative w-full h-[220px] md:h-[320px] rounded-2xl md:rounded-[24px] overflow-hidden bg-black flex flex-col justify-end border border-white/5 shadow-[0_20px_50px_-10px_rgba(0,0,0,0.8)] group">
+      <div className="relative w-full h-[220px] md:h-[320px] rounded-2xl md:rounded-[24px] overflow-hidden bg-[#0A0C10] flex flex-col justify-end border border-white/5 shadow-[0_20px_50px_-10px_rgba(0,0,0,0.8)] group">
         <img 
           src={tournament.image} 
           alt="Promo" 
@@ -93,7 +93,7 @@ export default function TournamentDetailView({ tournament, onBack }: TournamentD
         <div className="absolute top-4 left-4 md:top-8 md:left-8 z-20">
           <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full backdrop-blur-xl border border-white/10 ${tournament.status === 'upcoming' ? 'bg-yellow-500/10 shadow-[0_0_20px_rgba(234,179,8,0.2)]' : 'bg-[#00E5FF]/10 shadow-[0_0_20px_rgba(0,229,255,0.2)]'}`}>
             <span className={`w-1.5 h-1.5 rounded-full ${tournament.status === 'upcoming' ? 'bg-yellow-400' : 'bg-[#00E5FF] animate-pulse'}`} />
-            <span className={`text-[9px] font-black uppercase tracking-widest ${tournament.status === 'upcoming' ? 'text-yellow-400' : 'text-[#00E5FF]'}`}>
+            <span className={`text-[9px] font-black uppercase tracking-widest ${tournament.status === 'upcoming' ? 'text-zinc-300' : 'text-[#00E5FF]'}`}>
               {tournament.status === 'upcoming' ? t('promo_view.upcoming_tournament') : t('promo_view.active_tournament')}
             </span>
           </div>
@@ -158,8 +158,8 @@ export default function TournamentDetailView({ tournament, onBack }: TournamentD
         {/* Elegance Mechanics Chips */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
           <div className="bg-[#0a0a0a]/60 backdrop-blur-md rounded-[16px] border border-white/5 p-4 flex items-center gap-4 hover:border-white/10 hover:bg-white/[0.02] transition-colors shadow-lg group">
-            <div className="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20 group-hover:shadow-[0_0_15px_rgba(16,185,129,0.2)] transition-shadow">
-               <DollarSign className="w-5 h-5 text-emerald-400" />
+            <div className="w-10 h-10 rounded-full bg-[#00E5FF]/10 flex items-center justify-center border border-emerald-500/20 group-hover:shadow-[0_0_15px_rgba(16,185,129,0.2)] transition-shadow">
+               <DollarSign className="w-5 h-5 text-[#00E5FF]" />
             </div>
             <div>
               <div className="text-[9px] font-bold text-zinc-500 uppercase tracking-widest mb-0.5">Minimum Bahis</div>
@@ -192,7 +192,7 @@ export default function TournamentDetailView({ tournament, onBack }: TournamentD
         <div className="mt-8">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-[16px] font-black text-white uppercase tracking-wider flex items-center gap-2 drop-shadow-sm">
-              <Trophy className="w-4 h-4 text-amber-500" /> {t('promo_view.ranking')}
+              <Trophy className="w-4 h-4 text-zinc-300" /> {t('promo_view.ranking')}
             </h2>
           </div>
           
@@ -204,7 +204,7 @@ export default function TournamentDetailView({ tournament, onBack }: TournamentD
                 const isThird = idx === 2;
                 
                 let rankColor = 'text-zinc-400 bg-white/5 border border-white/5';
-                if (isFirst) rankColor = 'text-amber-400 bg-amber-500/10 border border-amber-500/30 shadow-[0_0_15px_rgba(251,191,36,0.3)]';
+                if (isFirst) rankColor = 'text-zinc-300 bg-amber-500/10 border border-amber-500/30 shadow-[0_0_15px_rgba(251,191,36,0.3)]';
                 if (isSecond) rankColor = 'text-slate-300 bg-slate-300/10 border border-slate-300/30 shadow-[0_0_15px_rgba(203,213,225,0.2)]';
                 if (isThird) rankColor = 'text-orange-400 bg-orange-500/10 border border-orange-500/30 shadow-[0_0_15px_rgba(249,115,22,0.2)]';
 
@@ -220,14 +220,14 @@ export default function TournamentDetailView({ tournament, onBack }: TournamentD
                         {user.rank}
                       </div>
                       <div>
-                        <div className={`text-[13px] md:text-[15px] font-bold ${isFirst ? 'text-amber-400 drop-shadow-[0_0_5px_rgba(251,191,36,0.5)]' : 'text-zinc-100'}`}>{user.name}</div>
+                        <div className={`text-[13px] md:text-[15px] font-bold ${isFirst ? 'text-zinc-300 drop-shadow-[0_0_5px_rgba(251,191,36,0.5)]' : 'text-zinc-100'}`}>{user.name}</div>
                         <div className="text-[10px] md:text-[11px] text-zinc-500 mt-0.5 md:mt-1 font-medium truncate max-w-[200px] md:max-w-md">{user.status}</div>
                       </div>
                     </div>
                     
                     <div className="text-right flex flex-col items-end justify-center">
-                      <div className="text-[14px] md:text-[16px] font-mono font-bold text-emerald-400 drop-shadow-[0_0_5px_rgba(52,211,153,0.3)]">
-                        {user.points.toLocaleString()} <span className="text-[8px] md:text-[9px] text-emerald-500/60 uppercase tracking-widest ml-0.5">{t('promo_view.pts')}</span>
+                      <div className="text-[14px] md:text-[16px] font-mono font-bold text-[#00E5FF] drop-shadow-[0_0_5px_rgba(52,211,153,0.3)]">
+                        {user.points.toLocaleString()} <span className="text-[8px] md:text-[9px] text-[#00E5FF]/60 uppercase tracking-widest ml-0.5">{t('promo_view.pts')}</span>
                       </div>
                       {user.prize && <div className="text-[11px] md:text-[12px] font-black text-white mt-1 bg-white/10 px-2 rounded backdrop-blur-sm border border-white/10">{user.prize}</div>}
                     </div>
@@ -275,7 +275,7 @@ export default function TournamentDetailView({ tournament, onBack }: TournamentD
 
                 <div>
                   <h4 className="text-white font-black uppercase tracking-wider mb-2 flex items-center gap-2">
-                    <Info className="w-4 h-4 text-emerald-400" /> Şartlar
+                    <Info className="w-4 h-4 text-[#00E5FF]" /> Şartlar
                   </h4>
                   <ul className="space-y-2 text-zinc-400">
                     <li className="flex items-center gap-2"><div className="w-1 h-1 rounded-full bg-white/30" /> Minimum katılım bahsi <strong className="text-white">$0.20</strong> değerindedir.</li>

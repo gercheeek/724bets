@@ -514,7 +514,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                     <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 bg-[#171a21] p-3 rounded-xl border border-white/5 w-full shadow-xl">
                         
                         <div className="flex-1 flex bg-[#0f1215] rounded-lg border border-white/10 overflow-hidden min-w-[200px]">
-                            <div className="px-4 flex items-center justify-center bg-white/5"><span className="text-emerald-400 font-bold">$</span></div>
+                            <div className="px-4 flex items-center justify-center bg-white/5"><span className="text-[#00E5FF] font-bold">$</span></div>
                             <input 
                                 type="number" 
                                 value={betAmount}
@@ -536,7 +536,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                                 setBetAmount(Math.min(bal, MAX_BET));
                             }}>Max</button>
                             <button 
-                                className={`px-2 py-2 sm:px-4 sm:py-3 text-[10px] sm:text-xs font-bold rounded-lg transition-colors border flex items-center justify-center gap-1 sm:gap-2 ${isAutoBetOpen ? 'text-gray-300 bg-[#222730] border-white/10 hover:bg-white/10' : 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20 hover:text-emerald-300'}`}
+                                className={`px-2 py-2 sm:px-4 sm:py-3 text-[10px] sm:text-xs font-bold rounded-lg transition-colors border flex items-center justify-center gap-1 sm:gap-2 ${isAutoBetOpen ? 'text-gray-300 bg-[#222730] border-white/10 hover:bg-white/10' : 'text-[#00E5FF] bg-[#00E5FF]/10 border-emerald-500/20 hover:text-emerald-300'}`}
                                 onClick={() => setIsAutoBetOpen(!isAutoBetOpen)}
                             >
                                 <span>{isAutoBetOpen ? '-' : '+'}</span>
@@ -556,11 +556,11 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                             <div className="flex justify-between items-center mb-6">
                                 <h3 className="font-bold text-sm text-white">Otomatik Rulet Bahsi</h3>
                                 <div className="flex items-center gap-4">
-                                    <span className={`text-[10px] font-black px-2 py-1 rounded-md ${autoBetIsActive ? 'text-emerald-400 bg-emerald-500/10' : 'text-amber-500 bg-amber-500/10'}`}>
+                                    <span className={`text-[10px] font-black px-2 py-1 rounded-md ${autoBetIsActive ? 'text-[#00E5FF] bg-[#00E5FF]/10' : 'text-zinc-300 bg-amber-500/10'}`}>
                                         {autoBetIsActive ? 'AKTİF' : 'AKTİF DEĞİL'}
                                     </span>
                                     <div 
-                                        className={`w-8 h-4.5 rounded-full relative cursor-pointer ${autoBetIsActive ? 'bg-emerald-500' : 'bg-gray-600'}`}
+                                        className={`w-8 h-4.5 rounded-full relative cursor-pointer ${autoBetIsActive ? 'bg-[#00E5FF]' : 'bg-gray-600'}`}
                                         onClick={() => { setAutoBetIsActive(!autoBetIsActive); setAutoBetCurrentAmount(autoBetBaseAmount); }}
                                     >
                                         <div className={`absolute top-0.5 w-3.5 h-3.5 bg-white rounded-full shadow transition-all ${autoBetIsActive ? 'right-0.5' : 'left-0.5'}`}></div>
@@ -585,21 +585,21 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                                 <div className="flex items-center gap-2 bg-[#0f1215] px-3 py-2 rounded-lg border border-white/5 cursor-pointer hover:border-white/20" onClick={() => setAutoBetRed(!autoBetRed)}>
                                     <div className="w-3 h-3 rounded-sm bg-red-500"></div>
                                     <span className="text-xs font-medium text-gray-300">Kırmızı</span>
-                                    <div className={`ml-2 w-7 h-4 rounded-full relative ${autoBetRed ? 'bg-emerald-500' : 'bg-gray-600'}`}>
+                                    <div className={`ml-2 w-7 h-4 rounded-full relative ${autoBetRed ? 'bg-[#00E5FF]' : 'bg-gray-600'}`}>
                                         <div className={`absolute top-0.5 w-3 h-3 bg-white rounded-full transition-all ${autoBetRed ? 'right-0.5' : 'left-0.5'}`}></div>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-2 bg-[#0f1215] px-3 py-2 rounded-lg border border-white/5 cursor-pointer hover:border-white/20" onClick={() => setAutoBetGreen(!autoBetGreen)}>
                                     <div className="w-3 h-3 rounded-sm bg-green-500"></div>
                                     <span className="text-xs font-medium text-gray-300">Yeşil</span>
-                                    <div className={`ml-2 w-7 h-4 rounded-full relative ${autoBetGreen ? 'bg-emerald-500' : 'bg-gray-600'}`}>
+                                    <div className={`ml-2 w-7 h-4 rounded-full relative ${autoBetGreen ? 'bg-[#00E5FF]' : 'bg-gray-600'}`}>
                                         <div className={`absolute top-0.5 w-3 h-3 bg-white rounded-full transition-all ${autoBetGreen ? 'right-0.5' : 'left-0.5'}`}></div>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-2 bg-[#0f1215] px-3 py-2 rounded-lg border border-white/5 cursor-pointer hover:border-white/20" onClick={() => setAutoBetBlack(!autoBetBlack)}>
                                     <div className="w-3 h-3 rounded-sm bg-gray-500"></div>
                                     <span className="text-xs font-medium text-gray-300">Siyah</span>
-                                    <div className={`ml-2 w-7 h-4 rounded-full relative ${autoBetBlack ? 'bg-emerald-500' : 'bg-gray-600'}`}>
+                                    <div className={`ml-2 w-7 h-4 rounded-full relative ${autoBetBlack ? 'bg-[#00E5FF]' : 'bg-gray-600'}`}>
                                         <div className={`absolute top-0.5 w-3 h-3 bg-white rounded-full transition-all ${autoBetBlack ? 'right-0.5' : 'left-0.5'}`}></div>
                                     </div>
                                 </div>
@@ -663,7 +663,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                             
                             <div className="flex justify-between items-center bg-[#0f1215] px-4 py-3 rounded-lg border border-white/5 mb-4">
                                 <span className="text-xs font-bold text-gray-300">Sadece Renk Bahsi</span>
-                                <div className={`w-8 h-4.5 rounded-full relative cursor-pointer ${advOnlyColorBet ? 'bg-emerald-500' : 'bg-gray-600'}`} onClick={() => setAdvOnlyColorBet(!advOnlyColorBet)}>
+                                <div className={`w-8 h-4.5 rounded-full relative cursor-pointer ${advOnlyColorBet ? 'bg-[#00E5FF]' : 'bg-gray-600'}`} onClick={() => setAdvOnlyColorBet(!advOnlyColorBet)}>
                                     <div className={`absolute top-0.5 w-3.5 h-3.5 bg-white rounded-full shadow transition-all ${advOnlyColorBet ? 'right-0.5' : 'left-0.5'}`}></div>
                                 </div>
                             </div>
@@ -696,7 +696,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                             </div>
 
                             <button 
-                                className={`mt-auto font-black text-xs py-3 px-6 rounded-lg self-start transition-colors shadow-lg ${advIsActive ? 'bg-rose-500 hover:bg-rose-400 text-white shadow-rose-500/20' : 'bg-emerald-500 hover:bg-emerald-400 text-black shadow-emerald-500/20'}`}
+                                className={`mt-auto font-black text-xs py-3 px-6 rounded-lg self-start transition-colors shadow-lg ${advIsActive ? 'bg-rose-500 hover:bg-rose-400 text-white shadow-rose-500/20' : 'bg-[#00E5FF] hover:bg-[#00E5FF] text-black shadow-emerald-500/20'}`}
                                 onClick={() => setAdvIsActive(!advIsActive)}
                             >
                                 {advIsActive ? 'Dur' : 'Otomatik Bahsi Başlat'}
@@ -707,7 +707,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                         <div className="flex-1 bg-[#171a21] rounded-xl border border-white/5 p-5 shadow-lg flex flex-col">
                             <div className="flex justify-between items-center mb-6">
                                 <h3 className="font-bold text-sm text-white">Green Hunt</h3>
-                                <span className={`text-[10px] font-black px-2 py-1 rounded-md ${greenHuntIsActive ? 'text-emerald-400 bg-emerald-500/10' : 'text-amber-500 bg-amber-500/10'}`}>
+                                <span className={`text-[10px] font-black px-2 py-1 rounded-md ${greenHuntIsActive ? 'text-[#00E5FF] bg-[#00E5FF]/10' : 'text-zinc-300 bg-amber-500/10'}`}>
                                     {greenHuntIsActive ? 'AKTİF' : 'AKTİF DEĞİL'}
                                 </span>
                             </div>
@@ -732,7 +732,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                             </p>
 
                             <button 
-                                className={`mt-auto font-black text-xs py-3 px-6 rounded-lg self-start transition-colors shadow-lg ${greenHuntIsActive ? 'bg-rose-500 hover:bg-rose-400 text-white shadow-rose-500/20' : 'bg-emerald-500 hover:bg-emerald-400 text-black shadow-emerald-500/20'}`}
+                                className={`mt-auto font-black text-xs py-3 px-6 rounded-lg self-start transition-colors shadow-lg ${greenHuntIsActive ? 'bg-rose-500 hover:bg-rose-400 text-white shadow-rose-500/20' : 'bg-[#00E5FF] hover:bg-[#00E5FF] text-black shadow-emerald-500/20'}`}
                                 onClick={() => setGreenHuntIsActive(!greenHuntIsActive)}
                             >
                                 {greenHuntIsActive ? 'Dur' : "Green Hunt'ı Başlat"}
@@ -760,7 +760,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                             <div className="flex justify-between items-center mb-2 text-[10px] font-bold text-gray-500 uppercase pb-2 border-b border-white/5">
                                 <span>{getColumnCount('red')} Bahis</span>
                                 <div className="flex items-center gap-1 text-white bg-[#0f1215] px-2 py-1 rounded-md">
-                                    <span className="text-emerald-400 font-bold mr-1">$</span>
+                                    <span className="text-[#00E5FF] font-bold mr-1">$</span>
                                     <span>{getColumnTotal('red').toFixed(2)}</span>
                                 </div>
                             </div>
@@ -773,7 +773,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                                             <div className="w-6 h-6 bg-[#0f1215] rounded flex items-center justify-center border border-red-500/30 text-white font-bold text-[10px]">Sen</div>
                                             <span className="text-sm text-gray-300 font-medium truncate max-w-[100px]">Sen</span>
                                         </div>
-                                        <span className="text-sm font-bold text-emerald-400">${getBetAmount('red').toFixed(2)}</span>
+                                        <span className="text-sm font-bold text-[#00E5FF]">${getBetAmount('red').toFixed(2)}</span>
                                     </div>
                                 )}
                                 
@@ -786,7 +786,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                                             </div>
                                             <span className="text-sm text-gray-400 font-medium truncate max-w-[100px]">{b.name}</span>
                                         </div>
-                                        <span className="text-sm font-bold text-emerald-400">${b.amount.toFixed(2)}</span>
+                                        <span className="text-sm font-bold text-[#00E5FF]">${b.amount.toFixed(2)}</span>
                                     </div>
                                 ))}
 
@@ -812,7 +812,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                             <div className="flex justify-between items-center mb-2 text-[10px] font-bold text-gray-500 uppercase pb-2 border-b border-white/5">
                                 <span>{getColumnCount('green')} Bahis</span>
                                 <div className="flex items-center gap-1 text-white bg-[#0f1215] px-2 py-1 rounded-md">
-                                    <span className="text-emerald-400 font-bold mr-1">$</span>
+                                    <span className="text-[#00E5FF] font-bold mr-1">$</span>
                                     <span>{getColumnTotal('green').toFixed(2)}</span>
                                 </div>
                             </div>
@@ -825,7 +825,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                                             <div className="w-6 h-6 bg-[#0f1215] rounded flex items-center justify-center border border-green-500/30 text-white font-bold text-[10px]">Sen</div>
                                             <span className="text-sm text-gray-300 font-medium truncate max-w-[100px]">Sen</span>
                                         </div>
-                                        <span className="text-sm font-bold text-emerald-400">${getBetAmount('green').toFixed(2)}</span>
+                                        <span className="text-sm font-bold text-[#00E5FF]">${getBetAmount('green').toFixed(2)}</span>
                                     </div>
                                 )}
                                 
@@ -838,7 +838,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                                             </div>
                                             <span className="text-sm text-gray-400 font-medium truncate max-w-[100px]">{b.name}</span>
                                         </div>
-                                        <span className="text-sm font-bold text-emerald-400">${b.amount.toFixed(2)}</span>
+                                        <span className="text-sm font-bold text-[#00E5FF]">${b.amount.toFixed(2)}</span>
                                     </div>
                                 ))}
 
@@ -864,7 +864,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                             <div className="flex justify-between items-center mb-2 text-[10px] font-bold text-gray-500 uppercase pb-2 border-b border-white/5">
                                 <span>{getColumnCount('black')} Bahis</span>
                                 <div className="flex items-center gap-1 text-white bg-[#0f1215] px-2 py-1 rounded-md">
-                                    <span className="text-emerald-400 font-bold mr-1">$</span>
+                                    <span className="text-[#00E5FF] font-bold mr-1">$</span>
                                     <span>{getColumnTotal('black').toFixed(2)}</span>
                                 </div>
                             </div>
@@ -877,7 +877,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                                             <div className="w-6 h-6 bg-[#0f1215] rounded flex items-center justify-center border border-gray-500/30 text-white font-bold text-[10px]">Sen</div>
                                             <span className="text-sm text-gray-300 font-medium truncate max-w-[100px]">Sen</span>
                                         </div>
-                                        <span className="text-sm font-bold text-emerald-400">${getBetAmount('black').toFixed(2)}</span>
+                                        <span className="text-sm font-bold text-[#00E5FF]">${getBetAmount('black').toFixed(2)}</span>
                                     </div>
                                 )}
                                 
@@ -890,7 +890,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                                             </div>
                                             <span className="text-sm text-gray-400 font-medium truncate max-w-[100px]">{b.name}</span>
                                         </div>
-                                        <span className="text-sm font-bold text-emerald-400">${b.amount.toFixed(2)}</span>
+                                        <span className="text-sm font-bold text-[#00E5FF]">${b.amount.toFixed(2)}</span>
                                     </div>
                                 ))}
 
@@ -911,8 +911,8 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                                 {/* Golden/Emerald Shine Sweep */}
                                 <div className="absolute inset-0 animate-shine opacity-30"></div>
                                 
-                                <div className="absolute -top-20 -left-20 w-64 h-64 bg-emerald-500/20 rounded-full blur-[80px]"></div>
-                                <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-emerald-500/20 rounded-full blur-[80px]"></div>
+                                <div className="absolute -top-20 -left-20 w-64 h-64 bg-[#00E5FF]/20 rounded-full blur-[80px]"></div>
+                                <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-[#00E5FF]/20 rounded-full blur-[80px]"></div>
                                 
                                 <div className="flex items-center justify-center gap-4 mb-2 z-10 animate-bounce-scale">
                                     <span className="text-5xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white via-gray-200 to-gray-600 drop-shadow-[0_15px_25px_rgba(0,0,0,0.9)] tracking-tighter">
@@ -920,7 +920,7 @@ export default function RouletteView({ siteUser, onAuthRequired }: any) {
                                     </span>
                                 </div>
                                 
-                                <div className="z-10 bg-emerald-500/20 text-emerald-400 text-sm md:text-base font-black px-6 py-2 rounded-full border border-emerald-500/40 uppercase tracking-[0.4em] shadow-[0_0_30px_rgba(16,185,129,0.4)] mt-6">
+                                <div className="z-10 bg-[#00E5FF]/20 text-[#00E5FF] text-sm md:text-base font-black px-6 py-2 rounded-full border border-emerald-500/40 uppercase tracking-[0.4em] shadow-[0_0_30px_rgba(16,185,129,0.4)] mt-6">
                                     Kazandın
                                 </div>
                             </div>

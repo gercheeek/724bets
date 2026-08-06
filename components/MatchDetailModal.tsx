@@ -81,7 +81,7 @@ export const MatchDetailModal: React.FC<{ match: any; onClose: () => void }> = (
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-      <div className="w-full max-w-3xl bg-[#111111] rounded-2xl shadow-2xl overflow-hidden flex flex-col h-[85vh]">
+      <div className="w-full max-w-3xl bg-[#0A0C10] rounded-2xl shadow-2xl overflow-hidden flex flex-col h-[85vh]">
         
         {/* Header */}
         <div className="flex items-center justify-between p-4 bg-[#20252D] border-b border-white/5">
@@ -111,7 +111,7 @@ export const MatchDetailModal: React.FC<{ match: any; onClose: () => void }> = (
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto bg-[#111111] p-4">
+        <div className="flex-1 overflow-y-auto bg-[#0A0C10] p-4">
           
           {/* Tabs */}
           <div className="flex items-center gap-2 overflow-x-auto pb-4 mb-4 border-b border-white/5 scrollbar-hide">
@@ -152,7 +152,7 @@ export const MatchDetailModal: React.FC<{ match: any; onClose: () => void }> = (
                         className={`flex items-center justify-between p-3 rounded-lg transition-colors border ${
                           selected 
                             ? 'bg-[#06b6d4]/10 border-[#06b6d4] text-white' 
-                            : 'bg-[#111111] border-white/5 text-zinc-400 hover:bg-[#2A313C] hover:text-white'
+                            : 'bg-[#0A0C10] border-white/5 text-zinc-400 hover:bg-[#2A313C] hover:text-white'
                         }`}
                       >
                         <span className="text-xs font-semibold">{fName}</span>

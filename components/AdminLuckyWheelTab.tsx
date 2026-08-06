@@ -107,7 +107,7 @@ const AdminLuckyWheelTab: React.FC<AdminLuckyWheelTabProps> = ({ config, onSave 
                       ...localConfig, 
                       grandPrize: { ...localConfig.grandPrize, name: e.target.value }
                     })}
-                    className="w-full bg-black border border-gray-800 rounded p-2.5 text-sm"
+                    className="w-full bg-[#0A0C10] border border-gray-800 rounded p-2.5 text-sm"
                   />
                 </div>
                 <div>
@@ -119,7 +119,7 @@ const AdminLuckyWheelTab: React.FC<AdminLuckyWheelTabProps> = ({ config, onSave 
                       ...localConfig, 
                       grandPrize: { ...localConfig.grandPrize, subtitle: e.target.value }
                     })}
-                    className="w-full bg-black border border-gray-800 rounded p-2.5 text-sm"
+                    className="w-full bg-[#0A0C10] border border-gray-800 rounded p-2.5 text-sm"
                   />
                 </div>
                 <div className="col-span-2">
@@ -131,7 +131,7 @@ const AdminLuckyWheelTab: React.FC<AdminLuckyWheelTabProps> = ({ config, onSave 
                       ...localConfig, 
                       grandPrize: { ...localConfig.grandPrize, image: e.target.value }
                     })}
-                    className="w-full bg-black border border-gray-800 rounded p-2.5 text-sm"
+                    className="w-full bg-[#0A0C10] border border-gray-800 rounded p-2.5 text-sm"
                   />
                 </div>
               </div>
@@ -150,7 +150,7 @@ const AdminLuckyWheelTab: React.FC<AdminLuckyWheelTabProps> = ({ config, onSave 
                       type="text" 
                       value={prize.name} 
                       onChange={(e) => handlePrizeChange(idx, 'name', e.target.value)}
-                      className="w-full bg-black border border-gray-800 rounded p-2 text-sm"
+                      className="w-full bg-[#0A0C10] border border-gray-800 rounded p-2 text-sm"
                     />
                   </div>
                   <div>
@@ -158,7 +158,7 @@ const AdminLuckyWheelTab: React.FC<AdminLuckyWheelTabProps> = ({ config, onSave 
                     <select 
                       value={prize.type}
                       onChange={(e) => handlePrizeChange(idx, 'type', e.target.value)}
-                      className="w-full bg-black border border-gray-800 rounded p-2 text-sm"
+                      className="w-full bg-[#0A0C10] border border-gray-800 rounded p-2 text-sm"
                     >
                       <option value="cash">Nakit</option>
                       <option value="freespin">FreeSpin</option>
@@ -174,14 +174,14 @@ const AdminLuckyWheelTab: React.FC<AdminLuckyWheelTabProps> = ({ config, onSave 
                         type="text" 
                         value={prize.value}
                         onChange={(e) => handlePrizeChange(idx, 'value', Number(e.target.value))}
-                        className="w-full bg-black border border-gray-800 rounded p-2 text-sm"
+                        className="w-full bg-[#0A0C10] border border-gray-800 rounded p-2 text-sm"
                         placeholder="Değer"
                       />
                       <input 
                         type="text" 
                         value={prize.icon}
                         onChange={(e) => handlePrizeChange(idx, 'icon', e.target.value)}
-                        className="w-12 bg-black border border-gray-800 rounded p-2 text-sm text-center"
+                        className="w-12 bg-[#0A0C10] border border-gray-800 rounded p-2 text-sm text-center"
                         placeholder="İkon"
                       />
                     </div>
@@ -192,7 +192,7 @@ const AdminLuckyWheelTab: React.FC<AdminLuckyWheelTabProps> = ({ config, onSave 
                       type="number" 
                       value={prize.weight}
                       onChange={(e) => handlePrizeChange(idx, 'weight', Number(e.target.value))}
-                      className="w-full bg-black border border-gray-800 rounded p-2 text-sm"
+                      className="w-full bg-[#0A0C10] border border-gray-800 rounded p-2 text-sm"
                     />
                   </div>
                   <div>
@@ -201,7 +201,7 @@ const AdminLuckyWheelTab: React.FC<AdminLuckyWheelTabProps> = ({ config, onSave 
                       type="color" 
                       value={prize.color}
                       onChange={(e) => handlePrizeChange(idx, 'color', e.target.value)}
-                      className="w-full h-9 bg-black border border-gray-800 rounded cursor-pointer p-1"
+                      className="w-full h-9 bg-[#0A0C10] border border-gray-800 rounded cursor-pointer p-1"
                     />
                   </div>
                 </div>

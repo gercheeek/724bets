@@ -159,7 +159,8 @@ export const DualRightPanel: React.FC<{
   isOpenMobile?: boolean;
   onCloseMobile?: () => void;
   currentView?: string;
-}> = ({ language, isOpenMobile, onCloseMobile, currentView }) => {
+  userRole?: 'admin' | 'moderator' | 'user' | null;
+}> = ({ language, isOpenMobile, onCloseMobile, currentView, userRole }) => {
   const { t } = useTranslation();
   const { betSlip, betAmount, setBetAmount, removeSelection, clearBetSlip, totalOdds, potentialPayout, accumulatorBoost, betType, setBetType, isLocked } = useBetSlip();
   const { siteUser, placeBet } = useUser();
@@ -519,8 +520,8 @@ export const DualRightPanel: React.FC<{
               if (onCloseMobile) onCloseMobile();
             }}
             siteUser={siteUser}
-            userRole={null}
-            isMobile={true}
+            userRole={userRole}
+            isMobile={isOpenMobile || false}
             botsConfig={[]}
           />
         )}

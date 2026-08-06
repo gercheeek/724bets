@@ -8,22 +8,22 @@ type Bet = {
   betAmount: number;
   multiplier: number;
   profit: number;
-  currency: 'USDT' | 'BTC' | 'ETH' | 'TRY';
+  currency: 'USDT' | 'BTC' | 'ETH' | 'USD';
 };
 
 const RECENT_BETS_DATA: Bet[] = [
-  { id: '1', game: 'Piggy Bank', user: 'EliteOcean418146', betAmount: 4.98, multiplier: 1.10, profit: 0.49, currency: 'TRY' },
+  { id: '1', game: 'Piggy Bank', user: 'EliteOcean418146', betAmount: 4.98, multiplier: 1.10, profit: 0.49, currency: 'USD' },
   { id: '2', game: 'QUEEN OF INCA', user: 'Gizlenmiş', betAmount: 2.85, multiplier: 0.90, profit: -0.28, currency: 'USDT' },
   { id: '3', game: 'Limbo', user: 'Pukhtoon123', betAmount: 4.74, multiplier: 1.01, profit: 0.04, currency: 'USDT' },
   { id: '4', game: 'Plinko', user: 'kazkaz0000', betAmount: 9.49, multiplier: 0.29, profit: -6.74, currency: 'USDT' },
   { id: '5', game: 'Wheel', user: 'Gizlenmiş', betAmount: 3.96, multiplier: 0.00, profit: -3.96, currency: 'USDT' },
-  { id: '6', game: 'Money Coming Expand Bets', user: 'Npltahwzbxcc', betAmount: 4.98, multiplier: 0.00, profit: -4.98, currency: 'TRY' },
+  { id: '6', game: 'Money Coming Expand Bets', user: 'Npltahwzbxcc', betAmount: 4.98, multiplier: 0.00, profit: -4.98, currency: 'USD' },
   { id: '7', game: 'Hilo', user: 'CRYPBO', betAmount: 75.98, multiplier: 0.00, profit: -75.98, currency: 'USDT' },
-  { id: '8', game: 'Gorilla', user: 'DHsrb', betAmount: 11884.09, multiplier: 0.00, profit: -11884.09, currency: 'USDT' },
+  { id: '8', game: 'Gorilla', user: 'DHsrb', betAmount: 118.09, multiplier: 0.00, profit: -118.09, currency: 'USDT' },
   { id: '9', game: 'LEGEND OF INCA', user: 'Danica671', betAmount: 3.60, multiplier: 0.70, profit: -1.08, currency: 'USDT' },
   { id: '10', game: 'Fast Crash', user: 'TNT_bocaj', betAmount: 9.48, multiplier: 0.00, profit: -9.48, currency: 'USDT' },
   { id: '11', game: 'Starlight Princess', user: 'AhmetCan', betAmount: 2.50, multiplier: 15.00, profit: 35.00, currency: 'USDT' },
-  { id: '12', game: 'Sweet Bonanza', user: 'Vip_Kral', betAmount: 200.00, multiplier: 0.00, profit: -200.00, currency: 'TRY' },
+  { id: '12', game: 'Sweet Bonanza', user: 'Vip_Kral', betAmount: 20.00, multiplier: 0.00, profit: -20.00, currency: 'USD' },
   { id: '13', game: 'Gates of Olympus', user: 'Zeus007', betAmount: 50.00, multiplier: 5.50, profit: 225.00, currency: 'USDT' },
   { id: '14', game: 'Dice', user: 'Roll_Master', betAmount: 0.05, multiplier: 2.00, profit: 0.05, currency: 'BTC' },
   { id: '15', game: 'Keno', user: 'Gizlenmiş', betAmount: 15.00, multiplier: 0.00, profit: -15.00, currency: 'USDT' },
@@ -31,7 +31,7 @@ const RECENT_BETS_DATA: Bet[] = [
   { id: '17', game: 'Mines', user: 'BoomBoom', betAmount: 12.00, multiplier: 1.50, profit: 6.00, currency: 'USDT' },
   { id: '18', game: 'Limbo', user: 'RocketMan', betAmount: 100.00, multiplier: 1.01, profit: 1.00, currency: 'USDT' },
   { id: '19', game: 'Roulette', user: 'SpinWin', betAmount: 0.10, multiplier: 36.00, profit: 3.50, currency: 'ETH' },
-  { id: '20', game: 'Blackjack', user: 'DealerBust', betAmount: 1000.00, multiplier: 2.00, profit: 1000.00, currency: 'TRY' },
+  { id: '20', game: 'Blackjack', user: 'DealerBust', betAmount: 100.00, multiplier: 2.00, profit: 100.00, currency: 'USD' },
   { id: '21', game: 'Baccarat', user: 'PlayerOne', betAmount: 25.00, multiplier: 0.00, profit: -25.00, currency: 'USDT' },
   { id: '22', game: 'Crash', user: 'ToTheMoon', betAmount: 10.00, multiplier: 10.50, profit: 95.00, currency: 'USDT' },
   { id: '23', game: 'Wheel', user: 'Gizlenmiş', betAmount: 2.00, multiplier: 5.00, profit: 8.00, currency: 'USDT' },
@@ -40,9 +40,9 @@ const RECENT_BETS_DATA: Bet[] = [
 ];
 
 const HIGH_ROLLERS: Bet[] = [
-  { id: '11', game: 'Blackjack PRO', user: 'HighRoller1', betAmount: 5000.00, multiplier: 2.50, profit: 7500.00, currency: 'USDT' },
+  { id: '11', game: 'Blackjack PRO', user: 'HighRoller1', betAmount: 500.00, multiplier: 2.50, profit: 750.00, currency: 'USDT' },
   { id: '12', game: 'Plinko PRO', user: 'Whale***', betAmount: 1.50, multiplier: 100.00, profit: 150.00, currency: 'BTC' },
-  { id: '13', game: 'Dice', user: 'Lucky_7', betAmount: 25000.00, multiplier: 2.00, profit: 25000.00, currency: 'TRY' },
+  { id: '13', game: 'Dice', user: 'Lucky_7', betAmount: 250.00, multiplier: 2.00, profit: 250.00, currency: 'USD' },
 ];
 
 const BET_RACE: Bet[] = [
@@ -60,15 +60,15 @@ const CurrencyIcon = ({ type }: { type: Bet['currency'] }) => {
   if (type === 'ETH') {
     return <span className="inline-flex items-center justify-center w-[16px] h-[16px] rounded-full bg-[#627EEA] text-white text-[9px] font-bold">Ξ</span>;
   }
-  if (type === 'TRY') {
-    return <span className="inline-flex items-center justify-center w-[16px] h-[16px] rounded-full bg-[#E53935] text-white text-[9px] font-bold">₺</span>;
+  if (type === 'USD') {
+    return <span className="inline-flex items-center justify-center w-[16px] h-[16px] rounded-full bg-[#00E5FF] text-[#0A0D14] text-[9px] font-bold">$</span>;
   }
   return null;
 };
 
 const formatCurrency = (amount: number, currency: string) => {
-  if (currency === 'TRY') return `₺${amount.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-  return amount.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  if (currency === 'USD') return `$${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  return amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 };
 
 const getGameIcon = (game: string) => {
@@ -112,24 +112,24 @@ export default function LiveBetsTable() {
       
       {/* Title & Tabs */}
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-4 px-2">
-        <h2 className="text-lg md:text-xl font-bold text-white tracking-wide">En son tur ve Yarış</h2>
+        <h2 className="text-lg md:text-xl font-bold text-white tracking-wide">Platform Hareketleri</h2>
         
         <div className="flex bg-[#121722]/80 border border-white/5 rounded-md overflow-hidden">
           <button 
             onClick={() => setActiveTab('recent')}
-            className={`px-4 py-2 text-xs md:text-sm font-medium transition-all ${activeTab === 'recent' ? 'bg-[#1b2230] text-white shadow-md' : 'text-gray-400 hover:text-gray-200'}`}
+            className={`px-4 py-2 text-xs md:text-sm font-medium transition-all ${activeTab === 'recent' ? 'bg-[#0A0C10] text-white shadow-md' : 'text-gray-400 hover:text-gray-200'}`}
           >
             Son Bahis
           </button>
           <button 
             onClick={() => setActiveTab('high')}
-            className={`px-4 py-2 text-xs md:text-sm font-medium transition-all ${activeTab === 'high' ? 'bg-[#1b2230] text-white shadow-md' : 'text-gray-400 hover:text-gray-200'}`}
+            className={`px-4 py-2 text-xs md:text-sm font-medium transition-all ${activeTab === 'high' ? 'bg-[#0A0C10] text-white shadow-md' : 'text-gray-400 hover:text-gray-200'}`}
           >
-            Yüksek Silindir
+            Yüksek Bahisler
           </button>
           <button 
             onClick={() => setActiveTab('race')}
-            className={`px-4 py-2 text-xs md:text-sm font-medium transition-all ${activeTab === 'race' ? 'bg-[#1b2230] text-white shadow-md' : 'text-gray-400 hover:text-gray-200'}`}
+            className={`px-4 py-2 text-xs md:text-sm font-medium transition-all ${activeTab === 'race' ? 'bg-[#0A0C10] text-white shadow-md' : 'text-gray-400 hover:text-gray-200'}`}
           >
             Bahis Yarışması
           </button>
@@ -144,7 +144,7 @@ export default function LiveBetsTable() {
           {displayData.map((bet) => {
             const isWin = bet.profit > 0;
             return (
-              <div key={bet.id} className="p-3 bg-[#121722]/80 hover:bg-[#1b2230] transition-colors rounded-lg border border-white/5 flex flex-col gap-2 shadow-sm">
+              <div key={bet.id} className="p-3 bg-[#121722]/80 hover:bg-[#0A0C10] transition-colors rounded-lg border border-white/5 flex flex-col gap-2 shadow-sm">
                 <div className="flex justify-between items-center">
                   <div className="flex items-center gap-2 text-gray-200 font-medium text-sm">
                     {getGameIcon(bet.game)}
@@ -199,7 +199,7 @@ export default function LiveBetsTable() {
                 return (
                   <div 
                     key={bet.id} 
-                    className="grid grid-cols-5 px-4 py-3 bg-[#121722]/80 hover:bg-[#1b2230] hover:border-[#00E5FF]/20 border border-white/5 transition-all rounded-lg items-center text-sm shadow-sm hover:shadow-md"
+                    className="grid grid-cols-5 px-4 py-3 bg-[#121722]/80 hover:bg-[#0A0C10] hover:border-[#00E5FF]/20 border border-white/5 transition-all rounded-lg items-center text-sm shadow-sm hover:shadow-md"
                   >
                     {/* Oyun */}
                     <div className="col-span-1 flex items-center gap-2.5 text-gray-200 font-medium truncate pr-2">

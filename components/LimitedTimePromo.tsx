@@ -87,14 +87,14 @@ const LimitedTimePromo = () => {
               value={promoCode}
               onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
               placeholder="PROMO KODU"
-              className="bg-[#111111] border border-[#2A2E3D] text-white placeholder-[#848B9D] text-[13px] font-bold tracking-widest uppercase rounded-lg px-5 py-3.5 w-[200px] focus:outline-none focus:border-[#06b6d4] focus:shadow-[0_0_15px_rgba(0,255,163,0.15)] transition-all"
+              className="bg-[#0A0C10] border border-[#2A2E3D] text-white placeholder-[#848B9D] text-[13px] font-bold tracking-widest uppercase rounded-lg px-5 py-3.5 w-[200px] focus:outline-none focus:border-[#06b6d4] focus:shadow-[0_0_15px_rgba(0,255,163,0.15)] transition-all"
             />
           </div>
 
           {/* Primary CTA Button */}
           <button 
             onClick={handleClaim}
-            className="relative overflow-hidden group/btn bg-[#06b6d4] hover:bg-[#00E676] text-[#0F121A] font-black px-8 py-3.5 rounded-lg shadow-[0_0_20px_rgba(0,255,163,0.2)] hover:shadow-[0_0_30px_rgba(0,255,163,0.4)] transition-all duration-300 hover:-translate-y-0.5 flex items-center gap-2 uppercase tracking-widest text-[13px]"
+            className="relative overflow-hidden group/btn bg-[#06b6d4] hover:bg-[#00E5FF] text-[#0F121A] font-black px-8 py-3.5 rounded-lg shadow-[0_0_20px_rgba(0,255,163,0.2)] hover:shadow-[0_0_30px_rgba(0,255,163,0.4)] transition-all duration-300 hover:-translate-y-0.5 flex items-center gap-2 uppercase tracking-widest text-[13px]"
           >
             <span className="relative z-10">KULLAN</span>
             <ArrowRight className="relative z-10 w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
@@ -108,7 +108,7 @@ const LimitedTimePromo = () => {
             localStorage.setItem('promoClosed', 'true');
             setIsVisible(false);
           }}
-          className="absolute top-3 right-3 text-[#848B9D] hover:text-white transition-colors bg-[#111111] rounded-full p-1 border border-[#2A2E3D]"
+          className="absolute top-3 right-3 text-[#848B9D] hover:text-white transition-colors bg-[#0A0C10] rounded-full p-1 border border-[#2A2E3D]"
         >
           <X className="w-4 h-4" />
         </button>
@@ -118,7 +118,7 @@ const LimitedTimePromo = () => {
     {/* Terms Modal */}
     {showTerms && typeof document !== 'undefined' && createPortal(
       <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-        <div className="bg-[#111111] border border-[#2A2E3D] rounded-2xl p-6 w-full max-w-md relative shadow-2xl animate-in fade-in zoom-in duration-300">
+        <div className="bg-[#0A0C10] border border-[#2A2E3D] rounded-2xl p-6 w-full max-w-md relative shadow-2xl animate-in fade-in zoom-in duration-300">
           <button 
             onClick={() => setShowTerms(false)}
             className="absolute top-4 right-4 text-[#848B9D] hover:text-white transition-colors"
@@ -162,7 +162,7 @@ const LimitedTimePromo = () => {
             </button>
             <button 
               onClick={handleAcceptTerms}
-              className="flex-1 bg-[#06b6d4] hover:bg-[#00E676] text-[#0F121A] font-black py-3 rounded-xl shadow-[0_0_20px_rgba(0,255,163,0.3)] transition-colors"
+              className="flex-1 bg-[#06b6d4] hover:bg-[#00E5FF] text-[#0F121A] font-black py-3 rounded-xl shadow-[0_0_20px_rgba(0,255,163,0.3)] transition-colors"
             >
               Kabul Et
             </button>

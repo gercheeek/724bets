@@ -8,9 +8,18 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { getOriginalsData } from './OriginalsSlider';
 import { PopularLiveWidget } from './PopularLiveWidget';
 import { GamePlayView } from './GamePlayView';
+import rawCasinoData from '../data/slotra_casino.json';
 
+const LIVE_CASINO_GAMES = rawCasinoData.map((game: any, index: number) => ({
+  id: `live-slotra-${index}`,
+  name: game.name.replace('Game thumb - ', ''),
+  img: game.image,
+  category: 'live',
+  provider: 'Live Casino'
+}));
 const TABS = [
   { id: 'all', label: 'Tümü', icon: <Grid2X2 size={16} /> },
+  { id: 'live', label: 'Canlı Casino', icon: <MonitorPlay size={16} /> },
   { id: 'popular', label: 'Popüler', icon: <Star size={16} /> },
   { id: 'slots', label: 'Slotlar', icon: <Flame size={16} /> },
   { id: 'egt', label: 'EGT', icon: <Flame size={16} /> },
@@ -136,24 +145,26 @@ const getGameColor = (name: string) => {
 import { BaseGameCard, GameCard, NewGameCard } from './GameCards';
 
 const SectionHeader: React.FC<{ title: string, icon?: React.ReactNode, onViewAll?: () => void, onScrollLeft?: () => void, onScrollRight?: () => void }> = ({ title, icon, onViewAll, onScrollLeft, onScrollRight }) => (
-  <div className="flex items-center justify-between mb-4 mt-8">
+  <div className="flex items-center justify-between mb-4 mt-8 px-1 md:px-0">
     <div className="flex items-center gap-2">
-      {icon && <div className="text-[#00E5FF] drop-shadow-[0_0_8px_rgba(0,229,255,0.5)]">{icon}</div>}
-      <h2 className="text-white text-lg font-black tracking-tight drop-shadow-md">{title}</h2>
+      <div className="flex items-center justify-center h-[10px] w-[10px] rounded-full bg-[#00E5FF]/20 border border-[#00E5FF]/50 shadow-[0_0_10px_rgba(0,229,255,0.6)]">
+        <span className="h-[4px] w-[4px] rounded-full bg-[#00E5FF] shadow-[0_0_5px_#00E5FF]"></span>
+      </div>
+      <h2 className="text-white text-[12px] md:text-[14px] font-black tracking-wide uppercase">{title}</h2>
     </div>
     <div className="flex gap-2 items-center">
       {onViewAll && (
-        <button className="px-3 h-8 flex items-center justify-center text-[#848B9D] hover:text-white hover:drop-shadow-[0_0_5px_rgba(255,255,255,0.5)] transition-all duration-300 text-[13px] font-medium" onClick={onViewAll}>
+        <button className="btn-secondary-modern" onClick={onViewAll}>
           Tümünü gör
         </button>
       )}
       {(onScrollLeft || onScrollRight) && (
         <>
-          <button onClick={onScrollLeft} className="w-8 h-8 rounded bg-[#0A0D14] border border-white/10 hover:border-[#00E5FF]/50 hover:shadow-[0_0_10px_rgba(0,229,255,0.3)] flex items-center justify-center text-[#848B9D] hover:text-[#00E5FF] transition-all duration-300">
-            <ChevronLeft size={18} />
+          <button onClick={onScrollLeft} className="btn-icon-modern">
+            <ChevronLeft size={20} />
           </button>
-          <button onClick={onScrollRight} className="w-8 h-8 rounded bg-[#0A0D14] border border-white/10 hover:border-[#00E5FF]/50 hover:shadow-[0_0_10px_rgba(0,229,255,0.3)] flex items-center justify-center text-[#848B9D] hover:text-[#00E5FF] transition-all duration-300">
-            <ChevronRight size={18} />
+          <button onClick={onScrollRight} className="btn-icon-modern">
+            <ChevronRight size={20} />
           </button>
         </>
       )}
@@ -244,12 +255,12 @@ export default function CasinoLobby({
   };
 
   const handleShuffle = () => {
-    const games = [...ALL_GAMES, ...DEMO_GAMES, ...dynamicOriginals, ...customGames.map(cg => ({ ...cg, img: cg.image, category: cg.lobbyCategory || 'slots' }))];
+    const games = [...ALL_GAMES, ...LIVE_CASINO_GAMES, ...DEMO_GAMES, ...dynamicOriginals, ...customGames.map(cg => ({ ...cg, img: cg.image, category: cg.lobbyCategory || 'slots' }))];
     setShuffledAllGames(shuffleGamesList(games));
   };
 
   useEffect(() => {
-    const games = [...ALL_GAMES, ...DEMO_GAMES, ...dynamicOriginals, ...customGames.map(cg => ({ ...cg, img: cg.image, category: cg.lobbyCategory || 'slots' }))];
+    const games = [...ALL_GAMES, ...LIVE_CASINO_GAMES, ...DEMO_GAMES, ...dynamicOriginals, ...customGames.map(cg => ({ ...cg, img: cg.image, category: cg.lobbyCategory || 'slots' }))];
     const newPool = games.filter(g => g.category === 'new' || g.isNew);
     const popularPool = games.filter(g => g.isPopular);
     
@@ -303,7 +314,7 @@ export default function CasinoLobby({
   };
 
   // Combine ALL_GAMES, DEMO_GAMES, dynamicOriginals, and customGames
-  const allGames = [...ALL_GAMES, ...DEMO_GAMES, ...dynamicOriginals, ...customGames.map(cg => ({ ...cg, img: cg.image, category: cg.lobbyCategory || 'slots' }))];
+  const allGames = [...ALL_GAMES, ...LIVE_CASINO_GAMES, ...DEMO_GAMES, ...dynamicOriginals, ...customGames.map(cg => ({ ...cg, img: cg.image, category: cg.lobbyCategory || 'slots' }))];
 
   const filteredGames = (activeTab === 'all' && shuffledAllGames.length > 0 ? shuffledAllGames : allGames).filter(game => {
     let matchesTab = false;
@@ -353,12 +364,13 @@ export default function CasinoLobby({
     }
     
     setSelectedGame(game);
+    setShowDemoIframe(true);
   };
 
   const handleDemoClick = (game: any) => {
     const gameName = (game.name || '').toLowerCase();
     if (game.provider === 'Originals' || gameName.includes('blackjack') || gameName.includes('plinko') || gameName.includes('limbo')) {
-      handleGameClick(game);
+      handleGameSelect(game);
       return;
     }
     setSelectedGame(game);
@@ -377,140 +389,43 @@ export default function CasinoLobby({
   }
 
   return (
-    <div className="w-full h-full flex flex-col bg-transparent text-white min-w-0">
+    <div className="w-full h-full flex flex-col bg-transparent text-white min-w-0 pb-[70px] lg:pb-0">
       {/* 1. TOP NAVBAR (Neon Stake Style) */}
-      <div className="sticky top-0 z-40 bg-[#0A0D14]/90 backdrop-blur-xl border-b border-[#00E5FF]/10 px-4 md:px-8 py-0 shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
-        <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#00E5FF]/20 to-transparent"></div>
-        <div className="max-w-[1600px] mx-auto flex items-center justify-start lg:justify-center gap-4 md:gap-8 overflow-x-auto hide-scrollbar px-4">
+      <div className="sticky top-0 z-40 bg-[#0A0C10]/90 backdrop-blur-xl border-b border-white/5 py-3 shadow-md">
+        <div className="max-w-[1720px] mx-auto flex items-center justify-start gap-2 md:gap-3 overflow-x-auto hide-scrollbar px-4 md:px-8 xl:px-12">
           {TABS.map(tab => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`relative flex items-center gap-2 py-4 px-2 whitespace-nowrap text-sm font-bold transition-all duration-300 ${
-                activeTab === tab.id 
-                  ? 'text-[#00E5FF] drop-shadow-[0_0_8px_rgba(0,229,255,0.5)]' 
-                  : 'text-[#848B9D] hover:text-white hover:drop-shadow-[0_0_5px_rgba(255,255,255,0.3)]'
-              }`}
+              className={`whitespace-nowrap px-4 py-2 rounded-lg font-bold text-sm transition-all duration-300 ${activeTab === tab.id ? 'bg-[#1A1F2D] text-white shadow-md' : 'text-[#848B9D] hover:bg-[#1A1F2D]/50 hover:text-white'}`}
             >
               {tab.label}
-              {activeTab === tab.id && (
-                <div className="absolute bottom-0 left-0 w-full h-[3px] bg-gradient-to-r from-[#00E5FF] to-[#00b3cc] rounded-t-full shadow-[0_-2px_15px_rgba(0,229,255,0.7)]" />
-              )}
             </button>
           ))}
         </div>
       </div>
 
-      <div className="w-full max-w-[1600px] mx-auto px-4 md:px-8 pt-6 min-w-0">
-        {/* 2. HERO BANNER */}
-        {activeTab === 'all' && !searchQuery && (
-          <div className="relative w-full h-[200px] md:h-[250px] lg:h-[280px] rounded-xl overflow-hidden mb-8 group bg-[#111111]">
-            {BANNERS.map((banner, idx) => (
-              <div 
-                key={banner.id}
-                className={`absolute inset-0 transition-opacity duration-700 ${currentBanner === idx ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
-              >
-                <img src={banner.image} alt={banner.title} className="w-full h-full object-cover opacity-60 mix-blend-overlay" />
-                <div className="absolute inset-0 bg-gradient-to-r from-[#0F121A] via-[#0F121A]/80 to-transparent" />
-                
-                <div className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 w-[90%] md:w-full max-w-3xl text-center px-4">
-                  <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white mb-2 md:mb-4 tracking-tight leading-tight">
-                    {banner.title}
-                  </h1>
-                  <p className="text-[#848B9D] text-sm md:text-lg mb-6 font-medium">
-                    {banner.sub}
-                  </p>
-                  <button onClick={() => handleAction()} className="bg-gradient-to-r from-[#00E5FF] to-[#00b3cc] hover:brightness-110 text-[#0A0D14] px-8 py-3 rounded-lg font-black text-sm uppercase tracking-wider transition-all shadow-[0_0_20px_rgba(0,229,255,0.4)] hover:shadow-[0_0_30px_rgba(0,229,255,0.6)] mx-auto block">
-                    Hemen Katıl
-                  </button>
-                </div>
-              </div>
-            ))}
+      <div className="w-full max-w-[1720px] mx-auto px-4 md:px-8 xl:px-12 pt-6 min-w-0">
+        {/* Slider removed as requested */}
 
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-2">
-              {BANNERS.map((_, idx) => (
-                <button 
-                  key={idx} 
-                  onClick={() => setCurrentBanner(idx)}
-                  className={`h-1.5 rounded-full transition-all ${currentBanner === idx ? 'w-6 bg-[#00E5FF] shadow-[0_0_8px_#00E5FF]' : 'w-2 bg-white/20'}`}
-                />
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* 3. FILTERS AND SEARCH */}
-        <div className="flex flex-col md:flex-row items-center justify-center gap-4 mb-8 relative z-50">
-          <div className="relative w-full md:w-auto">
-            <button 
-              onClick={() => setShowProviders(!showProviders)}
-              className="w-full md:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-[#0A0D14] hover:bg-[#111622] border border-white/5 hover:border-[#00E5FF]/30 shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)] rounded-lg text-white font-bold transition-all duration-300"
-            >
-              <Filter size={18} className="text-[#00E5FF]" />
-              Sağlayıcılar
-            </button>
-            
-            {showProviders && (
-              <div className="absolute top-full left-0 md:left-auto md:right-auto mt-2 w-full md:w-64 bg-[#0F121A] border border-white/10 rounded-lg shadow-[0_10px_40px_rgba(0,0,0,0.8)] py-2 z-50 animate-fade-in backdrop-blur-xl">
-                {[
-                  { id: 'all', name: 'Tüm Sağlayıcılar', search: '' },
-                  { id: 'pragmatic', name: 'Pragmatic Play', search: 'Pragmatic' },
-                  { id: 'egt', name: 'Amusnet (EGT)', search: 'Amusnet' },
-                  { id: 'hacksaw', name: 'Hacksaw Gaming', search: 'Hacksaw' },
-                  { id: 'evolution', name: 'Evolution', search: 'Evolution' },
-                  { id: 'netent', name: 'NetEnt', search: 'NetEnt' },
-                  { id: 'nolimit', name: 'Nolimit City', search: 'Nolimit' },
-                  { id: 'playngo', name: 'Play\'n GO', search: 'Play' }
-                ].map(p => (
-                  <button 
-                    key={p.id}
-                    onClick={() => {
-                      setSearchQuery(p.search);
-                      setShowProviders(false);
-                    }}
-                    className="w-full text-left px-4 py-3 text-sm font-bold text-[#848B9D] hover:text-white hover:bg-[#1A1F2D] hover:pl-6 transition-all duration-300 flex items-center gap-3 border-l-2 border-transparent hover:border-[#00E5FF]"
-                  >
-                    <div className="w-1.5 h-1.5 rounded-full bg-[#00E5FF]/50 shadow-[0_0_5px_#00E5FF]" />
-                    {p.name}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {activeTab === 'all' && (
-            <button 
-              onClick={handleShuffle}
-              className="w-full md:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-[#0A0D14] hover:bg-[#111622] border border-white/5 hover:border-[#00E5FF]/30 shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)] rounded-lg text-white font-bold transition-all duration-300 transition-colors"
-            >
-              <Shuffle size={18} className="text-[#00E5FF] animate-pulse" />
-              Oyunları Karıştır
-            </button>
-          )}
-
-          <div className="relative w-full md:w-[320px] group">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#848B9D] group-focus-within:text-[#00E5FF] transition-colors" size={18} />
-            <input 
-              type="text" 
-              placeholder="Oyun Ara..." 
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-[#0A0D14] shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)] border border-white/5 focus:border-[#00E5FF]/50 rounded-lg py-3 pl-12 pr-4 text-white placeholder-[#848B9D] focus:outline-none focus:ring-1 focus:ring-[#00E5FF]/30 transition-all duration-300 font-medium"
-            />
-          </div>
-        </div>
+        {/* Filters and search removed as requested */}
 
         {/* 4. GAME GRIDS */}
         <div>
           {activeTab === 'all' && !searchQuery && dynamicPopularGames.length > 0 && (
             <div className="mb-10">
-              <div className="flex items-center justify-between mb-4 px-2">
+              <div className="flex items-center justify-between mb-4 px-1 md:px-0">
                 <div className="flex items-center gap-2">
-                  <Star size={24} className="text-[#F59E0B] animate-pulse" />
-                  <h2 className="text-xl md:text-2xl font-black text-white">Popüler Oyunlar</h2>
+                  <div className="flex items-center justify-center h-[10px] w-[10px] rounded-full bg-[#F59E0B]/20 border border-[#F59E0B]/50 shadow-[0_0_10px_rgba(245,158,11,0.6)]">
+                    <span className="h-[4px] w-[4px] rounded-full bg-[#F59E0B] shadow-[0_0_5px_#F59E0B]"></span>
+                  </div>
+                  <h2 className="text-white text-[12px] md:text-[14px] font-black tracking-wide uppercase">Popüler Oyunlar</h2>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium text-[#848B9D] hidden sm:block">Tümünü Gör</span>
+                  <button className="text-[11px] md:text-xs font-black text-white hover:text-white transition-all flex items-center gap-1 group cursor-pointer border border-[#00E5FF]/30 bg-[#00E5FF]/20 hover:bg-[#00E5FF]/30 px-3.5 py-1.5 rounded-full shadow-[0_0_10px_rgba(0,229,255,0.2)] hover:shadow-[0_0_15px_rgba(0,229,255,0.4)] uppercase tracking-wider">
+                    <span>Tümünü Gör</span>
+                    <ChevronRight size={14} className="group-hover:translate-x-0.5 transition-transform text-[#00E5FF] drop-shadow-[0_0_3px_#00E5FF]" />
+                  </button>
                   <div className="flex items-center gap-1">
                     <button className="w-8 h-8 rounded bg-white/5 hover:bg-white/10 flex items-center justify-center text-[#848B9D] hover:text-white transition-colors">
                       <ChevronLeft size={16} />
@@ -521,7 +436,7 @@ export default function CasinoLobby({
                   </div>
                 </div>
               </div>
-              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-2 md:gap-3 w-full animate-fade-in relative px-1 md:px-0">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 md:gap-3 w-full animate-fade-in relative px-1 md:px-0">
                 {dynamicPopularGames.map((game) => (
                   <div key={game.id} className="animate-in fade-in duration-500">
                     <GameCard game={game} onClick={() => handleGameSelect(game)} />
@@ -533,13 +448,18 @@ export default function CasinoLobby({
 
           {activeTab === 'all' && !searchQuery && dynamicNewGames.length > 0 && (
             <div className="mb-10">
-              <div className="flex items-center justify-between mb-4 px-2">
+              <div className="flex items-center justify-between mb-4 px-1 md:px-0">
                 <div className="flex items-center gap-2">
-                  <Flame size={24} className="text-[#00E5FF] animate-pulse" />
-                  <h2 className="text-xl md:text-2xl font-black text-white">Yeni</h2>
+                  <div className="flex items-center justify-center h-[10px] w-[10px] rounded-full bg-[#00E5FF]/20 border border-[#00E5FF]/50 shadow-[0_0_10px_rgba(0,229,255,0.6)]">
+                    <span className="h-[4px] w-[4px] rounded-full bg-[#00E5FF] shadow-[0_0_5px_#00E5FF]"></span>
+                  </div>
+                  <h2 className="text-white text-[12px] md:text-[14px] font-black tracking-wide uppercase">Yeni</h2>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium text-[#848B9D] hidden sm:block">Tümünü Gör</span>
+                  <button className="text-[11px] md:text-xs font-black text-white hover:text-white transition-all flex items-center gap-1 group cursor-pointer border border-[#00E5FF]/30 bg-[#00E5FF]/20 hover:bg-[#00E5FF]/30 px-3.5 py-1.5 rounded-full shadow-[0_0_10px_rgba(0,229,255,0.2)] hover:shadow-[0_0_15px_rgba(0,229,255,0.4)] uppercase tracking-wider">
+                    <span>Tümünü Gör</span>
+                    <ChevronRight size={14} className="group-hover:translate-x-0.5 transition-transform text-[#00E5FF] drop-shadow-[0_0_3px_#00E5FF]" />
+                  </button>
                   <div className="flex items-center gap-1">
                     <button className="w-8 h-8 rounded bg-white/5 hover:bg-white/10 flex items-center justify-center text-[#848B9D] hover:text-white transition-colors">
                       <ChevronLeft size={16} />
@@ -550,7 +470,7 @@ export default function CasinoLobby({
                   </div>
                 </div>
               </div>
-              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-2 md:gap-3 w-full animate-fade-in relative px-1 md:px-0">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 md:gap-3 w-full animate-fade-in relative px-1 md:px-0">
                 {dynamicNewGames.map((game) => (
                   <div key={game.id} className="animate-in fade-in duration-500">
                     <GameCard game={game} onClick={() => handleGameSelect(game)} />
@@ -562,7 +482,7 @@ export default function CasinoLobby({
 
           <SectionHeader title={searchQuery ? 'Arama Sonuçları' : (activeTab === 'all' ? 'Tüm Oyunlar' : (TABS.find(t => t.id === activeTab)?.label || 'Oyunlar'))} />
           
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-2 md:gap-4 w-full px-1 md:px-0">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 md:gap-4 w-full px-1 md:px-0">
             {filteredGames.map((game) => (
               <GameCard key={game.id} game={game} onClick={() => handleGameSelect(game)} />
             ))}

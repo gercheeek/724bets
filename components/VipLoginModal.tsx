@@ -43,7 +43,7 @@ const VipLoginModal: React.FC<VipLoginModalProps> = ({ isOpen, onClose }) => {
         return (
           <div className="flex flex-col animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div className="w-20 h-20 rounded-full bg-gradient-to-br from-cyan-400 to-cyan-600 p-[2px] mb-6 mx-auto shadow-[0_0_40px_rgba(6,182,212,0.3)]">
-              <div className="w-full h-full bg-[#050505] rounded-full flex items-center justify-center border-4 border-[#050505]">
+              <div className="w-full h-full bg-[#0A0C10] rounded-full flex items-center justify-center border-4 border-[#050505]">
                  <ShieldCheck className="text-cyan-400" size={32} />
               </div>
             </div>
@@ -137,12 +137,12 @@ const VipLoginModal: React.FC<VipLoginModalProps> = ({ isOpen, onClose }) => {
       case 'SUCCESS':
         return (
           <div className="flex flex-col items-center animate-in zoom-in-95 duration-500">
-            <div className="w-24 h-24 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center mb-6 shadow-[0_0_50px_rgba(16,185,129,0.3)] relative">
+            <div className="w-24 h-24 rounded-full bg-[#00E5FF]/20 border border-emerald-500/30 flex items-center justify-center mb-6 shadow-[0_0_50px_rgba(16,185,129,0.3)] relative">
               <div className="absolute inset-0 rounded-full border border-emerald-400 animate-ping opacity-20"></div>
-              <ShieldCheck className="text-emerald-400" size={48} />
+              <ShieldCheck className="text-[#00E5FF]" size={48} />
             </div>
             <h3 className="text-3xl font-black text-center text-white mb-4 drop-shadow-md">Kimlik Doğrulandı</h3>
-            <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-6 text-center w-full">
+            <div className="bg-[#00E5FF]/10 border border-emerald-500/20 rounded-xl p-6 text-center w-full">
               <p className="text-emerald-300 font-bold text-[16px] mb-2">
                 Sayın VIP Üyemiz,
               </p>
@@ -169,7 +169,7 @@ const VipLoginModal: React.FC<VipLoginModalProps> = ({ isOpen, onClose }) => {
       />
       
       {/* Modal Content */}
-      <div className="relative w-full max-w-[440px] bg-[#0A0D14] border border-white/10 rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.8),inset_0_1px_1px_rgba(255,255,255,0.05)] overflow-hidden animate-in zoom-in-95 fade-in duration-300">
+      <div className="relative w-full max-w-[440px] bg-[#0A0C10] border border-white/10 rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.8),inset_0_1px_1px_rgba(255,255,255,0.05)] overflow-hidden animate-in zoom-in-95 fade-in duration-300">
         
         {/* Header decoration */}
         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#A5F3FC] via-[#0891B2] to-[#A5F3FC]"></div>

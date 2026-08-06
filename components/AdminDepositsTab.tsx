@@ -151,7 +151,7 @@ export default function AdminDepositsTab() {
                         {deposit.method === 'bank' ? 'Havale/EFT' : 'Kripto'}
                       </div>
                     </td>
-                    <td className="p-4 font-black text-emerald-400">
+                    <td className="p-4 font-black text-[#00E5FF]">
                       {deposit.amount} {deposit.method === 'bank' ? '₺' : 'USDT'}
                     </td>
                     <td className="p-4 text-zinc-300 font-mono text-xs">
@@ -159,12 +159,12 @@ export default function AdminDepositsTab() {
                     </td>
                     <td className="p-4">
                       {deposit.status === 'pending' && (
-                        <span className="flex items-center gap-1.5 text-amber-500 bg-amber-500/10 px-2 py-1 rounded-lg text-xs font-bold inline-flex">
+                        <span className="flex items-center gap-1.5 text-zinc-300 bg-amber-500/10 px-2 py-1 rounded-lg text-xs font-bold inline-flex">
                           <Clock className="w-3.5 h-3.5" /> Bekliyor
                         </span>
                       )}
                       {deposit.status === 'approved' && (
-                        <span className="flex items-center gap-1.5 text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded-lg text-xs font-bold inline-flex">
+                        <span className="flex items-center gap-1.5 text-[#00E5FF] bg-[#00E5FF]/10 px-2 py-1 rounded-lg text-xs font-bold inline-flex">
                           <CheckCircle2 className="w-3.5 h-3.5" /> Onaylandı
                         </span>
                       )}
@@ -179,7 +179,7 @@ export default function AdminDepositsTab() {
                         <div className="flex items-center justify-end gap-2">
                           <button
                             onClick={() => handleUpdateStatus(deposit.id, 'approved')}
-                            className="p-1.5 bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 rounded-lg transition-colors title='Onayla'"
+                            className="p-1.5 bg-[#00E5FF]/10 text-[#00E5FF] hover:bg-[#00E5FF]/20 rounded-lg transition-colors title='Onayla'"
                           >
                             <CheckCircle2 className="w-5 h-5" />
                           </button>

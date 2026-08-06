@@ -106,7 +106,7 @@ function fetchPrematchData() {
                 if (responseData.sport) {
                     Object.values(responseData.sport).forEach(sport => {
                         const sportName = (sport.name || 'Futbol').trim();
-                        if (!['Futbol', 'Basketbol', 'Tenis', 'Voleybol', 'Buz Hokeyi'].includes(sportName)) return;
+                        if (!['Futbol', 'Soccer', 'Football'].includes(sportName)) return;
 
                         if (sport.region) {
                             Object.values(sport.region).forEach(region => {
@@ -115,6 +115,19 @@ function fetchPrematchData() {
                                         if (comp.game) {
                                             Object.values(comp.game).forEach(game => {
                                                 if (!game.team1_name || !game.team2_name) return;
+
+                                                const tournamentName = (comp.name || '').trim();
+                                                const virtualKeywords = [
+                                                   'cyber', 'sanal', 'virtual', 'simulated', 'srl', 'esoccer', 'ebasketball', 'etennis',
+                                                   'esports', 'e-sports', 'fifa', 'nba2k', 'gt sports', 'h2hgg', 'dota', 'counter-strike',
+                                                   'cs:go', 'cs2', 'valorant', 'league of legends', 'rocket league', 'overwatch', 'starcraft',
+                                                   'crossfire', 'king of glory', 'pubg', 'penaltı atışları', 'penalty shootout', 'sub soccer'
+                                                ];
+
+                                                const combinedStr = `${tournamentName} ${game.team1_name} ${game.team2_name}`.toLowerCase();
+                                                if (virtualKeywords.some(kw => combinedStr.includes(kw))) {
+                                                   return;
+                                                }
 
                                                 const matchObj = {
                                                     id: String(game.id),

@@ -72,7 +72,7 @@ const HeroBanner = ({ onNavigate, isLoggedIn, onAuthRequired, setSiteUser }: { o
         transition: isHovering ? 'none' : 'transform 0.5s ease-out',
         transformStyle: 'preserve-3d'
       }}
-      className="arcade-cursor relative w-full bg-[#050505] border-b border-white/5 md:rounded-[2rem] md:border overflow-hidden px-6 py-6 md:px-8 md:py-10 flex items-center shadow-[0_20px_50px_rgba(0,0,0,0.5)] group z-10"
+      className="arcade-cursor relative w-full bg-[#0A0C10] border-b border-white/5 md:rounded-[2rem] md:border overflow-hidden px-6 py-6 md:px-8 md:py-10 flex items-center shadow-[0_20px_50px_rgba(0,0,0,0.5)] group z-10"
     >
       
       {/* Cursor Spotlight (Flashlight Effect) */}
@@ -200,7 +200,7 @@ const HeroBanner = ({ onNavigate, isLoggedIn, onAuthRequired, setSiteUser }: { o
       {/* Breathing Mesh / Cinematic Particle Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
          {/* Particles reacting to hover by slightly increasing opacity/blur */}
-         <div className={`absolute top-[-20%] left-[-10%] w-[50%] h-[120%] bg-emerald-500/10 rounded-[100%] animate-[slow-pan_10s_ease-in-out_infinite] mix-blend-screen transition-all duration-700 ${isHovering ? 'blur-[100px] opacity-100' : 'blur-[120px] opacity-70'}`}></div>
+         <div className={`absolute top-[-20%] left-[-10%] w-[50%] h-[120%] bg-[#00E5FF]/10 rounded-[100%] animate-[slow-pan_10s_ease-in-out_infinite] mix-blend-screen transition-all duration-700 ${isHovering ? 'blur-[100px] opacity-100' : 'blur-[120px] opacity-70'}`}></div>
          <div className={`absolute bottom-[-20%] right-[-10%] w-[60%] h-[120%] bg-purple-600/10 rounded-[100%] animate-[slow-pan_15s_ease-in-out_infinite_reverse] mix-blend-screen transition-all duration-700 ${isHovering ? 'blur-[120px] opacity-100' : 'blur-[150px] opacity-70'}`}></div>
          
          {/* Noise overlay for texture */}
@@ -236,10 +236,10 @@ const HeroBanner = ({ onNavigate, isLoggedIn, onAuthRequired, setSiteUser }: { o
           {[
             { id: 'crash', name: 'CRASH', color: 'text-[#00E5FF]', image: '/images/crash_premium.jpg', players: 4521, maxWin: '5000x' },
             { id: 'plinko', name: 'PLINKO', color: 'text-[#00ff88]', image: '/images/plinko_premium.jpg', players: 1245, maxWin: '1000x' },
-            { id: 'limbo', name: 'LIMBO', color: 'text-[#a855f7]', image: '/images/mission_premium.jpg', players: 843, maxWin: '10,000x' },
-            { id: 'roulette', name: 'ROULETTE', color: 'text-emerald-400', image: '/images/roulette_premium.jpg', players: 3201, maxWin: '36x' },
+            { id: 'limbo', name: 'LIMBO', color: 'text-[#a855f7]', image: '/images/limbo_premium.jpg', players: 843, maxWin: '10,000x' },
+            { id: 'roulette', name: 'ROULETTE', color: 'text-[#00E5FF]', image: '/images/roulette_premium.jpg', players: 3201, maxWin: '36x' },
             { id: 'blackjack-pro', name: 'BLACKJACK', color: 'text-white', image: '/images/blackjack_premium.jpg', players: 2150, maxWin: '2.5x' },
-            { id: 'keno', name: 'KENO', color: 'text-yellow-400', image: '/images/keno_premium.jpg', players: 540, maxWin: '500x' },
+            { id: 'keno', name: 'KENO', color: 'text-zinc-300', image: '/images/keno_premium.jpg', players: 540, maxWin: '500x' },
           ].map((game, idx) => {
             const isHovered = hoveredGameId ? game.id === hoveredGameId : idx === 0;
             
@@ -289,7 +289,7 @@ const HeroBanner = ({ onNavigate, isLoggedIn, onAuthRequired, setSiteUser }: { o
                            <div className="flex-1">
                               <h4 className={`text-[13px] md:text-[15px] font-black tracking-widest transition-colors ${isHovered ? 'text-[#00ff88] drop-shadow-[0_0_8px_rgba(0,255,136,0.8)]' : 'text-slate-200'}`}>{game.name}</h4>
                               <div className="text-[9px] md:text-[10px] text-zinc-400 font-bold uppercase mt-0.5 tracking-wider flex items-center gap-1.5">
-                                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_5px_#00ff88]"></span>
+                                 <span className="w-1.5 h-1.5 rounded-full bg-[#00E5FF] animate-pulse shadow-[0_0_5px_#00ff88]"></span>
                                  {game.players} Aktif Oyuncu
                               </div>
                            </div>

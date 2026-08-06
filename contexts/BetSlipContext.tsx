@@ -45,6 +45,7 @@ export const BetSlipProvider: React.FC<{ children: ReactNode }> = ({ children })
         setBetSlip([]);
         return;
       }
+      window.dispatchEvent(new CustomEvent('betSlipSelectionAdded'));
       setBetSlip([newSelection]);
       setBetType('sistem'); // Switch to Sistem tab
       return;
@@ -63,6 +64,8 @@ export const BetSlipProvider: React.FC<{ children: ReactNode }> = ({ children })
         return prev.filter(s => s.id !== newSelection.id);
       }
       
+      window.dispatchEvent(new CustomEvent('betSlipSelectionAdded'));
+
       // 2. If a different selection from the SAME match is clicked, replace it (only 1 selection per match)
       const sameMatchSelection = prev.find(s => s.matchId === newSelection.matchId);
       if (sameMatchSelection) {

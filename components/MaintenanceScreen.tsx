@@ -40,7 +40,7 @@ const MaintenanceScreen: React.FC<MaintenanceScreenProps> = ({ message, onAdminL
             <Settings className="w-6 h-6 text-black animate-spin" style={{ animationDuration: '4s' }} />
           </div>
           <h1 className="text-2xl md:text-3xl font-black tracking-tighter text-white mb-1">
-            724<span className="text-amber-500">BAHİS.NET</span>
+            724<span className="text-zinc-300">BAHİS.NET</span>
           </h1>
           <p className="text-zinc-500 font-bold tracking-[0.3em] uppercase text-[9px]">Premium Gaming & Analysis</p>
         </div>
@@ -50,12 +50,12 @@ const MaintenanceScreen: React.FC<MaintenanceScreenProps> = ({ message, onAdminL
           <div className="flex justify-center gap-4 mb-5 md:mb-6">
              <div className="px-3 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 flex items-center gap-2">
                 <div className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-ping" />
-                <span className="text-amber-500 text-[9px] font-black uppercase tracking-widest">Bakım Modu Yayında</span>
+                <span className="text-zinc-300 text-[9px] font-black uppercase tracking-widest">Bakım Modu Yayında</span>
              </div>
           </div>
 
           <h2 className="text-lg md:text-xl font-bold text-white mb-3 md:mb-4 leading-tight">
-             Sizin İçin <span className="text-amber-500">Güçleniyoruz</span>
+             Sizin İçin <span className="text-zinc-300">Güçleniyoruz</span>
           </h2>
 
           <p className="text-zinc-400 text-[13px] md:text-sm leading-relaxed font-medium mb-6 md:mb-8 px-4">
@@ -77,7 +77,7 @@ const MaintenanceScreen: React.FC<MaintenanceScreenProps> = ({ message, onAdminL
 
           <button
             onClick={onAdminLogin}
-            className="mt-6 inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-zinc-800/50 hover:bg-amber-500/10 border border-zinc-700 hover:border-amber-500/30 text-[10px] font-black text-zinc-500 hover:text-amber-500 uppercase tracking-widest transition-all duration-300 group"
+            className="mt-6 inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-zinc-800/50 hover:bg-amber-500/10 border border-zinc-700 hover:border-amber-500/30 text-[10px] font-black text-zinc-500 hover:text-zinc-300 uppercase tracking-widest transition-all duration-300 group"
           >
             <Lock className="w-3.5 h-3.5 group-hover:scale-110 transition-transform" />
             YETKİLİ GİRİŞİ

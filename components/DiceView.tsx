@@ -62,10 +62,10 @@ export default function DiceView({ siteUser, onAuthRequired }: any) {
                 <div className="mb-4 relative">
                     <div className="flex justify-between items-end mb-2">
                         <label className="text-xs text-gray-400 font-semibold">Bahis Tutarı</label>
-                        <span className="text-xs text-[#ffd700] font-mono font-bold">₺{siteUser ? siteUser.balance.toFixed(2) : '0.00'}</span>
+                        <span className="text-xs text-[#ffd700] font-mono font-bold">${siteUser ? siteUser.balance.toFixed(2) : '0.00'}</span>
                     </div>
                     <div className="flex bg-[#151D24] rounded-md border border-[#2A3744] overflow-hidden focus-within:border-[#3D82F6] transition-colors">
-                        <div className="px-3 flex items-center justify-center text-gray-400">₺</div>
+                        <div className="px-3 flex items-center justify-center text-gray-400">$</div>
                         <input 
                             type="number" 
                             value={betAmount || ''}
@@ -89,7 +89,7 @@ export default function DiceView({ siteUser, onAuthRequired }: any) {
                     </div>
                     <div className="flex justify-between items-center">
                         <span className="text-xs font-bold text-gray-400 uppercase">Çarpan</span>
-                        <span className="text-sm font-bold text-emerald-400">{multiplier.toFixed(2)}x</span>
+                        <span className="text-sm font-bold text-[#00E5FF]">{multiplier.toFixed(2)}x</span>
                     </div>
                 </div>
 
@@ -114,7 +114,7 @@ export default function DiceView({ siteUser, onAuthRequired }: any) {
                         onClick={handlePlay}
                         disabled={isPlaying}
                         className={`w-full font-bold py-3.5 rounded-md transition-colors shadow-lg ${
-                            isPlaying ? 'bg-[#324555] text-gray-400 cursor-not-allowed' : 'bg-emerald-500 hover:bg-emerald-600 text-white'
+                            isPlaying ? 'bg-[#324555] text-gray-400 cursor-not-allowed' : 'bg-[#00E5FF] hover:bg-emerald-600 text-white'
                         }`}
                     >
                         {isPlaying ? 'Zar Atılıyor...' : 'Bahis (Zar At)'}
@@ -125,8 +125,8 @@ export default function DiceView({ siteUser, onAuthRequired }: any) {
                 {winAmount !== null && (
                     <div className={`mt-4 bg-[#151D24] rounded-md border px-3 py-3 flex items-center justify-between transition-colors ${winAmount > 0 ? 'border-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.3)]' : 'border-red-500 shadow-[0_0_10px_rgba(239,68,68,0.3)]'}`}>
                         <span className="text-gray-400 text-xs font-bold uppercase">{winAmount > 0 ? 'Kazanç' : 'Kayıp'}</span>
-                        <span className={`font-mono text-sm font-bold ${winAmount > 0 ? 'text-emerald-400' : 'text-red-400'}`}>
-                            {winAmount > 0 ? `+₺${winAmount.toFixed(2)}` : `-₺${betAmount.toFixed(2)}`}
+                        <span className={`font-mono text-sm font-bold ${winAmount > 0 ? 'text-[#00E5FF]' : 'text-red-400'}`}>
+                            {winAmount > 0 ? `+$${winAmount.toFixed(2)}` : `-$${betAmount.toFixed(2)}`}
                         </span>
                     </div>
                 )}
@@ -139,7 +139,7 @@ export default function DiceView({ siteUser, onAuthRequired }: any) {
                 <div className="absolute top-4 right-4 flex gap-2 z-30">
                     {history.map((h, idx) => (
                         <div key={idx} className={`px-3 py-1 rounded-full text-xs font-mono font-bold shadow-md ${
-                            h.won ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/50' : 'bg-red-500/20 text-red-400 border border-red-500/50'
+                            h.won ? 'bg-[#00E5FF]/20 text-[#00E5FF] border border-emerald-500/50' : 'bg-red-500/20 text-red-400 border border-red-500/50'
                         }`}>
                             {h.roll.toFixed(2)}
                         </div>
@@ -158,7 +158,7 @@ export default function DiceView({ siteUser, onAuthRequired }: any) {
                         </span>
                     </div>
                     
-                    <div className="absolute top-6 right-6 flex items-center gap-2 bg-[#111111] px-3 py-1.5 rounded-full border border-white/5 z-20">
+                    <div className="absolute top-6 right-6 flex items-center gap-2 bg-[#0A0C10] px-3 py-1.5 rounded-full border border-white/5 z-20">
                         <ShieldCheck className="w-4 h-4 text-gray-400" />
                         <span className="text-gray-300 font-semibold text-xs">Adil Oyun</span>
                     </div>
@@ -166,7 +166,7 @@ export default function DiceView({ siteUser, onAuthRequired }: any) {
                     {/* Massive Result Text */}
                     <div className="flex flex-col items-center justify-center mb-16 relative z-10">
                          <div className={`text-[120px] md:text-[160px] font-black font-mono leading-none tracking-tighter transition-all duration-300 ${
-                             isPlaying ? 'blur-sm text-white/50' : winAmount !== null ? (winAmount > 0 ? 'text-emerald-400 drop-shadow-[0_0_40px_rgba(52,211,153,0.6)]' : 'text-red-500 drop-shadow-[0_0_40px_rgba(239,68,68,0.6)]') : 'text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.2)]'
+                             isPlaying ? 'blur-sm text-white/50' : winAmount !== null ? (winAmount > 0 ? 'text-[#00E5FF] drop-shadow-[0_0_40px_rgba(52,211,153,0.6)]' : 'text-red-500 drop-shadow-[0_0_40px_rgba(239,68,68,0.6)]') : 'text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.2)]'
                          }`}>
                              {rollResult.toFixed(2)}
                          </div>
@@ -189,7 +189,7 @@ export default function DiceView({ siteUser, onAuthRequired }: any) {
                              }}>
                              
                              {/* Fill Range */}
-                             <div className={`absolute top-0 bottom-0 rounded-full transition-all duration-100 ${condition === 'over' ? 'bg-emerald-500/20' : 'bg-red-500/20'}`}
+                             <div className={`absolute top-0 bottom-0 rounded-full transition-all duration-100 ${condition === 'over' ? 'bg-[#00E5FF]/20' : 'bg-red-500/20'}`}
                                   style={{
                                       left: condition === 'over' ? `${target}%` : '0%',
                                       right: condition === 'over' ? '0%' : `${100 - target}%`
@@ -210,7 +210,7 @@ export default function DiceView({ siteUser, onAuthRequired }: any) {
                                      'border-t-white opacity-0'
                                  }`} style={{ left: `${rollResult}%` }}>
                                      <div className={`absolute -top-10 left-1/2 -translate-x-1/2 px-2 py-1 bg-black/80 rounded border font-mono text-xs font-bold ${
-                                         winAmount !== null && winAmount > 0 ? 'text-emerald-400 border-emerald-500/50' : 'text-red-500 border-red-500/50'
+                                         winAmount !== null && winAmount > 0 ? 'text-[#00E5FF] border-emerald-500/50' : 'text-red-500 border-red-500/50'
                                      }`}>
                                          {rollResult.toFixed(2)}
                                      </div>
