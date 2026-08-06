@@ -13,8 +13,15 @@ dotenv.config({ path: '.env.local' });
 const supabaseUrl = process.env.VITE_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
 const supabaseKey = process.env.VITE_PUBLIC_SUPABASE_ANON_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
 let supabase = null;
+let supabaseChannel = null;
 if (supabaseUrl && supabaseKey) {
     supabase = createClient(supabaseUrl, supabaseKey);
+    supabaseChannel = supabase.channel('live-data');
+    supabaseChannel.subscribe((status) => {
+        if (status === 'SUBSCRIBED') {
+            console.log('📡 [SUPER] Connected to Supabase Broadcast channel (live-data) for live scores!');
+        }
+    });
 }
 
 const __filename = fileURLToPath(import.meta.url);
@@ -263,6 +270,15 @@ function startSwarmConnection() {
                         client.send(socketIoString);
                     }
                 });
+
+                // Send to Supabase Broadcast channel so online site gets real-time matches instantly!
+                if (supabaseChannel) {
+                    supabaseChannel.send({
+                        type: 'broadcast',
+                        event: 'live_matches_update',
+                        payload: payload
+                    }).catch(err => console.error('Supabase Broadcast Error:', err));
+                }
             }
         }
     });
