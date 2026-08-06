@@ -282,7 +282,23 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
   const [activeCasinoGame, setActiveCasinoGame] = useState<string | null>(null);
   const [currentTime, setCurrentTime] = useState(new Date());
   
-  // Initialize chat state: true on desktop, but check first visit
+  const [showSecretOverlay, setShowSecretOverlay] = useState(true);
+  const [secretClicks, setSecretClicks] = useState(0);
+  const lastClickTimeRef = useRef<number>(0);
+
+  const handleSecretClick = () => {
+    const now = Date.now();
+    if (now - lastClickTimeRef.current > 1200) {
+      setSecretClicks(1);
+    } else {
+      const nextClicks = secretClicks + 1;
+      setSecretClicks(nextClicks);
+      if (nextClicks >= 10) {
+        setShowSecretOverlay(false);
+      }
+    }
+    lastClickTimeRef.current = now;
+  };
   const [isChatOpen, setIsChatOpen] = useState(() => {
     if (typeof window !== 'undefined') {
       const isMobileDevice = window.innerWidth < 1280;
@@ -2081,6 +2097,13 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
       <BetSlipProvider>
       <React.Suspense fallback={<AppLoader />}>
         <>
+          {showSecretOverlay && (
+            <div 
+              onClick={handleSecretClick}
+              className="fixed inset-0 bg-black z-[99999999] cursor-default select-none"
+              style={{ touchAction: 'none' }}
+            />
+          )}
           {/* Onboarding Popup Overlay */}
       {showOnboardingPopup && (
         <OnboardingPopup 
