@@ -694,8 +694,26 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
   });
   const [siteUser, setSiteUser] = useState<SiteUser | null>(() => {
     try {
+      const isCleared = localStorage.getItem('force_logout_v2');
+      if (!isCleared) {
+        localStorage.removeItem('site_current_member');
+        localStorage.removeItem('site_member');
+        localStorage.removeItem('site_user_role');
+        localStorage.setItem('force_logout_v2', 'true');
+        return null;
+      }
       const saved = localStorage.getItem('site_current_member') || localStorage.getItem('site_member');
-      return saved ? JSON.parse(saved) : null;
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed && parsed.role !== 'admin') {
+          localStorage.removeItem('site_current_member');
+          localStorage.removeItem('site_member');
+          localStorage.removeItem('site_user_role');
+          return null;
+        }
+        return parsed;
+      }
+      return null;
     } catch {
       return null;
     }

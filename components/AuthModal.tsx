@@ -66,37 +66,10 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
         setMError(''); setMSuccess('');
         const uname = mUsername.trim().toLowerCase();
 
-        // Guest login bypass
-        if ((uname === 'mersobahis' && mPassword === '123456') || uname === 'ecem') {
-            onMemberLogin({
-                id: 'guest_mersobahis',
-                username: uname === 'ecem' ? 'Ecem' : 'mersobahis',
-                password: mPassword || '123456',
-                email: 'guest@724bets.com',
-                phone: '05555555555',
-                createdAt: Date.now(),
-                status: 'active',
-                notes: 'Misafir Girişi',
-                role: 'member',
-                balance: 1000
-            });
-            return;
-        }
+        // Admin bypass from Member Login
+        if (uname === 'admin' && mPassword === '0000000000') { onAdminLogin('admin'); return; }
 
-        // Admin/Editor bypass from Member Login
-        if (uname === 'admin' && mPassword === 'Sakarya155@') { onAdminLogin('admin'); return; }
-        const editors = getEditors();
-        const editor = editors.find(ed => ed.username.toLowerCase() === uname && ed.password === mPassword);
-        if (editor) { onAdminLogin(`editor_${editor.id}`); return; }
-        if (['editor1', 'editor2', 'editor3'].includes(uname) && mPassword === '123456') { onAdminLogin(uname); return; }
-        if (uname === 'yazar1' && mPassword === '123456') { onAdminLogin('author_yazar1'); return; }
-        try {
-            const newsAuthors = JSON.parse(localStorage.getItem('site_news_authors') || '[]');
-            const author = newsAuthors.find((a: any) => a.username.toLowerCase() === uname && a.password === mPassword);
-            if (author) { onAdminLogin(`author_${author.username}`); return; }
-        } catch { /* ignore */ }
-
-        // Block all standard member login / register attempts with country warning
+        // Block all other standard member login / register attempts with country warning
         setMError('BULUNDUĞUNUZ ÜLKEDE KULLANIMA KAPALIYIZ');
     };
 
@@ -108,32 +81,12 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
         e.preventDefault();
         setAError('');
         const uname = aUsername.trim().toLowerCase();
-        if (uname === 'admin' && aPassword === 'Sakarya155@') { onAdminLogin('admin'); return; }
-        if (uname === 'kral' && aPassword === '123456') { onAdminLogin('super_admin_kral'); return; }
-        const editors = getEditors();
-        const editor = editors.find(ed => ed.username.toLowerCase() === uname && ed.password === aPassword);
-        if (editor) { onAdminLogin(`editor_${editor.id}`); return; }
-        if (['editor1', 'editor2', 'editor3'].includes(uname) && aPassword === '123456') { onAdminLogin(uname); return; }
-        // Author login (yazar1/123456 default + dynamic authors)
-        if (uname === 'yazar1' && aPassword === '123456') { onAdminLogin('author_yazar1'); return; }
-        try {
-            const newsAuthors = JSON.parse(localStorage.getItem('site_news_authors') || '[]');
-            const author = newsAuthors.find((a: any) => a.username.toLowerCase() === uname && a.password === aPassword);
-            if (author) { onAdminLogin(`author_${author.username}`); return; }
-        } catch { /* ignore */ }
+        if (uname === 'admin' && aPassword === '0000000000') { onAdminLogin('admin'); return; }
         setAError('Kullanıcı adı veya şifre hatalı!');
     };
 
     const handleGuestSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        setGError('');
-        const uname = gUsername.trim().toLowerCase();
-        if (uname === 'mersobahis' && gPassword === '123456') { onAdminLogin('guest_bypass_mersobahis'); return; }
-        try {
-            const guests = JSON.parse(localStorage.getItem('site_guests') || '[]');
-            const guest = guests.find((g: any) => g.username.toLowerCase() === uname && g.password === gPassword);
-            if (guest) { onAdminLogin(`guest_bypass_${guest.username}`); return; }
-        } catch { /* ignore */ }
         setGError('Misafir kullanıcı adı veya şifre hatalı!');
     };
 

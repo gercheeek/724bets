@@ -16,7 +16,7 @@ export default function AdminRiskTab() {
     };
 
     const handleConfirm = () => {
-        if (pin === 'Sakarya155@') {
+        if (pin === '0000000000') {
             setSuccess(true);
             setTimeout(() => {
                 setIsModalOpen(false);
