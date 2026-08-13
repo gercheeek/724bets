@@ -2039,7 +2039,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
     return { flag: null, name: teamName.trim() };
   };
 
-  if (isMaintenanceActive && view !== 'admin') {
+  if (isMaintenanceActive && view !== 'admin' && userRole !== 'admin') {
     return (
       <UserProvider siteUser={siteUser} setSiteUser={setSiteUser}>
         <div className="relative w-full h-[100dvh] bg-[#0A0C10] overflow-hidden">
