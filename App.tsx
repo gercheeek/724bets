@@ -589,7 +589,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
   const [siteStatusConfig, setSiteStatusConfig] = useState<SiteStatusConfig>(() => {
     const stored = localStorage.getItem('site_status');
     const parsed = stored ? JSON.parse(stored) : DEFAULT_SITE_STATUS_CONFIG;
-    return { ...parsed, isMaintenanceMode: false };
+    return { ...parsed, isMaintenanceMode: true };
   });
 
   const handleSiteStatusConfigChange = (cfg: SiteStatusConfig) => {
