@@ -228,12 +228,6 @@ export default function CasinoLobby({
     path: game.path
   }));
 
-  const [displayLimit, setDisplayLimit] = useState(100);
-
-  useEffect(() => {
-    setDisplayLimit(100);
-  }, [activeTab, searchQuery]);
-
   const [activeTab, setActiveTab] = useState(initialTab || 'all');
 
   useEffect(() => {
@@ -241,7 +235,15 @@ export default function CasinoLobby({
       setActiveTab(initialTab);
     }
   }, [initialTab]);
+  
   const [searchQuery, setSearchQuery] = useState('');
+  
+  const [displayLimit, setDisplayLimit] = useState(100);
+
+  useEffect(() => {
+    setDisplayLimit(100);
+  }, [activeTab, searchQuery]);
+
   const [showProviders, setShowProviders] = useState(false);
   const [currentBanner, setCurrentBanner] = useState(0);
   const [selectedGame, setSelectedGame] = useState<any>(null);
