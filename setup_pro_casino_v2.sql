@@ -84,6 +84,7 @@ BEGIN
     IF NOT v_is_guest THEN
         SELECT balance INTO v_current_balance FROM members WHERE id = v_real_uuid FOR UPDATE;
         IF v_current_balance IS NULL THEN RAISE EXCEPTION 'User not found'; END IF;
+        IF p_bet_amount < 0 THEN RAISE EXCEPTION 'Negative bet amount is not allowed'; END IF;
         IF v_current_balance < p_bet_amount THEN RAISE EXCEPTION 'Insufficient balance'; END IF;
     ELSE
         v_current_balance := 999999999;
@@ -271,6 +272,7 @@ BEGIN
     IF NOT v_is_guest THEN
         SELECT balance INTO v_current_balance FROM members WHERE id = v_real_uuid FOR UPDATE;
         IF v_current_balance IS NULL THEN RAISE EXCEPTION 'User not found'; END IF;
+        IF p_bet_amount < 0 THEN RAISE EXCEPTION 'Negative bet amount is not allowed'; END IF;
         IF v_current_balance < p_bet_amount THEN RAISE EXCEPTION 'Insufficient balance'; END IF;
         UPDATE members SET balance = balance - p_bet_amount WHERE id = v_real_uuid;
     ELSE

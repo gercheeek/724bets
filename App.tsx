@@ -1846,18 +1846,16 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
       setBultenLoading(true);
     }
     if (v === view || isTransitioning) return;
-    setIsTransitioning(true);
-    const delay = (v === 'sports' || v === 'spor724') ? 5000 : 3000;
-
-    setTimeout(() => {
-      setIsTransitioning(false);
-      
-      // Update URL without reloading, preserving i18n lang prefix
-      const currentLang = i18n.language ? i18n.language.split('-')[0] : 'tr';
-      const langPrefix = ['tr', 'en', 'pt', 'es'].includes(currentLang) ? currentLang : 'tr';
-      
-      const newUrl = v === 'home' ? `/${langPrefix}` : (v === 'spor724' || v === 'sports' ? `/${langPrefix}/spor` : `/${langPrefix}/${v}`);
-      window.history.pushState(null, '', newUrl);
+    
+    // Yönlendirmeyi anında yap (eski 5 sn / 3 sn beklemeleri kaldırıldı)
+    const currentLang = i18n.language ? i18n.language.split('-')[0] : 'tr';
+    const langPrefix = ['tr', 'en', 'pt', 'es'].includes(currentLang) ? currentLang : 'tr';
+    const newUrl = v === 'home' ? `/${langPrefix}` : (v === 'spor724' || v === 'sports' ? `/${langPrefix}/spor` : `/${langPrefix}/${v}`);
+    
+    window.history.pushState(null, '', newUrl);
+    
+    // setView'in React hook'larını tetiklemesi için
+    window.dispatchEvent(new PopStateEvent('popstate'));
 
       const sportsViews = ['gercek', 'sports', 'spor724', 'slotra', 'spor'];
       if (sportsViews.includes(v)) {
@@ -1926,7 +1924,8 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
         setView(v as any);
         window.scrollTo({ top: 0, behavior: 'auto' });
       }
-    }, delay);
+      
+      setIsTransitioning(false);
   };
 
   const isLocalhost = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
@@ -3089,46 +3088,8 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
           <MobileBulletinView onBack={() => setView('home')} />
         )}
         {view === 'bulten' && (
-          <div className="animate-fade-in w-full relative overflow-hidden" style={{ height: 'calc(100vh - 72px)' }}>
-            <style>{`
-              iframe::-webkit-scrollbar {
-                display: none !important;
-              }
-              iframe {
-                -ms-overflow-style: none !important;
-                scrollbar-width: none !important;
-              }
-              #main-scroll-container::-webkit-scrollbar {
-                display: none !important;
-              }
-              #main-scroll-container {
-                -ms-overflow-style: none !important;
-                scrollbar-width: none !important;
-              }
-            `}</style>
-            <iframe 
-              src="https://demo.betby.com/sportsbook/classic/" 
-              onLoad={() => {
-                setBultenLoading(false);
-                // Listen to Betby iframe messages for login/bet requests
-                window.addEventListener('message', (e) => {
-                  try {
-                    // Check if the message asks for login (like placing a bet without auth)
-                    if (e.data && (e.data.type === 'login' || e.data.action === 'login' || e.data.type === 'auth' || (typeof e.data === 'string' && e.data.includes('login')))) {
-                       setAuthModalMode('register');
-                    }
-                  } catch(err) {}
-                });
-              }}
-              className="absolute border-none bg-[#0F172A]"
-              style={{
-                top: '-48px',
-                left: '0px',
-                width: '100%',
-                height: 'calc(100% + 200px)'
-              }}
-              title="Bülten"
-            />
+          <div className="animate-fade-in w-full relative">
+            <Spor724View onNavigate={setView} defaultTab="upcoming" />
           </div>
         )}
         {view === 'slotra' && (

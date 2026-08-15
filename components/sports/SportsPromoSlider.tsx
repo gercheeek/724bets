@@ -5,7 +5,7 @@ import { PlayerLogo, findBestLogoMatch } from './PlayerLogo';
 import { AnimatedOdd } from '../AnimatedOdd';
 import { LiveTimer } from './MatchCard';
 
-function MatchSlide({ matchData, theme, leagueName, compact = false, onSelectMatch }: { matchData: any, theme: 'fener'|'cl'|'el'|'conf', leagueName: string, compact?: boolean, onSelectMatch?: (match: any) => void }) {
+function MatchSlide({ matchData, theme, leagueName, compact = false, onSelectMatch }: { matchData: any, theme: 'fener'|'cl'|'el'|'conf'|'tr', leagueName: string, compact?: boolean, onSelectMatch?: (match: any) => void }) {
     const { toggleBetSelection } = useBetting();
     const themes: any = {
         'fener': {
@@ -35,6 +35,13 @@ function MatchSlide({ matchData, theme, leagueName, compact = false, onSelectMat
             badgeBg: 'bg-[#10b981]',
             leagueColor: 'text-[#10b981]',
             bgLogo: 'https://upload.wikimedia.org/wikipedia/commons/7/75/UEFA_Europa_Conference_League_logo.svg'
+        },
+        'tr': {
+            bgFrom: 'from-[#1a0606]', bgVia: 'via-[#2c0b0b]', bgTo: 'to-[#120404]',
+            blob1: 'bg-[#ef4444]', blob2: 'bg-[#dc2626]',
+            badgeBg: 'bg-[#ef4444]',
+            leagueColor: 'text-[#ef4444]',
+            bgLogo: 'https://upload.wikimedia.org/wikipedia/tr/9/90/Trendyol_S%C3%BCper_Lig_Logo.png'
         }
     };
     
@@ -169,12 +176,11 @@ export default function SportsPromoSlider({ matches = [], compact = false, onSel
     const dynamicSlides = useMemo(() => {
         if (!matches || matches.length === 0) return [];
         const slides = [];
-        const hasLogos = (m: any) => m.home && m.away && findBestLogoMatch(m.home) !== null && findBestLogoMatch(m.away) !== null;
 
         const fenerMatch = matches.find((m: any) => {
             const h = (m.home || '').toUpperCase();
             const a = (m.away || '').toUpperCase();
-            return (h.includes('FENERBAH') || a.includes('FENERBAH')) && hasLogos(m);
+            return (h.includes('FENERBAH') || a.includes('FENERBAH'));
         });
         if (fenerMatch) {
             slides.push({
@@ -185,7 +191,7 @@ export default function SportsPromoSlider({ matches = [], compact = false, onSel
 
         const clMatch = matches.find((m: any) => {
             const l = (m.league || '').toUpperCase();
-            return (l.includes('CHAMPIONS') || l.includes('ŞAMPİYONLAR') || l.includes('SAMPIYONLAR')) && m.id !== fenerMatch?.id && hasLogos(m);
+            return (l.includes('CHAMPIONS') || l.includes('ŞAMPİYONLAR') || l.includes('SAMPIYONLAR')) && m.id !== fenerMatch?.id;
         });
         if (clMatch) {
             slides.push({
@@ -203,7 +209,7 @@ export default function SportsPromoSlider({ matches = [], compact = false, onSel
         // 3. EUROPA LEAGUE
         const elMatch = matches.find((m: any) => {
             const l = (m.league || '').toUpperCase();
-            return (l.includes('EUROPA') || l.includes('AVRUPA LİGİ') || l.includes('AVRUPA LIGI')) && !l.includes('KONFERANS') && !l.includes('CONFERENCE') && m.id !== fenerMatch?.id && m.id !== clMatch?.id && hasLogos(m);
+            return (l.includes('EUROPA') || l.includes('AVRUPA LİGİ') || l.includes('AVRUPA LIGI')) && !l.includes('KONFERANS') && !l.includes('CONFERENCE') && m.id !== fenerMatch?.id && m.id !== clMatch?.id;
         });
         if (elMatch) {
             slides.push({
@@ -218,21 +224,21 @@ export default function SportsPromoSlider({ matches = [], compact = false, onSel
             });
         }
 
-        // 4. CONFERENCE LEAGUE
-        const confMatch = matches.find((m: any) => {
+        // 4. SUPER LIG
+        const trMatch = matches.find((m: any) => {
             const l = (m.league || '').toUpperCase();
-            return (l.includes('KONFERANS') || l.includes('CONFERENCE')) && m.id !== fenerMatch?.id && m.id !== clMatch?.id && m.id !== elMatch?.id && hasLogos(m);
+            return (l.includes('SUPER LIG') || l.includes('SÜPER LİG')) && m.id !== fenerMatch?.id && m.id !== clMatch?.id && m.id !== elMatch?.id;
         });
-        if (confMatch) {
+        if (trMatch) {
             slides.push({
                 data: {
-                    match: confMatch,
-                    home: confMatch.home, away: confMatch.away,
-                    homeOdd: confMatch.homeOdd, drawOdd: confMatch.drawOdd, awayOdd: confMatch.awayOdd,
-                    dateStr: confMatch.matchDate || 'BUGÜN', timeStr: confMatch.startTime || '20:00',
-                    isLive: confMatch.isLive, score: confMatch.score, minute: confMatch.minute
+                    match: trMatch,
+                    home: trMatch.home, away: trMatch.away,
+                    homeOdd: trMatch.homeOdd, drawOdd: trMatch.drawOdd, awayOdd: trMatch.awayOdd,
+                    dateStr: trMatch.matchDate || 'BUGÜN', timeStr: trMatch.startTime || '20:00',
+                    isLive: trMatch.isLive, score: trMatch.score, minute: trMatch.minute
                 },
-                theme: 'conf', name: 'KONFERANS LİGİ', id: confMatch.id
+                theme: 'tr', name: 'SÜPER LİG', id: trMatch.id
             });
         }
 
@@ -240,7 +246,7 @@ export default function SportsPromoSlider({ matches = [], compact = false, onSel
         const existingIds = new Set(slides.map(s => s.id));
         for (const m of matches) {
             if (slides.length >= 5) break;
-            if (!existingIds.has(m.id) && hasLogos(m)) {
+            if (!existingIds.has(m.id)) {
                 slides.push({
                     data: {
                         match: m,

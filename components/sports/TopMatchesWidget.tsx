@@ -92,12 +92,9 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onS
       .filter(m => {
         if (!m.homeOdd || m.homeOdd === '-') return false;
         
-        // Eğer her iki takımın da logosu yoksa, maçı widget'a alma
-        const hasHomeLogo = !!findBestLogoMatch(m.home);
-        const hasAwayLogo = !!findBestLogoMatch(m.away);
         const isTennisOrBasketball = m.sport?.toLowerCase().includes('tenis') || m.sport?.toLowerCase().includes('tennis') || m.sport?.toLowerCase().includes('basket');
-        if (!hasHomeLogo && !hasAwayLogo && !isTennisOrBasketball) return false;
         
+        // Removed synchronous logo checking here to prevent massive main thread freeze
         // En fazla 24 saat uzağındaki maçlar
         if (m.timestamp && !m.isLive) {
            const diff = m.timestamp - Date.now();
@@ -148,8 +145,9 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onS
         
         // Zaman olarak en yakın olan öne (Canlılar ve yakın saattekiler)
         return (a.timestamp || 0) - (b.timestamp || 0);
-      });
-  }, [matches]);
+      })
+      .slice(0, 10);
+  }, [matches, sortByTime]);
 
   if (topMatches.length === 0) return null;
 

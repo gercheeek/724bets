@@ -63,7 +63,7 @@ const translateSelection = (type: string) => {
   return type;
 };
 
-export const LiveMatchInline: React.FC<LiveMatchInlineProps> = ({ 
+export const LiveMatchInline: React.FC<LiveMatchInlineProps> = React.memo(({ 
   match, 
   onBack, 
   allLiveMatches = [],
@@ -816,12 +816,12 @@ export const LiveMatchInline: React.FC<LiveMatchInlineProps> = ({
                      {animTab === 'stats' && (
                        <div className="absolute inset-0 overflow-y-auto custom-scrollbar p-3 flex flex-col gap-3">
                          {[
-                           { label: 'Toplam Şutlar', h: homeStats?.Shot || homeStats?.totalShots || (match as any).homeStats?.totalShots, a: awayStats?.Shot || awayStats?.totalShots || (match as any).awayStats?.totalShots },
-                           { label: 'İsabetli Şutlar', h: homeStats?.ShotOnTarget || homeStats?.shotsOnTarget || (match as any).homeStats?.shotsOnTarget, a: awayStats?.ShotOnTarget || awayStats?.shotsOnTarget || (match as any).awayStats?.shotsOnTarget },
-                           { label: 'İsabetsiz Şutlar', h: homeStats?.ShotOffTarget || homeStats?.shotsOffTarget || (match as any).homeStats?.shotsOffTarget, a: awayStats?.ShotOffTarget || awayStats?.shotsOffTarget || (match as any).awayStats?.shotsOffTarget },
-                           { label: 'Kornerler', h: homeStats?.Corner || homeStats?.corners || (match as any).homeStats?.corners, a: awayStats?.Corner || awayStats?.corners || (match as any).awayStats?.corners },
-                           { label: 'Sarı Kartlar', h: homeStats?.YellowCard || homeStats?.yellowCards || (match as any).homeStats?.yellowCards, a: awayStats?.YellowCard || awayStats?.yellowCards || (match as any).awayStats?.yellowCards },
-                           { label: 'Kırmızı Kart', h: homeStats?.RedCard || homeStats?.redCards || (match as any).homeStats?.redCards, a: awayStats?.RedCard || awayStats?.redCards || (match as any).awayStats?.redCards },
+                           { label: 'Ataklar', h: stats.attack?.team1_value || homeStats?.attack || (match as any).homeStats?.attack, a: stats.attack?.team2_value || awayStats?.attack || (match as any).awayStats?.attack },
+                           { label: 'Tehlikeli Ataklar', h: stats.dangerous_attack?.team1_value || homeStats?.dangerous_attack || (match as any).homeStats?.dangerous_attack, a: stats.dangerous_attack?.team2_value || awayStats?.dangerous_attack || (match as any).awayStats?.dangerous_attack },
+                           { label: 'İsabetli Şutlar', h: stats.shot_on_target?.team1_value || homeStats?.ShotOnTarget || (match as any).homeStats?.shotsOnTarget, a: stats.shot_on_target?.team2_value || awayStats?.ShotOnTarget || (match as any).awayStats?.shotsOnTarget },
+                           { label: 'Kornerler', h: stats.corner?.team1_value || homeStats?.Corner || (match as any).homeStats?.corners, a: stats.corner?.team2_value || awayStats?.Corner || (match as any).awayStats?.corners },
+                           { label: 'Sarı Kartlar', h: stats.yellow_card?.team1_value || homeStats?.YellowCard || (match as any).homeStats?.yellowCards, a: stats.yellow_card?.team2_value || awayStats?.YellowCard || (match as any).awayStats?.yellowCards },
+                           { label: 'Kırmızı Kart', h: stats.red_card?.team1_value || homeStats?.RedCard || (match as any).homeStats?.redCards, a: stats.red_card?.team2_value || awayStats?.RedCard || (match as any).awayStats?.redCards },
                          ].map((stat, i) => {
                            const hVal = stat.h !== undefined ? stat.h : '-';
                            const aVal = stat.a !== undefined ? stat.a : '-';
@@ -896,4 +896,4 @@ export const LiveMatchInline: React.FC<LiveMatchInlineProps> = ({
       </div>
     </div>
   );
-};
+});

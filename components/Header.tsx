@@ -11,6 +11,7 @@ import { useLanguage, LanguageCode } from '../contexts/LanguageContext';
 import { useTranslation } from 'react-i18next';
 import { viewToPath } from '../utils/routes';
 import SlotText from './SlotText';
+import CasinoLogo from './CasinoLogo';
 
 export interface NavVisibility {
   coupons: boolean;
@@ -412,18 +413,7 @@ const Header: React.FC<HeaderProps> = ({
                 onClick={handleLogoSecretClick}
                 style={{ fontFamily: "'Inter', sans-serif", letterSpacing: '-0.03em', WebkitFontSmoothing: 'antialiased', textRendering: 'optimizeLegibility' }}
               >
-                  {/* 724 in Crisp White */}
-                  <span className="text-white">
-                    724
-                  </span>
-                  
-                  {/* bets in Solid Blue (Lowercase) with Slot Reel Animation on Hover */}
-                  <span className="text-[#00E5FF] flex ml-[1px]">
-                    <span className="inline-block transition-transform transform-style-3d group-hover:animate-[slotReel_2.5s_cubic-bezier(0.1,0.9,0.2,1)_1]">b</span>
-                    <span className="inline-block transition-transform transform-style-3d group-hover:animate-[slotReel_2.5s_cubic-bezier(0.1,0.9,0.2,1)_1]" style={{ animationDelay: '0.1s' }}>e</span>
-                    <span className="inline-block transition-transform transform-style-3d group-hover:animate-[slotReel_2.5s_cubic-bezier(0.1,0.9,0.2,1)_1]" style={{ animationDelay: '0.2s' }}>t</span>
-                    <span className="inline-block transition-transform transform-style-3d group-hover:animate-[slotReel_2.5s_cubic-bezier(0.1,0.9,0.2,1)_1]" style={{ animationDelay: '0.3s' }}>s</span>
-                  </span>
+                  <CasinoLogo />
 
                   {/* Right-side 3-leaf clover with soft glow */}
                   <div className="flex items-center justify-center w-4 h-4 md:w-5 md:h-5 ml-0 -mt-2">

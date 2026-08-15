@@ -24,4 +24,5 @@ export interface MatchInfo {
   marketsCount: number;
   info?: any;
   rawEvent?: any;
+  stats?: any;
 }

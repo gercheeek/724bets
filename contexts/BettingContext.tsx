@@ -104,11 +104,111 @@ export const BettingProvider: React.FC<{ children: React.ReactNode }> = ({ child
   // Eski sistemin devasa JSON dosyalarını çekmesini durdurduk.
   // Yeni API gelene kadar sistem boş ve şimşek hızında çalışacak.
   const fetchScraped = async () => {
-    setScrapedMatches([]);
+    try {
+      const supabase = createBrowserClient();
+      const { data, error } = await supabase.from('sports_matches').select('*').eq('status', 'active');
+      if (error || !data) return;
+
+      const formattedMatches = data.map(dbMatch => {
+        const m = {
+          id: 'sb_' + dbMatch.id,
+          isScraped: true,
+          data: {
+            sport: { name: dbMatch.sport_category },
+            tournament: { name: dbMatch.league },
+            participants: {
+              home: dbMatch.team_home,
+              away: dbMatch.team_away
+            },
+            start_time: dbMatch.match_date,
+            status: dbMatch.is_live ? 'in_progress' : 'not_started',
+            score: dbMatch.is_live ? `${dbMatch.score_home || 0}:${dbMatch.score_away || 0}` : undefined,
+            match_minute: dbMatch.match_minute,
+            stats: dbMatch.odds?.stats,
+            group_markets: {
+              "full_event|0": [
+                `|1x2|!1~home~${dbMatch.odds?.['1'] || 1.1}!x~draw~${dbMatch.odds?.['X'] || 1.1}!2~away~${dbMatch.odds?.['2'] || 1.1}`,
+                `|ou|2.5|!1~over~${dbMatch.odds?.['tU'] || 1.1}!2~under~${dbMatch.odds?.['tA'] || 1.1}`,
+                `|Double_Chance|!1x~1X~${dbMatch.odds?.['cs1X'] || 1.1}!12~12~${dbMatch.odds?.['cs12'] || 1.1}!x2~X2~${dbMatch.odds?.['csX2'] || 1.1}`,
+                `|gg|!1~var~${dbMatch.odds?.['1'] || 1.1}!2~yok~${dbMatch.odds?.['2'] || 1.1}`
+              ]
+            }
+          }
+        };
+        return normalizeEvent(m);
+      });
+      const prevStr = sessionStorage.getItem('prevScrapedMatchesStr');
+      const nextStr = JSON.stringify(formattedMatches);
+      
+      if (prevStr !== nextStr) {
+        sessionStorage.setItem('prevScrapedMatchesStr', nextStr);
+        setScrapedMatches(formattedMatches);
+      }
+    } catch (err) {
+      console.error('Error fetching Supabase matches:', err);
+    }
   };
 
   useEffect(() => {
     fetchScraped();
+  }, []);
+
+  // Supabase Realtime Broadcast Connection for Live Matches
+  useEffect(() => {
+    const supabase = createBrowserClient();
+    const channel = supabase.channel('live-data');
+
+    channel.on('broadcast', { event: 'live_matches_update' }, ({ payload }) => {
+      setIsConnected(true);
+      if (Array.isArray(payload)) {
+        const formattedMatches = payload.map(dbMatch => {
+          const m = {
+            id: dbMatch.id,
+            sport: dbMatch.sport_category,
+            league: dbMatch.league,
+            participants: {
+              home: dbMatch.team_home,
+              away: dbMatch.team_away
+            },
+            start_time: dbMatch.match_date,
+            status: dbMatch.is_live ? 'in_progress' : 'not_started',
+            score: dbMatch.is_live ? `${dbMatch.score_home || 0}:${dbMatch.score_away || 0}` : undefined,
+            match_minute: dbMatch.match_minute,
+            stats: dbMatch.odds?.stats,
+            group_markets: {
+              "full_event|0": [
+                `|1x2|!1~home~${dbMatch.odds?.['1'] || 1.1}!x~draw~${dbMatch.odds?.['X'] || 1.1}!2~away~${dbMatch.odds?.['2'] || 1.1}`,
+                `|ou|2.5|!1~over~${dbMatch.odds?.['tU'] || 1.1}!2~under~${dbMatch.odds?.['tA'] || 1.1}`,
+                `|Double_Chance|!1x~1X~${dbMatch.odds?.['cs1X'] || 1.1}!12~12~${dbMatch.odds?.['cs12'] || 1.1}!x2~X2~${dbMatch.odds?.['csX2'] || 1.1}`,
+                `|gg|!1~var~${dbMatch.odds?.['1'] || 1.1}!2~yok~${dbMatch.odds?.['2'] || 1.1}`
+              ]
+            }
+          };
+          return normalizeEvent(m);
+        });
+
+        setEvents(prev => {
+          const mergedMap = new Map();
+          prev.forEach(e => mergedMap.set(e.id, e));
+          
+          formattedMatches.forEach(ev => {
+             mergedMap.set(ev.id, ev);
+          });
+          
+          return Array.from(mergedMap.values());
+        });
+      }
+    }).subscribe((status) => {
+      if (status === 'SUBSCRIBED') {
+        console.log('✅ Subscribed to Supabase live-data channel');
+      } else if (status === 'CLOSED' || status === 'CHANNEL_ERROR') {
+        setIsConnected(false);
+      }
+    });
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   // Synchronize events with language and scraped matches
@@ -179,188 +279,6 @@ export const BettingProvider: React.FC<{ children: React.ReactNode }> = ({ child
   };
 
   const clearBetSelections = () => setBetSelections([]);
-
-  // Local Proxy WebSocket Connection (for localhost)
-  useEffect(() => {
-    if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
-      return;
-    }
-
-    const reconnectAttemptsRef = { current: 0 };
-    const reconnectTimeoutRef = { current: null as any };
-    const messageBufferRef = { current: [] as any[] };
-    const processBufferIntervalRef = { current: null as any };
-
-    const connectWs = () => {
-      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-      const ws = new WebSocket(`${protocol}//localhost:4000/?lang=${language}`);
-      wsRef.current = ws;
-
-      ws.onopen = () => {
-        console.log('✅ Connected to Local Proxy WebSocket (live-data). Sending LiveEvents subscribe...');
-        setIsConnected(true);
-        reconnectAttemptsRef.current = 0;
-        const loc = language === 'tr' ? 'tur' : 'en';
-        ws.send(`42["subscribe-LiveEvents",{"locale":"${loc}"}]`);
-      };
-
-      ws.onmessage = (event) => {
-        const msg = event.data.toString();
-        if (msg.startsWith('42[')) {
-          try {
-            const parsed = JSON.parse(msg.substring(2));
-            const payload = parsed[1];
-            
-            if (payload && payload.events) {
-              messageBufferRef.current.push(payload.events);
-            } else if (payload && payload.data && payload.data.events) {
-              messageBufferRef.current.push(payload.data.events);
-            } else if (payload && Array.isArray(payload)) {
-              messageBufferRef.current.push(payload);
-            }
-          } catch (e) {
-            console.error("Error parsing WS message", e);
-          }
-        }
-      };
-
-      ws.onclose = () => {
-        setIsConnected(false);
-        // Çok fazla hata basmamak için loglamayı yavaşlatalım
-        if (reconnectAttemptsRef.current < 5) {
-            console.log(`❌ Disconnected from Local Proxy WebSocket. Attempt: ${reconnectAttemptsRef.current + 1}`);
-        }
-        
-        // Exponential backoff: Max 30 seconds wait time instead of 5 to prevent browser CPU lock
-        const timeout = Math.min(1000 * Math.pow(1.5, reconnectAttemptsRef.current), 30000);
-        reconnectAttemptsRef.current += 1;
-        reconnectTimeoutRef.current = setTimeout(() => {
-          connectWs();
-        }, timeout);
-      };
-
-      ws.onerror = (err) => {
-        console.error('WebSocket Error:', err);
-        ws.close();
-      };
-    };
-
-    connectWs();
-
-    processBufferIntervalRef.current = setInterval(() => {
-      if (messageBufferRef.current.length === 0) return;
-      const payloads = [...messageBufferRef.current];
-      messageBufferRef.current = [];
-
-      setEvents(prev => {
-        let newEvents = [...prev];
-        let hasChanges = false;
-        
-        payloads.forEach(newEventsData => {
-          if (!Array.isArray(newEventsData)) return;
-          newEventsData.forEach((ev: any) => {
-            if (!ev.data) return;
-            const idx = newEvents.findIndex(e => e.id === ev.id);
-            hasChanges = true;
-            
-            const normalized = normalizeEvent(ev);
-
-            if (idx >= 0) {
-              const prevData = newEvents[idx].data || {};
-              const nextData = normalized.data || {};
-              const mergedGroupMarkets = { ...prevData.group_markets };
-              
-              if (nextData.group_markets) {
-                for (const groupName in nextData.group_markets) {
-                  const newMarkets = nextData.group_markets[groupName];
-                  if (!mergedGroupMarkets[groupName]) {
-                    mergedGroupMarkets[groupName] = [...newMarkets];
-                  } else {
-                    const existingMarkets = [...mergedGroupMarkets[groupName]];
-                    for (const newMStr of newMarkets) {
-                      const newMId = newMStr.split('|')[0];
-                      const mIdx = existingMarkets.findIndex((mStr: string) => mStr.startsWith(newMId + '|'));
-                      if (mIdx >= 0) existingMarkets[mIdx] = newMStr;
-                      else existingMarkets.push(newMStr);
-                    }
-                    mergedGroupMarkets[groupName] = existingMarkets;
-                  }
-                }
-              }
-
-              const removedMarkets = normalized.removed_markets || nextData.removed_markets;
-              if (removedMarkets && Array.isArray(removedMarkets)) {
-                const removedIds = new Set(removedMarkets);
-                for (const groupName in mergedGroupMarkets) {
-                  mergedGroupMarkets[groupName] = mergedGroupMarkets[groupName].filter((mStr: string) => {
-                    const mId = mStr.split('|')[0];
-                    return !removedIds.has(mId);
-                  });
-                }
-              }
-
-              newEvents[idx] = {
-                ...newEvents[idx],
-                ...normalized,
-                data: {
-                  ...prevData,
-                  ...nextData,
-                  group_markets: mergedGroupMarkets
-                }
-              };
-            } else {
-              newEvents.push(normalized);
-            }
-          });
-        });
-
-        return hasChanges ? newEvents : prev;
-      });
-    }, 500);
-
-    return () => {
-      if (wsRef.current) wsRef.current.close();
-      if (reconnectTimeoutRef.current) clearTimeout(reconnectTimeoutRef.current);
-      if (processBufferIntervalRef.current) clearInterval(processBufferIntervalRef.current);
-    };
-  }, [language]);
-
-  // Supabase Realtime Broadcast Connection for Live Matches
-  useEffect(() => {
-    const supabase = createBrowserClient();
-    const channel = supabase.channel('live-data');
-
-    channel.on('broadcast', { event: 'live_matches_update' }, ({ payload }) => {
-      setIsConnected(true);
-      // Backend bot sends the full parsed array of live matches
-      if (Array.isArray(payload)) {
-        const normalizedPayload = payload.map(ev => normalizeEvent(ev));
-        
-        setEvents(prevEvents => {
-            // Keep the pre-match / scraped events
-            const scrapedEvents = prevEvents.filter(e => e.isScraped || e.id.toString().startsWith('scraped_'));
-            
-            const mergedMap = new Map();
-            scrapedEvents.forEach(e => mergedMap.set(e.id, e));
-            
-            // Overwrite with fresh live events
-            normalizedPayload.forEach(e => mergedMap.set(e.id, e));
-            
-            return Array.from(mergedMap.values());
-        });
-      }
-    });
-
-    channel.subscribe((status) => {
-      if (status === 'SUBSCRIBED') {
-        console.log('✅ Subscribed to Supabase Broadcast (live-data)');
-      }
-    });
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, []);
 
   return (
     <BettingContext.Provider value={{

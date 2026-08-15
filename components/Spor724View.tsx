@@ -43,7 +43,8 @@ interface BetSelection {
 }
 
 interface Spor724ViewProps {
-  onNavigate: (view: string) => void;
+  onNavigate: (view: any) => void;
+  defaultTab?: string;
 }
 
 const getTeamColor = (teamName: string) => {
@@ -373,16 +374,16 @@ export const parseMatchData = (ev: any, language: string): MatchInfo | null => {
     marketsCount: data.markets_count || calculateMarketCount(ev),
     rawEvent: ev,
     info: data.info || {},
+    stats: ev.stats || data.stats,
   };
 
   return matchObj;
 };
-
-export default function Spor724View({ onNavigate }: Spor724ViewProps) {
+export default function Spor724View({ onNavigate, defaultTab }: Spor724ViewProps) {
   const { language } = useLanguage();
   const { isConnected, events } = useBetting();
   const [selectedMatch, setSelectedMatch] = useState<MatchInfo | null>(null);
-  const [activeTab, setActiveTab] = useState('in-play');
+  const [activeTab, setActiveTab] = useState(defaultTab || 'in-play');
   const [navTab, setNavTab] = useState('home');
   const isAuthenticated = typeof window !== 'undefined' ? !!localStorage.getItem('site_member') : false;
   const allSportsTabName = language === 'tr' ? 'Tüm Sporlar' : 'All Sports';
@@ -481,7 +482,12 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
   
   const { betSlip, addSelection } = useBetSlip();
   
-  const [viewMode, setViewMode] = useState<'home' | 'live' | 'bulletin'>('home');
+  const [viewMode, setViewMode] = useState<'home' | 'live' | 'bulletin'>(defaultTab === 'upcoming' ? 'bulletin' : 'home');
+  useEffect(() => {
+    if (defaultTab === 'upcoming') {
+      setNavTab('upcoming');
+    }
+  }, [defaultTab]);
 
   const [matches, setMatches] = useState<MatchInfo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -592,13 +598,25 @@ export default function Spor724View({ onNavigate }: Spor724ViewProps) {
         const matchObj = parseMatchData(ev, language);
         if (matchObj) parsedMatches.push(matchObj);
       });
+      
       setMatches(prev => {
-        if (JSON.stringify(prev) === JSON.stringify(parsedMatches)) return prev;
-        return parsedMatches;
+        const nextMatches = parsedMatches.map(newMatch => {
+           const oldMatch = prev.find(m => m.id === newMatch.id);
+           if (oldMatch && JSON.stringify(oldMatch) === JSON.stringify(newMatch)) {
+               return oldMatch; // Preserve reference
+           }
+           return newMatch;
+        });
+        
+        // Only update state if array changed length or any reference changed
+        const isSame = prev.length === nextMatches.length && prev.every((m, i) => m === nextMatches[i]);
+        return isSame ? prev : nextMatches;
       });
       setIsLoading(false);
     } else {
-      setIsLoading(true);
+      setMatches([]);
+      const timer = setTimeout(() => setIsLoading(false), 800);
+      return () => clearTimeout(timer);
     }
   }, [events, language]);
 

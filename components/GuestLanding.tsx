@@ -321,7 +321,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                 </div>
 
                 {/* Subtle Glow Background */}
-                <div className="absolute top-0 right-0 w-64 h-64 bg-[#06b6d4]/5 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/4 group-hover/casino:bg-[#06b6d4]/15 transition-colors duration-700 z-10"></div>
+                {/* Ambient glow removed to prevent smudge effect */}
                 
                 {/* Top Highlight Line */}
                 <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent z-10"></div>
@@ -345,7 +345,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                 </div>
 
                 {/* Subtle Glow Background */}
-                <div className="absolute top-0 right-0 w-64 h-64 bg-[#f59e0b]/5 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/4 group-hover/sports:bg-[#f59e0b]/15 transition-colors duration-700 z-10"></div>
+                {/* Ambient glow removed to prevent smudge effect */}
                 
                 {/* Top Highlight Line */}
                 <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent z-10"></div>
@@ -428,7 +428,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                   </div>
 
                   {/* Subtle Glow Background */}
-                  <div className="absolute top-0 right-0 w-64 h-64 bg-[#06b6d4]/5 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/4 group-hover/casino:bg-[#06b6d4]/15 transition-colors duration-700 z-10"></div>
+                  {/* Ambient glow removed to prevent smudge effect */}
                   
                   {/* Top Highlight Line */}
                   <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent z-10"></div>
@@ -452,7 +452,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                   </div>
 
                   {/* Subtle Glow Background */}
-                  <div className="absolute top-0 right-0 w-64 h-64 bg-[#f59e0b]/5 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/4 group-hover/sports:bg-[#f59e0b]/15 transition-colors duration-700 z-10"></div>
+                  {/* Ambient glow removed to prevent smudge effect */}
                   
                   {/* Top Highlight Line */}
                   <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent z-10"></div>

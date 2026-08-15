@@ -16,6 +16,11 @@ BEGIN
     RAISE EXCEPTION 'User not found';
   END IF;
 
+  -- Ensure amounts are not negative
+  IF p_bet_amount < 0 OR p_win_amount < 0 THEN
+    RAISE EXCEPTION 'Negative amounts are not allowed';
+  END IF;
+
   -- Ensure they have enough balance (if they are betting something)
   IF p_bet_amount > 0 AND v_current_balance < p_bet_amount THEN
     RAISE EXCEPTION 'Insufficient balance';

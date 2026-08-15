@@ -25,5 +25,11 @@ CREATE POLICY "Public can read wheel spins"
 ON wheel_spins FOR SELECT 
 USING (true);
 
+-- Admins can update/delete
+DROP POLICY IF EXISTS "Admins can update wheel spins" ON wheel_spins;
+DROP POLICY IF EXISTS "Admins can delete wheel spins" ON wheel_spins;
+CREATE POLICY "Admins can update wheel spins" ON wheel_spins FOR UPDATE USING (is_admin()) WITH CHECK (is_admin());
+CREATE POLICY "Admins can delete wheel spins" ON wheel_spins FOR DELETE USING (is_admin());
+
 -- Enable Realtime
 ALTER PUBLICATION supabase_realtime ADD TABLE wheel_spins;

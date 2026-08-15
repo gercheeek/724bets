@@ -27,12 +27,12 @@ ALTER TABLE public.promo_code_usages ENABLE ROW LEVEL SECURITY;
 
 -- Allow public to select promo codes (for validation purposes)
 CREATE POLICY "Public can read promo codes" ON public.promo_codes FOR SELECT USING (true);
-CREATE POLICY "Public can update promo codes" ON public.promo_codes FOR UPDATE USING (true);
-CREATE POLICY "Public can insert promo codes" ON public.promo_codes FOR INSERT WITH CHECK (true);
-CREATE POLICY "Public can delete promo codes" ON public.promo_codes FOR DELETE USING (true);
+CREATE POLICY "Admins can update promo codes" ON public.promo_codes FOR UPDATE USING (is_admin()) WITH CHECK (is_admin());
+CREATE POLICY "Admins can insert promo codes" ON public.promo_codes FOR INSERT WITH CHECK (is_admin());
+CREATE POLICY "Admins can delete promo codes" ON public.promo_codes FOR DELETE USING (is_admin());
 
 -- Usage table policies
 CREATE POLICY "Public can read usages" ON public.promo_code_usages FOR SELECT USING (true);
 CREATE POLICY "Public can insert usages" ON public.promo_code_usages FOR INSERT WITH CHECK (true);
-CREATE POLICY "Public can delete usages" ON public.promo_code_usages FOR DELETE USING (true);
-CREATE POLICY "Public can update usages" ON public.promo_code_usages FOR UPDATE USING (true);
+CREATE POLICY "Admins can delete usages" ON public.promo_code_usages FOR DELETE USING (is_admin());
+CREATE POLICY "Admins can update usages" ON public.promo_code_usages FOR UPDATE USING (is_admin());

@@ -16,7 +16,8 @@ DROP POLICY IF EXISTS "Service can manage tv_chat" ON tv_chat;
 
 CREATE POLICY "Public can insert tv_chat" ON tv_chat FOR INSERT WITH CHECK (true);
 CREATE POLICY "Public can read tv_chat" ON tv_chat FOR SELECT USING (true);
-CREATE POLICY "Service can manage tv_chat" ON tv_chat FOR ALL USING (true);
+CREATE POLICY "Admins can update tv_chat" ON tv_chat FOR UPDATE USING (is_admin()) WITH CHECK (is_admin());
+CREATE POLICY "Admins can delete tv_chat" ON tv_chat FOR DELETE USING (is_admin());
 
 -- 3. Enable Realtime replication so messages sync instantly across PCs & tablets
 -- First, try to add to supabase_realtime publication

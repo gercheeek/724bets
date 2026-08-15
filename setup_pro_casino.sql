@@ -52,6 +52,10 @@ BEGIN
         RAISE EXCEPTION 'User not found';
     END IF;
 
+    IF p_bet_amount < 0 THEN
+        RAISE EXCEPTION 'Negative bet amount is not allowed';
+    END IF;
+
     IF p_bet_amount > 0 AND v_current_balance < p_bet_amount THEN
         RAISE EXCEPTION 'Insufficient balance';
     END IF;
@@ -132,6 +136,7 @@ BEGIN
     -- Lock balance
     SELECT balance INTO v_current_balance FROM members WHERE id = p_user_id FOR UPDATE;
     IF v_current_balance IS NULL THEN RAISE EXCEPTION 'User not found'; END IF;
+    IF p_bet_amount < 0 THEN RAISE EXCEPTION 'Negative bet amount is not allowed'; END IF;
     IF p_bet_amount > 0 AND v_current_balance < p_bet_amount THEN RAISE EXCEPTION 'Insufficient balance'; END IF;
 
     -- Deduct bet amount
