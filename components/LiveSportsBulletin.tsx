@@ -1,61 +1,15 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React from 'react';
 import { CustomBetSlip } from './CustomBetSlip';
 import { Activity, Clock, ShieldCheck } from 'lucide-react';
+import { useBetting } from '../contexts/BettingContext';
 
 export const LiveSportsBulletin = () => {
-  const [events, setEvents] = useState<any[]>([]);
-  const [isConnected, setIsConnected] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const wsRef = useRef<WebSocket | null>(null);
+  const { events, isConnected } = useBetting();
+  const error = null;
+  
+  // Sadece canlı maçları filtrele
+  const liveEvents = events.filter((e: any) => !e.isScraped);
 
-  useEffect(() => {
-    // Connect to our Node.js Proxy
-    const ws = new WebSocket('ws://localhost:4000');
-    wsRef.current = ws;
-
-    ws.onopen = () => {
-      console.log('✅ Connected to Local Proxy');
-      setIsConnected(true);
-      setError(null);
-      
-      // Proxy sunucusuna (ve dolayısıyla Sekabet'e) bağlandığımız anda subscribe mesajını gönder
-      console.log('📡 Sending LiveEvents subscribe request...');
-      ws.send('42["subscribe-LiveEvents",{"locale":"tr_TR"}]');
-    };
-
-    ws.onmessage = (event) => {
-      const msg = event.data.toString();
-      console.log('⬇️ Received from proxy:', msg.substring(0, 100));
-
-      if (msg.startsWith('42[')) {
-        try {
-          const parsed = JSON.parse(msg.substring(2));
-          const eventName = parsed[0];
-          const payload = parsed[1];
-          
-          if (payload && payload.events) {
-            setEvents(payload.events);
-          }
-        } catch (e) {
-          console.error('Error parsing 42 message:', e);
-        }
-      }
-    };
-
-    ws.onclose = () => {
-      console.log('❌ Disconnected from Local Proxy');
-      setIsConnected(false);
-    };
-
-    ws.onerror = (err) => {
-      console.error('WebSocket Error:', err);
-      setError('Bağlantı kurulamadı. Proxy sunucusunun (localhost:4000) çalıştığından emin olun.');
-    };
-
-    return () => {
-      ws.close();
-    };
-  }, []);
 
   return (
     <div className="flex h-[calc(100vh-100px)] bg-[#09090b] text-white overflow-hidden">
@@ -101,7 +55,7 @@ export const LiveSportsBulletin = () => {
 
         {/* Matches List */}
         <div className="flex-1 overflow-y-auto p-4 scrollbar-hide">
-          {events.length === 0 && !error ? (
+          {liveEvents.length === 0 && !error ? (
             <div className="h-full flex flex-col items-center justify-center text-zinc-500">
               <div className="w-16 h-16 border-4 border-white/10 border-t-[#06b6d4] rounded-full animate-spin mb-4"></div>
               <p className="text-sm font-medium">Canlı veriler bekleniyor...</p>
@@ -109,11 +63,11 @@ export const LiveSportsBulletin = () => {
             </div>
           ) : (
             <div className="space-y-3">
-              {events.map((event) => (
+              {liveEvents.slice(0, 50).map((event: any) => (
                 <div key={event.id} className="bg-[#1C2028] border border-white/5 rounded-xl p-4 hover:border-white/10 transition-colors">
                   <div className="flex justify-between items-center mb-4">
                     <div className="flex items-center gap-2">
-                      <span className="text-[#06b6d4] text-xs font-bold bg-[#06b6d4]/10 px-2 py-1 rounded">{event.data?.sport?.name || 'Spor'}</span>
+                      <span className="text-[#06b6d4] text-xs font-bold bg-[#06b6d4]/10 px-2 py-1 rounded">{event.data?.sport?.name || event.sport || 'Spor'}</span>
                       <span className="text-zinc-400 text-xs font-medium flex items-center gap-1">
                         <Clock className="w-3 h-3" /> {new Date(event.data?.time).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}
                       </span>

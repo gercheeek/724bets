@@ -228,6 +228,12 @@ export default function CasinoLobby({
     path: game.path
   }));
 
+  const [displayLimit, setDisplayLimit] = useState(100);
+
+  useEffect(() => {
+    setDisplayLimit(100);
+  }, [activeTab, searchQuery]);
+
   const [activeTab, setActiveTab] = useState(initialTab || 'all');
 
   useEffect(() => {
@@ -483,10 +489,21 @@ export default function CasinoLobby({
           <SectionHeader title={searchQuery ? 'Arama Sonuçları' : (activeTab === 'all' ? 'Tüm Oyunlar' : (TABS.find(t => t.id === activeTab)?.label || 'Oyunlar'))} />
           
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 md:gap-4 w-full px-1 md:px-0">
-            {filteredGames.map((game) => (
+            {filteredGames.slice(0, displayLimit).map((game) => (
               <GameCard key={game.id} game={game} onClick={() => handleGameSelect(game)} />
             ))}
           </div>
+          
+          {filteredGames.length > displayLimit && (
+            <div className="flex justify-center mt-8 mb-12">
+              <button 
+                onClick={() => setDisplayLimit(prev => prev + 100)}
+                className="px-8 py-3 bg-[#1A1F2D] hover:bg-[#00E5FF]/20 text-[#00E5FF] font-black rounded-lg transition-all border border-[#00E5FF]/30 hover:shadow-[0_0_20px_rgba(0,229,255,0.3)]"
+              >
+                Daha Fazla Oyun Göster ({filteredGames.length - displayLimit})
+              </button>
+            </div>
+          )}
           
           {filteredGames.length === 0 && (
             <div className="w-full py-20 flex flex-col items-center justify-center text-[#848B9D]">

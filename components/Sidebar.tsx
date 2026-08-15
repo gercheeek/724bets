@@ -101,6 +101,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, activeView, onViewC
       <a
         key={item.id}
         href={href}
+        title={!isOpen ? item.label : undefined}
         onClick={(e) => handleNavClick(e, item.route)}
         className={`w-full flex items-center h-[52px] cursor-pointer transition-all duration-300 relative group/link text-left border-none bg-transparent outline-none z-[9999] pointer-events-auto
           ${isActive ? 'text-white bg-gradient-to-r from-[#00E5FF]/15 to-transparent' : 'text-[#8b92a5] hover:text-white hover:bg-gradient-to-r hover:from-white/5 hover:to-transparent'}

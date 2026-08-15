@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, startTransition } from 'react';
 import { createPortal } from 'react-dom';
 import { useLocation, useNavigate, Routes, Route, Navigate } from 'react-router-dom';
 import { viewToPath, pathToView } from './utils/routes';
@@ -210,7 +210,9 @@ export default function App() {
 
   const setView = (v: string) => {
     const targetPath = viewToPath[v] || v;
-    navigate(`/${targetPath}`);
+    startTransition(() => {
+      navigate(`/${targetPath}`);
+    });
   };
 
   const [isAdminPanelOpen, setIsAdminPanelOpen] = useState(false);
@@ -281,24 +283,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
   const [loadId, setLoadId] = useState(0);
   const [activeCasinoGame, setActiveCasinoGame] = useState<string | null>(null);
   const [currentTime, setCurrentTime] = useState(new Date());
-  
-  const [showSecretOverlay, setShowSecretOverlay] = useState(true);
-  const [secretClicks, setSecretClicks] = useState(0);
-  const lastClickTimeRef = useRef<number>(0);
-
-  const handleSecretClick = () => {
-    const now = Date.now();
-    if (now - lastClickTimeRef.current > 1200) {
-      setSecretClicks(1);
-    } else {
-      const nextClicks = secretClicks + 1;
-      setSecretClicks(nextClicks);
-      if (nextClicks >= 10) {
-        setShowSecretOverlay(false);
-      }
-    }
-    lastClickTimeRef.current = now;
-  };
+  // Secret overlay removed
   const [isChatOpen, setIsChatOpen] = useState(() => {
     if (typeof window !== 'undefined') {
       const isMobileDevice = window.innerWidth < 1280;
@@ -353,29 +338,8 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
     const isEnteringSports = isSports(view);
     const isLeavingSports = isSports(previousViewRef.current) && !isEnteringSports;
     
-    // Yalnızca spor sayfasına girerken/çıkarken veya ilk yüklemede göster
-    if (isEnteringSports || isLeavingSports || previousViewRef.current === view) {
-      setShowLoader(true);
-      setFadeOutLoader(false);
-      
-      // Fallback timer just in case
-      const timer1 = setTimeout(() => {
-        setFadeOutLoader(true);
-      }, 5000); 
-      
-      const timer2 = setTimeout(() => {
-        setShowLoader(false);
-        setFadeOutLoader(false);
-      }, 3000); // Completely hide at 3s
-      
-      previousViewRef.current = view;
-      return () => { 
-        clearTimeout(timer1); 
-        clearTimeout(timer2); 
-      };
-    } else {
-      previousViewRef.current = view;
-    }
+    // Transition bekleme süresi tamamen kaldırıldı, anında geçiş sağlanacak.
+    previousViewRef.current = view;
   }, [view]);
 
   useEffect(() => {
@@ -1965,7 +1929,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
   };
 
   const isLocalhost = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
-  const isMaintenanceActive = true; // Enabled by request
+  const isMaintenanceActive = false; // Disabled by request
 
   const getNextThreeAnalyses = () => {
     const combined = analyses.length > 0 ? analyses : demoAnalyses;
@@ -2115,13 +2079,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
       <BetSlipProvider>
       <React.Suspense fallback={<AppLoader />}>
         <>
-          {showSecretOverlay && (
-            <div 
-              onClick={handleSecretClick}
-              className="fixed inset-0 bg-black z-[99999999] cursor-default select-none"
-              style={{ touchAction: 'none' }}
-            />
-          )}
+          {/* Secret overlay rendered logic removed */}
           {/* Onboarding Popup Overlay */}
       {showOnboardingPopup && (
         <OnboardingPopup 

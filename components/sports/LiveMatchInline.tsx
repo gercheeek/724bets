@@ -800,10 +800,13 @@ export const LiveMatchInline: React.FC<LiveMatchInlineProps> = ({
                              </div>
                            </div>
                          ) : (
-                           <div className="relative z-10 flex-1 flex flex-col items-center justify-center p-4 opacity-50">
-                             <Trophy className="w-10 h-10 text-white/30 mb-2" />
-                             <div className="text-white/60 font-bold text-[11px] uppercase tracking-wider text-center max-w-[200px]">
-                               Maç saatinde canlı animasyon burada olacaktır
+                           <div className="relative z-10 flex-1 flex flex-col items-center justify-center p-4">
+                             <div className="absolute inset-0 bg-black/50 z-0 rounded-lg"></div>
+                             <div className="relative z-10 flex flex-col items-center">
+                               <Trophy className="w-10 h-10 text-white mb-2 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]" />
+                               <div className="text-white font-black text-[12px] uppercase tracking-wider text-center max-w-[220px] text-shadow-md shadow-black drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+                                 Animasyon maç saatinde aktifleşecektir
+                               </div>
                              </div>
                            </div>
                          )}

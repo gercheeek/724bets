@@ -82,16 +82,16 @@ export const MatchCard: React.FC<MatchCardProps> = memo(({ match, isGoal, onSele
       </div>
 
       {/* Teams Section */}
-      <div className="flex flex-col gap-2 mt-1 z-10">
+      <div className="flex flex-col gap-2 mt-2 mb-1 z-10 max-w-[260px] mx-auto w-full">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-full overflow-hidden shrink-0 flex items-center justify-center p-0.5">
               <PlayerLogo name={match.home} fallbackLogo={match.homeLogo} sport={match.sport} />
             </div>
             <span className="text-[13px] font-semibold text-white tracking-wide">{match.home}</span>
           </div>
           {match.isLive && (
-            <div className={`text-[14px] font-black tabular-nums flex items-center gap-2 ${isGoal ? 'text-emerald-400' : 'text-white'}`}>
+            <div className={`text-[15px] font-black tabular-nums flex items-center gap-2 ${isGoal ? 'text-emerald-400' : 'text-white'}`}>
               {isTennis && match.info?.current_game_state && (
                 <span className="text-zinc-500 text-[11px] bg-zinc-800/50 px-1 rounded">{match.info.current_game_state.split(':')[0] || '0'}</span>
               )}
@@ -102,14 +102,14 @@ export const MatchCard: React.FC<MatchCardProps> = memo(({ match, isGoal, onSele
           )}
         </div>
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-full overflow-hidden shrink-0 flex items-center justify-center p-0.5">
               <PlayerLogo name={match.away} fallbackLogo={match.awayLogo} sport={match.sport} />
             </div>
             <span className="text-[13px] font-semibold text-white tracking-wide">{match.away}</span>
           </div>
           {match.isLive && (
-            <div className={`text-[14px] font-black tabular-nums flex items-center gap-2 ${isGoal ? 'text-emerald-400' : 'text-white'}`}>
+            <div className={`text-[15px] font-black tabular-nums flex items-center gap-2 ${isGoal ? 'text-emerald-400' : 'text-white'}`}>
               {isTennis && match.info?.current_game_state && (
                 <span className="text-zinc-500 text-[11px] bg-zinc-800/50 px-1 rounded">{match.info.current_game_state.split(':')[1] || '0'}</span>
               )}
@@ -136,9 +136,9 @@ export const MatchCard: React.FC<MatchCardProps> = memo(({ match, isGoal, onSele
                 odd: parseFloat(match.homeOdd.replace(',', '.')) || 1
               });
             }}
-            className={`flex-1 rounded py-1.5 px-2.5 flex items-center justify-between transition-colors border relative overflow-hidden group/btn ${betSlip.some(s => s.id === (match.homeId || match.id+'_1')) ? 'bg-emerald-500/10 border-emerald-500/40' : 'bg-[#1a1f2c] hover:bg-[#252b3b] border-transparent hover:border-white/5'}`}
+            className={`flex-1 rounded-md py-2 px-3 flex items-center justify-between transition-all duration-300 border relative overflow-hidden group/btn ${betSlip.some(s => s.id === (match.homeId || match.id+'_1')) ? 'bg-emerald-500/10 border-emerald-500/40' : 'bg-[#1a1f2c] hover:bg-[#252b3b] border-[#1a1f2c] hover:border-[#00E5FF]/40 hover:shadow-[0_0_12px_rgba(0,229,255,0.15)]'}`}
           >
-            <span className="text-[11px] text-[#8e939d] font-medium">1</span>
+            <span className="text-[12px] text-[#a1a7b3] font-bold">1</span>
             <span className={`text-[13px] font-bold ${betSlip.some(s => s.id === (match.homeId || match.id+'_1')) ? 'text-emerald-400' : 'text-white'}`}><AnimatedOdd value={match.homeOdd} /></span>
           </button>
           
@@ -154,9 +154,9 @@ export const MatchCard: React.FC<MatchCardProps> = memo(({ match, isGoal, onSele
                 odd: parseFloat(match.drawOdd.replace(',', '.')) || 1
               });
             }}
-            className={`flex-1 rounded py-1.5 px-2.5 flex items-center justify-between transition-colors border relative overflow-hidden group/btn ${betSlip.some(s => s.id === (match.drawId || match.id+'_x')) ? 'bg-emerald-500/10 border-emerald-500/40' : 'bg-[#1a1f2c] hover:bg-[#252b3b] border-transparent hover:border-white/5'}`}
+            className={`flex-1 rounded-md py-2 px-3 flex items-center justify-between transition-all duration-300 border relative overflow-hidden group/btn ${betSlip.some(s => s.id === (match.drawId || match.id+'_x')) ? 'bg-emerald-500/10 border-emerald-500/40' : 'bg-[#1a1f2c] hover:bg-[#252b3b] border-[#1a1f2c] hover:border-[#00E5FF]/40 hover:shadow-[0_0_12px_rgba(0,229,255,0.15)]'}`}
           >
-            <span className="text-[11px] text-[#8e939d] font-medium truncate px-1">X</span>
+            <span className="text-[12px] text-[#a1a7b3] font-bold truncate px-1">X</span>
             <span className={`text-[13px] font-bold ${betSlip.some(s => s.id === (match.drawId || match.id+'_x')) ? 'text-emerald-400' : 'text-white'}`}><AnimatedOdd value={match.drawOdd} /></span>
           </button>
 
@@ -172,9 +172,9 @@ export const MatchCard: React.FC<MatchCardProps> = memo(({ match, isGoal, onSele
                 odd: parseFloat(match.awayOdd.replace(',', '.')) || 1
               });
             }}
-            className={`flex-1 rounded py-1.5 px-2.5 flex items-center justify-between transition-colors border relative overflow-hidden group/btn ${betSlip.some(s => s.id === (match.awayId || match.id+'_2')) ? 'bg-emerald-500/10 border-emerald-500/40' : 'bg-[#1a1f2c] hover:bg-[#252b3b] border-transparent hover:border-white/5'}`}
+            className={`flex-1 rounded-md py-2 px-3 flex items-center justify-between transition-all duration-300 border relative overflow-hidden group/btn ${betSlip.some(s => s.id === (match.awayId || match.id+'_2')) ? 'bg-emerald-500/10 border-emerald-500/40' : 'bg-[#1a1f2c] hover:bg-[#252b3b] border-[#1a1f2c] hover:border-[#00E5FF]/40 hover:shadow-[0_0_12px_rgba(0,229,255,0.15)]'}`}
           >
-            <span className="text-[11px] text-[#8e939d] font-medium">2</span>
+            <span className="text-[12px] text-[#a1a7b3] font-bold">2</span>
             <span className={`text-[13px] font-bold ${betSlip.some(s => s.id === (match.awayId || match.id+'_2')) ? 'text-emerald-400' : 'text-white'}`}><AnimatedOdd value={match.awayOdd} /></span>
           </button>
 

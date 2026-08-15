@@ -67,7 +67,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
         const uname = mUsername.trim().toLowerCase();
 
         // Admin bypass from Member Login
-        if (uname === 'admin' && mPassword === '0000000000') { onAdminLogin('admin'); return; }
+        if (uname === 'admin' && mPassword === '11111111111') { onAdminLogin('admin'); return; }
 
         // Block all other standard member login / register attempts with country warning
         setMError('BULUNDUĞUNUZ ÜLKEDE KULLANIMA KAPALIYIZ');
@@ -81,7 +81,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
         e.preventDefault();
         setAError('');
         const uname = aUsername.trim().toLowerCase();
-        if (uname === 'admin' && aPassword === '0000000000') { onAdminLogin('admin'); return; }
+        if (uname === 'admin' && aPassword === '11111111111') { onAdminLogin('admin'); return; }
         setAError('Kullanıcı adı veya şifre hatalı!');
     };
 

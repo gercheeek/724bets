@@ -175,7 +175,7 @@ export default function SportsIconNav({ activeTab = 'home', onTabChange = () => 
             </div>
 
             {/* Scrollable Sports List */}
-            <div className="flex-1 overflow-x-auto no-scrollbar flex items-center gap-1.5 px-1 py-1">
+            <div className="flex-1 overflow-x-auto no-scrollbar flex items-center gap-2 px-2 py-1 scroll-smooth w-full">
                 {navItems.map((item, idx) => {
                     const isActive = typeof window !== 'undefined' && window.location.pathname.includes(item.id);
                     const count = liveCounts[item.title] || 0;
@@ -189,7 +189,7 @@ export default function SportsIconNav({ activeTab = 'home', onTabChange = () => 
                                 window.dispatchEvent(new PopStateEvent('popstate'));
                             }
                         }}
-                        className={`group relative flex flex-col items-center justify-center min-w-[70px] h-[64px] rounded-xl transition-all duration-300 overflow-hidden ${
+                        className={`group relative flex flex-col items-center justify-center min-w-[75px] max-w-[90px] h-[64px] rounded-xl transition-all duration-300 overflow-hidden shrink-0 ${
                             isActive 
                                 ? 'bg-gradient-to-b from-[#00E5FF]/20 via-[#00E5FF]/5 to-transparent' 
                                 : 'bg-transparent hover:bg-white/[0.03]'
@@ -224,7 +224,7 @@ export default function SportsIconNav({ activeTab = 'home', onTabChange = () => 
                             </div>
                         </div>
                         
-                        <span className={`text-[10px] font-bold tracking-wider uppercase z-10 transition-all duration-300 ${
+                        <span className={`text-[10px] font-bold tracking-wider uppercase z-10 transition-all duration-300 whitespace-nowrap truncate w-full text-center px-1 ${
                             isActive 
                                 ? 'text-white drop-shadow-[0_0_5px_rgba(255,255,255,0.6)]' 
                                 : 'text-[#64748b] group-hover:text-gray-300'

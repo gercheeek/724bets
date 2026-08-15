@@ -3,69 +3,59 @@ import { ArrowLeft, Target, BarChart2, MessageCircle, Info, Shield, Trophy, Acti
 
 interface SingleMatchViewProps {
   match: any;
+  onBack?: () => void;
 }
 
-// Global cache for lightning-fast subsequent loads
-export const matchCache: Record<string, { markets: any[], categories: string[] }> = {};
+const MOCK_CATEGORIES = [
+  'Ana Seçenekler', 'Toplam', 'Yarılar', 'Kornerler', 'Oyuncular', 'İstatistikler', 'Asya'
+];
 
-export const prefetchMatchDetails = (id: string) => {
-  if (matchCache[id]) return;
-  
-  // Mark as fetching to prevent duplicate network requests
-  matchCache[id] = { markets: [], categories: [] }; 
-  
-  fetch(`/.netlify/functions/match_details?id=${id}`)
-    .then(res => res.json())
-    .then(json => {
-      if (json.success) {
-        matchCache[id] = {
-          markets: json.data.markets,
-          categories: json.data.categories
-        };
-      }
-    })
-    .catch(err => {
-      console.error("Prefetch failed", err);
-      delete matchCache[id]; // allow retry
-    });
-};
+const MOCK_MARKETS = [
+  // Ana Seçenekler
+  { id: 'm1', category: 'Ana Seçenekler', title: 'Maç Sonucu', selections: [{label: '1', odds: '1.85'}, {label: 'X', odds: '3.40'}, {label: '2', odds: '4.20'}] },
+  { id: 'm2', category: 'Ana Seçenekler', title: 'Çifte Şans', selections: [{label: '1X', odds: '1.22'}, {label: '12', odds: '1.30'}, {label: 'X2', odds: '1.85'}] },
+  { id: 'm3', category: 'Ana Seçenekler', title: 'Karşılıklı Gol', selections: [{label: 'Var', odds: '1.75'}, {label: 'Yok', odds: '1.95'}] },
+  { id: 'm4', category: 'Ana Seçenekler', title: 'Maç Golü 2.5 Alt/Üst', selections: [{label: 'Alt', odds: '1.90'}, {label: 'Üst', odds: '1.80'}] },
+  { id: 'm5', category: 'Ana Seçenekler', title: 'Beraberlikte İade', selections: [{label: '1', odds: '1.35'}, {label: '2', odds: '3.10'}] },
+
+  // Toplam
+  { id: 't1', category: 'Toplam', title: 'Toplam Gol 1.5', selections: [{label: 'Alt', odds: '3.20'}, {label: 'Üst', odds: '1.30'}] },
+  { id: 't2', category: 'Toplam', title: 'Toplam Gol 3.5', selections: [{label: 'Alt', odds: '1.35'}, {label: 'Üst', odds: '2.90'}] },
+  { id: 't3', category: 'Toplam', title: 'Ev Sahibi Toplam Gol 1.5', selections: [{label: 'Alt', odds: '1.60'}, {label: 'Üst', odds: '2.20'}] },
+  { id: 't4', category: 'Toplam', title: 'Deplasman Toplam Gol 1.5', selections: [{label: 'Alt', odds: '1.20'}, {label: 'Üst', odds: '4.00'}] },
+  { id: 't5', category: 'Toplam', title: 'Tek/Çift Gol', selections: [{label: 'Tek', odds: '1.85'}, {label: 'Çift', odds: '1.85'}] },
+
+  // Yarılar
+  { id: 'h1', category: 'Yarılar', title: '1. Yarı Sonucu', selections: [{label: '1', odds: '2.40'}, {label: 'X', odds: '2.10'}, {label: '2', odds: '4.50'}] },
+  { id: 'h2', category: 'Yarılar', title: '1. Yarı Toplam Gol 1.5', selections: [{label: 'Alt', odds: '1.40'}, {label: 'Üst', odds: '2.70'}] },
+  { id: 'h3', category: 'Yarılar', title: 'En Çok Gol Olan Yarı', selections: [{label: '1. Yarı', odds: '3.10'}, {label: 'Eşit', odds: '3.40'}, {label: '2. Yarı', odds: '2.00'}] },
+
+  // Kornerler
+  { id: 'c1', category: 'Kornerler', title: 'Toplam Korner 9.5', selections: [{label: 'Alt', odds: '1.85'}, {label: 'Üst', odds: '1.85'}] },
+  { id: 'c2', category: 'Kornerler', title: 'Ev Sahibi Korner 5.5', selections: [{label: 'Alt', odds: '1.70'}, {label: 'Üst', odds: '2.00'}] },
+  { id: 'c3', category: 'Kornerler', title: 'Deplasman Korner 3.5', selections: [{label: 'Alt', odds: '2.10'}, {label: 'Üst', odds: '1.65'}] },
+  { id: 'c4', category: 'Kornerler', title: '1. Yarı Toplam Korner 4.5', selections: [{label: 'Alt', odds: '1.90'}, {label: 'Üst', odds: '1.80'}] },
+
+  // Oyuncular
+  { id: 'p1', category: 'Oyuncular', title: 'İlk Golü Atar', selections: [{label: 'Ev', odds: '5.50'}, {label: 'Dep', odds: '6.50'}, {label: 'Hiçbiri', odds: '10.00'}] },
+  { id: 'p2', category: 'Oyuncular', title: 'Herhangi Bir Zamanda Gol Atar', selections: [{label: 'Oyuncu A', odds: '2.50'}, {label: 'Oyuncu B', odds: '2.80'}, {label: 'Oyuncu C', odds: '3.50'}] },
+  { id: 'p3', category: 'Oyuncular', title: 'Oyuncu Kart Görür mü?', selections: [{label: 'Oyuncu A (Evet)', odds: '3.00'}, {label: 'Oyuncu B (Evet)', odds: '2.50'}] },
+
+  // İstatistikler
+  { id: 's1', category: 'İstatistikler', title: 'Toplam Kart 4.5', selections: [{label: 'Alt', odds: '1.95'}, {label: 'Üst', odds: '1.75'}] },
+  { id: 's2', category: 'İstatistikler', title: 'Kırmızı Kart Çıkar mı?', selections: [{label: 'Evet', odds: '4.50'}, {label: 'Hayır', odds: '1.15'}] },
+  { id: 's3', category: 'İstatistikler', title: 'Toplam Faul 24.5', selections: [{label: 'Alt', odds: '1.85'}, {label: 'Üst', odds: '1.85'}] },
+  { id: 's4', category: 'İstatistikler', title: 'Toplam Ofsayt 3.5', selections: [{label: 'Alt', odds: '1.65'}, {label: 'Üst', odds: '2.10'}] },
+
+  // Asya
+  { id: 'a1', category: 'Asya', title: 'Asya Handikap', selections: [{label: 'Ev (-0.5)', odds: '1.85'}, {label: 'Dep (+0.5)', odds: '1.95'}] },
+  { id: 'a2', category: 'Asya', title: 'Asya Alt/Üst 2.75', selections: [{label: 'Alt', odds: '1.80'}, {label: 'Üst', odds: '2.00'}] },
+];
 
 export const SingleMatchView: React.FC<SingleMatchViewProps> = ({ match, onBack }) => {
-  const [activeTab, setActiveTab] = useState('Tümü');
-  const [markets, setMarkets] = useState<any[]>(matchCache[match.id]?.markets || []);
-  const [categories, setCategories] = useState<string[]>(matchCache[match.id]?.categories || ['Tümü']);
-  const [loading, setLoading] = useState(!matchCache[match.id]);
-
-  useEffect(() => {
-    // If we already have it in cache, do nothing
-    if (matchCache[match.id]) {
-      setMarkets(matchCache[match.id].markets);
-      setCategories(matchCache[match.id].categories);
-      setLoading(false);
-      return;
-    }
-
-    const fetchDetails = async () => {
-      try {
-        setLoading(true);
-        const res = await fetch(`/.netlify/functions/match_details?id=${match.id}`);
-        const json = await res.json();
-        if (json.success) {
-          matchCache[match.id] = {
-            markets: json.data.markets,
-            categories: json.data.categories
-          };
-          setMarkets(json.data.markets);
-          setCategories(json.data.categories);
-        }
-      } catch (err) {
-        console.error("Failed to fetch match details", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchDetails();
-  }, [match.id]);
+  const [activeTab, setActiveTab] = useState('Ana Seçenekler');
+  const [markets] = useState<any[]>(MOCK_MARKETS);
+  const [categories] = useState<string[]>(MOCK_CATEGORIES);
 
   return (
     <div className="flex flex-col h-full bg-[#09090b] text-white animate-in fade-in slide-in-from-bottom-4 duration-300 relative z-30">
@@ -74,12 +64,12 @@ export const SingleMatchView: React.FC<SingleMatchViewProps> = ({ match, onBack 
       <div className="flex items-center gap-4 px-6 py-4 border-b border-[#202532] bg-[#0E1116] sticky top-0 z-20">
         <button 
           onClick={onBack}
-          className="w-8 h-8 flex items-center justify-center rounded bg-[#0A0C10] text-zinc-400 hover:text-[#06b6d4] hover:bg-[#06b6d4]/10 transition-colors border border-transparent hover:border-[#06b6d4]/30"
+          className="w-8 h-8 flex items-center justify-center rounded bg-[#0A0C10] text-zinc-400 hover:text-[#00E5FF] hover:bg-[#00E5FF]/10 transition-colors border border-transparent hover:border-[#00E5FF]/30"
         >
           <ArrowLeft className="w-5 h-5" />
         </button>
         <div className="flex flex-col">
-          <span className="text-[#06b6d4] text-[10px] font-bold uppercase tracking-widest">{match.sport === 'futbol' ? 'Futbol / ' + (match.time === 'Yakında' ? 'Bülten' : 'Canlı') : match.sport}</span>
+          <span className="text-[#00E5FF] text-[10px] font-bold uppercase tracking-widest">{match.sport === 'futbol' ? 'Futbol / ' + (match.time === 'Yakında' ? 'Bülten' : 'Canlı') : match.sport}</span>
           <span className="text-sm font-bold text-zinc-200">{match.home} - {match.away}</span>
         </div>
         <div className="ml-auto flex items-center gap-2">
@@ -91,29 +81,29 @@ export const SingleMatchView: React.FC<SingleMatchViewProps> = ({ match, onBack 
 
       {/* Hero Banner with Score */}
       <div className="relative overflow-hidden border-b border-[#202532]">
-        <div className="absolute inset-0 bg-gradient-to-r from-[#06b6d4]/5 via-transparent to-[#06b6d4]/5"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-[#00E5FF]/5 via-transparent to-[#00E5FF]/5"></div>
         
-        <div className="relative px-8 py-10 flex items-center justify-between">
+        <div className="relative px-4 md:px-8 py-8 md:py-10 flex items-center justify-between">
           <div className="flex-1 flex flex-col items-center gap-3">
-            <div className="w-20 h-20 rounded-full bg-[#12161E] border border-[#202532] flex items-center justify-center shadow-[0_0_20px_rgba(0,0,0,0.5)]">
-              <Shield className="w-10 h-10 text-zinc-600" />
+            <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-[#12161E] border border-[#202532] flex items-center justify-center shadow-[0_0_20px_rgba(0,0,0,0.5)]">
+              <Shield className="w-8 h-8 md:w-10 md:h-10 text-zinc-600" />
             </div>
-            <span className="text-lg font-black text-center max-w-[200px] leading-tight text-zinc-100">{match.home}</span>
+            <span className="text-sm md:text-lg font-black text-center max-w-[120px] md:max-w-[200px] leading-tight text-zinc-100">{match.home}</span>
           </div>
 
-          <div className="flex flex-col items-center px-8">
-            <span className="text-zinc-400 text-xs font-bold mb-2 tracking-widest uppercase bg-[#0A0C10] px-3 py-1 rounded-full border border-[#202532] shadow-inner">{match.time}</span>
+          <div className="flex flex-col items-center px-4 md:px-8">
+            <span className="text-zinc-400 text-[10px] md:text-xs font-bold mb-2 tracking-widest uppercase bg-[#0A0C10] px-3 py-1 rounded-full border border-[#202532] shadow-inner">{match.time}</span>
             {match.isLive ? (
-              <div className="flex items-center gap-4 text-5xl font-black text-[#06b6d4] tracking-tighter drop-shadow-[0_0_15px_rgba(0,255,163,0.3)]">
-                <span>{match.scoreHome}</span>
+              <div className="flex items-center gap-3 md:gap-4 text-4xl md:text-5xl font-black text-[#00E5FF] tracking-tighter drop-shadow-[0_0_15px_rgba(0,229,255,0.3)]">
+                <span>{match.scoreHome || (match.score ? String(match.score).split(' - ')[0] : '0')}</span>
                 <span className="text-zinc-600 mb-2">-</span>
-                <span>{match.scoreAway}</span>
+                <span>{match.scoreAway || (match.score ? String(match.score).split(' - ')[1] : '0')}</span>
               </div>
             ) : (
-              <div className="text-3xl font-black text-zinc-300 tracking-tighter uppercase my-2">VS</div>
+              <div className="text-2xl md:text-3xl font-black text-zinc-300 tracking-tighter uppercase my-2">VS</div>
             )}
             {match.isLive && (
-              <div className="mt-4 flex items-center gap-2 text-red-500 animate-pulse">
+              <div className="mt-3 md:mt-4 flex items-center gap-2 text-red-500 animate-pulse">
                 <div className="w-2 h-2 rounded-full bg-red-500"></div>
                 <span className="text-[10px] font-bold uppercase tracking-widest">Canlı</span>
               </div>
@@ -121,60 +111,58 @@ export const SingleMatchView: React.FC<SingleMatchViewProps> = ({ match, onBack 
           </div>
 
           <div className="flex-1 flex flex-col items-center gap-3">
-            <div className="w-20 h-20 rounded-full bg-[#12161E] border border-[#202532] flex items-center justify-center shadow-[0_0_20px_rgba(0,0,0,0.5)]">
-              <Shield className="w-10 h-10 text-zinc-600" />
+            <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-[#12161E] border border-[#202532] flex items-center justify-center shadow-[0_0_20px_rgba(0,0,0,0.5)]">
+              <Shield className="w-8 h-8 md:w-10 md:h-10 text-zinc-600" />
             </div>
-            <span className="text-lg font-black text-center max-w-[200px] leading-tight text-zinc-100">{match.away}</span>
+            <span className="text-sm md:text-lg font-black text-center max-w-[120px] md:max-w-[200px] leading-tight text-zinc-100">{match.away}</span>
           </div>
         </div>
       </div>
 
       {/* Tabs */}
-      <div className="flex border-b border-[#202532] bg-[#0E1116] overflow-x-auto custom-scrollbar sticky top-[73px] z-10 shadow-md">
+      <div className="flex border-b border-[#202532] bg-[#0E1116] overflow-x-auto no-scrollbar sticky top-[73px] z-10 shadow-md">
         {categories.map(cat => (
           <button
             key={cat}
             onClick={() => setActiveTab(cat)}
-            className={`px-6 py-4 text-xs font-bold uppercase tracking-wider whitespace-nowrap border-b-2 transition-all ${
+            className={`px-5 py-4 text-[11px] md:text-xs font-bold uppercase tracking-wider whitespace-nowrap border-b-2 transition-all duration-300 relative ${
               activeTab === cat 
-                ? 'border-[#06b6d4] text-[#06b6d4] bg-[#06b6d4]/5' 
-                : 'border-transparent text-zinc-500 hover:text-zinc-300 hover:bg-[#0A0C10]'
+                ? 'border-[#00E5FF] text-[#00E5FF] bg-gradient-to-t from-[#00E5FF]/10 to-transparent' 
+                : 'border-transparent text-zinc-500 hover:text-zinc-300 hover:bg-white/5'
             }`}
           >
-            {cat}
+            {activeTab === cat && (
+              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[70%] h-[2px] bg-[#00E5FF] shadow-[0_0_12px_#00E5FF]"></div>
+            )}
+            <span className={activeTab === cat ? 'drop-shadow-[0_0_8px_rgba(0,229,255,0.5)]' : ''}>
+              {cat}
+            </span>
           </button>
         ))}
       </div>
 
       {/* Markets Content */}
-      <div className="flex-1 p-6 space-y-6 overflow-y-auto bg-[#09090b]">
-        {loading ? (
-          <div className="flex flex-col items-center justify-center py-20 gap-4">
-            <div className="w-8 h-8 border-4 border-[#06b6d4] border-t-transparent rounded-full animate-spin"></div>
-            <div className="text-[#06b6d4] font-bold text-sm tracking-widest animate-pulse">BAHİSLER YÜKLENİYOR...</div>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {markets
-              .filter(m => activeTab === 'Tümü' || m.category === activeTab)
-              .map(market => (
-                <div key={market.id} className="bg-[#12161E] rounded-xl border border-[#202532] overflow-hidden shadow-sm">
-                  <div className="px-4 py-3 bg-[#161A23] border-b border-[#202532] flex justify-between items-center">
-                    <span className="text-zinc-300 text-xs font-bold uppercase">{market.title}</span>
-                    <Activity className="w-4 h-4 text-zinc-500" />
-                  </div>
-                  <div className={`p-4 grid gap-2 ${market.selections.length > 3 ? 'grid-cols-3' : `grid-cols-${market.selections.length}`}`}>
-                    {market.selections.map((opt: any, i: number) => (
-                      <button key={i} className="group relative flex flex-col items-center justify-center h-14 bg-[#0A0C10] border border-[#202532] rounded hover:border-[#06b6d4]/50 hover:bg-[#06b6d4]/5 transition-all overflow-hidden">
-                        <span className="text-zinc-500 text-[10px] font-bold group-hover:text-zinc-300">{opt.label}</span>
-                        <span className="text-white font-black mt-0.5 group-hover:text-[#06b6d4]">{opt.odds}</span>
-                      </button>
-                    ))}
-                  </div>
+      <div className="flex-1 p-4 md:p-6 space-y-6 overflow-y-auto bg-[#09090b]">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+          {markets
+            .filter(m => m.category === activeTab)
+            .map(market => (
+              <div key={market.id} className="bg-[#12161E] rounded-xl border border-[#202532] overflow-hidden shadow-sm flex flex-col">
+                <div className="px-4 py-3 bg-[#161A23] border-b border-[#202532] flex justify-between items-center shrink-0">
+                  <span className="text-zinc-300 text-xs font-bold uppercase tracking-wide">{market.title}</span>
+                  <Activity className="w-4 h-4 text-zinc-500" />
                 </div>
-            ))}
-          </div>
-        )}
+                <div className={`p-4 grid gap-3 ${market.selections.length >= 3 ? 'grid-cols-3' : 'grid-cols-2'} flex-1 content-start`}>
+                  {market.selections.map((opt: any, i: number) => (
+                    <button key={i} className="group relative flex flex-col items-center justify-center py-3 px-2 bg-[#1A212D] border border-transparent rounded-lg hover:border-[#00E5FF]/40 hover:bg-[#1A212D] hover:shadow-[0_0_12px_rgba(0,229,255,0.15)] transition-all duration-300 cursor-pointer overflow-hidden">
+                      <span className="text-[#a1a7b3] text-[11px] font-bold group-hover:text-zinc-300 text-center leading-tight mb-1">{opt.label}</span>
+                      <span className="text-white font-black text-[13px] md:text-sm group-hover:text-[#00E5FF] transition-colors">{opt.odds}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+          ))}
+        </div>
       </div>
     </div>
   );
