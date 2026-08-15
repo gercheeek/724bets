@@ -2880,34 +2880,18 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
           </div>
         )}
 
-        {(view === 'casino' || view === 'blackjack' || view === 'slots' || view === 'live-casino' || view === 'favorites') && (
-          <div className="animate-fade-in w-full h-full relative z-[50] min-w-0">
-            <CasinoLobby 
-              customGames={casinoLobbyGames} 
-              isLoggedIn={!!(siteUser || userRole)}
-              onNavigate={handleViewChange}
-              initialTab={view === 'slots' ? 'slots' : view === 'live-casino' ? 'live' : view === 'favorites' ? 'favorites' : 'all'}
-            />
-          </div>
-        )}
+        <div style={{ display: (view === 'casino' || view === 'blackjack' || view === 'slots' || view === 'live-casino' || view === 'favorites') ? 'block' : 'none' }} className="animate-fade-in w-full h-full relative z-[50] min-w-0">
+          <CasinoLobby 
+            customGames={casinoLobbyGames} 
+            isLoggedIn={!!(siteUser || userRole)}
+            onNavigate={handleViewChange}
+            initialTab={view === 'slots' ? 'slots' : view === 'live-casino' ? 'live' : view === 'favorites' ? 'favorites' : 'all'}
+          />
+        </div>
 
-        {view === 'slotra' && (
-          <div className="w-full h-full flex flex-col bg-[#0a0a0a]">
-            <Header onAdminClick={() => {}} onViewChange={() => {}} activeView="slotra" />
-            <div className="flex-1 overflow-y-auto custom-scrollbar p-6">
-              <h1 className="text-3xl font-black text-white mb-6 uppercase tracking-wider text-center">Gerçek Casino</h1>
-              <div className="text-zinc-500 text-center max-w-xl mx-auto">Gerçek casino deneyimi çok yakında...</div>
-            </div>
-          </div>
-        )}
-
-        {view === 'spor724' && (
+        <div style={{ display: (view === 'spor724' || view === 'upcomingMatches') ? 'block' : 'none' }} className="w-full">
           <Spor724View onNavigate={handleViewChange} />
-        )}
-        
-        {view === 'upcomingMatches' && (
-          <Spor724View onNavigate={handleViewChange} />
-        )}
+        </div>
 
         {view === 'casino2' && (
           <div className="animate-fade-in w-full relative flex flex-col overflow-hidden" style={{ minHeight: 'calc(100vh - 85px)', height: 'calc(100vh - 85px)' }}>
