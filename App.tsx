@@ -70,7 +70,7 @@ import ModernChat from './components/ModernChat';
 import { DualRightPanel } from './components/sports/DualRightPanel';
 
 const LiveBetsFeed = React.lazy(() => import('./components/LiveBetsFeed'));
-const CasinoLobby = React.lazy(() => import('./components/CasinoLobby'));
+import CasinoLobby from './components/CasinoLobby';
 import { UserProvider } from './contexts/UserContext';
 import { BetSlipProvider } from './contexts/BetSlipContext';
 
@@ -100,7 +100,7 @@ import HeroSection from './components/HeroSection';
 const PromoView = React.lazy(() => import('./components/PromoView'));
 const PromoCodeView = React.lazy(() => import('./components/PromoCodeView'));
 const ReferralView = React.lazy(() => import('./components/ReferralView'));
-const Spor724View = React.lazy(() => import('./components/Spor724View'));
+import Spor724View from './components/Spor724View';
 const AffiliateView = React.lazy(() => import('./components/AffiliateView'));
 const VIPClubView = React.lazy(() => import('./components/VIPClubView'));
 
