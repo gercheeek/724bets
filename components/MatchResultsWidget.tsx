@@ -192,7 +192,7 @@ const MatchResultsWidget: React.FC = () => {
                     <span className="text-lg font-black text-white tabular-nums tracking-wider mb-0.5">
                       {m.status === 'Bitti' ? `${m.homeScore} : ${m.awayScore}` : (m.time || '-:-')}
                     </span>
-                    <span className={`text-[9px] font-black uppercase tracking-widest ${m.status === 'Bitti' ? 'text-gray-500' : 'text-[#06b6d4]'}`}>
+                    <span className={`text-[9px] font-black uppercase tracking-widest ${m.status === 'Bitti' ? 'text-gray-500' : 'text-[color:var(--theme-accent)]'}`}>
                       {m.status}
                     </span>
                   </div>

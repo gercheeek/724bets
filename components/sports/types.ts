@@ -16,6 +16,10 @@ export interface MatchInfo {
   homeOdd: string;
   drawOdd: string;
   awayOdd: string;
+  overOdd?: string;
+  underOdd?: string;
+  ggOdd?: string;
+  ngOdd?: string;
   homeId: string;
   drawId: string;
   awayId: string;

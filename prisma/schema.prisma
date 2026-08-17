@@ -1,0 +1,50 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  username  String   @unique
+  password  String
+  balance   Float    @default(0.0)
+  bets      Bet[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Bet {
+  id           String     @id @default(uuid())
+  userId       String
+  user         User       @relation(fields: [userId], references: [id])
+  totalOdds    Float
+  stake        Float
+  possibleWin  Float
+  status       String     @default("pending") // pending, won, lost, cashed_out
+  items        BetItem[]
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+}
+
+model BetItem {
+  id          String   @id @default(uuid())
+  betId       String
+  bet         Bet      @relation(fields: [betId], references: [id])
+  matchId     String
+  teamHome    String
+  teamAway    String
+  selection   String   // e.g., "1", "X", "2", "tU", "gg"
+  odds        Float
+  status      String   @default("pending") // pending, won, lost
+  createdAt   DateTime @default(now())
+}

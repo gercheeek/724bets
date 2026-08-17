@@ -515,10 +515,18 @@ const Header: React.FC<HeaderProps> = ({
                      <User className="w-[20px] h-[20px] z-10 relative" />
                   </div>
                   <div className="hidden sm:flex flex-col items-start mr-3">
-                    <span className="text-white font-bold text-[13px] leading-none mb-1">{siteUser.username}</span>
-                    <span className="text-purple-400 text-[9px] uppercase font-black tracking-widest flex items-center">
-                       VIP LVL {siteUser.loyalty?.level || 1}
-                    </span>
+                    <span className="text-white font-bold text-[13px] leading-none mb-1.5">{siteUser.username}</span>
+                    <div className="flex flex-col w-full gap-1">
+                      <div className="flex items-center justify-between w-full">
+                        <span className="text-purple-400 text-[9px] uppercase font-black tracking-widest flex items-center">
+                           LVL {siteUser.loyalty?.level || 1}
+                        </span>
+                        <span className="text-zinc-500 text-[8px] font-bold">{siteUser.loyalty?.points || 0} XP</span>
+                      </div>
+                      <div className="w-[80px] h-[4px] bg-black/40 rounded-full overflow-hidden">
+                        <div className="h-full bg-gradient-to-r from-purple-500 to-pink-500" style={{ width: `${((siteUser.loyalty?.points || 0) % 1000) / 10}%` }}></div>
+                      </div>
+                    </div>
                   </div>
                   <ChevronDown className={`w-4 h-4 text-zinc-500 transition-transform ${isProfileOpen ? 'rotate-180' : ''}`} />
                 </div>

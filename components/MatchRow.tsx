@@ -49,25 +49,25 @@ export const MatchRow: React.FC<{ event: any }> = ({ event }) => {
       <div className="flex-1 flex items-center gap-4">
         <div className="flex flex-col w-20 shrink-0">
           <span className="text-[10px] font-medium text-zinc-500">{date}</span>
-          <span className={`text-[14px] font-black ${data.minute ? 'text-[#06b6d4] animate-pulse' : 'text-zinc-300'}`}>{time || (data.start_time ? new Date(data.start_time).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' }) : 'Belirsiz')}</span>
+          <span className={`text-[14px] font-black ${data.minute ? 'text-[color:var(--theme-accent)] animate-pulse' : 'text-zinc-300'}`}>{time || (data.start_time ? new Date(data.start_time).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' }) : 'Belirsiz')}</span>
         </div>
         
         <div className="flex flex-col gap-2 flex-1">
           <div className="flex items-center gap-2">
-            <div className={`w-1 h-4 rounded ${data.minute ? 'bg-[#06b6d4]' : 'bg-white/20'}`}></div>
+            <div className={`w-1 h-4 rounded ${data.minute ? 'bg-[color:var(--theme-accent)]' : 'bg-white/20'}`}></div>
             <span className="text-[14px] font-semibold text-zinc-200 group-hover:text-white transition-colors">{home}</span>
-            {data.minute && <span className="text-sm font-black text-[#06b6d4] ml-auto bg-[#06b6d4]/10 px-2 py-0.5 rounded">{homeScore}</span>}
+            {data.minute && <span className="text-sm font-black text-[color:var(--theme-accent)] ml-auto bg-[color:var(--theme-accent)]/10 px-2 py-0.5 rounded">{homeScore}</span>}
           </div>
           <div className="flex items-center gap-2">
-            <div className={`w-1 h-4 rounded ${data.minute ? 'bg-[#06b6d4]' : 'bg-white/20'}`}></div>
+            <div className={`w-1 h-4 rounded ${data.minute ? 'bg-[color:var(--theme-accent)]' : 'bg-white/20'}`}></div>
             <span className="text-[14px] font-semibold text-zinc-200 group-hover:text-white transition-colors">{away}</span>
-            {data.minute && <span className="text-sm font-black text-[#06b6d4] ml-auto bg-[#06b6d4]/10 px-2 py-0.5 rounded">{awayScore}</span>}
+            {data.minute && <span className="text-sm font-black text-[color:var(--theme-accent)] ml-auto bg-[color:var(--theme-accent)]/10 px-2 py-0.5 rounded">{awayScore}</span>}
           </div>
         </div>
       </div>
 
       {/* Favorite Icon */}
-      <button className="px-4 text-zinc-600 hover:text-[#06b6d4] transition-colors shrink-0" onClick={(e) => { e.stopPropagation(); }}>
+      <button className="px-4 text-zinc-600 hover:text-[color:var(--theme-accent)] transition-colors shrink-0" onClick={(e) => { e.stopPropagation(); }}>
         <Star className="w-4 h-4" />
       </button>
 
@@ -98,8 +98,8 @@ export const MatchRow: React.FC<{ event: any }> = ({ event }) => {
                   }}
                   className={`flex-1 h-10 rounded-lg border flex items-center justify-center text-[13px] font-bold shadow-sm transition-all ${
                     isSel 
-                      ? 'bg-[#06b6d4] border-[#06b6d4] text-black shadow-[#06b6d4]/20' 
-                      : 'border-white/10 bg-[#161920] hover:border-[#06b6d4]/50 hover:bg-[#06b6d4]/10 text-white hover:text-[#06b6d4]'
+                      ? 'bg-[color:var(--theme-accent)] border-[color:var(--theme-accent)] text-black shadow-[#06b6d4]/20' 
+                      : 'border-white/10 bg-[#161920] hover:border-[color:var(--theme-accent)]/50 hover:bg-[color:var(--theme-accent)]/10 text-white hover:text-[color:var(--theme-accent)]'
                   }`}
                 >
                   {btn.odd}
@@ -110,7 +110,7 @@ export const MatchRow: React.FC<{ event: any }> = ({ event }) => {
         )}
         <button 
           onClick={(e) => { e.stopPropagation(); setSelectedMatch(event); }}
-          className="w-14 shrink-0 h-10 rounded-lg border border-[#06b6d4]/20 bg-[#06b6d4]/5 hover:bg-[#06b6d4]/20 hover:border-[#06b6d4]/50 flex items-center justify-center text-[11px] font-black text-[#06b6d4] transition-all shadow-sm shadow-[#06b6d4]/5"
+          className="w-14 shrink-0 h-10 rounded-lg border border-[color:var(--theme-accent)]/20 bg-[color:var(--theme-accent)]/5 hover:bg-[color:var(--theme-accent)]/20 hover:border-[color:var(--theme-accent)]/50 flex items-center justify-center text-[11px] font-black text-[color:var(--theme-accent)] transition-all shadow-sm shadow-[#06b6d4]/5"
         >
           +{extraMarkets}
         </button>

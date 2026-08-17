@@ -186,7 +186,7 @@ export default function OriginalsHub({ onNavigate, isLoggedIn, siteUser, setSite
                         <div className="flex flex-col">
                             <div className="flex items-center gap-2 mb-2">
                                 <span className="retro-badge animate-pulse">CANLI</span>
-                                <h3 className="arcade-header text-[#06b6d4]" style={{ textShadow: '2px 2px 0 #005555', fontSize: '14px' }}>
+                                <h3 className="arcade-header text-[color:var(--theme-accent)]" style={{ textShadow: '2px 2px 0 #005555', fontSize: '14px' }}>
                                     724BETS <span className="text-white">TV</span>
                                 </h3>
                             </div>

@@ -229,12 +229,46 @@ export default function CasinoLobby({
   }));
 
   const [activeTab, setActiveTab] = useState(initialTab || 'all');
+  const [currentPath, setCurrentPath] = useState(typeof window !== 'undefined' ? window.location.pathname : '');
 
   useEffect(() => {
-    if (initialTab) {
+    const handlePopState = () => setCurrentPath(window.location.pathname);
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  useEffect(() => {
+    if (initialTab && currentPath.includes(initialTab)) {
       setActiveTab(initialTab);
+    } else if (currentPath) {
+      if (currentPath.includes('/canli-casino')) {
+        setActiveTab('live');
+      } else if (currentPath.match(/\/casino\/([^\/]+)/)) {
+        const match = currentPath.match(/\/casino\/([^\/]+)/);
+        if (match && match[1]) {
+           const tabId = match[1];
+           if (TABS.find(t => t.id === tabId)) setActiveTab(tabId);
+           else setActiveTab('all');
+        }
+      } else if (currentPath.endsWith('/casino')) {
+        setActiveTab('all');
+      }
     }
-  }, [initialTab]);
+  }, [currentPath, initialTab]);
+
+  const handleTabChange = (tabId: string) => {
+    setActiveTab(tabId);
+    const lang = typeof window !== 'undefined' ? window.location.pathname.split('/')[1] : 'tr';
+    const langPrefix = ['tr', 'en', 'pt', 'es'].includes(lang) ? lang : 'tr';
+    
+    if (tabId === 'live') {
+      window.history.pushState(null, '', `/${langPrefix}/canli-casino`);
+    } else if (tabId === 'all') {
+      window.history.pushState(null, '', `/${langPrefix}/casino`);
+    } else {
+      window.history.pushState(null, '', `/${langPrefix}/casino/${tabId}`);
+    }
+  };
   
   const [searchQuery, setSearchQuery] = useState('');
   
@@ -404,7 +438,7 @@ export default function CasinoLobby({
           {TABS.map(tab => (
             <button
               key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
+              onClick={() => handleTabChange(tab.id)}
               className={`whitespace-nowrap px-4 py-2 rounded-lg font-bold text-sm transition-all duration-300 ${activeTab === tab.id ? 'bg-[#1A1F2D] text-white shadow-md' : 'text-[#848B9D] hover:bg-[#1A1F2D]/50 hover:text-white'}`}
             >
               {tab.label}

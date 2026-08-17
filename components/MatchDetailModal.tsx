@@ -91,10 +91,10 @@ export const MatchDetailModal: React.FC<{ match: any; onClose: () => void }> = (
             </button>
             <div>
               <h2 className="text-lg font-bold text-white flex items-center gap-2">
-                {homeTeam} <span className="text-[#06b6d4] mx-2">{score}</span> {awayTeam}
+                {homeTeam} <span className="text-[color:var(--theme-accent)] mx-2">{score}</span> {awayTeam}
               </h2>
               <div className="text-xs text-zinc-400 flex items-center gap-2">
-                <span className="text-[#06b6d4] font-bold">{status} {minute}</span>
+                <span className="text-[color:var(--theme-accent)] font-bold">{status} {minute}</span>
                 <span>•</span>
                 <span>{mData.tournament?.category?.name} - {mData.tournament?.name}</span>
               </div>
@@ -104,7 +104,7 @@ export const MatchDetailModal: React.FC<{ match: any; onClose: () => void }> = (
             <button className="p-2 bg-white/5 hover:bg-white/10 rounded-lg transition-colors text-zinc-400 hover:text-white">
               <BarChart2 className="w-5 h-5" />
             </button>
-            <button className="p-2 bg-white/5 hover:bg-white/10 rounded-lg transition-colors text-zinc-400 hover:text-[#06b6d4]">
+            <button className="p-2 bg-white/5 hover:bg-white/10 rounded-lg transition-colors text-zinc-400 hover:text-[color:var(--theme-accent)]">
               <Star className="w-5 h-5" />
             </button>
           </div>
@@ -121,7 +121,7 @@ export const MatchDetailModal: React.FC<{ match: any; onClose: () => void }> = (
                 onClick={() => setActiveTab(key)}
                 className={`whitespace-nowrap px-4 py-2 text-sm font-bold rounded-xl transition-colors ${
                   activeTab === key 
-                    ? 'bg-[#06b6d4] text-black' 
+                    ? 'bg-[color:var(--theme-accent)] text-black' 
                     : 'bg-[#2A313C] text-zinc-400 hover:bg-[#323A47] hover:text-white'
                 }`}
               >
@@ -151,12 +151,12 @@ export const MatchDetailModal: React.FC<{ match: any; onClose: () => void }> = (
                         onClick={() => toggleBetSelection(match, marketName, fName, sel.odd)}
                         className={`flex items-center justify-between p-3 rounded-lg transition-colors border ${
                           selected 
-                            ? 'bg-[#06b6d4]/10 border-[#06b6d4] text-white' 
+                            ? 'bg-[color:var(--theme-accent)]/10 border-[color:var(--theme-accent)] text-white' 
                             : 'bg-[#0A0C10] border-white/5 text-zinc-400 hover:bg-[#2A313C] hover:text-white'
                         }`}
                       >
                         <span className="text-xs font-semibold">{fName}</span>
-                        <span className={`text-sm font-bold ${selected ? 'text-[#06b6d4]' : 'text-white'}`}>
+                        <span className={`text-sm font-bold ${selected ? 'text-[color:var(--theme-accent)]' : 'text-white'}`}>
                           {sel.odd.toFixed(2)}
                         </span>
                       </button>

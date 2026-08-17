@@ -38,7 +38,14 @@ const getDummyFireStats = (match: MatchInfo) => {
 
 // Helper to extract true market odds from group_markets if available
 const extractMarketOdd = (match: MatchInfo, type: 'ou' | 'gg') => {
-  const gms = match.rawEvent?.group_markets?.['full_event|0'] || match.group_markets?.['full_event|0'];
+  if (type === 'ou' && match.overOdd && match.underOdd) {
+    return { over: match.overOdd, under: match.underOdd };
+  }
+  if (type === 'gg' && match.ggOdd && match.ngOdd) {
+    return { gg: match.ggOdd, ng: match.ngOdd };
+  }
+
+  const gms = match.rawEvent?.group_markets?.['full_event|0'] || (match as any).group_markets?.['full_event|0'];
   if (!gms) return type === 'ou' ? { over: '-', under: '-' } : { gg: '-', ng: '-' };
   
   for (const m of gms) {
@@ -61,11 +68,15 @@ const extractMarketOdd = (match: MatchInfo, type: 'ou' | 'gg') => {
   return type === 'ou' ? { over: '-', under: '-' } : { gg: '-', ng: '-' };
 };
 
-// Top tier leagues whitelist
+// Top tier leagues whitelist (STRICT PREMIUM)
 const ELITE_LEAGUES = [
-  'şampiyonlar ligi', 'champions league', 'premier', 'süper lig', 'la liga', 
-  'serie a', 'bundesliga', 'euroleague', 'nba', 'avrupa ligi', 'europa league',
-  'konferans ligi', 'conference league', 'dünya kupası', 'world cup', 'avrupa şampiyonası'
+  'SUPER LIG', 'SÜPER LİG', 
+  'CHAMPIONS LEAGUE', 'ŞAMPİYONLAR', 
+  'EUROPA LEAGUE', 'AVRUPA LİGİ', 'CONFERENCE LEAGUE', 'KONFERANS LİGİ',
+  'PREMIER LEAGUE', 'PREMIER LIG', 'PREMIER LİG', 
+  'LA LIGA', 'SERIE A', 'BUNDESLIGA', 'LIGUE 1', 
+  'NBA', 'EUROLEAGUE', 'LIGA PORTUGAL', 'EREDIVISIE', 
+  'WORLD CUP', 'DÜNYA KUPASI', 'EURO 20'
 ];
 
 export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onSelectMatch, title = "En İyi Maçlar", icon, sortByTime = false }) => {
@@ -75,10 +86,7 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onS
   const [activeMarket, setActiveMarket] = useState(0); // 0: 1x2, 1: Alt/Üst, 2: KG
 
   useEffect(() => {
-    const marketTimer = setInterval(() => {
-      setActiveMarket(prev => (prev + 1) % 3);
-    }, 3000);
-    return () => clearInterval(marketTimer);
+    // Auto-rotate removed to fix mismatch with UI labels
   }, []);
 
   useEffect(() => {
@@ -94,7 +102,18 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onS
         
         const isTennisOrBasketball = m.sport?.toLowerCase().includes('tenis') || m.sport?.toLowerCase().includes('tennis') || m.sport?.toLowerCase().includes('basket');
         
-        // Removed synchronous logo checking here to prevent massive main thread freeze
+        // --- STRICT FILTERING FOR TOP MATCHES ---
+        const l = (m.league || '').toUpperCase();
+        // Explicitly exclude amateur/lower leagues, qualifiers, and SECOND DIVISIONS
+        if (l.includes('QUEENSLAND') || l.includes('VICTORIA') || l.includes('NPL') || l.includes('RESERVE') || l.includes('YOUTH') || l.includes('U19') || l.includes('U21') || l.includes('WOMEN') || l.includes('KADIN') || l.includes('ELEMELER') || l.includes('QUALIFIERS') || l.includes('2.') || l.includes('SERIE B') || l.includes('SERIE C') || l.includes('PORTUGAL 2') || l.includes('CHAMPIONSHIP') || l.includes('LIGA 2') || l.includes('LIG 2')) {
+            return false;
+        }
+
+        // Must have logos
+        if (findBestLogoMatch(m.home) === null || findBestLogoMatch(m.away) === null) {
+            return false;
+        }
+        
         // En fazla 24 saat uzağındaki maçlar
         if (m.timestamp && !m.isLive) {
            const diff = m.timestamp - Date.now();
@@ -221,15 +240,22 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onS
               <div 
                 key={match.id} 
                 onClick={() => onSelectMatch && onSelectMatch(match)}
-                className="cursor-pointer min-w-[240px] w-[240px] shrink-0 bg-gradient-to-b from-[#121722]/95 to-[#0b0e14]/95 md:from-[#121722]/90 md:to-[#0b0e14]/90 md:backdrop-blur-md rounded-xl border border-white/5 p-2.5 flex flex-col shadow-md md:shadow-xl hover:border-[#00E5FF]/20 hover:shadow-lg md:hover:shadow-[0_8px_30px_rgba(0,229,255,0.1)] transition-all duration-300 relative group/card transform-gpu"
+                className="cursor-pointer min-w-[240px] w-[240px] shrink-0 bg-[#121825] rounded-xl border border-white/5 p-2.5 flex flex-col shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_8px_32px_rgba(0,0,0,0.3)] hover:border-[#00FF87]/30 hover:bg-[#161D2C] transition-all duration-300 relative group/card transform-gpu overflow-hidden"
               >
                 <div className="flex items-start mb-3 relative z-10 flex-col gap-1">
                   <div className="flex items-center justify-between w-full">
-                    <span className="bg-[#00E5FF]/10 text-[#00E5FF] border border-[#00E5FF]/20 px-2 py-0.5 rounded text-[10px] font-bold self-start whitespace-nowrap">
-                      {getCountdown(ts, !!match.isLive)}
-                    </span>
+                    {match.isLive ? (
+                        <div className="flex items-center gap-1.5 bg-red-500/10 text-red-500 border border-red-500/20 px-2 py-0.5 rounded self-start">
+                            <div className="w-1.5 h-1.5 rounded-full bg-red-500 shadow-[0_0_8px_#ef4444] animate-pulse"></div>
+                            <span className="text-[10px] font-bold whitespace-nowrap tracking-wider">CANLI</span>
+                        </div>
+                    ) : (
+                        <span className="bg-[#00E5FF]/10 text-[#00E5FF] border border-[#00E5FF]/20 px-2 py-0.5 rounded text-[10px] font-bold self-start whitespace-nowrap tracking-wider">
+                            {getCountdown(ts, false)}
+                        </span>
+                    )}
                     <span className="text-[9px] text-zinc-500 font-semibold truncate text-right ml-2" title={match.league}>
-                      {match.league}
+                      {match.league ? match.league.replace(/Uluslararası\s*-\s*/i, '').trim() : ''}
                     </span>
                   </div>
                   {isTennis && (
@@ -243,15 +269,15 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onS
 
                 <div className="flex items-start justify-between mb-3 px-1">
                   <div className="flex flex-col items-center flex-1 w-0">
-                    <div className="w-8 h-8 rounded-full flex items-center justify-center p-0.5 mb-1.5 overflow-hidden relative border border-transparent">
+                    <div className="w-10 h-10 flex items-center justify-center mb-1.5 relative border border-transparent drop-shadow-lg">
                        <PlayerLogo name={match.home} fallbackLogo={match.homeLogo} sport={match.sport} />
                     </div>
-                    <div className="text-[10px] sm:text-[11px] font-bold text-center text-white leading-[1.2] line-clamp-2 px-1 flex flex-col items-center gap-0.5">
+                    <div className="text-[10px] sm:text-[11px] font-bold text-center text-white leading-[1.2] truncate w-full px-1 flex flex-col items-center gap-0.5 min-h-[16px] justify-start">
                       {isTennis && (() => {
                           const hash = match.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
                           return (hash % 2) === 0 ? <span className="w-1.5 h-1.5 rounded-full bg-[#bef264] animate-pulse shadow-[0_0_5px_rgba(190,242,100,0.8)]" title="Servis Atıyor" /> : null;
                       })()}
-                      <span>{match.home.includes('/') ? match.home.split('/').map(n => n.trim()[0] + '. ' + n.trim().split(' ').pop()).join(' / ') : match.home}</span>
+                      <span className="truncate w-full max-w-[90px]">{match.home.includes('/') ? match.home.split('/').map(n => n.trim()[0] + '. ' + n.trim().split(' ').pop()).join(' / ') : match.home}</span>
                     </div>
                   </div>
                   
@@ -297,30 +323,30 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onS
                                 {match.score || '0 - 0'}
                               </div>
                            ) : (
-                              <div className="text-xs font-bold text-slate-500 italic">VS</div>
+                              <div className="text-sm font-black text-white/30 italic tracking-widest mt-1">VS</div>
                            )}
-                           <span className="text-[9px] text-[#00E5FF] font-semibold mt-0.5 animate-pulse tracking-wide drop-shadow-[0_0_3px_rgba(0,229,255,0.4)]">
-                              {match.isLive ? <LiveTimer minute={match.time || match.minute} hidePrefix /> : ''}
+                           <span className="text-[9px] text-[#00E5FF] font-semibold mt-1.5 animate-pulse tracking-wide drop-shadow-[0_0_3px_rgba(0,229,255,0.4)]">
+                              {match.isLive ? <LiveTimer minute={match.time || match.minute} lastUpdateTs={match.last_update_ts} hidePrefix /> : ''}
                            </span>
                         </>
                       )}
                   </div>
 
                   <div className="flex flex-col items-center flex-1 w-0">
-                    <div className="w-8 h-8 rounded-full flex items-center justify-center p-0.5 mb-1.5 overflow-hidden relative border border-transparent">
+                    <div className="w-10 h-10 flex items-center justify-center mb-1.5 relative border border-transparent drop-shadow-lg">
                        <PlayerLogo name={match.away} fallbackLogo={match.awayLogo} sport={match.sport} />
                     </div>
-                    <div className="text-[10px] sm:text-[11px] font-bold text-center text-white leading-[1.2] line-clamp-2 px-1 flex flex-col items-center gap-0.5">
+                    <div className="text-[10px] sm:text-[11px] font-bold text-center text-white leading-[1.2] truncate w-full px-1 flex flex-col items-center gap-0.5 min-h-[16px] justify-start">
                       {isTennis && (() => {
                           const hash = match.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
                           return (hash % 2) !== 0 ? <span className="w-1.5 h-1.5 rounded-full bg-[#bef264] animate-pulse shadow-[0_0_5px_rgba(190,242,100,0.8)]" title="Servis Atıyor" /> : null;
                       })()}
-                      <span>{match.away.includes('/') ? match.away.split('/').map(n => n.trim()[0] + '. ' + n.trim().split(' ').pop()).join(' / ') : match.away}</span>
+                      <span className="truncate w-full max-w-[90px]">{match.away.includes('/') ? match.away.split('/').map(n => n.trim()[0] + '. ' + n.trim().split(' ').pop()).join(' / ') : match.away}</span>
                     </div>
                   </div>
                 </div>
 
-                <div className="mt-3 relative z-10 w-full h-[60px] overflow-hidden">
+                <div className="mt-3 relative z-10 w-full h-[75px] overflow-hidden">
                   {/* Page 1: 1X2 */}
                   <div className={`absolute inset-0 w-full transition-all duration-500 transform ${activeMarket === 0 ? 'translate-x-0 opacity-100 z-10' : activeMarket > 0 ? '-translate-x-full opacity-0 z-0' : 'translate-x-full opacity-0 z-0'}`}>
                     <div className="flex justify-between items-center mb-1.5 px-1">
@@ -332,10 +358,10 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onS
                           e.stopPropagation();
                           addSelection({ id: match.homeId || match.id+'_1', matchId: match.id, matchName: `${match.home} vs ${match.away}`, selectionName: 'Maç Sonucu: 1', odd: parseFloat(hOdd.toString().replace(',','.')) });
                         }}
-                        className="bg-gradient-to-b from-[#151a25] to-[#0d1017] border border-white/5 hover:border-[#00E5FF]/40 hover:shadow-[inset_0_0_15px_rgba(0,229,255,0.1)] rounded p-1.5 flex flex-col items-center justify-center gap-0.5 transition-all group cursor-pointer active:scale-[0.98]"
+                        className="bg-[#0A0E17] border border-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] hover:border-[#00FF87]/50 hover:bg-[#00FF87]/5 rounded-lg p-2 flex flex-col items-center justify-center gap-1 transition-all group cursor-pointer active:scale-[0.96]"
                       >
-                        <span className="text-[10px] text-[#8e939d] font-medium tracking-wide group-hover:text-[#00E5FF] transition-colors">1</span>
-                        <div className="text-[12px] group-hover:text-white transition-colors"><AnimatedOdd value={hOdd} /></div>
+                        <span className="text-[10px] text-zinc-400 font-semibold tracking-wide group-hover:text-[#00FF87]/80 transition-colors">1</span>
+                        <div className="text-[14px] font-black group-hover:text-[#00FF87] transition-colors"><AnimatedOdd value={hOdd} /></div>
                       </button>
                       {!isTennis && (
                         <button 
@@ -343,10 +369,10 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onS
                             e.stopPropagation();
                             addSelection({ id: match.drawId || match.id+'_x', matchId: match.id, matchName: `${match.home} vs ${match.away}`, selectionName: 'Maç Sonucu: X', odd: parseFloat(dOdd.toString().replace(',','.')) });
                           }}
-                          className="bg-gradient-to-b from-[#151a25] to-[#0d1017] border border-white/5 hover:border-[#00E5FF]/40 hover:shadow-[inset_0_0_15px_rgba(0,229,255,0.1)] rounded p-1.5 flex flex-col items-center justify-center gap-0.5 transition-all group cursor-pointer active:scale-[0.98]"
+                          className="bg-[#0A0E17] border border-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] hover:border-[#00FF87]/50 hover:bg-[#00FF87]/5 rounded-lg p-2 flex flex-col items-center justify-center gap-1 transition-all group cursor-pointer active:scale-[0.96]"
                         >
-                          <span className="text-[10px] text-[#8e939d] font-medium tracking-wide group-hover:text-[#00E5FF] transition-colors">X</span>
-                          <div className="text-[12px] group-hover:text-white transition-colors"><AnimatedOdd value={dOdd} /></div>
+                          <span className="text-[10px] text-zinc-400 font-semibold tracking-wide group-hover:text-[#00FF87]/80 transition-colors">X</span>
+                          <div className="text-[14px] font-black group-hover:text-[#00FF87] transition-colors"><AnimatedOdd value={dOdd} /></div>
                         </button>
                       )}
                       <button 
@@ -354,10 +380,10 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onS
                           e.stopPropagation();
                           addSelection({ id: match.awayId || match.id+'_2', matchId: match.id, matchName: `${match.home} vs ${match.away}`, selectionName: 'Maç Sonucu: 2', odd: parseFloat(aOdd.toString().replace(',','.')) });
                         }}
-                        className="bg-gradient-to-b from-[#151a25] to-[#0d1017] border border-white/5 hover:border-[#00E5FF]/40 hover:shadow-[inset_0_0_15px_rgba(0,229,255,0.1)] rounded p-1.5 flex flex-col items-center justify-center gap-0.5 transition-all group cursor-pointer active:scale-[0.98]"
+                        className="bg-[#0A0E17] border border-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] hover:border-[#00FF87]/50 hover:bg-[#00FF87]/5 rounded-lg p-2 flex flex-col items-center justify-center gap-1 transition-all group cursor-pointer active:scale-[0.96]"
                       >
-                        <span className="text-[10px] text-[#8e939d] font-medium tracking-wide group-hover:text-[#00E5FF] transition-colors">2</span>
-                        <div className="text-[12px] group-hover:text-white transition-colors"><AnimatedOdd value={aOdd} /></div>
+                        <span className="text-[10px] text-zinc-400 font-semibold tracking-wide group-hover:text-[#00FF87]/80 transition-colors">2</span>
+                        <div className="text-[14px] font-black group-hover:text-[#00FF87] transition-colors"><AnimatedOdd value={aOdd} /></div>
                       </button>
                     </div>
                   </div>
@@ -373,7 +399,7 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onS
                           e.stopPropagation();
                           addSelection({ id: match.id+'_under', matchId: match.id, matchName: `${match.home} vs ${match.away}`, selectionName: '2.5 Alt', odd: parseFloat(underOdd) });
                         }}
-                        className="bg-gradient-to-b from-[#151a25] to-[#0d1017] border border-white/5 hover:border-[#00E5FF]/40 hover:shadow-[inset_0_0_15px_rgba(0,229,255,0.1)] rounded p-1.5 flex flex-col items-center justify-center gap-0.5 transition-all group cursor-pointer active:scale-[0.98]"
+                        className="bg-white/[0.04] backdrop-blur-sm border border-white/10 hover:border-[#00E5FF]/50 hover:shadow-[inset_0_0_15px_rgba(0,229,255,0.2)] rounded p-1.5 flex flex-col items-center justify-center gap-0.5 transition-all group cursor-pointer active:scale-[0.98]"
                       >
                         <span className="text-[10px] text-[#8e939d] font-medium tracking-wide group-hover:text-[#00E5FF] transition-colors">Alt</span>
                         <div className="text-[12px] group-hover:text-white transition-colors"><AnimatedOdd value={underOdd} /></div>
@@ -383,7 +409,7 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onS
                           e.stopPropagation();
                           addSelection({ id: match.id+'_over', matchId: match.id, matchName: `${match.home} vs ${match.away}`, selectionName: '2.5 Üst', odd: parseFloat(overOdd) });
                         }}
-                        className="bg-gradient-to-b from-[#151a25] to-[#0d1017] border border-white/5 hover:border-[#00E5FF]/40 hover:shadow-[inset_0_0_15px_rgba(0,229,255,0.1)] rounded p-1.5 flex flex-col items-center justify-center gap-0.5 transition-all group cursor-pointer active:scale-[0.98]"
+                        className="bg-white/[0.04] backdrop-blur-sm border border-white/10 hover:border-[#00E5FF]/50 hover:shadow-[inset_0_0_15px_rgba(0,229,255,0.2)] rounded p-1.5 flex flex-col items-center justify-center gap-0.5 transition-all group cursor-pointer active:scale-[0.98]"
                       >
                         <span className="text-[10px] text-[#8e939d] font-medium tracking-wide group-hover:text-[#00E5FF] transition-colors">Üst</span>
                         <div className="text-[12px] group-hover:text-white transition-colors"><AnimatedOdd value={overOdd} /></div>
@@ -406,7 +432,7 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onS
                                 e.stopPropagation();
                                 addSelection({ id: match.id+'_1_p3', matchId: match.id, matchName: `${match.home} vs ${match.away}`, selectionName: 'Maç Sonucu: 1', odd: parseFloat(hOdd) });
                               }}
-                              className="bg-gradient-to-b from-[#151a25] to-[#0d1017] border border-white/5 hover:border-[#00E5FF]/40 hover:shadow-[inset_0_0_15px_rgba(0,229,255,0.1)] rounded p-1.5 flex flex-col items-center justify-center gap-0.5 transition-all group cursor-pointer active:scale-[0.98]"
+                              className="bg-white/[0.04] backdrop-blur-sm border border-white/10 hover:border-[#00E5FF]/50 hover:shadow-[inset_0_0_15px_rgba(0,229,255,0.2)] rounded p-1.5 flex flex-col items-center justify-center gap-0.5 transition-all group cursor-pointer active:scale-[0.98]"
                             >
                               <span className="text-[10px] text-[#8e939d] font-medium tracking-wide group-hover:text-[#00E5FF] transition-colors">1</span>
                               <div className="text-[12px] group-hover:text-white transition-colors"><AnimatedOdd value={hOdd} /></div>
@@ -416,7 +442,7 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onS
                                 e.stopPropagation();
                                 addSelection({ id: match.id+'_2_p3', matchId: match.id, matchName: `${match.home} vs ${match.away}`, selectionName: 'Maç Sonucu: 2', odd: parseFloat(aOdd) });
                               }}
-                              className="bg-gradient-to-b from-[#151a25] to-[#0d1017] border border-white/5 hover:border-[#00E5FF]/40 hover:shadow-[inset_0_0_15px_rgba(0,229,255,0.1)] rounded p-1.5 flex flex-col items-center justify-center gap-0.5 transition-all group cursor-pointer active:scale-[0.98]"
+                              className="bg-white/[0.04] backdrop-blur-sm border border-white/10 hover:border-[#00E5FF]/50 hover:shadow-[inset_0_0_15px_rgba(0,229,255,0.2)] rounded p-1.5 flex flex-col items-center justify-center gap-0.5 transition-all group cursor-pointer active:scale-[0.98]"
                             >
                               <span className="text-[10px] text-[#8e939d] font-medium tracking-wide group-hover:text-[#00E5FF] transition-colors">2</span>
                               <div className="text-[12px] group-hover:text-white transition-colors"><AnimatedOdd value={aOdd} /></div>
@@ -431,27 +457,27 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onS
                       
                       return (
                         <div className="grid grid-cols-2 gap-1.5">
-                          <button 
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              if (isGgResolved) return;
-                              addSelection({ id: match.id+'_gg', matchId: match.id, matchName: `${match.home} vs ${match.away}`, selectionName: 'KG Var', odd: parseFloat(ggOdd) });
-                            }}
-                            className={`bg-gradient-to-b from-[#151a25] to-[#0d1017] border border-white/5 rounded p-1.5 flex flex-col items-center justify-center gap-0.5 transition-all group ${isGgResolved ? 'opacity-40 cursor-not-allowed bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,rgba(255,255,255,0.03)_10px,rgba(255,255,255,0.03)_20px)]' : 'hover:border-[#00E5FF]/40 hover:shadow-[inset_0_0_15px_rgba(0,229,255,0.1)] cursor-pointer active:scale-[0.98]'}`}
-                          >
+                            <button 
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                if (isGgResolved) return;
+                                addSelection({ id: match.id+'_gg', matchId: match.id, matchName: `${match.home} vs ${match.away}`, selectionName: 'KG Var', odd: parseFloat(ggOdd) });
+                              }}
+                              className={`bg-white/[0.04] backdrop-blur-sm border border-white/10 rounded p-1.5 flex flex-col items-center justify-center gap-0.5 transition-all group ${isGgResolved ? 'opacity-40 cursor-not-allowed bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,rgba(255,255,255,0.03)_10px,rgba(255,255,255,0.03)_20px)]' : 'hover:border-[#00E5FF]/50 hover:shadow-[inset_0_0_15px_rgba(0,229,255,0.2)] cursor-pointer active:scale-[0.98]'}`}
+                            >
                             <span className={`text-[10px] text-[#8e939d] font-medium tracking-wide transition-colors ${!isGgResolved && 'group-hover:text-[#00E5FF]'}`}>Var</span>
                             <div className={`text-[12px] transition-colors ${!isGgResolved && 'group-hover:text-white'}`}>
                               {isGgResolved ? <div className="flex items-center gap-1"><span className="text-[10px]">🔒</span><span className="text-gray-500 font-bold text-[9px] tracking-wider">KİLİTLİ</span></div> : <AnimatedOdd value={ggOdd} />}
                             </div>
                           </button>
-                          <button 
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              if (isGgResolved) return;
-                              addSelection({ id: match.id+'_ng', matchId: match.id, matchName: `${match.home} vs ${match.away}`, selectionName: 'KG Yok', odd: parseFloat(ngOdd) });
-                            }}
-                            className={`bg-gradient-to-b from-[#151a25] to-[#0d1017] border border-white/5 rounded p-1.5 flex flex-col items-center justify-center gap-0.5 transition-all group ${isGgResolved ? 'opacity-40 cursor-not-allowed bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,rgba(255,255,255,0.03)_10px,rgba(255,255,255,0.03)_20px)]' : 'hover:border-[#00E5FF]/40 hover:shadow-[inset_0_0_15px_rgba(0,229,255,0.1)] cursor-pointer active:scale-[0.98]'}`}
-                          >
+                            <button 
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                if (isGgResolved) return;
+                                addSelection({ id: match.id+'_ng', matchId: match.id, matchName: `${match.home} vs ${match.away}`, selectionName: 'KG Yok', odd: parseFloat(ngOdd) });
+                              }}
+                              className={`bg-white/[0.04] backdrop-blur-sm border border-white/10 rounded p-1.5 flex flex-col items-center justify-center gap-0.5 transition-all group ${isGgResolved ? 'opacity-40 cursor-not-allowed bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,rgba(255,255,255,0.03)_10px,rgba(255,255,255,0.03)_20px)]' : 'hover:border-[#00E5FF]/50 hover:shadow-[inset_0_0_15px_rgba(0,229,255,0.2)] cursor-pointer active:scale-[0.98]'}`}
+                            >
                             <span className={`text-[10px] text-[#8e939d] font-medium tracking-wide transition-colors ${!isGgResolved && 'group-hover:text-[#00E5FF]'}`}>Yok</span>
                             <div className={`text-[12px] transition-colors ${!isGgResolved && 'group-hover:text-white'}`}>
                               {isGgResolved ? <div className="flex items-center gap-1"><span className="text-[10px]">🔒</span><span className="text-gray-500 font-bold text-[9px] tracking-wider">KİLİTLİ</span></div> : <AnimatedOdd value={ngOdd} />}

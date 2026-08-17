@@ -114,7 +114,7 @@ const RetroWheel: React.FC = () => {
           
           {/* Center Hub */}
           <div className="absolute inset-0 m-auto w-12 h-12 md:w-16 md:h-16 bg-black border-4 border-white rounded-full flex items-center justify-center z-10">
-            <div className="w-4 h-4 bg-[#06b6d4] rounded-full animate-pulse"></div>
+            <div className="w-4 h-4 bg-[color:var(--theme-accent)] rounded-full animate-pulse"></div>
           </div>
         </div>
       </div>
@@ -124,7 +124,7 @@ const RetroWheel: React.FC = () => {
         <button 
           onClick={spinWheel}
           disabled={isSpinning}
-          className={`pixel-border bg-black text-[#06b6d4] border-[#06b6d4] retro-font-primary text-sm md:text-base px-6 py-3 cursor-pointer transition-none ${isSpinning ? 'opacity-50' : 'hover:bg-[#06b6d4] hover:text-black retro-text-glow'}`}
+          className={`pixel-border bg-black text-[color:var(--theme-accent)] border-[color:var(--theme-accent)] retro-font-primary text-sm md:text-base px-6 py-3 cursor-pointer transition-none ${isSpinning ? 'opacity-50' : 'hover:bg-[color:var(--theme-accent)] hover:text-black retro-text-glow'}`}
         >
           {isSpinning ? 'SPINNING...' : '[ SPIN NOW ]'}
         </button>

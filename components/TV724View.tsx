@@ -1142,10 +1142,10 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                             {/* Left Side Vertical Ad (KAZANCINI İKİYE KATLA) */}
                             <div className="hidden md:flex w-[110px] shrink-0 bg-[#050608] border-r border-white/5 z-[60] flex-col items-center justify-between py-4 shadow-[10px_0_30px_rgba(0,0,0,0.8)] pointer-events-auto cursor-pointer group hover:bg-[#0A0C10] transition-colors relative" onClick={(e) => { e.stopPropagation(); /* Prevent video click */ }}>
                                 {/* Subtle cyan glow */}
-                                <div className="absolute inset-0 bg-gradient-to-b from-[#06b6d4]/5 via-transparent to-[#06b6d4]/5 opacity-50"></div>
+                                <div className="absolute inset-0 bg-gradient-to-b from-[color:var(--theme-accent)]/5 via-transparent to-[color:var(--theme-accent)]/5 opacity-50"></div>
                                 
                                 <div className="flex flex-col items-center gap-3 w-full relative z-10 mt-2">
-                                    <div className="bg-[#06b6d4]/10 border border-[#06b6d4]/30 px-1.5 py-1 rounded text-[#06b6d4] text-[10px] font-black tracking-widest text-center">
+                                    <div className="bg-[color:var(--theme-accent)]/10 border border-[color:var(--theme-accent)]/30 px-1.5 py-1 rounded text-[color:var(--theme-accent)] text-[10px] font-black tracking-widest text-center">
                                         VIP<br/>KAZANÇ
                                     </div>
                                 </div>
@@ -1153,7 +1153,7 @@ const TV724View: React.FC<TV724ViewProps> = ({ config, siteUser, userRole, onBac
                                 <div className="flex flex-col items-center justify-center flex-1 w-full relative z-10">
                                     <div className="flex flex-col items-center gap-2 mb-4">
                                         <span className="text-white font-black text-xl italic tracking-tighter" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>KAZANCINI</span>
-                                        <span className="text-[#06b6d4] font-black text-xl italic tracking-tighter" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>İ. KATLA</span>
+                                        <span className="text-[color:var(--theme-accent)] font-black text-xl italic tracking-tighter" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>İ. KATLA</span>
                                     </div>
                                 </div>
                                 

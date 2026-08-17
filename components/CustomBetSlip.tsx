@@ -13,11 +13,11 @@ export const CustomBetSlip = () => {
       {/* Header */}
       <div className="bg-[#232833] p-4 flex items-center justify-between border-b border-white/5 shrink-0">
         <div className="flex items-center gap-2">
-          <DollarSign className="w-5 h-5 text-[#06b6d4]" />
+          <DollarSign className="w-5 h-5 text-[color:var(--theme-accent)]" />
           <h2 className="text-white font-black text-sm uppercase tracking-wide">Seçimlerim</h2>
         </div>
         {bets.length > 0 && (
-          <span className="bg-[#06b6d4] text-black text-xs font-bold px-2 py-0.5 rounded-full">
+          <span className="bg-[color:var(--theme-accent)] text-black text-xs font-bold px-2 py-0.5 rounded-full">
             {bets.length} Maç
           </span>
         )}
@@ -47,7 +47,7 @@ export const CustomBetSlip = () => {
               <div className="flex items-end justify-between mt-2 pt-2 border-t border-white/5">
                 <div>
                   <div className="text-xs text-zinc-400">{bet.market}</div>
-                  <div className="text-sm font-semibold text-[#06b6d4]">{bet.selection}</div>
+                  <div className="text-sm font-semibold text-[color:var(--theme-accent)]">{bet.selection}</div>
                 </div>
                 <div className="text-base font-black text-white">{bet.odds}</div>
               </div>
@@ -61,7 +61,7 @@ export const CustomBetSlip = () => {
         <div className="bg-[#15181E] p-4 border-t border-white/5 shrink-0">
           <div className="flex justify-between items-center mb-4">
             <span className="text-zinc-400 text-sm">Toplam Oran:</span>
-            <span className="text-[#06b6d4] text-lg font-black">{totalOdds}</span>
+            <span className="text-[color:var(--theme-accent)] text-lg font-black">{totalOdds}</span>
           </div>
 
           <div className="bg-[#1C2028] border border-white/5 rounded-lg p-3 mb-4 flex flex-col items-center">
@@ -81,7 +81,7 @@ export const CustomBetSlip = () => {
           </div>
 
           <div className="flex gap-2">
-            <button className="flex-1 bg-[#06b6d4] hover:bg-[#06b6d4]/90 text-black font-black text-[15px] uppercase tracking-wider py-4 rounded-xl transition-all shadow-[0_0_20px_rgba(6,182,212,0.4)] hover:shadow-[0_0_30px_rgba(6,182,212,0.6)] hover:-translate-y-0.5">
+            <button className="flex-1 bg-[color:var(--theme-accent)] hover:bg-[color:var(--theme-accent)]/90 text-black font-black text-[15px] uppercase tracking-wider py-4 rounded-xl transition-all shadow-[0_0_20px_rgba(6,182,212,0.4)] hover:shadow-[0_0_30px_rgba(6,182,212,0.6)] hover:-translate-y-0.5">
               KUPON YAP
             </button>
             <button 
@@ -100,10 +100,10 @@ export const CustomBetSlip = () => {
                   }
                 }
               }}
-              className="w-14 bg-[#1A212D] border border-white/5 hover:border-[#06b6d4]/50 hover:bg-[#202836] text-white flex items-center justify-center rounded-xl transition-colors group"
+              className="w-14 bg-[#1A212D] border border-white/5 hover:border-[color:var(--theme-accent)]/50 hover:bg-[#202836] text-white flex items-center justify-center rounded-xl transition-colors group"
               title="Kuponu Sohbette Paylaş"
             >
-              <Share2 className="w-5 h-5 text-zinc-400 group-hover:text-[#06b6d4] transition-colors" />
+              <Share2 className="w-5 h-5 text-zinc-400 group-hover:text-[color:var(--theme-accent)] transition-colors" />
             </button>
           </div>
         </div>

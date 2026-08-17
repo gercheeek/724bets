@@ -32,7 +32,7 @@ const InGameLayout: React.FC<InGameLayoutProps> = ({ children, siteUser, onViewC
     <div className="flex flex-col h-screen w-full bg-[#05070A] text-white overflow-hidden font-sans">
       
       {/* Top Bar - hides smoothly when fullscreen */}
-      <header className={`flex items-center justify-between px-4 sm:px-6 bg-[#0f172a] border-b border-[#06b6d4]/20 transition-all duration-500 ease-in-out ${isFullscreen ? 'h-0 opacity-0 overflow-hidden border-b-0' : 'h-16 opacity-100'}`}>
+      <header className={`flex items-center justify-between px-4 sm:px-6 bg-[#0f172a] border-b border-[color:var(--theme-accent)]/20 transition-all duration-500 ease-in-out ${isFullscreen ? 'h-0 opacity-0 overflow-hidden border-b-0' : 'h-16 opacity-100'}`}>
         
         {/* Left: Logo & Back Button */}
         <div className="flex items-center gap-4">
@@ -44,7 +44,7 @@ const InGameLayout: React.FC<InGameLayoutProps> = ({ children, siteUser, onViewC
           </button>
           <div className="hidden sm:flex items-center gap-2 cursor-pointer" onClick={() => onViewChange('home')}>
              <span className="font-black text-2xl tracking-tighter text-white">724</span>
-             <span className="font-black text-2xl tracking-tighter text-[#06b6d4]">BETS</span>
+             <span className="font-black text-2xl tracking-tighter text-[color:var(--theme-accent)]">BETS</span>
           </div>
           <div className="h-6 w-px bg-white/10 mx-2 hidden sm:block"></div>
           <h1 className="font-bold text-lg text-gray-200 tracking-wide uppercase drop-shadow-[0_0_10px_rgba(16,185,129,0.5)]">{gameTitle}</h1>
@@ -54,11 +54,11 @@ const InGameLayout: React.FC<InGameLayoutProps> = ({ children, siteUser, onViewC
         <div className="hidden lg:flex items-center gap-6 absolute left-1/2 -translate-x-1/2">
            <button onClick={() => onViewChange('casino')} className="text-gray-300 hover:text-white font-bold text-sm tracking-wider uppercase transition-colors relative group">
              Casino
-             <span className="absolute -bottom-5 left-0 w-full h-0.5 bg-[#06b6d4] scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
+             <span className="absolute -bottom-5 left-0 w-full h-0.5 bg-[color:var(--theme-accent)] scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
            </button>
            <button onClick={() => onViewChange('sports')} className="text-gray-300 hover:text-white font-bold text-sm tracking-wider uppercase transition-colors relative group">
              Spor
-             <span className="absolute -bottom-5 left-0 w-full h-0.5 bg-[#06b6d4] scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
+             <span className="absolute -bottom-5 left-0 w-full h-0.5 bg-[color:var(--theme-accent)] scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></span>
            </button>
         </div>
 
@@ -71,7 +71,7 @@ const InGameLayout: React.FC<InGameLayoutProps> = ({ children, siteUser, onViewC
                      <span className="text-[10px] text-gray-400 font-medium uppercase tracking-widest leading-none mb-0.5">Bakiye</span>
                      <span className="text-sm sm:text-base font-black text-white leading-none font-mono tracking-tight">₺{siteUser ? siteUser.balance.toLocaleString('tr-TR') : '0.00'}</span>
                   </div>
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#06b6d4] to-[#047857] flex items-center justify-center shadow-[0_0_15px_rgba(16,185,129,0.4)]">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[color:var(--theme-accent)] to-[#047857] flex items-center justify-center shadow-[0_0_15px_rgba(16,185,129,0.4)]">
                      <Wallet className="w-4 h-4 text-white" />
                   </div>
                </div>
@@ -80,7 +80,7 @@ const InGameLayout: React.FC<InGameLayoutProps> = ({ children, siteUser, onViewC
                </button>
              </>
            ) : (
-             <button onClick={() => onViewChange('home')} className="bg-[#06b6d4] hover:bg-[#0da070] text-black font-bold text-sm py-2 px-6 rounded-full transition-colors shadow-[0_0_20px_rgba(16,185,129,0.3)]">
+             <button onClick={() => onViewChange('home')} className="bg-[color:var(--theme-accent)] hover:bg-[#0da070] text-black font-bold text-sm py-2 px-6 rounded-full transition-colors shadow-[0_0_20px_rgba(16,185,129,0.3)]">
                Giriş Yap
              </button>
            )}
@@ -119,9 +119,9 @@ const InGameLayout: React.FC<InGameLayoutProps> = ({ children, siteUser, onViewC
               
               {/* Player Stats Widget */}
               <div className="bg-black/20 rounded-xl p-4 border border-[#10b981]/15 hover:border-[#10b981]/30 shadow-[0_8px_30px_rgba(0,0,0,0.5)] relative overflow-hidden group transition-colors">
-                 <div className="absolute inset-0 bg-gradient-to-b from-[#06b6d4]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                 <div className="absolute inset-0 bg-gradient-to-b from-[color:var(--theme-accent)]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                  <div className="flex items-center gap-2 mb-4 relative z-10">
-                    <Info className="w-4 h-4 text-[#06b6d4]" />
+                    <Info className="w-4 h-4 text-[color:var(--theme-accent)]" />
                     <h3 className="font-bold text-sm text-gray-200 tracking-wider uppercase">Oyuncu İstatistikleri</h3>
                  </div>
                  <div className="grid grid-cols-2 gap-3 relative z-10">
@@ -131,7 +131,7 @@ const InGameLayout: React.FC<InGameLayoutProps> = ({ children, siteUser, onViewC
                     </div>
                     <div className="bg-[#05070A]/50 rounded-lg p-3 border border-[#10b981]/10 flex flex-col items-center justify-center">
                        <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1">Kazanma Oranı</span>
-                       <span className="text-lg font-black text-[#06b6d4] font-mono tracking-tighter">%48.2</span>
+                       <span className="text-lg font-black text-[color:var(--theme-accent)] font-mono tracking-tighter">%48.2</span>
                     </div>
                  </div>
               </div>
@@ -219,12 +219,12 @@ const InGameLayout: React.FC<InGameLayoutProps> = ({ children, siteUser, onViewC
                        {/* Repeat items for infinite scroll effect */}
                        {[1, 2].map((set) => (
                          <React.Fragment key={set}>
-                           <div className="flex items-center justify-between p-2 rounded-lg bg-gradient-to-r from-[#06b6d4]/20 to-transparent border-l-2 border-[#06b6d4] animate-pulse">
+                           <div className="flex items-center justify-between p-2 rounded-lg bg-gradient-to-r from-[color:var(--theme-accent)]/20 to-transparent border-l-2 border-[color:var(--theme-accent)] animate-pulse">
                               <div className="flex flex-col">
                                  <span className="text-[11px] font-bold text-gray-300 font-mono">14:22 | AhM***</span>
                                  <span className="text-[10px] text-gray-400">Blackjack Pro</span>
                               </div>
-                              <span className="text-sm font-black text-[#06b6d4] font-mono tracking-tighter drop-shadow-[0_0_5px_rgba(16,185,129,0.5)]">x12.5</span>
+                              <span className="text-sm font-black text-[color:var(--theme-accent)] font-mono tracking-tighter drop-shadow-[0_0_5px_rgba(16,185,129,0.5)]">x12.5</span>
                            </div>
                            <div className="flex items-center justify-between p-2 rounded-lg hover:bg-white/5 transition-colors">
                               <div className="flex flex-col">
@@ -240,12 +240,12 @@ const InGameLayout: React.FC<InGameLayoutProps> = ({ children, siteUser, onViewC
                               </div>
                               <span className="text-sm font-black text-white font-mono tracking-tighter">x1.5</span>
                            </div>
-                           <div className="flex items-center justify-between p-2 rounded-lg bg-gradient-to-r from-[#06b6d4]/20 to-transparent border-l-2 border-[#06b6d4] animate-pulse">
+                           <div className="flex items-center justify-between p-2 rounded-lg bg-gradient-to-r from-[color:var(--theme-accent)]/20 to-transparent border-l-2 border-[color:var(--theme-accent)] animate-pulse">
                               <div className="flex flex-col">
                                  <span className="text-[11px] font-bold text-gray-300 font-mono">14:18 | Pro***</span>
                                  <span className="text-[10px] text-gray-400">Blackjack Pro</span>
                               </div>
-                              <span className="text-sm font-black text-[#06b6d4] font-mono tracking-tighter drop-shadow-[0_0_5px_rgba(16,185,129,0.5)]">x25.0</span>
+                              <span className="text-sm font-black text-[color:var(--theme-accent)] font-mono tracking-tighter drop-shadow-[0_0_5px_rgba(16,185,129,0.5)]">x25.0</span>
                            </div>
                          </React.Fragment>
                        ))}
@@ -263,13 +263,13 @@ const InGameLayout: React.FC<InGameLayoutProps> = ({ children, siteUser, onViewC
            {/* Glow background behind game */}
            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(16,185,129,0.05),transparent_70%)] pointer-events-none"></div>
 
-           <div className="relative w-full h-full bg-[#0f172a] sm:rounded-2xl border-0 sm:border border-[#06b6d4]/20 shadow-[0_0_50px_rgba(0,0,0,0.8)] overflow-hidden flex flex-col group">
+           <div className="relative w-full h-full bg-[#0f172a] sm:rounded-2xl border-0 sm:border border-[color:var(--theme-accent)]/20 shadow-[0_0_50px_rgba(0,0,0,0.8)] overflow-hidden flex flex-col group">
               
               {/* Fullscreen Toggle */}
               <div className="absolute top-4 right-4 z-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                  <button 
                    onClick={() => setIsFullscreen(!isFullscreen)}
-                   className="p-2.5 bg-black/60 hover:bg-[#0A0C10] backdrop-blur-sm border border-white/10 hover:border-[#06b6d4]/50 rounded-lg transition-all text-gray-300 hover:text-white shadow-lg"
+                   className="p-2.5 bg-black/60 hover:bg-[#0A0C10] backdrop-blur-sm border border-white/10 hover:border-[color:var(--theme-accent)]/50 rounded-lg transition-all text-gray-300 hover:text-white shadow-lg"
                  >
                    {isFullscreen ? <Minimize2 className="w-5 h-5" /> : <Maximize2 className="w-5 h-5" />}
                  </button>
@@ -319,7 +319,7 @@ const InGameLayout: React.FC<InGameLayoutProps> = ({ children, siteUser, onViewC
          </button>
       </div>
       <div className={`md:hidden absolute bottom-6 right-4 z-30 transition-transform duration-500 ${!showRightPanel || isMobileRightOpen || isFullscreen ? 'translate-y-24' : 'translate-y-0'}`}>
-         <button onClick={() => setIsMobileRightOpen(true)} className="w-12 h-12 bg-black/60 backdrop-blur-md border border-[#06b6d4]/50 rounded-full flex items-center justify-center text-[#06b6d4] shadow-[0_0_15px_rgba(16,185,129,0.3)] hover:scale-110 transition-transform">
+         <button onClick={() => setIsMobileRightOpen(true)} className="w-12 h-12 bg-black/60 backdrop-blur-md border border-[color:var(--theme-accent)]/50 rounded-full flex items-center justify-center text-[color:var(--theme-accent)] shadow-[0_0_15px_rgba(16,185,129,0.3)] hover:scale-110 transition-transform">
            <MessageSquare className="w-5 h-5" />
          </button>
       </div>

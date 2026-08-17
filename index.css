@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 /* ===== Global Reset & Base ===== */
 *,
 *::before,
@@ -123,6 +124,46 @@
 
   --bg-dark: var(--bg-main);
   --text-white: var(--text-primary);
+}
+
+/* ── Section Themes ── */
+
+/* Theme: Sports (Premium Dark System) */
+:root, [data-theme="dark"][data-section="sports"] {
+  --theme-accent: #00e5ff; /* Premium Neon Cyan */
+  --theme-accent-hover: #00c6dd;
+  --theme-accent-glow: rgba(0, 229, 255, 0.35);
+  --theme-bg-main: #0a0e17; /* Deep Slate/Navy Background */
+  --theme-bg-card: #131824; /* Elegant Card Background */
+  --theme-bg-hover: #1b2333; /* Elegant Card Hover */
+  --theme-border-card: rgba(255, 255, 255, 0.04); /* Very subtle glass border */
+  
+  --theme-radius-card: 10px;
+  --theme-radius-pill: 6px;
+}
+
+/* Sports Theme Utilities */
+.bg-sports-main { background-color: var(--theme-bg-main); }
+.bg-sports-card { background-color: var(--theme-bg-card); }
+.bg-sports-hover { transition: background-color 0.2s ease; }
+.bg-sports-hover:hover { background-color: var(--theme-bg-hover); }
+
+.text-sports-accent { color: var(--theme-accent); }
+.bg-sports-accent { background-color: var(--theme-accent); color: #000; font-weight: 700; transition: background-color 0.2s ease; }
+.bg-sports-accent:hover { background-color: var(--theme-accent-hover); }
+.border-sports-accent { border-color: var(--theme-accent); }
+
+.border-sports-subtle { border-color: var(--theme-border-card); border-width: 1px; border-style: solid; }
+.rounded-sports-card { border-radius: var(--theme-radius-card); }
+.rounded-sports-pill { border-radius: var(--theme-radius-pill); }
+
+/* Theme: Casino */
+[data-theme="dark"][data-section="casino"] {
+  --theme-accent: #f5a623; /* Gold */
+  --theme-accent-hover: #e59a1f;
+  --theme-accent-glow: rgba(245, 166, 35, 0.3);
+  --theme-bg-main: #050505; /* Pitch Black */
+  --theme-bg-card: #100f0d; /* Warm dark */
 }
 
 html, body {
@@ -1806,4 +1847,63 @@ input:-webkit-autofill:active{
   width: 100%;
   height: 100%;
   border: none;
+}
+
+/* Esports Theme Isolation */
+.theme-esports {
+  --primary-color: #A855F7 !important;
+  --primary-glow: rgba(168, 85, 247, 0.5) !important;
+  --primary-bg: rgba(168, 85, 247, 0.1) !important;
+}
+
+.theme-esports .text-\\[\\#00FF87\\],
+.theme-esports .text-\\[\\#00E5FF\\],
+.theme-esports .text-\\[\\#00E579\\] {
+  color: #A855F7 !important;
+}
+
+.theme-esports .bg-\\[\\#00FF87\\],
+.theme-esports .bg-\\[\\#00E5FF\\],
+.theme-esports .bg-\\[\\#00E579\\] {
+  background-color: #A855F7 !important;
+}
+
+.theme-esports .border-\\[\\#00FF87\\],
+.theme-esports .border-\\[\\#00E5FF\\],
+.theme-esports .border-\\[\\#00E579\\] {
+  border-color: #A855F7 !important;
+}
+
+.theme-esports .from-\\[\\#00FF87\\] {
+  --tw-gradient-from: #A855F7 !important;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(168, 85, 247, 0)) !important;
+}
+.theme-esports .to-\\[\\#00E579\\] {
+  --tw-gradient-to: #9333EA !important;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ===== TURBO MODE GLOBAL STYLES ===== */
+body.turbo-mode-active {
+  box-shadow: inset 0 0 50px rgba(239, 68, 68, 0.2);
+}
+
+body.turbo-mode-active::after {
+  content: "";
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  border: 2px solid rgba(239, 68, 68, 0.4);
+  pointer-events: none;
+  z-index: 99999;
+  animation: turboPulse 1.5s infinite alternate;
+}
+
+@keyframes turboPulse {
+  0% { box-shadow: inset 0 0 20px rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.3); }
+  100% { box-shadow: inset 0 0 80px rgba(239, 68, 68, 0.4); border-color: rgba(239, 68, 68, 0.8); }
 }

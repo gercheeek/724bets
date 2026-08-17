@@ -11,6 +11,8 @@ import {
   MapPin, Trophy, Flag, Pin, BarChart2, Scale, Info
 } from 'lucide-react';
 import { isEliteTeam } from '../../utils/eliteTeams';
+import { LiveMatchRadar } from './LiveMatchRadar';
+import { MatchAnimationPlayer } from './MatchAnimationPlayer';
 
 interface LiveMatchInlineProps {
   match: MatchInfo;
@@ -63,6 +65,70 @@ const translateSelection = (type: string) => {
   return type;
 };
 
+const MarketAccordion = React.memo(({ 
+  title, 
+  children, 
+  rightInfo, 
+  isOpen, 
+  onToggle 
+}: { 
+  title: string, 
+  children: React.ReactNode, 
+  rightInfo?: React.ReactNode, 
+  isOpen: boolean, 
+  onToggle: (title: string) => void 
+}) => {
+  return (
+    <div className="bg-sports-card rounded-sports-card flex flex-col w-full overflow-hidden transition-all duration-300 relative group/accordion border border-sports-subtle">
+      <button 
+        onClick={() => onToggle(title)}
+        className="w-full flex items-center justify-between p-4 transition-all relative z-10 bg-sports-card hover:bg-sports-hover"
+        style={{ borderBottom: isOpen ? '1px solid rgba(255,255,255,0.05)' : 'none' }}
+      >
+        <div className="absolute left-0 top-0 bottom-0 w-1 bg-sports-accent shadow-[0_0_10px_rgba(var(--theme-accent-rgb),0.5)] opacity-0 group-hover/accordion:opacity-100 transition-opacity"></div>
+        <div className="flex items-center gap-3 pl-2">
+           <h3 className="text-white font-bold text-[14px] tracking-wide">{title}</h3>
+           {rightInfo}
+        </div>
+        <div className="w-7 h-7 rounded-full bg-white/5 group-hover/accordion:bg-white/10 flex items-center justify-center text-zinc-400 transition-colors">
+          {isOpen ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+        </div>
+      </button>
+      {isOpen && (
+        <div className="p-4 bg-transparent relative z-10">
+           {children}
+        </div>
+      )}
+    </div>
+  );
+});
+
+const BetButton = React.memo(({ 
+  id, 
+  selectionName, 
+  odd, 
+  label, 
+  labelClass = "", 
+  isSelected, 
+  onAddSelection,
+  matchId,
+  matchHome,
+  matchAway
+}: any) => {
+  return (
+    <button 
+      onClick={() => { if (odd !== '-') onAddSelection(id, matchId, `${matchHome} vs ${matchAway}`, selectionName, odd) }}
+      disabled={odd === '-'}
+      className={`relative group bg-[#131517] hover:bg-[#222428] border ${isSelected ? 'border-sports-accent shadow-[0_0_15px_rgba(0,242,166,0.1)] bg-sports-accent' : 'border-sports-subtle'} rounded-sports-pill flex items-center justify-between px-4 py-2.5 transition-colors min-h-[44px] ${odd === '-' ? 'opacity-50 cursor-not-allowed' : ''}`}
+    >
+      <span className={`text-[12px] font-medium ${isSelected ? 'text-black font-bold' : 'text-zinc-400 group-hover:text-zinc-200'} ${labelClass} relative z-10 transition-colors`}>{label}</span>
+      <span className={`font-bold text-[13px] ${isSelected ? 'text-black font-black' : 'text-sports-accent group-hover:brightness-125'} relative z-10 transition-all`}>
+        <AnimatedOdd value={odd} />
+      </span>
+    </button>
+  );
+});
+
 export const LiveMatchInline: React.FC<LiveMatchInlineProps> = React.memo(({ 
   match, 
   onBack, 
@@ -70,16 +136,25 @@ export const LiveMatchInline: React.FC<LiveMatchInlineProps> = React.memo(({
   onSelectAnotherMatch 
 }) => {
   const { betSlip, addSelection } = useBetSlip();
+  const handleSelection = React.useCallback((id: string, matchId: string, matchName: string, selectionName: string, odd: string | number) => {
+    addSelection({ id, matchId, matchName, selectionName, odd: parseFloat(odd as string) || 1.00 });
+  }, [addSelection]);
+
   const raw = match.rawEvent || {};
   const data = raw.data || raw; 
   const stats = data.stats || {};
   
+
+  
   let homeStats = stats.team1_value || {};
   let awayStats = stats.team2_value || {};
   
-  const isFootball = !match.sport || match.sport.toLowerCase().includes('futbol') || match.sport.toLowerCase().includes('soccer');
-  const isBasketball = match.sport?.toLowerCase().includes('basketbol') || match.sport?.toLowerCase().includes('basket');
-  const isTennis = match.sport?.toLowerCase().includes('tenis') || match.sport?.toLowerCase().includes('tennis');
+  const rawSportId = raw?.sport_id?.toString();
+  const rawSportName = (match.sport || raw?.sport_name || '').toLowerCase();
+  
+  const isBasketball = rawSportName.includes('basket') || rawSportId === '18';
+  const isTennis = rawSportName.includes('tenis') || rawSportName.includes('tennis') || rawSportId === '13';
+  const isFootball = !isBasketball && !isTennis && (!rawSportName || rawSportName.includes('futbol') || rawSportName.includes('soccer') || rawSportId === '1');
 
   // Same mock stats logic as modal. Only trigger if strictly live.
   if (Object.keys(homeStats).length === 0 && match.isLive) {
@@ -124,9 +199,9 @@ export const LiveMatchInline: React.FC<LiveMatchInlineProps> = React.memo(({
      const match1X = dcStr.match(/~1X~([^!]+)/);
      const match12 = dcStr.match(/~12~([^!]+)/);
      const matchX2 = dcStr.match(/~X2~([^!]+)/);
-     if (match1X) dc1x_fallback = parseFloat(match1X[1]).toFixed(2);
-     if (match12) dc12_fallback = parseFloat(match12[1]).toFixed(2);
-     if (matchX2) dcx2_fallback = parseFloat(matchX2[1]).toFixed(2);
+     if (match1X && match1X[1] !== '-') dc1x_fallback = parseFloat(match1X[1]).toFixed(2);
+     if (match12 && match12[1] !== '-') dc12_fallback = parseFloat(match12[1]).toFixed(2);
+     if (matchX2 && matchX2[1] !== '-') dcx2_fallback = parseFloat(matchX2[1]).toFixed(2);
   }
 
   let ggVar_fallback = '-';
@@ -135,8 +210,8 @@ export const LiveMatchInline: React.FC<LiveMatchInlineProps> = React.memo(({
   if (ggStr) {
      const matchVar = ggStr.match(/~var~([^!]+)/);
      const matchYok = ggStr.match(/~yok~([^!]+)/);
-     if (matchVar) ggVar_fallback = parseFloat(matchVar[1]).toFixed(2);
-     if (matchYok) ggYok_fallback = parseFloat(matchYok[1]).toFixed(2);
+     if (matchVar && matchVar[1] !== '-') ggVar_fallback = parseFloat(matchVar[1]).toFixed(2);
+     if (matchYok && matchYok[1] !== '-') ggYok_fallback = parseFloat(matchYok[1]).toFixed(2);
   }
 
   const ouLines_fallback: any[] = [];
@@ -151,12 +226,62 @@ export const LiveMatchInline: React.FC<LiveMatchInlineProps> = React.memo(({
            ouLines_fallback.push({
               id: `${match.id}_ou_${base}`,
               base: parseFloat(base).toFixed(1),
-              over: matchOver ? parseFloat(matchOver[1]).toFixed(2) : '-',
-              under: matchUnder ? parseFloat(matchUnder[1]).toFixed(2) : '-'
+              over: matchOver && matchOver[1] !== '-' ? parseFloat(matchOver[1]).toFixed(2) : '-',
+              under: matchUnder && matchUnder[1] !== '-' ? parseFloat(matchUnder[1]).toFixed(2) : '-'
            });
         }
      }
   });
+
+  // Extract Halves & Corners Fallbacks
+  const ht1x2 = { home: '-', draw: '-', away: '-' };
+  const htStr = groupMarkets.find((s: string) => s.startsWith('|ht1x2|'));
+  if (htStr) {
+     const match1 = htStr.match(/~home~([^!]+)/);
+     const matchX = htStr.match(/~draw~([^!]+)/);
+     const match2 = htStr.match(/~away~([^!]+)/);
+     if (match1 && match1[1] !== '-') ht1x2.home = parseFloat(match1[1]).toFixed(2);
+     if (matchX && matchX[1] !== '-') ht1x2.draw = parseFloat(matchX[1]).toFixed(2);
+     if (match2 && match2[1] !== '-') ht1x2.away = parseFloat(match2[1]).toFixed(2);
+  }
+
+  const htou = { over05: '-', under05: '-', over15: '-', under15: '-' };
+  const htouStr = groupMarkets.find((s: string) => s.startsWith('|htou|'));
+  if (htouStr) {
+     const mO05 = htouStr.match(/~over0\.5~([^!]+)/);
+     const mU05 = htouStr.match(/~under0\.5~([^!]+)/);
+     const mO15 = htouStr.match(/~over1\.5~([^!]+)/);
+     const mU15 = htouStr.match(/~under1\.5~([^!]+)/);
+     if (mO05 && mO05[1] !== '-') htou.over05 = parseFloat(mO05[1]).toFixed(2);
+     if (mU05 && mU05[1] !== '-') htou.under05 = parseFloat(mU05[1]).toFixed(2);
+     if (mO15 && mO15[1] !== '-') htou.over15 = parseFloat(mO15[1]).toFixed(2);
+     if (mU15 && mU15[1] !== '-') htou.under15 = parseFloat(mU15[1]).toFixed(2);
+  }
+
+  const cr1x2 = { home: '-', draw: '-', away: '-' };
+  const crStr = groupMarkets.find((s: string) => s.startsWith('|cr1x2|'));
+  if (crStr) {
+     const match1 = crStr.match(/~home~([^!]+)/);
+     const matchX = crStr.match(/~draw~([^!]+)/);
+     const match2 = crStr.match(/~away~([^!]+)/);
+     if (match1 && match1[1] !== '-') cr1x2.home = parseFloat(match1[1]).toFixed(2);
+     if (matchX && matchX[1] !== '-') cr1x2.draw = parseFloat(matchX[1]).toFixed(2);
+     if (match2 && match2[1] !== '-') cr1x2.away = parseFloat(match2[1]).toFixed(2);
+  }
+
+  const crou = { over75: '-', under75: '-', over85: '-', under85: '-' };
+  const crouStr = groupMarkets.find((s: string) => s.startsWith('|crou|'));
+  if (crouStr) {
+     const mO75 = crouStr.match(/~over7\.5~([^!]+)/);
+     const mU75 = crouStr.match(/~under7\.5~([^!]+)/);
+     const mO85 = crouStr.match(/~over8\.5~([^!]+)/);
+     const mU85 = crouStr.match(/~under8\.5~([^!]+)/);
+     if (mO75 && mO75[1] !== '-') crou.over75 = parseFloat(mO75[1]).toFixed(2);
+     if (mU75 && mU75[1] !== '-') crou.under75 = parseFloat(mU75[1]).toFixed(2);
+     if (mO85 && mO85[1] !== '-') crou.over85 = parseFloat(mO85[1]).toFixed(2);
+     if (mU85 && mU85[1] !== '-') crou.under85 = parseFloat(mU85[1]).toFixed(2);
+  }
+
 
   // 1. 1x2 Odds
   const m1x2 = getMarket(['p1p2', 'p1x2', 'matchresult', '1x2'], ['match result', 'maç sonucu', 'winner']);
@@ -221,16 +346,81 @@ export const LiveMatchInline: React.FC<LiveMatchInlineProps> = React.memo(({
   };
   const isLowTier = isLowTierMatch();
 
+  const [activeCategory, setActiveCategory] = useState('Ana Seçenekler');
+
   const categories = isTennis 
     ? (isLowTier ? ['Ana Seçenekler', 'Toplam', 'Setler'] : ['Ana Seçenekler', 'Toplam', 'Setler', 'Oyunlar', 'İstatistikler'])
     : isBasketball 
     ? (isLowTier ? ['Ana Seçenekler', 'Toplam', 'Yarılar'] : ['Ana Seçenekler', 'Toplam', 'Çeyrekler', 'Yarılar', 'İstatistikler', 'Oyuncular'])
-    : (isLowTier ? ['Ana Seçenekler', 'Toplam', 'Yarılar'] : ['Ana Seçenekler', 'Sihirbaz', 'Toplam', 'İstatistikler', 'Yarılar', 'Kornerler', 'Oyuncular']);
-  const [activeCategory, setActiveCategory] = useState('Ana Seçenekler');
-  
-  const [activeRightTab, setActiveRightTab] = useState<'video'|'animation'>('animation');
-  const [animTab, setAnimTab] = useState<'pitch'|'stats'|'timeline'|'h2h'|'standings'>('pitch');
+    : (isLowTier ? ['Ana Seçenekler', 'Goller', 'İlk Yarı'] : ['Ana Seçenekler', 'Goller', 'İlk Yarı', 'Asya', 'Korner & Kart', 'Oyuncular']);
 
+  useEffect(() => {
+    if (!categories.includes(activeCategory)) {
+      setActiveCategory('Ana Seçenekler');
+    }
+  }, [categories, activeCategory]);
+
+  const [openMarkets, setOpenMarkets] = useState<Record<string, boolean>>({
+    'Maç Sonucu': true,
+    'Çifte Şans': true,
+    'Karşılıklı Gol': true,
+    'Toplam Goller': true,
+    'İlk Yarı Sonucu': true,
+    'İlk Yarı Toplam Gol': true,
+    'Asya Handikap': true,
+    'Beraberlikte İade': true,
+    'Korner Alt/Üst': true,
+    'Kart Alt/Üst': true,
+    'Ev Sahibi Toplam Gol': true,
+    'Deplasman Toplam Gol': true,
+    'Gol Atacak Oyuncu': true,
+    '1. Çeyrek Sonucu': true,
+    '1. Çeyrek Toplam': true,
+    'İlk Yarı Sonucu (Basketbol)': true,
+    'İlk Yarı Toplam (Basketbol)': true,
+    '1. Set Kazananı': true,
+    'Sıradaki Oyun': true,
+    'Toplam Set Sayısı': true,
+    'Oyuncu Özel (Sayı)': true,
+    'İstatistikler': true,
+    'Oyuncu Kart Görür mü?': true,
+    'Oyuncu İsabetli Şut Sayısı': true,
+    'Oyuncu Asist Yapar mı?': true,
+    'Kırmızı Kart Görür mü?': true,
+    'Gol Atar ve Takımı Kazanır': true
+  });
+  
+  const toggleMarket = (marketName: string) => {
+    setOpenMarkets(prev => ({ ...prev, [marketName]: !prev[marketName] }));
+  };
+
+  const RenderAccordion = React.useCallback(({ title, children, rightInfo }: { title: string, children: React.ReactNode, rightInfo?: React.ReactNode }) => (
+    <MarketAccordion 
+      title={title} 
+      isOpen={!!openMarkets[title]} 
+      onToggle={toggleMarket} 
+      rightInfo={rightInfo}
+    >
+      {children}
+    </MarketAccordion>
+  ), [openMarkets, toggleMarket]);
+
+  const RenderBetButton = React.useCallback(({ id, selectionName, odd, label, labelClass = "" }: { id: string, selectionName: string, odd: any, label: string, labelClass?: string }) => (
+    <BetButton 
+      key={id}
+      id={id} 
+      selectionName={selectionName} 
+      odd={odd} 
+      label={label} 
+      labelClass={labelClass}
+      isSelected={betSlip.some((s: any) => s.id === id)}
+      onAddSelection={handleSelection}
+      matchId={match.id}
+      matchHome={match.home}
+      matchAway={match.away}
+    />
+  ), [betSlip, handleSelection, match]);
+  
   // Custom function to format the selections based on screenshots
   // 1X2 -> 1, X, 2
   const formatSelectionLabel = (marketName: string, rawType: string, home: string, away: string) => {
@@ -271,185 +461,157 @@ export const LiveMatchInline: React.FC<LiveMatchInlineProps> = React.memo(({
       
       {/* Ticker for other live matches */}
       {allLiveMatches.length > 0 && (
-        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-2 mb-2 px-1">
+        <div className="flex items-center gap-3 overflow-x-auto no-scrollbar py-2 mb-4 px-1 border-b border-white/5">
            <button 
              onClick={onBack}
-             className="shrink-0 flex items-center justify-center w-8 h-8 rounded bg-[#1a1d29] hover:bg-white/10 text-white/50 hover:text-white transition-colors"
+             className="shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 text-white/70 hover:text-white transition-colors border border-white/10"
            >
-             <ChevronDown className="w-5 h-5 rotate-90" />
+             <ChevronDown className="w-4 h-4 rotate-90" />
            </button>
            
            {allLiveMatches.map((m, idx) => (
              <button 
                key={m.id || idx}
                onClick={() => onSelectAnotherMatch && onSelectAnotherMatch(m)}
-               className={`shrink-0 flex flex-col justify-center px-4 py-2.5 rounded-lg border transition-all duration-200 min-w-[180px] md:min-w-[200px] ${
+               className={`shrink-0 flex flex-col justify-center px-4 py-2 rounded-lg border transition-all duration-200 min-w-[160px] md:min-w-[180px] ${
                  m.id === match.id 
-                 ? 'bg-[#1a1d29] border-[#06b6d4]/40 shadow-[0_0_15px_rgba(6,182,212,0.15)]' 
-                 : 'bg-[#101114] border-[#1f222d] hover:border-[#06b6d4]/30 hover:bg-[#1a1d29]/50'
+                 ? 'bg-sports-card border-sports-accent shadow-[0_0_15px_rgba(0,242,166,0.15)]' 
+                 : 'bg-transparent border-sports-subtle hover:bg-sports-hover'
                }`}
              >
-                <div className="flex items-center gap-2 text-[11px] font-bold tracking-wider text-[#ef4444] mb-2 uppercase">
-                   <div className="w-1.5 h-1.5 rounded-full bg-[#ef4444] animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.6)]"></div>
+                <div className="flex items-center gap-2 text-[11px] font-bold tracking-wider text-zinc-400 mb-2 uppercase">
+                   <div className="w-1.5 h-1.5 rounded-full bg-[#ef4444]"></div>
                    {m.minute}
                 </div>
-                <div className="flex items-center justify-between text-[13px] font-semibold text-zinc-100 mb-1.5">
-                   <span className="truncate max-w-[120px] md:max-w-[140px]">{m.home}</span>
-                   <span className="text-[#06b6d4] font-black">{String(m.score).split('-')[0] || 0}</span>
+                <div className="flex items-center justify-between text-[12px] font-semibold text-zinc-100 mb-1.5 w-full gap-2">
+                   <span className="truncate flex-1 text-left">{m.home}</span>
+                   <span className="text-[color:var(--theme-accent)] font-black shrink-0 w-4 text-right">{String(m.score).split('-')[0] || 0}</span>
                 </div>
-                <div className="flex items-center justify-between text-[13px] font-semibold text-zinc-100">
-                   <span className="truncate max-w-[120px] md:max-w-[140px]">{m.away}</span>
-                   <span className="text-[#06b6d4] font-black">{String(m.score).split('-')[1] || 0}</span>
+                <div className="flex items-center justify-between text-[12px] font-semibold text-zinc-100 w-full gap-2">
+                   <span className="truncate flex-1 text-left">{m.away}</span>
+                   <span className="text-[color:var(--theme-accent)] font-black shrink-0 w-4 text-right">{String(m.score).split('-')[1] || 0}</span>
                 </div>
              </button>
            ))}
         </div>
       )}
 
-      {/* Main Grid: Left (Score & Markets) + Right (Video) */}
-      <div className="flex flex-col xl:flex-row gap-4">
+      {/* Main Grid */}
+      <div className="flex flex-col gap-6 w-full">
          
-         {/* Left Column */}
-         <div className="flex-1 flex flex-col min-w-0">
+         {/* TOP ROW: Scoreboard + Player */}
+         <div className="flex flex-col xl:flex-row gap-4 w-full items-start">
+            
+            {/* MATCH INFO & SCOREBOARD */}
+            <div className="flex-1 flex flex-col relative z-10 min-w-0 shrink-0">
             
             {/* SCOREBOARD BLOCK */}
-            <div className="bg-[#1a1d29] border border-[#222635] rounded-xl p-4 md:p-5 flex flex-col relative overflow-hidden shadow-lg mb-4 group">
-               {/* Stadium Background Texture */}
-               <div className="absolute inset-0 bg-[#0a0c10] opacity-80 z-0">
-                  <div className="absolute inset-0 opacity-20 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-white/10 via-transparent to-transparent"></div>
-                  <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
+            <div className="bg-transparent flex flex-col relative overflow-hidden group py-6 rounded-3xl mb-6 shadow-[0_10px_40px_rgba(0,0,0,0.5)]">
+               {/* Pure Dark Background Texture with Glow */}
+               <div className="absolute inset-0 z-0 bg-sports-main rounded-3xl overflow-hidden pointer-events-none border border-sports-subtle">
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[100%] h-[100%] bg-[radial-gradient(ellipse_at_top,rgba(var(--theme-accent-rgb),0.1),transparent_60%)] opacity-70"></div>
                </div>
                
-               {/* Dynamic Mesh Gradient Background */}
-               <div className="absolute inset-0 bg-gradient-to-br from-[#06b6d4]/10 via-transparent to-[#3b82f6]/5 opacity-60 z-0 mix-blend-screen"></div>
-               <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#06b6d4]/15 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-0"></div>
-               
                {/* Breadcrumb / League Name */}
-               <div className="flex items-center gap-1.5 text-[11px] font-bold text-zinc-400 mb-6 z-10">
-                 <Flag className="w-3.5 h-3.5" />
-                 <span>{match.league || 'Uluslararası • Seçkin Kulüp Hazırlık Maçları'}</span>
+               <div className="flex items-center justify-center gap-2 text-[11px] font-bold text-zinc-400 mb-6 z-10">
+                 <Flag className="w-3.5 h-3.5 text-zinc-500" />
+                 <span className="tracking-widest uppercase">{match.league || 'Uluslararası • Kulüp Hazırlık Maçları'}</span>
                </div>
                
                {/* Match Info Area */}
-               <div className="flex items-center justify-between z-10 px-2 md:px-6">
+               <div className="flex items-center justify-between z-10 w-full max-w-4xl mx-auto px-4">
                   {/* Home */}
-                  <div className="flex flex-col flex-1 max-w-[40%]">
-                     <div className="w-10 h-10 md:w-14 md:h-14 bg-white/5 rounded-full flex items-center justify-center p-1.5 mb-3 shadow-[0_0_15px_rgba(255,255,255,0.05)]">
+                  <div className="flex flex-col items-center flex-1">
+                     <div className="relative w-16 h-16 md:w-20 md:h-20 flex items-center justify-center mb-3 transition-transform duration-500 drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]">
                        <PlayerLogo name={match.home} fallbackLogo={match.homeLogo} sport={match.sport} />
-                    </div>
-                     <span className="text-[13px] md:text-[15px] font-bold text-white leading-tight mb-2 line-clamp-2 pr-2 break-words">{match.home}</span>
-                     <div className="flex items-center gap-1 h-4">
-                        {match.isLive && isFootball && (
-                           <>
-                              <div className="w-2.5 h-3.5 bg-[#ef4444] rounded-[1px]"></div>
-                              <span className="text-white text-[10px] font-bold mx-1">{redCards.home}</span>
-                              <div className="w-2.5 h-3.5 bg-yellow-500 rounded-[1px]"></div>
-                              <span className="text-white text-[10px] font-bold mx-1">{yellowCards.home}</span>
-                              <Flag className="w-3 h-3 text-zinc-400 ml-1" />
-                              <span className="text-white text-[10px] font-bold ml-0.5">{corners.home}</span>
-                           </>
-                        )}
                      </div>
+                     <span className="text-[14px] md:text-[16px] font-black text-white text-center tracking-wide leading-tight max-w-[140px] md:max-w-[200px] line-clamp-2 drop-shadow-md">{match.home}</span>
                   </div>
 
                   {/* Score & Time */}
-                  <div className="flex flex-col items-center justify-start flex-1 shrink-0 mt-[-30px]">
-                     <div className={`flex items-center justify-center gap-2 px-3 py-1 rounded border mb-4 backdrop-blur-sm ${match.isLive ? 'bg-[#ef4444]/10 border-[#ef4444]/30 text-[#ef4444] shadow-[0_0_10px_rgba(239,68,68,0.2)]' : 'bg-white/5 border-white/10 text-zinc-400'}`}>
+                  <div className="flex flex-col items-center justify-center flex-1 shrink-0">
+                     <div className="flex items-center justify-center gap-3 md:gap-6 text-5xl md:text-6xl font-black text-white tabular-nums tracking-tighter mb-4 drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)]">
+                        <span className="">{String(match.score).split('-')[0]?.trim() || '0'}</span>
+                        <span className="text-white/20 font-light pb-2">:</span>
+                        <span className="">{String(match.score).split('-')[1]?.trim() || '0'}</span>
+                     </div>
+                     
+                     <div className={`flex items-center justify-center gap-2.5 px-5 py-2 rounded-full backdrop-blur-md border shadow-lg ${match.isLive ? 'bg-[#ef4444]/10 border-[#ef4444]/40 text-[#ef4444] shadow-[0_0_20px_rgba(239,68,68,0.2)]' : 'bg-sports-card border-sports-subtle text-zinc-400'}`}>
                         {match.isLive ? (
                           <>
-                             <div className="relative flex h-2 w-2">
+                             <div className="relative flex h-2.5 w-2.5">
                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ef4444] opacity-75"></span>
-                                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#ef4444]"></span>
+                                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#ef4444] shadow-[0_0_8px_#ef4444]"></span>
                              </div>
-                             <span className="text-[12px] font-mono font-bold tracking-widest uppercase">
-                                <LiveTimer minute={match.minute} hidePrefix />
+                             <span className="text-[13px] font-black tracking-widest uppercase">
+                                <LiveTimer minute={match.minute} lastUpdateTs={match.last_update_ts} hidePrefix />
                              </span>
                           </>
                         ) : (
-                          <span className="text-[12px] font-bold tracking-wider">{match.startTime || match.minute || 'BAŞLAMADI'}</span>
-                        )}
-                     </div>
-                     <div className="flex items-center gap-2 md:gap-4 text-3xl md:text-5xl font-black text-white tabular-nums drop-shadow-md">
-                        {isTennis ? (
-                           <div className="flex flex-col items-center">
-                              <div className="flex gap-4 items-center">
-                                 <div className="w-10 h-12 md:w-14 md:h-16 bg-[#101114] border border-[#222635] rounded-lg flex items-center justify-center shadow-inner text-[#06b6d4]">
-                                    {match.info?.score1 || '0'}
-                                 </div>
-                                 <div className="flex flex-col gap-1 mx-2">
-                                    <div className="text-[12px] md:text-[14px] font-bold text-[#06b6d4] bg-[#06b6d4]/10 px-2 py-1 rounded">
-                                       {match.info?.current_game_state || '0:0'}
-                                    </div>
-                                    <div className="text-[10px] text-zinc-500 uppercase tracking-wider text-center">
-                                       {match.info?.pass_step ? `${match.info.pass_step}. Set` : 'Puan'}
-                                    </div>
-                                 </div>
-                                 <div className="w-10 h-12 md:w-14 md:h-16 bg-[#101114] border border-[#222635] rounded-lg flex items-center justify-center shadow-inner text-[#06b6d4]">
-                                    {match.info?.score2 || '0'}
-                                 </div>
-                              </div>
-                           </div>
-                        ) : (
-                           <>
-                              <div className="w-10 h-12 md:w-14 md:h-16 bg-[#101114] border border-[#222635] rounded-lg flex items-center justify-center shadow-inner">
-                                 {String(match.score).split('-')[0]?.trim() || '0'}
-                              </div>
-                              <span className="text-zinc-600">:</span>
-                              <div className="w-10 h-12 md:w-14 md:h-16 bg-[#101114] border border-[#222635] rounded-lg flex items-center justify-center shadow-inner">
-                                 {String(match.score).split('-')[1]?.trim() || '0'}
-                              </div>
-                           </>
+                          <span className="text-[13px] font-bold tracking-widest">{match.startTime || match.minute || 'BAŞLAMADI'}</span>
                         )}
                      </div>
                   </div>
 
                   {/* Away */}
-                  <div className="flex flex-col items-end text-right flex-1 max-w-[40%]">
-                     <div className="w-10 h-10 md:w-14 md:h-14 bg-white/5 rounded-full flex items-center justify-center p-1.5 mb-3 shadow-[0_0_15px_rgba(255,255,255,0.05)]">
+                  <div className="flex flex-col items-center flex-1">
+                     <div className="relative w-16 h-16 md:w-20 md:h-20 flex items-center justify-center mb-3 transition-transform duration-500 drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]">
                        <PlayerLogo name={match.away} fallbackLogo={match.awayLogo} sport={match.sport} />
-                    </div>
-                     <span className="text-[13px] md:text-[15px] font-bold text-white leading-tight mb-2 line-clamp-2 pl-2 break-words">{match.away}</span>
-                     <div className="flex items-center justify-end gap-1 h-4">
-                        {match.isLive && isFootball && (
-                           <>
-                              <div className="w-2.5 h-3.5 bg-[#ef4444] rounded-[1px]"></div>
-                              <span className="text-white text-[10px] font-bold mx-1">{redCards.away}</span>
-                              <div className="w-2.5 h-3.5 bg-yellow-500 rounded-[1px]"></div>
-                              <span className="text-white text-[10px] font-bold mx-1">{yellowCards.away}</span>
-                              <Flag className="w-3 h-3 text-zinc-400 ml-1" />
-                              <span className="text-white text-[10px] font-bold ml-0.5">{corners.away}</span>
-                           </>
-                        )}
                      </div>
+                     <span className="text-[14px] md:text-[16px] font-black text-white text-center tracking-wide leading-tight max-w-[140px] md:max-w-[200px] line-clamp-2 drop-shadow-md">{match.away}</span>
                   </div>
                </div>
+
+               {/* Live HUD Stats (Cards & Corners) */}
+               {match.isLive && isFootball && (
+                  <div className="flex items-center justify-center gap-6 mt-6 z-10 w-full relative">
+                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+                     <div className="flex items-center gap-5 bg-sports-card px-6 py-2 rounded-full border border-sports-subtle shadow-md relative z-10">
+                        <div className="flex items-center gap-2.5">
+                           <div className="w-2.5 h-3.5 bg-red-500 rounded-[2px] shadow-[0_0_8px_rgba(239,68,68,0.5)]"></div>
+                           <span className="text-white font-black text-sm">{redCards.home} - {redCards.away}</span>
+                        </div>
+                        <div className="w-[2px] h-4 bg-white/10"></div>
+                        <div className="flex items-center gap-2.5">
+                           <div className="w-2.5 h-3.5 bg-yellow-500 rounded-[2px] shadow-[0_0_8px_rgba(234,179,8,0.5)]"></div>
+                           <span className="text-white font-black text-sm">{yellowCards.home} - {yellowCards.away}</span>
+                        </div>
+                        <div className="w-[2px] h-4 bg-white/10"></div>
+                        <div className="flex items-center gap-2.5">
+                           <Flag className="w-4 h-4 text-blue-400 drop-shadow-[0_0_5px_rgba(96,165,250,0.5)]" />
+                           <span className="text-white font-black text-sm">{corners.home} - {corners.away}</span>
+                        </div>
+                     </div>
+                  </div>
+               )}
             </div>
 
-            {/* CATEGORY TABS (GLOW TAB V2) */}
-            <div className="flex items-center gap-2 overflow-x-auto no-scrollbar border-b border-[#222635] mb-4 px-1">
+            {/* Mobile Player (Hidden on desktop, shown on mobile below scoreboard) */}
+            <div className="w-full shrink-0 xl:hidden mb-4">
+               <MatchAnimationPlayer match={match} stats={stats} homeStats={homeStats} awayStats={awayStats} />
+            </div>
+
+            {/* CATEGORY TABS (Pill Design) */}
+            <div className="flex items-center gap-3 overflow-x-auto no-scrollbar mb-6 px-4 py-2 bg-sports-main rounded-2xl border border-sports-subtle">
                {categories.map((cat, idx) => (
                   <button 
                     key={idx}
                     onClick={() => setActiveCategory(cat)}
-                    className={`whitespace-nowrap px-4 py-3 text-[13px] font-black transition-all relative rounded-t-lg overflow-hidden ${
-                       activeCategory === cat ? 'text-[#06b6d4] bg-[#06b6d4]/10' : 'text-zinc-500 hover:text-zinc-300 hover:bg-white/5'
+                    className={`relative whitespace-nowrap px-5 py-2.5 rounded-xl text-[13px] font-bold transition-all flex items-center gap-2 group ${
+                       activeCategory === cat 
+                        ? 'bg-sports-accent text-black font-black' 
+                        : 'bg-sports-card border border-sports-subtle text-zinc-400 hover:text-white hover:bg-sports-hover'
                     }`}
                   >
-                     <div className="relative z-10 flex items-center gap-1.5">
-                       {cat === 'Sihirbaz' && <Star className={`w-3.5 h-3.5 ${activeCategory === cat ? 'text-[#06b6d4]' : 'text-zinc-500'}`} fill="currentColor" />}
-                       {cat}
-                       {idx === 0 && <span className={`text-[10px] px-1.5 py-0.5 rounded ml-1 ${activeCategory === cat ? 'bg-[#06b6d4]/20 text-[#06b6d4]' : 'bg-white/10 text-white'}`}>15</span>}
-                     </div>
-                     {activeCategory === cat && (
-                       <div className="absolute bottom-0 left-0 w-full h-[3px] bg-[#06b6d4] shadow-[0_0_15px_rgba(6,182,212,0.8)]"></div>
-                     )}
+                     {cat === 'Sihirbaz' && <Star className={`w-4 h-4 ${activeCategory === cat ? 'text-black' : 'text-zinc-500'}`} fill="currentColor" />}
+                     {cat}
                   </button>
                ))}
             </div>
             
             {/* MATCH FINISHED / LOCKED STATE */}
             {(match.isFinished || ODDS_ENGINE_CONFIG.rules.lockKeywords.includes(match.minute || '')) ? (
-               <div className="flex flex-col items-center justify-center py-12 px-4 bg-[#12141c] rounded-xl border border-red-500/20 shadow-[0_0_30px_rgba(239,68,68,0.1)]">
+               <div className="flex flex-col items-center justify-center py-12 px-4 bg-sports-card rounded-sports-card border border-red-500/20 shadow-[0_0_30px_rgba(239,68,68,0.1)]">
                   <div className="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mb-4">
                      <span className="text-3xl">🔒</span>
                   </div>
@@ -459,441 +621,588 @@ export const LiveMatchInline: React.FC<LiveMatchInlineProps> = React.memo(({
                   </p>
                </div>
             ) : (
-               <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 items-start">
-                  
-                  {/* LEFT COLUMN */}
-                  <div className="flex flex-col w-full gap-4">
-                     
-                     {/* 1x2 Panel */}
-                     <div className="bg-[#1C2028] rounded-xl border border-white/5 p-4 flex flex-col w-full hover:border-white/10 transition-colors">
-                        <div className="flex items-center gap-2 mb-4">
-                           <h3 className="text-zinc-300 font-bold text-[14px]">Maç Sonucu (1x2)</h3>
-                           <div className="w-4 h-4 rounded-full bg-white/5 flex items-center justify-center text-zinc-500 cursor-pointer hover:bg-white/10">
-                              <Info size={10} strokeWidth={3} />
+               <div className="w-full">
+                  {/* CATEGORY CONTENT */}
+                  {activeCategory === 'Ana Seçenekler' && (
+                     <>
+                        {isBasketball ? (
+                           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+                              {/* BASKETBALL LEFT COLUMN */}
+                              <div className="flex flex-col w-full gap-4">
+                                 <RenderAccordion title="Maç Kazananı (Uzatma Dahil)">
+                                   <div className="grid grid-cols-2 gap-2">
+                                      <RenderBetButton id={match.id + '_bb_winner_1'} selectionName="Maç Kazananı: 1" odd="1.45" label={match.home} labelClass="text-center w-full block" />
+                                      <RenderBetButton id={match.id + '_bb_winner_2'} selectionName="Maç Kazananı: 2" odd="2.55" label={match.away} labelClass="text-center w-full block" />
+                                   </div>
+                                 </RenderAccordion>
+                                 <RenderAccordion title="Handikap">
+                                   <div className="grid grid-cols-2 gap-x-2 gap-y-1">
+                                      <div className="text-[10px] text-zinc-500 font-bold uppercase px-2 mb-1">Ev Sahibi</div>
+                                      <div className="text-[10px] text-zinc-500 font-bold uppercase px-2 mb-1">Deplasman</div>
+                                      <RenderBetButton id={match.id + '_bb_hc_1'} selectionName="Handikap: Ev (-5.5)" odd="1.85" label="-5.5" />
+                                      <RenderBetButton id={match.id + '_bb_hc_2'} selectionName="Handikap: Dep (+5.5)" odd="1.95" label="+5.5" />
+                                      <RenderBetButton id={match.id + '_bb_hc_3'} selectionName="Handikap: Ev (-6.5)" odd="2.10" label="-6.5" />
+                                      <RenderBetButton id={match.id + '_bb_hc_4'} selectionName="Handikap: Dep (+6.5)" odd="1.70" label="+6.5" />
+                                   </div>
+                                 </RenderAccordion>
+                                 <RenderAccordion title="İlk Yarı Sonucu">
+                                   <div className="grid grid-cols-3 gap-2">
+                                      <RenderBetButton id={match.id + '_bb_ht_1'} selectionName="İlk Yarı Sonucu: 1" odd="1.55" label="1" labelClass="text-center w-full block" />
+                                      <RenderBetButton id={match.id + '_bb_ht_x'} selectionName="İlk Yarı Sonucu: X" odd="14.00" label="X" labelClass="text-center w-full block" />
+                                      <RenderBetButton id={match.id + '_bb_ht_2'} selectionName="İlk Yarı Sonucu: 2" odd="2.65" label="2" labelClass="text-center w-full block" />
+                                   </div>
+                                 </RenderAccordion>
+                              </div>
+                              {/* BASKETBALL RIGHT COLUMN */}
+                              <div className="flex flex-col w-full gap-4">
+                                 <RenderAccordion title="Toplam Sayı Alt/Üst">
+                                   <div className="grid grid-cols-2 gap-x-2 gap-y-1">
+                                      <div className="text-[10px] text-zinc-500 font-bold uppercase px-2 mb-1">Üstü</div>
+                                      <div className="text-[10px] text-zinc-500 font-bold uppercase px-2 mb-1">Altı</div>
+                                      <RenderBetButton id={match.id + '_bb_tot_o155'} selectionName="Toplam Sayı: 155.5 Üst" odd="1.85" label="155.5" />
+                                      <RenderBetButton id={match.id + '_bb_tot_u155'} selectionName="Toplam Sayı: 155.5 Alt" odd="1.95" label="155.5" />
+                                      <RenderBetButton id={match.id + '_bb_tot_o160'} selectionName="Toplam Sayı: 160.5 Üst" odd="2.30" label="160.5" />
+                                      <RenderBetButton id={match.id + '_bb_tot_u160'} selectionName="Toplam Sayı: 160.5 Alt" odd="1.55" label="160.5" />
+                                   </div>
+                                 </RenderAccordion>
+                                 <RenderAccordion title="Ev Sahibi Toplam Sayı">
+                                   <div className="grid grid-cols-2 gap-x-2 gap-y-1">
+                                      <div className="text-[10px] text-zinc-500 font-bold uppercase px-2 mb-1">Üstü</div>
+                                      <div className="text-[10px] text-zinc-500 font-bold uppercase px-2 mb-1">Altı</div>
+                                      <RenderBetButton id={match.id + '_bb_home_o80'} selectionName="Ev Sahibi Toplam: 80.5 Üst" odd="1.90" label="80.5" />
+                                      <RenderBetButton id={match.id + '_bb_home_u80'} selectionName="Ev Sahibi Toplam: 80.5 Alt" odd="1.90" label="80.5" />
+                                   </div>
+                                 </RenderAccordion>
+                                 <RenderAccordion title="1. Çeyrek Sonucu">
+                                   <div className="grid grid-cols-3 gap-2">
+                                      <RenderBetButton id={match.id + '_bb_q1_1'} selectionName="1. Çeyrek Sonucu: 1" odd="1.70" label="1" labelClass="text-center w-full block" />
+                                      <RenderBetButton id={match.id + '_bb_q1_x'} selectionName="1. Çeyrek Sonucu: X" odd="9.00" label="X" labelClass="text-center w-full block" />
+                                      <RenderBetButton id={match.id + '_bb_q1_2'} selectionName="1. Çeyrek Sonucu: 2" odd="2.30" label="2" labelClass="text-center w-full block" />
+                                   </div>
+                                 </RenderAccordion>
+                              </div>
                            </div>
-                        </div>
-                        <div className="grid grid-cols-3 gap-2">
-                            <button 
-                              onClick={() => addSelection({
-                                 id: match.homeId || match.id + '_1',
-                                 matchId: match.id,
-                                 matchName: `${match.home} vs ${match.away}`,
-                                 selectionName: `Maç Sonucu: 1`,
-                                 odd: parseFloat(hOdd) || 1.00
-                              })}
-                              className={`bg-[#232833] hover:bg-[#2A2F3D] border border-white/5 rounded-lg flex flex-col items-center justify-center transition-colors min-h-[64px] ${betSlip.some(s => s.id === (match.homeId || match.id+'_1')) ? 'bg-[#06b6d4]/10 border-[#06b6d4]/40 shadow-[0_0_10px_rgba(6,182,212,0.15)]' : ''}`}
-                            >
-                               <span className="text-zinc-400 text-xs font-bold mb-1">1</span>
-                               <span className="text-[#06b6d4] font-black text-lg">
-                                 <AnimatedOdd value={hOdd} />
-                               </span>
-                            </button>
-                            <button 
-                              onClick={() => addSelection({
-                                 id: match.drawId || match.id + '_x',
-                                 matchId: match.id,
-                                 matchName: `${match.home} vs ${match.away}`,
-                                 selectionName: `Maç Sonucu: X`,
-                                 odd: parseFloat(xOdd) || 1.00
-                              })}
-                              className={`bg-[#232833] hover:bg-[#2A2F3D] border border-white/5 rounded-lg flex flex-col items-center justify-center transition-colors min-h-[64px] ${betSlip.some(s => s.id === (match.drawId || match.id+'_x')) ? 'bg-[#06b6d4]/10 border-[#06b6d4]/40 shadow-[0_0_10px_rgba(6,182,212,0.15)]' : ''}`}
-                            >
-                               <span className="text-zinc-400 text-xs font-bold mb-1">X</span>
-                               <span className="text-[#06b6d4] font-black text-lg">
-                                 <AnimatedOdd value={xOdd} />
-                               </span>
-                            </button>
-                            <button 
-                              onClick={() => addSelection({
-                                 id: match.awayId || match.id + '_2',
-                                 matchId: match.id,
-                                 matchName: `${match.home} vs ${match.away}`,
-                                 selectionName: `Maç Sonucu: 2`,
-                                 odd: parseFloat(aOdd) || 1.00
-                              })}
-                              className={`bg-[#232833] hover:bg-[#2A2F3D] border border-white/5 rounded-lg flex flex-col items-center justify-center transition-colors min-h-[64px] ${betSlip.some(s => s.id === (match.awayId || match.id+'_2')) ? 'bg-[#06b6d4]/10 border-[#06b6d4]/40 shadow-[0_0_10px_rgba(6,182,212,0.15)]' : ''}`}
-                            >
-                               <span className="text-zinc-400 text-xs font-bold mb-1">2</span>
-                               <span className="text-[#06b6d4] font-black text-lg">
-                                 <AnimatedOdd value={aOdd} />
-                               </span>
-                            </button>
-                         </div>
-                     </div>
+                        ) : isTennis ? (
+                           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+                              {/* TENNIS LEFT COLUMN */}
+                              <div className="flex flex-col w-full gap-4">
+                                 <RenderAccordion title="Maç Kazananı">
+                                   <div className="grid grid-cols-2 gap-2">
+                                      <RenderBetButton id={match.id + '_tn_winner_1'} selectionName="Maç Kazananı: 1" odd={hOdd || '1.65'} label={match.home} labelClass="text-center w-full block" />
+                                      <RenderBetButton id={match.id + '_tn_winner_2'} selectionName="Maç Kazananı: 2" odd={aOdd || '2.15'} label={match.away} labelClass="text-center w-full block" />
+                                   </div>
+                                 </RenderAccordion>
+                                 <RenderAccordion title="1. Set Kazananı">
+                                   <div className="grid grid-cols-2 gap-2">
+                                      <RenderBetButton id={match.id + '_tn_set1_1'} selectionName="1. Set Kazananı: 1" odd="1.75" label={match.home} labelClass="text-center w-full block" />
+                                      <RenderBetButton id={match.id + '_tn_set1_2'} selectionName="1. Set Kazananı: 2" odd="2.00" label={match.away} labelClass="text-center w-full block" />
+                                   </div>
+                                 </RenderAccordion>
+                                 <RenderAccordion title="Oyun Handikapı">
+                                   <div className="grid grid-cols-2 gap-x-2 gap-y-1">
+                                      <div className="text-[10px] text-zinc-500 font-bold uppercase px-2 mb-1">Ev Sahibi</div>
+                                      <div className="text-[10px] text-zinc-500 font-bold uppercase px-2 mb-1">Deplasman</div>
+                                      <RenderBetButton id={match.id + '_tn_hc_1'} selectionName="Oyun Handikapı: Ev (-2.5)" odd="1.85" label="-2.5" />
+                                      <RenderBetButton id={match.id + '_tn_hc_2'} selectionName="Oyun Handikapı: Dep (+2.5)" odd="1.95" label="+2.5" />
+                                   </div>
+                                 </RenderAccordion>
+                              </div>
+                              {/* TENNIS RIGHT COLUMN */}
+                              <div className="flex flex-col w-full gap-4">
+                                 <RenderAccordion title="Toplam Oyun Alt/Üst">
+                                   <div className="grid grid-cols-2 gap-x-2 gap-y-1">
+                                      <div className="text-[10px] text-zinc-500 font-bold uppercase px-2 mb-1">Üstü</div>
+                                      <div className="text-[10px] text-zinc-500 font-bold uppercase px-2 mb-1">Altı</div>
+                                      <RenderBetButton id={match.id + '_tn_tot_o21'} selectionName="Toplam Oyun: 21.5 Üst" odd="1.85" label="21.5" />
+                                      <RenderBetButton id={match.id + '_tn_tot_u21'} selectionName="Toplam Oyun: 21.5 Alt" odd="1.95" label="21.5" />
+                                      <RenderBetButton id={match.id + '_tn_tot_o22'} selectionName="Toplam Oyun: 22.5 Üst" odd="2.20" label="22.5" />
+                                      <RenderBetButton id={match.id + '_tn_tot_u22'} selectionName="Toplam Oyun: 22.5 Alt" odd="1.60" label="22.5" />
+                                   </div>
+                                 </RenderAccordion>
+                                 <RenderAccordion title="Sıradaki Oyunu Kim Kazanır">
+                                   <div className="grid grid-cols-2 gap-2">
+                                      <RenderBetButton id={match.id + '_tn_nextg_1'} selectionName="Sıradaki Oyun: 1" odd="1.30" label={match.home} labelClass="text-center w-full block" />
+                                      <RenderBetButton id={match.id + '_tn_nextg_2'} selectionName="Sıradaki Oyun: 2" odd="3.20" label={match.away} labelClass="text-center w-full block" />
+                                   </div>
+                                 </RenderAccordion>
+                              </div>
+                           </div>
+                        ) : (
+                           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+                              {/* FOOTBALL LEFT COLUMN */}
+                              <div className="flex flex-col w-full gap-4">
+                                 <RenderAccordion title="Maç Sonucu" rightInfo={<Info size={14} className="text-zinc-500" />}>
+                                   <div className="grid grid-cols-3 gap-2">
+                                      <RenderBetButton id={match.homeId || match.id + '_1'} selectionName="Maç Sonucu: 1" odd={hOdd} label="1" labelClass="text-center w-full block" />
+                                      <RenderBetButton id={match.drawId || match.id + '_x'} selectionName="Maç Sonucu: X" odd={xOdd} label="X" labelClass="text-center w-full block" />
+                                      <RenderBetButton id={match.awayId || match.id + '_2'} selectionName="Maç Sonucu: 2" odd={aOdd} label="2" labelClass="text-center w-full block" />
+                                   </div>
+                                 </RenderAccordion>
+      
+                                 <RenderAccordion title="Karşılıklı Gol">
+                                   <div className="grid grid-cols-2 gap-2">
+                                      <RenderBetButton id={match.id + '_gg_var'} selectionName="Karşılıklı Gol: Evet" odd={ggVar} label="Evet" />
+                                      <RenderBetButton id={match.id + '_gg_yok'} selectionName="Karşılıklı Gol: Hayır" odd={ggYok} label="Hayır" />
+                                   </div>
+                                 </RenderAccordion>
+      
+                                 <RenderAccordion title="Asya Handikap">
+                                   <div className="grid grid-cols-2 gap-x-2 gap-y-1">
+                                      <div className="text-[10px] text-zinc-500 font-bold uppercase px-2 mb-1">Ev Sahibi</div>
+                                      <div className="text-[10px] text-zinc-500 font-bold uppercase px-2 mb-1">Deplasman</div>
+                                      <RenderBetButton id={match.id + '_ah_h_1'} selectionName="Asya Handikap: Ev (-0.5)" odd="1.85" label="-0.5" />
+                                      <RenderBetButton id={match.id + '_ah_a_1'} selectionName="Asya Handikap: Dep (+0.5)" odd="1.95" label="+0.5" />
+                                      <RenderBetButton id={match.id + '_ah_h_2'} selectionName="Asya Handikap: Ev (-1.5)" odd="3.20" label="-1.5" />
+                                      <RenderBetButton id={match.id + '_ah_a_2'} selectionName="Asya Handikap: Dep (+1.5)" odd="1.35" label="+1.5" />
+                                   </div>
+                                 </RenderAccordion>
 
-                     {/* İki takım da gol atar Panel */}
-                     <div className="bg-[#1C2028] rounded-xl border border-white/5 p-4 flex flex-col w-full hover:border-white/10 transition-colors">
-                        <div className="flex items-center gap-2 mb-4">
-                           <h3 className="text-zinc-300 font-bold text-[14px]">İki takım da gol atar</h3>
-                        </div>
-                        <div className="grid grid-cols-2 gap-2">
-                           <button 
-                              onClick={() => addSelection({
-                                 id: match.id + '_gg_var',
-                                 matchId: match.id,
-                                 matchName: `${match.home} vs ${match.away}`,
-                                 selectionName: 'Karşılıklı Gol: Evet',
-                                 odd: parseFloat(ggVar) || 1.00
-                              })}
-                              className={`bg-[#232833] hover:bg-[#2A2F3D] border border-white/5 rounded-lg flex flex-col items-center justify-center transition-colors min-h-[64px] ${betSlip.some(s => s.id === (match.id + '_gg_var')) ? 'bg-[#06b6d4]/10 border-[#06b6d4]/40 shadow-[0_0_10px_rgba(6,182,212,0.15)]' : ''}`}
-                           >
-                              <span className="text-zinc-400 text-xs font-bold mb-1">Evet</span>
-                              <span className="text-[#06b6d4] font-black text-lg">
-                                 <AnimatedOdd value={ggVar} />
-                              </span>
-                           </button>
-                           <button 
-                              onClick={() => addSelection({
-                                 id: match.id + '_gg_yok',
-                                 matchId: match.id,
-                                 matchName: `${match.home} vs ${match.away}`,
-                                 selectionName: 'Karşılıklı Gol: Hayır',
-                                 odd: parseFloat(ggYok) || 1.00
-                              })}
-                              className={`bg-[#232833] hover:bg-[#2A2F3D] border border-white/5 rounded-lg flex flex-col items-center justify-center transition-colors min-h-[64px] ${betSlip.some(s => s.id === (match.id + '_gg_yok')) ? 'bg-[#06b6d4]/10 border-[#06b6d4]/40 shadow-[0_0_10px_rgba(6,182,212,0.15)]' : ''}`}
-                           >
-                              <span className="text-zinc-400 text-xs font-bold mb-1">Hayır</span>
-                              <span className="text-[#06b6d4] font-black text-lg">
-                                 <AnimatedOdd value={ggYok} />
-                              </span>
-                           </button>
-                        </div>
-                     </div>
-                  </div>
+                                 <RenderAccordion title="Sıradaki Golü Kim Atar">
+                                   <div className="grid grid-cols-3 gap-2">
+                                      <RenderBetButton id={match.id + '_ng_1'} selectionName="Sıradaki Gol: 1" odd="1.95" label="1" labelClass="text-center w-full block" />
+                                      <RenderBetButton id={match.id + '_ng_x'} selectionName="Sıradaki Gol: Yok" odd="12.0" label="Yok" labelClass="text-center w-full block" />
+                                      <RenderBetButton id={match.id + '_ng_2'} selectionName="Sıradaki Gol: 2" odd="2.40" label="2" labelClass="text-center w-full block" />
+                                   </div>
+                                 </RenderAccordion>
+                              </div>
+      
+                              {/* FOOTBALL RIGHT COLUMN */}
+                              <div className="flex flex-col w-full gap-4">
+                                 <RenderAccordion title="Çifte Şans">
+                                   <div className="grid grid-cols-3 gap-2">
+                                      <RenderBetButton id={match.id + '_dc_1x'} selectionName="Çifte Şans: 1X" odd={dc1x} label="1X" labelClass="text-center w-full block" />
+                                      <RenderBetButton id={match.id + '_dc_12'} selectionName="Çifte Şans: 12" odd={dc12} label="12" labelClass="text-center w-full block" />
+                                      <RenderBetButton id={match.id + '_dc_x2'} selectionName="Çifte Şans: X2" odd={dcx2} label="X2" labelClass="text-center w-full block" />
+                                   </div>
+                                 </RenderAccordion>
+      
+                                 <RenderAccordion title="Toplam Goller">
+                                   <div className="grid grid-cols-2 gap-x-2 gap-y-1">
+                                      <div className="text-[10px] text-zinc-500 font-bold uppercase px-2 mb-1">Üstü</div>
+                                      <div className="text-[10px] text-zinc-500 font-bold uppercase px-2 mb-1">Altı</div>
+                                      {ouLines.slice(0, 3).map((line, idx) => (
+                                         <React.Fragment key={idx}>
+                                            <RenderBetButton id={`${match.id}_ou_${line?.id}_over`} selectionName={`Toplam ${line?.base} Üst`} odd={line?.over} label={line?.base} />
+                                            <RenderBetButton id={`${match.id}_ou_${line?.id}_under`} selectionName={`Toplam ${line?.base} Alt`} odd={line?.under} label={line?.base} />
+                                         </React.Fragment>
+                                      ))}
+                                   </div>
+                                 </RenderAccordion>
+      
+                                 <RenderAccordion title="Beraberlikte İade">
+                                   <div className="grid grid-cols-2 gap-2">
+                                      <RenderBetButton id={match.id + '_dnb_1'} selectionName="Beraberlikte İade: 1" odd="1.45" label="1" labelClass="text-center w-full block" />
+                                      <RenderBetButton id={match.id + '_dnb_2'} selectionName="Beraberlikte İade: 2" odd="2.55" label="2" labelClass="text-center w-full block" />
+                                   </div>
+                                 </RenderAccordion>
 
-                  {/* RIGHT COLUMN */}
-                  <div className="flex flex-col w-full gap-4">
-                     
-                     {/* Çifte şans Panel */}
-                     <div className="bg-[#1C2028] rounded-xl border border-white/5 p-4 flex flex-col w-full hover:border-white/10 transition-colors">
-                        <div className="flex items-center gap-2 mb-4">
-                           <h3 className="text-zinc-300 font-bold text-[14px]">Çifte şans</h3>
-                        </div>
-                        <div className="grid grid-cols-3 gap-2">
-                           <button 
-                             onClick={() => addSelection({
-                                id: match.id + '_dc_1x',
-                                matchId: match.id,
-                                matchName: `${match.home} vs ${match.away}`,
-                                selectionName: 'Çifte Şans: 1X',
-                                odd: parseFloat(dc1x) || 1.00
-                             })}
-                             className={`bg-[#232833] hover:bg-[#2A2F3D] border border-white/5 rounded-lg flex flex-col items-center justify-center transition-colors min-h-[64px] ${betSlip.some(s => s.id === (match.id + '_dc_1x')) ? 'bg-[#06b6d4]/10 border-[#06b6d4]/40 shadow-[0_0_10px_rgba(6,182,212,0.15)]' : ''}`}
-                           >
-                             <span className="text-zinc-400 text-xs font-bold mb-1">1X</span>
-                             <span className="text-[#06b6d4] font-black text-lg"><AnimatedOdd value={dc1x} /></span>
-                           </button>
-                           <button 
-                             onClick={() => addSelection({
-                                id: match.id + '_dc_12',
-                                matchId: match.id,
-                                matchName: `${match.home} vs ${match.away}`,
-                                selectionName: 'Çifte Şans: 12',
-                                odd: parseFloat(dc12) || 1.00
-                             })}
-                             className={`bg-[#232833] hover:bg-[#2A2F3D] border border-white/5 rounded-lg flex flex-col items-center justify-center transition-colors min-h-[64px] ${betSlip.some(s => s.id === (match.id + '_dc_12')) ? 'bg-[#06b6d4]/10 border-[#06b6d4]/40 shadow-[0_0_10px_rgba(6,182,212,0.15)]' : ''}`}
-                           >
-                             <span className="text-zinc-400 text-xs font-bold mb-1">12</span>
-                             <span className="text-[#06b6d4] font-black text-lg"><AnimatedOdd value={dc12} /></span>
-                           </button>
-                           <button 
-                             onClick={() => addSelection({
-                                id: match.id + '_dc_x2',
-                                matchId: match.id,
-                                matchName: `${match.home} vs ${match.away}`,
-                                selectionName: 'Çifte Şans: X2',
-                                odd: parseFloat(dcx2) || 1.00
-                             })}
-                             className={`bg-[#232833] hover:bg-[#2A2F3D] border border-white/5 rounded-lg flex flex-col items-center justify-center transition-colors min-h-[64px] ${betSlip.some(s => s.id === (match.id + '_dc_x2')) ? 'bg-[#06b6d4]/10 border-[#06b6d4]/40 shadow-[0_0_10px_rgba(6,182,212,0.15)]' : ''}`}
-                           >
-                             <span className="text-zinc-400 text-xs font-bold mb-1">X2</span>
-                             <span className="text-[#06b6d4] font-black text-lg"><AnimatedOdd value={dcx2} /></span>
-                           </button>
-                        </div>
-                     </div>
+                                 <RenderAccordion title="İlk Yarı Sonucu">
+                                   <div className="grid grid-cols-3 gap-2">
+                                      <RenderBetButton id={match.id + '_ht_1'} selectionName="İlk Yarı Sonucu: 1" odd="2.40" label="1" labelClass="text-center w-full block" />
+                                      <RenderBetButton id={match.id + '_ht_x'} selectionName="İlk Yarı Sonucu: X" odd="2.10" label="X" labelClass="text-center w-full block" />
+                                      <RenderBetButton id={match.id + '_ht_2'} selectionName="İlk Yarı Sonucu: 2" odd="3.50" label="2" labelClass="text-center w-full block" />
+                                   </div>
+                                 </RenderAccordion>
+                              </div>
+                           </div>
+                        )}
+                     </>
+                  )}
+                  
+                  {activeCategory === 'Goller' && (
+                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+                        {/* LEFT COLUMN */}
+                        <div className="flex flex-col w-full gap-4">
+                           <RenderAccordion title="Toplam Goller">
+                             <div className="grid grid-cols-2 gap-x-2 gap-y-1">
+                                <div className="text-[10px] text-zinc-500 font-bold uppercase px-2 mb-1">Üstü</div>
+                                <div className="text-[10px] text-zinc-500 font-bold uppercase px-2 mb-1">Altı</div>
+                                {ouLines.slice(0, 5).map((line, idx) => (
+                                   <React.Fragment key={idx}>
+                                      <RenderBetButton id={`${match.id}_ou_${line?.id}_over`} selectionName={`Toplam ${line?.base} Üst`} odd={line?.over} label={line?.base} />
+                                      <RenderBetButton id={`${match.id}_ou_${line?.id}_under`} selectionName={`Toplam ${line?.base} Alt`} odd={line?.under} label={line?.base} />
+                                   </React.Fragment>
+                                ))}
+                             </div>
+                           </RenderAccordion>
 
-                     {/* Toplam Panel */}
-                     <div className="bg-[#1C2028] rounded-xl border border-white/5 p-4 flex flex-col w-full hover:border-white/10 transition-colors">
-                        <div className="flex items-center gap-2 mb-4">
-                           <h3 className="text-zinc-300 font-bold text-[14px]">Toplam Goller</h3>
+                           <RenderAccordion title="İlk Yarı Toplam Gol">
+                             <div className="grid grid-cols-2 gap-x-2 gap-y-1">
+                                <div className="text-[10px] text-zinc-500 font-bold uppercase px-2 mb-1">Üstü</div>
+                                <div className="text-[10px] text-zinc-500 font-bold uppercase px-2 mb-1">Altı</div>
+                                <RenderBetButton id={`${match.id}_htO05`} selectionName="1. Yarı Toplam 0.5 Üst" odd={htou.over05 !== '-' ? htou.over05 : '1.40'} label="0.5" />
+                                <RenderBetButton id={`${match.id}_htU05`} selectionName="1. Yarı Toplam 0.5 Alt" odd={htou.under05 !== '-' ? htou.under05 : '2.70'} label="0.5" />
+                                <RenderBetButton id={`${match.id}_htO15`} selectionName="1. Yarı Toplam 1.5 Üst" odd={htou.over15 !== '-' ? htou.over15 : '2.85'} label="1.5" />
+                                <RenderBetButton id={`${match.id}_htU15`} selectionName="1. Yarı Toplam 1.5 Alt" odd={htou.under15 !== '-' ? htou.under15 : '1.38'} label="1.5" />
+                             </div>
+                           </RenderAccordion>
                         </div>
-                        <div className="grid grid-cols-2 gap-4 mb-2">
-                           <span className="text-center text-zinc-500 text-[11px] font-bold uppercase tracking-wider">Üstü</span>
-                           <span className="text-center text-zinc-500 text-[11px] font-bold uppercase tracking-wider">Altı</span>
-                        </div>
-                        <div className="grid grid-cols-2 gap-x-4 gap-y-2 mb-3">
-                           {ouLines.length > 0 ? ouLines.slice(0, 10).map((line, idx) => (
-                              <React.Fragment key={idx}>
-                                 <button 
-                                   onClick={() => addSelection({
-                                      id: `${match.id}_ou_${line?.id}_over`,
-                                      matchId: match.id,
-                                      matchName: `${match.home} vs ${match.away}`,
-                                      selectionName: `Toplam ${line?.base} Üst`,
-                                      odd: parseFloat(line?.over || '0')
-                                   })}
-                                   className={`bg-[#232833] hover:bg-[#2A2F3D] border border-white/5 rounded-lg flex flex-col items-center justify-center transition-colors min-h-[56px] ${betSlip.some(s => s.id === `${match.id}_ou_${line?.id}_over`) ? 'bg-[#06b6d4]/10 border-[#06b6d4]/40 shadow-[0_0_10px_rgba(6,182,212,0.15)]' : ''}`}
-                                 >
-                                   <span className="text-zinc-400 text-[11px] font-bold mb-0.5">{line?.base}</span>
-                                   <span className="text-[#06b6d4] font-black text-[15px] tracking-wide"><AnimatedOdd value={line?.over || '-'} /></span>
-                                 </button>
-                                 <button 
-                                   onClick={() => addSelection({
-                                      id: `${match.id}_ou_${line?.id}_under`,
-                                      matchId: match.id,
-                                      matchName: `${match.home} vs ${match.away}`,
-                                      selectionName: `Toplam ${line?.base} Alt`,
-                                      odd: parseFloat(line?.under || '0')
-                                   })}
-                                   className={`bg-[#232833] hover:bg-[#2A2F3D] border border-white/5 rounded-lg flex flex-col items-center justify-center transition-colors min-h-[56px] ${betSlip.some(s => s.id === `${match.id}_ou_${line?.id}_under`) ? 'bg-[#06b6d4]/10 border-[#06b6d4]/40 shadow-[0_0_10px_rgba(6,182,212,0.15)]' : ''}`}
-                                 >
-                                   <span className="text-zinc-400 text-[11px] font-bold mb-0.5">{line?.base}</span>
-                                   <span className="text-[#06b6d4] font-black text-[15px] tracking-wide"><AnimatedOdd value={line?.under || '-'} /></span>
-                                 </button>
-                              </React.Fragment>
-                           )) : (
-                              <div className="col-span-2 text-center text-zinc-500 text-[12px] py-4">Şu an için bahis seçeneği bulunmamaktadır.</div>
-                           )}
+
+                        {/* RIGHT COLUMN */}
+                        <div className="flex flex-col w-full gap-4">
+                           <RenderAccordion title="Ev Sahibi Toplam Gol">
+                             <div className="grid grid-cols-2 gap-x-2 gap-y-1">
+                                <div className="text-[10px] text-zinc-500 font-bold uppercase px-2 mb-1">Üstü</div>
+                                <div className="text-[10px] text-zinc-500 font-bold uppercase px-2 mb-1">Altı</div>
+                                <RenderBetButton id={`${match.id}_home_ou05_o`} selectionName="Ev Sahibi 0.5 Üst" odd="1.18" label="0.5" />
+                                <RenderBetButton id={`${match.id}_home_ou05_u`} selectionName="Ev Sahibi 0.5 Alt" odd="4.20" label="0.5" />
+                                <RenderBetButton id={`${match.id}_home_ou15_o`} selectionName="Ev Sahibi 1.5 Üst" odd="2.05" label="1.5" />
+                                <RenderBetButton id={`${match.id}_home_ou15_u`} selectionName="Ev Sahibi 1.5 Alt" odd="1.65" label="1.5" />
+                             </div>
+                           </RenderAccordion>
+                           
+                           <RenderAccordion title="Deplasman Toplam Gol">
+                             <div className="grid grid-cols-2 gap-x-2 gap-y-1">
+                                <div className="text-[10px] text-zinc-500 font-bold uppercase px-2 mb-1">Üstü</div>
+                                <div className="text-[10px] text-zinc-500 font-bold uppercase px-2 mb-1">Altı</div>
+                                <RenderBetButton id={`${match.id}_away_ou05_o`} selectionName="Deplasman 0.5 Üst" odd="1.35" label="0.5" />
+                                <RenderBetButton id={`${match.id}_away_ou05_u`} selectionName="Deplasman 0.5 Alt" odd="2.95" label="0.5" />
+                                <RenderBetButton id={`${match.id}_away_ou15_o`} selectionName="Deplasman 1.5 Üst" odd="2.65" label="1.5" />
+                                <RenderBetButton id={`${match.id}_away_ou15_u`} selectionName="Deplasman 1.5 Alt" odd="1.42" label="1.5" />
+                             </div>
+                           </RenderAccordion>
                         </div>
                      </div>
-                  </div>
+                  )}
+
+                  {activeCategory === 'İlk Yarı' && (
+                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+                        {/* LEFT COLUMN */}
+                        <div className="flex flex-col w-full gap-4">
+                           <RenderAccordion title="İlk Yarı Sonucu">
+                             <div className="grid grid-cols-3 gap-2">
+                                <RenderBetButton id={`${match.id}_ht1`} selectionName="1. Yarı Sonucu: 1" odd={ht1x2.home !== '-' ? ht1x2.home : '2.10'} label="1" labelClass="text-center w-full block" />
+                                <RenderBetButton id={`${match.id}_htX`} selectionName="1. Yarı Sonucu: X" odd={ht1x2.draw !== '-' ? ht1x2.draw : '2.05'} label="X" labelClass="text-center w-full block" />
+                                <RenderBetButton id={`${match.id}_ht2`} selectionName="1. Yarı Sonucu: 2" odd={ht1x2.away !== '-' ? ht1x2.away : '3.65'} label="2" labelClass="text-center w-full block" />
+                             </div>
+                           </RenderAccordion>
+
+                           <RenderAccordion title="İlk Yarı Toplam Gol">
+                             <div className="grid grid-cols-2 gap-x-2 gap-y-1">
+                                <div className="text-[10px] text-zinc-500 font-bold uppercase px-2 mb-1">Üstü</div>
+                                <div className="text-[10px] text-zinc-500 font-bold uppercase px-2 mb-1">Altı</div>
+                                <RenderBetButton id={`${match.id}_ht_o05`} selectionName="1. Yarı Toplam 0.5 Üst" odd={htou.over05 !== '-' ? htou.over05 : '1.40'} label="0.5" />
+                                <RenderBetButton id={`${match.id}_ht_u05`} selectionName="1. Yarı Toplam 0.5 Alt" odd={htou.under05 !== '-' ? htou.under05 : '2.70'} label="0.5" />
+                                <RenderBetButton id={`${match.id}_ht_o15`} selectionName="1. Yarı Toplam 1.5 Üst" odd={htou.over15 !== '-' ? htou.over15 : '2.85'} label="1.5" />
+                                <RenderBetButton id={`${match.id}_ht_u15`} selectionName="1. Yarı Toplam 1.5 Alt" odd={htou.under15 !== '-' ? htou.under15 : '1.38'} label="1.5" />
+                             </div>
+                           </RenderAccordion>
+                        </div>
+
+                        {/* RIGHT COLUMN */}
+                        <div className="flex flex-col w-full gap-4">
+                           <RenderAccordion title="İlk Yarı Çifte Şans">
+                             <div className="grid grid-cols-3 gap-2">
+                                <RenderBetButton id={`${match.id}_ht_dc1x`} selectionName="1. Yarı Çifte Şans: 1X" odd="1.25" label="1X" labelClass="text-center w-full block" />
+                                <RenderBetButton id={`${match.id}_ht_dc12`} selectionName="1. Yarı Çifte Şans: 12" odd="1.60" label="12" labelClass="text-center w-full block" />
+                                <RenderBetButton id={`${match.id}_ht_dcx2`} selectionName="1. Yarı Çifte Şans: X2" odd="1.45" label="X2" labelClass="text-center w-full block" />
+                             </div>
+                           </RenderAccordion>
+                           
+                           <RenderAccordion title="İlk Yarı Karşılıklı Gol">
+                             <div className="grid grid-cols-2 gap-2">
+                                <RenderBetButton id={`${match.id}_ht_gg_var`} selectionName="1. Yarı Karşılıklı Gol: Evet" odd="4.50" label="Evet" />
+                                <RenderBetButton id={`${match.id}_ht_gg_yok`} selectionName="1. Yarı Karşılıklı Gol: Hayır" odd="1.15" label="Hayır" />
+                             </div>
+                           </RenderAccordion>
+                        </div>
+                     </div>
+                  )}
+
+                  {activeCategory === 'Korner & Kart' && (
+                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+                        {/* LEFT COLUMN */}
+                        <div className="flex flex-col w-full gap-4">
+                           <RenderAccordion title="Maç Sonucu (Kornerler)">
+                             <div className="grid grid-cols-3 gap-2">
+                                <RenderBetButton id={`${match.id}_cr1`} selectionName="Korner Sonucu: 1" odd={cr1x2.home !== '-' ? cr1x2.home : '1.85'} label="1" labelClass="text-center w-full block" />
+                                <RenderBetButton id={`${match.id}_crX`} selectionName="Korner Sonucu: X" odd={cr1x2.draw !== '-' ? cr1x2.draw : '5.50'} label="X" labelClass="text-center w-full block" />
+                                <RenderBetButton id={`${match.id}_cr2`} selectionName="Korner Sonucu: 2" odd={cr1x2.away !== '-' ? cr1x2.away : '2.15'} label="2" labelClass="text-center w-full block" />
+                             </div>
+                           </RenderAccordion>
+                           
+                           <RenderAccordion title="İlk Yarı (Kornerler)">
+                             <div className="grid grid-cols-3 gap-2">
+                                <RenderBetButton id={`${match.id}_cr1_ht`} selectionName="1. Yarı Korner: 1" odd="2.10" label="1" labelClass="text-center w-full block" />
+                                <RenderBetButton id={`${match.id}_crX_ht`} selectionName="1. Yarı Korner: X" odd="3.40" label="X" labelClass="text-center w-full block" />
+                                <RenderBetButton id={`${match.id}_cr2_ht`} selectionName="1. Yarı Korner: 2" odd="2.80" label="2" labelClass="text-center w-full block" />
+                             </div>
+                           </RenderAccordion>
+                        </div>
+
+                        {/* RIGHT COLUMN */}
+                        <div className="flex flex-col w-full gap-4">
+                           <RenderAccordion title="Toplam Korner">
+                             <div className="grid grid-cols-2 gap-x-2 gap-y-1">
+                                <div className="text-[10px] text-zinc-500 font-bold uppercase px-2 mb-1">Üstü</div>
+                                <div className="text-[10px] text-zinc-500 font-bold uppercase px-2 mb-1">Altı</div>
+                                <RenderBetButton id={`${match.id}_cr_o75`} selectionName="Korner 7.5 Üst" odd={crou.over75 !== '-' ? crou.over75 : '1.35'} label="7.5" />
+                                <RenderBetButton id={`${match.id}_cr_u75`} selectionName="Korner 7.5 Alt" odd={crou.under75 !== '-' ? crou.under75 : '2.85'} label="7.5" />
+                                <RenderBetButton id={`${match.id}_cr_o85`} selectionName="Korner 8.5 Üst" odd={crou.over85 !== '-' ? crou.over85 : '1.75'} label="8.5" />
+                                <RenderBetButton id={`${match.id}_cr_u85`} selectionName="Korner 8.5 Alt" odd={crou.under85 !== '-' ? crou.under85 : '1.95'} label="8.5" />
+                                <RenderBetButton id={`${match.id}_cr_o95`} selectionName="Korner 9.5 Üst" odd="2.30" label="9.5" />
+                                <RenderBetButton id={`${match.id}_cr_u95`} selectionName="Korner 9.5 Alt" odd="1.55" label="9.5" />
+                             </div>
+                           </RenderAccordion>
+                           
+                           <RenderAccordion title="Toplam Kartlar">
+                             <div className="grid grid-cols-2 gap-x-2 gap-y-1">
+                                <div className="text-[10px] text-zinc-500 font-bold uppercase px-2 mb-1">Üstü</div>
+                                <div className="text-[10px] text-zinc-500 font-bold uppercase px-2 mb-1">Altı</div>
+                                <RenderBetButton id={`${match.id}_card_o35`} selectionName="Kart 3.5 Üst" odd="1.50" label="3.5" />
+                                <RenderBetButton id={`${match.id}_card_u35`} selectionName="Kart 3.5 Alt" odd="2.40" label="3.5" />
+                                <RenderBetButton id={`${match.id}_card_o45`} selectionName="Kart 4.5 Üst" odd="2.05" label="4.5" />
+                                <RenderBetButton id={`${match.id}_card_u45`} selectionName="Kart 4.5 Alt" odd="1.70" label="4.5" />
+                             </div>
+                           </RenderAccordion>
+                        </div>
+                     </div>
+                  )}
+
+                  {activeCategory === 'Asya' && (
+                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+                        {/* LEFT COLUMN */}
+                        <div className="flex flex-col w-full gap-4">
+                           <RenderAccordion title="Asya Handikap">
+                             <div className="grid grid-cols-2 gap-x-2 gap-y-1">
+                                <div className="text-[10px] text-zinc-500 font-bold uppercase px-2 mb-1">Ev Sahibi</div>
+                                <div className="text-[10px] text-zinc-500 font-bold uppercase px-2 mb-1">Deplasman</div>
+                                <RenderBetButton id={`${match.id}_ah_1_m05`} selectionName="Asya Handikap: 1 (-0.5)" odd="2.10" label="-0.5" />
+                                <RenderBetButton id={`${match.id}_ah_2_p05`} selectionName="Asya Handikap: 2 (+0.5)" odd="1.70" label="+0.5" />
+                                <RenderBetButton id={`${match.id}_ah_1_m10`} selectionName="Asya Handikap: 1 (-1.0)" odd="3.20" label="-1.0" />
+                                <RenderBetButton id={`${match.id}_ah_2_p10`} selectionName="Asya Handikap: 2 (+1.0)" odd="1.35" label="+1.0" />
+                             </div>
+                           </RenderAccordion>
+                           <RenderAccordion title="İlk Yarı Asya Handikap">
+                             <div className="grid grid-cols-2 gap-x-2 gap-y-1">
+                                <div className="text-[10px] text-zinc-500 font-bold uppercase px-2 mb-1">Ev Sahibi</div>
+                                <div className="text-[10px] text-zinc-500 font-bold uppercase px-2 mb-1">Deplasman</div>
+                                <RenderBetButton id={`${match.id}_ht_ah_1_m05`} selectionName="1. Yarı Asya Handikap: 1 (-0.5)" odd="2.65" label="-0.5" />
+                                <RenderBetButton id={`${match.id}_ht_ah_2_p05`} selectionName="1. Yarı Asya Handikap: 2 (+0.5)" odd="1.45" label="+0.5" />
+                             </div>
+                           </RenderAccordion>
+                        </div>
+
+                        {/* RIGHT COLUMN */}
+                        <div className="flex flex-col w-full gap-4">
+                           <RenderAccordion title="Asya Toplam Gol">
+                             <div className="grid grid-cols-2 gap-x-2 gap-y-1">
+                                <div className="text-[10px] text-zinc-500 font-bold uppercase px-2 mb-1">Üstü</div>
+                                <div className="text-[10px] text-zinc-500 font-bold uppercase px-2 mb-1">Altı</div>
+                                <RenderBetButton id={`${match.id}_ah_ou_175_o`} selectionName="Asya Toplam 1.75 Üst" odd="1.65" label="1.75" />
+                                <RenderBetButton id={`${match.id}_ah_ou_175_u`} selectionName="Asya Toplam 1.75 Alt" odd="2.15" label="1.75" />
+                                <RenderBetButton id={`${match.id}_ah_ou_225_o`} selectionName="Asya Toplam 2.25 Üst" odd="1.90" label="2.25" />
+                                <RenderBetButton id={`${match.id}_ah_ou_225_u`} selectionName="Asya Toplam 2.25 Alt" odd="1.85" label="2.25" />
+                                <RenderBetButton id={`${match.id}_ah_ou_275_o`} selectionName="Asya Toplam 2.75 Üst" odd="2.40" label="2.75" />
+                                <RenderBetButton id={`${match.id}_ah_ou_275_u`} selectionName="Asya Toplam 2.75 Alt" odd="1.50" label="2.75" />
+                             </div>
+                           </RenderAccordion>
+                        </div>
+                     </div>
+                  )}
+
+                  {activeCategory === 'Oyuncular' && (
+                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+                        <div className="flex flex-col w-full gap-4">
+                           <RenderAccordion title="Gol Atacak Oyuncu">
+                             <div className="grid grid-cols-2 gap-2">
+                                <RenderBetButton id={`${match.id}_player_1`} selectionName="İlk Golü Atar: L. Messi" odd="4.50" label="L. Messi" />
+                                <RenderBetButton id={`${match.id}_player_2`} selectionName="İlk Golü Atar: K. Mbappe" odd="5.00" label="K. Mbappe" />
+                                <RenderBetButton id={`${match.id}_player_3`} selectionName="Herhangi Bir Zamanda Atar: L. Messi" odd="2.10" label="L. Messi (Anytime)" />
+                                <RenderBetButton id={`${match.id}_player_4`} selectionName="Herhangi Bir Zamanda Atar: K. Mbappe" odd="2.40" label="K. Mbappe (Anytime)" />
+                             </div>
+                           </RenderAccordion>
+                           <RenderAccordion title="Oyuncu İsabetli Şut Sayısı">
+                             <div className="grid grid-cols-2 gap-x-2 gap-y-1">
+                                <div className="text-[10px] text-zinc-500 font-bold uppercase px-2 mb-1">Üstü</div>
+                                <div className="text-[10px] text-zinc-500 font-bold uppercase px-2 mb-1">Altı</div>
+                                <RenderBetButton id={`${match.id}_shot_1_o`} selectionName="L. Messi: 1.5 İsabetli Şut Üst" odd="1.85" label="1.5 (L. Messi)" />
+                                <RenderBetButton id={`${match.id}_shot_1_u`} selectionName="L. Messi: 1.5 İsabetli Şut Alt" odd="1.85" label="1.5 (L. Messi)" />
+                                <RenderBetButton id={`${match.id}_shot_2_o`} selectionName="K. Mbappe: 2.5 İsabetli Şut Üst" odd="2.10" label="2.5 (K. Mbappe)" />
+                                <RenderBetButton id={`${match.id}_shot_2_u`} selectionName="K. Mbappe: 2.5 İsabetli Şut Alt" odd="1.65" label="2.5 (K. Mbappe)" />
+                             </div>
+                           </RenderAccordion>
+                           <RenderAccordion title="Gol Atar ve Takımı Kazanır">
+                             <div className="grid grid-cols-1 gap-2">
+                                <RenderBetButton id={`${match.id}_win_score_1`} selectionName="L. Messi Gol Atar ve Takımı Kazanır" odd="3.20" label="L. Messi & Ev Sahibi Kazanır" />
+                                <RenderBetButton id={`${match.id}_win_score_2`} selectionName="K. Mbappe Gol Atar ve Takımı Kazanır" odd="4.10" label="K. Mbappe & Deplasman Kazanır" />
+                             </div>
+                           </RenderAccordion>
+                        </div>
+                        <div className="flex flex-col w-full gap-4">
+                           <RenderAccordion title="Oyuncu Kart Görür mü?">
+                             <div className="grid grid-cols-2 gap-x-2 gap-y-1">
+                                <div className="text-[10px] text-zinc-500 font-bold uppercase px-2 mb-1">Evet</div>
+                                <div className="text-[10px] text-zinc-500 font-bold uppercase px-2 mb-1">Hayır</div>
+                                <RenderBetButton id={`${match.id}_card_1_y`} selectionName="Kart Görür: S. Ramos" odd="2.20" label="S. Ramos" />
+                                <RenderBetButton id={`${match.id}_card_1_n`} selectionName="Kart Görmez: S. Ramos" odd="1.60" label="S. Ramos" />
+                                <RenderBetButton id={`${match.id}_card_2_y`} selectionName="Kart Görür: Pepe" odd="1.95" label="Pepe" />
+                                <RenderBetButton id={`${match.id}_card_2_n`} selectionName="Kart Görmez: Pepe" odd="1.75" label="Pepe" />
+                             </div>
+                           </RenderAccordion>
+                           <RenderAccordion title="Kırmızı Kart Görür mü?">
+                             <div className="grid grid-cols-2 gap-x-2 gap-y-1">
+                                <div className="text-[10px] text-zinc-500 font-bold uppercase px-2 mb-1">Evet</div>
+                                <div className="text-[10px] text-zinc-500 font-bold uppercase px-2 mb-1">Hayır</div>
+                                <RenderBetButton id={`${match.id}_rcard_1_y`} selectionName="Kırmızı Kart Görür: S. Ramos" odd="12.0" label="S. Ramos" />
+                                <RenderBetButton id={`${match.id}_rcard_1_n`} selectionName="Kırmızı Kart Görmez: S. Ramos" odd="1.02" label="S. Ramos" />
+                             </div>
+                           </RenderAccordion>
+                           <RenderAccordion title="Oyuncu Asist Yapar mı?">
+                             <div className="grid grid-cols-2 gap-x-2 gap-y-1">
+                                <div className="text-[10px] text-zinc-500 font-bold uppercase px-2 mb-1">Evet</div>
+                                <div className="text-[10px] text-zinc-500 font-bold uppercase px-2 mb-1">Hayır</div>
+                                <RenderBetButton id={`${match.id}_ast_1_y`} selectionName="Asist Yapar: K. De Bruyne" odd="2.50" label="K. De Bruyne" />
+                                <RenderBetButton id={`${match.id}_ast_1_n`} selectionName="Asist Yapmaz: K. De Bruyne" odd="1.45" label="K. De Bruyne" />
+                                <RenderBetButton id={`${match.id}_ast_2_y`} selectionName="Asist Yapar: Neymar" odd="3.10" label="Neymar" />
+                                <RenderBetButton id={`${match.id}_ast_2_n`} selectionName="Asist Yapmaz: Neymar" odd="1.30" label="Neymar" />
+                             </div>
+                           </RenderAccordion>
+                        </div>
+                     </div>
+                  )}
+
+                  {activeCategory === 'Çeyrekler' && (
+                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+                        <div className="flex flex-col w-full gap-4">
+                           <RenderAccordion title="1. Çeyrek Sonucu">
+                             <div className="grid grid-cols-3 gap-2">
+                                <RenderBetButton id={`${match.id}_q1_1`} selectionName="1. Çeyrek: 1" odd="1.85" label="1" labelClass="text-center w-full block" />
+                                <RenderBetButton id={`${match.id}_q1_x`} selectionName="1. Çeyrek: X" odd="15.0" label="X" labelClass="text-center w-full block" />
+                                <RenderBetButton id={`${match.id}_q1_2`} selectionName="1. Çeyrek: 2" odd="1.95" label="2" labelClass="text-center w-full block" />
+                             </div>
+                           </RenderAccordion>
+                        </div>
+                        <div className="flex flex-col w-full gap-4">
+                           <RenderAccordion title="1. Çeyrek Toplam">
+                             <div className="grid grid-cols-2 gap-x-2 gap-y-1">
+                                <div className="text-[10px] text-zinc-500 font-bold uppercase px-2 mb-1">Üstü</div>
+                                <div className="text-[10px] text-zinc-500 font-bold uppercase px-2 mb-1">Altı</div>
+                                <RenderBetButton id={`${match.id}_q1_o45`} selectionName="1. Çeyrek 45.5 Üst" odd="1.85" label="45.5" />
+                                <RenderBetButton id={`${match.id}_q1_u45`} selectionName="1. Çeyrek 45.5 Alt" odd="1.85" label="45.5" />
+                             </div>
+                           </RenderAccordion>
+                        </div>
+                     </div>
+                  )}
+
+                  {activeCategory === 'Yarılar' && (
+                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+                        <div className="flex flex-col w-full gap-4">
+                           <RenderAccordion title="İlk Yarı Sonucu (Basketbol)">
+                             <div className="grid grid-cols-3 gap-2">
+                                <RenderBetButton id={`${match.id}_h1_1`} selectionName="İlk Yarı: 1" odd="1.70" label="1" labelClass="text-center w-full block" />
+                                <RenderBetButton id={`${match.id}_h1_x`} selectionName="İlk Yarı: X" odd="20.0" label="X" labelClass="text-center w-full block" />
+                                <RenderBetButton id={`${match.id}_h1_2`} selectionName="İlk Yarı: 2" odd="2.10" label="2" labelClass="text-center w-full block" />
+                             </div>
+                           </RenderAccordion>
+                        </div>
+                        <div className="flex flex-col w-full gap-4">
+                           <RenderAccordion title="İlk Yarı Toplam (Basketbol)">
+                             <div className="grid grid-cols-2 gap-x-2 gap-y-1">
+                                <div className="text-[10px] text-zinc-500 font-bold uppercase px-2 mb-1">Üstü</div>
+                                <div className="text-[10px] text-zinc-500 font-bold uppercase px-2 mb-1">Altı</div>
+                                <RenderBetButton id={`${match.id}_h1_o85`} selectionName="İlk Yarı 85.5 Üst" odd="1.90" label="85.5" />
+                                <RenderBetButton id={`${match.id}_h1_u85`} selectionName="İlk Yarı 85.5 Alt" odd="1.90" label="85.5" />
+                             </div>
+                           </RenderAccordion>
+                        </div>
+                     </div>
+                  )}
+
+                  {activeCategory === 'Toplam' && (
+                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+                        <div className="flex flex-col w-full gap-4">
+                           <RenderAccordion title="Maç Toplamı (Alternatifler)">
+                             <div className="grid grid-cols-2 gap-x-2 gap-y-1">
+                                <div className="text-[10px] text-zinc-500 font-bold uppercase px-2 mb-1">Üstü</div>
+                                <div className="text-[10px] text-zinc-500 font-bold uppercase px-2 mb-1">Altı</div>
+                                <RenderBetButton id={`${match.id}_tot_o155`} selectionName="Toplam 155.5 Üst" odd="1.50" label="155.5" />
+                                <RenderBetButton id={`${match.id}_tot_u155`} selectionName="Toplam 155.5 Alt" odd="2.40" label="155.5" />
+                                <RenderBetButton id={`${match.id}_tot_o165`} selectionName="Toplam 165.5 Üst" odd="1.85" label="165.5" />
+                                <RenderBetButton id={`${match.id}_tot_u165`} selectionName="Toplam 165.5 Alt" odd="1.85" label="165.5" />
+                                <RenderBetButton id={`${match.id}_tot_o175`} selectionName="Toplam 175.5 Üst" odd="2.30" label="175.5" />
+                                <RenderBetButton id={`${match.id}_tot_u175`} selectionName="Toplam 175.5 Alt" odd="1.55" label="175.5" />
+                             </div>
+                           </RenderAccordion>
+                        </div>
+                     </div>
+                  )}
+
+                  {activeCategory === 'Setler' && (
+                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+                        <div className="flex flex-col w-full gap-4">
+                           <RenderAccordion title="1. Set Kazananı">
+                             <div className="grid grid-cols-2 gap-2">
+                                <RenderBetButton id={`${match.id}_set1_1`} selectionName="1. Set Kazananı: 1" odd="1.65" label={match.home} />
+                                <RenderBetButton id={`${match.id}_set1_2`} selectionName="1. Set Kazananı: 2" odd="2.15" label={match.away} />
+                             </div>
+                           </RenderAccordion>
+                        </div>
+                        <div className="flex flex-col w-full gap-4">
+                           <RenderAccordion title="Toplam Set Sayısı">
+                             <div className="grid grid-cols-2 gap-x-2 gap-y-1">
+                                <div className="text-[10px] text-zinc-500 font-bold uppercase px-2 mb-1">Üstü</div>
+                                <div className="text-[10px] text-zinc-500 font-bold uppercase px-2 mb-1">Altı</div>
+                                <RenderBetButton id={`${match.id}_sets_o25`} selectionName="Setler 2.5 Üst" odd="2.20" label="2.5" />
+                                <RenderBetButton id={`${match.id}_sets_u25`} selectionName="Setler 2.5 Alt" odd="1.60" label="2.5" />
+                             </div>
+                           </RenderAccordion>
+                        </div>
+                     </div>
+                  )}
+
+                  {activeCategory === 'Oyunlar' && (
+                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+                        <div className="flex flex-col w-full gap-4">
+                           <RenderAccordion title="Sıradaki Oyun">
+                             <div className="grid grid-cols-2 gap-2">
+                                <RenderBetButton id={`${match.id}_ng_1`} selectionName="Sıradaki Oyun: 1" odd="1.45" label={match.home} />
+                                <RenderBetButton id={`${match.id}_ng_2`} selectionName="Sıradaki Oyun: 2" odd="2.65" label={match.away} />
+                             </div>
+                           </RenderAccordion>
+                        </div>
+                     </div>
+                  )}
+
+                  {activeCategory === 'İstatistikler' && (
+                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+                        <div className="flex flex-col w-full gap-4">
+                           <RenderAccordion title="Oyuncu Özel (Sayı)">
+                             <div className="grid grid-cols-2 gap-x-2 gap-y-1">
+                                <div className="text-[10px] text-zinc-500 font-bold uppercase px-2 mb-1">Üstü</div>
+                                <div className="text-[10px] text-zinc-500 font-bold uppercase px-2 mb-1">Altı</div>
+                                <RenderBetButton id={`${match.id}_stat_p1_o`} selectionName="Oyuncu 1 Sayı: 20.5 Üst" odd="1.85" label="20.5" />
+                                <RenderBetButton id={`${match.id}_stat_p1_u`} selectionName="Oyuncu 1 Sayı: 20.5 Alt" odd="1.85" label="20.5" />
+                             </div>
+                           </RenderAccordion>
+                        </div>
+                     </div>
+                  )}
+
+                  {!['Ana Seçenekler', 'Goller', 'İlk Yarı', 'Asya', 'Korner & Kart', 'Oyuncular', 'Çeyrekler', 'Yarılar', 'Toplam', 'Setler', 'Oyunlar', 'İstatistikler'].includes(activeCategory) && (
+                     <div className="flex flex-col items-center justify-center py-16 px-4 bg-sports-card rounded-sports-card border border-sports-subtle w-full shadow-lg">
+                        <div className="w-16 h-16 bg-blue-500/10 rounded-full flex items-center justify-center mb-4">
+                           <span className="text-3xl">⌛</span>
+                        </div>
+                        <h3 className="text-white font-black text-[18px] mb-2 tracking-wide uppercase">Piyasalar Yükleniyor</h3>
+                        <p className="text-zinc-500 text-[14px] text-center max-w-sm">
+                           "{activeCategory}" bahisleri şu anda güncelleniyor veya bu karşılaşma için anlık olarak kapalı durumda. Lütfen Ana Seçeneklere dönün.
+                        </p>
+                     </div>
+                  )}
                </div>
             )}
 
          </div>
 
          {/* Right Column (Video / Animation Player) */}
-         <div className="w-full xl:w-[320px] 2xl:w-[360px] shrink-0">
-            <div className="bg-[#1a1d29] rounded-xl overflow-hidden border border-[#222635] sticky top-4">
-               {/* Player Tabs */}
-               <div className="flex items-center justify-between p-2 border-b border-[#222635] bg-[#12141c]">
-                  <div className="flex items-center gap-1 bg-[#1a1d29] p-1 rounded-lg w-full">
-                     <button 
-                        onClick={() => setActiveRightTab('video')}
-                        className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-md text-[11px] font-bold transition-all ${
-                          activeRightTab === 'video' 
-                            ? 'bg-[#3b82f6] text-white shadow-md' 
-                            : 'text-zinc-400 hover:text-white'
-                        }`}
-                     >
-                        <Tv className="w-3.5 h-3.5" />
-                        Video
-                     </button>
-                     <button 
-                        onClick={() => setActiveRightTab('animation')}
-                        className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-md text-[11px] font-bold transition-all ${
-                          activeRightTab === 'animation' 
-                            ? 'bg-[#3b82f6] text-white shadow-md' 
-                            : 'text-zinc-400 hover:text-white'
-                        }`}
-                     >
-                        <Activity className="w-3.5 h-3.5" />
-                        Animasyon
-                     </button>
-                  </div>
-                  <div className="flex items-center gap-1 ml-2">
-                     <button className="w-8 h-8 flex items-center justify-center rounded hover:bg-white/5 text-zinc-400 transition-colors">
-                        <Pin className="w-4 h-4" />
-                     </button>
-                  </div>
-               </div>
-
-               {/* Player Content */}
-               {activeRightTab === 'video' ? (
-                 <div className="aspect-video bg-[#0c0d12] flex flex-col items-center justify-center p-6 text-center relative">
-                    <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(59,130,246,0.1)_0%,transparent_70%)]"></div>
-                    
-                    <div className="w-12 h-12 rounded-full bg-[#1a1d29] border border-[#222635] flex items-center justify-center mb-4 relative z-10 shadow-lg">
-                       <div className="w-6 h-6 rounded-full bg-[#3b82f6]/20 flex items-center justify-center">
-                          <div className="w-3 h-3 rounded-full bg-[#3b82f6]"></div>
-                       </div>
-                    </div>
-                    
-                    <h4 className="text-white font-bold text-[13px] mb-4 relative z-10">
-                       Lütfen izlemek için oturum aç
-                    </h4>
-                    
-                    <button className="w-full bg-[#3b82f6] hover:bg-blue-500 text-white font-bold py-2.5 rounded-lg text-sm shadow-[0_0_15px_rgba(59,130,246,0.3)] transition-all relative z-10">
-                       GİRİŞ
-                    </button>
-                    
-                    <div className="text-[10px] text-zinc-400 mt-4 relative z-10">
-                       Herhangi bir hesabınız yok mu? <span className="text-[#3b82f6] underline cursor-pointer hover:text-white">Hemen Üye Ol!</span>
-                    </div>
-                 </div>
-               ) : (
-                 <div className="flex flex-col h-[320px] bg-[#0c0d12]">
-                   
-                   {/* Tracker Header */}
-                   <div className="flex items-center justify-between px-3 py-2 border-b border-[#222635] bg-[#12141c]">
-                     <div className="flex items-center gap-1.5">
-                       <Activity className="w-3 h-3 text-[#3b82f6]" />
-                       <span className="text-[11px] font-bold text-white uppercase tracking-wider">Canlı Bilgi</span>
-                     </div>
-                     <button className="text-zinc-500 hover:text-white transition-colors">
-                       <Pin className="w-3 h-3" />
-                     </button>
-                   </div>
-                   
-                   <div className="flex items-center justify-between px-3 py-2 bg-[#1a1d29]/50 border-b border-[#222635] text-[10px] md:text-[11px] font-bold">
-                     <div className="flex flex-col gap-1 w-full">
-                       <div className="flex justify-between w-full text-zinc-300">
-                         <div className="flex items-center gap-1.5">
-                           <div className="w-3.5 h-3.5">
-                             <PlayerLogo name={match.home} fallbackLogo="" sport={match.sport} />
-                           </div>
-                           <span className="truncate max-w-[120px]">{match.home}</span>
-                         </div>
-                         <div className="flex items-center gap-2">
-                           <span>{(match as any).homeStats?.corners !== undefined ? (match as any).homeStats.corners : '-'}</span>
-                           <span>{(match as any).homeStats?.redCards !== undefined ? (match as any).homeStats.redCards : '-'}</span>
-                           <span className="text-white bg-[#222635] px-1.5 rounded">{match.score.split('-')[0] || '-'}</span>
-                         </div>
-                       </div>
-                       <div className="flex justify-between w-full text-zinc-300">
-                         <div className="flex items-center gap-1.5">
-                           <div className="w-3.5 h-3.5">
-                             <PlayerLogo name={match.away} fallbackLogo="" sport={match.sport} />
-                           </div>
-                           <span className="truncate max-w-[120px]">{match.away}</span>
-                         </div>
-                         <div className="flex items-center gap-2">
-                           <span>{(match as any).awayStats?.corners !== undefined ? (match as any).awayStats.corners : '-'}</span>
-                           <span>{(match as any).awayStats?.redCards !== undefined ? (match as any).awayStats.redCards : '-'}</span>
-                           <span className="text-white bg-[#222635] px-1.5 rounded">{match.score.split('-')[1] || '-'}</span>
-                         </div>
-                       </div>
-                     </div>
-                   </div>
-
-                   {/* Tracker Body */}
-                   <div className="flex-1 relative overflow-hidden bg-[#0a0c10]">
-                     
-                     {animTab === 'pitch' && (
-                       <div className="absolute inset-0 flex flex-col relative overflow-hidden bg-[#0d2a15]">
-                         {/* Realistic Football Pitch Background */}
-                         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:30px_30px]"></div>
-                         
-                         {/* Pitch Lines (White/Neon) */}
-                         <div className="absolute inset-4 border-[1.5px] border-white/40 shadow-[0_0_15px_rgba(255,255,255,0.2)]"></div>
-                         <div className="absolute top-4 bottom-4 left-1/2 w-[1.5px] bg-white/40 shadow-[0_0_10px_rgba(255,255,255,0.3)] -translate-x-1/2"></div>
-                         <div className="absolute top-1/2 left-1/2 w-16 h-16 border-[1.5px] border-white/40 shadow-[0_0_15px_rgba(255,255,255,0.2)] rounded-full -translate-x-1/2 -translate-y-1/2"></div>
-                         <div className="absolute top-1/2 left-1/2 w-1.5 h-1.5 bg-white shadow-[0_0_10px_rgba(255,255,255,0.8)] rounded-full -translate-x-1/2 -translate-y-1/2"></div>
-                         
-                         {/* Penalty Boxes */}
-                         <div className="absolute top-1/4 bottom-1/4 left-4 w-12 border-y-[1.5px] border-r-[1.5px] border-white/40 shadow-[0_0_15px_rgba(255,255,255,0.2)]"></div>
-                         <div className="absolute top-1/4 bottom-1/4 right-4 w-12 border-y-[1.5px] border-l-[1.5px] border-white/40 shadow-[0_0_15px_rgba(255,255,255,0.2)]"></div>
-                         
-                         <div className="absolute top-1/3 bottom-1/3 left-4 w-6 border-y-[1.5px] border-r-[1.5px] border-white/40 shadow-[0_0_15px_rgba(255,255,255,0.2)]"></div>
-                         <div className="absolute top-1/3 bottom-1/3 right-4 w-6 border-y-[1.5px] border-l-[1.5px] border-white/40 shadow-[0_0_15px_rgba(255,255,255,0.2)]"></div>
-                         
-                         {/* Dynamic Content Overlay */}
-                         {(match as any).currentAction ? (
-                           <div className="relative z-10 flex-1 flex flex-col items-center justify-center p-4">
-                             <div className="bg-black/60 backdrop-blur-sm px-4 py-2 rounded-lg border border-white/10 text-center animate-pulse">
-                               <div className="text-white font-black text-sm uppercase tracking-wider mb-0.5 text-shadow-sm shadow-black">
-                                 {(match as any).currentAction.team || '-'}
-                               </div>
-                               <div className="text-[#eab308] font-black text-lg uppercase tracking-widest text-shadow-sm shadow-black">
-                                 {(match as any).currentAction.type || '-'}
-                               </div>
-                             </div>
-                           </div>
-                         ) : (
-                           <div className="relative z-10 flex-1 flex flex-col items-center justify-center p-4">
-                             <div className="absolute inset-0 bg-black/50 z-0 rounded-lg"></div>
-                             <div className="relative z-10 flex flex-col items-center">
-                               <Trophy className="w-10 h-10 text-white mb-2 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]" />
-                               <div className="text-white font-black text-[12px] uppercase tracking-wider text-center max-w-[220px] text-shadow-md shadow-black drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
-                                 Animasyon maç saatinde aktifleşecektir
-                               </div>
-                             </div>
-                           </div>
-                         )}
-                       </div>
-                     )}
-
-                     {animTab === 'stats' && (
-                       <div className="absolute inset-0 overflow-y-auto custom-scrollbar p-3 flex flex-col gap-3">
-                         {[
-                           { label: 'Ataklar', h: stats.attack?.team1_value || homeStats?.attack || (match as any).homeStats?.attack, a: stats.attack?.team2_value || awayStats?.attack || (match as any).awayStats?.attack },
-                           { label: 'Tehlikeli Ataklar', h: stats.dangerous_attack?.team1_value || homeStats?.dangerous_attack || (match as any).homeStats?.dangerous_attack, a: stats.dangerous_attack?.team2_value || awayStats?.dangerous_attack || (match as any).awayStats?.dangerous_attack },
-                           { label: 'İsabetli Şutlar', h: stats.shot_on_target?.team1_value || homeStats?.ShotOnTarget || (match as any).homeStats?.shotsOnTarget, a: stats.shot_on_target?.team2_value || awayStats?.ShotOnTarget || (match as any).awayStats?.shotsOnTarget },
-                           { label: 'Kornerler', h: stats.corner?.team1_value || homeStats?.Corner || (match as any).homeStats?.corners, a: stats.corner?.team2_value || awayStats?.Corner || (match as any).awayStats?.corners },
-                           { label: 'Sarı Kartlar', h: stats.yellow_card?.team1_value || homeStats?.YellowCard || (match as any).homeStats?.yellowCards, a: stats.yellow_card?.team2_value || awayStats?.YellowCard || (match as any).awayStats?.yellowCards },
-                           { label: 'Kırmızı Kart', h: stats.red_card?.team1_value || homeStats?.RedCard || (match as any).homeStats?.redCards, a: stats.red_card?.team2_value || awayStats?.RedCard || (match as any).awayStats?.redCards },
-                         ].map((stat, i) => {
-                           const hVal = stat.h !== undefined ? stat.h : '-';
-                           const aVal = stat.a !== undefined ? stat.a : '-';
-                           const hNum = typeof stat.h === 'number' ? stat.h : 0;
-                           const aNum = typeof stat.a === 'number' ? stat.a : 0;
-                           
-                           const total = hNum + aNum;
-                           const hp = total > 0 ? (hNum / total) * 100 : 0;
-                           const ap = total > 0 ? (aNum / total) * 100 : 0;
-                           
-                           return (
-                             <div key={i} className="flex flex-col gap-1">
-                               <div className="flex justify-between items-center text-[10px] font-bold text-white px-1">
-                                 <span>{hVal}</span>
-                                 <span className="text-zinc-400">{stat.label}</span>
-                                 <span>{aVal}</span>
-                               </div>
-                               <div className="flex h-1.5 w-full bg-[#1a1d29] rounded-full overflow-hidden">
-                                 <div className="h-full bg-[#ef4444]" style={{ width: `${hp}%` }}></div>
-                                 <div className="h-full bg-[#10b981]" style={{ width: `${ap}%` }}></div>
-                               </div>
-                             </div>
-                           );
-                         })}
-                       </div>
-                     )}
-                     
-                     {(animTab === 'timeline' || animTab === 'h2h' || animTab === 'standings') && (
-                       <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4">
-                         <Activity className="w-8 h-8 text-zinc-600 mb-2" />
-                         <div className="text-zinc-400 text-xs font-bold mb-1">
-                           {animTab === 'timeline' ? 'Maç Özeti' : animTab === 'h2h' ? 'Karşılaşma Geçmişi' : 'Puan Durumu'}
-                         </div>
-                         <div className="text-zinc-500 text-[10px]">
-                           Bu veriler şu an için güncelleniyor...
-                         </div>
-                       </div>
-                     )}
-
-                   </div>
-
-                   {/* Tracker Nav */}
-                   <div className="flex items-center bg-[#12141c] border-t border-[#222635]">
-                     {[
-                       { id: 'pitch', icon: PlayCircle },
-                       { id: 'stats', icon: BarChart2 },
-                       { id: 'timeline', icon: Clock },
-                       { id: 'h2h', icon: Scale },
-                       { id: 'standings', icon: Star },
-                     ].map(tab => {
-                       const Icon = tab.icon;
-                       const isActive = animTab === tab.id;
-                       return (
-                         <button 
-                           key={tab.id}
-                           onClick={() => setAnimTab(tab.id as any)}
-                           className={`flex-1 flex items-center justify-center py-3 border-r border-[#222635] last:border-0 transition-all ${
-                             isActive ? 'bg-[#06b6d4]/10 text-[#06b6d4] shadow-[inset_0_-2px_0_#06b6d4]' : 'text-zinc-500 hover:text-[#06b6d4]/70 hover:bg-[#1a1d29]/50'
-                           }`}
-                         >
-                           <Icon className="w-4 h-4" />
-                         </button>
-                       );
-                     })}
-                   </div>
-                   
-                 </div>
-               )}
-            </div>
+         <div className="w-full xl:w-[320px] 2xl:w-[360px] shrink-0 sticky top-4 self-start hidden xl:block">
+            <MatchAnimationPlayer match={match} stats={stats} homeStats={homeStats} awayStats={awayStats} />
          </div>
 
       </div>
+    </div>
     </div>
   );
 });

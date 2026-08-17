@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { Lock } from 'lucide-react';
 
 export const AnimatedOdd: React.FC<{ value: string }> = ({ value }) => {
     const [flashClass, setFlashClass] = useState('');
@@ -26,6 +27,14 @@ export const AnimatedOdd: React.FC<{ value: string }> = ({ value }) => {
         }
         prevValueRef.current = value;
     }, [value]);
+
+    if (!value || value === '-') {
+        return (
+            <span className="inline-flex items-center justify-center px-2 py-0.5 rounded-[4px] bg-white/5 border border-white/5 relative overflow-hidden opacity-40">
+                <Lock className="w-3.5 h-3.5 text-zinc-400 relative z-10" />
+            </span>
+        );
+    }
 
     return (
         <span className={`inline-flex items-center justify-center px-1.5 py-0.5 rounded-[4px] font-black transform ${flashClass || 'text-white'}`}>

@@ -12,7 +12,8 @@ export const viewToPath: Record<string, string> = {
   support: 'canli-destek',
   '724tv': '724-tv',
   affiliate: 'ortaklik',
-  'affiliate/overview': 'ortaklik'
+  'affiliate/overview': 'ortaklik',
+  social: 'sosyal'
 };
 
 export const pathToView: Record<string, string> = Object.entries(viewToPath).reduce((acc, [key, value]) => {

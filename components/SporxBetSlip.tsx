@@ -9,11 +9,88 @@ export const SporxBetSlip = () => {
   const totalOdds = betSelections.reduce((acc, curr) => acc * curr.odd, 1);
   const potentialWin = (parseFloat(betAmount || '0') * totalOdds).toFixed(2);
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const placeBet = async () => {
+    if (betSelections.length === 0) return;
+    setIsSubmitting(true);
+    
+    try {
+        // 1. Get Mock User
+        const userRes = await fetch('http://localhost:3001/api/user/mock', { method: 'POST' });
+        const userData = await userRes.json();
+        
+        if (!userData.success) throw new Error("Kullanıcı oluşturulamadı.");
+        const userId = userData.user.id;
+
+        // 2. Format Bet Items for API
+        // Front-end state has: matchId, marketName, selectionName, odd, homeTeam, awayTeam
+        // API expects: matchId, teamHome, teamAway, selection (e.g. "1"), odds
+        
+        // MAPPING logic for selectionName to backend selection key
+        const getSelectionKey = (selectionName: string, marketName: string) => {
+             const sLower = selectionName.toLowerCase();
+             if (marketName === 'Maç Sonucu' || marketName === '1X2') {
+                 if (sLower.includes('ev') || sLower === '1') return '1';
+                 if (sLower.includes('berabere') || sLower === 'x') return 'X';
+                 if (sLower.includes('deplasman') || sLower === '2') return '2';
+             }
+             if (marketName.includes('Alt/Üst') || marketName.includes('2.5')) {
+                 if (sLower.includes('üst')) return 'tU';
+                 if (sLower.includes('alt')) return 'tA';
+             }
+             if (marketName.includes('Çifte Şans')) {
+                 if (sLower === '1x') return 'cs1X';
+                 if (sLower === '12') return 'cs12';
+                 if (sLower === 'x2') return 'csX2';
+             }
+             if (marketName.includes('Karşılıklı Gol') || marketName === 'GG') {
+                 if (sLower === 'var') return 'gg';
+                 if (sLower === 'yok') return 'ng';
+             }
+             // Default fallback to selectionName
+             return selectionName;
+        };
+
+        const items = betSelections.map(b => ({
+            matchId: b.matchId,
+            teamHome: b.homeTeam,
+            teamAway: b.awayTeam,
+            selection: getSelectionKey(b.selectionName, b.marketName),
+            odds: b.odd
+        }));
+
+        // 3. Place Bet
+        const betRes = await fetch('http://localhost:3001/api/bet', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                userId,
+                stake: parseFloat(betAmount),
+                items
+            })
+        });
+        
+        const betData = await betRes.json();
+        if (betData.success) {
+            alert(`✅ Kupon Başarıyla Oynandı!\n\nYeni Bakiye: ${betData.newBalance} TL`);
+            clearBetSelections();
+        } else {
+            alert(`❌ Hata: ${betData.error}`);
+        }
+
+    } catch (e: any) {
+        alert(`❌ Bağlantı hatası: ${e.message}`);
+    } finally {
+        setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="w-[320px] flex-shrink-0 bg-[#20252D] flex flex-col h-full border-l border-white/5">
       {/* Header & Tabs */}
       <div className="px-4 pt-4 pb-2 bg-[#0A0C10] border-b border-white/5">
-        <div className="flex items-center gap-2 mb-4 justify-center text-[#06b6d4]">
+        <div className="flex items-center gap-2 mb-4 justify-center text-[color:var(--theme-accent)]">
           <Trophy className="w-5 h-5" />
           <span className="font-bold tracking-wide uppercase">Kuponum</span>
         </div>
@@ -24,7 +101,7 @@ export const SporxBetSlip = () => {
               key={t}
               onClick={() => setBetTab(t)}
               className={`flex-1 py-1.5 text-xs font-bold rounded-md transition-all ${
-                betTab === t ? 'bg-[#06b6d4] text-black shadow-md' : 'text-zinc-500 hover:text-white'
+                betTab === t ? 'bg-[color:var(--theme-accent)] text-black shadow-md' : 'text-zinc-500 hover:text-white'
               }`}
             >
               {t}
@@ -48,7 +125,7 @@ export const SporxBetSlip = () => {
                 <div className="text-[10px] text-zinc-500 mb-1 uppercase tracking-wider">{bet.marketName}</div>
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-xs font-bold text-white">{bet.selectionName}</span>
-                  <span className="text-sm font-black text-[#06b6d4] bg-[#06b6d4]/10 px-2 py-0.5 rounded">
+                  <span className="text-sm font-black text-[color:var(--theme-accent)] bg-[color:var(--theme-accent)]/10 px-2 py-0.5 rounded">
                     {bet.odd.toFixed(2)}
                   </span>
                 </div>
@@ -61,7 +138,7 @@ export const SporxBetSlip = () => {
             <div className="bg-[#0A0C10] rounded-xl p-4 border border-white/5">
               <div className="flex items-center justify-between mb-3">
                 <span className="text-xs font-bold text-zinc-400">Toplam Oran</span>
-                <span className="text-lg font-black text-[#06b6d4]">{totalOdds.toFixed(2)}</span>
+                <span className="text-lg font-black text-[color:var(--theme-accent)]">{totalOdds.toFixed(2)}</span>
               </div>
               
               <div className="bg-[#161920] rounded-lg p-2 border border-white/5 flex items-center justify-between mb-3">
@@ -80,8 +157,14 @@ export const SporxBetSlip = () => {
               </div>
             </div>
 
-            <button className="w-full py-4 bg-gradient-to-r from-[#06b6d4] to-[#00E75A] text-black font-black uppercase tracking-wider rounded-xl hover:scale-[1.02] transition-transform shadow-[0_0_20px_rgba(0,255,163,0.2)]">
-              BAHİS YAP
+            <button 
+              onClick={placeBet}
+              disabled={isSubmitting}
+              className={`w-full py-4 bg-gradient-to-r from-[color:var(--theme-accent)] to-[#00E75A] text-black font-black uppercase tracking-wider rounded-xl transition-all shadow-[0_0_20px_rgba(0,255,163,0.2)] ${
+                 isSubmitting ? 'opacity-50 cursor-not-allowed scale-95' : 'hover:scale-[1.02]'
+              }`}
+            >
+              {isSubmitting ? 'BEKLEYİN...' : 'BAHİS YAP'}
             </button>
             <button 
               onClick={clearBetSelections}
@@ -104,17 +187,17 @@ export const SporxBetSlip = () => {
           <div className="w-full flex flex-col gap-2">
             <button className="flex items-center justify-between w-full p-4 rounded-xl hover:bg-white/5 bg-[#0A0C10] border border-white/5 text-zinc-300 transition-colors group">
               <div className="flex items-center gap-3">
-                <Activity className="w-5 h-5 text-[#06b6d4]" />
+                <Activity className="w-5 h-5 text-[color:var(--theme-accent)]" />
                 <span className="text-sm font-bold">Spor bahisleri</span>
               </div>
-              <span className="text-zinc-600 group-hover:text-[#06b6d4] transition-colors">→</span>
+              <span className="text-zinc-600 group-hover:text-[color:var(--theme-accent)] transition-colors">→</span>
             </button>
             <button className="flex items-center justify-between w-full p-4 rounded-xl hover:bg-white/5 bg-[#0A0C10] border border-white/5 text-zinc-300 transition-colors group">
               <div className="flex items-center gap-3">
-                <Star className="w-5 h-5 text-[#06b6d4]" />
+                <Star className="w-5 h-5 text-[color:var(--theme-accent)]" />
                 <span className="text-sm font-bold">Canlı Bahis</span>
               </div>
-              <span className="text-zinc-600 group-hover:text-[#06b6d4] transition-colors">→</span>
+              <span className="text-zinc-600 group-hover:text-[color:var(--theme-accent)] transition-colors">→</span>
             </button>
           </div>
         </div>

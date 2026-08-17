@@ -56,7 +56,7 @@ const CouponsView: React.FC<CouponsViewProps> = ({
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
           <div className="flex items-center gap-3">
             <h1 className="text-white text-2xl font-black tracking-tight">{t('coupons.title', 'Bahislerim')}</h1>
-            <span className="bg-[#06b6d4]/10 border border-[#06b6d4]/20 text-[#06b6d4] text-xs font-bold px-2 py-0.5 rounded">
+            <span className="bg-[color:var(--theme-accent)]/10 border border-[color:var(--theme-accent)]/20 text-[color:var(--theme-accent)] text-xs font-bold px-2 py-0.5 rounded">
               {mockBets.length}
             </span>
           </div>
@@ -66,7 +66,7 @@ const CouponsView: React.FC<CouponsViewProps> = ({
               onClick={() => setActiveMainTab('aktif')}
               className={`px-4 py-2 rounded-md text-sm font-semibold transition-all ${
                 activeMainTab === 'aktif' 
-                  ? 'bg-transparent border border-[#06b6d4] text-[#06b6d4] shadow-[0_0_15px_rgba(0,255,163,0.1)]' 
+                  ? 'bg-transparent border border-[color:var(--theme-accent)] text-[color:var(--theme-accent)] shadow-[0_0_15px_rgba(0,255,163,0.1)]' 
                   : 'text-zinc-500 border border-transparent hover:text-white'
               }`}
             >
@@ -76,7 +76,7 @@ const CouponsView: React.FC<CouponsViewProps> = ({
               onClick={() => setActiveMainTab('gecmis')}
               className={`px-4 py-2 rounded-md text-sm font-semibold transition-all ${
                 activeMainTab === 'gecmis' 
-                  ? 'bg-transparent border border-[#06b6d4] text-[#06b6d4] shadow-[0_0_15px_rgba(0,255,163,0.1)]' 
+                  ? 'bg-transparent border border-[color:var(--theme-accent)] text-[color:var(--theme-accent)] shadow-[0_0_15px_rgba(0,255,163,0.1)]' 
                   : 'text-zinc-500 border border-transparent hover:text-white'
               }`}
             >
@@ -94,7 +94,7 @@ const CouponsView: React.FC<CouponsViewProps> = ({
                 onClick={() => setActiveSubTab(tab.id)}
                 className={`pb-3 border-b-2 text-sm font-semibold whitespace-nowrap transition-colors ${
                   activeSubTab === tab.id 
-                    ? 'border-[#06b6d4] text-[#06b6d4]' 
+                    ? 'border-[color:var(--theme-accent)] text-[color:var(--theme-accent)]' 
                     : 'border-transparent text-zinc-500 hover:text-white'
                 }`}
               >
@@ -149,7 +149,7 @@ const CouponsView: React.FC<CouponsViewProps> = ({
                 {/* Mid Bar (Logo & Actions) */}
                 <div className="flex items-center justify-between border-t border-b border-white/5 py-3 mb-5">
                   <div className="flex items-center gap-2">
-                    <Shield className="w-5 h-5 text-[#06b6d4]" />
+                    <Shield className="w-5 h-5 text-[color:var(--theme-accent)]" />
                     <span className="text-white font-black tracking-wide text-sm">724BAHİS</span>
                   </div>
                   <div className="flex items-center gap-2">
@@ -174,7 +174,7 @@ const CouponsView: React.FC<CouponsViewProps> = ({
                           }
                         }
                       }}
-                      className="w-8 h-8 flex items-center justify-center rounded bg-white/5 text-zinc-400 hover:text-[#06b6d4] hover:bg-white/10 transition-colors" 
+                      className="w-8 h-8 flex items-center justify-center rounded bg-white/5 text-zinc-400 hover:text-[color:var(--theme-accent)] hover:bg-white/10 transition-colors" 
                       title={t('coupons.share', 'Paylaş')}
                     >
                       <Share2 className="w-4 h-4" />
@@ -194,7 +194,7 @@ const CouponsView: React.FC<CouponsViewProps> = ({
                   </div>
                   <div className="flex justify-between items-center text-sm">
                     <span className="text-zinc-400 font-medium">{t('coupons.estimated_payout', 'Tahmini Ödeme')}</span>
-                    <span className="text-[#06b6d4] font-black">{bet.estimatedPayout}</span>
+                    <span className="text-[color:var(--theme-accent)] font-black">{bet.estimatedPayout}</span>
                   </div>
                 </div>
                 
@@ -211,7 +211,7 @@ const CouponsView: React.FC<CouponsViewProps> = ({
                         setCashedOutBets([...cashedOutBets, bet.id]);
                       }
                     }}
-                    className="w-full py-3.5 bg-[#06b6d4] hover:bg-[#33FFB5] text-black font-black uppercase tracking-wide text-sm rounded-lg transition-all flex items-center justify-between px-6 shadow-[0_0_20px_rgba(0,255,163,0.15)] hover:shadow-[0_0_30px_rgba(0,255,163,0.3)]"
+                    className="w-full py-3.5 bg-[color:var(--theme-accent)] hover:bg-[#33FFB5] text-black font-black uppercase tracking-wide text-sm rounded-lg transition-all flex items-center justify-between px-6 shadow-[0_0_20px_rgba(0,255,163,0.15)] hover:shadow-[0_0_30px_rgba(0,255,163,0.3)]"
                   >
                     <span>{t('coupons.early_cashout', 'Erken ödeme')} {bet.cashoutValue}</span>
                     <ArrowRightLeft className="w-4 h-4" />

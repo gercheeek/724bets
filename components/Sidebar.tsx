@@ -114,7 +114,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, activeView, onViewC
           <item.icon className={`w-[22px] h-[22px] transition-colors ${isActive ? 'text-[#d4af37]' : 'text-[#8b92a5] group-hover/link:text-white'}`} strokeWidth={1.2} />
         </div>
         
-        <span className={`ml-4 font-medium text-[14px] tracking-tight whitespace-nowrap transition-all duration-300 ${!isOpen ? 'opacity-0 translate-x-4' : 'opacity-100 translate-x-0'}`}>
+        <span className={`ml-4 font-medium text-[14px] tracking-tight whitespace-nowrap transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] ${!isOpen ? 'opacity-0 translate-x-[-10px]' : 'opacity-100 translate-x-0'}`}>
           {item.label}
         </span>
 
@@ -142,11 +142,11 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, activeView, onViewC
   };
 
   return (
-    <div className={`relative z-[99999] h-full shrink-0 transition-[width] duration-300 ${isOpen ? 'w-[280px]' : 'w-[78px]'}`}>
-      <div className={`group absolute top-0 left-0 flex flex-col h-full bg-[#05070a]/60 backdrop-blur-xl border-r border-white/5 transition-[width] duration-300 overflow-visible shadow-[4px_0_30px_rgba(0,0,0,0.1)] ${isOpen ? 'w-[280px]' : 'w-[78px]'}`}>
+    <div className={`relative z-[99999] h-full shrink-0 transition-[width] duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] ${isOpen ? 'w-[280px]' : 'w-[78px]'}`} style={{ willChange: 'width' }}>
+      <div className={`group absolute top-0 left-0 flex flex-col h-full bg-[#0a0c10] border-r border-white/5 transition-[width] duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] overflow-visible shadow-[4px_0_30px_rgba(0,0,0,0.1)] ${isOpen ? 'w-[280px]' : 'w-[78px]'}`} style={{ willChange: 'width' }}>
       
       {/* Top Header: Menu Toggle + Horizontal Nav Toggle */}
-      <div className={`h-[72px] flex items-center px-4 shrink-0 transition-all duration-300 relative z-[99999] pointer-events-auto gap-3 w-[280px]`}>
+      <div className={`h-[72px] flex items-center px-4 shrink-0 transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] relative z-[99999] pointer-events-auto gap-3 w-[280px]`}>
         <button 
           onClick={onToggle}
           className={`w-10 h-10 flex flex-shrink-0 items-center justify-center text-[#8b92a5] hover:text-white rounded-xl transition-all relative z-[99999] pointer-events-auto cursor-pointer`}
@@ -155,16 +155,20 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, activeView, onViewC
         </button>
 
         {/* Horizontal Toggle for Casino / Spor */}
-        <div className={`flex-1 flex items-center bg-[#131823] p-1 rounded-xl h-[44px] transition-all duration-300 relative z-[99999] pointer-events-auto border border-white/5 ${!isOpen ? 'opacity-0 w-0 hidden' : 'opacity-100'}`}>
+        <div className={`flex-1 flex items-center bg-[#131823] p-1 rounded-xl h-[44px] transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] relative z-[99999] pointer-events-auto border border-white/5 ${!isOpen ? 'opacity-0 w-0 hidden' : 'opacity-100'}`}>
           <button 
             onClick={() => { onViewChange('casino'); if (window.innerWidth < 1024) onToggle?.(); }}
-            className={`flex-1 flex items-center justify-center h-full rounded-lg font-bold text-[14px] transition-all duration-300 cursor-pointer pointer-events-auto z-[99999] ${isCasinoView ? 'bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 text-white shadow-[0_0_15px_rgba(168,85,247,0.3)]' : 'text-[#8b92a5] hover:text-white border border-transparent'}`}
+            className={`flex-1 flex items-center justify-center h-full rounded-lg font-bold text-[14px] transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer pointer-events-auto z-[99999] ${isCasinoView ? 'bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 text-white shadow-[0_0_15px_rgba(168,85,247,0.3)]' : 'text-[#8b92a5] hover:text-white border border-transparent'}`}
           >
             Casino
           </button>
           <button 
-            onClick={() => { onViewChange('spor724'); if (window.innerWidth < 1024) onToggle?.(); }}
-            className={`flex-1 flex items-center justify-center h-full rounded-lg font-bold text-[14px] transition-all duration-300 cursor-pointer pointer-events-auto z-[99999] ${isSportsView ? 'bg-gradient-to-r from-[#22c55e]/20 to-[#10b981]/20 border border-[#22c55e]/30 text-white shadow-[0_0_15px_rgba(34,197,94,0.3)]' : 'text-[#8b92a5] hover:text-white border border-transparent'}`}
+            onClick={() => { 
+                window.dispatchEvent(new CustomEvent('reset-sports-view'));
+                onViewChange('spor724'); 
+                if (window.innerWidth < 1024) onToggle?.(); 
+            }}
+            className={`flex-1 flex items-center justify-center h-full rounded-lg font-bold text-[14px] transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer pointer-events-auto z-[99999] ${isSportsView ? 'bg-gradient-to-r from-[#22c55e]/20 to-[#10b981]/20 border border-[#22c55e]/30 text-white shadow-[0_0_15px_rgba(34,197,94,0.3)]' : 'text-[#8b92a5] hover:text-white border border-transparent'}`}
           >
             Spor
           </button>

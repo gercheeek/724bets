@@ -1,64 +1,108 @@
 import React, { useState } from 'react';
-import { ChevronDown, X, MessageCircle, Trash2, RefreshCcw, Home, Gamepad2, Flag, FileText, Search, ChevronRight, Share2, Target, CheckCircle2 } from 'lucide-react';
+import { ChevronDown, X, MessageCircle, Trash2, RefreshCcw, Home, Gamepad2, Flag, FileText, Search, ChevronRight, Share2, Target, CheckCircle2, Zap } from 'lucide-react';
 import { useBetSlip } from '../../contexts/BetSlipContext';
 import { useUser } from '../../contexts/UserContext';
 import { triggerGlobalToast } from '../GlobalToaster';
 import ModernChat from '../ModernChat';
 import { useTranslation } from 'react-i18next';
 
-const MOCK_MY_BETS = [
-  {
-    id: 1,
-    type: 'TEKLİ BAHİS',
-    title: 'Real Madrid vs. Barcelona',
-    picks: [
-      { text: 'Real Madrid', detail: 'Maç Sonucu' }
-    ],
-    odds: '2.10',
-    stake: '1,000 ₺',
-    potentialWin: '2,100 ₺',
-    cashoutValue: '1,350 ₺',
-    isLive: true,
-    score: '1 - 0',
-    minute: '68\''
-  },
-  {
-    id: 2,
-    type: 'KOMBİNE BAHİS',
-    title: 'Arsenal vs. Chelsea',
-    picks: [
-      { text: 'Üst 2.5', detail: 'Toplam Gol' }
-    ],
-    odds: '1.85',
-    stake: '500 ₺',
-    potentialWin: '925 ₺',
-    cashoutValue: '480 ₺',
-    isLive: false,
-    score: '',
-    minute: ''
-  }
-];
-
 const MyBetsPanel = ({ onShare }: { onShare: (msg: string) => void }) => {
-  const [cashedOutBets, setCashedOutBets] = useState<number[]>([]);
+  const [activeBets, setActiveBets] = useState<any[]>([]);
+  const [isCashingOut, setIsCashingOut] = useState<string | null>(null);
+
+  const fetchBets = async () => {
+    try {
+        const userRes = await fetch('http://localhost:3001/api/user/mock', { method: 'POST' });
+        const userData = await userRes.json();
+        if (!userData.success) return;
+
+        const betsRes = await fetch(`http://localhost:3001/api/bets?userId=${userData.user.id}`);
+        const betsData = await betsRes.json();
+        
+        if (betsData.success) {
+            // Only show PENDING bets in active sidebar
+            const pendingBets = betsData.bets.filter((b: any) => b.status === 'pending');
+            const formatted = pendingBets.map((b: any) => ({
+                id: b.id,
+                type: b.items.length > 1 ? 'KOMBİNE BAHİS' : 'TEKLİ BAHİS',
+                title: b.items.length > 1 ? 'Kombine Kupon' : `${b.items[0].teamHome} vs. ${b.items[0].teamAway}`,
+                picks: b.items.map((i: any) => ({ text: i.selection, detail: `${i.teamHome} - ${i.teamAway}` })),
+                odds: b.totalOdds.toFixed(2),
+                stake: `${b.stake.toFixed(2)} ₺`,
+                potentialWin: `${b.possibleWin.toFixed(2)} ₺`,
+                cashoutValue: `${(b.stake * 0.95).toFixed(2)} ₺`, // Initial visual cashout
+                rawAmount: b.stake,
+                isLive: false,
+                score: '',
+                minute: ''
+            }));
+            setActiveBets(formatted);
+        }
+    } catch (e) {
+        console.error("Fetch bets failed", e);
+    }
+  };
+
+  React.useEffect(() => {
+      fetchBets();
+  }, []);
+
+  const handleCashout = async (betId: string) => {
+      setIsCashingOut(betId);
+      try {
+          const userRes = await fetch('http://localhost:3001/api/user/mock', { method: 'POST' });
+          const userData = await userRes.json();
+          
+          const cashoutRes = await fetch('http://localhost:3001/api/cashout', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ userId: userData.user.id, betId })
+          });
+          const cashoutData = await cashoutRes.json();
+          
+          if (cashoutData.success) {
+              alert(`✅ Bahis başarıyla bozduruldu!\nBozdurulan Tutar: ${cashoutData.cashoutAmount.toFixed(2)} TL\nYeni Bakiye: ${cashoutData.newBalance.toFixed(2)} TL`);
+              const member = { id: userData.user.id, username: userData.user.username, balance: cashoutData.newBalance };
+              localStorage.setItem('site_member', JSON.stringify(member));
+              window.dispatchEvent(new Event('storage'));
+              fetchBets();
+          } else {
+              alert(`❌ Hata: ${cashoutData.error}`);
+          }
+      } catch (e) {
+          alert("❌ Sunucuya bağlanırken hata oluştu.");
+      } finally {
+          setIsCashingOut(null);
+      }
+  };
+
+  if (activeBets.length === 0) {
+      return (
+          <div className="flex-1 flex flex-col items-center justify-center bg-[#050505] text-center p-6 gap-3">
+              <Target className="w-12 h-12 text-zinc-700 mb-2" />
+              <h3 className="text-white font-bold text-sm">Aktif Bahsiniz Yok</h3>
+              <p className="text-zinc-500 text-xs">Mevcut devam eden bir kuponunuz bulunmamaktadır.</p>
+          </div>
+      );
+  }
 
   return (
-    <div className="flex-1 overflow-y-auto bg-[#050608] flex flex-col p-3 gap-4">
+    <div className="flex-1 overflow-y-auto bg-black flex flex-col p-3 gap-4">
       <div className="flex items-center justify-between px-1 mb-2">
         <div className="flex items-center gap-2">
-          <div className="w-5 h-5 bg-[#06b6d4] rounded-full flex items-center justify-center shadow-[0_0_10px_#06b6d4]">
+          <div className="w-5 h-5 bg-[color:var(--theme-accent)] rounded-full flex items-center justify-center shadow-[0_0_10px_#06b6d4]">
             <Target className="w-3 h-3 text-black" />
           </div>
           <h3 className="text-white font-bold text-sm">Aktif Bahislerim</h3>
         </div>
-        <span className="text-[10px] text-zinc-400 font-bold bg-white/5 px-2 py-1 rounded">2 KUPON</span>
+        <span className="text-[10px] text-zinc-400 font-bold bg-white/5 px-2 py-1 rounded">{activeBets.length} KUPON</span>
       </div>
 
-      {MOCK_MY_BETS.map((bet) => (
-        <div key={bet.id} className="relative bg-[#0d1017] border border-white/10 rounded-xl overflow-hidden shadow-lg hover:border-[#06b6d4]/30 transition-colors">
+      {activeBets.map((bet) => (
+        <div key={bet.id} className="relative bg-[#0d1017] border border-white/10 rounded-xl overflow-hidden shadow-lg hover:border-[color:var(--theme-accent)]/30 transition-colors">
           {/* Header */}
           <div className="p-3 pb-2 flex items-center justify-between border-b border-white/5 bg-[#12161e]">
-            <span className="text-[#06b6d4] text-[10px] uppercase font-black tracking-wider">
+            <span className="text-[color:var(--theme-accent)] text-[10px] uppercase font-black tracking-wider">
               {bet.type}
             </span>
             {bet.isLive && (
@@ -81,8 +125,8 @@ const MyBetsPanel = ({ onShare }: { onShare: (msg: string) => void }) => {
 
           {/* Picks */}
           <div className="px-3 pb-3 flex flex-col gap-2">
-            {bet.picks.map((pick, i) => (
-              <div key={i} className="flex flex-col relative pl-2 border-l-2 border-[#06b6d4]">
+            {bet.picks.map((pick: any, i: number) => (
+              <div key={i} className="flex flex-col relative pl-2 border-l-2 border-[color:var(--theme-accent)]">
                 <span className="text-white text-[12px] font-bold">{pick.text}</span>
                 <span className="text-zinc-500 text-[11px] font-medium">{pick.detail}</span>
               </div>
@@ -106,24 +150,18 @@ const MyBetsPanel = ({ onShare }: { onShare: (msg: string) => void }) => {
             
             {/* Action Buttons */}
             <div className="flex gap-2 mt-1">
-              {cashedOutBets.includes(bet.id) ? (
-                <button disabled className="flex-1 py-2.5 bg-[#00E676]/20 border border-[#00E676]/30 text-[#00E676] font-black uppercase tracking-wide text-[11px] rounded-lg flex items-center justify-center gap-1.5 shadow-[0_0_15px_rgba(0,230,118,0.1)]">
-                  <CheckCircle2 className="w-4 h-4" />
-                  <span>BOZDURULDU</span>
-                </button>
-              ) : (
                 <button 
                   onClick={() => {
-                    if (window.confirm(`${bet.cashoutValue} tutarında bahis bozdurma işlemini onaylıyor musunuz?`)) {
-                      setCashedOutBets([...cashedOutBets, bet.id]);
+                    if (window.confirm(`Bahis bozdurma işlemini onaylıyor musunuz?`)) {
+                        handleCashout(bet.id);
                     }
                   }}
-                  className="flex-1 py-2.5 bg-[#06b6d4] hover:bg-[#33FFB5] text-black font-black uppercase tracking-wide text-[11px] rounded-lg transition-all flex items-center justify-center gap-1.5 shadow-[0_0_15px_rgba(0,255,163,0.15)] hover:shadow-[0_0_20px_rgba(0,255,163,0.3)]"
+                  disabled={isCashingOut === bet.id}
+                  className="flex-1 py-2.5 bg-[color:var(--theme-accent)] hover:bg-[#33FFB5] text-black font-black uppercase tracking-wide text-[11px] rounded-lg transition-all flex items-center justify-center gap-1.5 shadow-[0_0_15px_rgba(0,255,163,0.15)] hover:shadow-[0_0_20px_rgba(0,255,163,0.3)] disabled:opacity-50"
                 >
-                  <RefreshCcw className="w-3.5 h-3.5" />
-                  <span>BAHİS BOZDUR {bet.cashoutValue}</span>
+                  <RefreshCcw className={`w-3.5 h-3.5 ${isCashingOut === bet.id ? 'animate-spin' : ''}`} />
+                  <span>{isCashingOut === bet.id ? 'BOZDURULUYOR...' : `BAHİS BOZDUR`}</span>
                 </button>
-              )}
               <button 
                 onClick={() => {
                   const payload = {
@@ -140,10 +178,10 @@ const MyBetsPanel = ({ onShare }: { onShare: (msg: string) => void }) => {
                   };
                   onShare(`[BET_SHARE:${JSON.stringify(payload)}]`);
                 }}
-                className="w-10 flex items-center justify-center bg-[#1A212D] border border-white/5 hover:border-[#06b6d4]/50 hover:bg-[#202836] text-white rounded-lg transition-colors group"
+                className="w-10 flex items-center justify-center bg-[#1A212D] border border-white/5 hover:border-[color:var(--theme-accent)]/50 hover:bg-[#202836] text-white rounded-lg transition-colors group"
                 title="Kuponu Sohbette Paylaş"
               >
-                <Share2 className="w-4 h-4 text-zinc-400 group-hover:text-[#06b6d4] transition-colors" />
+                <Share2 className="w-4 h-4 text-zinc-400 group-hover:text-[color:var(--theme-accent)] transition-colors" />
               </button>
             </div>
           </div>
@@ -162,10 +200,9 @@ export const DualRightPanel: React.FC<{
   userRole?: 'admin' | 'moderator' | 'user' | null;
 }> = ({ language, isOpenMobile, onCloseMobile, currentView, userRole }) => {
   const { t } = useTranslation();
-  const { betSlip, betAmount, setBetAmount, removeSelection, clearBetSlip, totalOdds, potentialPayout, accumulatorBoost, betType, setBetType, isLocked } = useBetSlip();
+  const { betSlip, betAmount, setBetAmount, removeSelection, clearBetSlip, totalOdds, potentialPayout, accumulatorBoost, betType, setBetType, isLocked, isTurboMode, setIsTurboMode } = useBetSlip();
   const { siteUser, placeBet } = useUser();
   const [activePanel, setActivePanel] = useState<'coupon' | 'chat' | 'mybets'>('chat');
-  const [quickBet, setQuickBet] = useState(false);
   const [showStamp, setShowStamp] = useState(false);
   const [isConfirmingBet, setIsConfirmingBet] = useState(false);
 
@@ -174,6 +211,15 @@ export const DualRightPanel: React.FC<{
   React.useEffect(() => {
     setIsConfirmingBet(false);
   }, [betSlip, betAmount]);
+
+  React.useEffect(() => {
+    if (isTurboMode) {
+      document.body.classList.add('turbo-mode-active');
+    } else {
+      document.body.classList.remove('turbo-mode-active');
+    }
+    return () => document.body.classList.remove('turbo-mode-active');
+  }, [isTurboMode]);
 
   React.useEffect(() => {
     if (!isSports) {
@@ -240,14 +286,14 @@ export const DualRightPanel: React.FC<{
       />
     )}
     
-    <div className={`fixed xl:static top-0 right-0 h-full z-50 flex flex-col shrink-0 bg-[#0A0D14] transition-all duration-300 ${isOpenMobile ? 'translate-x-0 w-[350px]' : 'translate-x-full xl:translate-x-0'} xl:w-full w-[350px]`}>
+    <div className={`fixed xl:static top-0 right-0 h-full z-50 flex flex-col shrink-0 ${isSports ? 'bg-[#0a0e17]' : 'bg-[#050505]'} transition-all duration-300 ${isOpenMobile ? 'translate-x-0 w-[350px]' : 'translate-x-full xl:translate-x-0'} xl:w-full w-[350px]`}>
       
       {/* ── Desktop Tab & Chat/BetSlip Content ── */}
-      <div className="flex-1 flex flex-col min-h-0 relative overflow-hidden bg-[#0A0D14]">
+      <div className="flex-1 flex flex-col min-h-0 relative overflow-hidden bg-transparent">
         {activePanel === 'coupon' ? (
           <>
             {/* PREMIUM BET SLIP HEADER */}
-            <div className="bg-[#0A0D14] border-b border-white/5 px-2 py-1.5 flex items-center justify-between z-10">
+            <div className="bg-transparent border-b border-white/5 px-2 py-1.5 flex items-center justify-between z-10">
               <div className="flex items-center gap-1.5 cursor-pointer group flex-1" onClick={() => { if (onCloseMobile) onCloseMobile(); }}>
                 <div className="flex items-center gap-1.5 opacity-90 hover:opacity-100 transition-opacity">
                   <FileText className="w-4 h-4 text-white drop-shadow-[0_0_5px_rgba(255,255,255,0.4)]" />
@@ -273,17 +319,20 @@ export const DualRightPanel: React.FC<{
                   <Share2 className="w-3.5 h-3.5 text-zinc-400 hover:text-white transition-colors" />
                 </div>
 
-                  <div className="flex items-center gap-1.5 cursor-pointer px-2 py-1.5 rounded-full hover:bg-white/5 transition-all" onClick={() => setQuickBet(!quickBet)}>
-                  <span className={`font-bold text-[10px] uppercase tracking-wider transition-colors ${quickBet ? 'text-[#00E5FF]' : 'text-zinc-500'}`}>{t('bet_slip.fast')}</span>
-                  <div className={`w-7 h-4 rounded-full p-[2px] transition-colors ${quickBet ? 'bg-[#00E5FF] shadow-[0_0_10px_rgba(0,229,255,0.4)]' : 'bg-[#1a1a1a] border border-white/10'}`}>
-                    <div className={`w-3 h-3 rounded-full transition-transform ${quickBet ? 'translate-x-3 bg-black' : 'translate-x-0 bg-zinc-400'}`}></div>
+                  <div className="flex items-center gap-1.5 cursor-pointer px-2 py-1.5 rounded-full hover:bg-white/5 transition-all group/turbo" onClick={() => setIsTurboMode(!isTurboMode)}>
+                    <span className={`font-black text-[10px] uppercase tracking-wider transition-colors flex items-center gap-1 ${isTurboMode ? 'text-red-500 drop-shadow-[0_0_5px_rgba(239,68,68,0.8)]' : 'text-zinc-500 group-hover/turbo:text-white'}`}>
+                      <Zap className={`w-3 h-3 ${isTurboMode ? 'text-red-500 fill-red-500 animate-pulse' : 'text-zinc-500'}`} />
+                      TURBO
+                    </span>
+                    <div className={`w-8 h-4 rounded-full p-[2px] transition-colors relative shadow-inner ${isTurboMode ? 'bg-red-500 shadow-[0_0_12px_rgba(239,68,68,0.5)] border-red-400' : 'bg-[#1a1a1a] border border-white/10'}`}>
+                      <div className={`w-3 h-3 rounded-full transition-transform duration-300 ${isTurboMode ? 'translate-x-4 bg-white shadow-[0_0_5px_rgba(255,255,255,0.8)]' : 'translate-x-0 bg-zinc-400'}`}></div>
+                    </div>
                   </div>
-                </div>
               </div>
             </div>
 
             {/* TABS (Premium Segmented Control) */}
-            <div className="px-3 py-3 bg-[#0A0D14]">
+            <div className="px-3 py-3 bg-transparent">
               <div className="flex items-center p-1 bg-[#131823] rounded-xl border border-white/5 relative shadow-inner h-[46px]">
                 <div 
                   className="absolute top-1 bottom-1 w-[calc(33.333%-4px)] bg-[#1e2638] rounded-lg shadow-md transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]" 
@@ -330,15 +379,23 @@ export const DualRightPanel: React.FC<{
 
             {/* BET LIST */}
             {betSlip.length === 0 ? (
-              <div className="flex-1 p-6 flex flex-col items-center justify-center text-center bg-transparent">
-                <div className="w-20 h-20 rounded-2xl bg-[#0A0D14]/80 backdrop-blur flex items-center justify-center mb-5 border border-[#00E5FF]/20 shadow-[0_0_20px_rgba(0,229,255,0.05)] animate-pulse">
-                  <FileText className="w-8 h-8 text-[#00E5FF]/60 drop-shadow-[0_0_8px_rgba(0,229,255,0.5)]" strokeWidth={1.5} />
+              <div className="flex-1 relative flex flex-col items-center justify-center text-center bg-[#050505] overflow-hidden">
+                {/* Background Watermark */}
+                <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none">
+                  <div className="text-[150px] font-black italic tracking-tighter mix-blend-overlay">724</div>
                 </div>
-                <h3 className="text-white font-bold text-[15px] mb-1">
+                
+                {/* Glowing Center Icon */}
+                <div className="relative w-24 h-24 rounded-full bg-gradient-to-br from-[#00E5FF]/10 to-transparent flex items-center justify-center mb-6 border border-[#00E5FF]/20 shadow-[0_0_40px_rgba(0,229,255,0.1)] group">
+                  <div className="absolute inset-0 rounded-full border border-[#00E5FF]/30 blur-sm animate-pulse"></div>
+                  <Target className="w-10 h-10 text-[#00E5FF]/80 drop-shadow-[0_0_15px_rgba(0,229,255,0.8)] group-hover:scale-110 transition-transform duration-500" strokeWidth={1.5} />
+                </div>
+                
+                <h3 className="text-white font-black text-[16px] tracking-wide mb-2 uppercase z-10">
                   {t('bet_slip.empty_title')}
                 </h3>
-                <p className="text-zinc-500 font-medium text-[12px] max-w-[200px]">
-                  {t('bet_slip.empty_desc')}
+                <p className="text-zinc-500 font-medium text-[13px] max-w-[220px] leading-relaxed z-10">
+                  Oranların üzerine tıklayarak bahislerinizi kupona ekleyebilirsiniz.
                 </p>
               </div>
             ) : (
@@ -405,7 +462,7 @@ export const DualRightPanel: React.FC<{
                 </div>
 
                 {/* BOTTOM SUMMARY & ACTIONS */}
-                <div className="shrink-0 flex flex-col bg-[#0A0D14] border-t border-white/10 shadow-[0_-5px_15px_rgba(0,0,0,0.5)] z-20 p-3 md:p-4 gap-3">
+                <div className="shrink-0 flex flex-col bg-transparent border-t border-white/10 shadow-[0_-5px_15px_rgba(0,0,0,0.5)] z-20 p-3 md:p-4 gap-3">
                   
                   <div className="flex items-center justify-between">
                     <div className="flex flex-col">
@@ -472,12 +529,12 @@ export const DualRightPanel: React.FC<{
                           </button>
                           <button 
                             onClick={() => siteUser ? setIsConfirmingBet(true) : handlePlaceBet()}
-                            className="flex-1 h-10 md:h-12 bg-gradient-to-r from-[#00E5FF] to-[#00b3cc] text-[#0A0D14] font-black text-[13px] md:text-[15px] rounded-lg tracking-widest uppercase flex items-center justify-center hover:brightness-110 transition-all gap-1 shadow-[0_0_15px_rgba(0,229,255,0.4)] hover:shadow-[0_0_25px_rgba(0,229,255,0.6)] active:scale-[0.98] relative overflow-hidden group/btn"
+                            className="flex-1 h-10 md:h-12 bg-gradient-to-r from-[#00E5FF] to-[#0099CC] text-black font-black text-[13px] md:text-[15px] rounded-lg tracking-widest uppercase flex items-center justify-center hover:from-[#00FFFF] hover:to-[#00b3e6] transition-all gap-1 shadow-[0_0_20px_rgba(0,229,255,0.3)] hover:shadow-[0_0_30px_rgba(0,229,255,0.5)] active:scale-[0.98] relative overflow-hidden group/btn border border-white/20"
                           >
                             <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/40 to-transparent group-hover/btn:animate-[shine-sweep_2s_ease-in-out_infinite]" />
                             <span className="relative z-10 flex items-center gap-1">
                               {!siteUser ? t('bet_slip.login_to_bet') : t('bet_slip.place_bet')}
-                              {siteUser && <ChevronRight className="w-4 h-4 text-[#0A0D14]" />}
+                              {siteUser && <ChevronRight className="w-4 h-4 text-black" />}
                             </span>
                           </button>
                        </>
@@ -529,8 +586,8 @@ export const DualRightPanel: React.FC<{
 
       {/* ═══════════ STICKY BOTTOM TOGGLE BAR (SPORTS ONLY) ═══════════ */}
       {isSports && (
-        <div className={`shrink-0 bg-[#0A0D14] border-t border-white/5 relative z-50 shadow-[0_-10px_30px_rgba(0,0,0,0.8)] transition-all duration-300 overflow-hidden h-[70px] p-3 opacity-100`}>
-          <div className="flex items-center justify-between w-full h-full bg-[#131823] p-1 rounded-xl border border-white/5">
+        <div className={`shrink-0 ${isSports ? 'bg-[#0a0e17]' : 'bg-[#050505]'} border-t border-white/5 relative z-50 shadow-[0_-10px_30px_rgba(0,0,0,0.8)] transition-all duration-300 overflow-hidden h-[70px] p-3 opacity-100`}>
+          <div className="flex items-center justify-between w-full h-full bg-[#131823]/50 p-1 rounded-xl border border-white/5">
             
             <button 
               onClick={() => setActivePanel('chat')}

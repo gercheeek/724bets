@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
+import { io } from 'socket.io-client';
 import { useLanguage } from './LanguageContext';
 import { createBrowserClient } from '../lib/supabase';
 import { calculateMarketCount } from '../utils/marketUtils';
@@ -24,6 +25,7 @@ interface BettingContextType {
   events: any[];
   isConnected: boolean;
   globalLiveMatches: any[];
+  outrights: any[];
   
   // Filters
   activeSport: string;
@@ -91,6 +93,9 @@ const normalizeEvent = (ev: any) => {
     d.tournament = { name: 'Diğer Ligler' };
   }
   
+  // Sidebar Canlı Sayacı için isLive propertysini zorla ekle
+  ev.isLive = d.status === 'in_progress' || d.status === 'playing' || d.status === 'started' || d.status === 'halftime';
+  
   return ev;
 };
 
@@ -99,115 +104,108 @@ export const BettingProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const [events, setEvents] = useState<any[]>([]);
   const [scrapedMatches, setScrapedMatches] = useState<any[]>([]);
   const [globalLiveMatches, setGlobalLiveMatches] = useState<any[]>([]);
+  const [outrights, setOutrights] = useState<any[]>([]);
   const [isConnected, setIsConnected] = useState(false);
 
   // Eski sistemin devasa JSON dosyalarını çekmesini durdurduk.
-  // Yeni API gelene kadar sistem boş ve şimşek hızında çalışacak.
+  // Artık sadece kendi Socket.io sunucumuz üzerinden veri alıyoruz.
   const fetchScraped = async () => {
-    try {
-      const supabase = createBrowserClient();
-      const { data, error } = await supabase.from('sports_matches').select('*').eq('status', 'active');
-      if (error || !data) return;
-
-      const formattedMatches = data.map(dbMatch => {
-        const m = {
-          id: 'sb_' + dbMatch.id,
-          isScraped: true,
-          data: {
-            sport: { name: dbMatch.sport_category },
-            tournament: { name: dbMatch.league },
-            participants: {
-              home: dbMatch.team_home,
-              away: dbMatch.team_away
-            },
-            start_time: dbMatch.match_date,
-            status: dbMatch.is_live ? 'in_progress' : 'not_started',
-            score: dbMatch.is_live ? `${dbMatch.score_home || 0}:${dbMatch.score_away || 0}` : undefined,
-            match_minute: dbMatch.match_minute,
-            stats: dbMatch.odds?.stats,
-            group_markets: {
-              "full_event|0": [
-                `|1x2|!1~home~${dbMatch.odds?.['1'] || 1.1}!x~draw~${dbMatch.odds?.['X'] || 1.1}!2~away~${dbMatch.odds?.['2'] || 1.1}`,
-                `|ou|2.5|!1~over~${dbMatch.odds?.['tU'] || 1.1}!2~under~${dbMatch.odds?.['tA'] || 1.1}`,
-                `|Double_Chance|!1x~1X~${dbMatch.odds?.['cs1X'] || 1.1}!12~12~${dbMatch.odds?.['cs12'] || 1.1}!x2~X2~${dbMatch.odds?.['csX2'] || 1.1}`,
-                `|gg|!1~var~${dbMatch.odds?.['1'] || 1.1}!2~yok~${dbMatch.odds?.['2'] || 1.1}`
-              ]
-            }
-          }
-        };
-        return normalizeEvent(m);
-      });
-      const prevStr = sessionStorage.getItem('prevScrapedMatchesStr');
-      const nextStr = JSON.stringify(formattedMatches);
-      
-      if (prevStr !== nextStr) {
-        sessionStorage.setItem('prevScrapedMatchesStr', nextStr);
-        setScrapedMatches(formattedMatches);
-      }
-    } catch (err) {
-      console.error('Error fetching Supabase matches:', err);
-    }
+    // Disabled old Supabase integration
   };
 
   useEffect(() => {
-    fetchScraped();
+    // Disabled
   }, []);
 
-  // Supabase Realtime Broadcast Connection for Live Matches
+  // New Node.js Socket.io Connection
   useEffect(() => {
-    const supabase = createBrowserClient();
-    const channel = supabase.channel('live-data');
+    let socket;
+    try {
+        socket = io('http://localhost:3001'); // Node.js server portumuz
+        
+        socket.on('connect', () => {
+            console.log('✅ Connected to local Socket.io Server');
+            setIsConnected(true);
+        });
 
-    channel.on('broadcast', { event: 'live_matches_update' }, ({ payload }) => {
-      setIsConnected(true);
-      if (Array.isArray(payload)) {
-        const formattedMatches = payload.map(dbMatch => {
-          const m = {
-            id: dbMatch.id,
-            sport: dbMatch.sport_category,
-            league: dbMatch.league,
-            participants: {
-              home: dbMatch.team_home,
-              away: dbMatch.team_away
-            },
-            start_time: dbMatch.match_date,
-            status: dbMatch.is_live ? 'in_progress' : 'not_started',
-            score: dbMatch.is_live ? `${dbMatch.score_home || 0}:${dbMatch.score_away || 0}` : undefined,
-            match_minute: dbMatch.match_minute,
-            stats: dbMatch.odds?.stats,
-            group_markets: {
-              "full_event|0": [
-                `|1x2|!1~home~${dbMatch.odds?.['1'] || 1.1}!x~draw~${dbMatch.odds?.['X'] || 1.1}!2~away~${dbMatch.odds?.['2'] || 1.1}`,
-                `|ou|2.5|!1~over~${dbMatch.odds?.['tU'] || 1.1}!2~under~${dbMatch.odds?.['tA'] || 1.1}`,
-                `|Double_Chance|!1x~1X~${dbMatch.odds?.['cs1X'] || 1.1}!12~12~${dbMatch.odds?.['cs12'] || 1.1}!x2~X2~${dbMatch.odds?.['csX2'] || 1.1}`,
-                `|gg|!1~var~${dbMatch.odds?.['1'] || 1.1}!2~yok~${dbMatch.odds?.['2'] || 1.1}`
-              ]
+        socket.on('disconnect', () => {
+            console.log('❌ Disconnected from Socket.io Server');
+            setIsConnected(false);
+        });
+
+        socket.on('matches_update', (payload) => {
+            if (Array.isArray(payload)) {
+                // Initial load: Socket.io'dan gelen formaplanmış veriyi direkt al
+                const formattedMatches = payload.map(m => normalizeEvent(m));
+
+                setEvents(prev => {
+                    const mergedMap = new Map();
+                    // Önceki verileri koru
+                    prev.forEach(e => mergedMap.set(e.id, e));
+                    
+                    // Yeni gelenleri üstüne yaz (Canlı + PreMatch)
+                    formattedMatches.forEach(ev => {
+                        mergedMap.set(ev.id, ev);
+                    });
+                    
+                    return Array.from(mergedMap.values());
+                });
+
+                // Ayrıca global canlı maçları ayrıca kaydet (Sidebar vb. için)
+                setGlobalLiveMatches(formattedMatches.filter(m => m.isLive));
             }
-          };
-          return normalizeEvent(m);
         });
 
-        setEvents(prev => {
-          const mergedMap = new Map();
-          prev.forEach(e => mergedMap.set(e.id, e));
-          
-          formattedMatches.forEach(ev => {
-             mergedMap.set(ev.id, ev);
-          });
-          
-          return Array.from(mergedMap.values());
+        socket.on('outrights_update', (payload) => {
+            if (Array.isArray(payload)) {
+                setOutrights(payload);
+            }
         });
-      }
-    }).subscribe((status) => {
-      if (status === 'SUBSCRIBED') {
-        console.log('✅ Subscribed to Supabase live-data channel');
-      } else if (status === 'CLOSED' || status === 'CHANNEL_ERROR') {
-        setIsConnected(false);
-      }
-    });
+
+        // DELTA SOCKETS: Yalnızca değişen veriyi alarak performansı 100x artırıyoruz
+        socket.on('matches_delta', (delta) => {
+            if (delta && (delta.updated || delta.removed)) {
+                setEvents(prev => {
+                    const newMap = new Map();
+                    prev.forEach(e => newMap.set(e.id, e));
+
+                    if (delta.removed) {
+                        delta.removed.forEach(id => newMap.delete(id));
+                    }
+                    if (delta.updated) {
+                        delta.updated.forEach(match => {
+                            newMap.set(match.id, normalizeEvent(match));
+                        });
+                    }
+                    
+                    return Array.from(newMap.values());
+                });
+            }
+        });
+
+        socket.on('time_sync', (syncPayload) => {
+            if (Array.isArray(syncPayload)) {
+                setEvents(prev => {
+                    let hasChanges = false;
+                    const next = prev.map(match => {
+                        const syncData = syncPayload.find(s => s.id === match.id);
+                        if (syncData && (match.minute !== syncData.minute || match.last_update_ts !== Date.now())) {
+                            hasChanges = true;
+                            // Update minute directly and refresh last_update_ts to keep live local ticker synced
+                            return { ...match, minute: syncData.minute, last_update_ts: Date.now() };
+                        }
+                        return match;
+                    });
+                    return hasChanges ? next : prev;
+                });
+            }
+        });
+    } catch (e) {
+        console.error("Socket.io client loading error:", e);
+    }
 
     return () => {
-      supabase.removeChannel(channel);
+        if (socket) socket.disconnect();
     };
   }, []);
 
@@ -284,6 +282,7 @@ export const BettingProvider: React.FC<{ children: React.ReactNode }> = ({ child
     <BettingContext.Provider value={{
       events,
       globalLiveMatches,
+      outrights,
       isConnected,
       activeSport,
       setActiveSport,

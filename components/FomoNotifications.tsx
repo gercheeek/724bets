@@ -58,8 +58,8 @@ export default function FomoNotifications() {
         
         <div className="shrink-0">
           {notification.type === 'win' ? (
-            <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#06b6d4]/20 to-[#06b6d4]/5 border border-[#06b6d4]/20 flex items-center justify-center shadow-[0_0_10px_rgba(0,255,163,0.2)]">
-              <Trophy className="w-3.5 h-3.5 text-[#06b6d4]" />
+            <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[color:var(--theme-accent)]/20 to-[color:var(--theme-accent)]/5 border border-[color:var(--theme-accent)]/20 flex items-center justify-center shadow-[0_0_10px_rgba(0,255,163,0.2)]">
+              <Trophy className="w-3.5 h-3.5 text-[color:var(--theme-accent)]" />
             </div>
           ) : (
             <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#F59E0B]/20 to-[#F59E0B]/5 border border-[#F59E0B]/20 flex items-center justify-center">
@@ -74,7 +74,7 @@ export default function FomoNotifications() {
             <span className="text-gray-500 text-[10px]">{notification.type === 'win' ? (t('just_won') || 'just won') : (t('just_bet') || 'just bet')}</span>
           </div>
           <div className="flex items-baseline gap-1.5 leading-none">
-            <span className={`font-bold text-xs ${notification.type === 'win' ? 'text-[#06b6d4]' : 'text-white'}`}>
+            <span className={`font-bold text-xs ${notification.type === 'win' ? 'text-[color:var(--theme-accent)]' : 'text-white'}`}>
               {notification.amount}
             </span>
             <span className="text-gray-400 text-[10px] truncate">

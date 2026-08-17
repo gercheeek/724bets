@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import { ODDS_ENGINE_CONFIG } from '../utils/oddsEngineConfig';
+import { getOddsEngineConfig, saveOddsEngineConfig } from '../utils/oddsEngineConfig';
 import { Settings, ShieldAlert, Target, Clock, Zap, Users, LayoutDashboard, Flag } from 'lucide-react';
 
 const AdminOddsEngineTab = () => {
     // We are just displaying the config for now. In a real backend this would send an update API call.
-    const [config, setConfig] = useState(ODDS_ENGINE_CONFIG);
+    const [config, setConfig] = useState(getOddsEngineConfig());
     const [savedMessage, setSavedMessage] = useState('');
 
     const handleSave = () => {
+        saveOddsEngineConfig(config);
         setSavedMessage('Ayarlar belleğe kaydedildi! (Gerçek ortamda DB\'ye yazılır)');
         setTimeout(() => setSavedMessage(''), 3000);
     };
@@ -18,7 +19,7 @@ const AdminOddsEngineTab = () => {
             <div className="flex items-center justify-between p-6 bg-[#12141c] border-b border-[#222635]">
                 <div>
                     <h2 className="text-xl font-black text-white flex items-center gap-3">
-                        <Settings className="w-6 h-6 text-[#06b6d4]" />
+                        <Settings className="w-6 h-6 text-[color:var(--theme-accent)]" />
                         ORAN MOTORU VE SİSTEM İSKELETİ
                     </h2>
                     <p className="text-sm text-zinc-400 mt-1">Yapay zeka oran üretim motorunun ve elit takım yapılandırmalarının merkezi kontrol paneli.</p>
@@ -27,7 +28,7 @@ const AdminOddsEngineTab = () => {
                     {savedMessage && <span className="text-[#00E5FF] text-sm font-bold animate-fade-in">{savedMessage}</span>}
                     <button 
                         onClick={handleSave}
-                        className="px-6 py-2 bg-[#06b6d4] hover:bg-[#0891b2] text-white font-bold rounded-lg transition-colors flex items-center gap-2"
+                        className="px-6 py-2 bg-[color:var(--theme-accent)] hover:bg-[#0891b2] text-white font-bold rounded-lg transition-colors flex items-center gap-2"
                     >
                         <Zap className="w-4 h-4" />
                         AYARLARI KAYDET
@@ -66,7 +67,7 @@ const AdminOddsEngineTab = () => {
                         {/* TIME DECAY */}
                         <div className="bg-[#12141c] rounded-xl border border-[#222635] p-5">
                             <h3 className="text-lg font-black text-white mb-4 flex items-center gap-2 border-b border-[#222635] pb-3">
-                                <Clock className="w-5 h-5 text-[#06b6d4]" />
+                                <Clock className="w-5 h-5 text-[color:var(--theme-accent)]" />
                                 Zaman Çarpanı (Time Decay)
                             </h3>
                             <p className="text-xs text-zinc-500 mb-4">Maç dakikasına göre üretilen oranların erime katsayıları.</p>
@@ -82,6 +83,36 @@ const AdminOddsEngineTab = () => {
                                 <div className="bg-[#0b0d14] p-3 rounded-lg border border-[#222635]">
                                     <label className="text-[10px] text-zinc-500 font-bold uppercase mb-1 block">Maksimum Dakika Limiti</label>
                                     <input type="number" value={config.rules.maxMinuteThreshold} readOnly className="bg-transparent text-white font-black text-lg outline-none w-full" />
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* HOUSE EDGE */}
+                        <div className="bg-[#12141c] rounded-xl border border-[#222635] p-5 shadow-[0_0_20px_rgba(0,229,255,0.05)]">
+                            <h3 className="text-lg font-black text-white mb-4 flex items-center gap-2 border-b border-[#222635] pb-3">
+                                <Zap className="w-5 h-5 text-[#f59e0b]" />
+                                Kâr Marjı (House Edge)
+                            </h3>
+                            <p className="text-xs text-zinc-500 mb-4">Bahis platformunun matematiksel avantajı. Oranlar bu marja göre otomatik olarak aşağı yönlü tıraşlanır (Vig/Juice). Profesyonel sitelerde %4 - %8 arasıdır.</p>
+                            
+                            <div className="bg-[#0b0d14] p-4 rounded-lg border border-[#222635]">
+                                <div className="flex justify-between items-end mb-2">
+                                    <label className="text-[10px] text-zinc-500 font-bold uppercase block">Aktif Marj Yüzdesi</label>
+                                    <span className="text-2xl font-black text-[#00E5FF]">{(config.rules.houseEdgePercentage * 100).toFixed(1)}%</span>
+                                </div>
+                                <input 
+                                    type="range" 
+                                    min="0.01" 
+                                    max="0.20" 
+                                    step="0.01" 
+                                    value={config.rules.houseEdgePercentage} 
+                                    onChange={(e) => setConfig({ ...config, rules: { ...config.rules, houseEdgePercentage: parseFloat(e.target.value) } })}
+                                    className="w-full accent-[#00E5FF] h-2 bg-[#222635] rounded-lg appearance-none cursor-pointer"
+                                />
+                                <div className="flex justify-between text-[10px] text-zinc-500 font-bold mt-2">
+                                    <span>%1 (Agresif)</span>
+                                    <span>%10 (Standart)</span>
+                                    <span>%20 (Yüksek Kâr)</span>
                                 </div>
                             </div>
                         </div>

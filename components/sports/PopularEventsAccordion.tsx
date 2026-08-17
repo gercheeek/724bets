@@ -6,6 +6,8 @@ import { TrendingUp, ChevronDown, ChevronUp, Monitor, Filter, Trophy } from 'luc
 interface PopularEventsAccordionProps {
   matches: MatchInfo[];
   onSelectMatch?: (match: MatchInfo) => void;
+  targetLeagueOnly?: string;
+  hideHeader?: boolean;
 }
 
 const LOCAL_LEAGUE_LOGOS: Record<string, string> = {
@@ -116,9 +118,9 @@ const LeagueLogo: React.FC<{ league: string; className?: string }> = ({ league, 
   );
 };
 
-export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ matches, onSelectMatch }) => {
+export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ matches, onSelectMatch, targetLeagueOnly, hideHeader }) => {
   const [expandedLeagues, setExpandedLeagues] = useState<Record<string, boolean>>({});
-  const [visibleLeagues, setVisibleLeagues] = useState(5);
+  const [visibleLeagues, setVisibleLeagues] = useState(10);
 
   const toggleLeague = (league: string) => {
     setExpandedLeagues(prev => ({
@@ -246,7 +248,8 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
           statColor: 'text-[#10b981]',
           iconBg: 'bg-[#10b981]/10 border-[#10b981]/20',
           isTurkish: false,
-          bgImage: ''
+          bgImage: '',
+          badgeText: 'Tenis Karşılaşması'
       };
     }
     
@@ -261,7 +264,8 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
         iconBg: 'bg-[#00E5FF]/10 border-[#00E5FF]/20',
         hexColor: '#00E5FF',
         isTurkish: false,
-        bgImage: ''
+        bgImage: '',
+        badgeText: 'Popüler Lig'
     };
     
     if (l.includes('türk takımları')) {
@@ -275,9 +279,11 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
           iconBg: 'bg-red-500/10 border-red-500/20',
           hexColor: '#EF4444',
           isTurkish: true,
-          bgImage: ''
+          bgImage: '',
+          badgeText: 'Öne Çıkan Turnuva'
       };
     }
+
     if (l.includes('şampiyonlar ligi') || l.includes('champions league')) {
       return { 
           bgGlow: 'bg-blue-900/10',
@@ -289,7 +295,8 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
           iconBg: 'bg-blue-500/10 border-blue-500/20',
           hexColor: '#60A5FA',
           isTurkish: false,
-          bgImage: '/assets/leagues/champions-league-bg.jpg'
+          bgImage: '/assets/leagues/champions-league-bg.jpg',
+          badgeText: 'Öne Çıkan Turnuva'
       };
     }
     if (l.includes('avrupa ligi') || l.includes('europa league')) {
@@ -303,7 +310,8 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
           iconBg: 'bg-orange-500/10 border-orange-500/20',
           hexColor: '#F97316',
           isTurkish: false,
-          bgImage: '/assets/leagues/europa-league-bg.jpg'
+          bgImage: '/assets/leagues/europa-league-bg.jpg',
+          badgeText: 'Öne Çıkan Turnuva'
       };
     }
     if (l.includes('konferans ligi') || l.includes('conference league')) {
@@ -317,7 +325,8 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
           iconBg: 'bg-green-500/10 border-green-500/20',
           hexColor: '#22C55E',
           isTurkish: false,
-          bgImage: '/assets/leagues/conference-league-bg.jpg'
+          bgImage: '/assets/leagues/conference-league-bg.jpg',
+          badgeText: 'Öne Çıkan Turnuva'
       };
     }
     if (l.includes('dostluk maçları') || l.includes('friendlies') || l.includes('friendly')) {
@@ -331,20 +340,26 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
           iconBg: 'bg-indigo-500/10 border-indigo-500/20',
           hexColor: '#818CF8',
           isTurkish: false,
-          bgImage: '/assets/leagues/friendlies-bg.jpg'
+          bgImage: '/assets/leagues/friendlies-bg.jpg',
+          badgeText: 'Dostluk Maçı'
       };
     }
     
     return baseTheme;
   };
 
-  const sortedLeagues = Object.keys(groupedByLeague).sort((a, b) => {
+  let sortedLeagues = Object.keys(groupedByLeague).sort((a, b) => {
     const pA = getLeaguePriority(a);
     const pB = getLeaguePriority(b);
     if (pA !== pB) return pA - pB;
     // Secondary sort by number of matches
     return groupedByLeague[b].length - groupedByLeague[a].length;
   });
+
+  if (targetLeagueOnly) {
+    sortedLeagues = sortedLeagues.filter(l => l === targetLeagueOnly);
+    if (sortedLeagues.length === 0) return null; // Don't render anything if the target league has no matches
+  }
 
   if (matches.length === 0) {
     return (
@@ -366,32 +381,34 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
   return (
     <div className="w-full flex flex-col gap-4">
       {/* Header Controls */}
-      <div className="flex flex-row items-center justify-between flex-wrap gap-2">
-        <div className="flex items-center gap-2">
-          <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-zinc-300" />
-          <h2 className="text-white font-bold text-base sm:text-lg whitespace-nowrap">Popüler Etkinlikler</h2>
-        </div>
-        
-        <div className="flex items-center gap-2 sm:gap-4 text-sm ml-auto">
-          <div className="hidden sm:flex items-center gap-2">
-            <Monitor className="w-4 h-4 text-zinc-400" />
-            <span className="text-zinc-300 font-semibold">Görüntüle</span>
-            <div className="bg-[#1e2330] border border-white/5 text-zinc-400 rounded px-2 py-1 flex items-center gap-1 text-xs font-semibold cursor-pointer">
-              Standart
-              <ChevronDown className="w-3 h-3" />
-            </div>
+      {!hideHeader && (
+        <div className="flex flex-row items-center justify-between flex-wrap gap-2">
+          <div className="flex items-center gap-2">
+            <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-zinc-300" />
+            <h2 className="text-white font-bold text-base sm:text-lg whitespace-nowrap">Popüler Etkinlikler</h2>
           </div>
           
-          <div className="flex items-center gap-2">
-            <Filter className="w-4 h-4 text-zinc-400" />
-            <span className="text-zinc-300 font-semibold hidden sm:inline">Bahis Seçenekleri</span>
-            <div className="bg-[#1e2330] border border-white/5 text-zinc-400 rounded px-2 py-1 flex items-center gap-1 text-xs font-semibold cursor-pointer">
-              Kazanan
-              <ChevronDown className="w-3 h-3" />
+          <div className="flex items-center gap-2 sm:gap-4 text-sm ml-auto">
+            <div className="hidden sm:flex items-center gap-2">
+              <Monitor className="w-4 h-4 text-zinc-400" />
+              <span className="text-zinc-300 font-semibold">Görüntüle</span>
+              <div className="bg-[#1e2330] border border-white/5 text-zinc-400 rounded px-2 py-1 flex items-center gap-1 text-xs font-semibold cursor-pointer">
+                Standart
+                <ChevronDown className="w-3 h-3" />
+              </div>
+            </div>
+            
+            <div className="flex items-center gap-2">
+              <Filter className="w-4 h-4 text-zinc-400" />
+              <span className="text-zinc-300 font-semibold hidden sm:inline">Bahis Seçenekleri</span>
+              <div className="bg-[#1e2330] border border-white/5 text-zinc-400 rounded px-2 py-1 flex items-center gap-1 text-xs font-semibold cursor-pointer">
+                Kazanan
+                <ChevronDown className="w-3 h-3" />
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* League Accordion List */}
       <div className="flex flex-col gap-2">
@@ -431,7 +448,7 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
                     </span>
                     <div className="flex items-center">
                       <span className={`px-2 py-0.5 rounded-md border border-white/10 text-[9px] sm:text-[10px] font-bold tracking-widest uppercase ${theme.bgGlow} shadow-sm`} style={{ color: theme.hexColor }}>
-                        Öne Çıkan Turnuva
+                        {(theme as any).badgeText || 'Popüler Lig'}
                       </span>
                     </div>
                   </div>
@@ -473,7 +490,7 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
           );
         })}
       </div>
-      {visibleLeagues < sortedLeagues.length && (
+      {!targetLeagueOnly && visibleLeagues < sortedLeagues.length && (
         <button 
             onClick={() => setVisibleLeagues(prev => prev + 10)}
             className="w-full py-4 mt-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-white font-bold transition-colors"

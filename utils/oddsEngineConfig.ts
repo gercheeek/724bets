@@ -65,3 +65,32 @@ export const ODDS_ENGINE_CONFIG = {
         suspendStatuses: ['finished', 'suspended']
     }
 };
+
+export const getOddsEngineConfig = () => {
+    if (typeof window !== 'undefined') {
+        try {
+            const stored = localStorage.getItem('odds_engine_config');
+            if (stored) {
+                const parsed = JSON.parse(stored);
+                // Merge with default to ensure no missing keys if schema updates
+                return {
+                    ...ODDS_ENGINE_CONFIG,
+                    ...parsed,
+                    rules: {
+                        ...ODDS_ENGINE_CONFIG.rules,
+                        ...(parsed.rules || {})
+                    }
+                };
+            }
+        } catch (e) {
+            console.error('Failed to parse odds_engine_config from localStorage', e);
+        }
+    }
+    return ODDS_ENGINE_CONFIG;
+};
+
+export const saveOddsEngineConfig = (config: any) => {
+    if (typeof window !== 'undefined') {
+        localStorage.setItem('odds_engine_config', JSON.stringify(config));
+    }
+};

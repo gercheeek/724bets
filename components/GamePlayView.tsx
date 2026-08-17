@@ -72,6 +72,16 @@ export const GamePlayView: React.FC<GamePlayViewProps> = ({ game, demoUrl, onClo
     return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
   }, []);
 
+  useEffect(() => {
+    // Scroll to the top of the container when the game view mounts
+    const mainContainer = document.getElementById('main-scroll-container');
+    if (mainContainer) {
+      mainContainer.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, []);
+
   return (
     <div className="w-full h-full flex flex-col items-center animate-fade-in bg-[#0B0E14] min-h-screen">
       <style>{`
@@ -97,7 +107,7 @@ export const GamePlayView: React.FC<GamePlayViewProps> = ({ game, demoUrl, onClo
 
         {/* Game Iframe Wrapper */}
         <div className={`w-full relative ${isFullscreen ? 'h-screen' : 'h-[60vh] md:h-[70vh] lg:h-[75vh]'}`}>
-          {game.category === 'live' || game.provider === 'Live Casino' ? (
+          {game.category === 'live' || game.provider === 'Live Casino' || !demoUrl ? (
             <div className="w-full h-full bg-[#0A0C10] flex flex-col items-center justify-center p-6 border-0 relative overflow-hidden">
               <div className="absolute inset-0 z-0">
                 <img src={game.img || game.image} alt={game.name} className="w-full h-full object-cover opacity-20 blur-sm" />
@@ -110,7 +120,11 @@ export const GamePlayView: React.FC<GamePlayViewProps> = ({ game, demoUrl, onClo
                 {!siteUser ? (
                   <>
                     <h2 className="text-2xl font-black text-white mb-3 tracking-tight">Üye Olmanız Gerekiyor</h2>
-                    <p className="text-[#848B9D] mb-8 font-medium">Bu canlı casino oyununa katılmak ve gerçek krupiyelerle oynamak için lütfen giriş yapın veya üye olun.</p>
+                    <p className="text-[#848B9D] mb-8 font-medium">
+                      {game.category === 'live' || game.provider === 'Live Casino' 
+                        ? 'Bu canlı casino oyununa katılmak ve gerçek krupiyelerle oynamak için lütfen giriş yapın veya üye olun.'
+                        : 'Bu oyunun demo versiyonu bulunmamaktadır. Gerçek parayla oynamak için lütfen giriş yapın veya üye olun.'}
+                    </p>
                     <button 
                       onClick={() => window.dispatchEvent(new CustomEvent('openAuthModal', { detail: 'register' }))}
                       className="w-full sm:w-auto bg-gradient-to-r from-[#00E5FF] to-[#00b3cc] hover:brightness-110 text-[#0A0D14] px-10 py-4 rounded-xl font-black text-sm uppercase tracking-wider transition-all shadow-[0_0_20px_rgba(0,229,255,0.4)] hover:shadow-[0_0_30px_rgba(0,229,255,0.6)]"
@@ -121,7 +135,11 @@ export const GamePlayView: React.FC<GamePlayViewProps> = ({ game, demoUrl, onClo
                 ) : (
                   <>
                     <h2 className="text-2xl font-black text-white mb-3 tracking-tight">Gerçek Bakiye Gerekiyor</h2>
-                    <p className="text-[#848B9D] mb-8 font-medium">Canlı casino oyunları demo modunda oynanamaz. Masaya oturmak ve oynamaya başlamak için lütfen kasanıza bakiye yükleyin.</p>
+                    <p className="text-[#848B9D] mb-8 font-medium">
+                      {game.category === 'live' || game.provider === 'Live Casino'
+                        ? 'Canlı casino oyunları demo modunda oynanamaz. Masaya oturmak ve oynamaya başlamak için lütfen kasanıza bakiye yükleyin.'
+                        : 'Bu oyunun demo versiyonu bulunmamaktadır. Gerçek kazançlar elde etmek için lütfen hesabınıza bakiye yükleyin ve oynamaya başlayın.'}
+                    </p>
                     <button 
                       onClick={() => window.dispatchEvent(new CustomEvent('openDepositModal', { detail: { tab: 'deposit' } }))}
                       className="w-full sm:w-auto bg-gradient-to-r from-[#00E676] to-[#00C853] hover:brightness-110 text-black px-10 py-4 rounded-xl font-black text-sm uppercase tracking-wider transition-all shadow-[0_0_20px_rgba(0,230,118,0.4)] hover:shadow-[0_0_30px_rgba(0,230,118,0.6)] flex items-center justify-center gap-2 mx-auto"

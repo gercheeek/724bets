@@ -61,11 +61,11 @@ export const SporxMain = () => {
             onClick={() => setActiveTab(tab)}
             className={`h-10 px-4 text-sm font-medium flex flex-shrink-0 items-center gap-2 rounded-lg transition-colors ${
               activeTab === tab 
-                ? 'bg-[#2C3440] text-white font-semibold border-b-2 border-[#06b6d4]' 
+                ? 'bg-[#2C3440] text-white font-semibold border-b-2 border-[color:var(--theme-accent)]' 
                 : 'hover:bg-white/5 text-zinc-400'
             }`}
           >
-            {tab === 'Tümü' && <Activity className="w-4 h-4 text-[#06b6d4]" />}
+            {tab === 'Tümü' && <Activity className="w-4 h-4 text-[color:var(--theme-accent)]" />}
             {tab === 'Günün Maçları' && <Calendar className="w-4 h-4" />}
             {tab}
           </button>
@@ -91,7 +91,7 @@ export const SporxMain = () => {
                 onClick={() => setActiveSport(sport)}
                 className={`flex-shrink-0 flex items-center gap-3 px-5 py-3 rounded-xl transition-all border ${
                   isActive 
-                    ? 'bg-gradient-to-r from-[#06b6d4] to-[#00E75A] text-black border-transparent shadow-[0_0_20px_rgba(0,255,163,0.3)]' 
+                    ? 'bg-gradient-to-r from-[color:var(--theme-accent)] to-[#00E75A] text-black border-transparent shadow-[0_0_20px_rgba(0,255,163,0.3)]' 
                     : 'bg-[#1C2028] text-zinc-400 border-white/5 hover:border-white/10 hover:bg-[#232833]'
                 }`}
               >
@@ -146,7 +146,7 @@ export const SporxMain = () => {
 
                       {upcomingEvents.length > 0 && (
                         <div>
-                          <div className="px-4 py-1.5 bg-[#162A20] text-[10px] font-black text-[#06b6d4] uppercase tracking-widest border-l-2 border-[#06b6d4]">
+                          <div className="px-4 py-1.5 bg-[#162A20] text-[10px] font-black text-[color:var(--theme-accent)] uppercase tracking-widest border-l-2 border-[color:var(--theme-accent)]">
                             Gelecek Karşılaşmalar
                           </div>
                           {upcomingEvents.map(event => <MatchRow key={event.id} event={event} />)}
@@ -167,7 +167,7 @@ export const SporxMain = () => {
 
 // Extracted mini-components for cleanliness
 const MenuIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#06b6d4]">
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[color:var(--theme-accent)]">
     <line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/>
   </svg>
 );

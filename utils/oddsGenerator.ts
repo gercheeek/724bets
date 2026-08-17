@@ -1,4 +1,4 @@
-import { ODDS_ENGINE_CONFIG } from './oddsEngineConfig';
+import { getOddsEngineConfig } from './oddsEngineConfig';
 
 export const generateDetailedMarkets = (homeOdd: number, drawOdd: number, awayOdd: number, homeName: string, awayName: string, currentTotalGoals: number = 0, currentMinute: number = 0, currentTotalCorners: number = 0): string[] => {
   // Check if odds are valid
@@ -18,7 +18,9 @@ export const generateDetailedMarkets = (homeOdd: number, drawOdd: number, awayOd
   const p2 = pa / total;
   
   // 3. Margin logic (~6% sportsbook margin for realism)
-  const margin = 1.06;
+  const config = getOddsEngineConfig();
+  const margin = 1 + (config.rules.houseEdgePercentage || 0.06);
+  
   const formatOdd = (prob: number) => {
     // Avoid infinite or absurd odds
     if (prob < 0.01) prob = 0.01;
@@ -43,7 +45,7 @@ export const generateDetailedMarkets = (homeOdd: number, drawOdd: number, awayOd
   markets.push(`${nextMid()}|Draw_No_Bet|${nextSid()}~1~${formatOdd(p1 / (p1 + p2))}!${nextSid()}~2~${formatOdd(p2 / (p1 + p2))}`);
   
   // --- Toplam Gol (Over/Under) ---
-  const { goalBaseMargin, goalProb1More, goalProb2MoreMultiplier, goalProb3MoreMultiplier, goalProb4MoreMultiplier, maxMinuteThreshold, timeDecayStartMinute, timeDecayEnabled, cornerBaseMargin, cornerTimeFractionMax } = ODDS_ENGINE_CONFIG.rules;
+  const { goalBaseMargin, goalProb1More, goalProb2MoreMultiplier, goalProb3MoreMultiplier, goalProb4MoreMultiplier, maxMinuteThreshold, timeDecayStartMinute, timeDecayEnabled, cornerBaseMargin, cornerTimeFractionMax } = config.rules;
   
   // Time decay for goals: less time remaining = lower chance of scoring MORE goals
   let timeMultiplier = 1;

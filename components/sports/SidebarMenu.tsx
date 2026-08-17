@@ -14,22 +14,22 @@ export const SidebarMenu: React.FC<{
       {/* Header / Logo Area */}
       <div className="p-5 border-b border-white/[0.03] sticky top-0 bg-[#0b0e14]/80 backdrop-blur-xl z-20 shadow-sm">
         <div className="flex items-center gap-3 mb-5">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#00E5FF]/20 to-[#00E5FF]/5 flex items-center justify-center border border-[#00E5FF]/30 shadow-[0_0_15px_rgba(0,229,255,0.2)] relative overflow-hidden group-hover:shadow-[0_0_25px_rgba(0,229,255,0.4)] transition-all">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#00E5FF]/20 to-[#00E5FF]/5 flex items-center justify-center border border-[#00E5FF]/30 shadow-[0_0_15px_rgba(16,185,129,0.2)] relative overflow-hidden group-hover:shadow-[0_0_25px_rgba(16,185,129,0.4)] transition-all">
              <div className="absolute inset-0 bg-[#00E5FF]/10 blur-md"></div>
              <Activity className="w-5 h-5 text-[#00E5FF] relative z-10" />
           </div>
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-[#00E5FF] font-black text-lg tracking-widest uppercase drop-shadow-[0_0_8px_rgba(0,229,255,0.3)]">724SPORTS</span>
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-[#00E5FF] font-black text-lg tracking-widest uppercase drop-shadow-[0_0_8px_rgba(16,185,129,0.3)]">724SPORTS</span>
         </div>
         
         {/* Search Input */}
         <div className="relative group">
           <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none transition-colors group-focus-within:text-[#00E5FF] text-zinc-500">
-            <Search className="w-4 h-4 group-focus-within:drop-shadow-[0_0_5px_rgba(0,229,255,0.5)] transition-all" />
+            <Search className="w-4 h-4 group-focus-within:drop-shadow-[0_0_5px_rgba(16,185,129,0.5)] transition-all" />
           </div>
           <input 
             type="text" 
             placeholder={language === 'tr' ? 'Takım veya maç ara...' : 'Search team or match...'}
-            className="w-full bg-[#121620]/60 border border-white/5 rounded-xl py-2.5 pl-10 pr-4 text-zinc-200 text-[13px] font-medium focus:outline-none focus:border-[#00E5FF]/50 focus:bg-[#151a25] transition-all placeholder:text-zinc-600 shadow-inner hover:border-white/10 focus:shadow-[0_0_15px_rgba(0,229,255,0.1)]"
+            className="w-full bg-transparent border border-white/5 rounded-xl py-2.5 pl-10 pr-4 text-zinc-200 text-[13px] font-medium focus:outline-none focus:border-[#00E5FF]/50 focus:bg-[#151a25]/50 transition-all placeholder:text-zinc-600 shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)] hover:border-white/10 focus:shadow-[inset_0_0_15px_rgba(16,185,129,0.1)]"
           />
         </div>
       </div>
@@ -41,26 +41,33 @@ export const SidebarMenu: React.FC<{
           <div className="text-[10px] font-black text-zinc-600 uppercase tracking-[0.2em] mb-3 px-3">
             {language === 'tr' ? 'Ana Menü' : 'Main Menu'}
           </div>
-          <div className="space-y-1">
-            <button className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-zinc-400 hover:text-white hover:bg-white/[0.03] hover:shadow-[inset_0_0_20px_rgba(255,255,255,0.02)] transition-all group">
+          <div className="space-y-1 relative">
+            {/* Ambient Line */}
+            <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-white/5 rounded-full"></div>
+            
+            <button className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-zinc-400 hover:text-white hover:bg-white/[0.03] hover:shadow-[inset_0_0_20px_rgba(255,255,255,0.02)] transition-all group relative overflow-hidden">
+              <div className="absolute left-0 top-2 bottom-2 w-[2px] bg-[#00E5FF] rounded-r-md opacity-0 group-hover:opacity-100 transition-all shadow-[0_0_10px_rgba(16,185,129,0.8)]"></div>
               <div className="flex items-center gap-3">
-                <Home className="w-[18px] h-[18px] text-zinc-500 group-hover:text-[#00E5FF] group-hover:drop-shadow-[0_0_8px_rgba(0,229,255,0.5)] transition-all" />
+                <Home className="w-[18px] h-[18px] text-zinc-500 group-hover:text-[#00E5FF] group-hover:drop-shadow-[0_0_8px_rgba(16,185,129,0.5)] transition-all" />
                 <span className="text-[13px] font-bold">{language === 'tr' ? 'Ana Sayfa' : 'Home'}</span>
               </div>
             </button>
-            <button className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-zinc-400 hover:text-white hover:bg-white/[0.03] hover:shadow-[inset_0_0_20px_rgba(255,255,255,0.02)] transition-all group">
+            <button className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-zinc-400 hover:text-white hover:bg-white/[0.03] hover:shadow-[inset_0_0_20px_rgba(255,255,255,0.02)] transition-all group relative overflow-hidden">
+              <div className="absolute left-0 top-2 bottom-2 w-[2px] bg-[#00E5FF] rounded-r-md opacity-0 group-hover:opacity-100 transition-all shadow-[0_0_10px_rgba(16,185,129,0.8)]"></div>
               <div className="flex items-center gap-3">
                 <Cherry className="w-[18px] h-[18px] text-zinc-500 group-hover:text-pink-400 group-hover:drop-shadow-[0_0_8px_rgba(244,114,182,0.5)] transition-all" />
                 <span className="text-[13px] font-bold">Casino</span>
               </div>
             </button>
-            <button className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-zinc-400 hover:text-white hover:bg-white/[0.03] hover:shadow-[inset_0_0_20px_rgba(255,255,255,0.02)] transition-all group">
+            <button className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-zinc-400 hover:text-white hover:bg-white/[0.03] hover:shadow-[inset_0_0_20px_rgba(255,255,255,0.02)] transition-all group relative overflow-hidden">
+              <div className="absolute left-0 top-2 bottom-2 w-[2px] bg-[#00E5FF] rounded-r-md opacity-0 group-hover:opacity-100 transition-all shadow-[0_0_10px_rgba(16,185,129,0.8)]"></div>
               <div className="flex items-center gap-3">
-                <PlaySquare className="w-[18px] h-[18px] text-zinc-500 group-hover:text-blue-400 group-hover:drop-shadow-[0_0_8px_rgba(96,165,250,0.5)] transition-all" />
+                <PlaySquare className="w-[18px] h-[18px] text-zinc-500 group-hover:text-[#00E5FF] group-hover:drop-shadow-[0_0_8px_rgba(16,185,129,0.5)] transition-all" />
                 <span className="text-[13px] font-bold">{language === 'tr' ? 'Canlı Casino' : 'Live Casino'}</span>
               </div>
             </button>
-            <button className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-zinc-400 hover:text-white hover:bg-white/[0.03] hover:shadow-[inset_0_0_20px_rgba(255,255,255,0.02)] transition-all group">
+            <button className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-zinc-400 hover:text-white hover:bg-white/[0.03] hover:shadow-[inset_0_0_20px_rgba(255,255,255,0.02)] transition-all group relative overflow-hidden">
+              <div className="absolute left-0 top-2 bottom-2 w-[2px] bg-[#00E5FF] rounded-r-md opacity-0 group-hover:opacity-100 transition-all shadow-[0_0_10px_rgba(16,185,129,0.8)]"></div>
               <div className="flex items-center gap-3">
                 <Gift className="w-[18px] h-[18px] text-zinc-500 group-hover:text-yellow-400 group-hover:drop-shadow-[0_0_8px_rgba(250,204,21,0.5)] transition-all" />
                 <span className="text-[13px] font-bold">{language === 'tr' ? 'Promosyonlar' : 'Promotions'}</span>
@@ -98,6 +105,31 @@ export const SidebarMenu: React.FC<{
                 <Clock className="w-[18px] h-[18px] text-blue-500 drop-shadow-[0_0_8px_rgba(59,130,246,0.4)]" />
                 <span className="text-[13px] font-bold">Yaklaşan Maçlar</span>
               </div>
+            </button>
+          </div>
+        </div>
+
+        {/* E-Spor / Simülasyon Isolé Kategori */}
+        <div>
+          <div className="text-[10px] font-black text-[#A855F7] uppercase tracking-[0.2em] mb-3 px-3">
+            E-Spor / Simülasyon
+          </div>
+          <div className="space-y-1">
+            <button 
+              onClick={() => setActiveSport('E-Spor / Simülasyon')}
+              className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all group border ${
+                activeSport === 'E-Spor / Simülasyon' 
+                  ? 'bg-[#A855F7]/10 text-[#A855F7] border-[#A855F7]/30 shadow-[0_0_15px_rgba(168,85,247,0.15)]' 
+                  : 'text-zinc-400 hover:text-white border-transparent hover:bg-white/5'
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <Gamepad2 className={`w-[18px] h-[18px] ${
+                  activeSport === 'E-Spor / Simülasyon' ? 'text-[#A855F7] drop-shadow-[0_0_8px_rgba(168,85,247,0.5)]' : 'text-purple-400 group-hover:text-[#A855F7] group-hover:drop-shadow-[0_0_8px_rgba(168,85,247,0.5)]'
+                }`} />
+                <span className={`text-[13px] font-bold ${activeSport === 'E-Spor / Simülasyon' ? 'text-[#A855F7]' : ''}`}>Sanal Sporlar</span>
+              </div>
+              {activeSport === 'E-Spor / Simülasyon' && <ChevronRight className="w-4 h-4 text-[#A855F7] drop-shadow-[0_0_5px_rgba(168,85,247,0.5)]" />}
             </button>
           </div>
         </div>

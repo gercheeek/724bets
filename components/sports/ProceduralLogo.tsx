@@ -57,7 +57,7 @@ const isLikelyFemale = (name: string) => {
   return false;
 };
 
-export const ProceduralLogo: React.FC<ProceduralLogoProps> = ({ name, sport }) => {
+export const ProceduralLogo: React.FC<ProceduralLogoProps> = React.memo(({ name, sport }) => {
   const [imgError, setImgError] = useState(false);
 
   const hash = hashString(name);
@@ -130,29 +130,61 @@ export const ProceduralLogo: React.FC<ProceduralLogoProps> = ({ name, sport }) =
   };
 
   return (
-    <div className="w-full h-full flex items-center justify-center relative drop-shadow-[0_2px_5px_rgba(0,0,0,0.7)]">
+    <div className="w-full h-full flex items-center justify-center relative drop-shadow-[0_5px_15px_rgba(0,0,0,0.5)] group-hover:drop-shadow-[0_10px_25px_rgba(0,0,0,0.8)] transition-all duration-300">
       <svg width="100%" height="100%" viewBox="0 0 40 40" className="absolute inset-0 z-0">
         <defs>
           {renderPattern()}
+          <linearGradient id="gloss" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="white" stopOpacity="0.4" />
+            <stop offset="40%" stopColor="white" stopOpacity="0.05" />
+            <stop offset="100%" stopColor="black" stopOpacity="0.4" />
+          </linearGradient>
+          <radialGradient id="glow" cx="50%" cy="0%" r="100%">
+             <stop offset="0%" stopColor="white" stopOpacity="0.2"/>
+             <stop offset="100%" stopColor="transparent" stopOpacity="0"/>
+          </radialGradient>
         </defs>
         
-        {/* Background Shape: Always Circular Sleek Avatar */}
-        <circle 
-          cx="20" 
-          cy="20" 
-          r="17" 
-          fill={getFill()} 
-          stroke={colors.accent}
-          strokeWidth="1.5"
-        />
-        <circle 
-          cx="20" 
-          cy="20" 
-          r="15" 
-          fill="none" 
-          stroke="rgba(255,255,255,0.2)"
-          strokeWidth="1"
-        />
+        {/* Background Shape */}
+        {isFootball ? (
+          <>
+            <path 
+              d="M 20 2 L 4 7 V 18 C 4 28 14 35 20 38 C 26 35 36 28 36 18 V 7 Z"
+              fill={getFill()} 
+              stroke={colors.accent}
+              strokeWidth="1.5"
+              strokeLinejoin="round"
+            />
+            {/* Gloss Overlay */}
+            <path 
+              d="M 20 2 L 4 7 V 18 C 4 28 14 35 20 38 C 26 35 36 28 36 18 V 7 Z"
+              fill="url(#gloss)" 
+              pointerEvents="none"
+            />
+            <path 
+              d="M 20 4 L 6 8.5 V 18 C 6 26.5 14.5 32.5 20 35 C 25.5 32.5 34 26.5 34 18 V 8.5 Z"
+              fill="none" 
+              stroke="rgba(255,255,255,0.2)"
+              strokeWidth="1"
+            />
+          </>
+        ) : (
+          <>
+            <circle 
+              cx="20" cy="20" r="17" 
+              fill={getFill()} stroke={colors.accent} strokeWidth="1.5"
+            />
+            {/* Gloss Overlay */}
+            <circle 
+              cx="20" cy="20" r="17" 
+              fill="url(#gloss)" pointerEvents="none"
+            />
+            <circle 
+              cx="20" cy="20" r="15" 
+              fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="1"
+            />
+          </>
+        )}
       </svg>
 
       {/* Sport-Specific Watermark (Silhouette / Icon) */}
@@ -183,4 +215,4 @@ export const ProceduralLogo: React.FC<ProceduralLogoProps> = ({ name, sport }) =
       </span>
     </div>
   );
-};
+});

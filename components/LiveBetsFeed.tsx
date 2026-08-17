@@ -254,7 +254,7 @@ const LiveBetsFeed: React.FC = () => {
 
               {/* Ödeme */}
               <div className="col-span-2 flex items-center justify-end group-hover:pr-10 transition-all">
-                <span className={`text-[13px] font-bold ${bet.payout > 0 ? 'text-[#06b6d4]' : 'text-white'}`}>
+                <span className={`text-[13px] font-bold ${bet.payout > 0 ? 'text-[color:var(--theme-accent)]' : 'text-white'}`}>
                   {bet.payout < 0 ? '-' : ''}{formatCurrency(bet.payout, bet.currency)}
                 </span>
                 <CurrencyBadge currency={bet.currency} />

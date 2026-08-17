@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ProceduralLogo } from './ProceduralLogo';
-import logoIndex from '../../public/assets/logo-index.json';
+import logoIndex from '../../src/assets/logo-index.json';
 
 interface PlayerLogoProps {
   name: string;
@@ -12,8 +12,10 @@ const prefixes = 'fc|afc|sc|asd|cf|fk|nk|hnk|us|as|sk|ik|cd|sd|ac|ss|ssc|rsc|sl|
 
 const normalize = (str: string) => {
   if (!str) return '';
+  // Normalize accents (e.g. ê -> e, á -> a)
+  let s = str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  
   const charMap: Record<string, string> = { 'ğ':'g', 'ü':'u', 'ş':'s', 'ı':'i', 'ö':'o', 'ç':'c' };
-  let s = str.toLowerCase();
   s = s.replace(/[ğüşıöç]/g, m => charMap[m]);
   
   s = s.replace(/[^a-z0-9\s]/g, ' ');
@@ -75,8 +77,14 @@ export const findBestLogoMatch = (rawName: string): string | null => {
     match = logoIndex.find((file: string) => file.startsWith(norm + '-')) || null;
   }
   // 3. İçinde geçme eşleşmesi
-  else if (logoIndex.find((file: string) => (norm.includes(file) || (file.includes(norm) && norm.length > 4)) && file.length > 3)) {
-    match = logoIndex.find((file: string) => (norm.includes(file) || (file.includes(norm) && norm.length > 4)) && file.length > 3) || null;
+  else if (logoIndex.find((file: string) => {
+    if (norm.includes('gremio') && file.includes('porto')) return false;
+    return (norm.includes(file) || (file.includes(norm) && norm.length > 4)) && file.length > 3;
+  })) {
+    match = logoIndex.find((file: string) => {
+      if (norm.includes('gremio') && file.includes('porto')) return false;
+      return (norm.includes(file) || (file.includes(norm) && norm.length > 4)) && file.length > 3;
+    }) || null;
   }
   
   logoCache.set(rawName, match);

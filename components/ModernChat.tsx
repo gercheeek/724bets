@@ -614,7 +614,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
     const mainMessages = displayMessages.filter(m => !(m.message || '').startsWith('[BET_REPLY:'));
 
     return (
-        <div id="modern-chat-wrapper" className="flex flex-col h-full bg-[#0f172a]/60 backdrop-blur-xl relative transition-shadow duration-300 border-l border-white/5">
+        <div id="modern-chat-wrapper" className="flex flex-col h-full bg-[#0B0E14]/90 backdrop-blur-xl relative transition-shadow duration-300 border-l border-white/5">
             <CanvasRainEngine active={!!activeEvent} />
             <style>{`
                 @keyframes chatPopIn {

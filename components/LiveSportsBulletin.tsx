@@ -37,10 +37,10 @@ export const LiveSportsBulletin = () => {
         {/* Header */}
         <div className="bg-[#15181E] border-b border-white/5 p-4 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-3">
-            <Activity className="w-6 h-6 text-[#06b6d4]" />
+            <Activity className="w-6 h-6 text-[color:var(--theme-accent)]" />
             <h1 className="text-xl font-black uppercase tracking-wider">Canlı Bahis</h1>
-            <div className={`px-2 py-1 rounded text-[10px] font-bold uppercase tracking-widest flex items-center gap-1 ${isConnected ? 'bg-[#06b6d4]/20 text-[#06b6d4]' : 'bg-red-500/20 text-red-500'}`}>
-              <div className={`w-1.5 h-1.5 rounded-full ${isConnected ? 'bg-[#06b6d4] animate-pulse' : 'bg-red-500'}`}></div>
+            <div className={`px-2 py-1 rounded text-[10px] font-bold uppercase tracking-widest flex items-center gap-1 ${isConnected ? 'bg-[color:var(--theme-accent)]/20 text-[color:var(--theme-accent)]' : 'bg-red-500/20 text-red-500'}`}>
+              <div className={`w-1.5 h-1.5 rounded-full ${isConnected ? 'bg-[color:var(--theme-accent)] animate-pulse' : 'bg-red-500'}`}></div>
               {isConnected ? 'Canlı Bağlantı' : 'Bağlantı Koptu'}
             </div>
           </div>
@@ -67,7 +67,7 @@ export const LiveSportsBulletin = () => {
                 <div key={event.id} className="bg-[#1C2028] border border-white/5 rounded-xl p-4 hover:border-white/10 transition-colors">
                   <div className="flex justify-between items-center mb-4">
                     <div className="flex items-center gap-2">
-                      <span className="text-[#06b6d4] text-xs font-bold bg-[#06b6d4]/10 px-2 py-1 rounded">{event.data?.sport?.name || event.sport || 'Spor'}</span>
+                      <span className="text-[color:var(--theme-accent)] text-xs font-bold bg-[color:var(--theme-accent)]/10 px-2 py-1 rounded">{event.data?.sport?.name || event.sport || 'Spor'}</span>
                       <span className="text-zinc-400 text-xs font-medium flex items-center gap-1">
                         <Clock className="w-3 h-3" /> {new Date(event.data?.time).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}
                       </span>
@@ -91,15 +91,15 @@ export const LiveSportsBulletin = () => {
                     <div className="flex gap-2">
                       <button className="bg-[#232833] hover:bg-[#2A2F3D] border border-white/5 px-6 py-3 rounded-lg flex flex-col items-center justify-center min-w-[80px] transition-colors">
                         <span className="text-zinc-400 text-xs font-bold mb-1">1</span>
-                        <span className="text-[#06b6d4] font-black text-lg">2.10</span>
+                        <span className="text-[color:var(--theme-accent)] font-black text-lg">2.10</span>
                       </button>
                       <button className="bg-[#232833] hover:bg-[#2A2F3D] border border-white/5 px-6 py-3 rounded-lg flex flex-col items-center justify-center min-w-[80px] transition-colors">
                         <span className="text-zinc-400 text-xs font-bold mb-1">X</span>
-                        <span className="text-[#06b6d4] font-black text-lg">3.40</span>
+                        <span className="text-[color:var(--theme-accent)] font-black text-lg">3.40</span>
                       </button>
                       <button className="bg-[#232833] hover:bg-[#2A2F3D] border border-white/5 px-6 py-3 rounded-lg flex flex-col items-center justify-center min-w-[80px] transition-colors">
                         <span className="text-zinc-400 text-xs font-bold mb-1">2</span>
-                        <span className="text-[#06b6d4] font-black text-lg">2.80</span>
+                        <span className="text-[color:var(--theme-accent)] font-black text-lg">2.80</span>
                       </button>
                     </div>
                   </div>

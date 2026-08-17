@@ -47,53 +47,72 @@ export const MyBetsView: React.FC<{ onSelectMatch?: (match: any) => void }> = ({
 
   const toggleExpand = (id: string) => setExpandedId(prev => prev === id ? null : id);
   
-  useEffect(() => {
-    // Load bets from local storage
-    const savedBets = localStorage.getItem('site_my_bets');
-    if (savedBets) {
-      try {
-        const parsed = JSON.parse(savedBets);
-        setBets(parsed);
-      } catch (e) {
-        console.error("Error parsing bets", e);
-      }
+  const fetchBets = async () => {
+    try {
+        const userRes = await fetch('http://localhost:3001/api/user/mock', { method: 'POST' });
+        const userData = await userRes.json();
+        if (!userData.success) return;
+
+        const betsRes = await fetch(`http://localhost:3001/api/bets?userId=${userData.user.id}`);
+        const betsData = await betsRes.json();
+        
+        if (betsData.success) {
+            const formattedBets = betsData.bets.map((b: any) => ({
+                id: b.id,
+                timestamp: new Date(b.createdAt).getTime(),
+                amount: b.stake,
+                totalOdds: b.totalOdds,
+                potentialPayout: b.possibleWin,
+                status: b.status === 'pending' ? 'PENDING' : b.status === 'won' ? 'WON' : b.status === 'lost' ? 'LOST' : 'CASHED_OUT',
+                selections: b.items.map((item: any) => ({
+                    id: item.id,
+                    matchId: item.matchId,
+                    matchName: `${item.teamHome} - ${item.teamAway}`,
+                    selectionName: item.selection,
+                    odd: item.odds,
+                    status: 'PENDING'
+                }))
+            }));
+            setBets(formattedBets);
+        }
+    } catch (e) {
+        console.error("Fetch bets failed", e);
     }
+  };
+
+  useEffect(() => {
+    fetchBets();
   }, []);
 
-  const handleCashout = async (betId: string, amount: number) => {
+  const handleCashout = async (betId: string, _simulatedAmount: number) => {
     setIsCashingOut(true);
     
-    // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, 1200));
-
     try {
-      // 1. Get current member to update balance
-      const memberStr = localStorage.getItem('site_member');
-      if (memberStr) {
-        const member = JSON.parse(memberStr);
-        member.balance = (member.balance || 0) + amount;
-        localStorage.setItem('site_member', JSON.stringify(member));
-        // Dispatch storage event so topnav updates instantly
-        window.dispatchEvent(new Event('storage'));
-      }
-
-      // 2. Update bet status in localStorage
-      const updatedBets = bets.map(bet => {
-        if (bet.id === betId) {
-          return {
-            ...bet,
-            status: 'CASHED_OUT' as const,
-            potentialPayout: amount // set payout to cashed out amount
-          };
-        }
-        return bet;
-      });
+      const userRes = await fetch('http://localhost:3001/api/user/mock', { method: 'POST' });
+      const userData = await userRes.json();
       
-      setBets(updatedBets);
-      localStorage.setItem('site_my_bets', JSON.stringify(updatedBets));
+      const cashoutRes = await fetch('http://localhost:3001/api/cashout', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userId: userData.user.id, betId })
+      });
+      const cashoutData = await cashoutRes.json();
+      
+      if (cashoutData.success) {
+          alert(`✅ Bahis başarıyla bozduruldu!\nBozdurulan Tutar: ${cashoutData.cashoutAmount.toFixed(2)} TL\nYeni Bakiye: ${cashoutData.newBalance.toFixed(2)} TL`);
+          
+          const member = { id: userData.user.id, username: userData.user.username, balance: cashoutData.newBalance };
+          localStorage.setItem('site_member', JSON.stringify(member));
+          window.dispatchEvent(new Event('storage'));
+          
+          fetchBets(); // Reload bets
+      } else {
+          alert(`❌ Hata: ${cashoutData.error}`);
+      }
 
     } catch (e) {
       console.error("Cashout failed", e);
+      alert("❌ Sunucuya bağlanırken hata oluştu.");
     } finally {
       setIsCashingOut(false);
       setCashoutConfirmId(null);

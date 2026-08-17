@@ -81,6 +81,7 @@ import MobileQuickLinks from './components/MobileQuickLinks';
 import Slider2 from './components/Slider2';
 import PopularBets from './components/PopularBets';
 const ProfileDashboard = React.lazy(() => import('./components/ProfileDashboard'));
+const SocialBettingView = React.lazy(() => import('./components/SocialBettingView'));
 import GameLobbyTeaser from './components/GameLobbyTeaser';
 const TV724View = React.lazy(() => import('./components/TV724View'));
 import LiveMatches from './components/LiveMatches';
@@ -205,9 +206,46 @@ export default function App() {
   const navigate = useNavigate();
   const [isBypassed, setIsBypassed] = useState(true);
 
-  const currentPath = location.pathname.substring(1); // remove leading slash
-  // Determine view from URL. If empty or /anasayfa, it's home. Otherwise map it, or fallback to exact path.
-  const view = location.pathname === '/' || currentPath === 'anasayfa' ? 'home' : (pathToView[currentPath] || currentPath);
+  const getDerivedView = (path: string) => {
+    const parts = path.split('/').filter(Boolean);
+    const validLangs = ['tr', 'en', 'pt', 'es'];
+    const hasLang = parts[0] && validLangs.includes(parts[0]);
+    const cleanParts = hasLang ? parts.slice(1) : parts;
+    const cleanPath = '/' + cleanParts.join('/');
+    
+    if (cleanPath === '/' || cleanPath === '/anasayfa') return 'home';
+    if (cleanPath.startsWith('/spor')) return 'spor724';
+    if (cleanPath.startsWith('/casino') && !cleanPath.includes('demo')) return 'casino';
+    if (cleanPath.startsWith('/canli-casino')) return 'live-casino';
+    if (cleanPath === '/demo-oyunlar' || cleanPath === '/casino/demo' || cleanPath === '/demo') return 'demo';
+    if (cleanPath === '/raffles') return 'cekilis';
+    if (cleanPath === '/bilet') return 'raffle';
+    if (cleanPath === '/canli') return 'sports';
+    if (cleanPath === '/lucky-wheel' || cleanPath === '/luckywheel' || cleanPath === '/cark') return 'luckywheel';
+    if (cleanPath === '/brands' || cleanPath === '/trusted-sites') return 'trusted-sites';
+    if (cleanPath === '/admin') return 'admin';
+    if (cleanPath === '/analysis') return 'analysis';
+    if (cleanPath === '/coupons') return 'coupons';
+    if (cleanPath === '/724tv') return '724tv';
+    if (cleanPath === '/trusted-detail') return 'trusted-detail';
+    if (cleanPath === '/bulten') return 'bulten';
+    
+    const rawView = cleanParts[0] || '';
+    return pathToView[rawView] || rawView || 'home';
+  };
+
+  const view = getDerivedView(location.pathname);
+
+  // Set data-section for Modular Theming
+  useEffect(() => {
+    let section = 'sports'; // default
+    if (view === 'casino' || view === 'live-casino' || view === 'demo') {
+      section = 'casino';
+    } else if (view === 'spor724' || view === 'sports') {
+      section = 'sports';
+    }
+    document.documentElement.setAttribute('data-section', section);
+  }, [view]);
 
   const setView = (v: string) => {
     const targetPath = viewToPath[v] || v;
@@ -276,7 +314,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
   const [ipBlocked, setIpBlocked] = useState(false);
   const [fadeOutLoader, setFadeOutLoader] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
-  const [view, setView] = useState<'home' | 'sports' | 'sports2' | 'sports3' | 'sports4' | 'sports5' | 'admin' | 'login' | 'brands' | 'analysis' | 'blackjack' | 'blackjack-pro' | 'casino2' | 'loyalty' | 'raffle' | 'cekilis' | 'pool' | 'wheel' | 'luckywheel' | 'giveaway' | 'coupons' | '724tv' | 'trusted-sites' | 'trusted-detail' | 'demo' | 'kral' | 'promo' | 'referral' | 'profile' | 'slotra' | 'slotra2' | 'mobile-bulletin' | 'spor724' | 'plinko' | 'limbo' | 'chicken-run' | 'dice' | 'mines' | 'keno' | 'war' | 'hilo' | 'roulette' | 'crash-turbo' | 'turbo-mines' | 'hacksaw' | 'redtiger' | 'upcomingMatches' | 'rewards' | 'xslot' | 'xlot' | 'bulten'>(window.location.pathname.startsWith('/spor') ? 'spor724' : window.location.pathname.includes('lucky') ? 'luckywheel' : (window.location.pathname.includes('xslot') || window.location.pathname.includes('xlot')) ? 'xslot' : 'home');
+  const [view, setView] = useState<'home' | 'social' | 'sports' | 'sports2' | 'sports3' | 'sports4' | 'sports5' | 'admin' | 'login' | 'brands' | 'analysis' | 'blackjack' | 'blackjack-pro' | 'casino2' | 'loyalty' | 'raffle' | 'cekilis' | 'pool' | 'wheel' | 'luckywheel' | 'giveaway' | 'coupons' | '724tv' | 'trusted-sites' | 'trusted-detail' | 'demo' | 'kral' | 'promo' | 'referral' | 'profile' | 'slotra' | 'slotra2' | 'mobile-bulletin' | 'spor724' | 'plinko' | 'limbo' | 'chicken-run' | 'dice' | 'mines' | 'keno' | 'war' | 'hilo' | 'roulette' | 'crash-turbo' | 'turbo-mines' | 'hacksaw' | 'redtiger' | 'upcomingMatches' | 'rewards' | 'xslot' | 'xlot' | 'bulten'>(window.location.pathname.startsWith('/spor') ? 'spor724' : window.location.pathname.includes('lucky') ? 'luckywheel' : (window.location.pathname.includes('xslot') || window.location.pathname.includes('xlot')) ? 'xslot' : 'home');
   const [bultenLoading, setBultenLoading] = useState(true);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [iframeLoading, setIframeLoading] = useState(true);
@@ -1492,50 +1530,10 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
       const pathWithoutLang = '/' + actualPathParts.join('/');
       const cleanPath = pathWithoutLang.replace(/\/$/, '') || '/';
 
-      if (cleanPath === '/demo-oyunlar' || cleanPath === '/casino/demo' || cleanPath === '/demo') {
-        setView('demo');
-      } else if (cleanPath === '/raffles') {
-        setView('cekilis');
-      } else if (cleanPath === '/bilet') {
-        setView('raffle');
-      } else if (cleanPath === '/deposit' || cleanPath === '/withdraw') {
+      // Handle special modal URLs that shouldn't change the underlying view but show a modal
+      if (cleanPath === '/deposit' || cleanPath === '/withdraw') {
         window.dispatchEvent(new CustomEvent('openDepositModal', { detail: { tab: cleanPath.substring(1) } }));
-        window.history.replaceState(null, '', `/${actualUrlLang || 'tr'}`);
-        setView('home');
-      } else if (cleanPath === '/admin') {
-        setView('admin');
-      } else if (cleanPath === '/') {
-        setView('home');
-      } else if (cleanPath === '/brands') {
-        setView('trusted-sites');
-      } else if (cleanPath === '/analysis') {
-        setView('analysis');
-      } else if (cleanPath === '/coupons') {
-        setView('coupons');
-      } else if (cleanPath === '/724tv') {
-        setView('724tv');
-      } else if (cleanPath === '/trusted-sites') {
-        setView('trusted-sites');
-      } else if (cleanPath === '/trusted-detail') {
-        setView('trusted-detail');
-      } else if (cleanPath === '/casino') {
-        setView('casino');
-      } else if (cleanPath.startsWith('/spor')) {
-        setView('spor724');
-      } else if (cleanPath === '/canli') {
-        setView('sports');
-      } else if (cleanPath === '/lucky-wheel' || cleanPath === '/luckywheel' || cleanPath === '/cark') {
-        setView('luckywheel');
-      } else if (cleanPath === '/bulten') {
-        setView('bulten');
-      } else {
-        const viewName = cleanPath.substring(1);
-        const validViews = ['adventure', 'blackjack', 'blackjack-pro', 'casino2', 'loyalty', 'pool', 'wheel', 'luckywheel', 'giveaway', 'sports', 'sports2', 'sports3', 'sports4', 'sports5', 'demo', 'kral', 'analysis', 'plinko', 'limbo', 'chicken-run', 'dice', 'mines', 'keno', 'war', 'hilo', 'roulette', 'crash-turbo', 'turbo-mines', 'hacksaw', 'redtiger', 'upcomingMatches', 'xslot', 'xlot', 'bulten'];
-        if (validViews.includes(viewName)) {
-          setView(viewName as any);
-        } else {
-          setView('home');
-        }
+        navigate(`/${actualUrlLang || 'tr'}`, { replace: true });
       }
     };
 
@@ -1850,12 +1848,14 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
     // Yönlendirmeyi anında yap (eski 5 sn / 3 sn beklemeleri kaldırıldı)
     const currentLang = i18n.language ? i18n.language.split('-')[0] : 'tr';
     const langPrefix = ['tr', 'en', 'pt', 'es'].includes(currentLang) ? currentLang : 'tr';
-    const newUrl = v === 'home' ? `/${langPrefix}` : (v === 'spor724' || v === 'sports' ? `/${langPrefix}/spor` : `/${langPrefix}/${v}`);
     
-    window.history.pushState(null, '', newUrl);
+    // Map view names to proper paths using viewToPath where possible, else fallback
+    const targetPath = viewToPath[v] || v;
+    const newUrl = v === 'home' ? `/${langPrefix}` : (v === 'spor724' || v === 'sports' ? `/${langPrefix}/spor` : `/${langPrefix}/${targetPath}`);
     
-    // setView'in React hook'larını tetiklemesi için
-    window.dispatchEvent(new PopStateEvent('popstate'));
+    startTransition(() => {
+      navigate(newUrl);
+    });
 
       const sportsViews = ['gercek', 'sports', 'spor724', 'slotra', 'spor'];
       if (sportsViews.includes(v)) {
@@ -1929,7 +1929,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
   };
 
   const isLocalhost = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
-  const isMaintenanceActive = false; // Disabled by request
+  const isMaintenanceActive = !isLocalhost; // Take the site offline for production, only work on local
 
   const getNextThreeAnalyses = () => {
     const combined = analyses.length > 0 ? analyses : demoAnalyses;
@@ -2234,10 +2234,10 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
             )}
 
              {/* 2. ORTA İÇERİK */}
-            <div className={appStage !== 'loading' ? `app-reveal-mask flex-1 flex flex-col min-w-0 bg-[#0A0C10] relative overflow-hidden shadow-[inset_0_0_100px_rgba(0,0,0,1)] w-full` : `app-hidden-initial flex-1 flex flex-col min-w-0 bg-[#0A0C10] relative overflow-hidden shadow-[inset_0_0_100px_rgba(0,0,0,1)] w-full`}>
+            <div className={appStage !== 'loading' ? `app-reveal-mask flex-1 flex flex-col min-w-0 bg-[#0B0E14] relative overflow-hidden shadow-[inset_0_0_100px_rgba(0,0,0,1)] w-full` : `app-hidden-initial flex-1 flex flex-col min-w-0 bg-[#0B0E14] relative overflow-hidden shadow-[inset_0_0_100px_rgba(0,0,0,1)] w-full`}>
              
-             {/* Glossy overlay for the entire center */}
-             <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+PHBhdGggZD0iTTAgMGg0MHY0MEgweiIgZmlsbD0ibm9uZSIvPjxwYXRoIGQ9Ik0wIDEwaDQwTTEwIDB2NDBNMCAzMGg0ME0zMCAwdjQwIiBzdHJva2U9InJnYmEoMjU1LCAyNTUsIDI1NSwgMC4wMSkiIHN0cm9rZS13aWR0aD0iMSIvPjwvc3ZnPg==')] pointer-events-none z-0 opacity-30 mix-blend-screen"></div>
+             {/* Sleek ambient background light instead of busy grid */}
+             <div className="absolute top-[-20%] left-[50%] translate-x-[-50%] w-[1000px] h-[600px] bg-[radial-gradient(ellipse_at_top,rgba(0,229,255,0.03),transparent_70%)] pointer-events-none z-0"></div>
 
              {/* MASAÜSTÜ HEADER */}
              {view !== 'kral' && (
@@ -3018,6 +3018,11 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
           </div>
         )}
 
+        {view === 'social' && (
+          <div className="animate-fade-in w-full max-w-6xl mx-auto px-4 py-8" style={{ minHeight: '100vh' }}>
+            <SocialBettingView />
+          </div>
+        )}
 
         {view === 'referral' && (
           <div className="animate-fade-in">

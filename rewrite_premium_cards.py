@@ -1,136 +1,125 @@
-import re
+import os
 
-with open('/Users/alex/Desktop/7_24bets-landing-page/components/GuestLanding.tsx', 'r') as f:
+file_path = 'components/sports/MatchCard.tsx'
+with open(file_path, 'r') as f:
     content = f.read()
 
-start_marker = "{/* CATEGORY CARDS */}"
-end_marker = "{/* TICKER */}"
+# I will completely rewrite the MatchCard component using a regex or simple string replacement.
+# But string replacement is safer.
+start_marker = "export const MatchCard: React.FC<MatchCardProps> = memo(({ match, isGoal, onSelect }) => {"
+end_marker = "});"
 
 start_idx = content.find(start_marker)
-end_idx = content.find(end_marker)
+end_idx = content.rfind(end_marker) + len(end_marker)
 
-new_cards = """{/* CATEGORY CARDS */}
-            <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mt-10 mb-6">
-                
-                {/* Casino */}
-                <div onClick={() => onViewChange('blackjack')} className="group relative w-full rounded-[32px] bg-[#07090D] border border-white/5 p-3 cursor-pointer overflow-hidden transition-all duration-500 hover:border-[#06b6d4]/30 hover:shadow-[0_20px_40px_rgba(0,0,0,0.8)] hover:-translate-y-2">
-                    {/* Animated background glow */}
-                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[200px] bg-[#06b6d4]/20 blur-[100px] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
+new_match_card = """export const MatchCard: React.FC<MatchCardProps> = memo(({ match, isGoal, onSelect }) => {
+  const { betSlip, addSelection } = useBetSlip();
+  const isTennis = match.sport?.toLowerCase().includes('tenis') || match.sport?.toLowerCase().includes('tennis');
 
-                    {/* Image Section */}
-                    <div className="relative w-full h-[180px] md:h-[220px] rounded-[24px] overflow-hidden">
-                        <img src="/images/ai-generated/casino_card.jpg" className="absolute inset-0 w-full h-full object-cover transform scale-110 group-hover:scale-100 transition-all duration-700 ease-out" alt="Casino" />
-                        <div className="absolute inset-0 bg-gradient-to-t from-[#07090D] via-[#07090D]/40 to-transparent"></div>
-                        
-                        {/* Top Floating Badge */}
-                        <div className="absolute top-4 right-4 bg-black/50 backdrop-blur-md border border-white/10 rounded-full px-3 py-1.5 flex items-center gap-2 shadow-lg">
-                            <span className="w-2 h-2 rounded-full bg-[#06b6d4] animate-ping absolute"></span>
-                            <span className="w-2 h-2 rounded-full bg-[#06b6d4] relative z-10"></span>
-                            <span className="text-[#06b6d4] text-[10px] font-black uppercase tracking-[0.2em] relative z-10">CANLI MASALAR</span>
-                        </div>
-                    </div>
+  const homeScore = isTennis ? (match.info?.score1 || '0') : (String(match.score || '-').split(' - ')[0] || '0');
+  const awayScore = isTennis ? (match.info?.score2 || '0') : (String(match.score || '-').split(' - ')[1] || '0');
 
-                    {/* Content Section */}
-                    <div className="px-6 py-6 relative z-10 flex flex-col">
-                        <h3 className="text-3xl font-black text-white mb-2 font-['Outfit'] tracking-tight group-hover:text-[#06b6d4] transition-colors duration-300">
-                            Casino
-                        </h3>
-                        <p className="text-gray-400 text-sm font-medium mb-8 leading-relaxed">
-                            Gerçek krupiyeler eşliğinde, yüksek limitli VIP masalarda elit ve kesintisiz canlı casino deneyimi.
-                        </p>
-                        
-                        <div className="flex items-center justify-between mt-auto">
-                            <span className="text-[#06b6d4] font-bold text-sm tracking-wide opacity-0 group-hover:opacity-100 transform -translate-x-4 group-hover:translate-x-0 transition-all duration-500">
-                                Lobiye Git
-                            </span>
-                            <div className="w-12 h-12 rounded-full border border-white/10 bg-white/5 flex items-center justify-center group-hover:bg-[#06b6d4] group-hover:border-[#06b6d4] group-hover:shadow-[0_0_20px_rgba(6,182,212,0.4)] transition-all duration-300">
-                                <svg className="w-5 h-5 text-white transform group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"/></svg>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+  const getStatusText = () => {
+    if (match.isLive && match.minute) return match.minute;
+    if (match.isLive) return "Live";
+    if (match.matchDate) return `${match.matchDate}, ${match.startTime}`;
+    return match.startTime;
+  };
 
-                {/* Spor Bahisleri */}
-                <div onClick={() => onViewChange('sports')} className="group relative w-full rounded-[32px] bg-[#07090D] border border-white/5 p-3 cursor-pointer overflow-hidden transition-all duration-500 hover:border-[#10b981]/30 hover:shadow-[0_20px_40px_rgba(0,0,0,0.8)] hover:-translate-y-2">
-                    {/* Animated background glow */}
-                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[200px] bg-[#10b981]/20 blur-[100px] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
+  const handleBetClick = (e: React.MouseEvent, id: string, name: string, odd: string, marketName: string) => {
+    e.stopPropagation();
+    if (!odd || odd === '-') return;
+    addSelection({
+      id: `${match.id}_${id}`,
+      matchId: match.id,
+      matchName: `${match.home} - ${match.away}`,
+      marketName: marketName,
+      selectionName: name,
+      odd: parseFloat(odd)
+    });
+  };
 
-                    {/* Image Section */}
-                    <div className="relative w-full h-[180px] md:h-[220px] rounded-[24px] overflow-hidden">
-                        <img src="/images/ai-generated/sports_card.jpg" className="absolute inset-0 w-full h-full object-cover transform scale-110 group-hover:scale-100 transition-all duration-700 ease-out" alt="Spor Bahisleri" />
-                        <div className="absolute inset-0 bg-gradient-to-t from-[#07090D] via-[#07090D]/40 to-transparent"></div>
-                        
-                        {/* Top Floating Badge */}
-                        <div className="absolute top-4 right-4 bg-black/50 backdrop-blur-md border border-white/10 rounded-full px-3 py-1.5 flex items-center gap-2 shadow-lg">
-                            <span className="w-2 h-2 rounded-full bg-[#10b981] animate-ping absolute"></span>
-                            <span className="w-2 h-2 rounded-full bg-[#10b981] relative z-10"></span>
-                            <span className="text-[#10b981] text-[10px] font-black uppercase tracking-[0.2em] relative z-10">YÜKSEK ORANLAR</span>
-                        </div>
-                    </div>
+  const isSelected = (id: string) => betSlip.some(s => s.id === `${match.id}_${id}`);
 
-                    {/* Content Section */}
-                    <div className="px-6 py-6 relative z-10 flex flex-col">
-                        <h3 className="text-3xl font-black text-white mb-2 font-['Outfit'] tracking-tight group-hover:text-[#10b981] transition-colors duration-300">
-                            Spor Bahisleri
-                        </h3>
-                        <p className="text-gray-400 text-sm font-medium mb-8 leading-relaxed">
-                            Dünyanın en büyük liglerinde eşsiz bahis çeşitliliği, en yüksek oranlar ve anlık canlı skorlar.
-                        </p>
-                        
-                        <div className="flex items-center justify-between mt-auto">
-                            <span className="text-[#10b981] font-bold text-sm tracking-wide opacity-0 group-hover:opacity-100 transform -translate-x-4 group-hover:translate-x-0 transition-all duration-500">
-                                Bahis Yap
-                            </span>
-                            <div className="w-12 h-12 rounded-full border border-white/10 bg-white/5 flex items-center justify-center group-hover:bg-[#10b981] group-hover:border-[#10b981] group-hover:shadow-[0_0_20px_rgba(16,185,129,0.4)] transition-all duration-300">
-                                <svg className="w-5 h-5 text-white transform group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"/></svg>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+  return (
+    <div 
+      onClick={() => onSelect && onSelect(match)}
+      className={`bg-[#161a20] p-3.5 flex flex-col gap-3 group relative transition-colors border-b border-white/5 hover:bg-[#1a1e24] cursor-pointer w-full mb-[1px]`}
+    >
+      {/* Goal Overlay */}
+      {isGoal && (
+        <div className="absolute inset-0 bg-emerald-500/10 pointer-events-none border border-emerald-500/50 animate-pulse z-0"></div>
+      )}
 
-                {/* 724 Orijinal */}
-                <div onClick={() => onViewChange('originals')} className="group relative w-full rounded-[32px] bg-[#07090D] border border-white/5 p-3 cursor-pointer overflow-hidden transition-all duration-500 hover:border-yellow-500/30 hover:shadow-[0_20px_40px_rgba(0,0,0,0.8)] hover:-translate-y-2">
-                    {/* Animated background glow */}
-                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[200px] bg-yellow-500/20 blur-[100px] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
+      {/* Header: League & Status */}
+      <div className="flex justify-between items-center z-10 w-full mb-1">
+        <div className="flex items-center gap-1.5 text-[11px] font-semibold text-[#8a929a] uppercase tracking-wider">
+           <span className="truncate max-w-[200px]">{match.country ? `${match.country} • ` : ''}{match.league}</span>
+        </div>
+        
+        <div className="flex items-center gap-1.5">
+            <span className={`text-[11px] font-bold ${match.isLive ? 'text-[#00ff87]' : 'text-[#8a929a]'}`}>
+                {getStatusText()}
+            </span>
+            {match.isLive && (
+                <div className="w-1.5 h-1.5 rounded-full bg-[#00ff87] animate-pulse"></div>
+            )}
+        </div>
+      </div>
 
-                    {/* Image Section */}
-                    <div className="relative w-full h-[180px] md:h-[220px] rounded-[24px] overflow-hidden">
-                        <img src="/images/ai-generated/originals_card.jpg" className="absolute inset-0 w-full h-full object-cover transform scale-110 group-hover:scale-100 transition-all duration-700 ease-out" alt="724 Orijinal" />
-                        <div className="absolute inset-0 bg-gradient-to-t from-[#07090D] via-[#07090D]/40 to-transparent"></div>
-                        
-                        {/* Top Floating Badge */}
-                        <div className="absolute top-4 right-4 bg-black/50 backdrop-blur-md border border-white/10 rounded-full px-3 py-1.5 flex items-center gap-2 shadow-lg">
-                            <span className="text-yellow-500 text-[10px] font-black uppercase tracking-[0.2em] relative z-10 flex items-center gap-1.5">
-                                <svg className="w-3 h-3 fill-yellow-500" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                                ÖZEL ÜRETİM
-                            </span>
-                        </div>
-                    </div>
-
-                    {/* Content Section */}
-                    <div className="px-6 py-6 relative z-10 flex flex-col">
-                        <h3 className="text-3xl font-black text-white mb-2 font-['Outfit'] tracking-tight group-hover:text-yellow-400 transition-colors duration-300">
-                            724 Orijinal
-                        </h3>
-                        <p className="text-gray-400 text-sm font-medium mb-8 leading-relaxed">
-                            Sadece bize özel olarak üretilen efsanevi orijinal oyunlar. Farklı heyecanlar, devasa kazançlar.
-                        </p>
-                        
-                        <div className="flex items-center justify-between mt-auto">
-                            <span className="text-yellow-400 font-bold text-sm tracking-wide opacity-0 group-hover:opacity-100 transform -translate-x-4 group-hover:translate-x-0 transition-all duration-500">
-                                Oyunları Keşfet
-                            </span>
-                            <div className="w-12 h-12 rounded-full border border-white/10 bg-white/5 flex items-center justify-center group-hover:bg-yellow-500 group-hover:border-yellow-500 group-hover:shadow-[0_0_20px_rgba(234,179,8,0.4)] transition-all duration-300">
-                                <svg className="w-5 h-5 text-white transform group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"/></svg>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+      {/* Teams & Scores */}
+      <div className="flex justify-between items-center z-10 w-full mb-2">
+         {/* Teams */}
+         <div className="flex flex-col gap-2.5 w-[60%]">
+            <div className="flex items-center gap-3">
+               <PlayerLogo name={match.home} url={match.homeLogo} isFootball={true} />
+               <span className="text-[14px] font-semibold text-white truncate">{match.home}</span>
             </div>
+            <div className="flex items-center gap-3">
+               <PlayerLogo name={match.away} url={match.awayLogo} isFootball={true} />
+               <span className="text-[14px] font-semibold text-white truncate">{match.away}</span>
+            </div>
+         </div>
 
-            """
+         {/* Scores */}
+         {match.isLive && (
+             <div className="flex flex-col gap-2.5 items-end pr-4 w-[15%]">
+                <span className="text-[15px] font-bold text-white">{homeScore}</span>
+                <span className="text-[15px] font-bold text-white">{awayScore}</span>
+             </div>
+         )}
 
-if start_idx != -1 and end_idx != -1:
-    content = content[:start_idx] + new_cards + content[end_idx:]
-    with open('/Users/alex/Desktop/7_24bets-landing-page/components/GuestLanding.tsx', 'w') as f:
-        f.write(content)
+         {/* Odds Buttons */}
+         <div className="flex items-center gap-1.5 w-[25%] ml-auto">
+            {[{id: match.homeId, name: '1', odd: match.homeOdd}, 
+              {id: match.drawId, name: 'X', odd: match.drawOdd}, 
+              {id: match.awayId, name: '2', odd: match.awayOdd}].map((btn) => (
+                <button
+                  key={btn.id}
+                  onClick={(e) => handleBetClick(e, btn.id, btn.name, btn.odd, 'Maç Sonucu')}
+                  className={`flex-1 flex flex-col md:flex-row items-center justify-between px-2.5 py-2 rounded-md transition-all font-semibold text-[13px] border border-transparent ${
+                    isSelected(btn.id)
+                      ? 'bg-yellow-500 text-black shadow-[0_0_10px_rgba(234,179,8,0.3)]'
+                      : btn.odd && btn.odd !== '-'
+                        ? 'bg-[#222730] hover:bg-[#2a303c] text-white hover:border-white/10'
+                        : 'bg-[#1c2027] text-zinc-600 cursor-not-allowed'
+                  }`}
+                >
+                  <span className={`text-[11px] ${isSelected(btn.id) ? 'text-black/70' : 'text-[#8a929a]'}`}>{btn.name}</span>
+                  <div className={isSelected(btn.id) ? 'text-black font-bold' : ''}>
+                    <AnimatedOdd value={btn.odd} />
+                  </div>
+                </button>
+            ))}
+         </div>
+      </div>
+    </div>
+  );
+});"""
+
+final_content = content[:start_idx] + new_match_card + content[end_idx:]
+
+with open(file_path, 'w') as f:
+    f.write(final_content)
+    
+print("Updated MatchCard.tsx")

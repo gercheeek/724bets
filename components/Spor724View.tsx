@@ -9,7 +9,6 @@ import Footer from './Footer';
 import { ArrowRight, Trophy, Star, Bell, Clock, Search, ShieldCheck, Zap, Activity, Target, Gamepad2, Flame, Volume2, VolumeX, ChevronDown, Radio, Calendar } from 'lucide-react';
 import { SidebarMenu } from './sports/SidebarMenu';
 import { DualRightPanel } from './sports/DualRightPanel';
-import FeaturedCombos from './sports/FeaturedCombos';
 
 import { LiveMatchInline } from './sports/LiveMatchInline';
 import { useBetSlip } from '../contexts/BetSlipContext';
@@ -23,6 +22,7 @@ import ModernChat from './ModernChat';
 import { SporxBetSlip } from './SporxBetSlip';
 import { MatchCard } from './sports/MatchCard';
 import SportsPromoSlider from './sports/SportsPromoSlider';
+import SportsDashboardWidget from './sports/SportsDashboardWidget';
 import SportsBanners from './SportsBanners';
 import BasketballPromoSlider from './sports/BasketballPromoSlider';
 import { TopMatchesWidget } from './sports/TopMatchesWidget';
@@ -32,6 +32,7 @@ import MyBetsEmptyState from './sports/MyBetsEmptyState';
 import { PopularEventsAccordion } from './sports/PopularEventsAccordion';
 import { MyBetsView } from './sports/MyBetsView';
 import { PlayerLogo, findBestLogoMatch } from './sports/PlayerLogo';
+import { isSimulatedEvent } from '../utils/simulationUtils';
 
 interface BetSelection {
   id: string;
@@ -110,6 +111,20 @@ const mapCountryName = (name: string, lang: string) => {
   if (norm.includes('paraguay')) return 'Paraguay';
   if (norm.includes('finland') || norm.includes('finlandiya')) return lang === 'tr' ? 'Finlandiya' : 'Finland';
   return name;
+};
+
+
+const formatLeagueName = (name: string, country: string) => {
+  if (!name) return name;
+  let cleaned = name;
+  const parts = cleaned.split(' - ').map(p => p.trim());
+  if (parts.length > 1 && (parts[0] === parts[1] || parts[0] === country)) {
+    parts.shift();
+  }
+  // Remove "(Simulated Reality)" or other long suffixes if needed
+  let finalName = parts.join(' - ');
+  if (finalName.includes('Simulated')) finalName = 'SRL - ' + finalName.replace(' (Simulated Reality League)', '').replace('Simulated Reality', '');
+  return finalName;
 };
 
 const getCountryFlag = (country: string) => {
@@ -269,10 +284,10 @@ export const parseMatchData = (ev: any, language: string): MatchInfo | null => {
       if (Date.now() - finishedMatchTimes[matchId] < 180000) {
         isLive = true;
       }
-  } else if (data.status === 'halftime' || data.minute === 'HT') {
+  } else if (data.status === 'halftime' || data.minute === 'HT' || data.match_minute === 'HT') {
       minute = 'DEVRE ARASI';
-  } else if (data.minute) {
-      const minStr = String(data.minute).trim();
+  } else if (data.match_minute !== undefined || data.minute !== undefined) {
+      const minStr = String(data.match_minute ?? data.minute).trim();
       minute = /^\d+$/.test(minStr) ? `${minStr}'` : minStr;
   } else if (data.extended_status) {
       minute = String(data.extended_status || '').replace('s', '. Set');
@@ -288,7 +303,8 @@ export const parseMatchData = (ev: any, language: string): MatchInfo | null => {
   
   const countryName = mapCountryName(data.country?.name, language);
   const tournamentName = data.tournament?.name || 'Uluslararası Turnuva';
-  const league = countryName ? `${countryName} - ${tournamentName}` : tournamentName;
+  const rawLeague = countryName ? `${countryName} - ${tournamentName}` : tournamentName;
+  const league = formatLeagueName(rawLeague, countryName);
   let sport = mapSportName(data.sport?.name, language);
   
   if (sport === 'Tenis' || sport === 'Tennis') {
@@ -383,17 +399,106 @@ export default function Spor724View({ onNavigate, defaultTab }: Spor724ViewProps
   const { language } = useLanguage();
   const { isConnected, events } = useBetting();
   const [selectedMatch, setSelectedMatch] = useState<MatchInfo | null>(null);
-  const [activeTab, setActiveTab] = useState(defaultTab || 'in-play');
-  const [navTab, setNavTab] = useState('home');
+  
+  const handleSetSelectedMatch = (match: MatchInfo | null) => {
+    setSelectedMatch(match);
+    const rawLang = typeof window !== 'undefined' ? window.location.pathname.split('/')[1] : 'tr';
+    const langPrefix = ['tr', 'en', 'pt', 'es'].includes(rawLang) ? rawLang : 'tr';
+    if (match && match.id) {
+       const newPath = `/${langPrefix}/spor/mac/${match.id}`;
+       window.history.pushState(null, '', newPath);
+       setCurrentPath(newPath);
+    } else {
+       let base = '/spor';
+       if (navTab === 'canli') base = '/spor/canli';
+       else if (navTab === 'upcoming') base = '/spor/yaklasanlar';
+       const sportSlug = activeSport !== allSportsTabName ? `/${mapReverseSportName(activeSport)}` : '';
+       const newPath = `/${langPrefix}${base}${sportSlug}`;
+       window.history.pushState(null, '', newPath);
+       setCurrentPath(newPath);
+    }
+  };
+  const [activeTab, setActiveTab] = useState(() => {
+    const path = typeof window !== 'undefined' ? window.location.pathname : '';
+    if (path.includes('/canli')) return 'in-play';
+    if (path.includes('/yaklasan')) return 'pre-match';
+    return defaultTab || 'in-play';
+  });
+  const [navTab, setNavTab] = useState(() => {
+    const path = typeof window !== 'undefined' ? window.location.pathname : '';
+    if (path.includes('/canli')) return 'canli';
+    if (path.includes('/yaklasan')) return 'upcoming';
+    if (path.includes('/hepsi')) return 'all';
+    if (path.includes('/takip')) return 'followed';
+    if (path.includes('/bahislerim')) return 'mybets';
+    return 'home';
+  });
   const isAuthenticated = typeof window !== 'undefined' ? !!localStorage.getItem('site_member') : false;
   const allSportsTabName = language === 'tr' ? 'Tüm Sporlar' : 'All Sports';
-  const [activeSport, setActiveSport] = useState(allSportsTabName);
+  const [activeSport, setActiveSport] = useState(() => {
+    const path = typeof window !== 'undefined' ? window.location.pathname : '';
+    const parts = path.split('/');
+    const lastPart = parts[parts.length - 1];
+    const slugMap: Record<string, string> = {
+      'football': 'Futbol',
+      'futbol': 'Futbol',
+      'basketball': 'Basketbol',
+      'basketbol': 'Basketbol',
+      'tennis': 'Tenis',
+      'tenis': 'Tenis',
+      'volleyball': 'Voleybol',
+      'voleybol': 'Voleybol',
+      'baseball': 'Beyzbol',
+      'beyzbol': 'Beyzbol',
+      'table-tennis': 'Masa Tenisi',
+      'masa-tenisi': 'Masa Tenisi',
+      'ice-hockey': 'Buz Hokeyi',
+      'buz-hokeyi': 'Buz Hokeyi',
+      'handball': 'Hentbol',
+      'hentbol': 'Hentbol',
+      'boxing': 'Boks',
+      'boks': 'Boks',
+      'cs': 'Counter-Strike'
+    };
+    if (slugMap[lastPart]) return language === 'en' ? (slugMap[lastPart] === 'Futbol' ? 'Football' : slugMap[lastPart]) : slugMap[lastPart];
+    return allSportsTabName;
+  });
+  const [matches, setMatches] = useState<MatchInfo[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [goalScoredMatches, setGoalScoredMatches] = useState<string[]>([]);
   const [currentPath, setCurrentPath] = useState(typeof window !== 'undefined' ? window.location.pathname : '');
   
   useEffect(() => {
+    if (currentPath && matches.length > 0) {
+       if (currentPath.includes('/mac/')) {
+          const matchId = currentPath.split('/mac/')[1]?.split('/')[0];
+          if (matchId) {
+             const foundMatch = matches.find(m => String(m.id) === matchId);
+             if (foundMatch && (!selectedMatch || String(selectedMatch.id) !== matchId)) {
+                setSelectedMatch(foundMatch);
+             }
+          }
+       } else if (selectedMatch) {
+          setSelectedMatch(null);
+       }
+    }
+  }, [currentPath, matches, selectedMatch]);
+  
+  useEffect(() => {
     const handleLocationChange = () => setCurrentPath(window.location.pathname);
+    const handleResetSportsView = () => {
+      handleSetSelectedMatch(null);
+      setNavTab('home');
+      setActiveTab('in-play');
+    };
+    
     window.addEventListener('popstate', handleLocationChange);
-    return () => window.removeEventListener('popstate', handleLocationChange);
+    window.addEventListener('reset-sports-view', handleResetSportsView);
+    
+    return () => {
+      window.removeEventListener('popstate', handleLocationChange);
+      window.removeEventListener('reset-sports-view', handleResetSportsView);
+    };
   }, []);
 
   const activeSlug = currentPath.startsWith('/spor/') ? currentPath.split('/')[2] : '';
@@ -431,7 +536,9 @@ export default function Spor724View({ onNavigate, defaultTab }: Spor724ViewProps
     if (typeof window !== 'undefined' && window.innerWidth >= 1280) {
       setIsSidebarOpenMobile(false); // On desktop it's always open statically
     }
-
+  }, []);
+  
+  useEffect(() => {
     const handleOpenMobileChat = () => {
       setIsSidebarOpenMobile(true);
       setTimeout(() => {
@@ -445,27 +552,44 @@ export default function Spor724View({ onNavigate, defaultTab }: Spor724ViewProps
       // Always clear selected match when navigating tabs
       setSelectedMatch(null);
       
+      const rawLang = typeof window !== 'undefined' ? (window.location.pathname.split('/')[1] || 'tr') : 'tr';
+      const lang = ['tr', 'en', 'pt', 'es'].includes(rawLang) ? rawLang : 'tr';
+      
       if (tab === 'home' || tab === 'hepsi') {
+        window.history.pushState(null, '', `/${lang}/spor`);
         setActiveTab('in-play');
         setActiveSport(allSportsTabName);
         setViewMode('home');
         setNavTab('home');
       } else if (tab === 'canli') {
+        window.history.pushState(null, '', `/${lang}/spor/canli`);
         setActiveTab('in-play');
         setActiveSport(allSportsTabName);
         setViewMode('live');
         setNavTab('canli');
       } else if (tab === 'upcoming') {
+        window.history.pushState(null, '', `/${lang}/spor/yaklasanlar`);
         setActiveTab('pre-match');
         setActiveSport(allSportsTabName);
         setViewMode('bulletin');
         setNavTab('upcoming');
       } else if (tab === 'mybets') {
+        window.history.pushState(null, '', `/${lang}/spor/bahislerim`);
         // Bahislerim is handled by right sidebar or another view typically
         setNavTab('mybets');
+      } else if (tab === 'followed') {
+        window.history.pushState(null, '', `/${lang}/spor/takip`);
+        setNavTab('followed');
       } else {
         // Specific sport selected (e.g. 'Futbol')
         setActiveSport(tab);
+        const sportSlug = mapReverseSportName(tab);
+        let base = '/spor';
+        if (window.location.pathname.includes('/canli')) base = '/spor/canli';
+        else if (window.location.pathname.includes('/yaklasan')) base = '/spor/yaklasanlar';
+        
+        window.history.pushState(null, '', `/${lang}${base}/${sportSlug}`);
+        
         if (window.location.pathname.includes('/yaklasan')) {
            setViewMode('bulletin');
         }
@@ -482,16 +606,18 @@ export default function Spor724View({ onNavigate, defaultTab }: Spor724ViewProps
   
   const { betSlip, addSelection } = useBetSlip();
   
-  const [viewMode, setViewMode] = useState<'home' | 'live' | 'bulletin'>(defaultTab === 'upcoming' ? 'bulletin' : 'home');
+  const [viewMode, setViewMode] = useState<'home' | 'live' | 'bulletin'>(() => {
+    const path = typeof window !== 'undefined' ? window.location.pathname : '';
+    if (path.includes('/canli')) return 'live';
+    if (path.includes('/yaklasan')) return 'bulletin';
+    return defaultTab === 'upcoming' ? 'bulletin' : 'home';
+  });
   useEffect(() => {
     if (defaultTab === 'upcoming') {
       setNavTab('upcoming');
     }
   }, [defaultTab]);
 
-  const [matches, setMatches] = useState<MatchInfo[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [goalScoredMatches, setGoalScoredMatches] = useState<string[]>([]);
 
 
   // Collapsible Leagues State
@@ -648,6 +774,17 @@ export default function Spor724View({ onNavigate, defaultTab }: Spor724ViewProps
 
   const filteredMatches = React.useMemo(() => {
     let result = currentMatches.filter(m => {
+      // 1. Kökten filtreleme: Simülasyon/E-Spor ayrıştırması
+      const isSimulated = isSimulatedEvent(m);
+      
+      // Eğer seçili spor "E-Spor / Simülasyon" ise, sadece simülasyonları göster.
+      if (activeSport === 'E-Spor / Simülasyon') {
+          if (!isSimulated) return false;
+      } else {
+          // Normal sporlarda isek (Tüm Sporlar, Futbol vs.), simülasyonları tamamen gizle.
+          if (isSimulated) return false;
+      }
+
       if (viewMode === 'live' && !m.isLive) return false;
       if (viewMode === 'bulletin') {
         if (m.isLive) return false;
@@ -672,9 +809,11 @@ export default function Spor724View({ onNavigate, defaultTab }: Spor724ViewProps
         if (activeDateFilter === 'tomorrow' && m.matchDate !== 'Yarın' && m.matchDate !== 'Tomorrow') return false;
       }
       return true;
+      return true;
     });
 
     if (viewMode === 'live') {
+
       result = result
         .sort((a, b) => {
           const getSportPriority = (s: string) => {
@@ -691,6 +830,18 @@ export default function Spor724View({ onNavigate, defaultTab }: Spor724ViewProps
 
           const scoreA = getMatchPriorityScore(a.home, a.away);
           const scoreB = getMatchPriorityScore(b.home, b.away);
+          
+          // Demote women/youth even if they are in a good league
+          const isLowerA = a.home.includes('Kadınlar') || a.home.includes('U19') || a.league.includes('Kadınlar');
+          const isLowerB = b.home.includes('Kadınlar') || b.home.includes('U19') || b.league.includes('Kadınlar');
+          
+          let finalScoreA = scoreA;
+          let finalScoreB = scoreB;
+          
+          if (isLowerA && scoreA === 0) finalScoreA -= 20;
+          if (isLowerB && scoreB === 0) finalScoreB -= 20;
+          
+          if (finalScoreA !== finalScoreB) return finalScoreB - finalScoreA;
           if (scoreA !== scoreB) return scoreB - scoreA;
           return (a.timestamp || 0) - (b.timestamp || 0);
         });
@@ -717,7 +868,21 @@ export default function Spor724View({ onNavigate, defaultTab }: Spor724ViewProps
       if (!grouped[match.league]) {
         grouped[match.league] = [];
       }
-      grouped[match.league].push(match);
+      let groupKey = match.league;
+      const isElite = getMatchPriorityScore(match.home, match.away) > 0;
+      const isWomen = match.home.includes('Kadınlar') || match.league.includes('Kadınlar');
+      
+      // Break out massive generic leagues
+      if (groupKey.includes('Kulüp Hazırlık') || groupKey.includes('Club Friendly')) {
+         if (isElite) groupKey = '⭐ Öne Çıkan Hazırlık Maçları';
+         else if (isWomen) groupKey = 'Kulüp Hazırlık Maçları (Kadınlar)';
+         else groupKey = 'Diğer Hazırlık Maçları';
+      }
+      
+      if (!grouped[groupKey]) {
+        grouped[groupKey] = [];
+      }
+      grouped[groupKey].push(match);
     });
     return grouped;
   }, [filteredMatches]);
@@ -811,8 +976,12 @@ export default function Spor724View({ onNavigate, defaultTab }: Spor724ViewProps
     })
     .slice(0, 6);
 
+  const isEsportsMode = activeSport === 'E-Spor / Simülasyon';
+  const esportsTheme = isEsportsMode ? 'border-[#A855F7]/30 shadow-[0_0_20px_rgba(168,85,247,0.1)]' : '';
+  const esportsText = isEsportsMode ? 'text-[#A855F7] drop-shadow-[0_0_8px_rgba(168,85,247,0.5)]' : '';
+
   return (
-    <div className="flex flex-col h-[calc(100vh-64px)] md:h-screen w-full bg-[#0a0c10] text-zinc-300 font-sans overflow-hidden relative">
+    <div className={`flex flex-col h-[calc(100vh-64px)] md:h-screen w-full bg-[#0a0c10] text-zinc-300 font-sans overflow-hidden relative ${isEsportsMode ? 'theme-esports' : ''}`}>
       
       {/* Premium Luxury Background Layer */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
@@ -849,16 +1018,34 @@ export default function Spor724View({ onNavigate, defaultTab }: Spor724ViewProps
             <div className="sticky top-0 z-50 bg-[#0a0c10]/95 backdrop-blur-md shadow-xl border-b border-white/5 flex items-center justify-between mb-4">
                 <div className="flex-1 overflow-hidden">
                   <SportsIconNav activeTab={navTab} liveCounts={liveCountsMap} onTabChange={(tab) => {
+                    handleSetSelectedMatch(null); // HERHANGİ BİR SEKMEYE TIKLANDIĞINDA MAÇIN İÇİNDEN ÇIK!
                     setNavTab(tab);
+                    
+                    const rawLang = typeof window !== 'undefined' ? (window.location.pathname.split('/')[1] || 'tr') : 'tr';
+                    const lang = ['tr', 'en', 'pt', 'es'].includes(rawLang) ? rawLang : 'tr';
+                    
                     if (tab === 'canli') {
+                      window.history.pushState(null, '', `/${lang}/spor/canli`);
                       setActiveTab('in-play');
                       setViewMode('live');
+                      setCurrentPath(`/${lang}/spor/canli`);
                     } else if (tab === 'home') {
+                      window.history.pushState(null, '', `/${lang}/spor`);
                       setActiveTab('in-play');
                       setViewMode('home');
+                      setCurrentPath(`/${lang}/spor`);
                     } else if (tab === 'upcoming') {
+                      window.history.pushState(null, '', `/${lang}/spor/yaklasanlar`);
                       setActiveTab('pre-match');
                       setViewMode('bulletin');
+                      setCurrentPath(`/${lang}/spor/yaklasanlar`);
+                    } else if (tab === 'mybets') {
+                      window.history.pushState(null, '', `/${lang}/spor/bahislerim`);
+                      setActiveTab('in-play');
+                    } else if (tab === 'all') {
+                      window.history.pushState(null, '', `/${lang}/spor/hepsi`);
+                    } else if (tab === 'followed') {
+                      window.history.pushState(null, '', `/${lang}/spor/takip`);
                     }
                   }} />
                 </div>
@@ -867,42 +1054,52 @@ export default function Spor724View({ onNavigate, defaultTab }: Spor724ViewProps
             <div key={selectedMatch ? `match-${selectedMatch.id}` : `tab-${navTab}`} className="animate-fade-in w-full h-full min-h-[400px] transition-all duration-300">
             {selectedMatch ? (
                <div className="px-2 md:px-4">
+                 {/* Breadcrumb / Back Button */}
+                 <div className="flex items-center gap-2 mb-4 px-2 py-2 bg-black/40 backdrop-blur-md rounded-lg border border-white/5 shadow-sm">
+                   <button 
+                     onClick={() => handleSetSelectedMatch(null)}
+                     className="flex items-center gap-2 text-zinc-400 hover:text-white transition-colors px-3 py-1.5 rounded bg-white/5 hover:bg-white/10 text-sm font-bold tracking-wide cursor-pointer"
+                   >
+                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-chevron-left"><path d="m15 18-6-6 6-6"/></svg>
+                     Bültene Dön
+                   </button>
+                   <div className="w-[1px] h-4 bg-white/20 mx-2"></div>
+                   <div className="flex items-center gap-2 text-zinc-300 text-sm font-semibold truncate">
+                     <span className="text-[color:var(--theme-accent)]">{selectedMatch.league}</span>
+                     <span className="text-zinc-600">|</span>
+                     <span className="truncate">{selectedMatch.home} vs {selectedMatch.away}</span>
+                   </div>
+                 </div>
+                 
                  <LiveMatchInline 
                    match={selectedMatch} 
-                   onBack={() => setSelectedMatch(null)} 
+                   onBack={() => handleSetSelectedMatch(null)} 
                    allLiveMatches={filteredMatches.filter(m => m.isLive || m.minute)}
-                   onSelectAnotherMatch={setSelectedMatch} 
+                   onSelectAnotherMatch={handleSetSelectedMatch} 
                  />
                </div>
             ) : (
                <>
                
-            {/* Tüm görünümlerde (home, live, bulletin) Slider'ları göster (mybets HARİÇ) */}
-            {navTab !== 'mybets' && (viewMode === 'home' || viewMode === 'live' || viewMode === 'bulletin') && (isAllSportsSelected || activeSport === 'Futbol') && (
-              <div className="px-4 md:px-6 mb-2 mt-4">
-                <SportsPromoSlider matches={filteredMatches} />
-              </div>
+            {/* Slider'ları SADECE Ana Sayfada (home) göster */}
+            {navTab === 'home' && (isAllSportsSelected || activeSport === 'Futbol') && (
+              <>
+                <div className="px-4 md:px-6 mb-6 mt-6">
+                  <SportsPromoSlider matches={filteredMatches} />
+                </div>
+                
+                <div className="px-4 md:px-6 mb-6 mt-4">
+                  <SportsDashboardWidget matches={filteredMatches} onSelectMatch={handleSetSelectedMatch} />
+                </div>
+              </>
             )}
 
             {navTab === 'home' && (
               <div className="px-4 md:px-6 mb-4 transition-all duration-300">
                   
-                  {/* En İyi Maçlar Widget Moved Under Slider */}
-                  <div className="mt-6 mb-2">
-                    <TopMatchesWidget matches={filteredMatches} onSelectMatch={setSelectedMatch} sortByTime={viewMode === 'bulletin'} />
-                  </div>
-
-                  {/* Popular Events Accordion Moved Here for Home */}
-                  {navTab === 'home' && (
-                    <div className="mt-4 mb-2">
-                      <PopularEventsAccordion matches={filteredMatches} onSelectMatch={setSelectedMatch} />
-                    </div>
-                  )}
-                  
-                  {/* Featured Combos Widget */}
+                  {/* Featured Combos Widget Removed */}
                   {viewMode !== 'bulletin' && (
                     <div className="mt-8">
-                      <FeaturedCombos activeSport={activeSport} matches={filteredMatches} onSelectMatch={setSelectedMatch} />
                       <div className="mt-6 w-full">
                         <SportsBanners />
                       </div>
@@ -917,7 +1114,7 @@ export default function Spor724View({ onNavigate, defaultTab }: Spor724ViewProps
                   
                   {/* En İyi Maçlar Widget Moved Under Slider */}
                   <div className="mt-6 mb-2">
-                    <TopMatchesWidget matches={filteredMatches.filter(m => m.sport?.toLowerCase().includes('basket') || m.league?.toLowerCase().includes('nba'))} onSelectMatch={setSelectedMatch} sortByTime={viewMode === 'bulletin'} />
+                    <TopMatchesWidget matches={filteredMatches.filter(m => m.sport?.toLowerCase().includes('basket') || m.league?.toLowerCase().includes('nba'))} onSelectMatch={handleSetSelectedMatch} sortByTime={viewMode === 'bulletin'} />
                   </div>
               </div>
             )}
@@ -933,7 +1130,7 @@ export default function Spor724View({ onNavigate, defaultTab }: Spor724ViewProps
                 </div>
               ) : (
                 <div className="flex-1 w-full bg-[#0a0c10]">
-                  <MyBetsView onSelectMatch={setSelectedMatch} />
+                  <MyBetsView onSelectMatch={handleSetSelectedMatch} />
                 </div>
               )
             ) : (
@@ -949,7 +1146,25 @@ export default function Spor724View({ onNavigate, defaultTab }: Spor724ViewProps
             {/* LIVE AND BULLETIN MATCH LIST (Hidden on Home) */}
             {viewMode !== 'home' && (
               <>
-                {/* Removed Sports Filter Pills per request */}
+                {/* Sports Filter Pills for Live View */}
+                {viewMode === 'live' && (
+                    <div className="px-4 md:px-6 mb-6 mt-2 overflow-x-auto custom-scrollbar pb-2">
+                        <div className="flex items-center gap-2">
+                            {['Futbol', 'Tenis', 'Basketbol', 'Buz Hokeyi', 'Kriket', 'Beyzbol', 'Ragbi', 'E-Spor', 'Amerikan Futbolu'].map((s, idx) => {
+                                const isSelected = idx === 0; // Fake state for demo, or tie to activeSport if needed. For now, Soccer selected.
+                                return (
+                                    <button key={s} className={`shrink-0 flex items-center gap-1.5 px-3 py-1.5 font-bold text-[13px] transition-all relative ${isSelected ? 'text-white' : 'text-zinc-500 hover:text-zinc-300'}`}>
+                                        <div className={`w-4 h-4 flex items-center justify-center transition-all ${isSelected ? 'text-[#00E5FF] drop-shadow-[0_0_8px_rgba(0,229,255,0.6)]' : 'opacity-60'}`}>
+                                            {getSportIcon(s)}
+                                        </div>
+                                        <span>{s === 'Futbol' ? 'Soccer' : s === 'Tenis' ? 'Tennis' : s === 'Basketbol' ? 'Basketball' : s === 'Buz Hokeyi' ? 'Ice Hockey' : s === 'Kriket' ? 'Cricket' : s === 'Beyzbol' ? 'Baseball' : s === 'Ragbi' ? 'Rugby Union' : s === 'E-Spor' ? 'eSoccer' : 'American Football'}</span>
+                                        {isSelected && <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-8 h-[2px] bg-[#00E5FF] rounded-t-full shadow-[0_0_10px_#00E5FF]"></div>}
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    </div>
+                )}
                 
                 {/* Header */}
                 <div className="px-4 md:px-6 mb-4 flex items-center gap-2">
@@ -969,7 +1184,7 @@ export default function Spor724View({ onNavigate, defaultTab }: Spor724ViewProps
                 {/* Main Matches Area */}
                 <div className="px-4 md:px-6 pb-8">
                     {(() => {
-                        const isYaklasan = currentPath.includes('/yaklasan');
+                        const isYaklasan = viewMode === 'bulletin';
                         if (isYaklasan) {
                             return (
                                 <div className="flex flex-col gap-3">
@@ -980,27 +1195,30 @@ export default function Spor724View({ onNavigate, defaultTab }: Spor724ViewProps
                                      .map(match => (
                                         <div 
                                           key={match.id} 
-                                          onClick={() => setSelectedMatch(match)}
-                                          className="bg-[#171b26] p-3 md:p-4 rounded-xl flex flex-col md:flex-row md:items-center justify-between border border-transparent hover:border-white/10 hover:bg-[#1c2230] cursor-pointer transition-colors gap-4 shadow-sm"
+                                          onClick={() => handleSetSelectedMatch(match)}
+                                          className="bg-gradient-to-r from-[#161c28] to-[#131824] p-3 md:p-4 rounded-[14px] flex flex-col md:flex-row md:items-center justify-between border border-white/5 border-t-white/10 hover:border-sports-accent/50 cursor-pointer transition-all gap-4 shadow-[0_8px_30px_rgba(0,0,0,0.4)] hover:shadow-[0_8px_30px_rgba(0,229,255,0.1)] relative overflow-hidden group/card"
                                         >
-                                          <div className="flex items-center gap-4 min-w-[200px] flex-1">
-                                             <div className="flex flex-col items-center justify-center bg-[#10131a] px-3 py-1.5 rounded-lg min-w-[60px] border border-white/5">
-                                                <span className="text-[#06b6d4] font-black text-sm">{match.startTime}</span>
-                                                <span className="text-zinc-500 text-[10px] uppercase font-bold">{match.matchDate}</span>
+                                          {/* Ambient Background Glow */}
+                                          <div className="absolute top-0 left-0 w-32 h-32 bg-sports-accent/5 rounded-full blur-[50px] pointer-events-none group-hover/card:bg-sports-accent/10 transition-colors duration-500"></div>
+                                          
+                                          <div className="flex items-center gap-4 min-w-[200px] flex-1 relative z-10">
+                                             <div className="flex flex-col items-center justify-center bg-sports-accent/10 px-3 py-1.5 rounded-lg min-w-[60px] border border-sports-accent/20 shadow-[inset_0_0_10px_rgba(0,229,255,0.05)]">
+                                                <span className="text-[color:var(--theme-accent)] font-black text-sm tracking-wide drop-shadow-[0_0_5px_rgba(0,229,255,0.3)]">{match.startTime}</span>
+                                                <span className="text-zinc-500 text-[10px] uppercase font-bold tracking-widest">{match.matchDate}</span>
                                              </div>
-                                             <div className="flex flex-col gap-1.5 text-sm font-semibold text-white">
-                                                <div className="flex items-center gap-2">
-                                                   <div className="w-6 h-6 bg-white/5 rounded-full flex items-center justify-center p-0.5"><PlayerLogo name={match.home} fallbackLogo={match.homeLogo} sport={match.sport} /></div>
-                                                   <span className="truncate max-w-[150px] md:max-w-[200px]">{match.home}</span>
+                                             <div className="flex flex-col gap-2.5 text-sm font-semibold text-white">
+                                                <div className="flex items-center gap-3 group/team">
+                                                   <div className="w-6 h-6 bg-gradient-to-br from-white/10 to-white/5 rounded-full flex items-center justify-center p-0.5 border border-white/10 shadow-sm group-hover/team:border-sports-accent/30 transition-colors"><PlayerLogo name={match.home} fallbackLogo={match.homeLogo} sport={match.sport} /></div>
+                                                   <span className="truncate max-w-[150px] md:max-w-[200px] tracking-tight group-hover/team:text-sports-accent transition-colors">{match.home}</span>
                                                 </div>
-                                                <div className="flex items-center gap-2">
-                                                   <div className="w-6 h-6 bg-white/5 rounded-full flex items-center justify-center p-0.5"><PlayerLogo name={match.away} fallbackLogo={match.awayLogo} sport={match.sport} /></div>
-                                                   <span className="truncate max-w-[150px] md:max-w-[200px]">{match.away}</span>
+                                                <div className="flex items-center gap-3 group/team">
+                                                   <div className="w-6 h-6 bg-gradient-to-br from-white/10 to-white/5 rounded-full flex items-center justify-center p-0.5 border border-white/10 shadow-sm group-hover/team:border-sports-accent/30 transition-colors"><PlayerLogo name={match.away} fallbackLogo={match.awayLogo} sport={match.sport} /></div>
+                                                   <span className="truncate max-w-[150px] md:max-w-[200px] tracking-tight group-hover/team:text-sports-accent transition-colors">{match.away}</span>
                                                 </div>
                                              </div>
                                           </div>
                                           
-                                          <div className="flex items-center gap-2 flex-1 md:max-w-[400px]">
+                                          <div className="flex items-center gap-2 flex-1 md:max-w-[400px] relative z-10">
                                              <button 
                                                onClick={(e) => { 
                                                   e.stopPropagation(); 
@@ -1011,10 +1229,10 @@ export default function Spor724View({ onNavigate, defaultTab }: Spor724ViewProps
                                                   };
                                                   addSelection(sel);
                                                }}
-                                               className="flex-1 bg-[#252b3b] hover:bg-[#2d3548] p-2.5 rounded-lg flex justify-between items-center border border-white/5"
+                                               className="flex-1 bg-gradient-to-b from-white/[0.08] to-white/[0.02] border border-white/10 hover:border-sports-accent hover:from-sports-accent/20 hover:to-sports-accent/5 hover:shadow-[0_0_15px_rgba(0,229,255,0.2)] p-2.5 rounded-xl flex justify-between items-center transition-all group/odd active:scale-[0.98]"
                                              >
-                                                <span className="text-[11px] text-zinc-400 font-medium">1</span>
-                                                <span className="text-sm font-bold text-white"><AnimatedOdd value={match.homeOdd} /></span>
+                                                <span className="text-[11px] text-zinc-400 font-bold group-hover/odd:text-sports-accent transition-colors">1</span>
+                                                <span className="text-[13px] font-black text-white drop-shadow-sm"><AnimatedOdd value={match.homeOdd} /></span>
                                              </button>
                                              <button 
                                                onClick={(e) => { 
@@ -1025,10 +1243,10 @@ export default function Spor724View({ onNavigate, defaultTab }: Spor724ViewProps
                                                   };
                                                   addSelection(sel);
                                                }}
-                                               className="flex-1 bg-[#252b3b] hover:bg-[#2d3548] p-2.5 rounded-lg flex justify-between items-center border border-white/5"
+                                               className="flex-1 bg-gradient-to-b from-white/[0.08] to-white/[0.02] border border-white/10 hover:border-sports-accent hover:from-sports-accent/20 hover:to-sports-accent/5 hover:shadow-[0_0_15px_rgba(0,229,255,0.2)] p-2.5 rounded-xl flex justify-between items-center transition-all group/odd active:scale-[0.98]"
                                              >
-                                                <span className="text-[11px] text-zinc-400 font-medium">X</span>
-                                                <span className="text-sm font-bold text-white"><AnimatedOdd value={match.drawOdd} /></span>
+                                                <span className="text-[11px] text-zinc-400 font-bold group-hover/odd:text-sports-accent transition-colors">X</span>
+                                                <span className="text-[13px] font-black text-white drop-shadow-sm"><AnimatedOdd value={match.drawOdd} /></span>
                                              </button>
                                              <button 
                                                onClick={(e) => { 
@@ -1039,10 +1257,10 @@ export default function Spor724View({ onNavigate, defaultTab }: Spor724ViewProps
                                                   };
                                                   addSelection(sel);
                                                }}
-                                               className="flex-1 bg-[#252b3b] hover:bg-[#2d3548] p-2.5 rounded-lg flex justify-between items-center border border-white/5"
+                                               className="flex-1 bg-gradient-to-b from-white/[0.08] to-white/[0.02] border border-white/10 hover:border-sports-accent hover:from-sports-accent/20 hover:to-sports-accent/5 hover:shadow-[0_0_15px_rgba(0,229,255,0.2)] p-2.5 rounded-xl flex justify-between items-center transition-all group/odd active:scale-[0.98]"
                                              >
-                                                <span className="text-[11px] text-zinc-400 font-medium">2</span>
-                                                <span className="text-sm font-bold text-white"><AnimatedOdd value={match.awayOdd} /></span>
+                                                <span className="text-[11px] text-zinc-400 font-bold group-hover/odd:text-sports-accent transition-colors">2</span>
+                                                <span className="text-[13px] font-black text-white drop-shadow-sm"><AnimatedOdd value={match.awayOdd} /></span>
                                              </button>
                                           </div>
                                         </div>
@@ -1115,13 +1333,13 @@ export default function Spor724View({ onNavigate, defaultTab }: Spor724ViewProps
                                                     {totalCount}
                                                 </div>
                                             </div>
-                                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+                                            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
                                                 {sportMatches.map(match => (
                                                     <MatchCard 
                                                         key={match.id}
                                                         match={match}
                                                         isGoal={false}
-                                                        onSelect={setSelectedMatch}
+                                                        onSelect={handleSetSelectedMatch}
                                                     />
                                                 ))}
                                             </div>

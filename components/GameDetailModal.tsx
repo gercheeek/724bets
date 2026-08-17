@@ -87,7 +87,7 @@ export const GameDetailModal: React.FC<GameDetailModalProps> = ({ game, isOpen, 
                         <div className="w-full mt-auto">
                             <button 
                                 onClick={() => onPlay(game.path)}
-                                className="w-full h-14 md:h-16 rounded-xl md:rounded-2xl bg-[#06b6d4] hover:bg-[#00e693] text-black font-black text-lg md:text-xl tracking-wide flex items-center justify-center gap-3 transition-all duration-300 transform hover:scale-[1.02] active:scale-95 shadow-[0_0_40px_rgba(0,255,163,0.3)] hover:shadow-[0_0_60px_rgba(0,255,163,0.5)]"
+                                className="w-full h-14 md:h-16 rounded-xl md:rounded-2xl bg-[color:var(--theme-accent)] hover:bg-[#00e693] text-black font-black text-lg md:text-xl tracking-wide flex items-center justify-center gap-3 transition-all duration-300 transform hover:scale-[1.02] active:scale-95 shadow-[0_0_40px_rgba(0,255,163,0.3)] hover:shadow-[0_0_60px_rgba(0,255,163,0.5)]"
                             >
                                 <Play className="w-5 h-5 md:w-6 md:h-6 fill-current" />
                                 {t("play_now_caps")}
@@ -95,7 +95,7 @@ export const GameDetailModal: React.FC<GameDetailModalProps> = ({ game, isOpen, 
                             
                             <div className="flex items-center justify-center gap-2 mt-4 text-center">
                                 <span className="text-zinc-500 text-[9px] md:text-[10px] font-bold uppercase tracking-widest">
-                                    {t("right_now")} <span className="text-[#06b6d4]">{game.players.toLocaleString()} {t("active_players_caps")}</span>
+                                    {t("right_now")} <span className="text-[color:var(--theme-accent)]">{game.players.toLocaleString()} {t("active_players_caps")}</span>
                                 </span>
                             </div>
                         </div>

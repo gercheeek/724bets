@@ -121,7 +121,7 @@ const GameBlock: React.FC<BlockProps> = ({ title, icon, games, showPlayers, isSp
                   style={{ backgroundImage: `url(${game.image})`, filter: 'blur(20px) saturate(150%) brightness(1.2)' }}
                 ></div>
                 
-                <div className="casino-card-wrapper relative rounded-xl overflow-hidden aspect-[3/4] bg-[#111317] z-10 transition-all duration-300 transform group-hover:-translate-y-2 border border-transparent group-hover:border-[#06b6d4]/50">
+                <div className="casino-card-wrapper relative rounded-xl overflow-hidden aspect-[3/4] bg-[#111317] z-10 transition-all duration-300 transform group-hover:-translate-y-2 border border-transparent group-hover:border-[color:var(--theme-accent)]/50">
                   <img 
                     src={game.image} 
                     alt={game.title}
@@ -134,7 +134,7 @@ const GameBlock: React.FC<BlockProps> = ({ title, icon, games, showPlayers, isSp
                   <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none group-hover:pointer-events-auto bg-black/60 backdrop-blur-[2px]">
                       <button 
                          onClick={(e) => { e.stopPropagation(); onGameClick?.(game); }}
-                         className="w-[80%] flex items-center justify-center gap-2 bg-[#06b6d4] hover:bg-[#00E5FF] text-black font-black py-2.5 rounded-lg transition-transform hover:scale-105 shadow-[0_0_15px_rgba(0,255,163,0.4)] text-[11px] uppercase tracking-wider"
+                         className="w-[80%] flex items-center justify-center gap-2 bg-[color:var(--theme-accent)] hover:bg-[#00E5FF] text-black font-black py-2.5 rounded-lg transition-transform hover:scale-105 shadow-[0_0_15px_rgba(0,255,163,0.4)] text-[11px] uppercase tracking-wider"
                       >
                          GERÇEK OYNA
                       </button>
@@ -153,7 +153,7 @@ const GameBlock: React.FC<BlockProps> = ({ title, icon, games, showPlayers, isSp
 
               {!isSports && showPlayers && game.players && (
                 <div className="flex items-center justify-center gap-1.5 mt-0.5">
-                  <div className="w-2 h-2 rounded-full bg-[#06b6d4] shadow-[0_0_8px_rgba(0,255,163,0.6)]"></div>
+                  <div className="w-2 h-2 rounded-full bg-[color:var(--theme-accent)] shadow-[0_0_8px_rgba(0,255,163,0.6)]"></div>
                   <span className="text-gray-400 text-[10px] md:text-[11px] font-medium"><span className="text-white font-bold">{game.players}</span> {t('players')}</span>
                 </div>
               )}
@@ -167,9 +167,10 @@ const GameBlock: React.FC<BlockProps> = ({ title, icon, games, showPlayers, isSp
 
 interface GameLobbyGridProps {
   customGames?: CasinoLobbyGame[];
+  onGameSelect?: (game: any) => void;
 }
 
-const GameLobbyGrid: React.FC<GameLobbyGridProps> = ({ customGames = [] }) => {
+const GameLobbyGrid: React.FC<GameLobbyGridProps> = ({ customGames = [], onGameSelect }) => {
   const activeCustomGames = customGames.filter(g => g.isActive);
   const [tick, setTick] = useState(0);
   const [selectedGame, setSelectedGame] = useState<GameItem | null>(null);
@@ -230,8 +231,66 @@ const GameLobbyGrid: React.FC<GameLobbyGridProps> = ({ customGames = [] }) => {
 
   return (
     <div className="w-full bg-transparent p-0 my-1 md:my-2">
+      <GameBlock 
+        title={t('slots')} 
+        icon={<Video className="w-5 h-5 text-gray-400" />} 
+        games={slots} 
+        showPlayers 
+        onGameClick={(game) => {
+          if (onGameSelect) {
+            onGameSelect({ ...game, name: game.title, category: 'slots' });
+          } else {
+            setSelectedGame(game);
+          }
+        }}
+        onDemoClick={(game) => {
+          if (onGameSelect) {
+            onGameSelect({ ...game, name: game.title, category: 'slots', demoSymbol: game.demoSymbol });
+          } else {
+            setSelectedGame(game);
+            setShowDemoIframe(true);
+          }
+        }}
+      />
+      
+      <GameBlock 
+        title={t('live_casino')} 
+        icon={<Video className="w-5 h-5 text-gray-400" />} 
+        games={live} 
+        showPlayers 
+        onGameClick={(game) => {
+          if (onGameSelect) {
+            onGameSelect({ ...game, name: game.title, category: 'live' });
+          } else {
+            setSelectedGame(game);
+          }
+        }}
+        onDemoClick={(game) => {
+          if (onGameSelect) {
+            onGameSelect({ ...game, name: game.title, category: 'live', demoSymbol: game.demoSymbol });
+          } else {
+            setSelectedGame(game);
+            setShowDemoIframe(true);
+          }
+        }}
+      />
 
-      {selectedGame && typeof document !== 'undefined' && createPortal(
+      <GameBlock 
+        title={t('sports')} 
+        icon={<Trophy className="w-5 h-5 text-gray-400" />} 
+        games={sports} 
+        isSports 
+        onGameClick={(game) => {
+          if (onGameSelect) {
+            onGameSelect({ ...game, name: game.title, category: 'sport' });
+          } else {
+            setSelectedGame(game);
+          }
+        }}
+      />
+
+      {/* Legacy Fallback Modal (Only used if onGameSelect is NOT provided) */}
+      {!onGameSelect && selectedGame && typeof document !== 'undefined' && createPortal(
         <div 
           className="fixed inset-0 z-[99999] flex p-4 bg-black/90 backdrop-blur-sm overflow-y-auto"
           onClick={(e) => {
@@ -250,7 +309,7 @@ const GameLobbyGrid: React.FC<GameLobbyGridProps> = ({ customGames = [] }) => {
                          <span className="w-3 h-3 rounded-full bg-yellow-500"></span>
                          <span className="w-3 h-3 rounded-full bg-green-500"></span>
                      </div>
-                     <span className="text-white font-bold text-sm md:text-base tracking-wide uppercase">{selectedGame.title} <span className="text-[#06b6d4] font-black text-[10px] md:text-xs ml-2 border border-[#06b6d4]/30 bg-[#06b6d4]/10 px-2 py-0.5 rounded-full">DEMO</span></span>
+                     <span className="text-white font-bold text-sm md:text-base tracking-wide uppercase">{selectedGame.title} <span className="text-[color:var(--theme-accent)] font-black text-[10px] md:text-xs ml-2 border border-[color:var(--theme-accent)]/30 bg-[color:var(--theme-accent)]/10 px-2 py-0.5 rounded-full">DEMO</span></span>
                   </div>
                   <button onClick={() => setShowDemoIframe(false)} className="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center bg-white/5 hover:bg-white/10 rounded-full transition-colors text-gray-400 hover:text-white">
                     <X className="w-5 h-5" />
@@ -298,7 +357,7 @@ const GameLobbyGrid: React.FC<GameLobbyGridProps> = ({ customGames = [] }) => {
               <div className="w-full mt-auto flex flex-col sm:flex-row gap-3">
                   <button 
                       onClick={() => window.dispatchEvent(new CustomEvent('openLoginModal'))}
-                      className="flex-1 h-14 md:h-16 rounded-xl md:rounded-2xl bg-[#06b6d4] hover:bg-[#00e693] text-black font-black text-lg tracking-wide flex items-center justify-center gap-3 transition-all duration-300 transform hover:scale-[1.02] active:scale-95 shadow-[0_0_40px_rgba(0,255,163,0.3)] hover:shadow-[0_0_60px_rgba(0,255,163,0.5)]"
+                      className="flex-1 h-14 md:h-16 rounded-xl md:rounded-2xl bg-[color:var(--theme-accent)] hover:bg-[#00e693] text-black font-black text-lg tracking-wide flex items-center justify-center gap-3 transition-all duration-300 transform hover:scale-[1.02] active:scale-95 shadow-[0_0_40px_rgba(0,255,163,0.3)] hover:shadow-[0_0_60px_rgba(0,255,163,0.5)]"
                   >
                       GERÇEK OYNA
                   </button>
@@ -316,7 +375,7 @@ const GameLobbyGrid: React.FC<GameLobbyGridProps> = ({ customGames = [] }) => {
               
               <div className="flex items-center justify-center gap-2 mt-4 text-center w-full">
                   <span className="text-zinc-500 text-[9px] md:text-[10px] font-bold uppercase tracking-widest">
-                      ŞU AN <span className="text-[#06b6d4]">{selectedGame.players?.toLocaleString('tr-TR')} OYUNCU</span> AKTİF
+                      ŞU AN <span className="text-[color:var(--theme-accent)]">{selectedGame.players?.toLocaleString('tr-TR')} OYUNCU</span> AKTİF
                   </span>
               </div>
             </div>

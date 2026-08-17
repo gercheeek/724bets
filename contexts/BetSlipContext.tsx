@@ -26,6 +26,8 @@ interface BetSlipContextProps {
   totalOdds: number;
   potentialPayout: number;
   accumulatorBoost: number; // 0.05 for 5%, etc.
+  isTurboMode: boolean;
+  setIsTurboMode: (val: boolean) => void;
 }
 
 const BetSlipContext = createContext<BetSlipContextProps | undefined>(undefined);
@@ -34,10 +36,20 @@ export const BetSlipProvider: React.FC<{ children: ReactNode }> = ({ children })
   const [betSlip, setBetSlip] = useState<BetSelection[]>([]);
   const [betAmount, setBetAmount] = useState<number>(0);
   const [betType, setBetType] = useState<BetType>('kombine');
+  const [isTurboMode, setIsTurboMode] = useState<boolean>(false);
 
   const isLocked = betSlip.length === 1 && !!betSlip[0].isSpecialCombo;
 
   const addSelection = (newSelection: BetSelection) => {
+    // TURBO MODE CHECK
+    if (isTurboMode) {
+      triggerGlobalToast({ 
+        type: 'success', 
+        message: `⚡ TURBO BAHİS KABUL EDİLDİ: ${newSelection.matchName} - ${newSelection.selectionName}` 
+      });
+      // Do not add to normal slip, it's instant!
+      return;
+    }
     // If trying to add a special combo
     if (newSelection.isSpecialCombo) {
       if (betSlip.length === 1 && betSlip[0].id === newSelection.id) {
@@ -113,7 +125,9 @@ export const BetSlipProvider: React.FC<{ children: ReactNode }> = ({ children })
       clearBetSlip, 
       totalOdds, 
       potentialPayout,
-      accumulatorBoost
+      accumulatorBoost,
+      isTurboMode,
+      setIsTurboMode
     }}>
       {children}
     </BetSlipContext.Provider>
