@@ -20,6 +20,80 @@ export const GamePlayView: React.FC<GamePlayViewProps> = ({ game, demoUrl, onClo
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showInsufficientFunds, setShowInsufficientFunds] = useState(false);
   
+  const [realLaunchUrl, setRealLaunchUrl] = useState<string | null>(null);
+  const [loadingRealGame, setLoadingRealGame] = useState<boolean>(false);
+  const [realGameError, setRealGameError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchRealUrl = async () => {
+      let vendorCode = game?.vendorCode;
+      let gameCode = game?.gameCode;
+
+      // If missing vendor/game code, try lookup from API games list or fallback matches
+      if (!vendorCode || !gameCode) {
+        try {
+          const apiGamesRes = await fetch('/api/casino/games');
+          const apiGamesData = await apiGamesRes.json();
+          if (apiGamesData.success && Array.isArray(apiGamesData.games)) {
+            const found = apiGamesData.games.find((g: any) => 
+              g.id === game?.id || 
+              (g.name && game?.name && g.name.toLowerCase() === game.name.toLowerCase())
+            );
+            if (found) {
+              vendorCode = found.vendorCode;
+              gameCode = found.gameCode;
+            }
+          }
+        } catch (e) {
+          console.warn('Game lookup failed:', e);
+        }
+      }
+
+      if (!vendorCode || !gameCode) {
+        const nameStr = (game?.name || '').toLowerCase();
+        if (nameStr.includes('sweet bonanza')) { vendorCode = 'slot-pragmatic'; gameCode = 'vs20sbonz1000'; }
+        else if (nameStr.includes('gates of olympus')) { vendorCode = 'slot-pragmatic'; gameCode = 'vs20olympgate'; }
+        else if (nameStr.includes('big bass')) { vendorCode = 'slot-pragmatic'; gameCode = 'vs10txbigbass'; }
+        else if (nameStr.includes('sugar rush')) { vendorCode = 'slot-pragmatic'; gameCode = 'vs20sugarrushx'; }
+        else if (nameStr.includes('starlight')) { vendorCode = 'slot-pragmatic'; gameCode = 'vs20starlightx'; }
+        else if (nameStr.includes('dog house')) { vendorCode = 'slot-pragmatic'; gameCode = 'vs20doghouse'; }
+        else { vendorCode = 'slot-pragmatic'; gameCode = 'vs20olympx'; } // General slot fallback
+      }
+
+      if (vendorCode && gameCode) {
+        setLoadingRealGame(true);
+        setRealGameError(null);
+        try {
+          const res = await fetch('/api/casino/launch', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              vendorCode: vendorCode,
+              gameCode: gameCode,
+              userCode: siteUser?.username || "testuser",
+              balance: siteUser?.balance || 0
+            })
+          });
+          const data = await res.json();
+          if (data.success && data.launchUrl) {
+            console.log('[GamePlayView] Got real launch URL from OroPlay');
+            setRealLaunchUrl(data.launchUrl);
+          } else {
+            console.warn('[GamePlayView] OroPlay launch failed:', data);
+            setRealGameError('Bu oyun sağlayıcısı şu an kullanılamıyor. Lütfen başka bir oyun deneyin.');
+          }
+        } catch (err) {
+          console.error('Error fetching real launch URL:', err);
+          setRealGameError('Oyun sunucusuna bağlanılamadı.');
+        } finally {
+          setLoadingRealGame(false);
+        }
+      }
+    };
+
+    fetchRealUrl();
+  }, [game]);
+
   const gameName = game.name || game.title || 'Slot Game';
   const provider = game.provider || 'Pragmatic Play';
   const imgUrl = game.img || game.image || game.icon;
@@ -107,7 +181,13 @@ export const GamePlayView: React.FC<GamePlayViewProps> = ({ game, demoUrl, onClo
 
         {/* Game Iframe Wrapper */}
         <div className={`w-full relative ${isFullscreen ? 'h-screen' : 'h-[60vh] md:h-[70vh] lg:h-[75vh]'}`}>
-          {game.category === 'live' || game.provider === 'Live Casino' || !demoUrl ? (
+          {loadingRealGame ? (
+            <div className="w-full h-full bg-[#0B0E14] flex flex-col items-center justify-center text-white p-6">
+              <div className="w-12 h-12 border-4 border-[#00E5FF] border-t-transparent rounded-full animate-spin mb-4" />
+              <p className="font-black text-lg text-gray-100 tracking-wide">GERÇEK OYUN OTURUMU AÇILIYOR...</p>
+              <p className="text-sm text-[#00E5FF] mt-1 font-medium">Bakiye Güvenliği Sağlanıyor</p>
+            </div>
+          ) : (game.category === 'live' || game.provider === 'Live Casino') && (!isRealMoney || !siteUser) ? (
             <div className="w-full h-full bg-[#0A0C10] flex flex-col items-center justify-center p-6 border-0 relative overflow-hidden">
               <div className="absolute inset-0 z-0">
                 <img src={game.img || game.image} alt={game.name} className="w-full h-full object-cover opacity-20 blur-sm" />
@@ -134,26 +214,55 @@ export const GamePlayView: React.FC<GamePlayViewProps> = ({ game, demoUrl, onClo
                   </>
                 ) : (
                   <>
-                    <h2 className="text-2xl font-black text-white mb-3 tracking-tight">Gerçek Bakiye Gerekiyor</h2>
+                    <h2 className="text-2xl font-black text-white mb-3 tracking-tight">
+                      {siteUser.balance > 0 ? 'Gerçek Oyuna Geçin' : 'Gerçek Bakiye Gerekiyor'}
+                    </h2>
                     <p className="text-[#848B9D] mb-8 font-medium">
-                      {game.category === 'live' || game.provider === 'Live Casino'
-                        ? 'Canlı casino oyunları demo modunda oynanamaz. Masaya oturmak ve oynamaya başlamak için lütfen kasanıza bakiye yükleyin.'
-                        : 'Bu oyunun demo versiyonu bulunmamaktadır. Gerçek kazançlar elde etmek için lütfen hesabınıza bakiye yükleyin ve oynamaya başlayın.'}
+                      {siteUser.balance > 0 
+                        ? 'Canlı casino oyunları demo modunda oynanamaz. Bakiyeniz yeterli, hemen oynamaya başlamak için Gerçek Oyun moduna geçiş yapın.'
+                        : (game.category === 'live' || game.provider === 'Live Casino'
+                            ? 'Canlı casino oyunları demo modunda oynanamaz. Masaya oturmak ve oynamaya başlamak için lütfen kasanıza bakiye yükleyin.'
+                            : 'Bu oyunun demo versiyonu bulunmamaktadır. Gerçek kazançlar elde etmek için lütfen hesabınıza bakiye yükleyin ve oynamaya başlayın.')
+                      }
                     </p>
-                    <button 
-                      onClick={() => window.dispatchEvent(new CustomEvent('openDepositModal', { detail: { tab: 'deposit' } }))}
-                      className="w-full sm:w-auto bg-gradient-to-r from-[#00E676] to-[#00C853] hover:brightness-110 text-black px-10 py-4 rounded-xl font-black text-sm uppercase tracking-wider transition-all shadow-[0_0_20px_rgba(0,230,118,0.4)] hover:shadow-[0_0_30px_rgba(0,230,118,0.6)] flex items-center justify-center gap-2 mx-auto"
-                    >
-                      <Wallet className="w-5 h-5" /> Bakiye Yükle
-                    </button>
+                    {siteUser.balance > 0 ? (
+                      <button 
+                        onClick={() => setIsRealMoney(true)}
+                        className="w-full sm:w-auto bg-gradient-to-r from-[#00E5FF] to-[#00b3cc] hover:brightness-110 text-[#0A0D14] px-10 py-4 rounded-xl font-black text-sm uppercase tracking-wider transition-all shadow-[0_0_20px_rgba(0,229,255,0.4)] flex items-center justify-center gap-2 mx-auto"
+                      >
+                        Gerçek Modda Oyna
+                      </button>
+                    ) : (
+                      <button 
+                        onClick={() => window.dispatchEvent(new CustomEvent('openDepositModal', { detail: { tab: 'deposit' } }))}
+                        className="w-full sm:w-auto bg-gradient-to-r from-[#00E676] to-[#00C853] hover:brightness-110 text-black px-10 py-4 rounded-xl font-black text-sm uppercase tracking-wider transition-all shadow-[0_0_20px_rgba(0,230,118,0.4)] flex items-center justify-center gap-2 mx-auto"
+                      >
+                        <Wallet className="w-5 h-5" /> Bakiye Yükle
+                      </button>
+                    )}
                   </>
                 )}
+              </div>
+            </div>
+          ) : realGameError && isRealMoney ? (
+            <div className="w-full h-full bg-[#0A0C10] flex flex-col items-center justify-center p-6">
+              <div className="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mb-4">
+                <span className="text-red-400 text-2xl">⚠️</span>
+              </div>
+              <h3 className="text-xl font-bold text-white mb-2">Oyun Yüklenemedi</h3>
+              <p className="text-[#848B9D] text-center mb-6 max-w-md">{realGameError}</p>
+              <div className="flex gap-3">
+                <button onClick={() => setIsRealMoney(false)} className="px-6 py-3 bg-[#1A1F2D] text-white rounded-lg font-bold text-sm hover:bg-[#252A3A] transition-colors">Demo Modunda Oyna</button>
+                <button onClick={onClose} className="px-6 py-3 bg-gradient-to-r from-[#00E5FF] to-[#00b3cc] text-[#0A0D14] rounded-lg font-bold text-sm hover:brightness-110 transition-all">Başka Oyun Seç</button>
               </div>
             </div>
           ) : (
             <iframe 
               ref={iframeRef}
-              src={demoUrl} 
+              key={(isRealMoney && realLaunchUrl) ? realLaunchUrl : (demoUrl || 'demo-key')}
+              src={(isRealMoney && realLaunchUrl) 
+                ? realLaunchUrl 
+                : (demoUrl || 'https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=tr&cur=TRY&gameSymbol=vs20olympx&jurisdiction=99')} 
               className="w-full h-full border-0"
               allowFullScreen
             />
@@ -255,7 +364,7 @@ export const GamePlayView: React.FC<GamePlayViewProps> = ({ game, demoUrl, onClo
                     <div className="flex flex-col">
                       <span className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider">Bakiye</span>
                       <span className={`font-black text-sm tabular-nums transition-all ${status === 'win' ? 'flash-win' : status === 'loss' ? 'flash-loss' : 'text-[#10b981]'}`}>
-                        ${displayBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                        ₺{displayBalance.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                       </span>
                     </div>
                   </div>

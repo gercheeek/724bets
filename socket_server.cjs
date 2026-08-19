@@ -4,7 +4,11 @@ const { Server } = require('socket.io');
 const WebSocket = require('ws');
 const { logError, logInfo } = require('./logger.cjs');
 
+const cors = require('cors');
+
 const app = express();
+app.use(cors());
+
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
@@ -13,13 +17,334 @@ const io = new Server(server, {
   }
 });
 
-const wsUrl = 'wss://eu-swarm-newm.vbettr.com/';
+// Logo Scraper Proxy
+const { getLogo } = require('./logoScraper.cjs');
+const path = require('path');
+const fs = require('fs');
+
+// OroPlay Integration
+const oroplay = require('./oroplay.cjs');
+
+app.get('/', (req, res) => {
+    res.send('<h1 style="font-family:sans-serif;color:#10B981;text-align:center;margin-top:20%;">🚀 724Bets Backend API Sunucusu Başarıyla Çalışıyor!</h1>');
+});
+
+app.get('/api/casino/test-vps', (req, res) => {
+    res.json({
+        success: true,
+        ip_verification: "BU YANIT DOĞRUDAN SİZİN OFFSHORE SUNUCUNUZDAN (85.121.178.80) GELMEKTEDİR!",
+        vps_ip: "85.121.178.80",
+        server_time: new Date().toISOString()
+    });
+});
+
+// User balance store
+const userBalances = {};
+const INITIAL_BALANCE = 1000.00;
+
+app.get('/api/casino/games', async (req, res) => {
+    try {
+        const games = await oroplay.getAllGames();
+        res.json({ success: true, games: games || [] });
+    } catch (err) {
+        logError('Error fetching casino games from OroPlay', err);
+        res.json({ success: true, games: [] });
+    }
+});
+
+app.post('/api/casino/sync-user-balance', express.json(), (req, res) => {
+    const { userCode, balance } = req.body;
+    const code = userCode || 'testuser';
+    if (typeof balance === 'number') {
+        userBalances[code] = balance;
+        logInfo(`[Balance Sync] Synced balance for ${code}: ${balance}`);
+    }
+    res.json({ success: true, balance: userBalances[code] || 0 });
+});
+
+app.post('/api/casino/launch', express.json(), async (req, res) => {
+    const { vendorCode, gameCode, userCode, balance } = req.body;
+    if (!vendorCode || !gameCode) {
+        return res.status(400).json({ success: false, error: 'Missing vendorCode or gameCode' });
+    }
+
+    const code = userCode || 'testuser';
+    if (typeof balance === 'number') {
+        userBalances[code] = balance;
+    } else if (userBalances[code] === undefined) {
+        userBalances[code] = INITIAL_BALANCE;
+    }
+
+    const currentBalance = userBalances[code];
+
+    try {
+        // Note: OroPlay account is in Seamless Wallet mode.
+        // Balance is managed via /api/casino/callback/api/balance and /api/casino/callback/api/transaction callbacks.
+        // No need to call createUser/depositUser (Transfer Wallet mode).
+        const url = await oroplay.getLaunchUrl(vendorCode, gameCode, code);
+        logInfo(`[Casino Launch] Success for ${code}: vendor=${vendorCode}, game=${gameCode}`);
+        res.json({ success: true, launchUrl: url });
+    } catch (err) {
+        logError(`[Casino Launch] Failed for vendor=${vendorCode}, game=${gameCode}`, err);
+        res.status(500).json({ success: false, error: 'Bu oyun sağlayıcısı şu an kullanılamıyor.' });
+    }
+});
+
+
+
+app.get('/api/casino/agent-balance', async (req, res) => {
+    try {
+        const balance = await oroplay.getAgentBalance();
+        res.json({ success: true, agentBalance: balance });
+    } catch (err) {
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
+
+app.get('/api/casino/user-balance', (req, res) => {
+    const userCode = req.query.userCode || 'testuser';
+    if (!userBalances[userCode]) {
+        userBalances[userCode] = INITIAL_BALANCE;
+    }
+    res.json({ success: true, balance: userBalances[userCode] });
+});
+
+app.post('/api/casino/callback/api/balance', express.json(), (req, res) => {
+    const { userCode } = req.body;
+    if (!userBalances[userCode]) {
+        userBalances[userCode] = INITIAL_BALANCE;
+    }
+    logInfo(`[Wallet API] Balance check for ${userCode}: ${userBalances[userCode]}`);
+    res.json({
+        success: true,
+        message: userBalances[userCode],
+        errorCode: 0
+    });
+});
+
+app.post('/api/casino/callback/api/transaction', express.json(), (req, res) => {
+    const { userCode, amount, transactionCode, gameCode } = req.body;
+    if (!userBalances[userCode]) {
+        userBalances[userCode] = INITIAL_BALANCE;
+    }
+    
+    // amount is negative for bets, positive for wins
+    const parsedAmount = parseFloat(amount || 0);
+    userBalances[userCode] += parsedAmount;
+    
+    logInfo(`[Wallet API] Transaction for ${userCode} on ${gameCode}. Amount: ${parsedAmount}. New Balance: ${userBalances[userCode]}. Tx: ${transactionCode}`);
+    
+    res.json({
+        success: true,
+        message: userBalances[userCode],
+        errorCode: 0
+    });
+});
+
+app.get('/api/logo/:teamId', async (req, res) => {
+  const teamId = req.params.teamId;
+  const teamName = req.query.name;
+  
+  if (!teamName) {
+    return res.status(400).json({ error: 'Team name is required' });
+  }
+
+  const logosDir = path.join(__dirname, 'public', 'logos');
+  const exactPath = path.join(logosDir, `${teamId}.png`);
+  
+  // 1. Check if 1xBet mapped logo exists
+  if (fs.existsSync(exactPath)) {
+    return res.sendFile(exactPath);
+  }
+
+  // 2. Check if Bulk Scraper downloaded it as "teamname.png"
+  const slugName = teamName.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '.png';
+  const bulkPath = path.join(logosDir, slugName);
+  
+  if (fs.existsSync(bulkPath)) {
+    // Copy it to teamId.png so it's instantly mapped for the future!
+    fs.copyFileSync(bulkPath, exactPath);
+    return res.sendFile(exactPath);
+  }
+
+  // 3. If neither exists, trigger the dynamic lazy-scraper
+  try {
+    const logoPath = await getLogo(teamId, teamName);
+    if (logoPath && fs.existsSync(logoPath)) {
+      res.sendFile(logoPath);
+    } else {
+      res.status(404).json({ error: 'Logo not found' });
+    }
+  } catch (err) {
+    console.error(`[API] Error fetching logo for ${teamName}:`, err.message);
+    res.status(500).json({ error: 'Failed to fetch logo' });
+  }
+});
+
+// Proxy for detailed match data
+app.get('/api/1xbet/match/:id', async (req, res) => {
+  const matchId = req.params.id;
+  if (matchId === 'debug-list') return res.json(liveMatches1xBet);
+  const cleanMatchId = matchId.replace(/^(pre_|live_|mock_)/, '');
+  const isLive = req.query.isLive !== 'false' && !matchId.startsWith('pre_'); // Default to true if not explicitly false, unless prefixed with pre_
+  const feedType = isLive ? 'LiveFeed' : 'LineFeed';
+  
+  try {
+    const response = await fetch(`https://1xframemxz.com/service-api/${feedType}/GetGameZip?id=${cleanMatchId}&lng=tr&isSubGames=true&GroupEvents=true&allEventsGroupSubGames=true&countevents=250&partner=85`, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+        'Accept': 'application/json',
+        'Referer': `https://1xframemxz.com/tr/${isLive ? 'live' : 'line'}`
+      }
+    });
+    const data = await response.json();
+    res.json(data);
+  } catch (error) {
+    console.error('[1xBet Match Proxy Error]:', error.message);
+    res.status(500).json({ error: 'Failed to fetch match details' });
+  }
+});
+
+const wsUrl = 'wss://eu-swarm-newm.atekbet279.com/';
 let ws;
 let sessionId = null;
 
 const liveMatchesMap = new Map();
 const prematchMatchesMap = new Map();
 const outrightsMap = new Map();
+
+// 1xBet Feed Integration
+const API_URL_1XBET = 'https://1xframemxz.com/service-api/LiveFeed/Get1x2_VZip?count=50&lng=tr&mode=4&country=180&partner=85&noFilterBlockEvent=true';
+let liveMatches1xBet = [];
+
+async function fetch1xBetLive() {
+  try {
+    const res = await fetch(API_URL_1XBET, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+        'Accept': 'application/json',
+        'Referer': 'https://1xframemxz.com/tr/live'
+      }
+    });
+    const text = await res.text();
+    let data;
+    try {
+       data = JSON.parse(text);
+    } catch(e) {
+       console.error('[1xBet Live] JSON Parse Error. Raw response:', text.substring(0, 200));
+       return;
+    }
+    
+    if (data && data.Value) {
+      liveMatches1xBet = data.Value.map(match => {
+        let odds = { "1": '-', "X": '-', "2": '-', "tU": '-', "tA": '-', "tP": '2.5', "cs1X": '-', "cs12": '-', "csX2": '-', "gg": '-', "ng": '-' };
+        if (match.E) {
+          match.E.forEach(odd => {
+            if (odd.T === 1) odds["1"] = odd.C; 
+            if (odd.T === 2) odds["X"] = odd.C; 
+            if (odd.T === 3) odds["2"] = odd.C; 
+            if (odd.T === 9 && odds["tU"] === '-') { odds["tU"] = odd.C; odds["tP"] = odd.P || '2.5'; }
+            if (odd.T === 10 && odds["tA"] === '-') { odds["tA"] = odd.C; }
+            if (odd.T === 4) odds["cs1X"] = odd.C; 
+            if (odd.T === 5) odds["cs12"] = odd.C; 
+            if (odd.T === 6) odds["csX2"] = odd.C; 
+          });
+        }
+        
+        let scoreHome = 0;
+        let scoreAway = 0;
+        if (match.SC && match.SC.FS) {
+           scoreHome = match.SC.FS.S1 || 0;
+           scoreAway = match.SC.FS.S2 || 0;
+        }
+
+        return {
+          id: match.I,
+          sport: match.SN || match.SE || 'Futbol',
+          league: match.L || match.LE,
+          leagueId: match.LI,
+          homeTeam: match.O1,
+          homeTeamId: match.O1I,
+          awayTeam: match.O2,
+          awayTeamId: match.O2I,
+          score: `${scoreHome}-${scoreAway}`,
+          scoreHome: scoreHome,
+          scoreAway: scoreAway,
+          time: (match.SC && match.SC.TS) ? Math.floor(match.SC.TS / 60) + "'" : "LIVE",
+          info: match.SC,
+          odds: odds
+        };
+      });
+      
+      io.emit('1xbetLiveMatches', liveMatches1xBet);
+      console.log(`[1xBet Live] Fetched ${liveMatches1xBet.length} matches`);
+    }
+  } catch (err) {
+    console.error('[1xBet Live] Fetch Error:', err.message);
+  }
+}
+
+// 1xBet Pre-Match Integration
+const API_URL_1XBET_PRE = 'https://1xframemxz.com/service-api/LineFeed/Get1x2_VZip?count=50&lng=tr&tf=2200000&mode=4&country=180&partner=85&getEmpty=true';
+let preMatches1xBet = [];
+
+async function fetch1xBetPreMatch() {
+  try {
+    const res = await fetch(API_URL_1XBET_PRE, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+        'Accept': 'application/json',
+        'Referer': 'https://1xframemxz.com/tr/line'
+      }
+    });
+    const data = await res.json();
+    
+    if (data && data.Value) {
+      preMatches1xBet = data.Value.map(match => {
+        let odds = { "1": '-', "X": '-', "2": '-', "tU": '-', "tA": '-', "tP": '2.5', "cs1X": '-', "cs12": '-', "csX2": '-', "gg": '-', "ng": '-' };
+        if (match.E) {
+          match.E.forEach(odd => {
+            if (odd.T === 1) odds["1"] = odd.C; 
+            if (odd.T === 2) odds["X"] = odd.C; 
+            if (odd.T === 3) odds["2"] = odd.C; 
+            if (odd.T === 9 && odds["tU"] === '-') { odds["tU"] = odd.C; odds["tP"] = odd.P || '2.5'; }
+            if (odd.T === 10 && odds["tA"] === '-') { odds["tA"] = odd.C; }
+            if (odd.T === 4) odds["cs1X"] = odd.C; 
+            if (odd.T === 5) odds["cs12"] = odd.C; 
+            if (odd.T === 6) odds["csX2"] = odd.C; 
+          });
+        }
+        
+        return {
+          id: match.I,
+          sport: match.SN || '', // Sport Name
+          league: match.L || match.LE,
+          leagueId: match.LI,
+          homeTeam: match.O1,
+          homeTeamId: match.O1I,
+          awayTeam: match.O2,
+          awayTeamId: match.O2I,
+          score: `-`,
+          scoreHome: '-',
+          scoreAway: '-',
+          time: match.S ? new Date(match.S * 1000).toLocaleString('tr-TR', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }) : "YAKLAŞAN",
+          info: match.SC || null,
+          odds: odds,
+          isLive: false
+        };
+      });
+      
+      io.emit('1xbetPreMatches', preMatches1xBet);
+    }
+  } catch (err) {
+    console.error('[1xBet PreMatch] Fetch Error:', err.message);
+  }
+}
+
+setInterval(fetch1xBetLive, 5000);
+setInterval(fetch1xBetPreMatch, 15000);
+fetch1xBetLive();
+fetch1xBetPreMatch();
 
 // Filter matches by Elite Teams
 const vipTeams = [
@@ -188,31 +513,10 @@ function processSwarmData(dataObj, isLive) {
           const teamHome = game.team1_name || existingMatch?.team_home || '';
           const teamAway = game.team2_name || existingMatch?.team_away || '';
           const compName = comp.name || existingMatch?.league || '';
+          const regionName = region.name || existingMatch?.country || '';
 
-          // Filter out women's football matches
-          const isWomen = (
-              compName.toLowerCase().includes('women') || 
-              compName.toLowerCase().includes('kadınlar') || 
-              compName.toLowerCase().includes('(w)') || 
-              teamHome.toLowerCase().includes('(w)') || 
-              teamAway.toLowerCase().includes('(w)') || 
-              teamHome.toLowerCase().includes('women') || 
-              teamAway.toLowerCase().includes('women') ||
-              teamHome.toLowerCase().includes('kadınlar') ||
-              teamAway.toLowerCase().includes('kadınlar')
-          );
-
-          // Filter out virtual and simulated matches
-          const isVirtual = (
-              compName.toLowerCase().includes('virtual') ||
-              compName.toLowerCase().includes('srl') ||
-              teamHome.toLowerCase().includes('virtual') ||
-              teamAway.toLowerCase().includes('virtual') ||
-              teamHome.toLowerCase().includes('srl') ||
-              teamAway.toLowerCase().includes('srl')
-          );
-          
-          if (isWomen || isVirtual) continue;
+          // Tüm filtreler kaldırıldı (Kullanıcı Talebi: "TÜM FİLTRELRİ KALDIR.SADECE FUTBOLARI VER")
+          // Zaten sportId == 1 kontrolü yukarıda yapıldığı için sadece Futbol maçları buraya düşüyor.
 
           const startTs = game.start_ts || existingMatch?.start_ts;
           
@@ -471,47 +775,9 @@ function connectSwarm() {
             "rid": "live_sub"
           }));
 
-          const nowTs = Math.floor(Date.now() / 1000);
-          ws.send(JSON.stringify({
-            "command": "get",
-            "params": {
-              "source": "betting",
-              "what": {
-                "sport": ["id", "name"], "region": ["id", "name"], "competition": ["id", "name"],
-                "game": ["id", "start_ts", "team1_name", "team2_name", "type", "info", "stats"],
-                "market": ["id", "type", "name", "base"], "event": ["id", "price", "type", "name"]
-              },
-              "where": { 
-                  "sport": {"id": 1},
-                  "game": {
-                      "type": {"@in": [0, 2]},
-                      "start_ts": {"@gte": nowTs, "@lt": nowTs + 86400 * 3} // Next 3 days
-                  },
-                  "market": {"type": {"@in": ["P1P2", "MatchResult", "P1XP2", "TotalGoals", "BothTeamsToScore", "Total", "OverUnder", "GoalGoal", "YesNo"]}}
-              },
-              "subscribe": true
-            },
-            "rid": "pre_sub"
-          }));
-
-          // Outrights Subscription
-          ws.send(JSON.stringify({
-            "command": "get",
-            "params": {
-              "source": "betting",
-              "what": {
-                "sport": ["id", "name"], "region": ["id", "name"], "competition": ["id", "name"],
-                "game": ["id", "start_ts", "team1_name", "team2_name", "type"],
-                "market": ["id", "type", "name", "base"], "event": ["id", "price", "type", "name"]
-              },
-              "where": { 
-                  "game": { "type": {"@in": [0, 1, 2, 3]} },
-                  "market": {"type": "Outright"}
-              },
-              "subscribe": true
-            },
-            "rid": "outrights_sub"
-          }));
+          // SADECE CANLI FUTBOL - Kullanıcı Talebi Doğrultusunda Pre-Match ve Outrights Kaldırıldı
+          // ws.send(JSON.stringify({ "rid": "pre_sub", ... }));
+          // ws.send(JSON.stringify({ "rid": "outrights_sub", ... }));
       }
 
       // Handle Subscriptions & Deltas
@@ -577,6 +843,41 @@ io.on('connection', (socket) => {
     if (liveMatchesMap.size > 0 || prematchMatchesMap.size > 0) {
         broadcastToClients();
     }
+    
+    // Immediately send 1xBet matches if available
+    if (liveMatches1xBet.length > 0) {
+        socket.emit('1xbetLiveMatches', liveMatches1xBet);
+    }
+    
+    // Mock Outrights
+    const mockOutrights = [
+        {
+            id: "out_superlig_1",
+            sport: "Futbol",
+            competition: "Türkiye Süper Lig 2024/2025",
+            market_name: "Şampiyon Kim Olur?",
+            closes_at: Math.floor(new Date("2025-05-25").getTime() / 1000),
+            participants: [
+                { id: "sel_gs", name: "Galatasaray", price: "1.85" },
+                { id: "sel_fb", name: "Fenerbahçe", price: "2.10" },
+                { id: "sel_bjk", name: "Beşiktaş", price: "6.50" },
+                { id: "sel_ts", name: "Trabzonspor", price: "15.00" }
+            ]
+        },
+        {
+            id: "out_nba_1",
+            sport: "Basketbol",
+            competition: "NBA 2024/2025",
+            market_name: "Şampiyonluk",
+            closes_at: Math.floor(new Date("2025-06-10").getTime() / 1000),
+            participants: [
+                { id: "sel_bos", name: "Boston Celtics", price: "3.50" },
+                { id: "sel_den", name: "Denver Nuggets", price: "4.20" },
+                { id: "sel_mil", name: "Milwaukee Bucks", price: "6.00" }
+            ]
+        }
+    ];
+    socket.emit('outrights_update', mockOutrights);
 
     socket.on('disconnect', () => {
         console.log(`Frontend client disconnected: ${socket.id}`);

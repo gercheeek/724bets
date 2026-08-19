@@ -457,7 +457,7 @@ const Header: React.FC<HeaderProps> = ({
                   className="flex items-center px-3 md:px-4 cursor-pointer hover:bg-white/5 rounded-lg transition-colors h-[36px]"
                   onClick={() => setWalletDropdownOpen(prev => !prev)}
                 >
-                  <span className="font-black text-[#00E5FF] text-[13px] md:text-[14px] tracking-tight mr-2 whitespace-nowrap drop-shadow-[0_0_5px_rgba(16,185,129,0.3)]">${Number(siteUser.balance || 0).toFixed(2)}</span>
+                  <span className="font-black text-[#00E5FF] text-[13px] md:text-[14px] tracking-tight mr-2 whitespace-nowrap drop-shadow-[0_0_5px_rgba(16,185,129,0.3)]">₺{Number(siteUser.balance || 0).toFixed(2)}</span>
                   <ChevronDown className={`w-4 h-4 text-[#00E5FF]/70 transition-transform ${walletDropdownOpen ? 'rotate-180' : ''}`} />
                 </div>
                 
