@@ -7,22 +7,19 @@ import ModernChat from '../ModernChat';
 import { useTranslation } from 'react-i18next';
 import { MiniGamesSidebar, GamepadIcon } from '../MiniGamesSidebar';
 
-const MyBetsPanel = ({ onShare }: { onShare: (msg: string) => void }) => {
+const MyBetsPanel = ({ siteUser, onShare }: { siteUser: any, onShare: (msg: string) => void }) => {
   const [activeBets, setActiveBets] = useState<any[]>([]);
   const [isCashingOut, setIsCashingOut] = useState<string | null>(null);
 
   const fetchBets = async () => {
+    if (!siteUser) return;
     try {
-        const userRes = await fetch('http://localhost:3001/api/user/mock', { method: 'POST' });
-        const userData = await userRes.json();
-        if (!userData.success) return;
-
-        const betsRes = await fetch(`http://localhost:3001/api/bets?userId=${userData.user.id}`);
+        const betsRes = await fetch(`/api/sports/my-bets?userCode=${siteUser.username}`);
         const betsData = await betsRes.json();
         
-        if (betsData.success) {
+        if (betsData.success && betsData.bets) {
             // Only show PENDING bets in active sidebar
-            const pendingBets = betsData.bets.filter((b: any) => b.status === 'pending');
+            const pendingBets = betsData.bets.filter((b: any) => b.status?.toLowerCase() === 'pending');
             const formatted = pendingBets.map((b: any) => ({
                 id: b.id,
                 type: b.items.length > 1 ? 'KOMBİNE BAHİS' : 'TEKLİ BAHİS',
@@ -46,35 +43,10 @@ const MyBetsPanel = ({ onShare }: { onShare: (msg: string) => void }) => {
 
   React.useEffect(() => {
       fetchBets();
-  }, []);
+  }, [siteUser]);
 
   const handleCashout = async (betId: string) => {
-      setIsCashingOut(betId);
-      try {
-          const userRes = await fetch('http://localhost:3001/api/user/mock', { method: 'POST' });
-          const userData = await userRes.json();
-          
-          const cashoutRes = await fetch('http://localhost:3001/api/cashout', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ userId: userData.user.id, betId })
-          });
-          const cashoutData = await cashoutRes.json();
-          
-          if (cashoutData.success) {
-              alert(`✅ Bahis başarıyla bozduruldu!\nBozdurulan Tutar: ${cashoutData.cashoutAmount.toFixed(2)} TL\nYeni Bakiye: ${cashoutData.newBalance.toFixed(2)} TL`);
-              const member = { id: userData.user.id, username: userData.user.username, balance: cashoutData.newBalance };
-              localStorage.setItem('site_member', JSON.stringify(member));
-              window.dispatchEvent(new Event('storage'));
-              fetchBets();
-          } else {
-              alert(`❌ Hata: ${cashoutData.error}`);
-          }
-      } catch (e) {
-          alert("❌ Sunucuya bağlanırken hata oluştu.");
-      } finally {
-          setIsCashingOut(null);
-      }
+      alert("Bu özellik şu an bakımda.");
   };
 
   if (activeBets.length === 0) {
@@ -565,12 +537,15 @@ export const DualRightPanel: React.FC<{
             )}
           </>
         ) : activePanel === 'mybets' ? (
-          <MyBetsPanel onShare={(msg) => {
-            setActivePanel('chat');
-            setTimeout(() => {
-              window.dispatchEvent(new CustomEvent('shareBetEvent', { detail: { message: msg } }));
-            }, 150);
-          }} />
+          <MyBetsPanel 
+            siteUser={siteUser}
+            onShare={(msg) => {
+              setActivePanel('chat');
+              setTimeout(() => {
+                window.dispatchEvent(new CustomEvent('shareBetEvent', { detail: { message: msg } }));
+              }, 150);
+            }} 
+          />
         ) : activePanel === 'minigames' ? (
           <MiniGamesSidebar />
         ) : (

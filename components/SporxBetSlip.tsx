@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Trophy, Trash2, Activity, Star } from 'lucide-react';
 import { useBetting } from '../contexts/BettingContext';
+import { useUser } from '../contexts/UserContext';
 
 export const SporxBetSlip = () => {
   const { betSelections, betTab, setBetTab, removeBetSelection, clearBetSelections } = useBetting();
+  const { siteUser, setSiteUser } = useUser();
   const [betAmount, setBetAmount] = useState<string>('100');
 
   const totalOdds = betSelections.reduce((acc, curr) => acc * curr.odd, 1);
@@ -13,21 +15,14 @@ export const SporxBetSlip = () => {
 
   const placeBet = async () => {
     if (betSelections.length === 0) return;
+    if (!siteUser) {
+        alert("Lütfen önce giriş yapın.");
+        return;
+    }
+    
     setIsSubmitting(true);
     
     try {
-        // 1. Get Mock User
-        const userRes = await fetch('http://localhost:3001/api/user/mock', { method: 'POST' });
-        const userData = await userRes.json();
-        
-        if (!userData.success) throw new Error("Kullanıcı oluşturulamadı.");
-        const userId = userData.user.id;
-
-        // 2. Format Bet Items for API
-        // Front-end state has: matchId, marketName, selectionName, odd, homeTeam, awayTeam
-        // API expects: matchId, teamHome, teamAway, selection (e.g. "1"), odds
-        
-        // MAPPING logic for selectionName to backend selection key
         const getSelectionKey = (selectionName: string, marketName: string) => {
              const sLower = selectionName.toLowerCase();
              if (marketName === 'Maç Sonucu' || marketName === '1X2') {
@@ -48,35 +43,39 @@ export const SporxBetSlip = () => {
                  if (sLower === 'var') return 'gg';
                  if (sLower === 'yok') return 'ng';
              }
-             // Default fallback to selectionName
              return selectionName;
         };
 
         const items = betSelections.map(b => ({
             matchId: b.matchId,
-            teamHome: b.homeTeam,
-            teamAway: b.awayTeam,
-            selection: getSelectionKey(b.selectionName, b.marketName),
+            homeTeam: b.homeTeam,
+            awayTeam: b.awayTeam,
+            selectionName: getSelectionKey(b.selectionName, b.marketName),
             odds: b.odd
         }));
 
-        // 3. Place Bet
-        const betRes = await fetch('http://localhost:3001/api/bet', {
+        const betRes = await fetch('/api/sports/place-bet', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                userId,
-                stake: parseFloat(betAmount),
-                items
+                userCode: siteUser.username,
+                amount: parseFloat(betAmount),
+                selections: items,
+                totalOdds: totalOdds
             })
         });
         
         const betData = await betRes.json();
         if (betData.success) {
-            alert(`✅ Kupon Başarıyla Oynandı!\n\nYeni Bakiye: ${betData.newBalance} TL`);
+            alert(`✅ Kupon Başarıyla Oynandı!\n\nYeni Bakiye: ${betData.balance} TL`);
             clearBetSelections();
+            
+            const updatedUser = { ...siteUser, balance: betData.balance };
+            setSiteUser(updatedUser);
+            localStorage.setItem('site_current_member', JSON.stringify(updatedUser));
+            localStorage.setItem('site_member', JSON.stringify(updatedUser));
         } else {
-            alert(`❌ Hata: ${betData.error}`);
+            alert(`❌ Hata: ${betData.error || 'Bilinmeyen Hata'}`);
         }
 
     } catch (e: any) {
