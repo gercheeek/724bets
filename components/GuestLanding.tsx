@@ -32,7 +32,6 @@ import { useBetting } from '../contexts/BettingContext';
 
 const getDemoUrl = (game: any): string | null => {
   if (!game) return null;
-  if (game.customDemoUrl) return game.customDemoUrl;
   if (game.demoSymbol) {
     return `https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=tr&cur=TRY&gameSymbol=${game.demoSymbol}&jurisdiction=99&lobbyUrl=https://724bets.net`;
   }
@@ -178,6 +177,16 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
       setCurrentPromoSlide(prev => (prev + 1) % 3);
     }, 3000);
     return () => clearInterval(interval);
+  }, []);
+
+  // Handle global close games event
+  useEffect(() => {
+    const handleCloseGames = () => {
+      setShowDemoIframe(false);
+      setSelectedGame(null);
+    };
+    window.addEventListener('closeAllGames', handleCloseGames);
+    return () => window.removeEventListener('closeAllGames', handleCloseGames);
   }, []);
 
   const promoCards = [
@@ -370,10 +379,8 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
               setSelectedGame({
                 ...game,
                 img: game.image || game.img,
-                category: 'slots',
+                category: game.category || 'slots',
                 players: game.players,
-                customDemoUrl: game.customDemoUrl,
-                demoUrl: game.customDemoUrl,
                 demoSymbol: game.demoSymbol
               } as any);
               setShowDemoIframe(true);
@@ -386,10 +393,8 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
               setSelectedGame({
                 ...game,
                 img: game.image || game.img,
-                category: 'slots',
+                category: game.category || 'slots',
                 players: game.players,
-                customDemoUrl: game.customDemoUrl,
-                demoUrl: game.customDemoUrl,
                 demoSymbol: game.demoSymbol
               } as any);
               setShowDemoIframe(true);
@@ -473,10 +478,8 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                 setSelectedGame({
                   ...game,
                   img: game.image || game.img,
-                  category: 'slots',
+                  category: game.category || 'slots',
                   players: game.players,
-                  customDemoUrl: game.customDemoUrl,
-                  demoUrl: game.customDemoUrl,
                   demoSymbol: game.demoSymbol
                 } as any);
                 setShowDemoIframe(true);
@@ -486,10 +489,8 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                 setSelectedGame({
                   ...game,
                   img: game.image || game.img,
-                  category: 'slots',
+                  category: game.category || 'slots',
                   players: game.players,
-                  customDemoUrl: game.customDemoUrl,
-                  demoUrl: game.customDemoUrl,
                   demoSymbol: game.demoSymbol
                 } as any);
                 setShowDemoIframe(true);
@@ -499,10 +500,8 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                 setSelectedGame({
                   ...game,
                   img: game.image || game.img,
-                  category: 'slots',
+                  category: game.category || 'slots',
                   players: game.players,
-                  customDemoUrl: game.customDemoUrl,
-                  demoUrl: game.customDemoUrl,
                   demoSymbol: game.demoSymbol
                 } as any);
                 setShowDemoIframe(true);

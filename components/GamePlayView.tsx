@@ -24,6 +24,15 @@ export const GamePlayView: React.FC<GamePlayViewProps> = ({ game, demoUrl, onClo
   const [loadingRealGame, setLoadingRealGame] = useState<boolean>(false);
   const [realGameError, setRealGameError] = useState<string | null>(null);
 
+  // Fix for audio continuing after unmount in some browsers
+  useEffect(() => {
+    return () => {
+      if (iframeRef.current) {
+        iframeRef.current.src = 'about:blank';
+      }
+    };
+  }, []);
+
   useEffect(() => {
     const fetchRealUrl = async () => {
       let vendorCode = game?.vendorCode;

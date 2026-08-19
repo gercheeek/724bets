@@ -35,64 +35,12 @@ const BANNERS = [
 ];
 
 
-const BONUSBUY_GAMES = [
-  'Big Bass Splash 1000',
-  'Gates of Olympus 1000',
-  'Wisdom of Athena 1000 Xmas',
-  'Sugar Rush 1000',
-  'Wisdom of Athena 1000',
-  'Gates of Olympus Xmas 1000',
-  'Starlight Princess 1000',
-  'Big Bass Bonanza 1000',
-  'Sweet Bonanza 1000',
-  'Tigre Sortudo 1000',
-  'Lucky Tiger 1000',
-  'Sunny Coin 10000: Hold The Spin',
-  'JJ 1000: Hold & Win',
-  '1000 x Rush',
-  'DJ Tiger x1000',
-  'Rise of Olympus 1000',
-  'Always Up! x10000',
-  'Egypt Power x1000',
-  'Haunted Coins x1000',
-  'Free Reelin\' Joker 1000',
-  'Lucky Streak 1000',
-  '10001 Nights',
-  '1000 Rainbows Superpot Scratch',
-  '1000 Rainbows Superpot',
-  'Triple Jokers',
-  'Monkey Warrior',
-  'Aztec Treasure',
-  'The Great Chicken Escape',
-  'Vampires vs Wolves',
-  'Hot Chilli',
-  'Tree of Riches',
-  'John Hunter and the Tomb of the Scarab Queen',
-  'Super Joker',
-  'Fire Strike',
-  'Honey Honey Honey',
-  'Aladdin and the Sorcerer',
-  'Hercules and Pegasus',
-  'Sweet Bonanza Xmas',
-  'Greek Gods',
-  'Money Mouse',
-  'Buffalo King',
-  'Magic Journey',
-  'Release the Kraken',
-  'Super 7s',
-  'Master Joker',
-  'Mysterious',
-  'Lucky Dragons',
-  'Journey to the West',
-  'Jurassic Giants',
-  '888 Dragons'
-];
+const BONUSBUY_GAMES: string[] = [];
 
 // End of Mock Data
 
 const getDemoUrl = (game: any): string | null => {
   if (!game) return null;
-  if (game.customDemoUrl) return game.customDemoUrl;
   
   const nameString = (game.name || game.img || game.image || '').toLowerCase().replace(/[^a-z0-9]/g, '');
   let symbol = game.demoSymbol || 'vs20olympx'; // Fallback
@@ -218,15 +166,7 @@ export default function CasinoLobby({
   initialTab?: string
 }) {
   const { t } = useLanguage();
-  const dynamicOriginals = getOriginalsData(t).map((game, i) => ({
-    id: 1000 + i,
-    name: game.name,
-    provider: 'Originals',
-    img: game.image,
-    category: 'originals',
-    rtp: game.rtp || '99.00%',
-    path: game.path
-  }));
+  const dynamicOriginals: any[] = [];
 
   const [activeTab, setActiveTab] = useState(initialTab || 'all');
   const [currentPath, setCurrentPath] = useState(typeof window !== 'undefined' ? window.location.pathname : '');
@@ -286,6 +226,33 @@ export default function CasinoLobby({
   const [shuffledAllGames, setShuffledAllGames] = useState<any[]>([]);
   const [dynamicNewGames, setDynamicNewGames] = useState<any[]>([]);
   const [dynamicPopularGames, setDynamicPopularGames] = useState<any[]>([]);
+  const [oroGames, setOroGames] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchOroGames = async () => {
+      try {
+        const res = await fetch('/api/casino/games');
+        const data = await res.json();
+        if (data.success && Array.isArray(data.games)) {
+          const mapped = data.games.map((g: any) => ({
+            id: g.id,
+            name: g.name,
+            provider: g.provider,
+            category: g.type === 'live' ? 'live' : 'slots',
+            img: g.image,
+            image: g.image,
+            vendorCode: g.vendorCode,
+            gameCode: g.gameCode,
+            isActive: g.isActive
+          }));
+          setOroGames(mapped);
+        }
+      } catch (err) {
+        console.error('Failed to fetch OroPlay games:', err);
+      }
+    };
+    fetchOroGames();
+  }, []);
 
   const shuffleGamesList = (gamesArray: any[]) => {
     const arr = [...gamesArray];
@@ -296,36 +263,25 @@ export default function CasinoLobby({
     return arr;
   };
 
+  const allGames: any[] = oroGames.length > 0 ? (shuffledAllGames.length > 0 ? shuffledAllGames : oroGames) : [];
+
   const handleShuffle = () => {
-    const games = [...ALL_GAMES, ...LIVE_CASINO_GAMES, ...DEMO_GAMES, ...dynamicOriginals, ...customGames.map(cg => ({ ...cg, img: cg.image, category: cg.lobbyCategory || 'slots' }))];
-    setShuffledAllGames(shuffleGamesList(games));
+    setShuffledAllGames(shuffleGamesList(allGames));
   };
 
   useEffect(() => {
-    const games = [...ALL_GAMES, ...LIVE_CASINO_GAMES, ...DEMO_GAMES, ...dynamicOriginals, ...customGames.map(cg => ({ ...cg, img: cg.image, category: cg.lobbyCategory || 'slots' }))];
-    const newPool = games.filter(g => g.category === 'new' || g.isNew);
-    const popularPool = games.filter(g => g.isPopular);
+    const newPool = allGames.filter(g => g.category === 'new' || g.isNew || g.category === 'slots');
+    const popularPool = allGames.filter(g => g.category === 'popular' || g.category === 'slots');
     
-    // Initial set
     setDynamicNewGames(shuffleGamesList(newPool).slice(0, 14));
-    setDynamicPopularGames(popularPool);
-
-    const interval = setInterval(() => {
-      setDynamicNewGames(shuffleGamesList(newPool).slice(0, 14));
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, [customGames.length, dynamicOriginals.length]);
+    setDynamicPopularGames(popularPool.slice(0, 20));
+  }, [oroGames.length, customGames.length, dynamicOriginals.length]);
 
   useEffect(() => {
-    handleShuffle();
-  }, [customGames.length, dynamicOriginals.length]);
-
-  useEffect(() => {
-    if (activeTab === 'all') {
-      handleShuffle();
+    if (oroGames.length > 0) {
+      setShuffledAllGames(oroGames);
     }
-  }, [activeTab]);
+  }, [oroGames]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -355,21 +311,18 @@ export default function CasinoLobby({
     }
   };
 
-  // Combine ALL_GAMES, DEMO_GAMES, dynamicOriginals, and customGames
-  const allGames = [...ALL_GAMES, ...LIVE_CASINO_GAMES, ...DEMO_GAMES, ...dynamicOriginals, ...customGames.map(cg => ({ ...cg, img: cg.image, category: cg.lobbyCategory || 'slots' }))];
-
-  const filteredGames = (activeTab === 'all' && shuffledAllGames.length > 0 ? shuffledAllGames : allGames).filter(game => {
+  const filteredGames = allGames.filter(game => {
     let matchesTab = false;
     if (activeTab === 'all') {
       matchesTab = true;
     } else if (activeTab === 'popular') {
-      matchesTab = game.category === 'popular';
+      matchesTab = game.category === 'slots' || game.category === 'popular';
     } else if (activeTab === 'slots') {
-      matchesTab = game.category === 'pure_slots';
-    } else if (activeTab === 'bonusbuy') {
-      matchesTab = game.category === 'bonusbuy';
+      matchesTab = game.category === 'slots';
+    } else if (activeTab === 'live') {
+      matchesTab = game.category === 'live';
     } else {
-      matchesTab = game.category === activeTab;
+      matchesTab = true;
     }
     const matchesSearch = !searchQuery || 
       (game.name && game.name.toLowerCase().includes(searchQuery.toLowerCase())) ||
@@ -408,6 +361,16 @@ export default function CasinoLobby({
     setSelectedGame(game);
     setShowDemoIframe(true);
   };
+
+  // Handle global close games event
+  useEffect(() => {
+    const handleCloseGames = () => {
+      setShowDemoIframe(false);
+      setSelectedGame(null);
+    };
+    window.addEventListener('closeAllGames', handleCloseGames);
+    return () => window.removeEventListener('closeAllGames', handleCloseGames);
+  }, []);
 
   const handleDemoClick = (game: any) => {
     const gameName = (game.name || '').toLowerCase();

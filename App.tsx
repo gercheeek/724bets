@@ -102,6 +102,7 @@ const PromoView = React.lazy(() => import('./components/PromoView'));
 const PromoCodeView = React.lazy(() => import('./components/PromoCodeView'));
 const ReferralView = React.lazy(() => import('./components/ReferralView'));
 import Spor724View from './components/Spor724View';
+const Sports1xBetView = React.lazy(() => import('./components/Sports1xBetView'));
 const AffiliateView = React.lazy(() => import('./components/AffiliateView'));
 const VIPClubView = React.lazy(() => import('./components/VIPClubView'));
 
@@ -1404,14 +1405,8 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
           setBotsConfig(globalBotsConfig);
           localStorage.setItem('site_bots_config', JSON.stringify(globalBotsConfig));
         }
-        if (globalCasinoLobby && Array.isArray(globalCasinoLobby)) {
-          const hasOldPicsum = globalCasinoLobby.some(g => g.image && g.image.includes('picsum.photos'));
-          if (!hasOldPicsum) {
-            const filtered = globalCasinoLobby.filter((g: any) => g.name !== 'Death Becomes You' && g.name !== 'Crazy Time' && g.name !== 'XXXTreme Lightning');
-            setCasinoLobbyGames(filtered);
-            localStorage.setItem('site_casino_lobby_games', JSON.stringify(filtered));
-          }
-        }
+        setCasinoLobbyGames([]);
+        localStorage.removeItem('site_casino_lobby_games');
 
       } catch (err) {
         console.error('Initialization error:', err);
@@ -1843,7 +1838,12 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
     if (v === 'bulten') {
       setBultenLoading(true);
     }
-    if (v === view || isTransitioning) return;
+    if (v === view || isTransitioning) {
+      if (v === 'home' || v === 'slots' || v === 'live-casino') {
+        window.dispatchEvent(new CustomEvent('closeAllGames'));
+      }
+      return;
+    }
     
     // Yönlendirmeyi anında yap (eski 5 sn / 3 sn beklemeleri kaldırıldı)
     const currentLang = i18n.language ? i18n.language.split('-')[0] : 'tr';
@@ -2864,6 +2864,8 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
             </div>
           </div>
         )}
+
+        {view === '1xbet-live' && <Sports1xBetView />}
 
         {view === 'analysis' && (
           <div className="animate-fade-in">
