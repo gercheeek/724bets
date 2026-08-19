@@ -5,7 +5,7 @@ const WebSocket = require('ws');
 const { logError, logInfo } = require('./logger.cjs');
 
 const cors = require('cors');
-
+const puppeteer = require('puppeteer');
 const app = express();
 app.use(cors());
 
@@ -38,9 +38,14 @@ app.get('/api/casino/test-vps', (req, res) => {
     });
 });
 
-// Initialize Prisma
+require('dotenv').config();
 const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+const Database = require('better-sqlite3');
+const { PrismaBetterSqlite3 } = require('@prisma/adapter-better-sqlite3');
+
+const db = new Database('./dev.db');
+const adapter = new PrismaBetterSqlite3(db);
+const prisma = new PrismaClient({ adapter });
 const INITIAL_BALANCE = 1000.00;
 
 // Helper function to get or create a user in Prisma
@@ -268,7 +273,7 @@ app.post('/api/casino/callback/api/transaction', express.json(), verifyCallback,
             await prisma.transaction.create({
                 data: {
                     transactionCode,
-                    userCode,
+                    userId: user.id,
                     gameCode: gameCode || null,
                     amount: parsedAmount,
                     type: type || (parsedAmount < 0 ? 'bet' : 'win')
@@ -330,6 +335,456 @@ app.get('/api/logo/:teamId', async (req, res) => {
 });
 
 // Proxy for detailed match data
+// --- PAYMENT GATEWAY API ---
+
+// Admin: Get payment methods
+app.get('/api/admin/payment-methods', async (req, res) => {
+    try {
+        const methods = await prisma.paymentMethod.findMany();
+        res.json({ success: true, methods });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Admin: Update/Create payment method
+app.post('/api/admin/payment-methods', express.json(), async (req, res) => {
+    try {
+        const { id, name, type, accountName, accountNo, isActive, minAmount, maxAmount } = req.body;
+        if (id) {
+            const updated = await prisma.paymentMethod.update({
+                where: { id },
+                data: { name, type, accountName, accountNo, isActive, minAmount, maxAmount }
+            });
+            return res.json({ success: true, method: updated });
+        }
+        const created = await prisma.paymentMethod.create({
+            data: { name, type, accountName, accountNo, isActive, minAmount, maxAmount }
+        });
+        res.json({ success: true, method: created });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// User: Deposit Request
+app.post('/api/payments/deposit', express.json(), async (req, res) => {
+    try {
+        const { userId, method, amount, txHash } = req.body;
+        if (!userId || !method || !amount) return res.status(400).json({ success: false, error: 'Missing fields' });
+        
+        const request = await prisma.paymentRequest.create({
+            data: {
+                userId,
+                type: 'deposit',
+                method,
+                amount: parseFloat(amount),
+                txHash,
+                status: 'pending'
+            }
+        });
+        res.json({ success: true, request });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// User: Withdraw Request
+app.post('/api/payments/withdraw', express.json(), async (req, res) => {
+    try {
+        const { userId, method, amount, txHash } = req.body; // txHash can be user's IBAN/Wallet for withdrawal
+        if (!userId || !method || !amount) return res.status(400).json({ success: false, error: 'Missing fields' });
+        
+        const user = await prisma.user.findUnique({ where: { id: userId } });
+        if (!user || user.balance < amount) {
+            return res.status(400).json({ success: false, error: 'Insufficient balance' });
+        }
+
+        // Deduct balance immediately for withdrawal request
+        await prisma.user.update({
+            where: { id: userId },
+            data: { balance: { decrement: parseFloat(amount) } }
+        });
+
+        const request = await prisma.paymentRequest.create({
+            data: {
+                userId,
+                type: 'withdraw',
+                method,
+                amount: parseFloat(amount),
+                txHash, // where to send the money
+                status: 'pending'
+            }
+        });
+        res.json({ success: true, request });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// User: Payment History
+app.get('/api/payments/history', async (req, res) => {
+    try {
+        const { userId } = req.query;
+        if (!userId) return res.status(400).json({ success: false, error: 'Missing userId' });
+        const history = await prisma.paymentRequest.findMany({
+            where: { userId },
+            orderBy: { createdAt: 'desc' }
+        });
+        res.json({ success: true, history });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Admin: Pending Payments
+app.get('/api/admin/payments/pending', async (req, res) => {
+    try {
+        const { type } = req.query; // 'deposit' or 'withdraw'
+        const filter = { status: 'pending' };
+        if (type) filter.type = type;
+        
+        const pending = await prisma.paymentRequest.findMany({
+            where: filter,
+            include: { user: true },
+            orderBy: { createdAt: 'desc' }
+        });
+        res.json({ success: true, pending });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Admin: Approve Payment
+app.post('/api/admin/payments/approve', express.json(), async (req, res) => {
+    try {
+        const { id, adminNote } = req.body;
+        const request = await prisma.paymentRequest.findUnique({ where: { id }, include: { user: true } });
+        if (!request || request.status !== 'pending') return res.status(400).json({ success: false, error: 'Invalid request' });
+
+        // If deposit, add balance. (If withdraw, balance was already deducted on request)
+        if (request.type === 'deposit') {
+            await prisma.user.update({
+                where: { id: request.userId },
+                data: { balance: { increment: request.amount } }
+            });
+            // Log transaction
+            await prisma.transaction.create({
+                data: {
+                    transactionCode: `DEP-${Date.now()}`,
+                    userId: request.userId,
+                    amount: request.amount,
+                    type: 'deposit'
+                }
+            });
+        } else {
+             // Log withdrawal transaction
+             await prisma.transaction.create({
+                data: {
+                    transactionCode: `WD-${Date.now()}`,
+                    userId: request.userId,
+                    amount: -request.amount,
+                    type: 'withdraw'
+                }
+            });
+        }
+
+        const updated = await prisma.paymentRequest.update({
+            where: { id },
+            data: { status: 'approved', adminNote }
+        });
+        res.json({ success: true, request: updated });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Admin: Reject Payment
+app.post('/api/admin/payments/reject', express.json(), async (req, res) => {
+    try {
+        const { id, adminNote } = req.body;
+        const request = await prisma.paymentRequest.findUnique({ where: { id } });
+        if (!request || request.status !== 'pending') return res.status(400).json({ success: false, error: 'Invalid request' });
+
+        // If withdraw, refund the deducted balance
+        if (request.type === 'withdraw') {
+            await prisma.user.update({
+                where: { id: request.userId },
+                data: { balance: { increment: request.amount } }
+            });
+        }
+
+        const updated = await prisma.paymentRequest.update({
+            where: { id },
+            data: { status: 'rejected', adminNote }
+        });
+        res.json({ success: true, request: updated });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// --- ADMIN USER & DASHBOARD API ---
+
+// Admin: List Users
+app.get('/api/admin/users', async (req, res) => {
+    try {
+        const users = await prisma.user.findMany({
+            include: {
+                _count: {
+                    select: { bets: true, transactions: true, paymentRequests: true }
+                }
+            },
+            orderBy: { createdAt: 'desc' }
+        });
+        res.json({ success: true, users });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Admin: Adjust User Balance
+app.post('/api/admin/users/:id/balance', express.json(), async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { amount, action, note } = req.body; // action: 'add' | 'subtract'
+        
+        const numericAmount = parseFloat(amount);
+        if (isNaN(numericAmount) || numericAmount <= 0) {
+            return res.status(400).json({ success: false, error: 'Geçersiz miktar' });
+        }
+
+        const updateData = action === 'add' 
+            ? { balance: { increment: numericAmount } } 
+            : { balance: { decrement: numericAmount } };
+
+        const updatedUser = await prisma.user.update({
+            where: { id },
+            data: updateData
+        });
+
+        // Log the manual transaction
+        await prisma.transaction.create({
+            data: {
+                transactionCode: `ADM-${Date.now()}`,
+                userId: id,
+                amount: action === 'add' ? numericAmount : -numericAmount,
+                type: 'admin_adjustment'
+            }
+        });
+
+        res.json({ success: true, user: updatedUser });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Admin: Update User Status (Ban/Unban)
+app.put('/api/admin/users/:id/status', express.json(), async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { status } = req.body; // 'active' or 'banned'
+        
+        const updatedUser = await prisma.user.update({
+            where: { id },
+            data: { status }
+        });
+
+        res.json({ success: true, user: updatedUser });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Admin: Dashboard Stats
+app.get('/api/admin/dashboard-stats', async (req, res) => {
+    try {
+        // Total Users
+        const totalUsers = await prisma.user.count();
+        // Total active users
+        const activeUsers = await prisma.user.count({
+            where: { status: 'active' }
+        });
+
+        // Balances sum
+        const balances = await prisma.user.aggregate({
+            _sum: { balance: true }
+        });
+        const totalLiability = balances._sum.balance || 0;
+
+        // Deposits and Withdrawals sum
+        const deposits = await prisma.paymentRequest.aggregate({
+            where: { type: 'deposit', status: 'approved' },
+            _sum: { amount: true }
+        });
+        const totalDeposits = deposits._sum.amount || 0;
+
+        const withdrawals = await prisma.paymentRequest.aggregate({
+            where: { type: 'withdraw', status: 'approved' },
+            _sum: { amount: true }
+        });
+        const totalWithdrawals = withdrawals._sum.amount || 0;
+
+        // Bets Liability
+        const pendingBets = await prisma.bet.aggregate({
+            where: { status: 'pending' },
+            _sum: { possibleWin: true, stake: true }
+        });
+        const betLiability = pendingBets._sum.possibleWin || 0;
+        const pendingStake = pendingBets._sum.stake || 0;
+
+        res.json({
+            success: true,
+            stats: {
+                totalUsers,
+                activeUsers,
+                totalLiability, // Sum of all user balances
+                totalDeposits,
+                totalWithdrawals,
+                betLiability,   // Max exposure from pending bets
+                pendingStake    // Money currently tied in bets
+            }
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// --- KYC & FRAUD API ---
+app.post('/api/kyc/upload', express.json(), async (req, res) => {
+    try {
+        const { userId, type, fileUrl } = req.body;
+        if (!userId || !type || !fileUrl) {
+            return res.status(400).json({ success: false, error: 'Eksik parametre' });
+        }
+        const doc = await prisma.kycDocument.create({
+            data: { userId, type, fileUrl }
+        });
+        await prisma.user.update({
+            where: { id: userId },
+            data: { kycStatus: 'pending' }
+        });
+        res.json({ success: true, document: doc });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+app.get('/api/admin/kyc/pending', async (req, res) => {
+    try {
+        const documents = await prisma.kycDocument.findMany({
+            include: { user: true },
+            orderBy: { createdAt: 'desc' }
+        });
+        res.json({ success: true, documents });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+app.put('/api/admin/kyc/:id/status', express.json(), async (req, res) => {
+    try {
+        const { status, rejectionReason } = req.body;
+        const docId = req.params.id;
+        
+        const doc = await prisma.kycDocument.update({
+            where: { id: docId },
+            data: { status, rejectionReason }
+        });
+
+        let newStatus = status === 'approved' ? 'verified' : (status === 'rejected' ? 'rejected' : 'pending');
+        await prisma.user.update({
+            where: { id: doc.userId },
+            data: { kycStatus: newStatus }
+        });
+
+        res.json({ success: true, document: doc });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+app.get('/api/admin/fraud', async (req, res) => {
+    try {
+        const alerts = await prisma.fraudAlert.findMany({
+            include: { user: true },
+            orderBy: { createdAt: 'desc' },
+            take: 100
+        });
+        res.json({ success: true, alerts });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+app.put('/api/admin/fraud/:id/resolve', express.json(), async (req, res) => {
+    try {
+        const { isResolved, resolvedBy } = req.body;
+        const alert = await prisma.fraudAlert.update({
+            where: { id: req.params.id },
+            data: { isResolved, resolvedBy }
+        });
+        res.json({ success: true, alert });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+app.post('/api/admin/fraud/scan', async (req, res) => {
+    try {
+        // Mock scanner that generates a random fraud alert for demo purposes
+        const users = await prisma.user.findMany({ take: 5 });
+        if (users.length > 0) {
+            const randomUser = users[Math.floor(Math.random() * users.length)];
+            const reasons = [
+                "Aynı IP adresinden çoklu hesap girişi tespit edildi.",
+                "Son 1 saatte para yatırmadan yüklü miktarda çekim talebi.",
+                "Riskli bahis deseni: Çoklu çapraz bahis (Arbitraj şüphesi).",
+                "Kullanıcı bakiyesi ile bağdaşmayan yüksek tutarlı bahis."
+            ];
+            const severities = ["low", "medium", "high", "critical"];
+            
+            const alert = await prisma.fraudAlert.create({
+                data: {
+                    userId: randomUser.id,
+                    severity: severities[Math.floor(Math.random() * severities.length)],
+                    reason: reasons[Math.floor(Math.random() * reasons.length)],
+                },
+                include: { user: true }
+            });
+            
+            // Increment risk score
+            await prisma.user.update({
+                where: { id: randomUser.id },
+                data: { riskScore: { increment: 15 } }
+            });
+
+            return res.json({ success: true, alert, message: 'Tarama tamamlandı ve yeni uyarı bulundu.' });
+        }
+        res.json({ success: true, message: 'Tarama tamamlandı. Şüpheli işlem bulunamadı.' });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// --- END ADMIN USER & DASHBOARD API ---
+
+// --- SPORTS API ---
+app.get('/api/sports/matches', (req, res) => {
+    try {
+        res.json({
+            success: true,
+            live: liveMatches1xBet || [],
+            prematch: preMatches1xBet || []
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+// --- END SPORTS API ---
+
+// --- END PAYMENT GATEWAY API ---
+
 app.get('/api/1xbet/match/:id', async (req, res) => {
   const matchId = req.params.id;
   if (matchId === 'debug-list') return res.json(liveMatches1xBet);
@@ -361,138 +816,10 @@ const liveMatchesMap = new Map();
 const prematchMatchesMap = new Map();
 const outrightsMap = new Map();
 
-// 1xBet Feed Integration
-const API_URL_1XBET = 'https://1xframemxz.com/service-api/LiveFeed/Get1x2_VZip?count=50&lng=tr&mode=4&country=180&partner=85&noFilterBlockEvent=true';
+const API_URL_1XBET = 'https://1xframemxz.com/service-api/LiveFeed/Get1x2_VZip?count=50&lng=tr&mode=4&country=180&partner=85&noFilterBlockEvent=true&sports=1';
 let liveMatches1xBet = [];
 
-async function fetch1xBetLive() {
-  try {
-    const res = await fetch(API_URL_1XBET, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-        'Accept': 'application/json',
-        'Referer': 'https://1xframemxz.com/tr/live'
-      }
-    });
-    const text = await res.text();
-    let data;
-    try {
-       data = JSON.parse(text);
-    } catch(e) {
-       console.error('[1xBet Live] JSON Parse Error. Raw response:', text.substring(0, 200));
-       return;
-    }
-    
-    if (data && data.Value) {
-      liveMatches1xBet = data.Value.map(match => {
-        let odds = { "1": '-', "X": '-', "2": '-', "tU": '-', "tA": '-', "tP": '2.5', "cs1X": '-', "cs12": '-', "csX2": '-', "gg": '-', "ng": '-' };
-        if (match.E) {
-          match.E.forEach(odd => {
-            if (odd.T === 1) odds["1"] = odd.C; 
-            if (odd.T === 2) odds["X"] = odd.C; 
-            if (odd.T === 3) odds["2"] = odd.C; 
-            if (odd.T === 9 && odds["tU"] === '-') { odds["tU"] = odd.C; odds["tP"] = odd.P || '2.5'; }
-            if (odd.T === 10 && odds["tA"] === '-') { odds["tA"] = odd.C; }
-            if (odd.T === 4) odds["cs1X"] = odd.C; 
-            if (odd.T === 5) odds["cs12"] = odd.C; 
-            if (odd.T === 6) odds["csX2"] = odd.C; 
-          });
-        }
-        
-        let scoreHome = 0;
-        let scoreAway = 0;
-        if (match.SC && match.SC.FS) {
-           scoreHome = match.SC.FS.S1 || 0;
-           scoreAway = match.SC.FS.S2 || 0;
-        }
 
-        return {
-          id: match.I,
-          sport: match.SN || match.SE || 'Futbol',
-          league: match.L || match.LE,
-          leagueId: match.LI,
-          homeTeam: match.O1,
-          homeTeamId: match.O1I,
-          awayTeam: match.O2,
-          awayTeamId: match.O2I,
-          score: `${scoreHome}-${scoreAway}`,
-          scoreHome: scoreHome,
-          scoreAway: scoreAway,
-          time: (match.SC && match.SC.TS) ? Math.floor(match.SC.TS / 60) + "'" : "LIVE",
-          info: match.SC,
-          odds: odds
-        };
-      });
-      
-      io.emit('1xbetLiveMatches', liveMatches1xBet);
-      console.log(`[1xBet Live] Fetched ${liveMatches1xBet.length} matches`);
-    }
-  } catch (err) {
-    console.error('[1xBet Live] Fetch Error:', err.message);
-  }
-}
-
-// 1xBet Pre-Match Integration
-const API_URL_1XBET_PRE = 'https://1xframemxz.com/service-api/LineFeed/Get1x2_VZip?count=50&lng=tr&tf=2200000&mode=4&country=180&partner=85&getEmpty=true';
-let preMatches1xBet = [];
-
-async function fetch1xBetPreMatch() {
-  try {
-    const res = await fetch(API_URL_1XBET_PRE, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-        'Accept': 'application/json',
-        'Referer': 'https://1xframemxz.com/tr/line'
-      }
-    });
-    const data = await res.json();
-    
-    if (data && data.Value) {
-      preMatches1xBet = data.Value.map(match => {
-        let odds = { "1": '-', "X": '-', "2": '-', "tU": '-', "tA": '-', "tP": '2.5', "cs1X": '-', "cs12": '-', "csX2": '-', "gg": '-', "ng": '-' };
-        if (match.E) {
-          match.E.forEach(odd => {
-            if (odd.T === 1) odds["1"] = odd.C; 
-            if (odd.T === 2) odds["X"] = odd.C; 
-            if (odd.T === 3) odds["2"] = odd.C; 
-            if (odd.T === 9 && odds["tU"] === '-') { odds["tU"] = odd.C; odds["tP"] = odd.P || '2.5'; }
-            if (odd.T === 10 && odds["tA"] === '-') { odds["tA"] = odd.C; }
-            if (odd.T === 4) odds["cs1X"] = odd.C; 
-            if (odd.T === 5) odds["cs12"] = odd.C; 
-            if (odd.T === 6) odds["csX2"] = odd.C; 
-          });
-        }
-        
-        return {
-          id: match.I,
-          sport: match.SN || '', // Sport Name
-          league: match.L || match.LE,
-          leagueId: match.LI,
-          homeTeam: match.O1,
-          homeTeamId: match.O1I,
-          awayTeam: match.O2,
-          awayTeamId: match.O2I,
-          score: `-`,
-          scoreHome: '-',
-          scoreAway: '-',
-          time: match.S ? new Date(match.S * 1000).toLocaleString('tr-TR', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }) : "YAKLAŞAN",
-          info: match.SC || null,
-          odds: odds,
-          isLive: false
-        };
-      });
-      
-      io.emit('1xbetPreMatches', preMatches1xBet);
-    }
-  } catch (err) {
-    console.error('[1xBet PreMatch] Fetch Error:', err.message);
-  }
-}
-
-setInterval(fetch1xBetLive, 5000);
-setInterval(fetch1xBetPreMatch, 15000);
-fetch1xBetLive();
-fetch1xBetPreMatch();
 
 // Filter matches by Elite Teams
 const vipTeams = [
@@ -663,8 +990,10 @@ function processSwarmData(dataObj, isLive) {
           const compName = comp.name || existingMatch?.league || '';
           const regionName = region.name || existingMatch?.country || '';
 
-          // Tüm filtreler kaldırıldı (Kullanıcı Talebi: "TÜM FİLTRELRİ KALDIR.SADECE FUTBOLARI VER")
-          // Zaten sportId == 1 kontrolü yukarıda yapıldığı için sadece Futbol maçları buraya düşüyor.
+          const lowerCombined = `${compName} ${teamHome} ${teamAway}`.toLowerCase();
+          if (lowerCombined.includes('virtual') || lowerCombined.includes('srl') || lowerCombined.includes('simulated') || lowerCombined.includes('cyber') || lowerCombined.includes('e-soccer') || lowerCombined.includes('esports')) {
+              continue;
+          }
 
           const startTs = game.start_ts || existingMatch?.start_ts;
           
@@ -981,7 +1310,8 @@ function connectSwarm() {
   });
 }
 
-connectSwarm();
+// SWARM API BAĞLANTISI TAMAMEN İPTAL EDİLDİ
+// connectSwarm();
 
 // Client connection handling
 io.on('connection', (socket) => {
@@ -997,40 +1327,130 @@ io.on('connection', (socket) => {
         socket.emit('1xbetLiveMatches', liveMatches1xBet);
     }
     
-    // Mock Outrights
-    const mockOutrights = [
-        {
-            id: "out_superlig_1",
-            sport: "Futbol",
-            competition: "Türkiye Süper Lig 2024/2025",
-            market_name: "Şampiyon Kim Olur?",
-            closes_at: Math.floor(new Date("2025-05-25").getTime() / 1000),
-            participants: [
-                { id: "sel_gs", name: "Galatasaray", price: "1.85" },
-                { id: "sel_fb", name: "Fenerbahçe", price: "2.10" },
-                { id: "sel_bjk", name: "Beşiktaş", price: "6.50" },
-                { id: "sel_ts", name: "Trabzonspor", price: "15.00" }
-            ]
-        },
-        {
-            id: "out_nba_1",
-            sport: "Basketbol",
-            competition: "NBA 2024/2025",
-            market_name: "Şampiyonluk",
-            closes_at: Math.floor(new Date("2025-06-10").getTime() / 1000),
-            participants: [
-                { id: "sel_bos", name: "Boston Celtics", price: "3.50" },
-                { id: "sel_den", name: "Denver Nuggets", price: "4.20" },
-                { id: "sel_mil", name: "Milwaukee Bucks", price: "6.00" }
-            ]
-        }
-    ];
+    // Mock Outrights removed
+    const mockOutrights = [];
     socket.emit('outrights_update', mockOutrights);
 
     socket.on('disconnect', () => {
         console.log(`Frontend client disconnected: ${socket.id}`);
     });
 });
+
+// --- 1XBET NATIVE API INTEGRATION --- //
+
+function parseSingle1xBetMatchData(match, isLive) {
+    let odds = { "1": '-', "X": '-', "2": '-', "tU": '-', "tA": '-', "tP": '2.5', "cs1X": '-', "cs12": '-', "csX2": '-', "gg": '-', "ng": '-' };
+    if (match.E) {
+      match.E.forEach(odd => {
+        if (odd.T === 1) odds["1"] = odd.C; 
+        if (odd.T === 2) odds["X"] = odd.C; 
+        if (odd.T === 3) odds["2"] = odd.C; 
+        if (odd.T === 9 && odds["tU"] === '-') { odds["tU"] = odd.C; odds["tP"] = odd.P || '2.5'; }
+        if (odd.T === 10 && odds["tA"] === '-') { odds["tA"] = odd.C; }
+        if (odd.T === 4) odds["cs1X"] = odd.C; 
+        if (odd.T === 5) odds["cs12"] = odd.C; 
+        if (odd.T === 6) odds["csX2"] = odd.C; 
+      });
+    }
+    
+    let scoreHome = 0;
+    let scoreAway = 0;
+    if (match.SC && match.SC.FS) {
+       scoreHome = match.SC.FS.S1 || 0;
+       scoreAway = match.SC.FS.S2 || 0;
+    }
+
+    const actuallyLive = isLive && !!match.SC;
+
+    return {
+      id: match.I,
+      sport: match.SN || match.SE || (actuallyLive ? 'Futbol' : ''),
+      league: match.L || match.LE,
+      leagueId: match.LI,
+      homeTeam: match.O1,
+      homeTeamId: match.O1I,
+      awayTeam: match.O2,
+      awayTeamId: match.O2I,
+      score: actuallyLive ? `${scoreHome}-${scoreAway}` : `-`,
+      scoreHome: actuallyLive ? scoreHome : '-',
+      scoreAway: actuallyLive ? scoreAway : '-',
+      time: actuallyLive 
+        ? (() => {
+            if (match.SC.TS !== undefined) {
+               const elapsedMins = Math.floor(match.SC.TS / 60);
+               const period = match.SC.CP || 1;
+               if (period === 1) return elapsedMins + "'";
+               if (period === 2) return (45 + elapsedMins) + "'";
+               if (period === 3) return (90 + elapsedMins) + "'";
+               return elapsedMins + "'";
+            }
+            return "LIVE";
+          })()
+        : (match.S ? new Date(match.S * 1000).toLocaleString('tr-TR', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }) : "YAKLAŞAN"),
+      info: match.SC || null,
+      odds: odds,
+      isLive: actuallyLive
+    };
+}
+
+function parse1xBetMatchData(data, isLive) {
+  if (!data || !data.Value) return [];
+  return data.Value.filter(match => {
+    const ln = (match.L || match.LE || '').toLowerCase();
+    const t1 = (match.O1 || match.O1E || '').toLowerCase();
+    const t2 = (match.O2 || match.O2E || '').toLowerCase();
+    const combined = `${ln} ${t1} ${t2}`;
+    
+    // Aggressive Blacklist for sneaky e-sports and virtual matches
+    const blacklist = [
+      'virtual', 'srl', 'simulated', 'cyber', 'e-soccer', 'esports', 
+      'short football', 'liga pro', 'fifa', 'ea sports', 'gt sports', 
+      'esports battle', 'penalties', '8x8', '4x4', '3x3', 'sanal', 'e-spor'
+    ];
+    
+    const isSneaky = blacklist.some(word => combined.includes(word));
+    return !isSneaky;
+  }).map(match => parseSingle1xBetMatchData(match, isLive));
+}
+
+
+let preMatches1xBet = [];
+
+async function update1xBetFeed() {
+    try {
+        // Fetch LIVE
+        const liveRes = await fetch("https://1xframemxz.com/service-api/LiveFeed/Get1x2_Zip?count=50&lng=tr&mode=4&country=180&partner=85&noFilterBlockEvent=true&sports=1", {
+            headers: { 'Accept': 'application/json', 'User-Agent': 'Mozilla/5.0' }
+        });
+        if (liveRes.ok) {
+            const liveData = await liveRes.json();
+            const fetched = parse1xBetMatchData(liveData, true);
+            
+            liveMatches1xBet = [...fetched];
+            io.emit('1xbetLiveMatches', liveMatches1xBet);
+            console.log(`[1xBet Native API] Updated LIVE matches: ${liveMatches1xBet.length} (Filtered aggressive e-sports)`);
+        }
+
+        // Fetch PREMATCH
+        const preRes = await fetch("https://1xframemxz.com/service-api/LineFeed/Get1x2_Zip?count=50&lng=tr&mode=4&country=180&partner=85&noFilterBlockEvent=true&sports=1", {
+            headers: { 'Accept': 'application/json', 'User-Agent': 'Mozilla/5.0' }
+        });
+        if (preRes.ok) {
+            const preData = await preRes.json();
+            const fetchedPre = parse1xBetMatchData(preData, false);
+            
+            preMatches1xBet = [...fetchedPre];
+            io.emit('1xbetPreMatches', preMatches1xBet);
+            console.log(`[1xBet Native API] Updated PREMATCH matches: ${preMatches1xBet.length} (Filtered aggressive e-sports)`);
+        }
+    } catch (e) {
+        console.error("[1xBet Native API] Fetch Error:", e.message);
+    }
+}
+
+// Update every 3 seconds for lightning fast scores
+setInterval(update1xBetFeed, 3000);
+update1xBetFeed();
 
 const PORT = 3001;
 server.listen(PORT, () => {

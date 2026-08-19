@@ -11,33 +11,27 @@ export const ODDS_ENGINE_CONFIG = {
     // --- VIP TEAMS (Tier 1) ---
     // These teams get priority sorting, UI highlights, and guaranteed full market generation.
     vipTeams: [
-        // Turkey
-        'galatasaray', 'fenerbahçe', 'fenerbahce', 'beşiktaş', 'besiktas', 'trabzonspor', 'başakşehir', 'basaksehir',
-        // England
-        'manchester city', 'arsenal', 'liverpool', 'manchester united', 'chelsea', 'tottenham', 'newcastle', 'aston villa',
-        'west ham united', 'brighton', 'everton', 'crystal palace', 'brentford',
-        // Spain
-        'real madrid', 'barcelona', 'atletico madrid', 'girona', 'athletic bilbao', 'real sociedad',
-        'sevilla', 'valencia', 'villarreal', 'real betis',
-        // Italy
-        'inter', 'ac milan', 'milan', 'juventus', 'napoli', 'roma', 'lazio', 'atalanta',
-        'fiorentina', 'bologna', 'torino',
-        // Germany
-        'bayern munich', 'bayern münih', 'bayer leverkusen', 'borussia dortmund', 'rb leipzig', 'stuttgart',
-        'eintracht frankfurt', 'wolfsburg', 'borussia mönchengladbach', 'werder bremen',
-        // France
-        'psg', 'paris saint-germain', 'monaco', 'marseille', 'lille', 'lyon',
-        'lens', 'rennes', 'nice',
-        // South America
-        'inter miami', 'boca juniors', 'river plate', 'flamengo',
-        'palmeiras', 'são paulo', 'corinthians', 'fluminense', 'atletico mineiro', 'botafogo',
-        'racing club', 'independiente',
-        // Saudi Arabia
-        'al nassr', 'al-nassr', 'al hilal',
-        // Rest of Europe Elite
-        'ajax', 'psv', 'feyenoord', 'benfica', 'sporting cp', 'porto', 'celtic', 'rangers',
-        'braga', 'vitoria guimaraes', 'az alkmaar', 'fc twente', 'club brugge', 'anderlecht', 'genk', 'royal antwerp',
-        'olympiacos', 'panathinaikos', 'aek athens', 'paok'
+        'real madrid', 'manchester united', 'barcelona', 'liverpool', 'manchester city',
+        'bayern münih', 'bayern munich', 'paris saint-germain', 'psg', 'arsenal', 'tottenham hotspur', 'tottenham', 'chelsea',
+        'juventus', 'borussia dortmund', 'atlético madrid', 'atletico madrid', 'ac milan', 'milan', 'inter milan', 'inter',
+        'west ham united', 'newcastle united', 'aston villa', 'roma', 'napoli',
+        'bayer leverkusen', 'rb leipzig', 'benfica', 'porto', 'sporting cp', 'sporting',
+        'ajax', 'psv eindhoven', 'psv', 'feyenoord', 'lazio', 'atalanta', 'fiorentina',
+        'sevilla', 'real sociedad', 'real betis', 'villarreal', 'athletic bilbao',
+        'everton', 'brighton & hove albion', 'brighton', 'brentford', 'fulham', 'crystal palace',
+        'nottingham forest', 'wolverhampton wanderers', 'wolves', 'wolverhampton', 'bournemouth',
+        'olympique de marseille', 'marseille', 'olympique lyonnais', 'lyon', 'monaco', 'lille', 'lens', 'rennes',
+        'eintracht frankfurt', 'borussia mönchengladbach', 'vfb stuttgart', 'stuttgart', 'sc freiburg', 'wolfsburg',
+        'galatasaray', 'fenerbahçe', 'fenerbahce', 'beşiktaş', 'besiktas', 'trabzonspor',
+        'celtic', 'rangers', 'club brugge', 'anderlecht', 'red bull salzburg', 'salzburg',
+        'shakhtar donetsk', 'dinamo zagreb', 'olympiakos', 'panathinaikos', 'aek', 'aek athens', 'paok', 'kopenhag', 'copenhagen',
+        'boca juniors', 'river plate', 'flamengo', 'palmeiras', 'são paulo', 'sao paulo', 'corinthians',
+        'fluminense', 'santos', 'gremio', 'atletico mineiro', 'atlético mineiro',
+        'cruz azul', 'club américa', 'club america', 'monterrey', 'tigres',
+        'los angeles fc', 'lafc', 'inter miami', 'la galaxy', 'seattle sounders',
+        'al hilal', 'al nassr', 'al-nassr', 'al ittihad', 'al ahli',
+        'nacional', 'peñarol', 'penarol', 'colo-colo', 'universidad de chile',
+        'al ahly', 'wydad ac'
     ],
 
     // --- GENERATOR RULES ---

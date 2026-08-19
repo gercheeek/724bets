@@ -22,7 +22,7 @@ export const MARKET_GROUP_NAMES: Record<number, string> = {
   69: 'Tek/Çift',
   74: '1. Yarı Toplam Alt/Üst',
   75: '2. Yarı Toplam Alt/Üst',
-  100: 'Maç/Set Kazanır',
+  100: 'Maç/Set Kazanır / Tur Atlar',
   101: '1. Yarı Sonucu',
   102: '2. Yarı Sonucu',
   136: '1. Yarı - Korner Maç Sonucu',
@@ -43,7 +43,37 @@ export const MARKET_GROUP_NAMES: Record<number, string> = {
   8429: 'Korner - Handikap',
   8801: 'Oyuncu Gol Atar',
   8803: 'Oyuncu İlk Golü Atar',
-  9939: 'Sarı Kart - Handikap'
+  8587: 'Oyuncu İsabetli Şut',
+  8931: 'Oyuncu Faul',
+  9939: 'Sarı Kart - Handikap',
+  1032: 'Bir Üst Tura Çıkma Metodu',
+  10044: 'Takım 1, Bir Üst Tura Çıkma Metodu',
+  10045: 'Takım 2, Bir Üst Tura Çıkma Metodu',
+  10047: 'Olay Bahisleri',
+  99: 'Asya Handikap',
+  43: 'Ev Sahibi Gol Yemeden Kazanır',
+  49: 'Deplasman Gol Yemeden Kazanır',
+  87: 'Her İki Yarıyı Da Kazanır',
+  88: 'Herhangi Bir Yarıyı Kazanır',
+  89: 'Sonuç + Karşılıklı Gol',
+  91: 'Herhangi Bir Yarıda Gol Atar',
+  92: 'Takım Gol Atar (Evet/Hayır)',
+  275: 'İlk Yarı / Maç Sonucu',
+  852: 'Korner - Asya Handikap',
+  854: 'Korner - İlk Yarı Handikap',
+  864: 'Korner - Sonuç',
+  2422: '1. Yarı - Kartlar',
+  2424: '2. Yarı - Kartlar',
+  2752: 'Oyuncu İstatistikleri',
+  2867: 'Sıradaki Korner',
+  2876: 'Sıradaki Kart',
+  2882: '1. Yarı Korner Handikap',
+  2888: 'Korner Sayısı',
+  2890: 'Sarı Kart Sayısı',
+  3493: 'Korner Alt/Üst',
+  3521: 'Sarı Kart Alt/Üst',
+  11212: 'Takım 1 Asya Toplam',
+  11412: 'Takım 2 Asya Toplam'
 };
 
 // Map T (Event Types) directly if known.
@@ -68,14 +98,26 @@ export const EVENT_TYPE_NAMES: Record<number, string> = {
   1558: 'Üst',
   1559: 'Alt',
   1635: 'Üst',
-  1636: 'Alt'
+  1636: 'Alt',
+  1098: 'Penaltı Atışları - Evet',
+  1099: 'Penaltı Atışları - Hayır',
+  2577: 'Normal Süre - Evet',
+  2578: 'Normal Süre - Hayır',
+  2579: 'Uzatmalar - Evet',
+  2580: 'Uzatmalar - Hayır',
+  1090: 'Uzatmalar - Evet',
+  1092: 'Uzatmalar - Evet',
+  1094: 'Penaltı Atışları - Evet',
+  1096: 'Penaltı Atışları - Evet',
+  2094: 'Normal Süre - Evet',
+  2096: 'Normal Süre - Evet'
 };
 
 // Fallback logic for categorizing groups into tabs
 export const getMarketCategory = (g: number): string => {
   if ([2, 27, 173, 1119, 1120].includes(g)) return 'Handikap';
-  if ([17, 11, 12, 15, 74, 75, 62, 63, 285, 99].includes(g)) return 'Toplam Alt/Üst';
-  if ([1, 8, 10, 100, 101, 102, 14, 3559, 3561].includes(g)) return 'Ana Bahisler';
+  if ([17, 11, 12, 15, 74, 75, 62, 63, 285, 99, 11212, 11412].includes(g)) return 'Toplam Alt/Üst';
+  if ([1, 8, 10, 100, 101, 102, 14, 3559, 3561, 1032, 10044, 10045].includes(g)) return 'Ana Bahisler';
   if ([19, 20, 21, 22, 26, 69, 2854, 8801, 8803].includes(g)) return 'Gol Bahisleri';
   if ([136, 154, 2668, 2880, 8427, 8429].includes(g)) return 'Korner';
   if ([3309, 3311, 9939].includes(g)) return 'Kartlar';

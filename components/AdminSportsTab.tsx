@@ -6,29 +6,24 @@ import {
 import { 
     BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend 
 } from 'recharts';
-import { createBrowserClient } from '../lib/supabase';
+import { io } from 'socket.io-client';
 
-const supabase = createBrowserClient();
+const socket = io('https://api.724bahis.net', { transports: ['websocket'] });
 
-interface PoolMatch {
+interface ApiMatch {
     id: string;
-    data: {
-        status: string;
-        tournament: { name: string };
-        participants: { home: string; away: string };
-        start_time: string;
-        group_markets: any;
-    };
-}
-
-interface ActiveMatch {
-    id: string;
+    sport: string;
     league: string;
-    team_home: string;
-    team_away: string;
-    match_date: string;
-    status: 'active' | 'suspended' | 'finished';
-    odds: { "1": number, "X": number, "2": number };
+    homeTeam: string;
+    awayTeam: string;
+    score: string;
+    time: string;
+    isLive: boolean;
+    odds: {
+        "1": string;
+        "X": string;
+        "2": string;
+    };
 }
 
 // Mock Liability Data for Chart
@@ -50,147 +45,38 @@ export default function AdminSportsTab() {
     const [isPushing, setIsPushing] = useState(false);
     const [pushMessage, setPushMessage] = useState('');
 
-    const [poolMatches, setPoolMatches] = useState<PoolMatch[]>([]);
-    const [activeMatches, setActiveMatches] = useState<ActiveMatch[]>([]);
+    const [liveMatches, setLiveMatches] = useState<ApiMatch[]>([]);
+    const [preMatches, setPreMatches] = useState<ApiMatch[]>([]);
     const [searchQuery, setSearchQuery] = useState('');
 
-    // Fetch pool matches from JSON based on selected provider
     useEffect(() => {
-        const fileToFetch = '/prelive_matches.json';
-        
-        fetch(`${fileToFetch}?v=` + new Date().getTime())
-            .then(r => r.json())
+        // Fetch initial list
+        fetch('https://api.724bahis.net/api/sports/matches')
+            .then(res => res.json())
             .then(data => {
-                if (Array.isArray(data)) setPoolMatches(data);
-            })
-            .catch(err => console.error(`Error fetching ${fileToFetch}:`, err));
-    }, [apiProvider]); // Re-fetch when provider changes
-
-    // Fetch active matches from Supabase
-    const fetchActiveMatches = async () => {
-        const { data, error } = await supabase.from('sports_matches').select('*').order('match_date', { ascending: true });
-        if (data && !error) {
-            setActiveMatches(data);
-        }
-    };
-
-    useEffect(() => {
-        fetchActiveMatches();
-    }, []);
-
-    // Modals
-    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-    const [isResolveModalOpen, setIsResolveModalOpen] = useState(false);
-    const [selectedActiveMatch, setSelectedActiveMatch] = useState<ActiveMatch | null>(null);
-
-    // Form States
-    const [newMatch, setNewMatch] = useState({ league: '', homeTeam: '', awayTeam: '', dateTime: '', ms1: 1.85, msx: 3.40, ms2: 3.80 });
-    const [matchScore, setMatchScore] = useState({ home: '', away: '' });
-
-    // Extract Odds from Provider string format
-    const extractOdds = (markets: string[]) => {
-        let ms1 = 1.85, msx = 3.40, ms2 = 3.80;
-        for (const market of markets) {
-            if (!market || typeof market !== 'string') continue;
-            const is1x2 = market.includes('|12|') || market.includes('|1x2|') || market.includes('|match_winner|');
-            if (is1x2 && (market.includes('~home~') || market.includes('~away~') || market.includes('~1~') || market.includes('~2~'))) {
-                const parts = market.split('|');
-                const sp = parts.find((p: string) => p.includes('~home~') || p.includes('~away~') || p.includes('~1~') || p.includes('~2~'));
-                if (sp) {
-                    const sels = sp.split('!');
-                    sels.forEach((sel: string) => {
-                        const sParts = sel.split('~');
-                        if (sParts.length > 2) {
-                            const type = sParts[1].toLowerCase();
-                            let odd = parseFloat(sParts[2]);
-                            if (!isNaN(odd)) {
-                                if (odd < 0) odd = Math.abs(odd);
-                                if (odd < 1) odd += 1;
-                                if (odd < 1.01) odd = 1.01;
-                                if (type === 'home' || type === '1') ms1 = odd;
-                                if (type === 'draw' || type === 'x') msx = odd;
-                                if (type === 'away' || type === '2') ms2 = odd;
-                            }
-                        }
-                    });
+                if (data.success) {
+                    setLiveMatches(data.live);
+                    setPreMatches(data.prematch);
                 }
-            }
-        }
-        return { ms1, msx, ms2 };
-    };
+            })
+            .catch(err => console.error("Error fetching sports matches:", err));
 
-    const handleOpenAddModal = (pm?: PoolMatch) => {
-        if (pm && pm.data) {
-            const markets = pm.data.group_markets?.['full_event|0'] || [];
-            const odds = extractOdds(markets);
-            
-            // Format for datetime-local
-            const dt = pm.data.start_time ? new Date(pm.data.start_time) : new Date();
-            dt.setMinutes(dt.getMinutes() - dt.getTimezoneOffset());
-            const dtString = dt.toISOString().slice(0, 16);
-
-            setNewMatch({
-                league: pm.data.tournament?.name || 'Lig',
-                homeTeam: pm.data.participants?.home || 'Ev',
-                awayTeam: pm.data.participants?.away || 'Dep',
-                dateTime: dtString,
-                ms1: odds.ms1,
-                msx: odds.msx,
-                ms2: odds.ms2
-            });
-        } else {
-            setNewMatch({ league: '', homeTeam: '', awayTeam: '', dateTime: '', ms1: 1.5, msx: 3.0, ms2: 4.0 });
-        }
-        setIsAddModalOpen(true);
-    };
-
-    const handleAddMatch = async () => {
-        if (!newMatch.homeTeam || !newMatch.awayTeam) return;
-
-        const { error } = await supabase.from('sports_matches').insert({
-            sport_category: 'Futbol',
-            league: newMatch.league || 'Genel',
-            team_home: newMatch.homeTeam,
-            team_away: newMatch.awayTeam,
-            match_date: new Date(newMatch.dateTime).toISOString(),
-            is_live: false,
-            status: 'active',
-            odds: { "1": newMatch.ms1, "X": newMatch.msx, "2": newMatch.ms2 }
+        // Listen for live updates via WebSocket
+        socket.on('1xbetLiveMatches', (matches) => {
+            setLiveMatches(matches);
         });
 
-        if (!error) {
-            setIsAddModalOpen(false);
-            fetchActiveMatches();
-        } else {
-            console.error("Error adding match:", error);
-            alert("Maç eklenirken bir hata oluştu.");
-        }
-    };
+        socket.on('1xbetPreMatches', (matches) => {
+            setPreMatches(matches);
+        });
 
-    const handleResolveClick = (m: ActiveMatch) => {
-        setSelectedActiveMatch(m);
-        setMatchScore({ home: '', away: '' });
-        setIsResolveModalOpen(true);
-    };
+        return () => {
+            socket.off('1xbetLiveMatches');
+            socket.off('1xbetPreMatches');
+        };
+    }, []);
 
-    const confirmResolve = async () => {
-        if (!selectedActiveMatch || matchScore.home === '' || matchScore.away === '') return;
-        
-        const { error } = await supabase.from('sports_matches')
-            .update({ 
-                status: 'finished', 
-                score_home: parseInt(matchScore.home), 
-                score_away: parseInt(matchScore.away) 
-            })
-            .eq('id', selectedActiveMatch.id);
 
-        if (!error) {
-            setIsResolveModalOpen(false);
-            fetchActiveMatches();
-        } else {
-            console.error("Error resolving match:", error);
-        }
-    };
 
     const handlePushApiSettings = () => {
         setIsPushing(true);
@@ -206,51 +92,51 @@ export default function AdminSportsTab() {
         }, 3000);
     };
 
-    const filteredPoolMatches = poolMatches.filter(m => 
-        m?.data?.participants?.home?.toLowerCase().includes(searchQuery.toLowerCase()) || 
-        m?.data?.participants?.away?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        m?.data?.tournament?.name?.toLowerCase().includes(searchQuery.toLowerCase())
+    const filteredLive = liveMatches.filter(m => 
+        m?.homeTeam?.toLowerCase().includes(searchQuery.toLowerCase()) || 
+        m?.awayTeam?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        m?.league?.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    const filteredPre = preMatches.filter(m => 
+        m?.homeTeam?.toLowerCase().includes(searchQuery.toLowerCase()) || 
+        m?.awayTeam?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        m?.league?.toLowerCase().includes(searchQuery.toLowerCase())
     ).slice(0, 100);
 
-    const nowTime = Date.now();
-    const livePoolMatches = filteredPoolMatches.filter(m => {
-        if (!m?.data?.start_time) return false;
-        const t = new Date(m.data.start_time).getTime();
-        return t <= nowTime + (4 * 60 * 60 * 1000);
-    });
-    const upcomingPoolMatches = filteredPoolMatches.filter(m => !livePoolMatches.includes(m));
-
-    const renderMatchRow = (m: PoolMatch) => {
-        const odds = extractOdds(m.data.group_markets?.['full_event|0'] || []);
+    const renderMatchRow = (m: ApiMatch) => {
         return (
             <tr key={m.id} className="hover:bg-white/[0.02] transition-colors group">
                 <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="text-sm font-bold text-zinc-400 bg-zinc-800/50 px-3 py-1 rounded border border-zinc-700/50">{m?.data?.tournament?.name || 'Bilinmeyen Lig'}</span>
+                    <span className="text-sm font-bold text-zinc-400 bg-zinc-800/50 px-3 py-1 rounded border border-zinc-700/50">{m?.league || 'Bilinmeyen Lig'}</span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-bold text-white flex items-center gap-2">
-                        {m?.data?.participants?.home || 'Ev'} <span className="text-zinc-600 text-xs">VS</span> {m?.data?.participants?.away || 'Dep'}
+                        {m?.homeTeam || 'Ev'} <span className="text-zinc-600 text-xs">VS</span> {m?.awayTeam || 'Dep'}
                     </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-zinc-300">{m?.data?.start_time ? new Date(m.data.start_time).toLocaleDateString('tr-TR') : '-'}</div>
-                    <div className="text-xs text-zinc-500">{m?.data?.start_time ? new Date(m.data.start_time).toLocaleTimeString('tr-TR', { hour: '2-digit', minute:'2-digit' }) : '-'}</div>
+                    <div className="text-sm text-zinc-300">
+                        {m.isLive ? (
+                            <span className="text-red-500 animate-pulse flex items-center gap-1">
+                                <Activity className="w-3 h-3" /> {m.time} | {m.score}
+                            </span>
+                        ) : (
+                            <span>{m.time}</span>
+                        )}
+                    </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center justify-center gap-2 font-mono text-sm opacity-70">
-                        <span className="bg-[#1a1c24] px-3 py-1 rounded border border-zinc-800 text-blue-400">{odds.ms1.toFixed(2)}</span>
-                        <span className="bg-[#1a1c24] px-3 py-1 rounded border border-zinc-800 text-zinc-400">{odds.msx.toFixed(2)}</span>
-                        <span className="bg-[#1a1c24] px-3 py-1 rounded border border-zinc-800 text-blue-400">{odds.ms2.toFixed(2)}</span>
+                        <span className="bg-[#1a1c24] px-3 py-1 rounded border border-zinc-800 text-blue-400">{m.odds["1"]}</span>
+                        <span className="bg-[#1a1c24] px-3 py-1 rounded border border-zinc-800 text-zinc-400">{m.odds["X"]}</span>
+                        <span className="bg-[#1a1c24] px-3 py-1 rounded border border-zinc-800 text-blue-400">{m.odds["2"]}</span>
                     </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right">
-                    <button 
-                        onClick={() => handleOpenAddModal(m)}
-                        className="px-4 py-1.5 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 border border-blue-500/30 font-semibold rounded transition-colors text-xs flex items-center justify-end gap-1 ml-auto"
-                    >
-                        <Check className="w-3 h-3" />
-                        Aktife Al
-                    </button>
+                    <span className="px-4 py-1.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 font-semibold rounded text-xs ml-auto">
+                        API AKTİF
+                    </span>
                 </td>
             </tr>
         );
@@ -280,17 +166,6 @@ export default function AdminSportsTab() {
                     >
                         <Database className="w-4 h-4" />
                         Onay Bekleyenler (Havuz)
-                    </button>
-                    <button 
-                        onClick={() => setActiveSubTab('active')}
-                        className={`px-4 py-2 rounded-lg font-bold text-sm flex items-center gap-2 transition-all ${
-                            activeSubTab === 'active' 
-                            ? 'bg-emerald-600 text-white shadow-[0_0_15px_rgba(16,185,129,0.3)]' 
-                            : 'text-zinc-400 hover:text-white'
-                        }`}
-                    >
-                        <Medal className="w-4 h-4" />
-                        Aktif Maçlar
                     </button>
                     <button 
                         onClick={() => setActiveSubTab('risk')}
@@ -342,12 +217,7 @@ export default function AdminSportsTab() {
                                 className="w-full bg-[#111318] border border-zinc-800 text-white text-sm rounded-lg pl-9 pr-4 py-2.5 focus:border-blue-500 outline-none transition-all"
                             />
                         </div>
-                        <button 
-                            onClick={() => handleOpenAddModal()}
-                            className="px-5 py-2.5 bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 text-white font-bold rounded-lg flex items-center gap-2 transition-all"
-                        >
-                            <Plus className="w-5 h-5" /> Manuel Maç Ekle
-                        </button>
+
                     </div>
 
                     {/* Window 1: Canlı Maçlar Window */}
@@ -362,7 +232,7 @@ export default function AdminSportsTab() {
                                     Canlı Maçlar (Havuz)
                                 </h3>
                                 <span className="ml-2 bg-[#00E5FF]/20 text-[#00E5FF] text-xs font-bold px-2.5 py-0.5 rounded-full border border-emerald-500/30">
-                                    {livePoolMatches.length} Maç
+                                    {filteredLive.length} Maç
                                 </span>
                             </div>
                             <button 
@@ -396,11 +266,11 @@ export default function AdminSportsTab() {
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-zinc-800/50">
-                                        {livePoolMatches.length === 0 ? (
+                                        {filteredLive.length === 0 ? (
                                             <tr>
                                                 <td colSpan={5} className="text-center py-8 text-zinc-500">Şu anda canlı oynanan maç bulunamadı.</td>
                                             </tr>
-                                        ) : livePoolMatches.map(m => renderMatchRow(m))}
+                                        ) : filteredLive.map(m => renderMatchRow(m))}
                                     </tbody>
                                 </table>
                             </div>
@@ -416,7 +286,7 @@ export default function AdminSportsTab() {
                                     Gelecek Maçlar (Bülten)
                                 </h3>
                                 <span className="ml-2 bg-blue-500/20 text-blue-400 text-xs font-bold px-2.5 py-0.5 rounded-full border border-blue-500/30">
-                                    {upcomingPoolMatches.length} Maç
+                                    {filteredPre.length} Maç
                                 </span>
                             </div>
                             <button 
@@ -450,11 +320,11 @@ export default function AdminSportsTab() {
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-zinc-800/50">
-                                        {upcomingPoolMatches.length === 0 ? (
+                                        {filteredPre.length === 0 ? (
                                             <tr>
                                                 <td colSpan={5} className="text-center py-8 text-zinc-500">Bültende gelecek maç bulunamadı.</td>
                                             </tr>
-                                        ) : upcomingPoolMatches.map(m => renderMatchRow(m))}
+                                        ) : filteredPre.map(m => renderMatchRow(m))}
                                     </tbody>
                                 </table>
                             </div>
@@ -463,84 +333,7 @@ export default function AdminSportsTab() {
                 </div>
             )}
 
-            {/* TAB: ACTIVE MATCHES */}
-            {activeSubTab === 'active' && (
-                <div className="flex-1 flex flex-col min-h-0 animate-in fade-in slide-in-from-bottom-4 duration-300">
-                    <div className="flex justify-between items-center mb-6">
-                        <div className="relative w-64">
-                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
-                            <input 
-                                type="text" 
-                                placeholder="Aktif maçlarda ara..."
-                                className="w-full bg-[#111318] border border-zinc-800 text-white text-sm rounded-lg pl-9 pr-4 py-2.5 focus:border-emerald-500 outline-none transition-all"
-                            />
-                        </div>
-                    </div>
 
-                    <div className="flex-1 bg-[#111318] border border-zinc-800 rounded-2xl shadow-xl overflow-hidden flex flex-col min-h-0">
-                        <div className="overflow-x-auto flex-1">
-                            <table className="w-full text-left border-collapse min-w-[900px]">
-                                <thead>
-                                    <tr className="bg-[#1a1d24] border-b border-zinc-800">
-                                        <th className="px-6 py-4 text-xs font-semibold text-zinc-500 uppercase tracking-wider">Lig</th>
-                                        <th className="px-6 py-4 text-xs font-semibold text-zinc-500 uppercase tracking-wider">Karşılaşma</th>
-                                        <th className="px-6 py-4 text-xs font-semibold text-zinc-500 uppercase tracking-wider">Tarih / Saat</th>
-                                        <th className="px-6 py-4 text-xs font-semibold text-zinc-500 uppercase tracking-wider text-center">Aktif Oranlar (1 - X - 2)</th>
-                                        <th className="px-6 py-4 text-xs font-semibold text-zinc-500 uppercase tracking-wider">Durum</th>
-                                        <th className="px-6 py-4 text-right text-xs font-semibold text-zinc-500 uppercase tracking-wider">İşlem</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-zinc-800/50">
-                                    {activeMatches.length === 0 ? (
-                                        <tr>
-                                            <td colSpan={6} className="text-center py-10 text-zinc-500">Yayında aktif maç bulunmuyor.</td>
-                                        </tr>
-                                    ) : activeMatches.map(m => (
-                                        <tr key={m.id} className="hover:bg-white/[0.02] transition-colors group">
-                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                <span className="text-sm font-bold text-zinc-400 bg-zinc-800/50 px-3 py-1 rounded border border-zinc-700/50">{m.league}</span>
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                <div className="text-sm font-bold text-white flex items-center gap-2">
-                                                    {m.team_home} <span className="text-zinc-600 text-xs">VS</span> {m.team_away}
-                                                </div>
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                <div className="text-sm text-zinc-300">{new Date(m.match_date).toLocaleDateString('tr-TR')}</div>
-                                                <div className="text-xs text-zinc-500">{new Date(m.match_date).toLocaleTimeString('tr-TR', { hour: '2-digit', minute:'2-digit' })}</div>
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                <div className="flex items-center justify-center gap-2 font-mono text-sm">
-                                                    <span className="bg-[#1a1c24] px-3 py-1 rounded border border-zinc-800 text-[#00E5FF]">{m.odds?.["1"]?.toFixed(2) || '0.00'}</span>
-                                                    <span className="bg-[#1a1c24] px-3 py-1 rounded border border-zinc-800 text-zinc-300">{m.odds?.["X"]?.toFixed(2) || '0.00'}</span>
-                                                    <span className="bg-[#1a1c24] px-3 py-1 rounded border border-zinc-800 text-[#00E5FF]">{m.odds?.["2"]?.toFixed(2) || '0.00'}</span>
-                                                </div>
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                {m.status === 'active' && <span className="text-xs font-bold text-[#00E5FF] bg-[#00E5FF]/10 px-2.5 py-1 rounded border border-emerald-500/20">Bahse Açık</span>}
-                                                {m.status === 'suspended' && <span className="text-xs font-bold text-rose-400 bg-rose-500/10 px-2.5 py-1 rounded border border-rose-500/20 flex items-center gap-1.5 w-min"><div className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse"/> Askıda</span>}
-                                                {m.status === 'finished' && <span className="text-xs font-bold text-zinc-400 bg-zinc-800 px-2.5 py-1 rounded border border-zinc-700">Sonuçlandı</span>}
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-right">
-                                                {m.status === 'active' || m.status === 'suspended' ? (
-                                                    <button 
-                                                        onClick={() => handleResolveClick(m)}
-                                                        className="px-4 py-1.5 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 font-semibold rounded transition-colors text-xs"
-                                                    >
-                                                        Sonuçlandır
-                                                    </button>
-                                                ) : (
-                                                    <span className="text-xs text-zinc-500 flex items-center justify-end gap-1"><CheckCircle2 className="w-3 h-3"/> Ödendi</span>
-                                                )}
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            )}
 
             {/* TAB: API SETTINGS */}
             {activeSubTab === 'api_settings' && (
@@ -717,69 +510,6 @@ export default function AdminSportsTab() {
                                     <Bar dataKey="MS2" name="MS2 Yatırılan" fill="#60a5fa" radius={[4, 4, 0, 0]} />
                                 </BarChart>
                             </ResponsiveContainer>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {/* ADD MATCH MODAL (Provider'dan Aktife Alma veya Manuel) */}
-            {isAddModalOpen && (
-                <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[200] flex items-center justify-center p-4 animate-in fade-in duration-200">
-                    <div className="bg-[#0f1115] border border-emerald-500/30 w-full max-w-xl rounded-2xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
-                        <div className="px-6 py-4 border-b border-zinc-800 flex justify-between items-center bg-[#15171e]">
-                            <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                                <Plus className="w-5 h-5 text-[#00E5FF]" /> Maçı Bahse Aç
-                            </h3>
-                            <button onClick={() => setIsAddModalOpen(false)} className="text-zinc-500 hover:text-white transition-colors">
-                                <X className="w-5 h-5" />
-                            </button>
-                        </div>
-
-                        <div className="p-6 space-y-6">
-                            <div className="grid grid-cols-2 gap-4">
-                                <div className="col-span-2">
-                                    <label className="text-xs font-bold text-zinc-400 uppercase tracking-wider mb-2 block">Lig / Turnuva</label>
-                                    <input type="text" value={newMatch.league} onChange={e => setNewMatch({...newMatch, league: e.target.value})} placeholder="Örn: Şampiyonlar Ligi" className="w-full bg-[#1a1c24] border border-zinc-800 rounded-lg px-4 py-2.5 text-white outline-none focus:border-emerald-500" />
-                                </div>
-                                <div>
-                                    <label className="text-xs font-bold text-zinc-400 uppercase tracking-wider mb-2 block">Ev Sahibi (MS1)</label>
-                                    <input type="text" value={newMatch.homeTeam} onChange={e => setNewMatch({...newMatch, homeTeam: e.target.value})} className="w-full bg-[#1a1c24] border border-zinc-800 rounded-lg px-4 py-2.5 text-white outline-none focus:border-emerald-500" />
-                                </div>
-                                <div>
-                                    <label className="text-xs font-bold text-zinc-400 uppercase tracking-wider mb-2 block">Deplasman (MS2)</label>
-                                    <input type="text" value={newMatch.awayTeam} onChange={e => setNewMatch({...newMatch, awayTeam: e.target.value})} className="w-full bg-[#1a1c24] border border-zinc-800 rounded-lg px-4 py-2.5 text-white outline-none focus:border-emerald-500" />
-                                </div>
-                                <div className="col-span-2">
-                                    <label className="text-xs font-bold text-zinc-400 uppercase tracking-wider mb-2 block">Tarih & Saat</label>
-                                    <input type="datetime-local" value={newMatch.dateTime} onChange={e => setNewMatch({...newMatch, dateTime: e.target.value})} className="w-full bg-[#1a1c24] border border-zinc-800 rounded-lg px-4 py-2.5 text-white outline-none focus:border-emerald-500 [color-scheme:dark]" />
-                                </div>
-                            </div>
-                            
-                            <div>
-                                <label className="text-xs font-bold text-zinc-400 uppercase tracking-wider mb-3 block border-b border-zinc-800 pb-2">Maç Sonu Oranları (1 - X - 2)</label>
-                                <div className="grid grid-cols-3 gap-4">
-                                    <div>
-                                        <div className="text-[10px] text-center text-zinc-500 mb-1">Ev Sahibi (1)</div>
-                                        <input type="number" step="0.01" value={newMatch.ms1} onChange={e => setNewMatch({...newMatch, ms1: Number(e.target.value)})} className="w-full bg-[#1a1c24] border border-zinc-800 rounded-lg px-4 py-2.5 text-[#00E5FF] font-mono text-center outline-none focus:border-emerald-500" />
-                                    </div>
-                                    <div>
-                                        <div className="text-[10px] text-center text-zinc-500 mb-1">Beraberlik (X)</div>
-                                        <input type="number" step="0.01" value={newMatch.msx} onChange={e => setNewMatch({...newMatch, msx: Number(e.target.value)})} className="w-full bg-[#1a1c24] border border-zinc-800 rounded-lg px-4 py-2.5 text-zinc-300 font-mono text-center outline-none focus:border-emerald-500" />
-                                    </div>
-                                    <div>
-                                        <div className="text-[10px] text-center text-zinc-500 mb-1">Deplasman (2)</div>
-                                        <input type="number" step="0.01" value={newMatch.ms2} onChange={e => setNewMatch({...newMatch, ms2: Number(e.target.value)})} className="w-full bg-[#1a1c24] border border-zinc-800 rounded-lg px-4 py-2.5 text-[#00E5FF] font-mono text-center outline-none focus:border-emerald-500" />
-                                    </div>
-                                </div>
-                            </div>
-
-                            <button 
-                                onClick={handleAddMatch}
-                                className="w-full py-3.5 bg-emerald-600 hover:bg-[#00E5FF] text-white rounded-xl font-bold shadow-[0_0_15px_rgba(16,185,129,0.3)] transition-all flex justify-center items-center gap-2"
-                            >
-                                <Database className="w-5 h-5" />
-                                Kaydet ve Aktife Al
-                            </button>
                         </div>
                     </div>
                 </div>

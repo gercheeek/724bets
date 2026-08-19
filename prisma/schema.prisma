@@ -6,7 +6,7 @@
 
 generator client {
   provider = "prisma-client-js"
-  previewFeatures = ["driverAdapters"]
+
 }
 
 datasource db {
@@ -18,7 +18,15 @@ model User {
   username  String   @unique
   password  String
   balance   Float    @default(0.0)
+  status    String   @default("active") // active, banned
+  role      String   @default("user") // user, admin
+  kycStatus String   @default("unverified") // unverified, pending, verified, rejected
+  riskScore Float    @default(0.0) // 0-100 risk score based on activity
   bets      Bet[]
+  transactions Transaction[]
+  paymentRequests PaymentRequest[]
+  kycDocuments    KycDocument[]
+  fraudAlerts     FraudAlert[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -52,9 +60,61 @@ model BetItem {
 model Transaction {
   id              String   @id @default(uuid())
   transactionCode String   @unique
-  userCode        String
+  userId          String
+  user            User     @relation(fields: [userId], references: [id])
   gameCode        String?
   amount          Float
   type            String   // "bet", "win", "refund", "deposit", "withdraw"
   createdAt       DateTime @default(now())
+}
+
+model PaymentMethod {
+  id          String   @id @default(uuid())
+  name        String   // e.g. "Papara", "USDT TRC-20", "Ziraat Bankası"
+  type        String   // "crypto", "papara", "bank_transfer"
+  accountName String   // e.g. "Ahmet Yılmaz"
+  accountNo   String   // IBAN, Wallet Address, or Papara Number
+  isActive    Boolean  @default(true)
+  minAmount   Float    @default(50.0)
+  maxAmount   Float    @default(100000.0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model PaymentRequest {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  type        String   // "deposit", "withdraw"
+  method      String   // e.g. "Papara", "Crypto", "Bank Transfer"
+  amount      Float
+  status      String   @default("pending") // "pending", "approved", "rejected"
+  txHash      String?  // Reference number provided by user
+  adminNote   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model KycDocument {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  type        String   // "id_front", "id_back", "selfie", "address"
+  fileUrl     String   // The URL or path to the document
+  status      String   @default("pending") // "pending", "approved", "rejected"
+  rejectionReason String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model FraudAlert {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  severity    String   // "low", "medium", "high", "critical"
+  reason      String   // Description of what triggered the alert
+  isResolved  Boolean  @default(false)
+  resolvedBy  String?  // Admin ID who resolved it
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }

@@ -6,6 +6,7 @@ import { triggerGlobalToast } from '../GlobalToaster';
 import ModernChat from '../ModernChat';
 import { useTranslation } from 'react-i18next';
 import { MiniGamesSidebar, GamepadIcon } from '../MiniGamesSidebar';
+import { supabase } from '../../utils/supabase';
 
 const MyBetsPanel = ({ siteUser, onShare }: { siteUser: any, onShare: (msg: string) => void }) => {
   const [activeBets, setActiveBets] = useState<any[]>([]);
@@ -14,26 +15,34 @@ const MyBetsPanel = ({ siteUser, onShare }: { siteUser: any, onShare: (msg: stri
   const fetchBets = async () => {
     if (!siteUser) return;
     try {
-        const betsRes = await fetch(`/api/sports/my-bets?userCode=${siteUser.username}`);
-        const betsData = await betsRes.json();
+        const { data: betsData, error } = await supabase
+          .from('sports_bets')
+          .select('*')
+          .eq('user_id', siteUser.id)
+          .order('created_at', { ascending: false });
         
-        if (betsData.success && betsData.bets) {
+        if (error) throw error;
+        
+        if (betsData) {
             // Only show PENDING bets in active sidebar
-            const pendingBets = betsData.bets.filter((b: any) => b.status?.toLowerCase() === 'pending');
-            const formatted = pendingBets.map((b: any) => ({
-                id: b.id,
-                type: b.items.length > 1 ? 'KOMBİNE BAHİS' : 'TEKLİ BAHİS',
-                title: b.items.length > 1 ? 'Kombine Kupon' : `${b.items[0].teamHome} vs. ${b.items[0].teamAway}`,
-                picks: b.items.map((i: any) => ({ text: i.selection, detail: `${i.teamHome} - ${i.teamAway}` })),
-                odds: b.totalOdds.toFixed(2),
-                stake: `${b.stake.toFixed(2)} ₺`,
-                potentialWin: `${b.possibleWin.toFixed(2)} ₺`,
-                cashoutValue: `${(b.stake * 0.95).toFixed(2)} ₺`, // Initial visual cashout
-                rawAmount: b.stake,
-                isLive: false,
-                score: '',
-                minute: ''
-            }));
+            const pendingBets = betsData.filter((b: any) => b.status?.toLowerCase() === 'pending');
+            const formatted = pendingBets.map((b: any) => {
+                const selections = Array.isArray(b.selections) ? b.selections : [];
+                return {
+                  id: b.id,
+                  type: selections.length > 1 ? 'KOMBİNE BAHİS' : 'TEKLİ BAHİS',
+                  title: selections.length > 1 ? 'Kombine Kupon' : (selections[0] ? `${selections[0].teamHome || selections[0].homeTeam} vs. ${selections[0].teamAway || selections[0].awayTeam}` : 'Bahis'),
+                  picks: selections.map((i: any) => ({ text: i.selection || i.selectionName, detail: `${i.teamHome || i.homeTeam} - ${i.teamAway || i.awayTeam}` })),
+                  odds: Number(b.odd).toFixed(2),
+                  stake: `${Number(b.bet_amount).toFixed(2)} ₺`,
+                  potentialWin: `${Number(b.potential_win).toFixed(2)} ₺`,
+                  cashoutValue: `${(Number(b.bet_amount) * 0.95).toFixed(2)} ₺`,
+                  rawAmount: Number(b.bet_amount),
+                  isLive: false,
+                  score: '',
+                  minute: ''
+                };
+            });
             setActiveBets(formatted);
         }
     } catch (e) {
@@ -122,7 +131,38 @@ const MyBetsPanel = ({ siteUser, onShare }: { siteUser: any, onShare: (msg: stri
             </div>
             
             {/* Action Buttons */}
-            <div className="flex gap-2 mt-1">
+            <div className="flex flex-col gap-2 mt-1">
+                {/* Admin/Test Settle Buttons */}
+                <div className="flex gap-2">
+                  <button 
+                    onClick={async () => {
+                      try {
+                        const { data, error } = await supabase.rpc('settle_sports_bet', { p_bet_id: bet.id, p_status: 'won' });
+                        if (error) throw error;
+                        triggerGlobalToast({ type: 'success', message: 'Kupon Kazandı Olarak İşaretlendi!' });
+                        fetchBets();
+                      } catch(e) {
+                        triggerGlobalToast({ type: 'warning', message: 'Sonuçlandırma hatası.' });
+                      }
+                    }}
+                    className="flex-1 py-1.5 bg-green-500/20 text-green-400 hover:bg-green-500 hover:text-white font-bold rounded text-xs border border-green-500/30 transition-colors"
+                  >KAZAN</button>
+                  <button 
+                    onClick={async () => {
+                      try {
+                        const { data, error } = await supabase.rpc('settle_sports_bet', { p_bet_id: bet.id, p_status: 'lost' });
+                        if (error) throw error;
+                        triggerGlobalToast({ type: 'warning', message: 'Kupon Kaybetti Olarak İşaretlendi!' });
+                        fetchBets();
+                      } catch(e) {
+                        triggerGlobalToast({ type: 'warning', message: 'Sonuçlandırma hatası.' });
+                      }
+                    }}
+                    className="flex-1 py-1.5 bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-white font-bold rounded text-xs border border-red-500/30 transition-colors"
+                  >KAYBET</button>
+                </div>
+                
+                <div className="flex gap-2">
                 <button 
                   onClick={() => {
                     if (window.confirm(`Bahis bozdurma işlemini onaylıyor musunuz?`)) {
@@ -156,6 +196,7 @@ const MyBetsPanel = ({ siteUser, onShare }: { siteUser: any, onShare: (msg: stri
               >
                 <Share2 className="w-4 h-4 text-zinc-400 group-hover:text-[color:var(--theme-accent)] transition-colors" />
               </button>
+              </div>
             </div>
           </div>
         </div>
@@ -211,17 +252,18 @@ export const DualRightPanel: React.FC<{
   }, [betSlip.length]);
 
   React.useEffect(() => {
-    const handleSetChat = () => {
-      setActivePanel('chat');
-    };
-    const handleSetCoupon = () => {
-      setActivePanel('coupon');
-    };
+    const handleSetChat = () => setActivePanel('chat');
+    const handleSetCoupon = () => setActivePanel('coupon');
+    const handleSetMyBets = () => setActivePanel('mybets');
     window.addEventListener('setRightPanelToChat', handleSetChat);
     window.addEventListener('openBetSlip', handleSetCoupon);
+    window.addEventListener('open-betslip', handleSetCoupon);
+    window.addEventListener('setRightPanelToMyBets', handleSetMyBets);
     return () => {
       window.removeEventListener('setRightPanelToChat', handleSetChat);
       window.removeEventListener('openBetSlip', handleSetCoupon);
+      window.removeEventListener('open-betslip', handleSetCoupon);
+      window.removeEventListener('setRightPanelToMyBets', handleSetMyBets);
     };
   }, []);
 
@@ -239,6 +281,7 @@ export const DualRightPanel: React.FC<{
         clearBetSlip();
         if (onCloseMobile) onCloseMobile();
         triggerGlobalToast({ type: 'success', message: 'Bahis başarıyla oynandı!' });
+        // Event for opening my bets is triggered inside UserContext.tsx upon success
       }, 1500);
     } catch (error: any) {
       triggerGlobalToast({ type: 'warning', message: error.message || 'Bir hata oluştu.' });
@@ -565,39 +608,19 @@ export const DualRightPanel: React.FC<{
       {/* ═══════════ STICKY BOTTOM TOGGLE BAR (SPORTS ONLY) ═══════════ */}
       {isSports && (
         <div className={`shrink-0 ${isSports ? 'bg-transparent backdrop-blur-md' : 'bg-transparent backdrop-blur-md'} border-t border-white/5 relative z-50 shadow-[0_-10px_30px_rgba(0,0,0,0.3)] transition-all duration-300 overflow-hidden h-[70px] p-3 opacity-100`}>
-          <div className="flex items-center justify-between w-full h-full bg-white/5 p-1 rounded-xl border border-white/10 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)]">
+          <div className="flex items-center justify-between w-full h-full bg-white/5 p-1 rounded-xl border-none shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)]">
             
             <button 
               onClick={() => setActivePanel('chat')}
-              className={`flex items-center justify-center gap-2 flex-1 h-full rounded-lg transition-all ${activePanel === 'chat' ? 'bg-[color:var(--theme-accent)]/10 text-[color:var(--theme-accent)] shadow-[inset_0_0_15px_var(--theme-accent-glow)] font-bold border border-[color:var(--theme-accent)]/20' : 'text-zinc-500 hover:text-white hover:bg-white/5 font-medium'}`}
+              className={`flex items-center justify-center gap-2 flex-1 h-full rounded-lg transition-all ${activePanel === 'chat' ? 'bg-[color:var(--theme-accent)]/15 text-[color:var(--theme-accent)] shadow-[inset_0_0_15px_var(--theme-accent-glow)] font-bold border-none' : 'text-zinc-500 hover:text-white hover:bg-white/5 font-medium'}`}
             >
               <MessageCircle className={`w-[18px] h-[18px] ${activePanel === 'chat' ? 'text-[color:var(--theme-accent)]' : ''}`} />
               <span className="text-[12px] tracking-wide hidden sm:block md:hidden 2xl:block">Sohbet</span>
             </button>
             
             <button 
-              onClick={() => setActivePanel('mybets')}
-              className={`flex items-center justify-center gap-2 flex-1 h-full rounded-lg transition-all ${activePanel === 'mybets' ? 'bg-[color:var(--theme-accent)]/10 text-[color:var(--theme-accent)] shadow-[inset_0_0_15px_var(--theme-accent-glow)] font-bold border border-[color:var(--theme-accent)]/20' : 'text-zinc-500 hover:text-white hover:bg-white/5 font-medium'}`}
-            >
-              <Flag className={`w-[18px] h-[18px] ${activePanel === 'mybets' ? 'text-[color:var(--theme-accent)]' : ''}`} />
-              <span className="text-[12px] tracking-wide hidden sm:block md:hidden 2xl:block">{t('nav.my_bets', 'Bahislerim')}</span>
-            </button>
-            
-            <button 
-              onClick={() => setActivePanel('minigames')}
-              className={`flex items-center justify-center gap-2 flex-1 h-full rounded-lg transition-all relative ${activePanel === 'minigames' ? 'bg-purple-500/10 text-purple-400 shadow-[inset_0_0_15px_rgba(168,85,247,0.2)] font-bold border border-purple-500/20' : 'text-zinc-500 hover:text-white hover:bg-white/5 font-medium'}`}
-            >
-              <div className="relative">
-                <GamepadIcon className={`w-[18px] h-[18px] ${activePanel === 'minigames' ? 'text-purple-400' : ''}`} />
-                {/* Optional hot badge */}
-                <span className="absolute -top-1 -right-1.5 w-2 h-2 bg-red-500 rounded-full animate-pulse shadow-[0_0_5px_rgba(239,68,68,0.8)]"></span>
-              </div>
-              <span className="text-[12px] tracking-wide hidden sm:block md:hidden 2xl:block">Oyunlar</span>
-            </button>
-            
-            <button 
               onClick={() => setActivePanel('coupon')}
-              className={`flex items-center justify-center gap-2 flex-1 h-full rounded-lg transition-all relative ${activePanel === 'coupon' ? 'bg-[#10b981]/10 text-[#10b981] shadow-[inset_0_0_15px_rgba(16,185,129,0.2)] font-bold border border-[#10b981]/20' : 'text-zinc-500 hover:text-white hover:bg-white/5 font-medium'}`}
+              className={`flex items-center justify-center gap-2 flex-1 h-full rounded-lg transition-all relative ${activePanel === 'coupon' ? 'bg-[#10b981]/15 text-[#10b981] shadow-[inset_0_0_15px_rgba(16,185,129,0.2)] font-bold border-none' : 'text-zinc-500 hover:text-white hover:bg-white/5 font-medium'}`}
             >
               <div className="relative">
                 <FileText className={`w-[18px] h-[18px] ${activePanel === 'coupon' ? 'text-[#10b981]' : ''}`} />

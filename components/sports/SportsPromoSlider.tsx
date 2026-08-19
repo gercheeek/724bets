@@ -6,27 +6,71 @@ import { AnimatedOdd } from '../AnimatedOdd';
 import { LiveTimer } from './MatchCard';
 import { getMatchPriorityScore } from '../../utils/eliteTeams';
 
-const PREMIUM_LEAGUES = [
-    'SUPER LIG', 'SÜPER LİG', 
-    'CHAMPIONS LEAGUE', 'ŞAMPİYONLAR', 
-    'EUROPA LEAGUE', 'AVRUPA LİGİ', 'CONFERENCE LEAGUE', 'KONFERANS LİGİ',
-    'PREMIER LEAGUE', 'PREMIER LIG', 'PREMIER LİG', 
-    'LA LIGA', 'SERIE A', 'BUNDESLIGA', 'LIGUE 1', 
-    'NBA', 'EUROLEAGUE', 'LIGA PORTUGAL', 'EREDIVISIE', 
-    'WORLD CUP', 'DÜNYA KUPASI', 'EURO 20'
-];
+function isBannedLeague(league: string) {
+    if (!league) return false;
+    const l = league.toUpperCase();
+    return l.includes('QUEENSLAND') || l.includes('VICTORIA') || l.includes('NPL') || l.includes('RESERVE') || l.includes('YOUTH') || l.includes('U19') || l.includes('U21') || l.includes('U23') || l.includes('WOMEN') || l.includes('KADIN') || l.includes('ELEMELER') || l.includes('QUALIFIERS') || l.includes('2.') || l.includes('SERIE B') || l.includes('SERIE C') || l.includes('PORTUGAL 2') || l.includes('CHAMPIONSHIP') || l.includes('LIGA 2') || l.includes('LIG 2') || l.includes('TROPHY') || l.includes('İRLANDA') || l.includes('IRELAND') || l.includes('LEINSTER') || l.includes('ŞAMPİYONASI') || l.includes('AMATEUR') || l.includes('AMATÖR');
+}
 
 function isPremium(league: string) {
     if (!league) return false;
     const l = league.toUpperCase();
     
-    // Explicitly exclude amateur/lower leagues, qualifiers, and SECOND DIVISIONS that falsely match
-    if (l.includes('QUEENSLAND') || l.includes('VICTORIA') || l.includes('NPL') || l.includes('RESERVE') || l.includes('YOUTH') || l.includes('U19') || l.includes('U21') || l.includes('WOMEN') || l.includes('KADIN') || l.includes('ELEMELER') || l.includes('QUALIFIERS') || l.includes('2.') || l.includes('SERIE B') || l.includes('SERIE C') || l.includes('PORTUGAL 2') || l.includes('CHAMPIONSHIP') || l.includes('LIGA 2') || l.includes('LIG 2')) {
+    // Explicitly exclude amateur/lower leagues
+    if (isBannedLeague(league)) {
         return false;
     }
 
-    return PREMIUM_LEAGUES.some(p => l.includes(p));
+    // UEFA / International
+    if (l.includes('UEFA') || l.includes('CHAMPIONS LEAGUE') || l.includes('ŞAMPİYONLAR LİGİ') || l.includes('EUROPA LEAGUE') || l.includes('AVRUPA LİGİ') || l.includes('CONFERENCE') || l.includes('KONFERANS')) return true;
+    if (l.includes('WORLD CUP') || l.includes('DÜNYA KUPASI') || l.includes('EURO 20') || l.includes('COPA AMERICA')) return true;
+    
+    // England
+    if ((l.includes('İNGİLTERE') || l.includes('ENGLAND')) && (l.includes('PREMIER LİG') || l.includes('PREMIER LEAGUE') || l.includes('FA CUP') || l.includes('FA KUPASI'))) return true;
+    
+    // Turkey
+    if ((l.includes('TÜRKİYE') || l.includes('TURKEY')) && (l.includes('SÜPER LİG') || l.includes('SUPER LIG') || l.includes('TÜRKİYE KUPASI'))) return true;
+    
+    // Spain
+    if ((l.includes('İSPANYA') || l.includes('SPAIN')) && (l.includes('LA LIGA') || l.includes('LALIGA') || l.includes('COPA DEL REY') || l.includes('KRAL KUPASI'))) return true;
+    
+    // Italy
+    if ((l.includes('İTALYA') || l.includes('ITALY')) && (l.includes('SERIE A') || l.includes('COPPA ITALIA') || l.includes('İTALYA KUPASI'))) return true;
+    
+    // Germany
+    if ((l.includes('ALMANYA') || l.includes('GERMANY')) && (l.includes('BUNDESLIGA') || l.includes('DFB'))) return true;
+    
+    // France
+    if ((l.includes('FRANSA') || l.includes('FRANCE')) && l.includes('LIGUE 1')) return true;
+    
+    // Others
+    if ((l.includes('HOLLANDA') || l.includes('NETHERLANDS')) && l.includes('EREDIVISIE')) return true;
+    if ((l.includes('PORTEKİZ') || l.includes('PORTUGAL')) && (l.includes('PRIMEIRA') || l.includes('LIGA PORTUGAL'))) return true;
+    
+    // Basketball
+    if (l.includes('NBA') || l.includes('EUROLEAGUE')) return true;
+
+    return false;
 }
+
+function isYouthOrReserve(home: string, away: string, league: string) {
+    const str = `${home} ${away} ${league}`.toUpperCase();
+    return str.includes('U19') || str.includes('U20') || str.includes('U21') || str.includes('U23') || str.includes('RESERVE') || str.includes('YOUTH') || str.includes('ACADEMY') || str.includes('KADIN') || str.includes('WOMEN');
+}
+
+export const cleanTeamName = (name: string) => {
+    if (!name) return '';
+    // Remove common long suffixes to make it cleaner (e.g. Gremio FB Porto Alegrense -> Gremio)
+    // Also remove "VIRTUAL" (case-insensitive) as requested by the user
+    return name.replace(/\s(FC|SAD|FB PORTO ALEGRENSE|ROTTERDAM|EAGLES|FK|SK|AS|US|UNITED)$/i, '')
+               .replace(/VIRTUAL/i, '')
+               .trim();
+};
+
+export const cleanLeague = (league: string) => {
+    if (!league) return '';
+    return league.replace(/Uluslararası\s*-\s*/i, '').trim();
+};
 
 function CouponSlide({ matches, compact }: { matches: any[], compact?: boolean }) {
     const { addSelection } = useBetSlip();
@@ -35,17 +79,6 @@ function CouponSlide({ matches, compact }: { matches: any[], compact?: boolean }
     const m1 = matches[0];
     const m2 = matches[1];
     const m3 = matches[2];
-
-    const cleanTeamName = (name: string) => {
-        if (!name) return '';
-        // Remove common long suffixes to make it cleaner (e.g. Gremio FB Porto Alegrense -> Gremio)
-        return name.replace(/\s(FC|SAD|FB PORTO ALEGRENSE|ROTTERDAM|EAGLES|FK|SK|AS|US|UNITED)$/i, '').trim();
-    };
-
-    const cleanLeague = (league: string) => {
-        if (!league) return '';
-        return league.replace(/Uluslararası\s*-\s*/i, '').trim();
-    };
 
     const totalOdd = (parseFloat(m1.homeOdd) * parseFloat(m2.homeOdd) * parseFloat(m3.homeOdd)).toFixed(2);
 
@@ -240,7 +273,7 @@ function MatchSlide({ matchData, theme, leagueName, compact = false, onSelectMat
                     </div>
 
                     {/* Logos and Odds Row */}
-                    <div className="flex items-stretch justify-center w-full relative z-20 gap-3 md:gap-10 max-w-[800px] mx-auto mt-2 md:mt-4 h-[140px] md:h-[220px]">
+                    <div className="flex items-stretch justify-center w-full relative z-20 gap-3 md:gap-8 max-w-[700px] mx-auto mt-1 md:mt-3 h-[130px] md:h-[190px]">
                         {/* Home Team */}
                         <div className="flex flex-col items-center justify-end group cursor-pointer flex-1" onClick={(e) => { e.stopPropagation(); addSelection({ id: matchData.match.homeId || matchData.match.id+'_1', matchId: matchData.match.id, matchName: `${matchData.home} vs ${matchData.away}`, selectionName: 'Maç Sonucu: 1', odd: parseFloat(matchData.homeOdd) }); window.dispatchEvent(new CustomEvent('open-betslip')); }}>
                             <div className="flex-1 flex items-center justify-center w-full mb-2 md:mb-4">
@@ -250,7 +283,7 @@ function MatchSlide({ matchData, theme, leagueName, compact = false, onSelectMat
                                 </div>
                             </div>
                             <div className={`shrink-0 flex flex-col items-center justify-center bg-black/40 backdrop-blur-md border border-white/10 rounded-lg px-1 md:px-4 py-1.5 md:py-2.5 group-hover:bg-white/10 group-hover:border-[#00E5FF]/40 transition-all shadow-[0_8px_32px_rgba(0,0,0,0.3)] w-[100%] md:w-auto min-w-[70px] md:min-w-[140px] max-w-[110px] md:max-w-[180px]`}>
-                                <span className={`text-white/70 font-bold uppercase tracking-wider mb-0.5 md:mb-1 group-hover:text-white transition-colors w-full text-center truncate ${compact ? 'text-[7px]' : 'text-[8px] md:text-[10px]'}`} title={matchData.home}>{matchData.home}</span>
+                                <span className={`text-white/70 font-bold uppercase tracking-wider mb-0.5 md:mb-1 group-hover:text-white transition-colors w-full text-center truncate ${compact ? 'text-[7px]' : 'text-[8px] md:text-[10px]'}`} title={cleanTeamName(matchData.home)}>{cleanTeamName(matchData.home)}</span>
                                 <span className={`text-white font-black drop-shadow-[0_0_10px_rgba(255,255,255,0.3)] group-hover:text-[#00E5FF] transition-colors ${compact ? 'text-[14px] md:text-[18px]' : 'text-[16px] md:text-[24px]'}`}>
                                     {matchData.homeOdd === '-' ? '🔒' : <AnimatedOdd value={matchData.homeOdd} />}
                                 </span>
@@ -289,7 +322,7 @@ function MatchSlide({ matchData, theme, leagueName, compact = false, onSelectMat
                                 </div>
                             </div>
                             <div className={`shrink-0 flex flex-col items-center justify-center bg-black/40 backdrop-blur-md border border-white/10 rounded-lg px-1 md:px-4 py-1.5 md:py-2.5 group-hover:bg-white/10 group-hover:border-[#00E5FF]/40 transition-all shadow-[0_8px_32px_rgba(0,0,0,0.3)] w-[100%] md:w-auto min-w-[70px] md:min-w-[140px] max-w-[110px] md:max-w-[180px]`}>
-                                <span className={`text-white/70 font-bold uppercase tracking-wider mb-0.5 md:mb-1 group-hover:text-white transition-colors w-full text-center truncate ${compact ? 'text-[7px]' : 'text-[8px] md:text-[10px]'}`} title={matchData.away}>{matchData.away}</span>
+                                <span className={`text-white/70 font-bold uppercase tracking-wider mb-0.5 md:mb-1 group-hover:text-white transition-colors w-full text-center truncate ${compact ? 'text-[7px]' : 'text-[8px] md:text-[10px]'}`} title={cleanTeamName(matchData.away)}>{cleanTeamName(matchData.away)}</span>
                                 <span className={`text-white font-black drop-shadow-[0_0_10px_rgba(255,255,255,0.3)] group-hover:text-[#00E5FF] transition-colors ${compact ? 'text-[14px] md:text-[18px]' : 'text-[16px] md:text-[24px]'}`}>
                                     {matchData.awayOdd === '-' ? '🔒' : <AnimatedOdd value={matchData.awayOdd} />}
                                 </span>
@@ -305,35 +338,46 @@ function MatchSlide({ matchData, theme, leagueName, compact = false, onSelectMat
 export default function SportsPromoSlider({ matches = [], compact = false, onSelectMatch }: { matches?: any[], compact?: boolean, onSelectMatch?: (match: any) => void }) {
     const [currentSlide, setCurrentSlide] = useState(0);
 
-    const dynamicSlides = useMemo(() => {
-        const soccerMatches = Array.isArray(matches) ? matches.filter(m => m.sport?.toLowerCase().includes('futbol') || m.sport?.toLowerCase().includes('soccer')) : [];
+    const allSlides = useMemo(() => {
+        const soccerMatches = Array.isArray(matches) ? matches.filter(m => (m.sport || '').toLowerCase().includes('futbol') || (m.sport || '').toLowerCase().includes('soccer') || (m.sport || '').toLowerCase().includes('football')) : [];
 
-        // Try to find API premium matches
-        let premiumMatches = soccerMatches.filter(m => 
-            isPremium(m.league) && 
-            findBestLogoMatch(m.home) !== null && 
-            findBestLogoMatch(m.away) !== null
-        ).sort((a, b) => {
-            const scoreA = getMatchPriorityScore(a.home, a.away) + (a.league.toUpperCase().includes('SÜPER LİG') ? 1000 : 0) + (a.league.toUpperCase().includes('CHAMPIONS') ? 500 : 0);
-            const scoreB = getMatchPriorityScore(b.home, b.away) + (b.league.toUpperCase().includes('SÜPER LİG') ? 1000 : 0) + (b.league.toUpperCase().includes('CHAMPIONS') ? 500 : 0);
-            return scoreB - scoreA;
+        // Adım 1: Sadece büyük takımları / premium ligleri filtrele (ve genç/rezerv takımları engelle)
+        let premiumMatches = soccerMatches.filter(m => {
+            // Logosuz takımları slider'a verme
+            if (findBestLogoMatch(m.home) === null || findBestLogoMatch(m.away) === null) return false;
+            
+            if (isYouthOrReserve(m.home || '', m.away || '', m.league || '')) return false;
+            if (isBannedLeague(m.league || '')) return false;
+            return isPremium(m.league || '') || getMatchPriorityScore(m.home, m.away) > 0;
         });
-
-        const slides = [];
-
-        // 1. Coupon Slide (Top 3 Matches)
-        const couponMatches = premiumMatches.slice(0, 3);
-        if (couponMatches.length === 3) {
-            slides.push({
-                type: 'coupon',
-                matches: couponMatches,
-                id: 'coupon_slide_1'
+        
+        // Eğer premium maç hiç yoksa (hem canlı hem gelecek), en azından logolu maçlara düş (yine gençleri engelle)
+        if (premiumMatches.length === 0) {
+            premiumMatches = soccerMatches.filter(m => {
+                if (isYouthOrReserve(m.home || '', m.away || '', m.league || '')) return false;
+                if (isBannedLeague(m.league || '')) return false;
+                return findBestLogoMatch(m.home) !== null && findBestLogoMatch(m.away) !== null;
             });
         }
 
-        // 2. Individual Premium Matches
-        for (const m of premiumMatches) {
-            if (slides.length >= 6) break;
+        const sortedSoccerMatches = [...premiumMatches].sort((a, b) => {
+            let scoreA = getMatchPriorityScore(a.home, a.away) + ((a.league || '').toUpperCase().includes('SÜPER LİG') ? 1000 : 0) + ((a.league || '').toUpperCase().includes('CHAMPIONS') ? 500 : 0);
+            let scoreB = getMatchPriorityScore(b.home, b.away) + ((b.league || '').toUpperCase().includes('SÜPER LİG') ? 1000 : 0) + ((b.league || '').toUpperCase().includes('CHAMPIONS') ? 500 : 0);
+            
+            // Canlı maçlara her zaman öncelik ver ama artık "ufak takım" filtrelemesinden geçtiğimiz için
+            // sadece BÜYÜK takımların canlı maçları öne çıkacak. Canlı büyük maç yoksa, gelecek büyük maçlar çıkacak.
+            if (a.isLive) scoreA += 10000;
+            if (b.isLive) scoreB += 10000;
+            
+            if (findBestLogoMatch(a.home) && findBestLogoMatch(a.away)) scoreA += 50;
+            if (findBestLogoMatch(b.home) && findBestLogoMatch(b.away)) scoreB += 50;
+            
+            return scoreB - scoreA;
+        });
+
+        let availableMatches = sortedSoccerMatches.slice(0, 8); // Max 8 matches
+
+        const matchSlides = availableMatches.map((m, idx) => {
             let theme = 'premium';
             const l = (m.league || '').toUpperCase();
             if (l.includes('CHAMPIONS') || l.includes('ŞAMPİYONLAR')) theme = 'cl';
@@ -341,30 +385,151 @@ export default function SportsPromoSlider({ matches = [], compact = false, onSel
             else if (l.includes('SUPER LIG') || l.includes('SÜPER LİG')) theme = 'tr';
             else if (m.home?.includes('FENERBAH') || m.away?.includes('FENERBAH')) theme = 'fener';
 
-            slides.push({
+            return {
                 type: 'match',
-                data: { match: m, home: m.home, away: m.away, homeOdd: m.homeOdd, drawOdd: m.drawOdd, awayOdd: m.awayOdd, dateStr: m.matchDate || 'BUGÜN', timeStr: m.startTime || '20:00', isLive: m.isLive, score: m.score, minute: m.minute, sport: m.sport || 'soccer' },
-                theme,
-                name: m.league || 'GÜNÜN MAÇI',
-                id: m.id
-            });
+                id: m.id || `match_${idx}`,
+                content: <MatchSlide key={`m_${m.id || idx}`} matchData={{ match: m, home: m.home, away: m.away, homeOdd: m.homeOdd, drawOdd: m.drawOdd, awayOdd: m.awayOdd, dateStr: m.matchDate || 'BUGÜN', timeStr: m.startTime || '20:00', isLive: m.isLive, score: m.score, minute: m.minute, sport: m.sport || 'soccer' }} theme={theme} leagueName={m.league || 'GÜNÜN MAÇI'} compact={compact} onSelectMatch={onSelectMatch} />
+            };
+        });
+
+        const staticPromos = [
+            <div key="promo_1" className="w-full h-full flex-shrink-0 relative overflow-hidden bg-[#0D0B14]">
+                <div className="absolute top-0 right-0 w-[85%] md:w-[65%] h-full z-[2] overflow-hidden" style={{ maskImage: 'linear-gradient(to left, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%)', WebkitMaskImage: 'linear-gradient(to left, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%)' }}>
+                    <img src="https://images.unsplash.com/photo-1620168962458-47700a944321?q=80&w=1200&auto=format&fit=crop" className="w-full h-full object-cover opacity-60 mix-blend-screen animate-slow-pan" alt="Casino" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#0D0B14] via-[#0D0B14]/80 to-[#FF007F]/20 mix-blend-multiply"></div>
+                </div>
+                <div className="absolute inset-0 z-10 flex flex-col justify-center px-12 md:px-16">
+                    <div>
+                        <div className="inline-flex items-center gap-2 mb-2 drop-shadow-[0_0_8px_rgba(255,0,127,0.5)]">
+                            <div className="w-1.5 h-1.5 rounded-full bg-[#FF007F] shadow-[0_0_12px_#FF007F]"></div>
+                            <span className="text-[#FF007F] font-bold text-[10px] md:text-[11px] tracking-[0.3em] uppercase">HOŞ GELDİN BONUSU</span>
+                        </div>
+                        <h2 className={`font-black leading-[0.9] tracking-[-0.03em] italic uppercase drop-shadow-[0_4px_10px_rgba(0,0,0,0.5)] mb-2 ${compact ? 'text-[24px] sm:text-[30px] md:text-[36px]' : 'text-[28px] sm:text-[38px] md:text-[48px]'}`}>
+                            <span className="title-gradient-white">%100 İLK</span> <br className="hidden sm:block"/>
+                            <span className="text-[#FF007F] drop-shadow-[0_0_15px_rgba(255,0,127,0.5)]">YATIRIM BONUSU</span>
+                        </h2>
+                        <div className="border-l-[3px] border-[#FF007F]/50 pl-3 md:pl-4 mt-2">
+                            <p className="text-gray-300 text-[11px] sm:text-[12px] md:text-[13px] max-w-[280px] sm:max-w-[350px] md:max-w-[420px] font-medium leading-snug tracking-wide">
+                                İlk yatırımınıza özel anında %100 çevrimsiz bonus. 724Bets ayrıcalıklar dünyasına hoş geldiniz.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>,
+            <div key="promo_2" className="w-full h-full flex-shrink-0 relative overflow-hidden bg-[#14120B]">
+                <div className="absolute top-0 right-0 w-[85%] md:w-[65%] h-full z-[2] overflow-hidden" style={{ maskImage: 'linear-gradient(to left, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%)', WebkitMaskImage: 'linear-gradient(to left, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%)' }}>
+                    <img src="https://images.unsplash.com/photo-1621416894569-0f39ed31d247?q=80&w=1200&auto=format&fit=crop" className="w-full h-full object-cover opacity-60 mix-blend-screen animate-slow-pan" alt="Crypto Bitcoin" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#14120B] via-[#14120B]/80 to-[#FFD700]/10 mix-blend-multiply"></div>
+                </div>
+                <div className="absolute inset-0 z-10 flex flex-col justify-center px-12 md:px-16">
+                    <div>
+                        <div className="inline-flex items-center gap-2 mb-2 drop-shadow-[0_0_8px_rgba(255,215,0,0.5)]">
+                            <div className="w-1.5 h-1.5 rounded-full bg-[#FFD700] shadow-[0_0_12px_#FFD700]"></div>
+                            <span className="text-[#FFD700] font-bold text-[10px] md:text-[11px] tracking-[0.3em] uppercase">SINIRSIZ & ÇEVRİMSİZ</span>
+                        </div>
+                        <h2 className={`font-black leading-[0.9] tracking-[-0.03em] italic uppercase drop-shadow-[0_4px_10px_rgba(0,0,0,0.5)] mb-2 ${compact ? 'text-[24px] sm:text-[30px] md:text-[36px]' : 'text-[28px] sm:text-[38px] md:text-[48px]'}`}>
+                            <span className="title-gradient-white">%20 KRİPTO</span> <br className="hidden sm:block"/>
+                            <span className="text-[#FFD700] drop-shadow-[0_0_15px_rgba(255,215,0,0.5)]">NAKİT İADE</span>
+                        </h2>
+                        <div className="border-l-[3px] border-[#FFD700]/50 pl-3 md:pl-4 mt-2">
+                            <p className="text-gray-300 text-[11px] sm:text-[12px] md:text-[13px] max-w-[280px] sm:max-w-[350px] md:max-w-[420px] font-medium leading-snug tracking-wide">
+                                Tüm kripto para yatırımlarınıza özel anında %20 kayıp iadesi veya yatırım bonusu.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>,
+            <div key="promo_3" className="w-full h-full flex-shrink-0 relative overflow-hidden bg-[#0b0e11]">
+                <div className="absolute top-0 right-0 w-[85%] md:w-[65%] h-full z-[2] overflow-hidden" style={{ maskImage: 'linear-gradient(to left, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%)', WebkitMaskImage: 'linear-gradient(to left, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%)' }}>
+                    <img src="https://images.unsplash.com/photo-1508344928928-7137b29de218?q=80&w=1200&auto=format&fit=crop" className="w-full h-full object-cover opacity-50 mix-blend-screen animate-slow-pan" alt="Stadium Lights" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#0b0e11] via-[#0b0e11]/80 to-[#00E5FF]/10 mix-blend-multiply"></div>
+                </div>
+                <div className="absolute inset-0 z-10 flex items-center px-12 md:px-16">
+                    <div className="w-full md:w-[60%] flex flex-col justify-center">
+                        <div className="inline-flex items-center gap-2 mb-2 drop-shadow-[0_0_8px_rgba(0,229,255,0.5)] w-fit">
+                            <span className="text-[#00E5FF] font-bold text-[10px] md:text-[11px] tracking-[0.3em] uppercase">ANINDA NAKİT</span>
+                        </div>
+                        <h2 className={`font-black leading-[0.9] tracking-[-0.03em] italic uppercase drop-shadow-[0_4px_10px_rgba(0,0,0,0.5)] mb-2 ${compact ? 'text-[24px] sm:text-[30px] md:text-[36px]' : 'text-[28px] sm:text-[38px] md:text-[48px]'}`}>
+                            <span className="title-gradient-white">ERKEN</span> <br className="hidden sm:block"/>
+                            <span className="text-zinc-300">ÖDEME</span>
+                        </h2>
+                        <div className="border-l-[3px] border-white/20 pl-3 md:pl-4 mt-2">
+                            <p className="text-gray-300 text-[11px] sm:text-[12px] md:text-[13px] max-w-[280px] font-medium leading-snug tracking-wide">
+                                Takımınız <strong className="text-white font-bold">2 GOL</strong> öne geçtiği an kuponunuz kazanır.
+                            </p>
+                        </div>
+                    </div>
+                    <div className="hidden md:flex w-[40%] h-full items-center justify-end pr-8">
+                        <div className="relative flex items-center">
+                            <div className="text-[90px] leading-none font-black premium-text-gradient italic relative z-10 select-none drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)]">+2</div>
+                            <div className="ml-4 flex flex-col">
+                                <div className="w-8 h-[3px] bg-white/40 mb-1.5 shadow-[0_0_8px_rgba(255,255,255,0.2)]"></div>
+                                <div className="text-white font-black text-[14px] tracking-[0.4em] uppercase leading-none">GOL</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>,
+            <div key="promo_4" className="w-full h-full flex-shrink-0 relative overflow-hidden bg-[#050b14]">
+                <div className="absolute top-0 right-0 w-[85%] md:w-[65%] h-full z-[2] overflow-hidden" style={{ maskImage: 'linear-gradient(to left, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%)', WebkitMaskImage: 'linear-gradient(to left, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%)' }}>
+                    <img src="https://images.unsplash.com/photo-1579952363873-27f3bade9f55?q=80&w=1200&auto=format&fit=crop" className="w-full h-full object-cover opacity-50 mix-blend-screen animate-slow-pan" alt="Football pitch" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#050b14] via-[#050b14]/80 to-cyan-900/40 mix-blend-multiply"></div>
+                </div>
+                <div className="absolute inset-0 z-10 flex items-center px-12 md:px-16">
+                    <div className="w-full md:w-[60%] flex flex-col justify-center">
+                        <div className="inline-flex items-center gap-2 mb-2 drop-shadow-[0_0_8px_rgba(0,229,255,0.5)] w-fit">
+                            <span className="text-[#00E5FF] font-bold text-[10px] md:text-[11px] tracking-[0.3em] uppercase">VİP KAZANÇ</span>
+                        </div>
+                        <h2 className={`font-black leading-[0.9] tracking-[-0.03em] italic uppercase drop-shadow-[0_4px_10px_rgba(0,0,0,0.5)] mb-2 ${compact ? 'text-[24px] sm:text-[30px] md:text-[36px]' : 'text-[28px] sm:text-[38px] md:text-[48px]'}`}>
+                            <span className="title-gradient-white">KAZANCINI</span> <br className="hidden sm:block"/>
+                            <span className="title-gradient-cyan">İKİYE KATLA</span>
+                        </h2>
+                        <div className="border-l-[3px] border-[#00E5FF]/50 pl-3 md:pl-4 mt-2">
+                            <p className="text-gray-300 text-[11px] sm:text-[12px] md:text-[13px] max-w-[280px] sm:max-w-[350px] font-medium leading-snug tracking-wide">
+                                Favori takımınıza bahis yapın, maçı <strong className="text-[#00E5FF] font-bold">2 gol farkla</strong> kazanırsanız, net kazancınızı anında 2'ye katlayalım!
+                            </p>
+                        </div>
+                    </div>
+                    <div className="hidden md:flex w-[40%] h-full items-center justify-end pr-8">
+                        <div className="relative flex items-center">
+                            <div className="text-[90px] leading-none font-black premium-text-gradient italic relative z-10 select-none drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)]">2X</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        ];
+
+        // "1 Reklam, 2 Maç" Harmanlaması
+        const interleaved = [];
+        let pIndex = 0;
+        let mIndex = 0;
+
+        while (pIndex < staticPromos.length || mIndex < matchSlides.length) {
+            if (pIndex < staticPromos.length) {
+                interleaved.push({ type: 'promo', id: `p_${pIndex}`, content: staticPromos[pIndex] });
+                pIndex++;
+            }
+            if (mIndex < matchSlides.length) {
+                interleaved.push(matchSlides[mIndex]);
+                mIndex++;
+            }
+            if (mIndex < matchSlides.length) {
+                interleaved.push(matchSlides[mIndex]);
+                mIndex++;
+            }
         }
-
-        return slides;
-    }, [matches]);
-
-    const staticSlideCount = 3;
-    const totalSlides = dynamicSlides.length > 0 ? dynamicSlides.length + staticSlideCount : staticSlideCount;
+        return interleaved;
+    }, [matches, compact, onSelectMatch]);
 
     useEffect(() => {
-        if (totalSlides === 0) return;
+        if (allSlides.length === 0) return;
         const timer = setInterval(() => {
-            setCurrentSlide((prev) => (prev + 1) % totalSlides);
+            setCurrentSlide((prev) => (prev + 1) % allSlides.length);
         }, 8000);
         return () => clearInterval(timer);
-    }, [totalSlides]);
+    }, [allSlides.length]);
 
-    if (totalSlides === 0) return null;
+    if (allSlides.length === 0) return null;
 
     const getTransform = () => {
         return `translateX(-${currentSlide * 100}%)`;
@@ -393,126 +558,38 @@ export default function SportsPromoSlider({ matches = [], compact = false, onSel
             <div className={`overflow-hidden rounded-xl relative w-full ${compact ? 'h-[180px] sm:h-[200px] md:h-[220px]' : 'h-[220px] sm:h-[240px] md:h-[280px]'} bg-[#050505] shadow-2xl cursor-pointer font-montserrat`}>
                 
                 <div className="w-full h-full flex transition-transform duration-700 ease-in-out" style={{ transform: getTransform() }}>
-                    
-                    {/* DYNAMIC LEAGUE MATCHES & COUPONS */}
-                    {dynamicSlides.map((slide, i) => {
-                        if (slide.type === 'coupon') {
-                            return null;
-                        }
-                        return <MatchSlide key={slide.id || i} matchData={slide.data} theme={slide.theme} leagueName={slide.name} compact={compact} onSelectMatch={onSelectMatch} />
-                    })}
-
-                    {/* ================= STATIC SLIDES ================= */}
-                    <div className="w-full h-full flex-shrink-0 relative overflow-hidden bg-[#0a0f1d]">
-                        <div className="absolute left-0 top-0 bottom-0 w-8 bg-cyan-900/10 flex items-center justify-center border-r border-white/5 z-20 backdrop-blur-sm">
-                            <span className="vertical-text text-[10px] font-black text-cyan-400/30 tracking-[0.3em] uppercase">724BETS PARTNERS</span>
+                    {allSlides.map((slide) => (
+                        <div key={slide.id} className="w-full h-full flex-shrink-0">
+                            {slide.content}
                         </div>
-                        <div className="absolute top-0 right-0 w-[85%] md:w-[65%] h-full z-[2] overflow-hidden" style={{ maskImage: 'linear-gradient(to left, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%)', WebkitMaskImage: 'linear-gradient(to left, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%)' }}>
-                            <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1200&auto=format&fit=crop" className="w-full h-full object-cover opacity-60 mix-blend-screen animate-slow-pan" alt="Esports" />
-                            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(10,15,29,0.8)_100%)] pointer-events-none"></div>
-                            <div className="absolute inset-0 bg-gradient-to-r from-[#0a0f1d] via-[#0a0f1d]/70 to-cyan-900/10 mix-blend-multiply"></div>
-                        </div>
-                        <div className="absolute inset-0 z-10 flex flex-col justify-center px-12 md:px-16">
-                            <div>
-                                <div className="inline-flex items-center gap-2 mb-2 bg-[#00E5FF]/10 border border-[#00E5FF]/20 px-2.5 py-1 rounded-sm">
-                                    <div className="w-1.5 h-1.5 rounded-full bg-[#00E5FF] shadow-[0_0_8px_[#00E5FF]]"></div>
-                                    <span className="text-[#00E5FF] font-bold text-[9px] md:text-[10px] tracking-[0.25em] uppercase">GLOBAL PARTNERSHIP</span>
-                                </div>
-                                <h2 className={`font-black leading-[0.9] tracking-[-0.03em] italic uppercase drop-shadow-[0_4px_10px_rgba(0,0,0,0.5)] mb-2 ${compact ? 'text-[24px] sm:text-[30px] md:text-[36px]' : 'text-[28px] sm:text-[38px] md:text-[48px]'}`}>
-                                    <span className="title-gradient-white">SYNAPSE</span> <br className="hidden sm:block"/>
-                                    <span className="title-gradient-cyan">ESPORTS</span>
-                                </h2>
-                                <div className="border-l-[3px] border-[#00E5FF]/50 pl-3 md:pl-4 mt-2">
-                                    <p className="text-gray-300 text-[11px] sm:text-[12px] md:text-[13px] max-w-[280px] sm:max-w-[350px] md:max-w-[420px] font-medium leading-snug tracking-wide">
-                                        724bets is proud to be the official global betting partner of Synapse Esports. Bet on all major tournaments.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="w-full h-full flex-shrink-0 relative overflow-hidden bg-[#0b0e11]">
-                        <div className="absolute left-0 top-0 bottom-0 w-8 bg-[#00E5FF]/5 flex items-center justify-center border-r border-white/5 z-20 backdrop-blur-sm">
-                            <span className="vertical-text text-[10px] font-black text-[#00E5FF]/30 tracking-[0.3em] uppercase">YENİ ÖZELLİK</span>
-                        </div>
-                        <div className="absolute top-0 right-0 w-[85%] md:w-[65%] h-full z-[2] overflow-hidden" style={{ maskImage: 'linear-gradient(to left, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%)', WebkitMaskImage: 'linear-gradient(to left, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%)' }}>
-                            <img src="https://images.unsplash.com/photo-1508344928928-7137b29de218?q=80&w=1200&auto=format&fit=crop" className="w-full h-full object-cover opacity-50 mix-blend-screen animate-slow-pan" alt="Stadium Lights" />
-                            <div className="absolute inset-0 bg-gradient-to-r from-[#0b0e11] via-[#0b0e11]/80 to-[#00E5FF]/10 mix-blend-multiply"></div>
-                        </div>
-                        <div className="absolute inset-0 z-10 flex items-center px-12 md:px-16">
-                            <div className="w-full md:w-[60%] flex flex-col justify-center">
-                                <div className="inline-flex items-center gap-2 mb-2 bg-[#00E5FF]/10 border border-[#00E5FF]/20 px-2.5 py-1 rounded-sm w-fit">
-                                    <span className="text-[#00E5FF] font-bold text-[9px] md:text-[10px] tracking-[0.25em] uppercase">ANINDA NAKİT</span>
-                                </div>
-                                <h2 className={`font-black leading-[0.9] tracking-[-0.03em] italic uppercase drop-shadow-[0_4px_10px_rgba(0,0,0,0.5)] mb-2 ${compact ? 'text-[24px] sm:text-[30px] md:text-[36px]' : 'text-[28px] sm:text-[38px] md:text-[48px]'}`}>
-                                    <span className="title-gradient-white">ERKEN</span> <br className="hidden sm:block"/>
-                                    <span className="text-zinc-300">ÖDEME</span>
-                                </h2>
-                                <div className="border-l-[3px] border-white/20 pl-3 md:pl-4 mt-2">
-                                    <p className="text-gray-300 text-[11px] sm:text-[12px] md:text-[13px] max-w-[280px] font-medium leading-snug tracking-wide">
-                                        Takımınız <strong className="text-white font-bold">2 GOL</strong> öne geçtiği an kuponunuz kazanır.
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="hidden md:flex w-[40%] h-full items-center justify-end pr-8">
-                                <div className="relative flex items-center">
-                                    <div className="text-[90px] leading-none font-black premium-text-gradient italic relative z-10 select-none drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)]">+2</div>
-                                    <div className="ml-4 flex flex-col">
-                                        <div className="w-8 h-[3px] bg-white/40 mb-1.5 shadow-[0_0_8px_rgba(255,255,255,0.2)]"></div>
-                                        <div className="text-white font-black text-[14px] tracking-[0.4em] uppercase leading-none">GOL</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="w-full h-full flex-shrink-0 relative overflow-hidden bg-[#050b14]">
-                        <div className="absolute left-0 top-0 bottom-0 w-8 bg-cyan-900/10 flex items-center justify-center border-r border-[#00E5FF]/10 z-20 backdrop-blur-sm">
-                            <span className="vertical-text text-[10px] font-black text-[#00E5FF]/30 tracking-[0.3em] uppercase">HAFTANIN PROMOSU</span>
-                        </div>
-                        <div className="absolute top-0 right-0 w-[85%] md:w-[65%] h-full z-[2] overflow-hidden" style={{ maskImage: 'linear-gradient(to left, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%)', WebkitMaskImage: 'linear-gradient(to left, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%)' }}>
-                            <img src="https://images.unsplash.com/photo-1579952363873-27f3bade9f55?q=80&w=1200&auto=format&fit=crop" className="w-full h-full object-cover opacity-50 mix-blend-screen animate-slow-pan" alt="Football pitch" />
-                            <div className="absolute inset-0 bg-gradient-to-r from-[#050b14] via-[#050b14]/80 to-cyan-900/40 mix-blend-multiply"></div>
-                        </div>
-                        <div className="absolute inset-0 z-10 flex items-center px-12 md:px-16">
-                            <div className="w-full md:w-[60%] flex flex-col justify-center">
-                                <div className="inline-flex items-center gap-2 mb-2 bg-[#00E5FF]/10 border border-[#00E5FF]/20 px-2.5 py-1 rounded-sm w-fit">
-                                    <span className="text-[#00E5FF] font-bold text-[9px] md:text-[10px] tracking-[0.25em] uppercase">VİP KAZANÇ</span>
-                                </div>
-                                <h2 className={`font-black leading-[0.9] tracking-[-0.03em] italic uppercase drop-shadow-[0_4px_10px_rgba(0,0,0,0.5)] mb-2 ${compact ? 'text-[24px] sm:text-[30px] md:text-[36px]' : 'text-[28px] sm:text-[38px] md:text-[48px]'}`}>
-                                    <span className="title-gradient-white">KAZANCINI</span> <br className="hidden sm:block"/>
-                                    <span className="title-gradient-cyan">İKİYE KATLA</span>
-                                </h2>
-                                <div className="border-l-[3px] border-[#00E5FF]/50 pl-3 md:pl-4 mt-2">
-                                    <p className="text-gray-300 text-[11px] sm:text-[12px] md:text-[13px] max-w-[280px] sm:max-w-[350px] font-medium leading-snug tracking-wide">
-                                        Favori takımınıza bahis yapın, maçı <strong className="text-[#00E5FF] font-bold">2 gol farkla</strong> kazanırsanız, net kazancınızı anında 2'ye katlayalım!
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="hidden md:flex w-[40%] h-full items-center justify-end pr-8">
-                                <div className="relative flex items-center">
-                                    <div className="text-[90px] leading-none font-black premium-text-gradient italic relative z-10 select-none drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)]">2X</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
+                    ))}
                 </div>
                 
                 {/* Hover Arrows */}
                 <div className="absolute right-4 top-1/2 -translate-y-1/2 flex gap-2 opacity-0 group-hover/slider:opacity-100 transition-opacity duration-300 z-[20]">
                     <button 
-                        onClick={(e) => { e.stopPropagation(); setCurrentSlide((prev) => (prev - 1 + totalSlides) % totalSlides); }}
+                        onClick={(e) => { e.stopPropagation(); setCurrentSlide((prev) => (prev - 1 + allSlides.length) % allSlides.length); }}
                         className="w-8 h-8 rounded-full bg-black/60 border border-white/20 hover:bg-black/90 text-white flex items-center justify-center backdrop-blur-md transition-all"
                     >
                         <ChevronLeft className="w-4 h-4" />
                     </button>
                     <button 
-                        onClick={(e) => { e.stopPropagation(); setCurrentSlide((prev) => (prev + 1) % totalSlides); }}
+                        onClick={(e) => { e.stopPropagation(); setCurrentSlide((prev) => (prev + 1) % allSlides.length); }}
                         className="w-8 h-8 rounded-full bg-black/60 border border-white/20 hover:bg-black/90 text-white flex items-center justify-center backdrop-blur-md transition-all"
                     >
                         <ChevronRight className="w-4 h-4" />
                     </button>
+                </div>
+                
+                {/* Dots indicator */}
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 z-[20]">
+                    {allSlides.map((_, i) => (
+                        <button
+                            key={i}
+                            onClick={(e) => { e.stopPropagation(); setCurrentSlide(i); }}
+                            className={`w-1.5 h-1.5 rounded-full transition-all ${i === currentSlide ? 'bg-[#FF007F] scale-150 w-3' : 'bg-white/30 hover:bg-white/60'}`}
+                        />
+                    ))}
                 </div>
             </div>
         </div>

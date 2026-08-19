@@ -154,11 +154,10 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, activeView, onViewC
           <Menu className="w-[26px] h-[26px]" strokeWidth={2} />
         </button>
 
-        {/* Horizontal Toggle for Casino / Spor */}
-        <div className={`flex-1 flex items-center bg-[#131823] p-1 rounded-xl h-[44px] transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] relative z-[99999] pointer-events-auto border border-white/5 ${!isOpen ? 'opacity-0 w-0 hidden' : 'opacity-100'}`}>
+        <div className={`flex-1 flex items-center bg-[#131823] p-1 rounded-xl h-[44px] transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] relative z-[99999] pointer-events-auto border-none shadow-inner ${!isOpen ? 'opacity-0 w-0 hidden' : 'opacity-100'}`}>
           <button 
             onClick={() => { onViewChange('casino'); if (window.innerWidth < 1024) onToggle?.(); }}
-            className={`flex-1 flex items-center justify-center h-full rounded-lg font-bold text-[14px] transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer pointer-events-auto z-[99999] ${isCasinoView ? 'bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 text-white shadow-[0_0_15px_rgba(168,85,247,0.3)]' : 'text-[#8b92a5] hover:text-white border border-transparent'}`}
+            className={`flex-1 flex items-center justify-center h-full rounded-lg font-bold text-[14px] transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer pointer-events-auto z-[99999] ${isCasinoView ? 'bg-gradient-to-r from-purple-500/15 to-pink-500/15 border-none text-purple-400 shadow-[0_0_15px_rgba(168,85,247,0.15)]' : 'text-[#8b92a5] hover:text-white border-none'}`}
           >
             Casino
           </button>
@@ -168,7 +167,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, activeView, onViewC
                 onViewChange('spor724'); 
                 if (window.innerWidth < 1024) onToggle?.(); 
             }}
-            className={`flex-1 flex items-center justify-center h-full rounded-lg font-bold text-[14px] transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer pointer-events-auto z-[99999] ${isSportsView ? 'bg-gradient-to-r from-[#22c55e]/20 to-[#10b981]/20 border border-[#22c55e]/30 text-white shadow-[0_0_15px_rgba(34,197,94,0.3)]' : 'text-[#8b92a5] hover:text-white border border-transparent'}`}
+            className={`flex-1 flex items-center justify-center h-full rounded-lg font-bold text-[14px] transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer pointer-events-auto z-[99999] ${isSportsView ? 'bg-gradient-to-r from-[color:var(--theme-accent)]/15 to-[color:var(--theme-accent)]/5 border-none text-[color:var(--theme-accent)] shadow-[0_0_15px_rgba(0,229,255,0.15)]' : 'text-[#8b92a5] hover:text-white border-none'}`}
           >
             Spor
           </button>

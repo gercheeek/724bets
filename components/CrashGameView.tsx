@@ -55,6 +55,7 @@ export default function CrashGameView({ siteUser, setSiteUser, onAuthRequired, o
 
     const reqRef = useRef<number | undefined>(undefined);
     const startTimeRef = useRef<number>(0);
+    const isMounted = useRef<boolean>(true);
 
     // Exponential math function for multiplier (Faster curve for more excitement)
     const calcMultiplier = (seconds: number) => {
@@ -62,6 +63,7 @@ export default function CrashGameView({ siteUser, setSiteUser, onAuthRequired, o
     };
 
     const startGame = () => {
+        if (!isMounted.current) return;
         let placedBet = false;
         if (nextRoundBet) {
             const b = parseFloat(betAmount);
@@ -113,7 +115,9 @@ export default function CrashGameView({ siteUser, setSiteUser, onAuthRequired, o
 
     // Unmount cleanup for sound engine
     useEffect(() => {
+        isMounted.current = true;
         return () => {
+            isMounted.current = false;
             soundEngine.stopEngineSound();
         };
     }, []);
@@ -176,6 +180,7 @@ export default function CrashGameView({ siteUser, setSiteUser, onAuthRequired, o
         setHistory(prev => [parseFloat(finalMulti.toFixed(2)), ...prev].slice(0, 10));
 
         setTimeout(() => {
+            if (!isMounted.current) return;
             setGameState('betting');
             setMultiplier(1.00);
             setElapsedSeconds(0);

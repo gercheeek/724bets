@@ -7,6 +7,25 @@ export default function AdminRiskTab() {
     const [pin, setPin] = useState('');
     const [error, setError] = useState('');
     const [success, setSuccess] = useState(false);
+    
+    const [stats, setStats] = useState<any>(null);
+
+    useEffect(() => {
+        const fetchStats = async () => {
+            try {
+                const res = await fetch('https://api.724bahis.net/api/admin/dashboard-stats');
+                const data = await res.json();
+                if (data.success) {
+                    setStats(data.stats);
+                }
+            } catch (err) {
+                console.error("Error fetching stats:", err);
+            }
+        };
+        fetchStats();
+        const interval = setInterval(fetchStats, 5000);
+        return () => clearInterval(interval);
+    }, []);
 
     const handleSaveRequest = () => {
         setIsModalOpen(true);
@@ -108,25 +127,27 @@ export default function AdminRiskTab() {
                     <div className="bg-[#111318] border border-red-500/30 rounded-xl p-4 flex items-center justify-between relative overflow-hidden">
                         <div className="absolute inset-0 bg-red-500/5 animate-pulse"></div>
                         <div>
-                            <div className="text-sm font-bold text-white mb-1">Galatasaray - Fenerbahçe</div>
-                            <div className="text-xs text-zinc-400">Piyasa: Maç Sonucu 1</div>
+                            <div className="text-sm font-bold text-white mb-1">Mevcut Toplam Bekleyen Risk (Tüm Bahisler)</div>
+                            <div className="text-xs text-zinc-400">Piyasa: Genel Kasa Limiti</div>
                         </div>
                         <div className="text-right relative z-10">
                             <div className="text-xl font-black text-red-400 font-mono flex items-center gap-2 justify-end drop-shadow-[0_0_8px_rgba(248,113,113,0.8)]">
-                                <Activity className="w-4 h-4 animate-bounce" /> ₺1,250,000
+                                <Activity className="w-4 h-4 animate-bounce" /> ₺{stats ? stats.betLiability.toLocaleString('tr-TR') : '...'}
                             </div>
-                            <div className="text-[10px] text-red-500 font-bold uppercase mt-1">KRİTİK RİSK (LIMIT AŞIMI)</div>
+                            <div className="text-[10px] text-red-500 font-bold uppercase mt-1">
+                                {stats && stats.betLiability > 500000 ? 'KRİTİK RİSK (LIMIT AŞIMI)' : 'GÜVENLİ BÖLGE'}
+                            </div>
                         </div>
                     </div>
 
                     <div className="bg-[#111318] border border-orange-500/30 rounded-xl p-4 flex items-center justify-between group hover:border-orange-500/50 transition-colors">
                         <div>
-                            <div className="text-sm font-bold text-white mb-1">Real Madrid - Barcelona</div>
-                            <div className="text-xs text-zinc-400">Piyasa: 2.5 Üst</div>
+                            <div className="text-sm font-bold text-white mb-1">Bekleyen Ana Para (Stake)</div>
+                            <div className="text-xs text-zinc-400">Oynanan Toplam Tutar</div>
                         </div>
                         <div className="text-right">
-                            <div className="text-xl font-black text-orange-400 font-mono drop-shadow-[0_0_8px_rgba(251,146,60,0.8)]">₺450,000</div>
-                            <div className="text-[10px] text-orange-500 font-bold uppercase mt-1">YÜKSEK RİSK</div>
+                            <div className="text-xl font-black text-orange-400 font-mono drop-shadow-[0_0_8px_rgba(251,146,60,0.8)]">₺{stats ? stats.pendingStake.toLocaleString('tr-TR') : '...'}</div>
+                            <div className="text-[10px] text-orange-500 font-bold uppercase mt-1">RİSKTEKİ ANA PARA</div>
                         </div>
                     </div>
                 </div>

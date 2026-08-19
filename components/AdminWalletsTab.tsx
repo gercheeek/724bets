@@ -1,122 +1,262 @@
 import React, { useState, useEffect } from 'react';
-import { Wallet, Save, CheckCircle2 } from 'lucide-react';
+import { Wallet, Save, CheckCircle2, Plus, Trash2, Edit2, X } from 'lucide-react';
+
+interface PaymentMethod {
+  id: string;
+  name: string;
+  type: string;
+  accountName: string;
+  accountNo: string;
+  minAmount: number;
+  maxAmount: number | null;
+  isActive: boolean;
+}
 
 export function AdminWalletsTab() {
-    const [addresses, setAddresses] = useState({
-        ETH: '',
-        BTC: '',
-        USDT: '',
-        USDC: ''
-    });
+  const [methods, setMethods] = useState<PaymentMethod[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [editingMethod, setEditingMethod] = useState<Partial<PaymentMethod> | null>(null);
+
+  const fetchMethods = async () => {
+    try {
+      const res = await fetch('https://api.724bahis.net/api/admin/payment-methods');
+      const data = await res.json();
+      if (data.success) {
+        setMethods(data.methods);
+      }
+    } catch (err) {
+      console.error('Error fetching methods', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchMethods();
+  }, []);
+
+  const handleSave = async () => {
+    if (!editingMethod?.name || !editingMethod?.type) return;
     
-    const [saved, setSaved] = useState(false);
+    try {
+      const isNew = !editingMethod.id;
+      const url = 'https://api.724bahis.net/api/admin/payment-methods';
+      const method = isNew ? 'POST' : 'PUT';
+      
+      const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(editingMethod)
+      });
+      
+      const data = await res.json();
+      if (data.success) {
+        setEditingMethod(null);
+        fetchMethods();
+      } else {
+        alert(data.error);
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Kaydetme hatası');
+    }
+  };
 
-    useEffect(() => {
-        const stored = localStorage.getItem('admin_wallet_addresses');
-        if (stored) {
-            try {
-                setAddresses(JSON.parse(stored));
-            } catch (e) {
-                console.error("Parse error", e);
-            }
-        }
-    }, []);
+  const handleDelete = async (id: string) => {
+    if (!confirm('Silmek istediğinize emin misiniz?')) return;
+    try {
+      const res = await fetch('https://api.724bahis.net/api/admin/payment-methods', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id })
+      });
+      const data = await res.json();
+      if (data.success) {
+        fetchMethods();
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
-    const handleSave = () => {
-        localStorage.setItem('admin_wallet_addresses', JSON.stringify(addresses));
-        setSaved(true);
-        setTimeout(() => setSaved(false), 3000);
-    };
+  return (
+    <div className="p-6 bg-[#0F131A] min-h-full font-sans text-slate-300 relative">
+      <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 flex items-center justify-center border border-blue-500/30">
+            <Wallet className="w-5 h-5 text-blue-400" />
+          </div>
+          <div>
+            <h2 className="text-xl font-bold text-white tracking-tight">Ödeme Yöntemleri (Hesaplar)</h2>
+            <p className="text-sm text-zinc-500 mt-1">Kullanıcıların para yatıracağı cüzdan ve banka hesaplarını yönetin.</p>
+          </div>
+        </div>
+        
+        <button 
+          onClick={() => setEditingMethod({ isActive: true, type: 'bank_transfer', minAmount: 100 })}
+          className="flex items-center gap-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-semibold transition-colors shadow-lg"
+        >
+          <Plus className="w-4 h-4" /> Yeni Ekle
+        </button>
+      </div>
 
-    return (
-        <div className="p-6 bg-[#0F131A] min-h-full font-sans text-slate-300">
-            <div className="flex items-center justify-between mb-8">
-                <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 flex items-center justify-center border border-blue-500/30">
-                        <Wallet className="w-5 h-5 text-blue-400" />
-                    </div>
-                    <div>
-                        <h2 className="text-xl font-bold text-white tracking-tight">Kripto Cüzdan Ayarları</h2>
-                        <p className="text-sm text-zinc-500 mt-1">Kullanıcıların para yatıracağı deposit cüzdan adreslerini belirleyin.</p>
-                    </div>
-                </div>
-                
-                <button 
-                    onClick={handleSave}
-                    className="flex items-center gap-2 px-4 py-2 bg-[#00E5FF] hover:bg-emerald-600 text-white rounded-lg font-semibold transition-colors shadow-lg shadow-emerald-500/20"
-                >
-                    {saved ? <CheckCircle2 className="w-4 h-4" /> : <Save className="w-4 h-4" />}
-                    {saved ? 'Kaydedildi' : 'Kaydet'}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {loading ? (
+          <div className="col-span-full text-center text-zinc-500 py-10">Yükleniyor...</div>
+        ) : methods.length === 0 ? (
+          <div className="col-span-full text-center text-zinc-500 py-10 border border-dashed border-zinc-800 rounded-xl">
+            Henüz ödeme yöntemi eklenmemiş.
+          </div>
+        ) : (
+          methods.map(method => (
+            <div key={method.id} className="bg-[#1A1F29] p-5 rounded-xl border border-white/5 relative group">
+              <div className="absolute top-4 right-4 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                <button onClick={() => setEditingMethod(method)} className="p-1.5 bg-blue-500/20 text-blue-400 rounded hover:bg-blue-500 hover:text-white transition-colors">
+                  <Edit2 className="w-3.5 h-3.5" />
                 </button>
+                <button onClick={() => handleDelete(method.id)} className="p-1.5 bg-red-500/20 text-red-400 rounded hover:bg-red-500 hover:text-white transition-colors">
+                  <Trash2 className="w-3.5 h-3.5" />
+                </button>
+              </div>
+              
+              <div className="flex items-center gap-2 mb-4 pr-16">
+                <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
+                  method.isActive ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'
+                }`}>
+                  {method.isActive ? 'Aktif' : 'Pasif'}
+                </span>
+                <span className="text-xs bg-white/5 text-zinc-400 px-2 py-0.5 rounded uppercase">{method.type}</span>
+              </div>
+              
+              <h3 className="font-bold text-white text-lg mb-1">{method.name}</h3>
+              
+              <div className="space-y-3 mt-4">
+                <div>
+                  <div className="text-[10px] uppercase text-zinc-500 font-bold mb-0.5">Alıcı Adı</div>
+                  <div className="text-sm font-medium text-white">{method.accountName}</div>
+                </div>
+                <div>
+                  <div className="text-[10px] uppercase text-zinc-500 font-bold mb-0.5">Hesap No / IBAN / Cüzdan</div>
+                  <div className="text-sm font-mono text-[#00E5FF] bg-black/30 p-2 rounded border border-white/5 truncate">
+                    {method.accountNo}
+                  </div>
+                </div>
+                <div className="flex items-center gap-4 pt-2 border-t border-white/5">
+                  <div>
+                    <div className="text-[10px] uppercase text-zinc-500 font-bold">Min</div>
+                    <div className="text-sm font-bold text-white">{method.minAmount}</div>
+                  </div>
+                  {method.maxAmount && (
+                    <div>
+                      <div className="text-[10px] uppercase text-zinc-500 font-bold">Max</div>
+                      <div className="text-sm font-bold text-white">{method.maxAmount}</div>
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
+          ))
+        )}
+      </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl">
-                {/* ETH */}
-                <div className="bg-[#1A1F29] p-5 rounded-xl border border-white/5">
-                    <div className="flex items-center gap-2 mb-3">
-                        <div className="w-6 h-6 rounded-full bg-[#627EEA] flex items-center justify-center text-white text-[10px] font-bold">Ξ</div>
-                        <h3 className="font-semibold text-white">Ethereum (ERC20)</h3>
-                    </div>
-                    <input 
-                        type="text" 
-                        value={addresses.ETH}
-                        onChange={(e) => setAddresses({...addresses, ETH: e.target.value})}
-                        placeholder="0x..."
-                        className="w-full bg-[#0F131A] border border-white/10 rounded-lg px-4 py-2.5 text-white font-mono text-sm focus:border-blue-500 outline-none transition-colors"
-                    />
-                </div>
-
-                {/* BTC */}
-                <div className="bg-[#1A1F29] p-5 rounded-xl border border-white/5">
-                    <div className="flex items-center gap-2 mb-3">
-                        <div className="w-6 h-6 rounded-full bg-[#F7931A] flex items-center justify-center text-white text-[10px] font-bold">₿</div>
-                        <h3 className="font-semibold text-white">Bitcoin</h3>
-                    </div>
-                    <input 
-                        type="text" 
-                        value={addresses.BTC}
-                        onChange={(e) => setAddresses({...addresses, BTC: e.target.value})}
-                        placeholder="1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa"
-                        className="w-full bg-[#0F131A] border border-white/10 rounded-lg px-4 py-2.5 text-white font-mono text-sm focus:border-orange-500 outline-none transition-colors"
-                    />
-                </div>
-
-                {/* USDT */}
-                <div className="bg-[#1A1F29] p-5 rounded-xl border border-white/5">
-                    <div className="flex items-center gap-2 mb-3">
-                        <div className="w-6 h-6 rounded-full bg-[#26A17B] flex items-center justify-center text-white text-[10px] font-bold">₮</div>
-                        <h3 className="font-semibold text-white">Tether USDT (TRC20/ERC20)</h3>
-                    </div>
-                    <input 
-                        type="text" 
-                        value={addresses.USDT}
-                        onChange={(e) => setAddresses({...addresses, USDT: e.target.value})}
-                        placeholder="T..."
-                        className="w-full bg-[#0F131A] border border-white/10 rounded-lg px-4 py-2.5 text-white font-mono text-sm focus:border-teal-500 outline-none transition-colors"
-                    />
-                </div>
-
-                {/* USDC */}
-                <div className="bg-[#1A1F29] p-5 rounded-xl border border-white/5">
-                    <div className="flex items-center gap-2 mb-3">
-                        <div className="w-6 h-6 rounded-full bg-[#2775CA] flex items-center justify-center text-white text-[10px] font-bold">$</div>
-                        <h3 className="font-semibold text-white">USDC (ERC20)</h3>
-                    </div>
-                    <input 
-                        type="text" 
-                        value={addresses.USDC}
-                        onChange={(e) => setAddresses({...addresses, USDC: e.target.value})}
-                        placeholder="0x..."
-                        className="w-full bg-[#0F131A] border border-white/10 rounded-lg px-4 py-2.5 text-white font-mono text-sm focus:border-blue-500 outline-none transition-colors"
-                    />
-                </div>
+      {editingMethod && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-[#1A1F29] border border-white/10 rounded-xl p-6 w-full max-w-md shadow-2xl">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-lg font-bold text-white">
+                {editingMethod.id ? 'Yöntemi Düzenle' : 'Yeni Yöntem Ekle'}
+              </h3>
+              <button onClick={() => setEditingMethod(null)} className="text-zinc-500 hover:text-white">
+                <X className="w-5 h-5" />
+              </button>
             </div>
             
-            <div className="mt-8 p-4 bg-blue-500/10 border border-blue-500/20 rounded-xl max-w-4xl">
-                <p className="text-sm text-blue-200">
-                    <strong>Bilgi:</strong> Buraya girdiğiniz adresler, kullanıcılar "Para Yatır" (Depozito) butonuna tıkladığında gösterilecek olan cüzdan adresleridir. Değişiklikler anında canlıya yansır.
-                </p>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-xs font-bold text-zinc-400 mb-1">Görünen Ad (Örn: Papara 1)</label>
+                <input 
+                  type="text" 
+                  value={editingMethod.name || ''}
+                  onChange={e => setEditingMethod({...editingMethod, name: e.target.value})}
+                  className="w-full bg-[#0F131A] border border-white/10 rounded-lg px-3 py-2 text-white outline-none focus:border-blue-500"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-xs font-bold text-zinc-400 mb-1">Tür</label>
+                <select 
+                  value={editingMethod.type || 'bank_transfer'}
+                  onChange={e => setEditingMethod({...editingMethod, type: e.target.value})}
+                  className="w-full bg-[#0F131A] border border-white/10 rounded-lg px-3 py-2 text-white outline-none focus:border-blue-500"
+                >
+                  <option value="bank_transfer">Banka Havalesi/EFT</option>
+                  <option value="papara">Papara</option>
+                  <option value="crypto">Kripto Para</option>
+                  <option value="other">Diğer</option>
+                </select>
+              </div>
+              
+              <div>
+                <label className="block text-xs font-bold text-zinc-400 mb-1">Alıcı Ad-Soyad</label>
+                <input 
+                  type="text" 
+                  value={editingMethod.accountName || ''}
+                  onChange={e => setEditingMethod({...editingMethod, accountName: e.target.value})}
+                  className="w-full bg-[#0F131A] border border-white/10 rounded-lg px-3 py-2 text-white outline-none focus:border-blue-500"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-xs font-bold text-zinc-400 mb-1">IBAN / Cüzdan Adresi</label>
+                <input 
+                  type="text" 
+                  value={editingMethod.accountNo || ''}
+                  onChange={e => setEditingMethod({...editingMethod, accountNo: e.target.value})}
+                  className="w-full bg-[#0F131A] border border-white/10 rounded-lg px-3 py-2 text-white outline-none focus:border-blue-500 font-mono text-sm"
+                />
+              </div>
+              
+              <div className="flex gap-4">
+                <div className="flex-1">
+                  <label className="block text-xs font-bold text-zinc-400 mb-1">Min Tutar</label>
+                  <input 
+                    type="number" 
+                    value={editingMethod.minAmount || ''}
+                    onChange={e => setEditingMethod({...editingMethod, minAmount: Number(e.target.value)})}
+                    className="w-full bg-[#0F131A] border border-white/10 rounded-lg px-3 py-2 text-white outline-none focus:border-blue-500"
+                  />
+                </div>
+                <div className="flex-1">
+                  <label className="block text-xs font-bold text-zinc-400 mb-1">Max Tutar (Opsiyonel)</label>
+                  <input 
+                    type="number" 
+                    value={editingMethod.maxAmount || ''}
+                    onChange={e => setEditingMethod({...editingMethod, maxAmount: Number(e.target.value)})}
+                    className="w-full bg-[#0F131A] border border-white/10 rounded-lg px-3 py-2 text-white outline-none focus:border-blue-500"
+                  />
+                </div>
+              </div>
+              
+              <label className="flex items-center gap-2 cursor-pointer pt-2">
+                <input 
+                  type="checkbox" 
+                  checked={editingMethod.isActive}
+                  onChange={e => setEditingMethod({...editingMethod, isActive: e.target.checked})}
+                  className="w-4 h-4 rounded bg-zinc-800 border-zinc-700 text-blue-500"
+                />
+                <span className="text-sm font-medium text-white">Bu yöntemi aktif olarak göster</span>
+              </label>
+              
+              <button 
+                onClick={handleSave}
+                className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 rounded-lg mt-4 transition-colors"
+              >
+                Kaydet
+              </button>
             </div>
+          </div>
         </div>
-    );
+      )}
+    </div>
+  );
 }

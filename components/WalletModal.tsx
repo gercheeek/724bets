@@ -1,88 +1,128 @@
 import React, { useState, useEffect } from 'react';
-import { X, Copy, AlertCircle, ChevronDown } from 'lucide-react';
+import { X, Copy, AlertCircle, ChevronDown, CheckCircle2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useUser } from '../contexts/UserContext';
 
 interface WalletModalProps {
   onClose: () => void;
   initialTab?: 'deposit' | 'withdraw';
 }
 
-const WalletModal: React.FC<WalletModalProps> = ({ onClose }) => {
+const WalletModal: React.FC<WalletModalProps> = ({ onClose, initialTab = 'deposit' }) => {
   const { t } = useTranslation();
-  const [activeTab, setActiveTab] = useState<'Kripto' | 'fiat'>('Kripto');
-  const [selectedCoin, setSelectedCoin] = useState<'ETH' | 'BTC' | 'USDT' | 'USDC'>('ETH');
+  const { siteUser } = useUser();
+  const [activeTab, setActiveTab] = useState<'deposit' | 'withdraw' | 'history'>(initialTab as any);
   
-  const [adminAddresses, setAdminAddresses] = useState<Record<string, string>>({
-    'ETH': '0xB1F5D5436dDbCCD4F28D6bf9e1ACe970Dc349D66',
-    'BTC': '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa',
-    'USDT': 'TXLAQ63Xg1N4vef5K6Uq9M4Jb3V2o3o5X7',
-    'USDC': '0xUSDC...9D66'
-  });
+  const [methods, setMethods] = useState<any[]>([]);
+  const [selectedMethod, setSelectedMethod] = useState<any>(null);
+  const [amount, setAmount] = useState<string>('');
+  const [txHash, setTxHash] = useState<string>('');
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState('');
+  
+  const [history, setHistory] = useState<any[]>([]);
+  const [loadingHistory, setLoadingHistory] = useState(false);
 
   useEffect(() => {
-    // Load custom addresses from localStorage if set by admin
-    const stored = localStorage.getItem('admin_wallet_addresses');
-    if (stored) {
+    const fetchMethods = async () => {
       try {
-        const parsed = JSON.parse(stored);
-        setAdminAddresses(prev => ({ ...prev, ...parsed }));
-      } catch (e) {
-        console.error("Error parsing admin wallet addresses", e);
+        const res = await fetch('https://api.724bahis.net/api/admin/payment-methods');
+        const data = await res.json();
+        if (data.success && data.methods.length > 0) {
+          const activeMethods = data.methods.filter((m: any) => m.isActive);
+          setMethods(activeMethods);
+          if (activeMethods.length > 0) {
+            setSelectedMethod(activeMethods[0]);
+          }
+        } else {
+          const dummies = [
+            { id: '1', name: 'Papara', type: 'papara', accountName: '724Bets Destek', accountNo: '1234567890', minAmount: 50 },
+            { id: '2', name: 'Banka Havalesi', type: 'bank_transfer', accountName: '724Bets Finans', accountNo: 'TR12 3456 7890 0000 0000 0000 00', minAmount: 100 },
+            { id: '3', name: 'USDT (TRC-20)', type: 'crypto', accountName: 'USDT Cüzdanı', accountNo: 'TXYZ1234567890abcdef', minAmount: 10 }
+          ];
+          setMethods(dummies);
+          setSelectedMethod(dummies[0]);
+        }
+      } catch (err) {
+        console.error("Error fetching methods", err);
       }
-    }
+    };
+    fetchMethods();
   }, []);
 
-  const coinDetails = {
-    'ETH': { name: 'ETH', network: 'Ethereum (ERC20)', min: '0.0002 ETH', color: '#627EEA' },
-    'BTC': { name: 'BTC', network: 'Bitcoin', min: '0.0001 BTC', color: '#F7931A' },
-    'USDT': { name: 'USDT', network: 'Tron (TRC20)', min: '1 USDT', color: '#26A17B' },
-    'USDC': { name: 'USDC', network: 'Ethereum (ERC20)', min: '1 USDC', color: '#2775CA' }
-  };
+  useEffect(() => {
+    if (activeTab === 'history' && siteUser) {
+      const fetchHistory = async () => {
+        setLoadingHistory(true);
+        try {
+          const res = await fetch(`https://api.724bahis.net/api/payments/history?userId=${siteUser.id}`);
+          const data = await res.json();
+          if (data.success) {
+            setHistory(data.history);
+          }
+        } catch (err) {
+          console.error("Error fetching history", err);
+        } finally {
+          setLoadingHistory(false);
+        }
+      };
+      fetchHistory();
+    }
+  }, [activeTab, siteUser]);
 
   const handleCopy = (text: string) => {
     navigator.clipboard.writeText(text);
-    // You can add a toast notification here
   };
 
-  // Icons
-  const EthIcon = () => (
-    <div className="w-5 h-5 rounded-full bg-[#627EEA] flex items-center justify-center text-white text-[10px] font-bold">Ξ</div>
-  );
-  const BtcIcon = () => (
-    <div className="w-5 h-5 rounded-full bg-[#F7931A] flex items-center justify-center text-white text-[10px] font-bold">₿</div>
-  );
-  const UsdtIcon = () => (
-    <div className="w-5 h-5 rounded-full bg-[#26A17B] flex items-center justify-center text-white text-[10px] font-bold">₮</div>
-  );
-  const UsdcIcon = () => (
-    <div className="w-5 h-5 rounded-full bg-[#2775CA] flex items-center justify-center text-white text-[10px] font-bold">$</div>
-  );
+  const handleSubmit = async () => {
+    if (!siteUser) {
+      setError('Lütfen önce giriş yapın.');
+      return;
+    }
+    if (!amount || isNaN(Number(amount)) || Number(amount) < selectedMethod?.minAmount) {
+      setError(`Minimum tutar: ${selectedMethod?.minAmount}`);
+      return;
+    }
+    if (activeTab === 'deposit' && !txHash) {
+      setError('Lütfen işlem referans numarasını girin.');
+      return;
+    }
+    if (activeTab === 'withdraw' && !txHash) {
+      setError('Lütfen çekim yapılacak cüzdan/IBAN adresinizi girin.');
+      return;
+    }
 
-  const getActiveIcon = () => {
-    switch (selectedCoin) {
-      case 'ETH': return <EthIcon />;
-      case 'BTC': return <BtcIcon />;
-      case 'USDT': return <UsdtIcon />;
-      case 'USDC': return <UsdcIcon />;
-      default: return <EthIcon />;
+    setLoading(true);
+    setError('');
+
+    try {
+      const endpoint = activeTab === 'deposit' ? 'https://api.724bahis.net/api/payments/deposit' : 'https://api.724bahis.net/api/payments/withdraw';
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: siteUser.id,
+          method: selectedMethod.name,
+          amount: amount,
+          txHash: txHash
+        })
+      });
+      const data = await res.json();
+      if (data.success) {
+        setSuccess(true);
+        setTimeout(() => {
+          onClose();
+        }, 3000);
+      } else {
+        setError(data.error || 'İşlem başarısız oldu.');
+      }
+    } catch (err) {
+      setError('Sunucu bağlantı hatası.');
+    } finally {
+      setLoading(false);
     }
   };
-
-  const formatAddress = (address: string) => {
-    if (address.length < 10) return <span>{address}</span>;
-    const start = address.substring(0, 4);
-    const middle = address.substring(4, address.length - 4);
-    const end = address.substring(address.length - 4);
-    return (
-      <>
-        <span className="text-[#00E5FF]">{start}</span>
-        <span className="text-white">{middle}</span>
-        <span className="text-[#00E5FF]">{end}</span>
-      </>
-    );
-  };
-
-  const activeAddress = adminAddresses[selectedCoin] || coinDetails[selectedCoin].network;
 
   return (
     <div className="fixed inset-0 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in" style={{ zIndex: 999999 }} onClick={onClose}>
@@ -90,9 +130,10 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose }) => {
         className="w-full max-w-[480px] bg-[#0A0C10] border border-white/5 rounded-xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.9),inset_0_1px_1px_rgba(255,255,255,0.1)] relative flex flex-col font-sans"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header */}
         <div className="relative flex items-center justify-center py-5 border-b border-white/5 bg-[#0A0C10]">
-          <h2 className="text-white font-black text-lg tracking-wide">Depozito</h2>
+          <h2 className="text-white font-black text-lg tracking-wide">
+            {activeTab === 'deposit' ? 'Para Yatır' : activeTab === 'withdraw' ? 'Para Çek' : 'İşlem Geçmişi'}
+          </h2>
           <button 
             onClick={onClose}
             className="absolute right-4 w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center text-zinc-400 hover:text-white transition-colors"
@@ -101,140 +142,157 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose }) => {
           </button>
         </div>
 
-        {/* Tabs */}
         <div className="flex border-b border-white/5 bg-[#0A0C10]">
           <button 
-            onClick={() => setActiveTab('Kripto')}
+            onClick={() => setActiveTab('deposit')}
             className={`flex-1 py-3.5 text-center font-bold text-[13px] uppercase tracking-wider transition-all border-b-[3px] ${
-              activeTab === 'Kripto' ? 'text-white border-[#00E676] bg-[#00E5FF]/5' : 'text-zinc-500 border-transparent hover:text-zinc-300 hover:bg-white/5'
+              activeTab === 'deposit' ? 'text-white border-[#00E676] bg-[#00E5FF]/5' : 'text-zinc-500 border-transparent hover:text-zinc-300 hover:bg-white/5'
             }`}
           >
-            Kripto
+            Yatırım
           </button>
           <button 
-            onClick={() => setActiveTab('fiat')}
+            onClick={() => setActiveTab('withdraw')}
             className={`flex-1 py-3.5 text-center font-bold text-[13px] uppercase tracking-wider transition-all border-b-[3px] ${
-              activeTab === 'fiat' ? 'text-white border-[#00E676] bg-[#00E5FF]/5' : 'text-zinc-500 border-transparent hover:text-zinc-300 hover:bg-white/5'
+              activeTab === 'withdraw' ? 'text-white border-[#00E676] bg-[#00E5FF]/5' : 'text-zinc-500 border-transparent hover:text-zinc-300 hover:bg-white/5'
             }`}
           >
-            fiat
+            Çekim
+          </button>
+          <button 
+            onClick={() => setActiveTab('history')}
+            className={`flex-1 py-3.5 text-center font-bold text-[13px] uppercase tracking-wider transition-all border-b-[3px] ${
+              activeTab === 'history' ? 'text-white border-[#00E5FF] bg-[#00E5FF]/5' : 'text-zinc-500 border-transparent hover:text-zinc-300 hover:bg-white/5'
+            }`}
+          >
+            Geçmiş
           </button>
         </div>
 
-        {/* Content */}
-        <div className="p-5 bg-[#0A0C10] flex-1">
-          {activeTab === 'Kripto' ? (
-            <div className="bg-[#0A0C10] rounded-xl p-5 border border-white/5 shadow-inner">
-              
-              {/* Coin Quick Select */}
-              <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide mb-3 pb-2">
-                <button onClick={() => setSelectedCoin('ETH')} className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border transition-all ${selectedCoin === 'ETH' ? 'border-[#00E676] bg-[#00E5FF]/10 text-[#00E5FF]' : 'border-white/5 bg-white/[0.02] hover:bg-white/5'}`}>
-                  <EthIcon /> <span className="text-sm font-semibold">ETH</span>
-                </button>
-                <button onClick={() => setSelectedCoin('BTC')} className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border transition-all ${selectedCoin === 'BTC' ? 'border-[#00E676] bg-[#00E5FF]/10 text-[#00E5FF]' : 'border-white/5 bg-white/[0.02] hover:bg-white/5'}`}>
-                  <BtcIcon /> <span className="text-sm font-semibold">BTC</span>
-                </button>
-                <button onClick={() => setSelectedCoin('USDT')} className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border transition-all ${selectedCoin === 'USDT' ? 'border-[#00E676] bg-[#00E5FF]/10 text-[#00E5FF]' : 'border-white/5 bg-white/[0.02] hover:bg-white/5'}`}>
-                  <UsdtIcon /> <span className="text-sm font-semibold">USDT</span>
-                </button>
-                <button onClick={() => setSelectedCoin('USDC')} className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border transition-all ${selectedCoin === 'USDC' ? 'border-[#00E676] bg-[#00E5FF]/10 text-[#00E5FF]' : 'border-white/5 bg-white/[0.02] hover:bg-white/5'}`}>
-                  <UsdcIcon /> <span className="text-sm font-semibold">USDC</span>
-                </button>
-                <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-white/5 bg-white/[0.02] hover:bg-white/5 shrink-0">
-                  <div className="flex -space-x-1">
-                    <div className="w-4 h-4 rounded-full bg-yellow-500 z-20 border border-[#0A0D14]"></div>
-                    <div className="w-4 h-4 rounded-full bg-blue-500 z-10 border border-[#0A0D14]"></div>
-                    <div className="w-4 h-4 rounded-full bg-purple-500 z-0 border border-[#0A0D14]"></div>
-                  </div>
-                  <span className="text-sm font-semibold text-zinc-400">Daha fazla {'>'}</span>
-                </button>
-              </div>
-
-              <div className="text-[12px] text-zinc-500 mb-6 font-medium">
-                Para biriminizi göremiyor musunuz? <span className="text-[#00E5FF] cursor-pointer hover:underline">Buraya ekleyin</span>
-              </div>
-
-              {/* Selectors */}
-              <div className="grid grid-cols-2 gap-4 mb-6">
-                <div>
-                  <label className="block text-[11px] uppercase tracking-wider font-bold text-zinc-500 mb-1.5">Para Birimi</label>
-                  <div className="flex items-center justify-between bg-[#0A0C10] border border-white/5 rounded-lg p-3 cursor-pointer hover:border-white/10 transition-colors">
-                    <div className="flex items-center gap-2">
-                      {getActiveIcon()}
-                      <span className="text-white font-bold text-[13px]">{coinDetails[selectedCoin].name}</span>
+        <div className="p-5 bg-[#0A0C10] flex-1 max-h-[60vh] overflow-y-auto custom-scrollbar">
+          {success ? (
+            <div className="flex flex-col items-center justify-center py-10 text-center">
+              <CheckCircle2 className="w-16 h-16 text-[#00E676] mb-4 drop-shadow-[0_0_15px_rgba(0,230,118,0.5)]" />
+              <h3 className="text-white font-bold text-xl mb-2">İşlem Başarılı!</h3>
+              <p className="text-zinc-400 text-sm">
+                Talebiniz alınmıştır. Finans birimimiz tarafından incelendikten sonra bakiyenize yansıyacaktır.
+              </p>
+            </div>
+          ) : activeTab === 'history' ? (
+            <div className="space-y-3">
+              {loadingHistory ? (
+                <div className="text-center text-zinc-500 py-10">Yükleniyor...</div>
+              ) : history.length === 0 ? (
+                <div className="text-center text-zinc-500 py-10 bg-white/5 rounded-xl border border-white/5">İşlem geçmişiniz bulunmuyor.</div>
+              ) : (
+                history.map((item) => (
+                  <div key={item.id} className="bg-[#131620] border border-white/5 rounded-xl p-4 flex items-center justify-between">
+                    <div>
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className={`text-[10px] uppercase font-black px-2 py-0.5 rounded ${
+                          item.type === 'deposit' ? 'bg-[#00E676]/20 text-[#00E676]' : 'bg-orange-500/20 text-orange-400'
+                        }`}>
+                          {item.type === 'deposit' ? 'YATIRIM' : 'ÇEKİM'}
+                        </span>
+                        <span className="text-white font-bold text-sm">{item.method}</span>
+                      </div>
+                      <div className="text-xs text-zinc-500">{new Date(item.createdAt).toLocaleString('tr-TR')}</div>
                     </div>
-                    <ChevronDown className="w-4 h-4 text-zinc-500" />
+                    <div className="text-right">
+                      <div className="text-[#00E5FF] font-black">{item.amount.toLocaleString('tr-TR')} ₺</div>
+                      <div className={`text-[11px] font-bold ${
+                        item.status === 'approved' ? 'text-[#00E676]' :
+                        item.status === 'rejected' ? 'text-red-500' : 'text-yellow-500'
+                      }`}>
+                        {item.status === 'approved' ? 'ONAYLANDI' : item.status === 'rejected' ? 'İPTAL EDİLDİ' : 'BEKLİYOR'}
+                      </div>
+                    </div>
                   </div>
-                </div>
-                <div>
-                  <label className="block text-[11px] uppercase tracking-wider font-bold text-zinc-500 mb-1.5">Ağ</label>
-                  <div className="flex items-center justify-between bg-[#0A0C10] border border-white/5 rounded-lg p-3 cursor-pointer hover:border-white/10 transition-colors">
-                    <span className="text-white font-bold text-[13px] truncate">{coinDetails[selectedCoin].network}</span>
-                    <ChevronDown className="w-4 h-4 text-zinc-500" />
-                  </div>
-                </div>
-              </div>
-
-              {/* QR Code */}
-              <div className="flex justify-center mb-6">
-                <div className="bg-white p-3 rounded-xl relative shadow-[0_0_30px_rgba(255,255,255,0.1)]">
-                  {/* Fake QR for demo */}
-                  <div className="w-36 h-36 bg-[url('https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=example&color=000000&bgcolor=ffffff')] bg-contain"></div>
-                  {/* Center Logo in QR */}
-                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white p-1 rounded-full shadow-lg border border-gray-100">
-                    {getActiveIcon()}
-                  </div>
-                </div>
-              </div>
-
-              {/* Address */}
-              <div className="mb-5">
-                <label className="block text-[11px] uppercase tracking-wider font-bold text-zinc-500 mb-1.5">Para yatırma adresi</label>
-                <div className="flex items-center justify-between bg-[#0A0C10] border border-white/5 rounded-lg p-3">
-                  <div className="text-[13px] font-mono font-medium truncate mr-2 select-all break-all whitespace-pre-wrap">
-                    {formatAddress(activeAddress)}
-                  </div>
-                  <button onClick={() => handleCopy(activeAddress)} className="text-zinc-400 hover:text-white bg-white/5 hover:bg-white/10 p-1.5 rounded transition-colors active:scale-95 shrink-0">
-                    <Copy className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-
-              {/* Warning */}
-              <div className="bg-[#00E5FF]/5 border border-[#00E676]/20 rounded-lg p-4 flex items-start gap-3 mb-6">
-                <AlertCircle className="w-5 h-5 text-[#00E5FF] shrink-0 mt-0.5 drop-shadow-[0_0_8px_rgba(0,230,118,0.5)]" />
-                <p className="text-[12px] text-zinc-400 leading-relaxed font-medium">
-                  Bu para yatırma adresine yalnızca <strong className="text-white">{coinDetails[selectedCoin].name}</strong> gönderin. <strong className="text-white">{coinDetails[selectedCoin].min}</strong> değerinin altındaki transferler hesaba aktarılmayacaktır.
-                </p>
-              </div>
-
-              {/* Alternate Web3 Wallets */}
-              <div className="text-center mb-3 flex items-center gap-3">
-                <div className="h-[1px] flex-1 bg-white/5"></div>
-                <span className="text-[10px] uppercase tracking-widest font-bold text-zinc-600">Veya Web3 İle Ödeyin</span>
-                <div className="h-[1px] flex-1 bg-white/5"></div>
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <button className="flex items-center justify-center gap-2 bg-[#0A0C10] hover:bg-white/5 text-zinc-300 hover:text-white py-3 rounded-lg font-bold text-[13px] transition-colors border border-white/5">
-                  <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" alt="MetaMask" className="w-5 h-5" />
-                  MetaMask
-                </button>
-                <button className="flex items-center justify-center gap-2 bg-[#0A0C10] hover:bg-white/5 text-zinc-300 hover:text-white py-3 rounded-lg font-bold text-[13px] transition-colors border border-white/5">
-                  <svg className="w-5 h-5 text-blue-500" viewBox="0 0 40 40" fill="currentColor"><path d="M20,6C11,6,3.6,11.3,1.4,18.9c-0.1,0.5,0,1,0.4,1.4l3.1,3.1c0.4,0.4,1,0.5,1.5,0.2 C9.2,21.8,14.4,20,20,20s10.8,1.8,13.6,3.6c0.5,0.3,1.1,0.2,1.5-0.2l3.1-3.1c0.4-0.4,0.5-0.9,0.4-1.4C36.4,11.3,29,6,20,6z M30,26.7 l-3.1-3.1c-0.4-0.4-1.1-0.4-1.5-0.1c-1.5,1.1-3.3,1.9-5.3,2.3c-0.5,0.1-1,0.2-1.5,0.2s-1-0.1-1.5-0.2c-2-0.4-3.8-1.2-5.3-2.3 c-0.4-0.3-1.1-0.3-1.5,0.1l-3.1,3.1c-0.4,0.4-0.4,1,0,1.4l5.3,5.3c0.4,0.4,1,0.4,1.4,0l3.1-3.1c0.4-0.4,1.1-0.4,1.5-0.1 c0.5,0.4,1,0.6,1.6,0.6s1.1-0.2,1.6-0.6c0.4-0.3,1.1-0.3,1.5,0.1l3.1,3.1c0.4,0.4,1,0.4,1.4,0l5.3-5.3C30.4,27.7,30.4,27.1,30,26.7z"/></svg>
-                  WalletConnect
-                </button>
-              </div>
-
+                ))
+              )}
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center py-24 text-center bg-[#0A0C10] rounded-xl border border-white/5 h-full">
-              <div className="w-20 h-20 rounded-full bg-white/5 flex items-center justify-center mb-5 border border-white/5 shadow-inner">
-                <span className="text-3xl">💳</span>
+            <div className="bg-[#0A0C10] rounded-xl p-5 border border-white/5 shadow-inner">
+              <div className="mb-5">
+                <label className="block text-[11px] uppercase tracking-wider font-bold text-zinc-500 mb-1.5">Ödeme Yöntemi</label>
+                <div className="grid grid-cols-3 gap-2">
+                  {methods.map((m) => (
+                    <button
+                      key={m.id}
+                      onClick={() => setSelectedMethod(m)}
+                      className={`py-2 px-3 rounded-lg border text-sm font-bold transition-all ${
+                        selectedMethod?.id === m.id 
+                          ? 'border-[#00E676] bg-[#00E5FF]/10 text-white' 
+                          : 'border-white/10 bg-white/5 text-zinc-400 hover:text-white'
+                      }`}
+                    >
+                      {m.name}
+                    </button>
+                  ))}
+                </div>
               </div>
-              <h3 className="text-white font-black text-xl mb-3 tracking-wide">Fiat Para Yatırma</h3>
-              <p className="text-zinc-500 max-w-[260px] text-sm font-medium leading-relaxed">
-                Banka havalesi ve kredi kartı ile para yatırma seçenekleri çok yakında aktif edilecek.
-              </p>
+
+              {selectedMethod && activeTab === 'deposit' && (
+                <div className="bg-[#00E5FF]/5 border border-[#00E676]/20 rounded-lg p-4 mb-5">
+                  <p className="text-[12px] text-zinc-300 leading-relaxed font-medium mb-3">
+                    Lütfen aşağıdaki hesaba gönderim yaptıktan sonra işlemi onaylayın.
+                  </p>
+                  <div className="mb-2">
+                    <span className="text-[10px] text-zinc-500 uppercase font-bold">Alıcı Adı</span>
+                    <div className="text-white font-bold text-sm">{selectedMethod.accountName}</div>
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-zinc-500 uppercase font-bold">Hesap / IBAN / Cüzdan</span>
+                    <div className="flex items-center justify-between bg-black/50 p-2 rounded border border-white/5 mt-1">
+                      <span className="text-[#00E5FF] font-mono text-sm break-all">{selectedMethod.accountNo}</span>
+                      <button onClick={() => handleCopy(selectedMethod.accountNo)} className="text-zinc-400 hover:text-white p-1">
+                        <Copy className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              <div className="mb-4">
+                <label className="block text-[11px] uppercase tracking-wider font-bold text-zinc-500 mb-1.5">Tutar (USD/TL)</label>
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 font-bold">$</span>
+                  <input 
+                    type="number" 
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
+                    placeholder={selectedMethod?.minAmount?.toString() || '0'}
+                    className="w-full bg-[#131620] border border-white/10 rounded-lg py-3 pl-8 pr-4 text-white font-bold outline-none focus:border-[#00E5FF]/50"
+                  />
+                </div>
+              </div>
+
+              <div className="mb-6">
+                <label className="block text-[11px] uppercase tracking-wider font-bold text-zinc-500 mb-1.5">
+                  {activeTab === 'deposit' ? 'İşlem Numarası / Gönderen Adı' : 'Çekim Yapılacak Hesap / Cüzdan / IBAN'}
+                </label>
+                <input 
+                  type="text" 
+                  value={txHash}
+                  onChange={(e) => setTxHash(e.target.value)}
+                  placeholder={activeTab === 'deposit' ? 'Örn: Ahmet Yılmaz veya TX123456' : 'TR12 3456...'}
+                  className="w-full bg-[#131620] border border-white/10 rounded-lg py-3 px-4 text-white font-medium outline-none focus:border-[#00E5FF]/50"
+                />
+              </div>
+
+              {error && (
+                <div className="text-red-500 text-sm font-bold mb-4 flex items-center gap-2">
+                  <AlertCircle className="w-4 h-4" /> {error}
+                </div>
+              )}
+
+              <button 
+                onClick={handleSubmit}
+                disabled={loading}
+                className="w-full bg-[#c6ff00] hover:bg-[#a6d900] text-black font-black py-3.5 rounded-lg uppercase tracking-wider transition-colors disabled:opacity-50"
+              >
+                {loading ? 'İşleniyor...' : (activeTab === 'deposit' ? 'Yatırımı Bildir' : 'Çekim Talebi Oluştur')}
+              </button>
             </div>
           )}
         </div>
@@ -244,3 +302,4 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose }) => {
 };
 
 export default WalletModal;
+

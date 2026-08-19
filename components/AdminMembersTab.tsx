@@ -1,21 +1,19 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { SiteUser } from '../types';
 import { Search, Trash2, Ban, CheckCircle2, Shield, Loader2, ArrowUpDown, MoreHorizontal, X, Wallet, Activity, ArrowUpRight, ArrowDownRight, Edit3, Save, Copy, Send, Gift, AlertTriangle } from 'lucide-react';
-import { supabase } from '../utils/supabase';
 
 // Helper to format currency
 const formatCurrency = (val: number) => new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(val);
 
 export default function AdminMembersTab() {
-    const [members, setMembers] = useState<SiteUser[]>([]);
+    const [members, setMembers] = useState<any[]>([]);
     const [search, setSearch] = useState('');
     const [loading, setLoading] = useState(true);
 
     // Sorting
-    const [sortConfig, setSortConfig] = useState<{ key: keyof SiteUser; direction: 'asc' | 'desc' } | null>(null);
+    const [sortConfig, setSortConfig] = useState<{ key: string; direction: 'asc' | 'desc' } | null>(null);
 
     // Drawer / Sheet state
-    const [selectedUser, setSelectedUser] = useState<SiteUser | null>(null);
+    const [selectedUser, setSelectedUser] = useState<any | null>(null);
     const [isSheetOpen, setIsSheetOpen] = useState(false);
 
     // Actions state
@@ -25,44 +23,34 @@ export default function AdminMembersTab() {
 
     const refresh = async () => {
         setLoading(true);
-        const { data, error } = await supabase
-            .from('members')
-            .select('*')
-            .or('is_bot.eq.false,is_bot.is.null')
-            .order('created_at', { ascending: false });
-        
-        if (data) {
-            const mapped: SiteUser[] = data.map(m => {
-                // Mocking some data for the UI if it doesn't exist in DB
-                const wager = Number(m.total_wagered) || 0;
-                const pnl = wager * 0.05; // House keeps 5% as mock PNL
-
-                return {
+        try {
+            const res = await fetch('https://api.724bahis.net/api/admin/users');
+            const data = await res.json();
+            if (data.success) {
+                const mapped = data.users.map((m: any) => ({
                     id: m.id,
                     username: m.username,
-                    password: m.password,
                     email: m.email || '',
-                    phone: m.phone || '',
-                    createdAt: new Date(m.created_at).getTime(),
+                    createdAt: new Date(m.createdAt).getTime(),
                     status: m.status || 'active',
-                    notes: m.notes || '',
                     balance: Number(m.balance) || 0,
-                    role: m.role || 'member',
-                    totalWagered: wager,
-                    netPnl: pnl,
-                    lastLoginAt: m.last_login_at ? new Date(m.last_login_at).getTime() : new Date(m.created_at).getTime() + 86400000, // mock
-                    lastLoginIp: m.last_login_ip || `192.168.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}`,
-                    vipLevel: m.vip_level || 'Bronze',
-                    cryptoWallet: m.crypto_wallet || `0x${Math.random().toString(16).slice(2,10)}...${Math.random().toString(16).slice(2,6)}`
-                };
-            });
-            setMembers(mapped);
-            
-            // Update selected user if sheet is open
-            if (selectedUser) {
-                const updated = mapped.find(u => u.id === selectedUser.id);
-                if (updated) setSelectedUser(updated);
+                    role: m.role || 'user',
+                    totalWagered: 0,
+                    netPnl: 0,
+                    lastLoginAt: new Date(m.createdAt).getTime(),
+                    lastLoginIp: `192.168.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}`,
+                    stats: m._count,
+                    kycStatus: m.kycStatus || 'unverified',
+                    riskScore: m.riskScore || 0
+                }));
+                setMembers(mapped);
+                if (selectedUser) {
+                    const updated = mapped.find((u: any) => u.id === selectedUser.id);
+                    if (updated) setSelectedUser(updated);
+                }
             }
+        } catch (error) {
+            console.error("Error fetching members:", error);
         }
         setLoading(false);
     };
@@ -94,7 +82,7 @@ export default function AdminMembersTab() {
         return result;
     }, [members, search, sortConfig]);
 
-    const requestSort = (key: keyof SiteUser) => {
+    const requestSort = (key: string) => {
         let direction: 'asc' | 'desc' = 'asc';
         if (sortConfig && sortConfig.key === key && sortConfig.direction === 'asc') {
             direction = 'desc';
@@ -103,7 +91,7 @@ export default function AdminMembersTab() {
     };
 
     // Table Header Component
-    const Th = ({ label, sortKey }: { label: string, sortKey: keyof SiteUser }) => (
+    const Th = ({ label, sortKey }: { label: string, sortKey: string }) => (
         <th 
             onClick={() => requestSort(sortKey)}
             className="px-6 py-4 text-left text-xs font-semibold text-zinc-400 uppercase tracking-wider cursor-pointer hover:bg-white/5 transition-colors group select-none"
@@ -119,11 +107,20 @@ export default function AdminMembersTab() {
     const handleToggleStatus = async () => {
         if (!selectedUser) return;
         setActionLoading(true);
-        const nextStatus = selectedUser.status === 'suspended' ? 'active' : 'suspended';
-        const { error } = await supabase.from('members').update({ status: nextStatus }).eq('id', selectedUser.id);
-        if (!error) {
-            showMsg(nextStatus === 'suspended' ? '⛔ Üye uzaklaştırıldı.' : '✅ Üye yasağı kaldırıldı.');
-            await refresh();
+        const nextStatus = selectedUser.status === 'banned' ? 'active' : 'banned';
+        try {
+            const res = await fetch(`https://api.724bahis.net/api/admin/users/${selectedUser.id}/status`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ status: nextStatus })
+            });
+            const data = await res.json();
+            if (data.success) {
+                showMsg(nextStatus === 'banned' ? '⛔ Üye uzaklaştırıldı.' : '✅ Üye yasağı kaldırıldı.');
+                await refresh();
+            }
+        } catch (err) {
+            console.error(err);
         }
         setActionLoading(false);
     };
@@ -134,18 +131,26 @@ export default function AdminMembersTab() {
         if (isNaN(amount) || amount <= 0) return;
 
         setActionLoading(true);
-        const newBalance = type === 'add' ? selectedUser.balance! + amount : Math.max(0, selectedUser.balance! - amount);
         
-        const { error } = await supabase.from('members').update({ balance: newBalance }).eq('id', selectedUser.id);
-        if (!error) {
-            showMsg(`✅ Bakiye güncellendi: ${formatCurrency(newBalance)}`);
-            setBalanceInput('');
-            await refresh();
+        try {
+            const res = await fetch(`https://api.724bahis.net/api/admin/users/${selectedUser.id}/balance`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ amount, action: type })
+            });
+            const data = await res.json();
+            if (data.success) {
+                showMsg(`✅ Bakiye güncellendi: ${formatCurrency(data.user.balance)}`);
+                setBalanceInput('');
+                await refresh();
+            }
+        } catch (err) {
+            console.error(err);
         }
         setActionLoading(false);
     };
 
-    const openSheet = (user: SiteUser) => {
+    const openSheet = (user: any) => {
         setSelectedUser(user);
         setIsSheetOpen(true);
         setBalanceInput('');
@@ -224,13 +229,13 @@ export default function AdminMembersTab() {
                                     >
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <div className="flex items-center gap-3">
-                                                <div className={`w-8 h-8 rounded flex items-center justify-center font-bold text-xs shrink-0 ${m.status === 'suspended' ? 'bg-red-500/10 text-red-500' : 'bg-[#0ea5e9]/10 text-[#0ea5e9]'}`}>
+                                                <div className={`w-8 h-8 rounded flex items-center justify-center font-bold text-xs shrink-0 ${m.status === 'banned' ? 'bg-red-500/10 text-red-500' : 'bg-[#0ea5e9]/10 text-[#0ea5e9]'}`}>
                                                     {m.username.charAt(0).toUpperCase()}
                                                 </div>
                                                 <div>
                                                     <div className="text-white font-medium flex items-center gap-2">
                                                         {m.username}
-                                                        {m.status === 'suspended' && <Ban className="w-3 h-3 text-red-500" />}
+                                                        {m.status === 'banned' && <Ban className="w-3 h-3 text-red-500" />}
                                                     </div>
                                                     <div className="text-zinc-500 text-xs">{m.email}</div>
                                                 </div>
@@ -286,23 +291,19 @@ export default function AdminMembersTab() {
                         {/* Header */}
                         <div className="px-6 py-4 border-b border-zinc-800 flex items-center justify-between bg-[#15171e]">
                             <div className="flex items-center gap-3">
-                                <div className={`w-10 h-10 rounded-lg flex items-center justify-center font-bold text-lg ${selectedUser.status === 'suspended' ? 'bg-red-500/20 text-red-500 border border-red-500/30' : 'bg-[#0ea5e9]/20 text-[#0ea5e9] border border-[#0ea5e9]/30'}`}>
+                                <div className={`w-10 h-10 rounded-lg flex items-center justify-center font-bold text-lg ${selectedUser.status === 'banned' ? 'bg-red-500/20 text-red-500 border border-red-500/30' : 'bg-[#0ea5e9]/20 text-[#0ea5e9] border border-[#0ea5e9]/30'}`}>
                                     {selectedUser.username.charAt(0).toUpperCase()}
                                 </div>
                                 <div>
-                                    <h3 className="text-lg font-bold text-white leading-tight">{selectedUser.username}</h3>
-                                    <div className="flex items-center gap-2 text-xs font-medium">
-                                        <span className={selectedUser.status === 'suspended' ? 'text-red-400' : 'text-[#00E5FF]'}>
-                                            {selectedUser.status === 'suspended' ? 'Askıda' : 'Aktif'}
-                                        </span>
-                                        <span className="text-zinc-600">•</span>
-                                        <span className="text-[#f0b90b] flex items-center gap-1">
-                                            <Shield className="w-3 h-3" /> VIP {selectedUser.vipLevel}
-                                        </span>
-                                    </div>
+                                    <h3 className="text-xl font-bold text-white flex items-center gap-2">
+                                        {selectedUser.username}
+                                        {selectedUser.status === 'banned' && <span className="bg-red-500/20 text-red-500 text-[10px] px-2 py-0.5 rounded font-black tracking-wider border border-red-500/20">BANNED</span>}
+                                        {selectedUser.role === 'admin' && <span className="bg-purple-500/20 text-purple-400 text-[10px] px-2 py-0.5 rounded font-black tracking-wider border border-purple-500/20">ADMIN</span>}
+                                    </h3>
+                                    <p className="text-zinc-400 text-sm">{selectedUser.email}</p>
                                 </div>
                             </div>
-                            <button onClick={() => setIsSheetOpen(false)} className="p-2 text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-lg transition-colors">
+                            <button onClick={() => setIsSheetOpen(false)} className="p-2 bg-white/5 hover:bg-white/10 rounded-lg text-zinc-400 hover:text-white transition-colors">
                                 <X className="w-5 h-5" />
                             </button>
                         </div>
@@ -376,6 +377,30 @@ export default function AdminMembersTab() {
                                 </div>
                             </div>
 
+                            {/* Risk & Security Actions */}
+                            <div className="p-4 bg-zinc-900 border border-zinc-800 rounded-xl mb-6">
+                                <h4 className="text-sm font-bold text-zinc-400 mb-3 uppercase tracking-wider flex items-center gap-2"><Shield className="w-4 h-4"/> Risk & Güvenlik Aksiyonları</h4>
+                                
+                                <div className="grid grid-cols-2 gap-3">
+                                    <button 
+                                        onClick={handleToggleStatus}
+                                        disabled={actionLoading}
+                                        className={`py-2 px-3 rounded-lg text-sm font-bold border transition-colors flex items-center justify-center gap-2 ${
+                                            selectedUser.status === 'banned' 
+                                            ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/30 hover:bg-emerald-500 hover:text-white' 
+                                            : 'bg-red-500/10 text-red-500 border-red-500/30 hover:bg-red-500 hover:text-white'
+                                        }`}
+                                    >
+                                        {selectedUser.status === 'banned' ? <CheckCircle2 className="w-4 h-4"/> : <Ban className="w-4 h-4"/>}
+                                        {selectedUser.status === 'banned' ? 'Hesabı Aç' : 'Hesabı Uzaklaştır (Ban)'}
+                                    </button>
+                                    
+                                    <button className="py-2 px-3 rounded-lg text-sm font-bold border border-zinc-700 bg-zinc-800 text-zinc-300 hover:bg-zinc-700 hover:text-white transition-colors flex items-center justify-center gap-2">
+                                        <AlertTriangle className="w-4 h-4"/> Bonus Kısıtlaması
+                                    </button>
+                                </div>
+                            </div>
+
                             {/* Details */}
                             <div className="space-y-4">
                                 <h4 className="text-sm font-bold text-white uppercase tracking-wider">Kullanıcı Bilgileri</h4>
@@ -396,6 +421,27 @@ export default function AdminMembersTab() {
                                         <span className="text-zinc-500">Toplam Hacim (Wager)</span>
                                         <span className="text-zinc-300 font-mono">{formatCurrency(selectedUser.totalWagered!)}</span>
                                     </div>
+                                    <div className="flex justify-between items-center text-sm pt-2 border-t border-zinc-800">
+                                        <span className="text-zinc-500">KYC Durumu</span>
+                                        <span className={`px-2 py-0.5 rounded text-xs font-bold border ${
+                                            selectedUser.kycStatus === 'verified' ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/30' :
+                                            selectedUser.kycStatus === 'pending' ? 'bg-orange-500/10 text-orange-500 border-orange-500/30' :
+                                            selectedUser.kycStatus === 'rejected' ? 'bg-red-500/10 text-red-500 border-red-500/30' :
+                                            'bg-zinc-800 text-zinc-400 border-zinc-700'
+                                        }`}>
+                                            {selectedUser.kycStatus?.toUpperCase()}
+                                        </span>
+                                    </div>
+                                    <div className="flex justify-between items-center text-sm">
+                                        <span className="text-zinc-500">Hesap Risk Puanı</span>
+                                        <span className={`font-mono font-bold ${
+                                            selectedUser.riskScore > 50 ? 'text-red-400' :
+                                            selectedUser.riskScore > 20 ? 'text-yellow-400' :
+                                            'text-emerald-400'
+                                        }`}>
+                                            {selectedUser.riskScore} / 100
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -415,28 +461,20 @@ export default function AdminMembersTab() {
                                 >
                                     <Gift className="w-4 h-4" /> VIP Bonus Ekle
                                 </button>
-                                <button 
-                                    onClick={() => showMsg("Risk Limiti Düşürüldü")}
-                                    className="col-span-2 py-2.5 rounded-xl font-bold flex items-center justify-center gap-2 bg-[#f59e0b]/10 hover:bg-[#f59e0b]/20 text-[#f59e0b] border border-[#f59e0b]/30 transition-all text-xs"
-                                >
-                                    <AlertTriangle className="w-4 h-4" /> Risk Limitini Düşür (Otomasyon)
-                                </button>
                             </div>
-                            
                             <button 
                                 onClick={handleToggleStatus}
                                 disabled={actionLoading}
                                 className={`w-full py-3 mt-2 rounded-xl font-bold flex items-center justify-center gap-2 transition-all shadow-lg ${
-                                    selectedUser.status === 'suspended' 
+                                    selectedUser.status === 'banned' 
                                     ? 'bg-emerald-600 hover:bg-[#00E5FF] text-white shadow-emerald-600/20' 
                                     : 'bg-red-600 hover:bg-red-500 text-white shadow-red-600/20'
                                 } disabled:opacity-50`}
                             >
-                                {actionLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : (selectedUser.status === 'suspended' ? <CheckCircle2 className="w-5 h-5" /> : <Ban className="w-5 h-5" />)}
-                                {selectedUser.status === 'suspended' ? 'Yasağı Kaldır ve Aktifleştir' : 'Kullanıcıyı Yasakla (Ban)'}
+                                {actionLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : (selectedUser.status === 'banned' ? <CheckCircle2 className="w-5 h-5" /> : <Ban className="w-5 h-5" />)}
+                                {selectedUser.status === 'banned' ? 'Yasağı Kaldır ve Aktifleştir' : 'Kullanıcıyı Yasakla (Ban)'}
                             </button>
                         </div>
-
                     </div>
                 </>
             )}

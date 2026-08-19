@@ -3,7 +3,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { 
   User, Bell, Users, ShieldCheck, Settings, Lock, Link as LinkIcon, FileText, LogOut,
   ChevronRight, Upload, HelpCircle, Info, ChevronDown, CheckCircle2, ChevronLeft,
-  Coins, Gamepad2, AlertCircle, Plus
+  Coins, Gamepad2, AlertCircle, Plus, Trophy
 } from 'lucide-react';
 import { SiteUser } from '../types';
 import { supabase } from '../utils/supabase';

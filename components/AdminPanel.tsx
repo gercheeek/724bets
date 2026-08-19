@@ -18,6 +18,7 @@ import { AdminWalletsTab } from './AdminWalletsTab';
 import AdminCommunityTab from './AdminCommunityTab';
 import AdminKralTab from './AdminKralTab';
 import AdminBettingEngineTab from './AdminBettingEngineTab';
+import AdminFraudTab from './AdminFraudTab';
 import { LuckyWheelConfig } from '../types';
 
 interface AdminPanelProps {
@@ -321,7 +322,7 @@ export default function AdminPanel(props: AdminPanelProps) {
                                 )}
 
                                 {/* İleri Düzey Modüller (Placeholders) */}
-                                {['bonus', 'affiliate', 'fraud', 'deposits'].includes(activeTab) && (
+                                {['bonus', 'affiliate', 'deposits'].includes(activeTab) && (
                                     <div className="h-full flex items-center justify-center text-center p-8">
                                         <div className="max-w-md bg-[#0b0c10] border border-white/5 rounded-2xl p-8 shadow-2xl">
                                             <div className="w-16 h-16 bg-[color:var(--theme-accent)]/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-[color:var(--theme-accent)]/30">
@@ -330,6 +331,12 @@ export default function AdminPanel(props: AdminPanelProps) {
                                             <h2 className="text-xl font-black text-white mb-2 uppercase tracking-wider">Modül Hazırlanıyor</h2>
                                             <p className="text-sm text-zinc-400">Bu modül (Pazarlama/Güvenlik) şu anda geliştirme aşamasındadır. Ana komuta merkezindeki (Casino Komuta) SLA ve API sağlık durumlarını inceleyebilirsiniz.</p>
                                         </div>
+                                    </div>
+                                )}
+
+                                {activeTab === 'fraud' && (
+                                    <div className="h-[75vh]">
+                                        <AdminFraudTab />
                                     </div>
                                 )}
 

@@ -401,7 +401,7 @@ export const parseMatchData = (ev: any, language: string): MatchInfo | null => {
 };
 export default function Spor724View({ onNavigate, defaultTab }: Spor724ViewProps) {
   const { language } = useLanguage();
-  const { isConnected, events, global1xBetMatches } = useBetting();
+  const { isConnected, events, global1xBetMatches, global1xBetPreMatches } = useBetting();
   const [selectedMatch, setSelectedMatch] = useState<MatchInfo | null>(null);
   
   const handleSetSelectedMatch = (match: MatchInfo | null) => {
@@ -796,7 +796,62 @@ export default function Spor724View({ onNavigate, defaultTab }: Spor724ViewProps
     }
   }, [events, language]);
 
-  const currentMatches = matches;
+  const currentMatches = React.useMemo(() => {
+    const merged = new Map();
+    
+    const formatOdd = (val: any) => {
+        if (!val || val === '-') return '-';
+        const num = parseFloat(val);
+        if (isNaN(num)) return val;
+        // Truncate/round to max 2 decimal places and remove trailing zeros if any (or keep .xx, user wants 1.67 instead of 1.673)
+        return num.toFixed(2).replace(/\.?0+$/, ''); // e.g., 1.504 -> 1.50, replace -> 1.5
+    };
+    
+    const map1xBetToMatchInfo = (m: any) => {
+      if (m.home && m.away) {
+         return {
+            ...m,
+            homeOdd: formatOdd(m.homeOdd),
+            drawOdd: formatOdd(m.drawOdd),
+            awayOdd: formatOdd(m.awayOdd)
+         };
+      }
+      return {
+        ...m,
+        id: m.id,
+        home: m.homeTeam || m.home || '',
+        away: m.awayTeam || m.away || '',
+        homeId: m.homeTeamId || `h_${m.id}`,
+        awayId: m.awayTeamId || `a_${m.id}`,
+        drawId: `d_${m.id}`,
+        isLive: m.isLive || false,
+        isFinished: false,
+        score: m.score || '0-0',
+        minute: m.minute || m.time || "0'",
+        league: m.league || '',
+        sport: m.sport || '',
+        country: m.country || '',
+        homeOdd: formatOdd(m.odds?.['1']),
+        drawOdd: formatOdd(m.odds?.['X']),
+        awayOdd: formatOdd(m.odds?.['2']),
+        homeLogo: '',
+        awayLogo: '',
+        marketsCount: 48,
+        rawEvent: m
+      };
+    };
+
+    if (global1xBetPreMatches && Array.isArray(global1xBetPreMatches)) {
+        global1xBetPreMatches.forEach(m => merged.set(m.id, map1xBetToMatchInfo(m)));
+    }
+    if (global1xBetMatches && Array.isArray(global1xBetMatches)) {
+        global1xBetMatches.forEach(m => merged.set(m.id, map1xBetToMatchInfo(m)));
+    }
+    if (matches && Array.isArray(matches)) {
+        matches.forEach(m => merged.set(m.id, m));
+    }
+    return Array.from(merged.values());
+  }, [matches, global1xBetMatches, global1xBetPreMatches]);
 
   const sportsList = Array.from(new Set(currentMatches.map(m => m.sport)));
   const getSportCount = (sport: string) => currentMatches.filter(m => m.sport === sport).length;
@@ -882,8 +937,8 @@ export default function Spor724View({ onNavigate, defaultTab }: Spor724ViewProps
           const scoreB = getMatchPriorityScore(b.home, b.away);
           
           // Demote women/youth even if they are in a good league
-          const isLowerA = a.home.includes('Kadınlar') || a.home.includes('U19') || a.league.includes('Kadınlar');
-          const isLowerB = b.home.includes('Kadınlar') || b.home.includes('U19') || b.league.includes('Kadınlar');
+          const isLowerA = (a.home || '').includes('Kadınlar') || (a.home || '').includes('U19') || (a.league || '').includes('Kadınlar');
+          const isLowerB = (b.home || '').includes('Kadınlar') || (b.home || '').includes('U19') || (b.league || '').includes('Kadınlar');
           
           let finalScoreA = scoreA;
           let finalScoreB = scoreB;
@@ -915,12 +970,13 @@ export default function Spor724View({ onNavigate, defaultTab }: Spor724ViewProps
   const groupedByLeague = React.useMemo(() => {
     const grouped: Record<string, MatchInfo[]> = {};
     filteredMatches.forEach(match => {
-      if (!grouped[match.league]) {
-        grouped[match.league] = [];
+      const leagueKey = match.league || 'Diğer';
+      if (!grouped[leagueKey]) {
+        grouped[leagueKey] = [];
       }
-      let groupKey = match.league;
+      let groupKey = leagueKey;
       const isElite = getMatchPriorityScore(match.home, match.away) > 0;
-      const isWomen = match.home.includes('Kadınlar') || match.league.includes('Kadınlar');
+      const isWomen = (match.home || '').includes('Kadınlar') || (leagueKey).includes('Kadınlar');
       
       // Break out massive generic leagues
       if (groupKey.includes('Kulüp Hazırlık') || groupKey.includes('Club Friendly')) {
@@ -1081,7 +1137,7 @@ export default function Spor724View({ onNavigate, defaultTab }: Spor724ViewProps
         <div className="max-w-[1200px] mx-auto pb-24 md:pb-12">
             
             {/* Top Icon Navigation (Sticky) */}
-            <div className="sticky top-0 z-50 bg-[#0a0c10]/95 backdrop-blur-md shadow-xl border-b border-white/5 flex items-center justify-between mb-4">
+            <div className="sticky top-0 z-50 bg-[#0a0c10]/95 backdrop-blur-md shadow-xl flex items-center justify-between mb-4">
                 <div className="flex-1 overflow-hidden">
                   <SportsIconNav activeTab={navTab} liveCounts={liveCountsMap} onTabChange={(tab) => {
                     handleSetSelectedMatch(null); // HERHANGİ BİR SEKMEYE TIKLANDIĞINDA MAÇIN İÇİNDEN ÇIK!
@@ -1150,7 +1206,7 @@ export default function Spor724View({ onNavigate, defaultTab }: Spor724ViewProps
             {navTab === 'home' && (isAllSportsSelected || activeSport === 'Futbol') && (
               <>
                 <div className="px-4 md:px-6 mb-6 mt-6">
-                  <SportsPromoSlider matches={filteredMatches} />
+                  <SportsPromoSlider matches={currentMatches} />
                 </div>
                 
                 <div className="px-4 md:px-6 mb-6 mt-4">
@@ -1175,11 +1231,11 @@ export default function Spor724View({ onNavigate, defaultTab }: Spor724ViewProps
 
             {navTab === 'basketball' && (
               <div className="px-4 md:px-6 mb-4 transition-all duration-300">
-                  <BasketballPromoSlider matches={filteredMatches.filter(m => m.sport?.toLowerCase().includes('basket') || m.league?.toLowerCase().includes('nba'))} />
+                  <BasketballPromoSlider matches={filteredMatches.filter(m => (m.sport || '').toLowerCase().includes('basket') || (m.league || '').toLowerCase().includes('nba'))} />
                   
                   {/* En İyi Maçlar Widget Moved Under Slider */}
                   <div className="mt-6 mb-2">
-                    <TopMatchesWidget matches={filteredMatches.filter(m => m.sport?.toLowerCase().includes('basket') || m.league?.toLowerCase().includes('nba'))} onSelectMatch={handleSetSelectedMatch} sortByTime={viewMode === 'bulletin'} />
+                    <TopMatchesWidget matches={filteredMatches.filter(m => (m.sport || '').toLowerCase().includes('basket') || (m.league || '').toLowerCase().includes('nba'))} onSelectMatch={handleSetSelectedMatch} sortByTime={viewMode === 'bulletin'} />
                   </div>
               </div>
             )}

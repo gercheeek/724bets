@@ -142,22 +142,34 @@ const getConfidenceColor = (confidence: number) => {
 };
 
 const getLeagueFlag = (league: string): string => {
-    const l = league.toLowerCase();
+    if (!league) return '🌍';
+    const l = league.toLocaleLowerCase('tr-TR');
+    
     if (l.includes('premier') || l.includes('championship') || l.includes('ingiltere')) return '🏴󠁧󠁢󠁥󠁮󠁧󠁿';
     if (l.includes('la liga') || l.includes('ispanya')) return '🇪🇸';
     if (l.includes('serie a') || l.includes('italya')) return '🇮🇹';
     if (l.includes('bundesliga') || l.includes('almanya')) return '🇩🇪';
     if (l.includes('ligue 1') || l.includes('fransa')) return '🇫🇷';
-    if (l.includes('süper lig') || l.includes('türkiye') || l.includes('1. lig')) return '🇹🇷';
+    if (l.includes('süper lig') || l.includes('türkiye') || l.includes('1. lig') || l.includes('türk')) return '🇹🇷';
     if (l.includes('eredivisie') || l.includes('hollanda')) return '🇳🇱';
     if (l.includes('primeira') || l.includes('portekiz')) return '🇵🇹';
     if (l.includes('mls') || l.includes('nba') || l.includes('abd')) return '🇺🇸';
-    if (l.includes('brasileirao') || l.includes('brezilya')) return '🇧🇷';
-    if (l.includes('şampiyonlar') || l.includes('avrupa ligi') || l.includes('konferans') || l.includes('euroleague') || l.includes('uefa')) return '🇪🇺';
-    if (l.includes('nba') || l.includes('basket') || l.includes('euroleague')) return '🏀';
+    if (l.includes('brasileirao') || l.includes('brezilya') || l.includes('serie b')) return '🇧🇷';
+    if (l.includes('arjantin')) return '🇦🇷';
+    if (l.includes('rusya')) return '🇷🇺';
+    if (l.includes('suudi') || l.includes('arabistan')) return '🇸🇦';
+    
+    // International / Continental
+    if (l.includes('şampiyonlar') || l.includes('avrupa ligi') || l.includes('konferans') || l.includes('euroleague') || l.includes('uefa') || l.includes('euro 20')) return '🇪🇺';
+    if (l.includes('libertadores') || l.includes('güney amerika') || l.includes('conmebol') || l.includes('concacaf') || l.includes('orta amerika')) return '🌎';
+    if (l.includes('dostluk') || l.includes('friendly') || l.includes('hazırlık') || l.includes('uluslararası')) return '🌍';
+    
+    // Sports specific fallbacks
+    if (l.includes('basket')) return '🏀';
     if (l.includes('formula') || l.includes('f1')) return '🏎️';
     if (l.includes('motogp') || l.includes('superbike')) return '🏍️';
     if (l.includes('wimbledon') || l.includes('roland') || l.includes('tenis')) return '🎾';
+    
     return '🌍';
 };
 
@@ -406,6 +418,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
   
   // Responsive sidebar state - open by default on PC / TV (>= 1280px)
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [isTablet, setIsTablet] = useState(window.innerWidth < 1280);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   useEffect(() => {
     const handleResize = () => {
@@ -424,6 +437,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
       const mobile = window.innerWidth < 768;
       const tablet = window.innerWidth < 1280;
       setIsMobile(mobile);
+      setIsTablet(tablet);
       if (tablet) {
         setIsSidebarOpen(false);
       } else {
@@ -2200,7 +2214,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
             {/* 1. SOL MENÜ (Masaüstünde Açılır/Kapanır, Mobilde Gizli) */}
             {!(view === 'giveaway' || view === 'bulten') && (
               <aside 
-                className={`hidden lg:flex flex-col bg-[#0A0D15]/90 backdrop-blur-xl border-r border-white/5 shadow-[5px_0_30px_rgba(0,0,0,0.8)] h-full overflow-visible flex-shrink-0 relative z-[99999] pointer-events-auto transition-[width,box-shadow,background-color] duration-300 ${isSidebarOpen ? 'w-[280px]' : 'w-[80px]'}`}
+                className={`hidden lg:flex flex-col bg-[#0A0D15]/90 backdrop-blur-xl shadow-[5px_0_30px_rgba(0,0,0,0.8)] h-full overflow-visible flex-shrink-0 relative z-[99999] pointer-events-auto transition-[width,box-shadow,background-color] duration-300 ${isSidebarOpen ? 'w-[280px]' : 'w-[80px]'}`}
                 style={{ willChange: 'width' }}
               >
                   <Sidebar
@@ -2226,7 +2240,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
             {isMobileMenuOpen && (
               <div className="fixed inset-0 z-50 flex lg:hidden">
                 <div className="fixed inset-0 bg-[#0A0C10]/70 backdrop-blur-md transition-opacity" onClick={() => setIsMobileMenuOpen(false)}></div>
-                <aside className="w-[280px] bg-[#0A0C10] border-r border-white/5 h-full shadow-[20px_0_50px_rgba(0,0,0,0.9),inset_0_1px_0_rgba(255,255,255,0.03)] flex-shrink-0 relative z-10 animate-slide-in-left">
+                <aside className="w-[280px] bg-[#0A0C10] h-full shadow-[20px_0_50px_rgba(0,0,0,0.9),inset_0_1px_0_rgba(255,255,255,0.03)] flex-shrink-0 relative z-10 animate-slide-in-left">
                   <button onClick={() => setIsMobileMenuOpen(false)} className="absolute top-4 -right-12 w-10 h-10 bg-[#0A0C10] border border-[#111111] rounded-r-xl flex items-center justify-center text-gray-400 hover:text-white shadow-[5px_0_15px_rgba(0,0,0,0.3)]"><X className="w-5 h-5"/></button>
                   <Sidebar
                     isOpen={true}
@@ -2250,7 +2264,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
 
              {/* MASAÜSTÜ HEADER */}
              {view !== 'kral' && (
-               <div className="hidden lg:block shrink-0 z-50 relative w-full border-b border-white/5 bg-[#0A0C10] shadow-lg">
+               <div className="hidden lg:block shrink-0 z-50 relative w-full bg-[#0A0C10] shadow-lg">
                  <Header
                    onAdminClick={() => {
                      if (userRole) setView('admin');
@@ -3147,15 +3161,15 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
         {view !== 'admin' && !showLiveScoreModal && (
           <>
             {/* Masaüstü Spacer (Layout'u ezmeden iter) */}
-            {!isMobile && (
+            {!isTablet && (
               <aside 
-                className={`hidden xl:block flex-shrink-0 transition-[width] duration-300 ease-in-out ${isChatOpen ? 'w-[350px]' : 'w-0'}`}
+                className={`flex-shrink-0 transition-[width] duration-300 ease-in-out ${isChatOpen ? 'w-[350px]' : 'w-0'}`}
                 style={{ willChange: 'width' }}
               />
             )}
 
-            {/* Mobil Backdrop */}
-            {isMobile && isChatOpen && (
+            {/* Mobil ve Tablet Backdrop */}
+            {isTablet && isChatOpen && (
               <div 
                 className="fixed inset-0 bg-[#0A0C10]/60 backdrop-blur-sm z-[99998] transition-opacity duration-300"
                 onClick={() => setIsChatOpen(false)}
@@ -3164,12 +3178,12 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
 
             {/* Chat Paneli (Translate-X Slide Animasyonu) */}
             <div 
-              className={`fixed top-0 right-0 bottom-0 z-[99999] w-[100vw] sm:w-[350px] xl:w-[350px] bg-[#0A0C10] border-l border-white/5 shadow-[-5px_0_25px_rgba(0,0,0,0.8)] transform transition-transform duration-300 ease-in-out ${isChatOpen ? 'translate-x-0' : 'translate-x-full'}`}
+              className={`fixed top-0 right-0 bottom-0 z-[99999] w-[100vw] sm:w-[350px] xl:w-[350px] bg-[#0A0C10] shadow-[-5px_0_25px_rgba(0,0,0,0.8)] transform transition-transform duration-300 ease-in-out ${isChatOpen ? 'translate-x-0' : 'translate-x-full'}`}
             >
               <div className="w-full h-full flex flex-col relative overflow-hidden">
                 <DualRightPanel
                   language={i18n.language || 'tr'}
-                  isOpenMobile={isMobile && isChatOpen}
+                  isOpenMobile={isTablet && isChatOpen}
                   onCloseMobile={() => setIsChatOpen(false)}
                   currentView={view}
                   userRole={userRole}

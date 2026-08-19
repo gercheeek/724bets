@@ -1,242 +1,163 @@
 import React, { useState, useEffect } from 'react';
-import { 
-    Wallet, ArrowDownToLine, ArrowUpFromLine, Bitcoin, ShieldAlert, ShieldCheck, 
-    Check, X, Loader2, AlertCircle, Clock
-} from 'lucide-react';
+import { Wallet, CheckCircle2, XCircle, RefreshCw, AlertCircle, Clock } from 'lucide-react';
 
 interface WithdrawalRequest {
-    id: string;
-    date: Date;
-    username: string;
-    amountTry: number;
-    amountCrypto: number;
-    cryptoSymbol: string;
-    network: string;
-    walletAddress: string;
-    riskScore: 'safe' | 'risky';
-    riskReason?: string;
-    status: 'pending' | 'processing' | 'approved' | 'rejected';
+  id: string;
+  userId: string;
+  user?: { username: string };
+  method: string;
+  amount: number;
+  txHash: string;
+  status: 'pending' | 'approved' | 'rejected';
+  createdAt: string;
 }
 
 export default function AdminWithdrawalsTab() {
-    const [requests, setRequests] = useState<WithdrawalRequest[]>([]);
-    
-    // Mock Hot Wallet Balances
-    const hotWallets = [
-        { name: 'USDT (Tether)', balance: 145250.50, usdValue: 145250.50, color: 'text-[#00E5FF]', bg: 'bg-[#00E5FF]/10' },
-        { name: 'Bitcoin (BTC)', balance: 2.45, usdValue: 165000.00, color: 'text-orange-400', bg: 'bg-orange-500/10' },
-        { name: 'Ethereum (ETH)', balance: 34.2, usdValue: 112000.00, color: 'text-blue-400', bg: 'bg-blue-500/10' },
-    ];
+  const [requests, setRequests] = useState<WithdrawalRequest[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-    useEffect(() => {
-        // Generate mock pending withdrawals
-        const mockData: WithdrawalRequest[] = [
-            {
-                id: 'w_1', date: new Date(Date.now() - 1000 * 60 * 5),
-                username: 'crypto_king', amountTry: 15000, amountCrypto: 485.20, cryptoSymbol: 'USDT',
-                network: 'TRC20', walletAddress: 'TKh...9vL2p', riskScore: 'safe', status: 'pending'
-            },
-            {
-                id: 'w_2', date: new Date(Date.now() - 1000 * 60 * 15),
-                username: 'whale_007', amountTry: 125000, amountCrypto: 1.85, cryptoSymbol: 'BTC',
-                network: 'Bitcoin', walletAddress: 'bc1q...x2a', riskScore: 'risky', riskReason: 'Çevrim şartı eksik (%85)', status: 'pending'
-            },
-            {
-                id: 'w_3', date: new Date(Date.now() - 1000 * 60 * 45),
-                username: 'lucky99', amountTry: 2500, amountCrypto: 80.90, cryptoSymbol: 'USDT',
-                network: 'ERC20', walletAddress: '0x71...C9bA', riskScore: 'safe', status: 'pending'
-            },
-            {
-                id: 'w_4', date: new Date(Date.now() - 1000 * 60 * 120),
-                username: 'anon_user', amountTry: 8500, amountCrypto: 0.12, cryptoSymbol: 'ETH',
-                network: 'ERC20', walletAddress: '0x44...8dF1', riskScore: 'risky', riskReason: 'Farklı IP adresi girişi tespit edildi.', status: 'pending'
-            }
-        ];
-        setRequests(mockData);
-    }, []);
+  const fetchWithdrawals = async () => {
+    setLoading(true);
+    setError('');
+    try {
+      const res = await fetch('https://api.724bahis.net/api/admin/payments/pending?type=withdraw');
+      const data = await res.json();
+      if (data.success) {
+        setRequests(data.pending);
+      } else {
+        setError(data.error || 'API Hatası');
+      }
+    } catch (err) {
+      console.error('Error fetching withdrawals:', err);
+      setError('Bağlantı hatası.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    const formatTRY = (val: number) => new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(val);
-    const formatUSD = (val: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(val);
+  useEffect(() => {
+    fetchWithdrawals();
+  }, []);
 
-    const handleAction = (id: string, action: 'approve' | 'reject') => {
-        // Set to processing
-        setRequests(prev => prev.map(req => req.id === id ? { ...req, status: 'processing' } : req));
-        
-        // Simulate API delay
-        setTimeout(() => {
-            setRequests(prev => prev.map(req => req.id === id ? { ...req, status: action === 'approve' ? 'approved' : 'rejected' } : req));
-            
-            // Remove from list after showing the success state briefly
-            setTimeout(() => {
-                setRequests(prev => prev.filter(req => req.id !== id));
-            }, 2000);
-        }, 1500);
-    };
+  const handleAction = async (id: string, action: 'approve' | 'reject') => {
+    try {
+      const endpoint = action === 'approve' 
+        ? 'https://api.724bahis.net/api/admin/payments/approve' 
+        : 'https://api.724bahis.net/api/admin/payments/reject';
+      
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, adminNote: '' })
+      });
+      const data = await res.json();
+      
+      if (data.success) {
+        setRequests(prev => prev.filter(req => req.id !== id));
+      } else {
+        alert(data.error || 'İşlem güncellenirken hata oluştu.');
+      }
+    } catch (err) {
+      console.error('Error updating withdrawal status:', err);
+      alert('İşlem güncellenirken bir hata oluştu.');
+    }
+  };
 
-    return (
-        <div className="p-4 sm:p-6 text-white h-full flex flex-col relative overflow-hidden">
-            
-            {/* Header */}
-            <div className="mb-6">
-                <h2 className="text-xl font-bold text-white tracking-wide uppercase flex items-center gap-2">
-                    <Wallet className="w-5 h-5 text-indigo-400" />
-                    Çekim Talepleri & Kasa
-                </h2>
-                <p className="text-sm text-zinc-400 mt-1">Sıcak cüzdan likidite durumu ve bekleyen çekim onayları</p>
-            </div>
-
-            {/* TOP: Hot Wallet Balances */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-                {hotWallets.map((wallet, i) => (
-                    <div key={i} className="bg-[#111318] border border-zinc-800 rounded-2xl p-5 shadow-lg relative overflow-hidden group">
-                        <div className={`absolute top-0 right-0 w-32 h-32 ${wallet.bg} rounded-full blur-3xl -mr-16 -mt-16 transition-all group-hover:opacity-100 opacity-50`}></div>
-                        
-                        <div className="flex items-center justify-between mb-4 relative z-10">
-                            <span className="text-sm font-bold text-zinc-400 uppercase tracking-wider">{wallet.name}</span>
-                            <div className={`p-2 rounded-lg ${wallet.bg}`}>
-                                <Wallet className={`w-4 h-4 ${wallet.color}`} />
-                            </div>
-                        </div>
-                        
-                        <div className="relative z-10">
-                            <div className="text-2xl font-black text-white font-mono mb-1">
-                                {wallet.balance.toLocaleString()} <span className="text-sm text-zinc-500 font-medium">{wallet.name.split(' ')[0] === 'USDT' ? '' : wallet.name.split(' ')[0]}</span>
-                            </div>
-                            <div className="text-sm text-zinc-500 font-mono">
-                                ≈ {formatUSD(wallet.usdValue)}
-                            </div>
-                        </div>
-                    </div>
-                ))}
-            </div>
-
-            {/* BOTTOM: Pending Withdrawals Table */}
-            <div className="flex-1 flex flex-col min-h-0 bg-[#111318] border border-zinc-800 rounded-2xl shadow-lg overflow-hidden">
-                <div className="px-6 py-4 border-b border-zinc-800 bg-[#15171e] flex items-center justify-between">
-                    <h3 className="font-bold text-zinc-300 text-sm flex items-center gap-2 uppercase tracking-wider">
-                        <ArrowUpFromLine className="w-4 h-4 text-zinc-300" /> 
-                        Onay Bekleyen Talepler
-                    </h3>
-                    <div className="bg-amber-500/10 text-zinc-300 text-xs font-black px-2 py-1 rounded border border-amber-500/20">
-                        {requests.filter(r => r.status === 'pending').length} TALEP
-                    </div>
-                </div>
-
-                <div className="flex-1 overflow-auto">
-                    <table className="w-full text-left border-collapse min-w-[800px]">
-                        <thead>
-                            <tr className="bg-[#1a1d24] border-b border-zinc-800">
-                                <th className="px-6 py-3 text-xs font-semibold text-zinc-500 uppercase tracking-wider">Tarih</th>
-                                <th className="px-6 py-3 text-xs font-semibold text-zinc-500 uppercase tracking-wider">Kullanıcı</th>
-                                <th className="px-6 py-3 text-xs font-semibold text-zinc-500 uppercase tracking-wider">Miktar</th>
-                                <th className="px-6 py-3 text-xs font-semibold text-zinc-500 uppercase tracking-wider">Ağ & Cüzdan</th>
-                                <th className="px-6 py-3 text-xs font-semibold text-zinc-500 uppercase tracking-wider">Risk Skoru</th>
-                                <th className="px-6 py-3 text-right text-xs font-semibold text-zinc-500 uppercase tracking-wider">Aksiyon</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-zinc-800/50">
-                            {requests.length === 0 ? (
-                                <tr>
-                                    <td colSpan={6} className="py-16 text-center text-zinc-500">
-                                        <Check className="w-8 h-8 text-[#00E5FF]/50 mx-auto mb-3" />
-                                        <p className="font-medium">Tüm çekim talepleri onaylandı.</p>
-                                    </td>
-                                </tr>
-                            ) : (
-                                requests.map(req => (
-                                    <tr 
-                                        key={req.id} 
-                                        className={`transition-all duration-500 ${
-                                            req.status === 'approved' ? 'bg-[#00E5FF]/20 border-l-4 border-emerald-500' : 
-                                            req.status === 'rejected' ? 'bg-red-500/20 border-l-4 border-red-500' :
-                                            req.status === 'processing' ? 'bg-zinc-800/50 opacity-50' :
-                                            'hover:bg-white/[0.02]'
-                                        }`}
-                                    >
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <div className="text-sm text-zinc-300 font-medium flex items-center gap-1.5">
-                                                <Clock className="w-3.5 h-3.5 text-zinc-500" />
-                                                {req.date.toLocaleTimeString('tr-TR', { hour: '2-digit', minute:'2-digit' })}
-                                            </div>
-                                            <div className="text-xs text-zinc-500">{req.date.toLocaleDateString('tr-TR')}</div>
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <div className="text-sm font-bold text-white">{req.username}</div>
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <div className="text-sm font-bold text-white font-mono">{formatTRY(req.amountTry)}</div>
-                                            <div className="text-xs text-zinc-500 font-mono">{req.amountCrypto.toLocaleString()} {req.cryptoSymbol}</div>
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <div className="text-xs font-bold text-indigo-400 bg-indigo-500/10 px-2 py-0.5 rounded inline-block mb-1 border border-indigo-500/20">
-                                                {req.network}
-                                            </div>
-                                            <div className="text-xs text-zinc-400 font-mono truncate max-w-[150px]">{req.walletAddress}</div>
-                                        </td>
-                                        <td className="px-6 py-4">
-                                            {req.riskScore === 'safe' ? (
-                                                <div className="inline-flex flex-col gap-1">
-                                                    <div className="inline-flex items-center gap-1.5 text-xs font-bold text-[#00ff88] bg-[#00ff88]/10 px-2.5 py-1 rounded border border-[#00ff88]/20">
-                                                        <ShieldCheck className="w-3.5 h-3.5" /> GÜVENLİ (OTO-ONAY)
-                                                    </div>
-                                                    <span className="text-[10px] text-[#00ff88]/70">Yapay zeka onayı alındı.</span>
-                                                </div>
-                                            ) : (
-                                                <div>
-                                                    <div className="inline-flex items-center gap-1.5 text-xs font-bold text-red-400 bg-red-500/10 px-2.5 py-1 rounded border border-red-500/20 mb-1">
-                                                        <ShieldAlert className="w-3.5 h-3.5" /> RİSKLİ - İNCELE
-                                                    </div>
-                                                    <div className="text-[10px] text-zinc-400 flex items-start gap-1 max-w-[200px] leading-tight">
-                                                        <AlertCircle className="w-3 h-3 text-red-400 shrink-0 mt-0.5" />
-                                                        {req.riskReason}
-                                                    </div>
-                                                </div>
-                                            )}
-                                        </td>
-                                        <td className="px-6 py-4 text-right whitespace-nowrap">
-                                            {req.status === 'pending' ? (
-                                                <div className="flex items-center justify-end gap-2">
-                                                    <button 
-                                                        onClick={() => handleAction(req.id, 'reject')}
-                                                        className="p-2 text-red-400 hover:text-white hover:bg-red-500 border border-red-500/30 rounded-lg transition-all"
-                                                        title="Reddet"
-                                                    >
-                                                        <X className="w-4 h-4" />
-                                                    </button>
-                                                    <button 
-                                                        onClick={() => handleAction(req.id, 'approve')}
-                                                        className={`px-3 py-2 rounded-lg font-bold flex items-center gap-2 transition-all ${
-                                                            req.riskScore === 'safe' 
-                                                            ? 'bg-[#00ff88]/20 text-[#00ff88] hover:bg-[#00ff88] hover:text-black border border-[#00ff88]/50 shadow-[0_0_10px_rgba(0,255,136,0.3)]' 
-                                                            : 'bg-[#00E5FF]/10 text-[#00E5FF] hover:bg-[#00E5FF] hover:text-white border border-emerald-500/30'
-                                                        }`}
-                                                    >
-                                                        <Check className="w-4 h-4" />
-                                                        {req.riskScore === 'safe' ? 'OTO ONAYLA' : 'ONAYLA'}
-                                                    </button>
-                                                </div>
-                                            ) : req.status === 'processing' ? (
-                                                <div className="flex items-center justify-end gap-2 text-zinc-400 font-medium">
-                                                    <Loader2 className="w-5 h-5 animate-spin text-[#00ff88]" />
-                                                    İşleniyor...
-                                                </div>
-                                            ) : req.status === 'approved' ? (
-                                                <div className="inline-flex items-center gap-2 text-[#00E5FF] font-bold text-sm">
-                                                    <Check className="w-4 h-4" /> Onaylandı
-                                                </div>
-                                            ) : (
-                                                <div className="inline-flex items-center gap-2 text-red-400 font-bold text-sm">
-                                                    <X className="w-4 h-4" /> Reddedildi
-                                                </div>
-                                            )}
-                                        </td>
-                                    </tr>
-                                ))
-                            )}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+  return (
+    <div className="space-y-6 animate-fade-in relative z-10">
+      <div className="flex items-center justify-between mb-8">
+        <div>
+          <h2 className="text-2xl font-black flex items-center gap-2 text-white">
+            <Wallet className="w-6 h-6 text-indigo-400" />
+            Para Çekme (Withdraw) Talepleri
+          </h2>
+          <p className="text-zinc-400 mt-1">Kullanıcılardan gelen bekleyen çekim talepleri (Prisma API)</p>
         </div>
-    );
+        <button 
+          onClick={fetchWithdrawals}
+          className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 rounded-lg text-white font-medium transition-colors"
+        >
+          <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+          Yenile
+        </button>
+      </div>
+
+      {error && (
+        <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-lg flex items-center gap-2 mb-4">
+          <AlertCircle className="w-5 h-5" />
+          {error}
+        </div>
+      )}
+
+      <div className="bg-[#15171e] rounded-xl border border-gray-800 overflow-hidden shadow-2xl">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr className="bg-gray-800/50 text-gray-400 text-sm uppercase tracking-wider">
+                <th className="p-4 font-semibold">Tarih</th>
+                <th className="p-4 font-semibold">Kullanıcı</th>
+                <th className="p-4 font-semibold">Yöntem</th>
+                <th className="p-4 font-semibold">Cüzdan / IBAN</th>
+                <th className="p-4 font-semibold">Tutar</th>
+                <th className="p-4 font-semibold text-center">İşlemler</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-800 text-gray-300">
+              {loading ? (
+                <tr>
+                  <td colSpan={6} className="p-8 text-center text-gray-500">Yükleniyor...</td>
+                </tr>
+              ) : requests.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="p-8 text-center text-gray-500 flex flex-col items-center">
+                    <Wallet className="w-12 h-12 text-gray-700 mb-3" />
+                    Bekleyen çekim talebi bulunmuyor.
+                  </td>
+                </tr>
+              ) : (
+                requests.map((req) => (
+                  <tr key={req.id} className="hover:bg-white/5 transition-colors group">
+                    <td className="p-4 whitespace-nowrap text-sm text-gray-400">
+                      {new Date(req.createdAt).toLocaleString('tr-TR')}
+                    </td>
+                    <td className="p-4 font-medium text-white">
+                      {req.user?.username || req.userId}
+                    </td>
+                    <td className="p-4">
+                      <span className="capitalize text-[#00E5FF] font-medium">{req.method}</span>
+                    </td>
+                    <td className="p-4 font-mono text-sm text-gray-400">
+                      {req.txHash}
+                    </td>
+                    <td className="p-4 font-black text-indigo-400">
+                      {req.amount.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} ₺
+                    </td>
+                    <td className="p-4">
+                      <div className="flex items-center justify-center gap-2">
+                        <button
+                          onClick={() => handleAction(req.id, 'approve')}
+                          className="flex items-center gap-1.5 px-3 py-1.5 bg-[#10b981]/10 text-[#10b981] hover:bg-[#10b981] hover:text-white rounded-lg font-medium transition-all text-sm"
+                        >
+                          <CheckCircle2 className="w-4 h-4" />
+                          Onayla (Gönderildi)
+                        </button>
+                        <button
+                          onClick={() => handleAction(req.id, 'reject')}
+                          className="flex items-center gap-1.5 px-3 py-1.5 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white rounded-lg font-medium transition-all text-sm"
+                        >
+                          <XCircle className="w-4 h-4" />
+                          İptal Et (İade)
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
 }

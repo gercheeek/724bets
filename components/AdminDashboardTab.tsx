@@ -38,9 +38,26 @@ export default function AdminDashboardTab() {
     const [liveLogs, setLiveLogs] = useState<{id: number, text: string, type: 'success' | 'warning' | 'info', badge?: string, icon?: string}[]>([]);
     const [activeMetric, setActiveMetric] = useState<'pnl' | 'risk' | 'players'>('pnl');
 
-    // Simulate Live WebSocket Logs
+    const [stats, setStats] = useState<any>(null);
+
+    // Simulate Live WebSocket Logs & Fetch Stats
     useEffect(() => {
+        const fetchStats = async () => {
+            try {
+                const res = await fetch('https://api.724bahis.net/api/admin/dashboard-stats');
+                const data = await res.json();
+                if (data.success) {
+                    setStats(data.stats);
+                }
+            } catch (err) {
+                console.error("Error fetching dashboard stats:", err);
+            }
+        };
+        fetchStats();
+
         const interval = setInterval(() => {
+            fetchStats(); // Update stats periodically
+
             const logsGen = [
                 { text: 'TRX 500 Yatırım Onaylandı', type: 'success', badge: 'YATIRIM', icon: '💰' },
                 { text: 'Kullanıcı ahmet12 giriş yaptı', type: 'info', badge: 'SİSTEM', icon: '🖥️' },
@@ -60,7 +77,7 @@ export default function AdminDashboardTab() {
             };
             
             setLiveLogs(prev => [newLog, ...prev].slice(0, 50));
-        }, 2500);
+        }, 5000);
         return () => clearInterval(interval);
     }, []);
 
@@ -105,8 +122,8 @@ export default function AdminDashboardTab() {
                         <TrendingUp className={`w-3 h-3 ${activeMetric === 'pnl' ? 'text-[#00ff88] animate-pulse' : 'text-zinc-600'}`} />
                     </div>
                     <div className="flex items-end gap-1.5 relative z-10">
-                        <h3 className="text-base font-black text-white font-mono">₺165,420</h3>
-                        <span className="text-[#00ff88] text-[9px] font-bold flex items-center mb-0.5"><ArrowUpRight className="w-2 h-2" /> 12.5%</span>
+                        <h3 className="text-base font-black text-white font-mono">₺{stats ? (stats.totalDeposits - stats.totalWithdrawals).toLocaleString('tr-TR') : '...'}</h3>
+                        <span className="text-[#00ff88] text-[9px] font-bold flex items-center mb-0.5"><ArrowUpRight className="w-2 h-2" /> Canlı</span>
                     </div>
                 </button>
 
@@ -123,8 +140,8 @@ export default function AdminDashboardTab() {
                         <ShieldAlert className={`w-3 h-3 ${activeMetric === 'risk' ? 'text-[#ef4444] animate-pulse' : 'text-zinc-600'}`} />
                     </div>
                     <div className="flex items-end gap-1.5 relative z-10">
-                        <h3 className="text-base font-black text-white font-mono">₺45,200</h3>
-                        <span className="text-[#ef4444] text-[9px] font-bold flex items-center mb-0.5"><ArrowUpRight className="w-2 h-2" /> 5.2%</span>
+                        <h3 className="text-base font-black text-white font-mono">₺{stats ? stats.betLiability.toLocaleString('tr-TR') : '...'}</h3>
+                        <span className="text-[#ef4444] text-[9px] font-bold flex items-center mb-0.5"><ArrowUpRight className="w-2 h-2" /> Bahis Riski</span>
                     </div>
                 </button>
 
@@ -141,8 +158,8 @@ export default function AdminDashboardTab() {
                         <Users className={`w-3 h-3 ${activeMetric === 'players' ? 'text-[#3b82f6] animate-pulse' : 'text-zinc-600'}`} />
                     </div>
                     <div className="flex items-end gap-1.5 relative z-10">
-                        <h3 className="text-base font-black text-white font-mono">1,204</h3>
-                        <span className="text-zinc-400 text-[9px] font-bold mb-0.5">Anlık</span>
+                        <h3 className="text-base font-black text-white font-mono">{stats ? stats.totalUsers : '...'}</h3>
+                        <span className="text-zinc-400 text-[9px] font-bold mb-0.5">({stats ? stats.activeUsers : 0} Aktif)</span>
                     </div>
                 </button>
 

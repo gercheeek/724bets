@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { triggerGlobalToast } from '../components/GlobalToaster';
 
 export interface BetSelection {
   id: string; // The odd ID (e.g., h_123, d_123)
@@ -43,10 +42,7 @@ export const BetSlipProvider: React.FC<{ children: ReactNode }> = ({ children })
   const addSelection = (newSelection: BetSelection) => {
     // TURBO MODE CHECK
     if (isTurboMode) {
-      triggerGlobalToast({ 
-        type: 'success', 
-        message: `⚡ TURBO BAHİS KABUL EDİLDİ: ${newSelection.matchName} - ${newSelection.selectionName}` 
-      });
+      console.log(`⚡ TURBO BAHİS KABUL EDİLDİ: ${newSelection.matchName} - ${newSelection.selectionName}`);
       // Do not add to normal slip, it's instant!
       return;
     }

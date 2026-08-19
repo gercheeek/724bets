@@ -1,33 +1,36 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../utils/supabase';
-import { CheckCircle2, XCircle, Clock, RefreshCw, Wallet, QrCode, Building2 } from 'lucide-react';
+import { CheckCircle2, XCircle, Clock, RefreshCw, Wallet, Building2, AlertCircle } from 'lucide-react';
 
 interface Deposit {
   id: string;
-  username: string;
-  method: 'bank' | 'crypto';
+  userId: string;
+  user?: { username: string };
+  method: string;
   amount: number;
-  tx_hash: string;
+  txHash: string;
   status: 'pending' | 'approved' | 'rejected';
-  created_at: string;
+  createdAt: string;
 }
 
 export default function AdminDepositsTab() {
   const [deposits, setDeposits] = useState<Deposit[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   const fetchDeposits = async () => {
     setLoading(true);
+    setError('');
     try {
-      const { data, error } = await supabase
-        .from('deposits')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
-      if (data) setDeposits(data as Deposit[]);
+      const res = await fetch('https://api.724bahis.net/api/admin/payments/pending?type=deposit');
+      const data = await res.json();
+      if (data.success) {
+        setDeposits(data.pending);
+      } else {
+        setError(data.error || 'API Hatası');
+      }
     } catch (err) {
       console.error('Error fetching deposits:', err);
+      setError('Bağlantı hatası.');
     } finally {
       setLoading(false);
     }
@@ -39,53 +42,23 @@ export default function AdminDepositsTab() {
 
   const handleUpdateStatus = async (id: string, newStatus: 'approved' | 'rejected') => {
     try {
-      const deposit = deposits.find(d => d.id === id);
-      if (!deposit) return;
-
-      const { error } = await supabase
-        .from('deposits')
-        .update({ status: newStatus })
-        .eq('id', id);
-
-      if (error) throw error;
-
-      // Handle Referral Bonus on First Deposit
-      if (newStatus === 'approved') {
-        const { data: member } = await supabase.from('members').select('referred_by, balance').eq('username', deposit.username).single();
-        if (member && member.referred_by) {
-          // Check if it's their FIRST approved deposit (other than this one we just approved)
-          const { data: otherDeposits } = await supabase
-            .from('deposits')
-            .select('id')
-            .eq('username', deposit.username)
-            .eq('status', 'approved')
-            .neq('id', id);
-          
-          if (!otherDeposits || otherDeposits.length === 0) {
-            // First deposit! Give 10% bonus
-            const bonusAmount = Number(deposit.amount) * 0.10;
-            
-            // Insert history
-            await supabase.from('referral_history').insert([{
-              referrer_username: member.referred_by,
-              referred_username: deposit.username,
-              deposit_status: 'completed',
-              bonus_amount: bonusAmount
-            }]);
-
-            // Add balance to referrer
-            const { data: referrer } = await supabase.from('members').select('id, balance').eq('referral_code', member.referred_by).single();
-            if (referrer) {
-              await supabase.from('members').update({
-                balance: (Number(referrer.balance) || 0) + bonusAmount
-              }).eq('id', referrer.id);
-            }
-          }
-        }
+      const endpoint = newStatus === 'approved' 
+        ? 'https://api.724bahis.net/api/admin/payments/approve' 
+        : 'https://api.724bahis.net/api/admin/payments/reject';
+      
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, adminNote: '' })
+      });
+      const data = await res.json();
+      
+      if (data.success) {
+        // Remove from pending list
+        setDeposits(prev => prev.filter(d => d.id !== id));
+      } else {
+        alert(data.error || 'İşlem güncellenirken hata oluştu.');
       }
-
-      // Update local state
-      setDeposits(prev => prev.map(d => d.id === id ? { ...d, status: newStatus } : d));
     } catch (err) {
       console.error('Error updating deposit status:', err);
       alert('İşlem güncellenirken bir hata oluştu.');
@@ -96,101 +69,91 @@ export default function AdminDepositsTab() {
     <div className="space-y-6 animate-fade-in relative z-10">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h2 className="text-2xl font-black flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
+          <h2 className="text-2xl font-black flex items-center gap-2 text-white">
             <Wallet className="w-6 h-6 text-[#10b981]" />
-            Finans ve Yatırımlar
+            Para Yatırma (Deposit) Talepleri
           </h2>
-          <p className="text-sm mt-1" style={{ color: 'var(--text-secondary)' }}>
-            Kullanıcılardan gelen yatırım bildirimlerini yönetin.
-          </p>
+          <p className="text-zinc-400 mt-1">Kullanıcılardan gelen bekleyen yatırım talepleri (Prisma API)</p>
         </div>
         <button 
           onClick={fetchDeposits}
-          className="p-2 bg-[#10b981]/10 text-[#10b981] hover:bg-[#10b981]/20 rounded-lg transition-colors"
-          title="Yenile"
+          className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 rounded-lg text-white font-medium transition-colors"
         >
-          <RefreshCw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
+          <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+          Yenile
         </button>
       </div>
 
-      <div className="bg-black/20 border border-zinc-800/50 rounded-lg overflow-hidden">
+      {error && (
+        <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-lg flex items-center gap-2 mb-4">
+          <AlertCircle className="w-5 h-5" />
+          {error}
+        </div>
+      )}
+
+      <div className="bg-[#15171e] rounded-xl border border-gray-800 overflow-hidden shadow-2xl">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-black/40 text-zinc-400 text-xs uppercase tracking-wider">
-                <th className="p-4 font-bold">Tarih</th>
-                <th className="p-4 font-bold">Kullanıcı Adı</th>
-                <th className="p-4 font-bold">Yöntem</th>
-                <th className="p-4 font-bold">Tutar</th>
-                <th className="p-4 font-bold">İşlem Özeti / Ad-Soyad</th>
-                <th className="p-4 font-bold">Durum</th>
-                <th className="p-4 font-bold text-right">İşlem</th>
+              <tr className="bg-gray-800/50 text-gray-400 text-sm uppercase tracking-wider">
+                <th className="p-4 font-semibold">Tarih</th>
+                <th className="p-4 font-semibold">Kullanıcı</th>
+                <th className="p-4 font-semibold">Yöntem</th>
+                <th className="p-4 font-semibold">İşlem / Cüzdan No</th>
+                <th className="p-4 font-semibold">Tutar</th>
+                <th className="p-4 font-semibold text-center">İşlemler</th>
               </tr>
             </thead>
-            <tbody className="text-sm divide-y divide-zinc-800/50">
-              {loading && deposits.length === 0 ? (
+            <tbody className="divide-y divide-gray-800 text-gray-300">
+              {loading ? (
                 <tr>
-                  <td colSpan={7} className="p-8 text-center text-zinc-500">Yükleniyor...</td>
+                  <td colSpan={6} className="p-8 text-center text-gray-500">Yükleniyor...</td>
                 </tr>
               ) : deposits.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="p-8 text-center text-zinc-500">Henüz bir yatırım bildirimi bulunmuyor.</td>
+                  <td colSpan={6} className="p-8 text-center text-gray-500 flex flex-col items-center">
+                    <Wallet className="w-12 h-12 text-gray-700 mb-3" />
+                    Bekleyen yatırım talebi bulunmuyor.
+                  </td>
                 </tr>
               ) : (
-                deposits.map(deposit => (
-                  <tr key={deposit.id} className="hover:bg-zinc-900/30 transition-colors">
-                    <td className="p-4 text-zinc-400 whitespace-nowrap">
-                      {new Date(deposit.created_at).toLocaleString('tr-TR')}
+                deposits.map((deposit) => (
+                  <tr key={deposit.id} className="hover:bg-white/5 transition-colors group">
+                    <td className="p-4 whitespace-nowrap text-sm text-gray-400">
+                      {new Date(deposit.createdAt).toLocaleString('tr-TR')}
                     </td>
-                    <td className="p-4 font-bold text-white">
-                      {deposit.username}
+                    <td className="p-4 font-medium text-white flex items-center gap-2">
+                      {deposit.user?.username || deposit.userId}
                     </td>
                     <td className="p-4">
-                      <div className="flex items-center gap-1.5 text-zinc-300 bg-zinc-800/50 px-2 py-1 rounded-lg inline-flex text-xs font-medium">
-                        {deposit.method === 'bank' ? <Building2 className="w-3.5 h-3.5 text-blue-400" /> : <QrCode className="w-3.5 h-3.5 text-orange-400" />}
-                        {deposit.method === 'bank' ? 'Havale/EFT' : 'Kripto'}
+                      <div className="flex items-center gap-2">
+                        <Building2 className="w-4 h-4 text-blue-400" />
+                        <span className="capitalize">{deposit.method}</span>
                       </div>
                     </td>
-                    <td className="p-4 font-black text-[#00E5FF]">
-                      {deposit.amount} {deposit.method === 'bank' ? '₺' : 'USDT'}
+                    <td className="p-4 font-mono text-sm text-gray-400">
+                      {deposit.txHash || '-'}
                     </td>
-                    <td className="p-4 text-zinc-300 font-mono text-xs">
-                      {deposit.tx_hash}
+                    <td className="p-4 font-black text-[#10b981]">
+                      {deposit.amount.toLocaleString('tr-TR', { minimumFractionDigits: 2 })} ₺
                     </td>
                     <td className="p-4">
-                      {deposit.status === 'pending' && (
-                        <span className="flex items-center gap-1.5 text-zinc-300 bg-amber-500/10 px-2 py-1 rounded-lg text-xs font-bold inline-flex">
-                          <Clock className="w-3.5 h-3.5" /> Bekliyor
-                        </span>
-                      )}
-                      {deposit.status === 'approved' && (
-                        <span className="flex items-center gap-1.5 text-[#00E5FF] bg-[#00E5FF]/10 px-2 py-1 rounded-lg text-xs font-bold inline-flex">
-                          <CheckCircle2 className="w-3.5 h-3.5" /> Onaylandı
-                        </span>
-                      )}
-                      {deposit.status === 'rejected' && (
-                        <span className="flex items-center gap-1.5 text-red-500 bg-red-500/10 px-2 py-1 rounded-lg text-xs font-bold inline-flex">
-                          <XCircle className="w-3.5 h-3.5" /> Reddedildi
-                        </span>
-                      )}
-                    </td>
-                    <td className="p-4 text-right">
-                      {deposit.status === 'pending' && (
-                        <div className="flex items-center justify-end gap-2">
-                          <button
-                            onClick={() => handleUpdateStatus(deposit.id, 'approved')}
-                            className="p-1.5 bg-[#00E5FF]/10 text-[#00E5FF] hover:bg-[#00E5FF]/20 rounded-lg transition-colors title='Onayla'"
-                          >
-                            <CheckCircle2 className="w-5 h-5" />
-                          </button>
-                          <button
-                            onClick={() => handleUpdateStatus(deposit.id, 'rejected')}
-                            className="p-1.5 bg-red-500/10 text-red-500 hover:bg-red-500/20 rounded-lg transition-colors title='Reddet'"
-                          >
-                            <XCircle className="w-5 h-5" />
-                          </button>
-                        </div>
-                      )}
+                      <div className="flex items-center justify-center gap-2">
+                        <button
+                          onClick={() => handleUpdateStatus(deposit.id, 'approved')}
+                          className="flex items-center gap-1.5 px-3 py-1.5 bg-[#10b981]/10 text-[#10b981] hover:bg-[#10b981] hover:text-white rounded-lg font-medium transition-all text-sm"
+                        >
+                          <CheckCircle2 className="w-4 h-4" />
+                          Onayla
+                        </button>
+                        <button
+                          onClick={() => handleUpdateStatus(deposit.id, 'rejected')}
+                          className="flex items-center gap-1.5 px-3 py-1.5 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white rounded-lg font-medium transition-all text-sm"
+                        >
+                          <XCircle className="w-4 h-4" />
+                          Reddet
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))

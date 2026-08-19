@@ -69,12 +69,12 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
         // Admin bypass from Member Login
         if (uname === 'admin' && mPassword === '11111111111') { onAdminLogin('admin'); return; }
 
-        // Block all other standard member login / register attempts with country warning
-        setMError('BULUNDUĞUNUZ ÜLKEDE KULLANIMA KAPALIYIZ');
+        // Block all other standard member login / register attempts
+        setMError('Kullanıcı adı veya şifre hatalı!');
     };
 
     const handleGoogleLogin = async () => {
-        setMError('BULUNDUĞUNUZ ÜLKEDE KULLANIMA KAPALIYIZ');
+        setMError('Giriş başarısız oldu. Lütfen tekrar deneyin.');
     };
 
     const handleAdminSubmit = (e: React.FormEvent) => {
@@ -242,10 +242,11 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
                         ) : (
                             <>
                                 <form onSubmit={handleMemberSubmit} className="space-y-3 md:space-y-4">
-                                    <div className="bg-red-500/15 border border-red-500/40 text-red-400 font-black p-3.5 rounded-xl text-center text-xs tracking-wide shadow-[0_0_20px_rgba(239,68,68,0.25)] flex items-center justify-center gap-2">
-                                        <span className="text-base">⚠️</span>
-                                        <span>BULUNDUĞUNUZ ÜLKEDE KULLANIMA KAPALIYIZ</span>
-                                    </div>
+                                    {mError && (
+                                        <div className="bg-red-500/15 border border-red-500/40 text-red-400 font-black p-3 rounded-lg text-center text-[11px] md:text-xs">
+                                            {mError}
+                                        </div>
+                                    )}
                                     <div className="relative flex flex-col gap-2">
                                         <label className="text-xs text-zinc-400 font-medium">{memberMode === 'register' ? 'E-posta veya Telefon' : 'Kullanıcı adı'}</label>
                                         <input

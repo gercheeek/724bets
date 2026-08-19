@@ -93,39 +93,46 @@ export const UserProvider: React.FC<{ children: ReactNode, siteUser: SiteUser | 
     if (selections.length === 0) throw new Error('Lütfen en az bir maç seçin.');
     
     try {
-      const res = await fetch('/api/sports/place-bet', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          userCode: siteUser.username,
-          amount: amount,
-          selections: selections,
-          totalOdds: totalOdds
-        })
+      const potentialWin = amount * totalOdds;
+
+      // Call Supabase RPC
+      const { data, error } = await supabase.rpc('place_sports_bet', {
+        p_user_id: siteUser.id,
+        p_bet_amount: amount,
+        p_potential_win: potentialWin,
+        p_total_odds: totalOdds,
+        p_selections: selections
       });
 
-      const data = await res.json();
-      
-      if (!data.success) {
-        throw new Error(data.error || 'Bahis işlemi başarısız oldu.');
+      if (error) {
+        console.error('Supabase RPC Error:', error);
+        throw new Error(error.message || 'Bahis işlemi başarısız oldu.');
+      }
+
+      // Check RPC response
+      if (!data || !data.success) {
+        throw new Error('Bahis işlemi başarısız oldu. Lütfen tekrar deneyin.');
       }
 
       // Update Local State with the new balance from backend
-      const updatedUser = { ...siteUser, balance: data.balance };
+      const updatedUser = { ...siteUser, balance: data.new_balance };
       setSiteUser(updatedUser);
       localStorage.setItem('site_current_member', JSON.stringify(updatedUser));
       localStorage.setItem('site_member', JSON.stringify(updatedUser));
 
       // Asynchronously send Discord notification
       sendDiscordNotification({
-        id: data.bet.id,
+        id: data.bet_id || 'new-bet',
         timestamp: Date.now(),
         amount: amount,
         selections: selections,
         totalOdds: totalOdds,
-        potentialPayout: amount * totalOdds,
+        potentialPayout: potentialWin,
         status: 'PENDING'
       });
+      
+      // Dispatch event to switch Right Panel to My Bets
+      window.dispatchEvent(new Event('setRightPanelToMyBets'));
 
     } catch (err: any) {
       console.error('Betting error:', err);

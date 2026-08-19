@@ -26,6 +26,7 @@ interface BettingContextType {
   isConnected: boolean;
   globalLiveMatches: any[];
   global1xBetMatches: any[];
+  global1xBetPreMatches: any[];
   outrights: any[];
   
   // Filters
@@ -129,7 +130,7 @@ export const BettingProvider: React.FC<{ children: React.ReactNode }> = ({ child
         socket = io(socketUrl); // Node.js server portumuz
         
         socket.on('connect', () => {
-            console.log('✅ Connected to local Socket.io Server (Atekbet279)');
+            console.log('✅ Connected to local Socket.io Server (V2 Data Engine)');
             setIsConnected(true);
         });
 
@@ -169,7 +170,35 @@ export const BettingProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
         socket.on('1xbetLiveMatches', (payload) => {
             if (Array.isArray(payload)) {
-                setGlobal1xBetMatches(payload);
+                const now = Date.now();
+                setGlobal1xBetMatches(prev => {
+                    const mergedMap = new Map();
+                    // Mevcut maçları haritaya ekle (Eğer son 60 saniye içinde güncellenmişse tut)
+                    prev.forEach(m => {
+                        const lastSeen = m.lastSeen || now;
+                        if (now - lastSeen < 60000) {
+                            let newTime = m.time;
+                            const minVal = parseInt(String(m.time).replace(/\D/g, '')) || 0;
+                            // Eğer maç 90 dk veya üzerindeyse ve feed'den düştüyse "Bitti" olarak kabul et
+                            if (minVal >= 90 || m.time === 'Bitti') {
+                                newTime = 'Bitti';
+                            }
+                            mergedMap.set(m.id, { 
+                                ...m, 
+                                isSuspended: true,
+                                time: newTime,
+                                odds: { "1": "-", "X": "-", "2": "-", "tU": "-", "tA": "-", "cs1X": "-", "cs12": "-", "csX2": "-", "gg": "-", "ng": "-" } // Oranları kitle
+                            });
+                        }
+                    });
+                    
+                    // Yeni gelen canlı maçları üzerine yaz (Aktif ve güncel)
+                    payload.forEach(m => {
+                        mergedMap.set(m.id, { ...m, isSuspended: false, lastSeen: now });
+                    });
+                    
+                    return Array.from(mergedMap.values());
+                });
             }
         });
 

@@ -402,7 +402,7 @@ const Header: React.FC<HeaderProps> = ({
           }
         `}</style>
 
-      <div className="header-topbar relative w-full h-[72px] bg-[#0A0C10] border-b border-white/5 flex z-50 transition-colors duration-300 shadow-[0_4px_30px_rgba(0,0,0,0.1)]">
+      <div className="header-topbar relative w-full h-[72px] bg-[#0A0C10] flex z-50 transition-colors duration-300 shadow-[0_4px_30px_rgba(0,0,0,0.1)]">
         <div className="w-full max-w-[1720px] mx-auto h-full flex items-center px-4 md:px-8 xl:px-12 gap-4">
             
             {/* Left Section: Logo */}
@@ -467,7 +467,7 @@ const Header: React.FC<HeaderProps> = ({
                     const event = new CustomEvent('openWalletModal', { detail: 'deposit' });
                     window.dispatchEvent(event);
                   }}
-                  className="bg-gradient-to-r from-[#00E5FF] to-[#00B0FF] hover:from-[#00B0FF] hover:to-[#0091EA] text-[#06080C] font-black tracking-widest text-[12px] h-[36px] px-4 md:px-5 rounded-lg transition-all flex items-center shadow-[0_0_15px_rgba(0,229,255,0.3)] uppercase"
+                  className="bg-gradient-to-r from-[color:var(--theme-accent)]/20 to-[color:var(--theme-accent)]/5 hover:from-[color:var(--theme-accent)]/30 hover:to-[color:var(--theme-accent)]/10 text-[color:var(--theme-accent)] font-black tracking-widest text-[12px] h-[36px] px-4 md:px-5 rounded-lg transition-all flex items-center shadow-[0_0_15px_rgba(0,229,255,0.15)] hover:shadow-[0_0_25px_rgba(0,229,255,0.3)] uppercase border-none"
                 >
                   <Wallet className="w-4 h-4 mr-2 hidden sm:block" />
                   CÜZDAN
@@ -508,10 +508,10 @@ const Header: React.FC<HeaderProps> = ({
               </div>              <div className="relative" ref={profileRef}>
                 {/* User Avatar Block */}
                 <div 
-                  className="flex items-center bg-[#20242D] hover:bg-[#2a303c] border border-transparent cursor-pointer transition-colors rounded-xl p-1.5 pr-3 h-[48px]"
+                  className="flex items-center bg-[#20242D] hover:bg-[#2a303c] border-none shadow-sm cursor-pointer transition-colors rounded-xl p-1.5 pr-3 h-[48px]"
                   onClick={() => setIsProfileOpen(prev => !prev)}
                 >
-                  <div className="w-[36px] h-[36px] rounded-lg bg-gradient-to-br from-purple-500/20 to-pink-500/20 text-purple-400 flex items-center justify-center mr-2 md:mr-3 border border-purple-500/30 overflow-hidden relative group-hover:border-purple-500/50">
+                  <div className="w-[36px] h-[36px] rounded-lg bg-gradient-to-br from-purple-500/15 to-pink-500/15 text-purple-400 flex items-center justify-center mr-2 md:mr-3 border-none shadow-[0_0_15px_rgba(168,85,247,0.15)] overflow-hidden relative">
                      <User className="w-[20px] h-[20px] z-10 relative" />
                   </div>
                   <div className="hidden sm:flex flex-col items-start mr-3">
@@ -608,7 +608,7 @@ const Header: React.FC<HeaderProps> = ({
           <div className="flex items-center gap-2 ml-1">
              <button 
                onClick={onToggleChat}
-               className={`w-[40px] h-[40px] rounded-xl flex items-center justify-center transition-all duration-300 ${isChatOpen ? 'bg-[#00E5FF] text-[#002b30] shadow-[0_4px_12px_rgba(0,229,255,0.2)]' : 'bg-[#20242D] border border-transparent hover:bg-[#2a303c] text-zinc-300 hover:text-white'} shadow-sm`}
+               className={`w-[40px] h-[40px] rounded-xl flex items-center justify-center transition-all duration-300 ${isChatOpen ? 'bg-[color:var(--theme-accent)]/15 text-[color:var(--theme-accent)] shadow-[0_0_15px_rgba(0,229,255,0.15)]' : 'bg-[#20242D] border-none hover:bg-[#2a303c] text-zinc-300 hover:text-white'} shadow-sm`}
                title="Sohbet (Chat)"
              >
                <MessageSquare className="w-[18px] h-[18px]" strokeWidth={2} />

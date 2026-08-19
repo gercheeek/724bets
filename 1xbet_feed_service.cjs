@@ -12,7 +12,7 @@ const io = new Server(server, {
   }
 });
 
-const API_URL = 'https://1xframemxz.com/service-api/LiveFeed/Get1x2_VZip?count=50&lng=tr&gr=1110&mode=4&country=180&partner=85&virtualSports=true&noFilterBlockEvent=true';
+const API_URL = 'https://1xframemxz.com/service-api/LiveFeed/Get1x2_VZip?count=50&lng=tr&sports=1&mode=4&country=180&partner=85&noFilterBlockEvent=true';
 
 let liveMatches = [];
 
@@ -28,7 +28,13 @@ async function fetch1xBetLive() {
     const data = await res.json();
     
     if (data && data.Value) {
-      liveMatches = data.Value.map(match => {
+      liveMatches = data.Value.filter(match => {
+        const ln = (match.L || match.LE || '').toLowerCase();
+        const t1 = (match.O1 || match.O1E || '').toLowerCase();
+        const t2 = (match.O2 || match.O2E || '').toLowerCase();
+        const combined = `${ln} ${t1} ${t2}`;
+        return !combined.includes('virtual') && !combined.includes('srl') && !combined.includes('simulated') && !combined.includes('cyber') && !combined.includes('e-soccer') && !combined.includes('esports');
+      }).map(match => {
         // Parse odds array E: [{T: 1, C: 2.10}, {T: 2, C: 3.4}, {T: 3, C: 2.8} ...]
         let odds = { 
           "1": '-', "X": '-', "2": '-', 
@@ -68,7 +74,17 @@ async function fetch1xBetLive() {
           score: `${scoreHome}-${scoreAway}`,
           scoreHome: scoreHome,
           scoreAway: scoreAway,
-          time: (match.SC && match.SC.TS) ? Math.floor(match.SC.TS / 60) + "'" : "LIVE",
+          time: (() => {
+            if (match.SC && match.SC.TS !== undefined) {
+               const elapsedMins = Math.floor(match.SC.TS / 60);
+               const period = match.SC.CP || 1;
+               if (period === 1) return elapsedMins + "'";
+               if (period === 2) return (45 + elapsedMins) + "'";
+               if (period === 3) return (90 + elapsedMins) + "'";
+               return elapsedMins + "'";
+            }
+            return "LIVE";
+          })(),
           odds: odds
         };
       });

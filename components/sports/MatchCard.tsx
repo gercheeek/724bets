@@ -29,7 +29,7 @@ export const LiveTimer: React.FC<{ minute: string; hidePrefix?: boolean; lastUpd
   if (!isNaN(Number(cleanMinute))) {
     const num = Number(cleanMinute);
     if (num === 0) {
-      return <span>{`${prefix}BAŞLIYOR`}</span>;
+      return <span>{`${prefix}`}</span>;
     }
     const s = seconds.toString().padStart(2, '0');
     return <span>{`${prefix}${cleanMinute}:${s}`}</span>;

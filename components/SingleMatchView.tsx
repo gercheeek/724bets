@@ -79,42 +79,63 @@ export const SingleMatchView: React.FC<SingleMatchViewProps> = ({ match, onBack 
         </div>
       </div>
 
-      {/* Hero Banner with Score */}
-      <div className="relative overflow-hidden border-b border-[#202532]">
-        <div className="absolute inset-0 bg-gradient-to-r from-[#00E5FF]/5 via-transparent to-[#00E5FF]/5"></div>
+      {/* Premium Glassmorphism Hero Banner */}
+      <div className="relative overflow-hidden border-b border-white/5 bg-[#050608]">
+        {/* Subtle grid pattern & glow */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,229,255,0.03)_0%,transparent_70%)]"></div>
+        <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: 'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)', backgroundSize: '40px 40px' }}></div>
         
-        <div className="relative px-4 md:px-8 py-8 md:py-10 flex items-center justify-between">
-          <div className="flex-1 flex flex-col items-center gap-3">
-            <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-[#12161E] border border-[#202532] flex items-center justify-center shadow-[0_0_20px_rgba(0,0,0,0.5)]">
-              <Shield className="w-8 h-8 md:w-10 md:h-10 text-zinc-600" />
+        <div className="relative px-4 md:px-8 py-10 md:py-14 flex items-center justify-between max-w-4xl mx-auto">
+          {/* Home Team */}
+          <div className="flex-1 flex flex-col items-center gap-4">
+            <div className="relative group">
+              <div className="absolute inset-0 bg-white/5 rounded-full blur-xl group-hover:bg-[#00E5FF]/20 transition-all duration-500"></div>
+              <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-gradient-to-br from-white/10 to-transparent border border-white/10 flex items-center justify-center backdrop-blur-md relative z-10 shadow-2xl">
+                <span className="text-2xl md:text-3xl font-black text-white tracking-wider">
+                  {match.home?.split(' ').map((w: string) => w[0]).join('').substring(0, 2).toUpperCase()}
+                </span>
+              </div>
             </div>
-            <span className="text-sm md:text-lg font-black text-center max-w-[120px] md:max-w-[200px] leading-tight text-zinc-100">{match.home}</span>
+            <span className="text-base md:text-lg font-bold text-center max-w-[150px] md:max-w-[200px] leading-tight text-zinc-200">{match.home}</span>
           </div>
 
-          <div className="flex flex-col items-center px-4 md:px-8">
-            <span className="text-zinc-400 text-[10px] md:text-xs font-bold mb-2 tracking-widest uppercase bg-[#0A0C10] px-3 py-1 rounded-full border border-[#202532] shadow-inner">{match.time}</span>
+          {/* Scoreboard (Glassmorphism) */}
+          <div className="flex flex-col items-center px-2 md:px-6 z-10">
             {match.isLive ? (
-              <div className="flex items-center gap-3 md:gap-4 text-4xl md:text-5xl font-black text-[#00E5FF] tracking-tighter drop-shadow-[0_0_15px_rgba(0,229,255,0.3)]">
-                <span>{match.scoreHome || (match.score ? String(match.score).split(' - ')[0] : '0')}</span>
-                <span className="text-zinc-600 mb-2">-</span>
-                <span>{match.scoreAway || (match.score ? String(match.score).split(' - ')[1] : '0')}</span>
+              <div className="flex items-center justify-center gap-2 mb-3 bg-red-500/10 border border-red-500/20 px-3 py-1 rounded-full">
+                <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse shadow-[0_0_8px_#ef4444]"></div>
+                <span className="text-[10px] md:text-xs font-bold tracking-widest text-red-500">{match.time}</span>
               </div>
             ) : (
-              <div className="text-2xl md:text-3xl font-black text-zinc-300 tracking-tighter uppercase my-2">VS</div>
+              <span className="text-zinc-400 text-[10px] md:text-xs font-bold mb-3 tracking-widest uppercase bg-white/5 px-4 py-1.5 rounded-full border border-white/10 backdrop-blur-sm">
+                {match.time}
+              </span>
             )}
-            {match.isLive && (
-              <div className="mt-3 md:mt-4 flex items-center gap-2 text-red-500 animate-pulse">
-                <div className="w-2 h-2 rounded-full bg-red-500"></div>
-                <span className="text-[10px] font-bold uppercase tracking-widest">Canlı</span>
-              </div>
-            )}
+            
+            <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl px-6 md:px-10 py-4 shadow-2xl flex items-center justify-center gap-4 min-w-[140px] md:min-w-[180px]">
+              {match.isLive ? (
+                <>
+                  <span className="text-4xl md:text-5xl font-black text-white tracking-tighter w-8 text-center">{match.scoreHome || (match.score ? String(match.score).split(' - ')[0] : '0')}</span>
+                  <span className="text-zinc-600 text-2xl font-light">-</span>
+                  <span className="text-4xl md:text-5xl font-black text-white tracking-tighter w-8 text-center">{match.scoreAway || (match.score ? String(match.score).split(' - ')[1] : '0')}</span>
+                </>
+              ) : (
+                <div className="text-2xl md:text-3xl font-black text-zinc-500 tracking-tighter uppercase">VS</div>
+              )}
+            </div>
           </div>
 
-          <div className="flex-1 flex flex-col items-center gap-3">
-            <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-[#12161E] border border-[#202532] flex items-center justify-center shadow-[0_0_20px_rgba(0,0,0,0.5)]">
-              <Shield className="w-8 h-8 md:w-10 md:h-10 text-zinc-600" />
+          {/* Away Team */}
+          <div className="flex-1 flex flex-col items-center gap-4">
+            <div className="relative group">
+              <div className="absolute inset-0 bg-white/5 rounded-full blur-xl group-hover:bg-red-500/20 transition-all duration-500"></div>
+              <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-gradient-to-br from-white/10 to-transparent border border-white/10 flex items-center justify-center backdrop-blur-md relative z-10 shadow-2xl">
+                <span className="text-2xl md:text-3xl font-black text-white tracking-wider">
+                  {match.away?.split(' ').map((w: string) => w[0]).join('').substring(0, 2).toUpperCase()}
+                </span>
+              </div>
             </div>
-            <span className="text-sm md:text-lg font-black text-center max-w-[120px] md:max-w-[200px] leading-tight text-zinc-100">{match.away}</span>
+            <span className="text-base md:text-lg font-bold text-center max-w-[150px] md:max-w-[200px] leading-tight text-zinc-200">{match.away}</span>
           </div>
         </div>
       </div>
