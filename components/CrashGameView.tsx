@@ -111,6 +111,13 @@ export default function CrashGameView({ siteUser, setSiteUser, onAuthRequired, o
         soundEngine.startEngineSound();
     };
 
+    // Unmount cleanup for sound engine
+    useEffect(() => {
+        return () => {
+            soundEngine.stopEngineSound();
+        };
+    }, []);
+
     useEffect(() => {
         if (gameState === 'playing') {
             const update = () => {
