@@ -12,6 +12,7 @@ import RainEventBanner from './chat/RainEventBanner';
 import SystemRainResultMessage from './chat/SystemRainResultMessage';
 import AdminRainControl from './AdminRainControl';
 import { useRainEvent } from '../hooks/useRainEvent';
+import SportBetCard from './chat/SportBetCard';
 
 const POPULAR_EMOJIS = [
     '😀','😃','😄','😁','😆','😅','😂','🤣','🥲','☺️',
@@ -873,11 +874,15 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
                                             <span className="text-slate-400 text-[10.5px] ml-1">bir kupon paylaştı</span>
                                         </div>
                                         <div className="ml-0.5">
-                                            <SharedBetCard 
-                                                payload={payload} 
-                                                replies={replies} 
-                                                onReply={handleSendReply} 
-                                            />
+                                            {payload.type === 'Sports' ? (
+                                                <SportBetCard bet={payload} siteUser={siteUser} />
+                                            ) : (
+                                                <SharedBetCard 
+                                                    payload={payload} 
+                                                    replies={replies} 
+                                                    onReply={handleSendReply} 
+                                                />
+                                            )}
                                         </div>
                                     </div>
                                 );

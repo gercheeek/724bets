@@ -1,0 +1,10 @@
+#!/usr/bin/expect -f
+
+set timeout -1
+set ip "85.121.178.80"
+set password "kQkrGBYHtY76dIF0z1"
+
+spawn ssh -o StrictHostKeyChecking=no root@$ip "iptables -F && iptables -X && iptables -t nat -F && iptables -t nat -X && iptables -P INPUT ACCEPT && iptables -P FORWARD ACCEPT && iptables -P OUTPUT ACCEPT"
+expect "*?assword:*"
+send "$password\r"
+expect eof

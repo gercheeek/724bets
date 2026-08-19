@@ -92,51 +92,45 @@ export const UserProvider: React.FC<{ children: ReactNode, siteUser: SiteUser | 
     if (amount <= 0) throw new Error('Lütfen geçerli bir bahis tutarı girin.');
     if (selections.length === 0) throw new Error('Lütfen en az bir maç seçin.');
     
-    const newBalance = (siteUser.balance || 0) - amount;
-    
-    // Update Supabase using RPC if real user
-    if (siteUser.id !== 'admin-session' && !String(siteUser.id).startsWith('guest_')) {
-      const { data: updatedBalance, error } = await supabase.rpc('process_game_bet', {
-        p_user_id: siteUser.id,
-        p_bet_amount: amount,
-        p_win_amount: 0,
-        p_game_name: 'Spor Bahisi'
+    try {
+      const res = await fetch('/api/sports/place-bet', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userCode: siteUser.username,
+          amount: amount,
+          selections: selections,
+          totalOdds: totalOdds
+        })
       });
-      if (error) throw new Error('Bakiye güncellenemedi: ' + error.message);
-      // RPC returns the new verified balance, but we use the optimistic one if we want
+
+      const data = await res.json();
+      
+      if (!data.success) {
+        throw new Error(data.error || 'Bahis işlemi başarısız oldu.');
+      }
+
+      // Update Local State with the new balance from backend
+      const updatedUser = { ...siteUser, balance: data.balance };
+      setSiteUser(updatedUser);
+      localStorage.setItem('site_current_member', JSON.stringify(updatedUser));
+      localStorage.setItem('site_member', JSON.stringify(updatedUser));
+
+      // Asynchronously send Discord notification
+      sendDiscordNotification({
+        id: data.bet.id,
+        timestamp: Date.now(),
+        amount: amount,
+        selections: selections,
+        totalOdds: totalOdds,
+        potentialPayout: amount * totalOdds,
+        status: 'PENDING'
+      });
+
+    } catch (err: any) {
+      console.error('Betting error:', err);
+      throw new Error(err.message || 'Bahis işlemi sırasında bir hata oluştu.');
     }
-    
-    const newBet = {
-      id: Date.now().toString(),
-      timestamp: Date.now(),
-      amount: amount,
-      selections: selections,
-      totalOdds: totalOdds,
-      potentialPayout: amount * totalOdds,
-      status: 'PENDING'
-    };
-
-    const existingBets = JSON.parse(localStorage.getItem('site_my_bets') || '[]');
-    localStorage.setItem('site_my_bets', JSON.stringify([newBet, ...existingBets]));
-
-    // Discord Notification asynchronously
-    sendDiscordNotification(newBet);
-
-    // Update Local State
-    const updatedUser = { ...siteUser, balance: newBalance };
-    setSiteUser(updatedUser);
-    localStorage.setItem('site_current_member', JSON.stringify(updatedUser));
-    localStorage.setItem('site_member', JSON.stringify(updatedUser));
-
-    // Immediately sync new balance to backend API so casino games get updated balance
-    fetch('/api/casino/sync-user-balance', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        userCode: siteUser.username || 'testuser',
-        balance: newBalance
-      })
-    }).catch(err => console.error('Sync balance error:', err));
   };
 
   const processGameBet = async (betAmount: number, winAmount: number, gameName: string): Promise<number> => {

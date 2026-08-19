@@ -16,17 +16,28 @@ export default function DynamicSlotsGames({ onGameSelect, onViewChange }: { onGa
   };
 
   useEffect(() => {
-    const games = [...ALL_GAMES, ...DEMO_GAMES];
-    const slotsPool = games.filter(g => g.category === 'slots' || g.lobbyCategory === 'slots');
-    
-    // Initial set
-    setDynamicSlotsGames(shuffleGamesList(slotsPool).slice(0, 16));
-
-    const interval = setInterval(() => {
-      setDynamicSlotsGames(shuffleGamesList(slotsPool).slice(0, 16));
-    }, 5000);
-
-    return () => clearInterval(interval);
+    const fetchGames = async () => {
+      try {
+        const res = await fetch('/api/casino/games');
+        const data = await res.json();
+        if (data.success && Array.isArray(data.games)) {
+          const slotsOnly = data.games.filter((g: any) => g.type !== 'live').map((g: any) => ({
+            id: g.id,
+            name: g.name,
+            provider: g.provider,
+            category: 'slots',
+            img: g.image,
+            image: g.image,
+            vendorCode: g.vendorCode,
+            gameCode: g.gameCode
+          }));
+          setDynamicSlotsGames(shuffleGamesList(slotsOnly).slice(0, 16));
+        }
+      } catch (e) {
+        console.error('Failed to fetch slot games:', e);
+      }
+    };
+    fetchGames();
   }, []);
 
   if (dynamicSlotsGames.length === 0) return null;

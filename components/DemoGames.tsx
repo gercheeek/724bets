@@ -8,41 +8,10 @@ interface Game {
   image: string;
 }
 
-const GAMES: Game[] = [
-  {
-    id: 'olympus',
-    name: 'Gates of Olympus',
-    symbol: 'vs20olympgate',
-    image: 'https://images.unsplash.com/photo-1608889175123-8ec330b86f84?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3'
-  },
-  {
-    id: 'bonanza',
-    name: 'Sweet Bonanza',
-    symbol: 'vs20sweetbonanza',
-    image: 'https://images.unsplash.com/photo-1587314168485-3236d6710814?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3'
-  },
-  {
-    id: 'sugarrush',
-    name: 'Sugar Rush',
-    symbol: 'vs20sugarrush',
-    image: 'https://images.unsplash.com/photo-1534080391025-097b03b2af3f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3'
-  },
-  {
-    id: 'starlight',
-    name: 'Starlight Princess',
-    symbol: 'vs20starlight',
-    image: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3'
-  },
-  {
-    id: 'bigbass',
-    name: 'Big Bass Bonanza',
-    symbol: 'vs10bbbonanza',
-    image: 'https://images.unsplash.com/photo-1517462964-21fdcec3f25b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3'
-  }
-];
+const GAMES: Game[] = [];
 
 const DemoGames: React.FC = () => {
-  const [selectedGame, setSelectedGame] = useState<Game>(GAMES[0]);
+  const [selectedGame, setSelectedGame] = useState<Game | null>(null);
   const [loading, setLoading] = useState(true);
 
   const handleGameSelect = (game: Game) => {

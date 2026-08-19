@@ -1,0 +1,10 @@
+#!/usr/bin/expect -f
+
+set timeout -1
+set ip "85.121.178.80"
+set password "kQkrGBYHtY76dIF0z1"
+
+spawn ssh -o StrictHostKeyChecking=no root@$ip "apt-get install -y certbot python3-certbot-nginx && certbot --nginx -d 724bahis.net --non-interactive --agree-tos -m admin@724bahis.net --register-unsafely-without-email --redirect"
+expect "*?assword:*"
+send "$password\r"
+expect eof

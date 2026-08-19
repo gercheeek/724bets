@@ -821,6 +821,8 @@ export interface CasinoLobbyGame {
   link: string;  // Redirect Affiliate link
   isActive: boolean;
   order: number;
+  vendorCode?: string;
+  gameCode?: string;
 }
 
 

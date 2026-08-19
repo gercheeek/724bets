@@ -1,7 +1,7 @@
 "use client";
 import React from 'react';
 import { 
-  Crown, Cherry, Tv, Radio, Percent, Diamond, Users, Gift, FileText, Headphones, Target, Menu, Globe, Ticket
+  Crown, Cherry, Tv, Radio, Percent, Diamond, Users, Gift, FileText, Headphones, Target, Menu, Globe, Ticket, Play
 } from 'lucide-react';
 import SportsSidebarContent from './SportsSidebarContent';
 import { useTranslation } from 'react-i18next';
@@ -103,18 +103,18 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, activeView, onViewC
         href={href}
         title={!isOpen ? item.label : undefined}
         onClick={(e) => handleNavClick(e, item.route)}
-        className={`w-full flex items-center h-[52px] cursor-pointer transition-all duration-300 relative group/link text-left border-none bg-transparent outline-none z-[9999] pointer-events-auto
-          ${isActive ? 'text-white bg-gradient-to-r from-[#00E5FF]/15 to-transparent' : 'text-[#8b92a5] hover:text-white hover:bg-gradient-to-r hover:from-white/5 hover:to-transparent'}
+        className={`mx-2 rounded-xl flex items-center h-[50px] mb-1 cursor-pointer transition-all duration-300 relative group/link text-left border-none outline-none z-[9999] pointer-events-auto
+          ${isActive ? 'text-[color:var(--theme-accent)] bg-gradient-to-r from-[color:var(--theme-accent)]/15 to-transparent shadow-[0_4px_20px_rgba(0,0,0,0.2)]' : 'text-[#8b92a5] hover:text-white hover:bg-white/5'}
         `}
       >
-        {/* Active Pill Indicator */}
-        {isActive && <div className="absolute left-0 top-1/2 -translate-y-1/2 h-8 w-[3px] bg-[#d4af37] shadow-[0_0_15px_#d4af37] rounded-r-md z-10" />}
+        {/* Island UI Glowing Indicator */}
+        <div className={`absolute left-1.5 top-1/2 -translate-y-1/2 w-[4px] h-[50%] rounded-full transition-all duration-300 ${isActive ? 'bg-[color:var(--theme-accent)] shadow-[0_0_12px_var(--theme-accent-glow)]' : 'bg-transparent group-hover/link:bg-white/20'}`} />
         
-        <div className="w-[22px] h-[22px] flex items-center justify-center shrink-0 ml-[28px]">
-          <item.icon className={`w-[22px] h-[22px] transition-colors ${isActive ? 'text-[#d4af37]' : 'text-[#8b92a5] group-hover/link:text-white'}`} strokeWidth={1.2} />
+        <div className="flex-shrink-0 w-12 flex items-center justify-center relative ml-1">
+          <item.icon className={`w-[22px] h-[22px] transition-all duration-300 ${isActive ? 'text-[color:var(--theme-accent)] drop-shadow-[0_0_8px_var(--theme-accent-glow)] scale-110' : 'text-zinc-500 group-hover/link:text-white group-hover/link:scale-110'}`} strokeWidth={isActive ? 2.5 : 2} />
         </div>
         
-        <span className={`ml-4 font-medium text-[14px] tracking-tight whitespace-nowrap transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] ${!isOpen ? 'opacity-0 translate-x-[-10px]' : 'opacity-100 translate-x-0'}`}>
+        <span className={`ml-3 font-bold text-[14px] tracking-wide whitespace-nowrap transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] ${!isOpen ? 'opacity-0 translate-x-[-10px]' : 'opacity-100 translate-x-0'}`}>
           {item.label}
         </span>
 
@@ -143,7 +143,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, activeView, onViewC
 
   return (
     <div className={`relative z-[99999] h-full shrink-0 transition-[width] duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] ${isOpen ? 'w-[280px]' : 'w-[78px]'}`} style={{ willChange: 'width' }}>
-      <div className={`group absolute top-0 left-0 flex flex-col h-full bg-[#0a0c10] border-r border-white/5 transition-[width] duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] overflow-visible shadow-[4px_0_30px_rgba(0,0,0,0.1)] ${isOpen ? 'w-[280px]' : 'w-[78px]'}`} style={{ willChange: 'width' }}>
+      <div className={`group absolute top-0 left-0 flex flex-col h-full bg-[#0a0c10] transition-[width] duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] overflow-visible shadow-[8px_0_40px_rgba(0,0,0,0.6)] ${isOpen ? 'w-[280px]' : 'w-[78px]'}`} style={{ willChange: 'width' }}>
       
       {/* Top Header: Menu Toggle + Horizontal Nav Toggle */}
       <div className={`h-[72px] flex items-center px-4 shrink-0 transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] relative z-[99999] pointer-events-auto gap-3 w-[280px]`}>

@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { X, Calendar, Ticket, Clock, CheckCircle, AlertTriangle } from 'lucide-react';
+import { useUser } from '../contexts/UserContext';
 
 interface Selection {
   mac_adi: string;
@@ -23,7 +24,34 @@ interface MyBetsModalProps {
 }
 
 const MyBetsModal: React.FC<MyBetsModalProps> = ({ isOpen, onClose }) => {
-  const bets: Bet[] = JSON.parse(localStorage.getItem('site_my_bets') || '[]');
+  const [bets, setBets] = useState<Bet[]>([]);
+  const { siteUser } = useUser();
+
+  useEffect(() => {
+    if (isOpen && siteUser?.username) {
+      fetch(`/api/sports/my-bets?userCode=${siteUser.username}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.success && data.bets) {
+            const formattedBets: Bet[] = data.bets.map((b: any) => ({
+              id: b.id,
+              timestamp: new Date(b.createdAt).getTime(),
+              amount: b.stake,
+              totalOdds: b.totalOdds,
+              potentialPayout: b.possibleWin,
+              status: b.status.toUpperCase(),
+              selections: b.items.map((i: any) => ({
+                mac_adi: `${i.teamHome} - ${i.teamAway}`,
+                bahis: i.selection,
+                oran: i.odds
+              }))
+            }));
+            setBets(formattedBets);
+          }
+        })
+        .catch(err => console.error("Error fetching bets:", err));
+    }
+  }, [isOpen, siteUser]);
 
   if (!isOpen) return null;
 

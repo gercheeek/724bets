@@ -25,6 +25,7 @@ interface BettingContextType {
   events: any[];
   isConnected: boolean;
   globalLiveMatches: any[];
+  global1xBetMatches: any[];
   outrights: any[];
   
   // Filters
@@ -104,6 +105,8 @@ export const BettingProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const [events, setEvents] = useState<any[]>([]);
   const [scrapedMatches, setScrapedMatches] = useState<any[]>([]);
   const [globalLiveMatches, setGlobalLiveMatches] = useState<any[]>([]);
+  const [global1xBetMatches, setGlobal1xBetMatches] = useState<any[]>([]);
+  const [global1xBetPreMatches, setGlobal1xBetPreMatches] = useState<any[]>([]);
   const [outrights, setOutrights] = useState<any[]>([]);
   const [isConnected, setIsConnected] = useState(false);
 
@@ -117,14 +120,14 @@ export const BettingProvider: React.FC<{ children: React.ReactNode }> = ({ child
     // Disabled
   }, []);
 
-  // New Node.js Socket.io Connection
+  // SİSTEM YENİ API ADRESİ İLE TEKRAR AKTİF EDİLDİ
   useEffect(() => {
     let socket;
     try {
         socket = io('http://localhost:3001'); // Node.js server portumuz
         
         socket.on('connect', () => {
-            console.log('✅ Connected to local Socket.io Server');
+            console.log('✅ Connected to local Socket.io Server (Atekbet279)');
             setIsConnected(true);
         });
 
@@ -159,6 +162,18 @@ export const BettingProvider: React.FC<{ children: React.ReactNode }> = ({ child
         socket.on('outrights_update', (payload) => {
             if (Array.isArray(payload)) {
                 setOutrights(payload);
+            }
+        });
+
+        socket.on('1xbetLiveMatches', (payload) => {
+            if (Array.isArray(payload)) {
+                setGlobal1xBetMatches(payload);
+            }
+        });
+
+        socket.on('1xbetPreMatches', (payload) => {
+            if (Array.isArray(payload)) {
+                setGlobal1xBetPreMatches(payload);
             }
         });
 
@@ -282,6 +297,8 @@ export const BettingProvider: React.FC<{ children: React.ReactNode }> = ({ child
     <BettingContext.Provider value={{
       events,
       globalLiveMatches,
+      global1xBetMatches,
+      global1xBetPreMatches,
       outrights,
       isConnected,
       activeSport,

@@ -1025,13 +1025,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
 
   const handleFakeBetSubmit = async (amount: number) => {
     if (!siteUser) throw new Error('Oturum kapalı.');
-    const newBalance = (siteUser.balance || 0) - amount;
     
-    if (siteUser.id !== 'admin-session') {
-      const { error } = await supabase.from('members').update({ balance: newBalance }).eq('id', siteUser.id);
-      if (error) throw new Error('Veritabanı bağlantı hatası: ' + error.message);
-    }
-
     const totalOdds = currentPendingBet?.toplam_oran || 516.56;
     const selections = currentPendingBet?.secilen_maclar || [
       { mac_adi: "Apejes Academy 1 : 0 Elecsport Limbe", bahis: "Maç Sonucu : 1", oran: 1.15 },
@@ -1040,27 +1034,42 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
       { mac_adi: "Hubei Istar U20 1 : 2 Henan Songshan Longmen U20", bahis: "Maç Sonucu : 1", oran: 25.00 }
     ];
 
-    const newBet = {
-      id: Date.now().toString(),
-      timestamp: Date.now(),
-      amount: amount,
-      selections: selections,
-      totalOdds: totalOdds,
-      potentialPayout: amount * totalOdds,
-      status: 'PENDING'
-    };
+    try {
+      const res = await fetch('/api/sports/place-bet', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userCode: siteUser.username,
+          amount: amount,
+          selections: selections,
+          totalOdds: totalOdds
+        })
+      });
 
-    const existingBets = JSON.parse(localStorage.getItem('site_my_bets') || '[]');
-    localStorage.setItem('site_my_bets', JSON.stringify([newBet, ...existingBets]));
-    setCurrentPendingBet(null);
+      const data = await res.json();
+      if (!data.success) throw new Error(data.error || 'Bahis başarısız.');
 
-    // Send Discord Notification asynchronously
-    sendDiscordNotification(newBet);
+      setCurrentPendingBet(null);
+      
+      const updatedUser = { ...siteUser, balance: data.balance };
+      setSiteUser(updatedUser);
+      localStorage.setItem('site_current_member', JSON.stringify(updatedUser));
+      localStorage.setItem('site_member', JSON.stringify(updatedUser));
 
-    const updatedUser = { ...siteUser, balance: newBalance };
-    setSiteUser(updatedUser);
-    localStorage.setItem('site_current_member', JSON.stringify(updatedUser));
-    localStorage.setItem('site_member', JSON.stringify(updatedUser));
+      sendDiscordNotification({
+        id: data.bet.id,
+        timestamp: Date.now(),
+        amount: amount,
+        selections: selections,
+        totalOdds: totalOdds,
+        potentialPayout: amount * totalOdds,
+        status: 'PENDING'
+      });
+
+    } catch (err: any) {
+      console.error('Bet error:', err);
+      throw new Error(err.message || 'Hata oluştu');
+    }
   };
 
   // ── Trusted Sites State ──────────────────────────────────────────────────────

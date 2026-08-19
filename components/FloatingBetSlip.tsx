@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { ChevronUp, ChevronDown, FileText, Zap, X, Share2, User } from 'lucide-react';
 import { useBetting } from '../contexts/BettingContext';
+import { useBetSlip } from '../contexts/BetSlipContext';
 
 const COMBO_MILESTONES = [
   { count: 3, multiplier: 1.05 },
@@ -11,14 +12,14 @@ const COMBO_MILESTONES = [
 ];
 
 export const FloatingBetSlip = () => {
-  const { betSelections, removeBetSelection } = useBetting();
+  const { betSelections } = useBetting();
+  const { betSlip, removeSelection, isTurboMode, setIsTurboMode } = useBetSlip();
   const [isOpen, setIsOpen] = useState(false);
   const [betTab, setBetTab] = useState('Kombine');
-  const [fastBet, setFastBet] = useState(false);
   const [amount, setAmount] = useState('1');
 
-  // betSelections replaces the dummy bets
-  const bets = betSelections;
+  // Use the new BetSlipContext for bets
+  const bets = betSlip;
 
   const totalOdds = bets.length > 0 ? bets.reduce((acc, bet) => acc * bet.odd, 1) : 0;
   const totalBet = parseFloat(amount || '0');
@@ -98,8 +99,8 @@ export const FloatingBetSlip = () => {
               <div key={bet.id} className="flex bg-[#0A0C10] rounded-xl overflow-hidden border border-[#2A2E3D] hover:border-[#10b981]/50 transition-all relative animate-[slideIn_0.3s_ease-out] opacity-0 group" style={{animationFillMode: 'forwards'}}>
                 {/* Remove button (Left side in screenshot it's on left) */}
                 <button 
-                  onClick={() => removeBetSelection(bet.id)}
-                  className="w-10 flex items-center justify-center border-r border-[#2A2E3D] text-[#848B9D] hover:text-white hover:bg-white/5 transition-colors"
+                  onClick={() => removeSelection(bet.id)}
+                  className="w-10 flex items-center justify-center bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white transition-colors"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -167,21 +168,37 @@ export const FloatingBetSlip = () => {
               <span className="text-[#10b981] font-black text-2xl drop-shadow-[0_0_8px_rgba(16,185,129,0.4)]">{potentialWin.toFixed(2)} $</span>
             </div>
 
-            {typeof window !== 'undefined' && !localStorage.getItem('siteUser') ? (
+            <div className="flex gap-2 w-full mt-2">
               <button 
-                onClick={() => window.dispatchEvent(new CustomEvent('openLoginModal'))}
-                className="w-full py-4 bg-zinc-800 text-zinc-500 cursor-not-allowed font-black text-lg tracking-widest rounded-xl transition-all relative overflow-hidden group"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (bets.length === 0) return;
+                  const isCombo = bets.length > 1;
+                  const shareText = `[BET_SHARE:{"id":"slip_${Math.random()}","title":"${isCombo ? 'Kombine Kupon' : bets[0]?.matchName}","type":"Sports","odds":"${totalOdds.toFixed(2)}","amount":"${amount || '100'}","isCombo":${isCombo},"pick":"${isCombo ? '' : bets[0]?.selectionName}","matches": ${JSON.stringify(bets.map(b => ({title: b.matchName, pick: b.selectionName, odds: b.odd})))} }]`;
+                  window.dispatchEvent(new CustomEvent('shareBetEvent', { detail: { message: shareText } }));
+                }}
+                className={`w-[60px] flex items-center justify-center border rounded-xl transition-all ${bets.length > 0 ? 'bg-[#0F121A] border-[#2A2E3D] hover:border-[#10b981] hover:text-[#10b981] text-[#848B9D]' : 'bg-[#0A0C10] border-[#111111] text-[#2A2E3D] cursor-not-allowed'}`}
+                title="Sohbette Paylaş"
+                disabled={bets.length === 0}
               >
-                BAHİS YAP
-                <div className="absolute inset-0 bg-black/40 hidden group-hover:flex items-center justify-center backdrop-blur-sm text-white text-sm">
-                  Giriş Yapmalısınız
-                </div>
+                <Share2 className="w-5 h-5" />
               </button>
-            ) : (
-              <button className="w-full py-4 bg-[#10b981] hover:bg-[#0ea371] text-black font-black text-lg tracking-widest rounded-xl transition-all shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] active:scale-[0.98]">
-                BAHİS YAP
-              </button>
-            )}
+              {typeof window !== 'undefined' && !localStorage.getItem('siteUser') ? (
+                <button 
+                  onClick={() => window.dispatchEvent(new CustomEvent('openLoginModal'))}
+                  className="flex-1 py-4 bg-zinc-800 text-zinc-500 cursor-not-allowed font-black text-lg tracking-widest rounded-xl transition-all relative overflow-hidden group"
+                >
+                  BAHİS YAP
+                  <div className="absolute inset-0 bg-black/40 hidden group-hover:flex items-center justify-center backdrop-blur-sm text-white text-sm">
+                    Giriş Yapmalısınız
+                  </div>
+                </button>
+              ) : (
+                <button className="flex-1 py-4 bg-[#10b981] hover:bg-[#0ea371] text-black font-black text-lg tracking-widest rounded-xl transition-all shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] active:scale-[0.98]">
+                  BAHİS YAP
+                </button>
+              )}
+            </div>
           </div>
         </div>
       )}
@@ -211,15 +228,15 @@ export const FloatingBetSlip = () => {
         <div className="flex items-center gap-3" onClick={(e) => e.stopPropagation()}>
           <span className="font-bold text-xs uppercase tracking-wider text-[#848B9D]">Hızlı Bahis</span>
           <button 
-            onClick={() => setFastBet(!fastBet)}
+            onClick={() => setIsTurboMode(!isTurboMode)}
             className={`w-[48px] h-[26px] rounded-full p-[3px] transition-colors flex items-center ${
-              fastBet ? 'bg-[#10b981]' : 'bg-[#0A0C10] border border-[#2A2E3D]'
+              isTurboMode ? 'bg-[#10b981]' : 'bg-[#0A0C10] border border-[#2A2E3D]'
             }`}
           >
             <div className={`w-[20px] h-[20px] rounded-full flex items-center justify-center transition-transform shadow-md ${
-              fastBet ? 'translate-x-[22px] bg-[#0A0C10]' : 'translate-x-0 bg-[#848B9D]'
+              isTurboMode ? 'translate-x-[22px] bg-[#0A0C10]' : 'translate-x-0 bg-[#848B9D]'
             }`}>
-              <Zap className={`w-3 h-3 ${fastBet ? 'text-[#10b981] fill-current' : 'text-[#111111]'}`} />
+              <Zap className={`w-3 h-3 ${isTurboMode ? 'text-[#10b981] fill-current' : 'text-[#111111]'}`} />
             </div>
           </button>
         </div>

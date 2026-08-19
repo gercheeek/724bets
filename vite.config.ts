@@ -14,6 +14,10 @@ export default defineConfig(({ mode }) => {
         strictPort: true,
         host: '0.0.0.0',
         proxy: {
+          '/api/casino': {
+            target: 'http://localhost:3001',
+            changeOrigin: true
+          },
           '/api': {
             target: 'http://localhost:4000',
             changeOrigin: true,

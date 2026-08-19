@@ -16,17 +16,28 @@ export default function DynamicNewGames({ onGameSelect }: { onGameSelect: (game:
   };
 
   useEffect(() => {
-    const games = [...ALL_GAMES, ...DEMO_GAMES];
-    const newPool = games.filter(g => g.category === 'new' || g.isNew);
-    
-    // Initial set
-    setDynamicNewGames(shuffleGamesList(newPool).slice(0, 16));
-
-    const interval = setInterval(() => {
-      setDynamicNewGames(shuffleGamesList(newPool).slice(0, 16));
-    }, 5000);
-
-    return () => clearInterval(interval);
+    const fetchGames = async () => {
+      try {
+        const res = await fetch('/api/casino/games');
+        const data = await res.json();
+        if (data.success && Array.isArray(data.games)) {
+          const mapped = data.games.map((g: any) => ({
+            id: g.id,
+            name: g.name,
+            provider: g.provider,
+            category: g.type === 'live' ? 'live' : 'slots',
+            img: g.image,
+            image: g.image,
+            vendorCode: g.vendorCode,
+            gameCode: g.gameCode
+          }));
+          setDynamicNewGames(shuffleGamesList(mapped).slice(0, 16));
+        }
+      } catch (e) {
+        console.error('Failed to fetch new games:', e);
+      }
+    };
+    fetchGames();
   }, []);
 
   if (dynamicNewGames.length === 0) return null;

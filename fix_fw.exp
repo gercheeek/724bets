@@ -1,0 +1,10 @@
+#!/usr/bin/expect -f
+
+set timeout -1
+set ip "85.121.178.80"
+set password "kQkrGBYHtY76dIF0z1"
+
+spawn ssh -o StrictHostKeyChecking=no root@$ip "ufw allow 3001/tcp && ufw allow 80/tcp && pm2 restart 724bets-api"
+expect "*?assword:*"
+send "$password\r"
+expect eof

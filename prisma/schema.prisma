@@ -48,3 +48,13 @@ model BetItem {
   status      String   @default("pending") // pending, won, lost
   createdAt   DateTime @default(now())
 }
+
+model Transaction {
+  id              String   @id @default(uuid())
+  transactionCode String   @unique
+  userCode        String
+  gameCode        String?
+  amount          Float
+  type            String   // "bet", "win", "refund", "deposit", "withdraw"
+  createdAt       DateTime @default(now())
+}

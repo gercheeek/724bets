@@ -1,0 +1,9 @@
+#!/usr/bin/expect -f
+set timeout 30
+set ip "85.121.178.80"
+set password "kQkrGBYHtY76dIF0z1"
+
+spawn ssh -o StrictHostKeyChecking=no root@$ip "ls -la /var/www/724bahis/assets; grep -rn 'Big Bass' /var/www/724bahis/"
+expect "*?assword:*"
+send "$password\r"
+expect eof

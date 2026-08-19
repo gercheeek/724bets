@@ -16,17 +16,28 @@ export default function DynamicPopularGames({ onGameSelect, onViewChange }: { on
   };
 
   useEffect(() => {
-    const games = [...ALL_GAMES, ...DEMO_GAMES];
-    const popularPool = games.filter(g => g.category === 'popular' || g.isPopular || g.lobbyCategory === 'popular' || g.badgeText === 'Popüler');
-    
-    // Initial set
-    setDynamicPopularGames(shuffleGamesList(popularPool).slice(0, 16));
-
-    const interval = setInterval(() => {
-      setDynamicPopularGames(shuffleGamesList(popularPool).slice(0, 16));
-    }, 5000);
-
-    return () => clearInterval(interval);
+    const fetchGames = async () => {
+      try {
+        const res = await fetch('/api/casino/games');
+        const data = await res.json();
+        if (data.success && Array.isArray(data.games)) {
+          const mapped = data.games.map((g: any) => ({
+            id: g.id,
+            name: g.name,
+            provider: g.provider,
+            category: g.type === 'live' ? 'live' : 'slots',
+            img: g.image,
+            image: g.image,
+            vendorCode: g.vendorCode,
+            gameCode: g.gameCode
+          }));
+          setDynamicPopularGames(shuffleGamesList(mapped).slice(0, 16));
+        }
+      } catch (e) {
+        console.error('Failed to fetch popular games:', e);
+      }
+    };
+    fetchGames();
   }, []);
 
   if (dynamicPopularGames.length === 0) return null;

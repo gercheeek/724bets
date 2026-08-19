@@ -11,25 +11,8 @@ export interface PromoGame {
   hasDropsAndWins?: boolean;
 }
 
-const THOUSAND_X_GAMES: PromoGame[] = [
-  { id: '1', name: 'BIG BASS\nSPLASH 1000', provider: 'PRAGMATIC PLAY', image: '/images/promo/BigBassSplash.png', bgColor: 'from-[#D97706] to-[#F59E0B]', hasDropsAndWins: false },
-  { id: '2', name: 'GATES OF\nOLYMPUS 1000', provider: 'PRAGMATIC PLAY', image: '/images/promo/GatesofOlympus1000.png', bgColor: 'from-[#DB2777] to-[#F472B6]', hasDropsAndWins: true },
-  { id: '3', name: 'WISDOM OF\nATHENA 1000 XMAS', provider: 'PRAGMATIC PLAY', image: '/images/promo/WisdomofAthena.png', bgColor: 'from-[#BE185D] to-[#F43F5E]', hasDropsAndWins: true },
-  { id: '4', name: 'SUGAR RUSH\n1000', provider: 'PRAGMATIC PLAY', image: '/images/promo/SugarRush1000.png', bgColor: 'from-[#7C3AED] to-[#A855F7]', hasDropsAndWins: true },
-  { id: '5', name: 'WISDOM OF\nATHENA 1000', provider: 'PRAGMATIC PLAY', image: '/images/promo/WisdomofAthena.png', bgColor: 'from-[#C2410C] to-[#EF4444]', hasDropsAndWins: true },
-  { id: '6', name: 'GATES OF\nOLYMPUS XMAS 1000', provider: 'PRAGMATIC PLAY', image: '/images/promo/GatesofOlympus1000.png', bgColor: 'from-[#B91C1C] to-[#EF4444]', hasDropsAndWins: true },
-  { id: '7', name: 'STARLIGHT\nPRINCESS 1000', provider: 'PRAGMATIC PLAY', image: '/images/promo/StarlightPrincess1000.png', bgColor: 'from-[#0284C7] to-[#38BDF8]', hasDropsAndWins: true },
-];
-
-const DROPS_AND_WINS_GAMES: PromoGame[] = [
-  { id: '11', name: 'BIG BASS VEGAS\nDOUBLE DOWN DELUXE', provider: 'PRAGMATIC PLAY', image: '/images/promo/BigBassSplash.png', bgColor: 'from-[#B45309] to-[#F59E0B]', hasDropsAndWins: true },
-  { id: '12', name: 'GATES OF OLYMPUS\nSUPER SCATTER', provider: 'PRAGMATIC PLAY', image: '/images/promo/GatesofOlympus.png', bgColor: 'from-[#C2410C] to-[#F97316]', hasDropsAndWins: true },
-  { id: '13', name: 'FRUIT\nPARTY', provider: 'PRAGMATIC PLAY', image: '/images/promo/FruitParty2.png', bgColor: 'from-[#BE123C] to-[#EF4444]', hasDropsAndWins: true },
-  { id: '14', name: '5 LIONS\nMEGAWAYS', provider: 'PRAGMATIC PLAY', image: '/images/promo/5Lions.png', bgColor: 'from-[#1D4ED8] to-[#3B82F6]', hasDropsAndWins: true },
-  { id: '15', name: 'SUGAR\nRUSH', provider: 'PRAGMATIC PLAY', image: '/images/promo/SugarRush.png', bgColor: 'from-[#4338CA] to-[#8B5CF6]', hasDropsAndWins: true },
-  { id: '16', name: 'GATES OF\nOLYMPUS', provider: 'PRAGMATIC PLAY', image: '/images/promo/GatesofOlympus.png', bgColor: 'from-[#4C1D95] to-[#7C3AED]', hasDropsAndWins: true },
-  { id: '17', name: 'SWEET RUSH\nBONANZA', provider: 'PRAGMATIC PLAY', image: '/images/promo/SweetBonanza.png', bgColor: 'from-[#BE185D] to-[#F43F5E]', hasDropsAndWins: true },
-];
+const THOUSAND_X_GAMES: PromoGame[] = [];
+const DROPS_AND_WINS_GAMES: PromoGame[] = [];
 
 const GameCard = ({ game, onClick }: { game: PromoGame, onClick: () => void }) => {
   return (

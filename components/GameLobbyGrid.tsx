@@ -42,9 +42,6 @@ const liveCasinoGames: GameItem[] = ALL_GAMES.filter(g => g.category === 'live')
 
 const getDemoUrl = (game: GameItem | null): string | null => {
   if (!game) return null;
-  if (game.demoSymbol) {
-    return `https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=tr&cur=TRY&gameSymbol=${game.demoSymbol}&jurisdiction=99&lobbyUrl=https://724bets.net`;
-  }
   const nameString = (game.title || '').toLowerCase().replace(/[^a-z0-9]/g, '');
   let symbol = null;
   if (nameString.includes('sweetbonanza1000')) symbol = 'vs20sbonz1000';

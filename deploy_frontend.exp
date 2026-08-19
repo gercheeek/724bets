@@ -1,0 +1,61 @@
+#!/usr/bin/expect -f
+
+set timeout -1
+set ip "85.121.178.80"
+set password "kQkrGBYHtY76dIF0z1"
+
+spawn scp -o StrictHostKeyChecking=no dist.tar.gz root@$ip:/tmp/
+expect "*?assword:*"
+send "$password\r"
+expect eof
+
+spawn ssh -o StrictHostKeyChecking=no root@$ip "rm -rf /var/www/724bahis/* && mkdir -p /var/www/724bahis && tar -xzf /tmp/dist.tar.gz -C /var/www/724bahis/"
+expect "*?assword:*"
+send "$password\r"
+expect eof
+
+spawn ssh -o StrictHostKeyChecking=no root@$ip "cat << 'EOF' > /etc/nginx/sites-available/default
+server {
+    listen 80 default_server;
+    listen \[::\]:80 default_server;
+    server_name 724bahis.net www.724bahis.net;
+
+    root /var/www/724bahis;
+    index index.html;
+
+    location /api/ {
+        proxy_pass http://127.0.0.1:3001/api/;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade \$http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host \$host;
+    }
+
+    location / {
+        try_files \$uri \$uri/ /index.html;
+        add_header Cache-Control \"no-store, no-cache, must-revalidate, max-age=0\";
+    }
+}
+EOF
+systemctl restart nginx
+certbot --nginx -d 724bahis.net --non-interactive --agree-tos -m admin@724bahis.net --register-unsafely-without-email --redirect
+systemctl restart nginx"
+spawn scp -o StrictHostKeyChecking=no socket_server.cjs root@$ip:/opt/724bets-backend/socket_server.cjs
+expect "*?assword:*"
+send "$password\r"
+expect eof
+
+spawn scp -o StrictHostKeyChecking=no oroplay.cjs root@$ip:/opt/724bets-backend/oroplay.cjs
+expect "*?assword:*"
+send "$password\r"
+expect eof
+
+spawn scp -o StrictHostKeyChecking=no socket_server.cjs root@$ip:/root/socket_server.cjs
+expect "*?assword:*"
+send "$password\r"
+expect eof
+
+spawn ssh -o StrictHostKeyChecking=no root@$ip "pm2 restart all || pm2 restart 724bets-api"
+expect "*?assword:*"
+send "$password\r"
+expect eof

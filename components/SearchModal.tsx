@@ -73,26 +73,36 @@ const SearchModal: React.FC<SearchModalProps> = ({ onClose, coupons = [], onNavi
             }
         });
 
-        // Search Games
-        ALL_GAMES.forEach(game => {
-            if (game.name.toLowerCase().includes(q) || game.provider.toLowerCase().includes(q)) {
-                hits.push({
+        // Search Games dynamically from API
+        (async () => {
+          try {
+            const res = await fetch('/api/casino/games');
+            const data = await res.json();
+            if (data.success && Array.isArray(data.games)) {
+              data.games.forEach((game: any) => {
+                if (game.name.toLowerCase().includes(q) || (game.provider && game.provider.toLowerCase().includes(q))) {
+                  hits.push({
                     type: 'game',
                     title: game.name,
-                    subtitle: game.provider,
-                    meta: `Kategori: ${game.category.toUpperCase()} · RTP: ${game.rtp || '-'}`,
+                    subtitle: game.provider || 'Casino',
+                    meta: `Kategori: ${game.type === 'live' ? 'CANLI CASINO' : 'SLOT'}`,
                     icon: <Play className="w-4 h-4 text-[color:var(--theme-accent)]" />,
                     action: () => {
-                        onNavigate?.('casino');
-                        // In a real app we'd dispatch an event to open this specific game
-                        setTimeout(() => {
-                           window.scrollTo({ top: 0, behavior: 'smooth' });
-                        }, 150);
-                        handleClose();
+                      onNavigate?.('casino');
+                      setTimeout(() => {
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }, 150);
+                      handleClose();
                     },
-                });
+                  });
+                }
+              });
+              setResults(hits);
             }
-        });
+          } catch (e) {
+            console.error(e);
+          }
+        })();
 
         // Sort by type (coupons first, then games)
         hits.sort((a, b) => {

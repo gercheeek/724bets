@@ -1,5 +1,5 @@
-import React, { useRef } from 'react';
-import { Play, ChevronLeft, ChevronRight } from 'lucide-react';
+import React, { useRef, useState, useEffect } from 'react';
+import { Play, ChevronLeft, ChevronRight, Loader } from 'lucide-react';
 import { CasinoLobbyGame } from '../types';
 
 const FEATURED_GAMES = [
@@ -8,22 +8,6 @@ const FEATURED_GAMES = [
   { id: 'dice', name: 'Dice', icon: '🎲', color: '#cd853f', gradient: 'linear-gradient(145deg, #1a0f05 0%, #3a2010 100%)', glowColor: 'rgba(205,133,63,0.3)', link: 'https://gamdom.com/r/724bets' },
   { id: 'blackjack', name: 'Blackjack', icon: '🃏', color: '#9370db', gradient: 'linear-gradient(145deg, #100a1a 0%, #1e1035 100%)', glowColor: 'rgba(147,112,219,0.3)', link: 'https://gamdom.com/r/724bets' },
   { id: 'rulet', name: 'Rulet', icon: '🔴', color: '#dc143c', gradient: 'linear-gradient(145deg, #1a0506 0%, #3a0a10 100%)', glowColor: 'rgba(220,20,60,0.3)', link: 'https://gamdom.com/r/724bets' },
-];
-
-const DEFAULT_CASINO_GAMES: CasinoLobbyGame[] = [
-  { id: 'fruit_party', name: 'Fruit Party', provider: 'Pragmatic Play', type: 'slot', themeColor: 'from-[#FF1744] to-[#FF8F00]', image: '', link: 'https://gamdom.com/r/724bets', isActive: true, order: 1 },
-  { id: 'sugar_rush', name: 'Sugar Rush', provider: 'Pragmatic Play', type: 'slot', themeColor: 'from-[#E040FB] to-[#FF4081]', image: '', link: 'https://gamdom.com/r/724bets', isActive: true, order: 2 },
-  { id: 'shining_crown', name: 'Shining Crown', provider: 'Amusnet', type: 'slot', themeColor: 'from-[#FFD54F] to-[#8D6E63]', image: '', link: 'https://gamdom.com/r/724bets', isActive: true, order: 3 },
-  { id: 'big_bass', name: 'Big Bass Bonanza', provider: 'Reel Kingdom', type: 'slot', themeColor: 'from-[#00E5FF] to-[#1A237E]', image: '', link: 'https://gamdom.com/r/724bets', isActive: true, order: 4 },
-  { id: 'gates_olympus', name: 'Gates of Olympus', provider: 'Pragmatic Play', type: 'slot', themeColor: 'from-[#F5A623] to-[#3E2723]', image: '', link: 'https://gamdom.com/r/724bets', isActive: true, order: 5 },
-  { id: 'le_bandit', name: 'Le Bandit', provider: 'Hacksaw Gaming', type: 'slot', themeColor: 'from-[#78909C] to-[#263238]', image: '', link: 'https://gamdom.com/r/724bets', isActive: true, order: 6 },
-  { id: 'rip_city', name: 'R.I.P. City', provider: 'Hacksaw Gaming', type: 'slot', themeColor: 'from-[#37474F] to-[#000000]', image: '', link: 'https://gamdom.com/r/724bets', isActive: true, order: 7 },
-  { id: 'sweet_candyland', name: 'Sweet Bonanza Candyland', provider: 'Pragmatic Play', type: 'live', themeColor: 'from-[#F50057] to-[#F50057]/40', image: '', link: 'https://gamdom.com/r/724bets', isActive: true, order: 8 },
-  { id: 'crazy_time', name: 'Crazy Time', provider: 'Evolution Gaming', type: 'live', themeColor: 'from-[#FF3D00] to-[#FFEA00]', image: '', link: 'https://gamdom.com/r/724bets', isActive: true, order: 9 },
-  { id: 'baccarat_live', name: 'Baccarat Live', provider: 'Evolution Gaming', type: 'live', themeColor: 'from-[#D50000] to-[#000000]', image: '', link: 'https://gamdom.com/r/724bets', isActive: true, order: 10 },
-  { id: 'candy_wheel', name: 'Candy Wheel Live', provider: 'Pragmatic Play', type: 'live', themeColor: 'from-[#AA00FF] to-[#311B92]', image: '', link: 'https://gamdom.com/r/724bets', isActive: true, order: 11 },
-  { id: 'lightning_roulette', name: 'Lightning Roulette', provider: 'Evolution Gaming', type: 'live', themeColor: 'from-[#FFD54F] to-[#00E5FF]', image: '', link: 'https://gamdom.com/r/724bets', isActive: true, order: 12 },
-  { id: 'speed_baccarat', name: 'Speed Baccarat', provider: 'Evolution Gaming', type: 'live', themeColor: 'from-[#C51162] to-[#1A237E]', image: '', link: 'https://gamdom.com/r/724bets', isActive: true, order: 13 }
 ];
 
 interface GameLobbyTeaserProps {
@@ -36,7 +20,36 @@ const GameLobbyTeaser: React.FC<GameLobbyTeaserProps> = ({ games = [], onViewCha
   const slotsScrollRef = useRef<HTMLDivElement>(null);
   const liveScrollRef = useRef<HTMLDivElement>(null);
 
-  const activeGamesList = games.length > 0 ? games : DEFAULT_CASINO_GAMES;
+  const [apiGames, setApiGames] = useState<CasinoLobbyGame[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const getApiBaseUrl = () => {
+    return ''; // Vercel rewrite or Vite proxy will handle this securely
+  };
+
+  useEffect(() => {
+    const fetchGames = async () => {
+      setLoading(true);
+      try {
+        const res = await fetch(`${getApiBaseUrl()}/api/casino/games`);
+        const data = await res.json();
+        if (data.success && data.games) {
+          setApiGames(data.games);
+        } else {
+          setError('Oyunlar yüklenemedi.');
+        }
+      } catch (err) {
+        setError('Oyunlar yüklenemedi. Lütfen internet bağlantınızı kontrol edin.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchGames();
+  }, []);
+
+  const activeGamesList = apiGames.length > 0 ? apiGames : (games.length > 0 ? games : []);
 
   const slotGames = activeGamesList
     .filter(g => g.type === 'slot' && g.isActive)
@@ -52,8 +65,31 @@ const GameLobbyTeaser: React.FC<GameLobbyTeaserProps> = ({ games = [], onViewCha
     }
   };
 
-  const handleCardClick = (game: CasinoLobbyGame) => {
-    if (game.link) window.open(game.link, '_blank');
+  const handleCardClick = async (game: CasinoLobbyGame) => {
+    if (game.vendorCode && game.gameCode) {
+        try {
+            const res = await fetch(`${getApiBaseUrl()}/api/casino/launch`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    vendorCode: game.vendorCode,
+                    gameCode: game.gameCode,
+                    userCode: "demo-user" // Real app would use logged in user id
+                })
+            });
+            const data = await res.json();
+            if (data.success && data.launchUrl) {
+                window.open(data.launchUrl, '_blank');
+            } else {
+                alert('Oyun başlatılamadı.');
+            }
+        } catch (err) {
+            console.error('Launch game error:', err);
+            alert('Oyun başlatılamadı. Lütfen tekrar deneyin.');
+        }
+    } else if (game.link) {
+        window.open(game.link, '_blank');
+    }
   };
 
   const siteGold = '#f2a900';
@@ -170,7 +206,13 @@ const GameLobbyTeaser: React.FC<GameLobbyTeaserProps> = ({ games = [], onViewCha
       </div>
 
       {/* ══════════ SLOT GAMES ══════════ */}
-      {slotGames.length > 0 && (
+      {loading ? (
+        <div style={sectionStyle}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '140px' }}>
+            <Loader className="animate-spin text-[#F5A623]" size={32} />
+          </div>
+        </div>
+      ) : slotGames.length > 0 && (
         <div style={sectionStyle}>
           <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 80% 50%, rgba(242, 169, 0, 0.03) 0%, transparent 70%)', pointerEvents: 'none' }} />
 

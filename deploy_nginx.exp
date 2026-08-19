@@ -1,0 +1,14 @@
+#!/usr/bin/expect -f
+set timeout -1
+set ip "85.121.178.80"
+set password "kQkrGBYHtY76dIF0z1"
+
+spawn scp -o StrictHostKeyChecking=no nginx_api.conf root@$ip:/etc/nginx/sites-available/api.724bahis.net
+expect "*?assword:*"
+send "$password\r"
+expect eof
+
+spawn ssh -o StrictHostKeyChecking=no root@$ip "ln -sf /etc/nginx/sites-available/api.724bahis.net /etc/nginx/sites-enabled/ && systemctl restart nginx"
+expect "*?assword:*"
+send "$password\r"
+expect eof

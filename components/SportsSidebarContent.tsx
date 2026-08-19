@@ -54,10 +54,44 @@ const MmaIcon = ({ className }: { className?: string }) => (
 );
 
 const SportsSidebarContent: React.FC<SportsSidebarContentProps> = ({ isOpen, onViewChange, onToggle }) => {
-  const { events } = useBetting();
-  const liveCount = events.filter((e: any) => e.isLive).length;
+  const { events, global1xBetMatches } = useBetting();
+  const liveCount = global1xBetMatches?.length > 0 ? global1xBetMatches.length : events.filter((e: any) => e.isLive).length;
   
-  const [activeMenu, setActiveMenu] = useState<string>('');
+  const [activeMenu, setActiveMenu] = useState<string>(() => {
+    if (typeof window !== 'undefined') {
+      const path = window.location.pathname;
+      if (path.includes('/canli')) return 'live';
+      if (path.includes('/yaklasan')) return 'upcoming';
+      if (path.includes('/hepsi')) return 'hepsi';
+    }
+    return '';
+  });
+
+  useEffect(() => {
+    const handleSync = (e: any) => {
+      const tab = e.detail;
+      if (tab === 'canli') setActiveMenu('live');
+      else if (tab === 'upcoming') setActiveMenu('upcoming');
+      else if (tab === 'home' || tab === 'all') setActiveMenu('hepsi');
+      else setActiveMenu('');
+    };
+
+    const handlePopState = () => {
+      const path = window.location.pathname;
+      if (path.includes('/canli')) setActiveMenu('live');
+      else if (path.includes('/yaklasan')) setActiveMenu('upcoming');
+      else if (path.includes('/hepsi')) setActiveMenu('hepsi');
+      else setActiveMenu('');
+    };
+
+    window.addEventListener('syncSportsMenu', handleSync);
+    window.addEventListener('popstate', handlePopState);
+
+    return () => {
+      window.removeEventListener('syncSportsMenu', handleSync);
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, []);
   const [currentPath, setCurrentPath] = useState(window.location.pathname);
   const [isTopSportsOpen, setIsTopSportsOpen] = useState(false);
   const [isFutbolOpen, setIsFutbolOpen] = useState(false);
@@ -90,15 +124,16 @@ const SportsSidebarContent: React.FC<SportsSidebarContentProps> = ({ isOpen, onV
               window.dispatchEvent(new CustomEvent('changeSportsTab', { detail: 'canli' }));
               if (window.innerWidth < 1024) onToggle?.();
             }}
-            className={`flex items-center justify-between py-2.5 mb-1 cursor-pointer transition-all duration-300 relative group px-2 mx-3 rounded-lg ${activeMenu === 'canli' ? 'bg-gradient-to-r from-[#00E5FF]/10 to-transparent text-[#00E5FF]' : 'text-[#8b92a5] hover:bg-white/5 hover:text-white'}`}
+            className={`flex items-center justify-between py-2.5 mb-1 cursor-pointer transition-all duration-300 relative group px-2 mx-2 rounded-xl ${activeMenu === 'canli' ? 'text-[color:var(--theme-accent)] bg-gradient-to-r from-[color:var(--theme-accent)]/15 to-transparent border-none shadow-[0_4px_20px_rgba(0,0,0,0.2)]' : 'text-[#8b92a5] hover:bg-white/5 hover:text-white border-none'}`}
           >
-            {activeMenu === 'canli' && <div className="absolute left-0 top-1/2 -translate-y-1/2 h-3/4 w-[2px] bg-gradient-to-b from-transparent via-[#00E5FF] to-transparent shadow-[0_0_15px_#00E5FF] z-10"></div>}
+            {/* Island UI Glowing Indicator */}
+            {activeMenu === 'canli' && <div className="absolute left-1.5 top-1/2 -translate-y-1/2 w-[4px] h-[50%] rounded-full bg-[color:var(--theme-accent)] shadow-[0_0_12px_var(--theme-accent-glow)] transition-all duration-300 z-10" />}
             <div className="flex items-center">
-              <PlayCircle className={`w-5 h-5 min-w-[20px] transition-all duration-300 ml-2.5 ${activeMenu === 'canli' ? 'text-[#00E5FF]' : 'text-[#8b92a5] group-hover:text-white'}`} strokeWidth={activeMenu === 'canli' ? 2.5 : 2} />
+              <PlayCircle className={`w-5 h-5 min-w-[20px] transition-all duration-300 ml-2.5 ${activeMenu === 'canli' ? 'text-[color:var(--theme-accent)]' : 'text-[#8b92a5] group-hover:text-white group-hover:scale-110'}`} strokeWidth={activeMenu === 'canli' ? 2.5 : 2} />
               {isOpen && <span className="ml-4 font-semibold text-[14px] tracking-tight whitespace-nowrap">Canlı Etkinlikler</span>}
             </div>
             {isOpen && (
-              <div className="bg-[#00E5FF]/10 border border-[#00E5FF]/20 px-2 py-0.5 rounded-full text-[#00E5FF] shadow-[0_0_8px_rgba(0,229,255,0.2)] text-[11px] font-black">{liveCount}</div>
+              <div className="bg-[color:var(--theme-accent)]/10 border border-[color:var(--theme-accent)]/20 px-2 py-0.5 rounded-md text-[color:var(--theme-accent)] shadow-[0_0_8px_var(--theme-accent-glow)] text-[11px] font-black">{liveCount}</div>
             )}
             {!isOpen && (
                <div className="absolute left-[calc(100%+12px)] top-auto bg-[#1a1d29] text-white px-2.5 py-1.5 rounded shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible whitespace-nowrap z-[999] transition-all font-bold text-xs">
@@ -112,11 +147,11 @@ const SportsSidebarContent: React.FC<SportsSidebarContentProps> = ({ isOpen, onV
               window.dispatchEvent(new CustomEvent('changeSportsTab', { detail: 'upcoming' }));
               if (window.innerWidth < 1024) onToggle?.();
             }}
-            className={`flex items-center justify-between py-2.5 mb-1 cursor-pointer transition-all duration-300 relative group px-2 mx-3 rounded-lg ${activeMenu === 'upcoming' ? 'bg-gradient-to-r from-[#f59e0b]/10 to-transparent text-[#f59e0b]' : 'text-[#8b92a5] hover:bg-white/5 hover:text-white'}`}
+            className={`flex items-center justify-between py-2.5 mb-1 cursor-pointer transition-all duration-300 relative group px-2 mx-2 rounded-xl ${activeMenu === 'upcoming' ? 'text-[#f59e0b] bg-gradient-to-r from-[#f59e0b]/15 to-transparent border-none shadow-[0_4px_20px_rgba(0,0,0,0.2)]' : 'text-[#8b92a5] hover:bg-white/5 hover:text-white border-none'}`}
           >
-            {activeMenu === 'upcoming' && <div className="absolute left-0 top-1/2 -translate-y-1/2 h-3/4 w-[2px] bg-gradient-to-b from-transparent via-[#f59e0b] to-transparent shadow-[0_0_15px_#f59e0b] z-10"></div>}
+            {activeMenu === 'upcoming' && <div className="absolute left-1.5 top-1/2 -translate-y-1/2 w-[4px] h-[50%] rounded-full bg-[#f59e0b] shadow-[0_0_12px_#f59e0b] transition-all duration-300 z-10" />}
             <div className="flex items-center">
-              <Clock className={`w-5 h-5 min-w-[20px] transition-all duration-300 ml-2.5 ${activeMenu === 'upcoming' ? 'text-[#f59e0b]' : 'text-[#8b92a5] group-hover:text-white'}`} strokeWidth={activeMenu === 'upcoming' ? 2.5 : 2} />
+              <Clock className={`w-5 h-5 min-w-[20px] transition-all duration-300 ml-2.5 ${activeMenu === 'upcoming' ? 'text-[#f59e0b]' : 'text-[#8b92a5] group-hover:text-white group-hover:scale-110'}`} strokeWidth={activeMenu === 'upcoming' ? 2.5 : 2} />
               {isOpen && <span className="ml-4 font-semibold text-[14px] tracking-tight whitespace-nowrap">Yaklaşanlar</span>}
             </div>
             {!isOpen && (
@@ -133,11 +168,11 @@ const SportsSidebarContent: React.FC<SportsSidebarContentProps> = ({ isOpen, onV
               window.dispatchEvent(new CustomEvent('changeSportsTab', { detail: 'home' }));
               if (window.innerWidth < 1024) onToggle?.();
             }}
-            className={`flex items-center justify-between py-2.5 mb-1 cursor-pointer transition-all duration-300 relative group px-2 mx-3 rounded-lg ${activeMenu === 'hepsi' ? 'bg-gradient-to-r from-[#8b5cf6]/10 to-transparent text-[#8b5cf6]' : 'text-[#8b92a5] hover:bg-white/5 hover:text-white'}`}
+            className={`flex items-center justify-between py-2.5 mb-1 cursor-pointer transition-all duration-300 relative group px-2 mx-2 rounded-xl ${activeMenu === 'hepsi' ? 'text-[#8b5cf6] bg-gradient-to-r from-[#8b5cf6]/15 to-transparent border-none shadow-[0_4px_20px_rgba(0,0,0,0.2)]' : 'text-[#8b92a5] hover:bg-white/5 hover:text-white border-none'}`}
           >
-            {activeMenu === 'hepsi' && <div className="absolute left-0 top-1/2 -translate-y-1/2 h-3/4 w-[2px] bg-gradient-to-b from-transparent via-[#8b5cf6] to-transparent shadow-[0_0_15px_#8b5cf6] z-10"></div>}
+            {activeMenu === 'hepsi' && <div className="absolute left-1.5 top-1/2 -translate-y-1/2 w-[4px] h-[50%] rounded-full bg-[#8b5cf6] shadow-[0_0_12px_#8b5cf6] transition-all duration-300 z-10" />}
             <div className="flex items-center">
-              <LayoutGrid className={`w-5 h-5 min-w-[20px] transition-all duration-300 ml-2.5 ${activeMenu === 'hepsi' ? 'text-[#8b5cf6]' : 'text-[#8b92a5] group-hover:text-white'}`} strokeWidth={activeMenu === 'hepsi' ? 2.5 : 2} />
+              <LayoutGrid className={`w-5 h-5 min-w-[20px] transition-all duration-300 ml-2.5 ${activeMenu === 'hepsi' ? 'text-[#8b5cf6]' : 'text-[#8b92a5] group-hover:text-white group-hover:scale-110'}`} strokeWidth={activeMenu === 'hepsi' ? 2.5 : 2} />
               {isOpen && <span className="ml-4 font-semibold text-[14px] tracking-tight whitespace-nowrap">Hepsi</span>}
             </div>
             {!isOpen && (
@@ -154,11 +189,11 @@ const SportsSidebarContent: React.FC<SportsSidebarContentProps> = ({ isOpen, onV
               window.dispatchEvent(new CustomEvent('changeSportsTab', { detail: 'mybets' }));
               if (window.innerWidth < 1024) onToggle?.();
             }}
-            className={`flex items-center justify-between py-2.5 mb-1 cursor-pointer transition-all duration-300 relative group px-2 mx-3 rounded-lg ${activeMenu === 'bahislerim' ? 'bg-gradient-to-r from-[#10b981]/10 to-transparent text-[#10b981]' : 'text-[#8b92a5] hover:bg-white/5 hover:text-white'}`}
+            className={`flex items-center justify-between py-2.5 mb-1 cursor-pointer transition-all duration-300 relative group px-2 mx-2 rounded-xl ${activeMenu === 'bahislerim' ? 'text-[#10b981] bg-gradient-to-r from-[#10b981]/15 to-transparent border-none shadow-[0_4px_20px_rgba(0,0,0,0.2)]' : 'text-[#8b92a5] hover:bg-white/5 hover:text-white border-none'}`}
           >
-            {activeMenu === 'bahislerim' && <div className="absolute left-0 top-1/2 -translate-y-1/2 h-3/4 w-[2px] bg-gradient-to-b from-transparent via-[#10b981] to-transparent shadow-[0_0_15px_#10b981] z-10"></div>}
+            {activeMenu === 'bahislerim' && <div className="absolute left-1.5 top-1/2 -translate-y-1/2 w-[4px] h-[50%] rounded-full bg-[#10b981] shadow-[0_0_12px_#10b981] transition-all duration-300 z-10" />}
             <div className="flex items-center">
-              <Receipt className={`w-5 h-5 min-w-[20px] transition-all duration-300 ml-2.5 ${activeMenu === 'bahislerim' ? 'text-[#10b981]' : 'text-[#8b92a5] group-hover:text-white'}`} strokeWidth={activeMenu === 'bahislerim' ? 2.5 : 2} />
+              <Receipt className={`w-5 h-5 min-w-[20px] transition-all duration-300 ml-2.5 ${activeMenu === 'bahislerim' ? 'text-[#10b981]' : 'text-[#8b92a5] group-hover:text-white group-hover:scale-110'}`} strokeWidth={activeMenu === 'bahislerim' ? 2.5 : 2} />
               {isOpen && <span className="ml-4 font-semibold text-[14px] tracking-tight whitespace-nowrap">Takip Ettiklerim</span>}
             </div>
             {!isOpen && (
@@ -211,11 +246,11 @@ const SportsSidebarContent: React.FC<SportsSidebarContentProps> = ({ isOpen, onV
                  window.dispatchEvent(new PopStateEvent('popstate'));
                  if (window.innerWidth < 1024) onToggle?.();
                }}
-               className={`flex items-center justify-between py-3 mb-1.5 cursor-pointer transition-all duration-300 relative group px-2 mx-3 rounded-lg ${isActive ? `bg-gradient-to-r ${sport.bgGradient} to-transparent ${sport.activeColor}` : 'text-[#8b92a5] hover:bg-white/5 hover:text-white'} ${!isOpen ? 'justify-center' : ''}`}
+               className={`flex items-center justify-between py-3 mb-1.5 cursor-pointer transition-all duration-300 relative group px-2 mx-2 rounded-xl ${isActive ? `bg-gradient-to-r ${sport.bgGradient} to-transparent ${sport.activeColor} shadow-[0_4px_20px_rgba(0,0,0,0.2)]` : 'text-[#8b92a5] hover:bg-white/5 hover:text-white border-none'} ${!isOpen ? 'justify-center' : ''}`}
              >
-               {isActive && <div className={`absolute left-0 top-1/2 -translate-y-1/2 h-3/4 w-[2px] bg-gradient-to-b from-transparent via-current to-transparent ${sport.shadow} z-10`}></div>}
+               {isActive && <div className={`absolute left-1.5 top-1/2 -translate-y-1/2 w-[4px] h-[50%] rounded-full bg-current ${sport.shadow} z-10 transition-all duration-300`}></div>}
                <div className="flex items-center">
-                 <sport.Icon className={`w-5 h-5 min-w-[20px] transition-all duration-300 ml-2.5 ${isActive ? `${sport.activeColor} ${sport.drop}` : `text-[#8b92a5] ${sport.hoverColor}`}`} />
+                 <sport.Icon className={`w-5 h-5 min-w-[20px] transition-all duration-300 ml-2.5 ${isActive ? `${sport.activeColor} ${sport.drop}` : `text-[#8b92a5] group-hover:scale-110 ${sport.hoverColor}`}`} />
                  {isOpen && <span className={`ml-4 font-semibold text-[14px] tracking-tight whitespace-nowrap transition-colors ${isActive ? sport.activeColor : `text-[#8b92a5] group-hover:text-white`}`}>{sport.name}</span>}
                </div>
                {!isOpen && (

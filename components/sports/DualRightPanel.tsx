@@ -5,6 +5,7 @@ import { useUser } from '../../contexts/UserContext';
 import { triggerGlobalToast } from '../GlobalToaster';
 import ModernChat from '../ModernChat';
 import { useTranslation } from 'react-i18next';
+import { MiniGamesSidebar, GamepadIcon } from '../MiniGamesSidebar';
 
 const MyBetsPanel = ({ onShare }: { onShare: (msg: string) => void }) => {
   const [activeBets, setActiveBets] = useState<any[]>([]);
@@ -202,7 +203,7 @@ export const DualRightPanel: React.FC<{
   const { t } = useTranslation();
   const { betSlip, betAmount, setBetAmount, removeSelection, clearBetSlip, totalOdds, potentialPayout, accumulatorBoost, betType, setBetType, isLocked, isTurboMode, setIsTurboMode } = useBetSlip();
   const { siteUser, placeBet } = useUser();
-  const [activePanel, setActivePanel] = useState<'coupon' | 'chat' | 'mybets'>('chat');
+  const [activePanel, setActivePanel] = useState<'coupon' | 'chat' | 'mybets' | 'minigames'>('chat');
   const [showStamp, setShowStamp] = useState(false);
   const [isConfirmingBet, setIsConfirmingBet] = useState(false);
 
@@ -286,7 +287,7 @@ export const DualRightPanel: React.FC<{
       />
     )}
     
-    <div className={`fixed xl:static top-0 right-0 h-full z-50 flex flex-col shrink-0 ${isSports ? 'bg-[#0a0e17]' : 'bg-[#050505]'} transition-all duration-300 ${isOpenMobile ? 'translate-x-0 w-[350px]' : 'translate-x-full xl:translate-x-0'} xl:w-full w-[350px]`}>
+    <div className={`fixed xl:static top-0 right-0 h-full z-50 flex flex-col shrink-0 ${isSports ? 'bg-[#0a0e17]/90 backdrop-blur-2xl border-l border-white/5 shadow-[-10px_0_30px_rgba(0,0,0,0.5)]' : 'bg-[#050505]/90 backdrop-blur-2xl border-l border-white/5 shadow-[-10px_0_30px_rgba(0,0,0,0.5)]'} transition-all duration-300 ${isOpenMobile ? 'translate-x-0 w-[350px]' : 'translate-x-full xl:translate-x-0'} xl:w-full w-[350px]`}>
       
       {/* ── Desktop Tab & Chat/BetSlip Content ── */}
       <div className="flex-1 flex flex-col min-h-0 relative overflow-hidden bg-transparent">
@@ -570,6 +571,8 @@ export const DualRightPanel: React.FC<{
               window.dispatchEvent(new CustomEvent('shareBetEvent', { detail: { message: msg } }));
             }, 150);
           }} />
+        ) : activePanel === 'minigames' ? (
+          <MiniGamesSidebar />
         ) : (
           <ModernChat 
             open={true}
@@ -586,28 +589,40 @@ export const DualRightPanel: React.FC<{
 
       {/* ═══════════ STICKY BOTTOM TOGGLE BAR (SPORTS ONLY) ═══════════ */}
       {isSports && (
-        <div className={`shrink-0 ${isSports ? 'bg-[#0a0e17]' : 'bg-[#050505]'} border-t border-white/5 relative z-50 shadow-[0_-10px_30px_rgba(0,0,0,0.8)] transition-all duration-300 overflow-hidden h-[70px] p-3 opacity-100`}>
-          <div className="flex items-center justify-between w-full h-full bg-[#131823]/50 p-1 rounded-xl border border-white/5">
+        <div className={`shrink-0 ${isSports ? 'bg-transparent backdrop-blur-md' : 'bg-transparent backdrop-blur-md'} border-t border-white/5 relative z-50 shadow-[0_-10px_30px_rgba(0,0,0,0.3)] transition-all duration-300 overflow-hidden h-[70px] p-3 opacity-100`}>
+          <div className="flex items-center justify-between w-full h-full bg-white/5 p-1 rounded-xl border border-white/10 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)]">
             
             <button 
               onClick={() => setActivePanel('chat')}
-              className={`flex items-center justify-center gap-2 flex-1 h-full rounded-lg transition-all ${activePanel === 'chat' ? 'bg-[#00E5FF]/20 text-[#00E5FF] shadow-[inset_0_0_15px_rgba(0,229,255,0.2)] font-bold' : 'text-zinc-500 hover:text-zinc-300 font-medium'}`}
+              className={`flex items-center justify-center gap-2 flex-1 h-full rounded-lg transition-all ${activePanel === 'chat' ? 'bg-[color:var(--theme-accent)]/10 text-[color:var(--theme-accent)] shadow-[inset_0_0_15px_var(--theme-accent-glow)] font-bold border border-[color:var(--theme-accent)]/20' : 'text-zinc-500 hover:text-white hover:bg-white/5 font-medium'}`}
             >
-              <MessageCircle className={`w-[18px] h-[18px] ${activePanel === 'chat' ? 'text-[#00E5FF]' : ''}`} />
-              <span className="text-[12px] tracking-wide">Sohbet</span>
+              <MessageCircle className={`w-[18px] h-[18px] ${activePanel === 'chat' ? 'text-[color:var(--theme-accent)]' : ''}`} />
+              <span className="text-[12px] tracking-wide hidden sm:block md:hidden 2xl:block">Sohbet</span>
             </button>
             
             <button 
               onClick={() => setActivePanel('mybets')}
-              className={`flex items-center justify-center gap-2 flex-1 h-full rounded-lg transition-all ${activePanel === 'mybets' ? 'bg-[#00E5FF]/20 text-[#00E5FF] shadow-[inset_0_0_15px_rgba(0,229,255,0.2)] font-bold' : 'text-zinc-500 hover:text-zinc-300 font-medium'}`}
+              className={`flex items-center justify-center gap-2 flex-1 h-full rounded-lg transition-all ${activePanel === 'mybets' ? 'bg-[color:var(--theme-accent)]/10 text-[color:var(--theme-accent)] shadow-[inset_0_0_15px_var(--theme-accent-glow)] font-bold border border-[color:var(--theme-accent)]/20' : 'text-zinc-500 hover:text-white hover:bg-white/5 font-medium'}`}
             >
-              <Flag className={`w-[18px] h-[18px] ${activePanel === 'mybets' ? 'text-[#00E5FF]' : ''}`} />
-              <span className="text-[12px] tracking-wide">{t('nav.my_bets', 'Bahislerim')}</span>
+              <Flag className={`w-[18px] h-[18px] ${activePanel === 'mybets' ? 'text-[color:var(--theme-accent)]' : ''}`} />
+              <span className="text-[12px] tracking-wide hidden sm:block md:hidden 2xl:block">{t('nav.my_bets', 'Bahislerim')}</span>
+            </button>
+            
+            <button 
+              onClick={() => setActivePanel('minigames')}
+              className={`flex items-center justify-center gap-2 flex-1 h-full rounded-lg transition-all relative ${activePanel === 'minigames' ? 'bg-purple-500/10 text-purple-400 shadow-[inset_0_0_15px_rgba(168,85,247,0.2)] font-bold border border-purple-500/20' : 'text-zinc-500 hover:text-white hover:bg-white/5 font-medium'}`}
+            >
+              <div className="relative">
+                <GamepadIcon className={`w-[18px] h-[18px] ${activePanel === 'minigames' ? 'text-purple-400' : ''}`} />
+                {/* Optional hot badge */}
+                <span className="absolute -top-1 -right-1.5 w-2 h-2 bg-red-500 rounded-full animate-pulse shadow-[0_0_5px_rgba(239,68,68,0.8)]"></span>
+              </div>
+              <span className="text-[12px] tracking-wide hidden sm:block md:hidden 2xl:block">Oyunlar</span>
             </button>
             
             <button 
               onClick={() => setActivePanel('coupon')}
-              className={`flex items-center justify-center gap-2 flex-1 h-full rounded-lg transition-all relative ${activePanel === 'coupon' ? 'bg-[#10b981]/20 text-[#10b981] shadow-[inset_0_0_15px_rgba(16,185,129,0.2)] font-bold' : 'text-zinc-500 hover:text-zinc-300 font-medium'}`}
+              className={`flex items-center justify-center gap-2 flex-1 h-full rounded-lg transition-all relative ${activePanel === 'coupon' ? 'bg-[#10b981]/10 text-[#10b981] shadow-[inset_0_0_15px_rgba(16,185,129,0.2)] font-bold border border-[#10b981]/20' : 'text-zinc-500 hover:text-white hover:bg-white/5 font-medium'}`}
             >
               <div className="relative">
                 <FileText className={`w-[18px] h-[18px] ${activePanel === 'coupon' ? 'text-[#10b981]' : ''}`} />
@@ -617,7 +632,7 @@ export const DualRightPanel: React.FC<{
                   </span>
                 )}
               </div>
-              <span className="text-[12px] tracking-wide">{t('nav.bet_slip', 'Kupon')}</span>
+              <span className="text-[12px] tracking-wide hidden sm:block md:hidden 2xl:block">{t('nav.bet_slip', 'Kupon')}</span>
             </button>
             
           </div>

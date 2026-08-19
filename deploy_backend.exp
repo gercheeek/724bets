@@ -1,0 +1,15 @@
+#!/usr/bin/expect -f
+
+set timeout 60
+set ip "85.121.178.80"
+set password "kQkrGBYHtY76dIF0z1"
+
+spawn scp -o StrictHostKeyChecking=no socket_server.cjs root@$ip:/root/socket_server.cjs
+expect "*?assword:*"
+send "$password\r"
+expect eof
+
+spawn ssh -o StrictHostKeyChecking=no root@$ip "pm2 restart all || pkill -f socket_server.cjs || true; nohup node /root/socket_server.cjs > /root/server.log 2>&1 &"
+expect "*?assword:*"
+send "$password\r"
+expect eof

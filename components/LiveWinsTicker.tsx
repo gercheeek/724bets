@@ -3,33 +3,7 @@ import BetDetailsModal, { BetDetailData } from './BetDetailsModal';
 import { Diamond } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 
-const TICKER_GAMES = [
-  // 724bets Originals
-  { name: "Plinko", provider: '724bets', image: "/images/plinko_premium.jpg", type: 'slot' as const, path: "plinko", rules: "Topları yukarıdan bırakın, çarpan engellerini aşarak en yüksek kazanç kutusuna ulaşmasını sağlayın. (Çarpan: 0.2x - 1000x)" },
-  { name: "Mission Uncrossable", provider: '724bets', image: "/images/mission_premium.jpg", type: 'slot' as const, path: "chicken-run", rules: "Tavuğu güvenle karşıya geçirin. Her başarılı adımda çarpanınız artsın. (Çarpan: 1.0x - 1000x)" },
-  { name: "Keno", provider: '724bets', image: "/images/keno_premium.jpg", type: 'keno' as const, path: "keno", rules: "Şanslı sayılarınızı seçin. Eşleşme yakaladıkça kazancınız büyüsün. (Çarpan: 1.0x - 10000x)" },
-  { name: "Limbo", provider: '724bets', image: "/images/limbo_premium.jpg", type: 'slot' as const, path: "limbo", rules: "Hedef çarpanınızı belirleyin, roket belirlediğiniz çarpanın üzerine çıkarsa kazanın. (Çarpan: 1.01x - 1,000,000x)" },
-  { name: "Mines", provider: '724bets', image: "/images/mines_premium.jpg", type: 'slot' as const, path: "mines", rules: "Mayınlara basmadan elmasları bulun. Ne kadar çok elmas, o kadar büyük çarpan! (Çarpan: 1.01x - 5,000,000x)" },
-  { name: "Dice", provider: '724bets', image: "/images/dice_premium.jpg", type: 'dice' as const, path: "dice", rules: "Zarın düşeceği aralığı tahmin edin, şansınızı katlayın. (Çarpan: 1.01x - 99x)" },
-  { name: "Crash", provider: '724bets', image: "/images/crash_premium.jpg", type: 'slot' as const, path: "crash", rules: "Roket patlamadan önce bahis bozdurun. Risk alın, daha çok kazanın! (Çarpan: 1.01x - 100,000x)" },
-  { name: "Hilo", provider: '724bets', image: "/images/blackjack_premium.jpg", type: 'slot' as const, path: "hilo", rules: "Sıradaki kartın yüksek mi düşük mü olacağını tahmin edin. (Çarpan: 1.1x - 12x)" },
-
-  // Live Casino
-  { name: "Blackjack", provider: '724bets', image: "/images/blackjack_premium.jpg", type: 'blackjack' as const, path: "blackjack-pro", rules: "Krupiyeyi 21'e en yakın skorla yenin. (Ödemeler: Normal 2x, Blackjack 2.5x)" },
-  { name: "Roulette", provider: '724bets', image: "/images/roulette_premium.jpg", type: 'slot' as const, path: "roulette", rules: "Şanslı rakamlarınızı seçin ve çarkın dönüşünü bekleyin. (Çarpan: 1x - 36x)" },
-  { name: "Casino Arena", provider: "Evolution", image: "/images/slots/arena.webp", type: 'slot' as const, path: "arena", rules: "Devasa arenada en büyük çarpanları yakalayın!" },
-  { name: "Legion Gold", provider: "Play'n GO", image: "/images/slots/legiongold.webp", type: 'slot' as const, path: "legion-gold", rules: "Roma lejyonu ile altına hücum edin." },
-
-  // Popular Slots
-  { name: "The Dog House", provider: "Pragmatic Play", image: "/images/slots/doghouse.webp", type: 'slot' as const, path: "dog-house", rules: "Sevimli köpeklerle x3 çarpanlı wild'ları yakalayın!" },
-  { name: "Fruit Shop", provider: "NetEnt", image: "/images/slots/fruitshop.webp", type: 'slot' as const, path: "fruit-shop", rules: "Taze meyvelerle bedava dönüşler kazanın." },
-  { name: "Out of the Woods", provider: "Hacksaw Gaming", image: "/images/slots/outofthewoods.webp", type: 'slot' as const, path: "out-of-the-woods", rules: "Karanlık ormandan büyük ödüllerle çıkın." },
-  { name: "Crabby", provider: "Hacksaw Gaming", image: "/images/slots/crabby.webp", type: 'slot' as const, path: "crabby", rules: "Okyanusun derinliklerinde hazineleri bulun." },
-  { name: "Sugar Twist 1000", provider: "Pragmatic Play", image: "https://mediumrare.imgix.net/2782fa43a134b33c6c44f35edaa6850ef5cf9899a8a2efa9a2450ba5d30f5610?w=300&h=400&fit=min&auto=format", type: 'slot' as const, path: "sugar-twist-1000", rules: "Şeker dünyasında 1000x çarpanlarla kazanın." },
-  { name: "Undead Farm", provider: "True Labs", image: "https://mediumrare.imgix.net/79a6b3ce1158894cb6b085dc8d6fed994321449e248d49796b52ff0e38a742e0?w=560&h=750&fit=min&auto=format", type: 'slot' as const, path: "undead-farm", rules: "Zombi çiftliğinde büyük ödülleri toplayın." },
-  { name: "Big Bass Rock and Roll", provider: "Pragmatic Play", image: "https://mediumrare.imgix.net/49950a8148c358e88455c78d8dd1abfbeb8d2dd31a7b7971f5515ae4091b6429?w=300&h=400&fit=min&auto=format", type: 'slot' as const, path: "big-bass-rock", rules: "Rock eşliğinde dev balıkları yakalayın." },
-  { name: "Sweet Bonanza 2500", provider: "Pragmatic Play", image: "https://mediumrare.imgix.net/76411df1039d658a8b9c9f90c14467c7ca7c240feeed97274ea73208d786484e?w=300&h=400&fit=min&auto=format", type: 'slot' as const, path: "sweet-bonanza-2500", rules: "Klasik efsane şimdi daha büyük kazandırıyor." }
-];
+const TICKER_GAMES: any[] = [];
 
 const getRandom = (arr: any[]) => arr[Math.floor(Math.random() * arr.length)];
 
@@ -123,8 +97,24 @@ const generateFakeBet = (t: any, filterType: 'all' | 'originals' | 'slots' | 'ca
     filteredGames = TICKER_GAMES.filter(g => g.name === 'Blackjack' || g.name === 'Roulette');
   }
   
-  if (filteredGames.length === 0) filteredGames = TICKER_GAMES;
-  
+  if (!filteredGames || filteredGames.length === 0) {
+    return {
+      id: Math.random().toString(36).substr(2, 9),
+      game: '',
+      provider: '',
+      image: '',
+      user: '',
+      userRank: 0,
+      time: '',
+      betAmount: '$0.00',
+      multiplier: '0x',
+      payout: '$0.00',
+      type: 'slot',
+      rules: '',
+      path: ''
+    };
+  }
+
   const game = getRandom(filteredGames);
   let user = '';
   const rand = Math.random();
@@ -145,7 +135,7 @@ const generateFakeBet = (t: any, filterType: 'all' | 'originals' | 'slots' | 'ca
     : Number((Math.random() * 9.8 + 0.2).toFixed(2)); // 80% lower bets ($0.20 to $10)
   
   // Realistic oyuna özel çarpanlar
-  const multiplierRaw = getRealisticMultiplier(game.type, game.name);
+  const multiplierRaw = getRealisticMultiplier(game?.type || 'slot', game?.name || '');
   
   const payoutRaw = betAmountRaw * multiplierRaw;
   
@@ -153,21 +143,21 @@ const generateFakeBet = (t: any, filterType: 'all' | 'originals' | 'slots' | 'ca
   
   const data: BetDetailData = {
     id: Math.random().toString(36).substr(2, 9),
-    game: game.name,
-    provider: game.provider,
-    image: game.image,
+    game: game?.name || '',
+    provider: game?.provider || '',
+    image: game?.image || '',
     user,
     userRank,
     time: `${now.getDate()} Tem ${now.getFullYear()} ${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}`,
     betAmount: formatCurrency(betAmountRaw),
     multiplier: `${multiplierRaw.toFixed(2)}x`,
     payout: formatCurrency(payoutRaw),
-    type: game.type,
-    rules: game.rules,
-    path: game.path
+    type: game?.type || 'slot',
+    rules: game?.rules || '',
+    path: game?.path || ''
   };
   
-  if (game.type === 'blackjack') {
+  if (game?.type === 'blackjack') {
     const cards = ['2♠', '3♥', '4♦', '5♣', '6♠', '7♥', '8♦', '9♣', '10♠', 'J♥', 'Q♦', 'K♣', 'A♠'];
     data.cards = {
       player: [getRandom(cards), getRandom(cards)],
@@ -175,7 +165,7 @@ const generateFakeBet = (t: any, filterType: 'all' | 'originals' | 'slots' | 'ca
       playerScore: Math.floor(Math.random() * 10) + 12,
       dealerScore: Math.floor(Math.random() * 6) + 17
     };
-  } else if (game.type === 'keno') {
+  } else if (game?.type === 'keno') {
     const selected = [];
     while(selected.length < 10) {
       const n = Math.floor(Math.random() * 40) + 1;
@@ -183,7 +173,7 @@ const generateFakeBet = (t: any, filterType: 'all' | 'originals' | 'slots' | 'ca
     }
     const hits = selected.filter(() => Math.random() > 0.5);
     data.kenoNumbers = { selected, hits };
-  } else if (game.type === 'dice') {
+  } else if (game?.type === 'dice') {
     data.diceRoll = Math.random() * 100;
   }
   
@@ -197,10 +187,16 @@ export default React.memo(function LiveWinsTicker({ guestTheme = "retro" }: { gu
   const { t } = useLanguage();
 
   useEffect(() => {
+    if (TICKER_GAMES.length === 0) {
+      setWins([]);
+      return;
+    }
     // Generate a fixed number of items for the infinite loop
     const initial = Array.from({ length: 30 }).map(() => generateFakeBet(t, activeTab));
     setWins(initial);
   }, [activeTab, t]);
+
+  if (TICKER_GAMES.length === 0) return null;
 
   return (
     <div className="w-full flex flex-col mb-1 relative px-0 md:px-2">

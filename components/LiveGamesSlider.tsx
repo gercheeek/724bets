@@ -11,71 +11,7 @@ const LiveCasinoIcon = () => (
   </svg>
 );
 
-const LIVE_GAMES = [
-  {
-    id: 1,
-    title: 'PRIVÉ LOUNGE BLACKJACK 12',
-    provider: 'Pragmatic Play Live',
-    image: '/images/dealer_blonde_green.jpg',
-    gradient: 'from-[#22c55e] to-transparent', // Green
-    viewers: 279,
-    isExclusive: false,
-  },
-  {
-    id: 2,
-    title: 'PRIVÉ LOUNGE BLACKJACK 6',
-    provider: 'Pragmatic Play Live',
-    image: '/images/dealer_man_vest.jpg',
-    gradient: 'from-[#a3e635] to-transparent', // Lime/Yellow
-    viewers: 257,
-    isExclusive: false,
-  },
-  {
-    id: 3,
-    title: 'VIP ROULETTE',
-    provider: 'Evolution',
-    image: '/images/dealer_brunette_red.jpg',
-    gradient: 'from-[#ec4899] to-transparent', // Pink
-    viewers: 203,
-    isExclusive: false,
-  },
-  {
-    id: 4,
-    title: 'MEGA ROULETTE',
-    provider: 'Pragmatic Play Live',
-    image: '/images/dealer_man_tuxedo.jpg',
-    gradient: 'from-[#1d4ed8] to-transparent', // Blue
-    viewers: 2479,
-    isExclusive: false,
-  },
-  {
-    id: 5,
-    title: 'BACCARAT 1',
-    provider: 'Pragmatic Play Live',
-    image: '/images/dealer_blonde_green.jpg', // Reusing
-    gradient: 'from-[#ef4444] to-transparent', // Red
-    viewers: 198,
-    isExclusive: false,
-  },
-  {
-    id: 6,
-    title: 'GAMDOM PRIVÉ BLACKJACK 2',
-    provider: 'Pragmatic Play Live',
-    image: '/images/dealer_brunette_red.jpg', // Reusing
-    gradient: 'from-[#22c55e] to-transparent', // Green
-    viewers: 55,
-    isExclusive: true,
-  },
-  {
-    id: 7,
-    title: 'GAMDOM LOBBY',
-    provider: 'Pragmatic Play Live',
-    image: '/images/dealer_blonde_green.jpg', // Reusing
-    gradient: 'from-[#22c55e] to-transparent', // Green
-    viewers: 51,
-    isExclusive: true,
-  }
-];
+const LIVE_GAMES: any[] = [];
 
 // Added onPlayGame to props
 interface LiveGamesSliderProps {

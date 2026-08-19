@@ -120,27 +120,27 @@ export default function SportsIconNav({ activeTab = 'home', onTabChange = () => 
                   onClick={() => onTabChange('home')}
                   className={`w-12 h-12 rounded-lg transition-all duration-300 flex flex-col items-center justify-center relative overflow-hidden ${
                     activeTab === 'home' 
-                      ? 'bg-gradient-to-b from-[#00E5FF]/20 to-transparent shadow-[inset_0_20px_30px_-15px_rgba(0,229,255,0.3)]' 
+                      ? 'bg-gradient-to-b from-[color:var(--theme-accent)]/20 to-transparent shadow-[inset_0_20px_30px_-15px_var(--theme-accent-glow)]' 
                       : 'bg-transparent hover:bg-white/[0.03]'
                   }`}
                 >
-                    {activeTab === 'home' && <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#00E5FF] to-transparent shadow-[0_0_15px_#00E5FF]"></div>}
-                    <Home className={`w-5 h-5 transition-all duration-300 ${activeTab === 'home' ? 'text-white drop-shadow-[0_0_10px_rgba(0,229,255,0.8)]' : 'text-[#64748b] group-hover:text-white'}`} strokeWidth={1.8} />
-                    {activeTab === 'home' && <div className="absolute bottom-1 w-1 h-1 rounded-full bg-[#00E5FF] shadow-[0_0_8px_#00E5FF]"></div>}
+                    {activeTab === 'home' && <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-transparent via-[color:var(--theme-accent)] to-transparent shadow-[0_0_15px_var(--theme-accent)]"></div>}
+                    <Home className={`w-5 h-5 transition-all duration-300 ${activeTab === 'home' ? 'text-white drop-shadow-[0_0_15px_var(--theme-accent)]' : 'text-[#64748b] group-hover:text-white'}`} strokeWidth={1.8} />
+                    {activeTab === 'home' && <div className="absolute bottom-1 w-1 h-1 rounded-full bg-[color:var(--theme-accent)] shadow-[0_0_8px_var(--theme-accent)]"></div>}
                 </button>
 
                 <button 
                   onClick={() => onTabChange('canli')}
                   className={`w-14 h-12 rounded-lg transition-all duration-300 flex flex-col items-center justify-center relative overflow-hidden ${
                     activeTab === 'canli' 
-                      ? 'bg-gradient-to-b from-[#00E5FF]/20 to-transparent shadow-[inset_0_20px_30px_-15px_rgba(0,229,255,0.3)]' 
+                      ? 'bg-gradient-to-b from-[color:var(--theme-accent)]/20 to-transparent shadow-[inset_0_20px_30px_-15px_var(--theme-accent-glow)]' 
                       : 'bg-transparent hover:bg-white/[0.03]'
                   }`}
                 >
-                    {activeTab === 'canli' && <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#00E5FF] to-transparent shadow-[0_0_15px_#00E5FF]"></div>}
+                    {activeTab === 'canli' && <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-transparent via-[color:var(--theme-accent)] to-transparent shadow-[0_0_20px_var(--theme-accent)]"></div>}
                     <div className="flex flex-col items-center gap-1">
-                        <div className={`w-2 h-2 rounded-full ${activeTab === 'canli' ? 'bg-[#00E5FF] shadow-[0_0_10px_#00E5FF] animate-pulse' : 'bg-[#00E5FF]/40'}`}></div>
-                        <span className={`text-[9px] font-black tracking-widest uppercase transition-colors ${activeTab === 'canli' ? 'text-white drop-shadow-[0_0_5px_rgba(0,229,255,0.5)]' : 'text-[#64748b]'}`}>CANLI</span>
+                        <div className={`w-2 h-2 rounded-full ${activeTab === 'canli' ? 'bg-[color:var(--theme-accent)] shadow-[0_0_12px_var(--theme-accent)] animate-pulse' : 'bg-white/20 group-hover:bg-white/40'}`}></div>
+                        <span className={`text-[10px] font-black tracking-widest uppercase transition-colors ${activeTab === 'canli' ? 'text-white drop-shadow-[0_0_8px_var(--theme-accent)]' : 'text-[#64748b]'}`}>CANLI</span>
                     </div>
                 </button>
 
@@ -185,21 +185,29 @@ export default function SportsIconNav({ activeTab = 'home', onTabChange = () => 
                         key={idx}
                         onClick={() => {
                             if (item.title) {
-                                window.history.pushState(null, '', `/spor/${item.id}`);
+                                const currentPath = window.location.pathname;
+                                const isLive = currentPath.includes('/canli');
+                                const isUpcoming = currentPath.includes('/yaklasanlar');
+                                
+                                let newPath = `/spor/${item.id}`;
+                                if (isLive) newPath = `/spor/canli/${item.id}`;
+                                else if (isUpcoming) newPath = `/spor/yaklasanlar/${item.id}`;
+                                
+                                window.history.pushState(null, '', newPath);
                                 window.dispatchEvent(new PopStateEvent('popstate'));
                             }
                         }}
                         className={`group relative flex flex-col items-center justify-center min-w-[75px] max-w-[90px] h-[64px] rounded-xl transition-all duration-300 overflow-hidden shrink-0 ${
                             isActive 
-                                ? 'bg-gradient-to-b from-[#00E5FF]/20 via-[#00E5FF]/5 to-transparent' 
+                                ? 'bg-gradient-to-b from-[color:var(--theme-accent)]/20 via-[color:var(--theme-accent)]/5 to-transparent' 
                                 : 'bg-transparent hover:bg-white/[0.03]'
                         }`}
                         title={item.title || item.id}
                     >
                         {isActive && (
                             <>
-                                <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#00E5FF] to-transparent shadow-[0_0_15px_#00E5FF]"></div>
-                                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#00E5FF]/20 via-transparent to-transparent opacity-60"></div>
+                                <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-transparent via-[color:var(--theme-accent)] to-transparent shadow-[0_0_20px_var(--theme-accent)]"></div>
+                                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[color:var(--theme-accent)]/20 via-transparent to-transparent opacity-80"></div>
                             </>
                         )}
                         {!isActive && (
@@ -207,9 +215,9 @@ export default function SportsIconNav({ activeTab = 'home', onTabChange = () => 
                         )}
                         
                         <div className="relative flex items-center justify-center mb-1.5 mt-1">
-                            <div className={`absolute -top-1.5 -right-3 text-[9px] font-bold px-1.5 py-0.5 rounded-full z-10 leading-none backdrop-blur-sm ${
+                            <div className={`absolute -top-1.5 -right-3 text-[10px] font-extrabold px-2 py-[2px] rounded-full z-10 leading-none backdrop-blur-md transition-all ${
                                 count > 0 
-                                ? 'bg-[#00E5FF]/10 text-[#00E5FF] border border-[#00E5FF]/40 shadow-[0_0_10px_rgba(0,229,255,0.3)]' 
+                                ? 'bg-[color:var(--theme-accent)]/10 text-[color:var(--theme-accent)] border border-[color:var(--theme-accent)]/50 shadow-[0_0_15px_var(--theme-accent-glow)]' 
                                 : 'bg-white/5 text-white/40 border border-white/5'
                             }`}>
                                 {count}
@@ -217,17 +225,17 @@ export default function SportsIconNav({ activeTab = 'home', onTabChange = () => 
                             
                             <div className={`transition-all duration-300 z-10 ${
                                 isActive 
-                                    ? 'text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.8)] scale-110' 
+                                    ? 'text-white drop-shadow-[0_0_15px_var(--theme-accent)] scale-110' 
                                     : 'text-[#64748b] group-hover:text-white group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]'
                             }`}>
-                                {React.cloneElement(item.icon as React.ReactElement<any>, { width: 22, height: 22, strokeWidth: isActive ? 1.8 : 1.5 })}
+                                {React.cloneElement(item.icon as React.ReactElement<any>, { width: 22, height: 22, strokeWidth: isActive ? 2 : 1.5 })}
                             </div>
                         </div>
                         
                         <span className={`text-[10px] font-bold tracking-wider uppercase z-10 transition-all duration-300 whitespace-nowrap truncate w-full text-center px-1 ${
                             isActive 
-                                ? 'text-white drop-shadow-[0_0_5px_rgba(255,255,255,0.6)]' 
-                                : 'text-[#64748b] group-hover:text-gray-300'
+                                ? 'text-white drop-shadow-[0_0_5px_rgba(255,255,255,0.8)]' 
+                                : 'text-[#64748b] group-hover:text-zinc-300'
                         }`}>
                             {item.title}
                         </span>

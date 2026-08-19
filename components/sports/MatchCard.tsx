@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import { PlayerLogo } from './PlayerLogo';
 import { AnimatedOdd } from '../AnimatedOdd';
 import { useBetSlip } from '../../contexts/BetSlipContext';
-import { Globe, Radio, ChevronDown } from 'lucide-react';
+import { Globe, Radio, ChevronDown, Star } from 'lucide-react';
 
 export const LiveTimer: React.FC<{ minute: string; hidePrefix?: boolean; lastUpdateTs?: number }> = ({ minute, hidePrefix = false }) => {
   const [seconds, setSeconds] = React.useState(() => new Date().getSeconds());
@@ -41,10 +41,12 @@ export const LiveTimer: React.FC<{ minute: string; hidePrefix?: boolean; lastUpd
 export interface MatchCardProps {
   match: any;
   isGoal?: boolean;
+  isFavorite?: boolean;
   onSelect?: (match: any) => void;
+  onToggleFavorite?: (e: React.MouseEvent, match: any) => void;
 }
 
-export const MatchCard: React.FC<MatchCardProps> = memo(({ match, isGoal, onSelect }) => {
+export const MatchCard: React.FC<MatchCardProps> = memo(({ match, isGoal, isFavorite, onSelect, onToggleFavorite }) => {
   const { betSlip, addSelection } = useBetSlip();
   const isTennis = match.sport?.toLowerCase().includes('tenis') || match.sport?.toLowerCase().includes('tennis');
 
@@ -105,9 +107,23 @@ export const MatchCard: React.FC<MatchCardProps> = memo(({ match, isGoal, onSele
               <span className="text-zinc-500">{getStatusText()}</span>
           )}
         </div>
-        <span className="text-zinc-500 text-[9px] uppercase tracking-widest truncate max-w-[130px] font-bold">
-          {match.league}
-        </span>
+
+        <div className="flex items-center gap-2">
+          <span className="text-zinc-500 text-[9px] uppercase tracking-widest truncate max-w-[130px] font-bold">
+            {match.league}
+          </span>
+          {onToggleFavorite && (
+            <button 
+              onClick={(e) => onToggleFavorite(e, match)}
+              className="group/star p-1 hover:bg-white/5 rounded-full transition-colors"
+            >
+              <Star 
+                size={14} 
+                className={`${isFavorite ? 'fill-[#f2a900] text-[#f2a900] drop-shadow-[0_0_5px_rgba(242,169,0,0.8)]' : 'text-zinc-500 group-hover/star:text-zinc-300'}`} 
+              />
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Teams & Scores */}
@@ -119,6 +135,9 @@ export const MatchCard: React.FC<MatchCardProps> = memo(({ match, isGoal, onSele
                  <PlayerLogo name={match.home} url={match.homeLogo} isFootball={!isTennis} />
                </div>
                <span className="text-white font-bold text-[12px] truncate tracking-tight">{match.home}</span>
+               {match.info?.FS?.R1 > 0 && (
+                 <span className="w-2.5 h-3.5 bg-red-500 rounded-[2px] shadow-[0_0_5px_rgba(239,68,68,0.5)] flex items-center justify-center text-[8px] font-bold text-white ml-1">{match.info.FS.R1 > 1 ? match.info.FS.R1 : ''}</span>
+               )}
             </div>
             {match.isLive && (
                <div className="bg-black border border-white/10 shadow-[inset_0_2px_4px_rgba(0,0,0,1)] rounded-md px-2 py-0.5 flex items-center justify-center min-w-[28px]">
@@ -133,6 +152,9 @@ export const MatchCard: React.FC<MatchCardProps> = memo(({ match, isGoal, onSele
                  <PlayerLogo name={match.away} url={match.awayLogo} isFootball={!isTennis} />
                </div>
                <span className="text-white font-bold text-[12px] truncate tracking-tight">{match.away}</span>
+               {match.info?.FS?.R2 > 0 && (
+                 <span className="w-2.5 h-3.5 bg-red-500 rounded-[2px] shadow-[0_0_5px_rgba(239,68,68,0.5)] flex items-center justify-center text-[8px] font-bold text-white ml-1">{match.info.FS.R2 > 1 ? match.info.FS.R2 : ''}</span>
+               )}
             </div>
             {match.isLive && (
                <div className="bg-black border border-white/10 shadow-[inset_0_2px_4px_rgba(0,0,0,1)] rounded-md px-2 py-0.5 flex items-center justify-center min-w-[28px]">

@@ -9,12 +9,7 @@ interface CasinoSidebarContentProps {
 
 import rawCasinoData from '../data/slotra_casino.json';
 
-const CASINO_GAMES = rawCasinoData.slice(0, 10).map((game: any, index: number) => ({
-  id: index + 1,
-  name: game.name.replace('Game thumb - ', ''),
-  image: game.image,
-  provider: 'Live Casino'
-}));
+const CASINO_GAMES: any[] = [];
 
 const CasinoSidebarContent: React.FC<CasinoSidebarContentProps> = ({ isOpen, onViewChange, onToggle }) => {
   return (
