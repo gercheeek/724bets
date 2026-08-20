@@ -163,6 +163,26 @@ const SportsSidebarContent: React.FC<SportsSidebarContentProps> = ({ isOpen, onV
 
           <button 
             onClick={() => { 
+              setActiveMenu('tahminler'); 
+              onViewChange('tahminler'); 
+              if (window.innerWidth < 1024) onToggle?.();
+            }}
+            className={`flex items-center justify-between py-2.5 mb-1 cursor-pointer transition-all duration-300 relative group px-2 mx-2 rounded-xl ${activeMenu === 'tahminler' ? 'text-[color:var(--theme-accent)] bg-gradient-to-r from-[color:var(--theme-accent)]/15 to-transparent border-none shadow-[0_4px_20px_rgba(0,0,0,0.2)]' : 'text-[#8b92a5] hover:bg-white/5 hover:text-white border-none'}`}
+          >
+            {activeMenu === 'tahminler' && <div className="absolute left-1.5 top-1/2 -translate-y-1/2 w-[4px] h-[50%] rounded-full bg-[color:var(--theme-accent)] shadow-[0_0_12px_var(--theme-accent-glow)] transition-all duration-300 z-10" />}
+            <div className="flex items-center">
+              <Target className={`w-5 h-5 min-w-[20px] transition-all duration-300 ml-2.5 ${activeMenu === 'tahminler' ? 'text-[color:var(--theme-accent)] drop-shadow-[0_0_8px_var(--theme-accent-glow)] scale-110' : 'text-[#8b92a5] group-hover:text-white group-hover:scale-110'}`} strokeWidth={activeMenu === 'tahminler' ? 2.5 : 2} />
+              {isOpen && <span className="ml-4 font-semibold text-[14px] tracking-tight whitespace-nowrap text-white">Tahminler</span>}
+            </div>
+            {!isOpen && (
+               <div className="absolute left-[calc(100%+12px)] top-auto bg-[#1a1d29] text-white px-2.5 py-1.5 rounded shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible whitespace-nowrap z-[999] transition-all font-bold text-xs">
+                 Tahminler
+               </div>
+            )}
+          </button>
+
+          <button 
+            onClick={() => { 
               setActiveMenu('hepsi'); 
               onViewChange('spor724'); 
               window.dispatchEvent(new CustomEvent('changeSportsTab', { detail: 'home' }));

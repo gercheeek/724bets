@@ -1,0 +1,9 @@
+#!/usr/bin/expect -f
+set timeout 120
+set ip "85.121.178.80"
+set password "kQkrGBYHtY76dIF0z1"
+
+spawn ssh -o StrictHostKeyChecking=no root@$ip "cd /opt/724bets-backend && npm rebuild better-sqlite3 && pm2 restart 724bets-api"
+expect "*?assword:*"
+send "$password\r"
+expect eof

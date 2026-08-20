@@ -1,9 +1,9 @@
 #!/usr/bin/expect -f
-set timeout 60
+set timeout 120
 set ip "85.121.178.80"
 set password "kQkrGBYHtY76dIF0z1"
 
-spawn ssh -o StrictHostKeyChecking=no root@$ip "pm2 logs 724bets-api --lines 50 --nostream"
+spawn ssh -o StrictHostKeyChecking=no root@$ip "tail -n 100 /var/log/nginx/access.log | grep casino"
 expect "*?assword:*"
 send "$password\r"
 expect eof

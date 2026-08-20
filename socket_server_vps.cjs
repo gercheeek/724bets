@@ -39,11 +39,14 @@ app.get('/api/casino/test-vps', (req, res) => {
 });
 
 require('dotenv').config();
-const { PrismaClient } = require('@prisma/client');
 const Database = require('better-sqlite3');
 const { PrismaBetterSqlite3 } = require('@prisma/adapter-better-sqlite3');
+const { PrismaClient } = require('./node_modules/.prisma/client/index.js');
 
-const adapter = new PrismaBetterSqlite3({ url: "file:./dev.db" });
+const db = new Database('./dev.db');
+
+const sqlite = new Database('./prisma/dev.db');
+const adapter = new PrismaBetterSqlite3(sqlite);
 const prisma = new PrismaClient({ adapter });
 const INITIAL_BALANCE = 1000.00;
 
@@ -169,12 +172,13 @@ app.post('/api/casino/launch', express.json(), async (req, res) => {
     }
 
     const code = userCode || 'testuser';
-
-    try {
-        await getOrCreateUser(code);
-    } catch(err) {
-        logError('Error ensuring user exists', err.stack || err.message);
+    if (typeof balance === 'number') {
+        userBalances[code] = balance;
+    } else if (userBalances[code] === undefined) {
+        userBalances[code] = INITIAL_BALANCE;
     }
+
+    const currentBalance = userBalances[code];
 
     try {
         // Note: OroPlay account is in Seamless Wallet mode.
@@ -184,7 +188,7 @@ app.post('/api/casino/launch', express.json(), async (req, res) => {
         logInfo(`[Casino Launch] Success for ${code}: vendor=${vendorCode}, game=${gameCode}`);
         res.json({ success: true, launchUrl: url });
     } catch (err) {
-        logError(`[Casino Launch] Failed for vendor=${vendorCode}, game=${gameCode}`, err.stack || err.message);
+        logError(`[Casino Launch] Failed for vendor=${vendorCode}, game=${gameCode}`, err);
         res.status(500).json({ success: false, error: 'Bu oyun sağlayıcısı şu an kullanılamıyor.' });
     }
 });
@@ -196,7 +200,7 @@ app.get('/api/casino/agent-balance', async (req, res) => {
         const balance = await oroplay.getAgentBalance();
         res.json({ success: true, agentBalance: balance });
     } catch (err) {
-        res.status(500).json({ success: false, error: err.stack || err.message });
+        res.status(500).json({ success: false, error: err.message });
     }
 });
 
@@ -206,7 +210,7 @@ app.get('/api/casino/user-balance', async (req, res) => {
         const user = await getOrCreateUser(userCode);
         res.json({ success: true, balance: user.balance });
     } catch (err) {
-        logError('Error fetching user balance', err.stack || err.message);
+        logError('Error fetching user balance', err);
         res.status(500).json({ success: false, error: 'Internal Server Error' });
     }
 });
@@ -327,7 +331,7 @@ app.get('/api/logo/:teamId', async (req, res) => {
       res.status(404).json({ error: 'Logo not found' });
     }
   } catch (err) {
-    console.error(`[API] Error fetching logo for ${teamName}:`, err.stack || err.message);
+    console.error(`[API] Error fetching logo for ${teamName}:`, err.message);
     res.status(500).json({ error: 'Failed to fetch logo' });
   }
 });
@@ -1304,7 +1308,7 @@ function connectSwarm() {
   }, 10000);
   
   ws.on('error', (err) => {
-      logError("WebSocket Error", { error: err.stack || err.message });
+      logError("WebSocket Error", { error: err.message });
   });
 }
 

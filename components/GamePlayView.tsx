@@ -60,10 +60,13 @@ export const GamePlayView: React.FC<GamePlayViewProps> = ({ game, demoUrl, onClo
 
       if (!vendorCode || !gameCode) {
         const nameStr = (game?.name || '').toLowerCase();
-        if (nameStr.includes('sweet bonanza')) { vendorCode = 'slot-pragmatic'; gameCode = 'vs20sbonz1000'; }
+        if (nameStr.includes('sweet bonanza 1000')) { vendorCode = 'slot-pragmatic'; gameCode = 'vs20fruitswx'; }
+        else if (nameStr.includes('sweet bonanza')) { vendorCode = 'slot-pragmatic'; gameCode = 'vs20fruitsw'; }
+        else if (nameStr.includes('gates of olympus 1000')) { vendorCode = 'slot-pragmatic'; gameCode = 'vs20olympx'; }
         else if (nameStr.includes('gates of olympus')) { vendorCode = 'slot-pragmatic'; gameCode = 'vs20olympgate'; }
         else if (nameStr.includes('big bass')) { vendorCode = 'slot-pragmatic'; gameCode = 'vs10txbigbass'; }
-        else if (nameStr.includes('sugar rush')) { vendorCode = 'slot-pragmatic'; gameCode = 'vs20sugarrushx'; }
+        else if (nameStr.includes('sugar rush 1000')) { vendorCode = 'slot-pragmatic'; gameCode = 'vs20sugarrushx'; }
+        else if (nameStr.includes('sugar rush')) { vendorCode = 'slot-pragmatic'; gameCode = 'vs20sugarrush'; }
         else if (nameStr.includes('starlight')) { vendorCode = 'slot-pragmatic'; gameCode = 'vs20starlightx'; }
         else if (nameStr.includes('dog house')) { vendorCode = 'slot-pragmatic'; gameCode = 'vs20doghouse'; }
         else { vendorCode = 'slot-pragmatic'; gameCode = 'vs20olympx'; } // General slot fallback

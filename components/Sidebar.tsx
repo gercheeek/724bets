@@ -45,7 +45,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, activeView, onViewC
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const isSportsView = ['sports', 'spor724', 'gercek', 'upcomingMatches', 'bulten'].includes(activeView);
+  const isSportsView = ['sports', 'spor724', 'gercek', 'upcomingMatches', 'bulten', 'tahminler'].includes(activeView);
   const isCasinoView = ['casino', 'slots', 'live-casino', 'originals'].includes(activeView);
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, route: string) => {

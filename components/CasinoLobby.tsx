@@ -46,9 +46,9 @@ const getDemoUrl = (game: any): string | null => {
   let symbol = game.demoSymbol || 'vs20olympx'; // Fallback
 
   if (!game.demoSymbol) {
-    if (nameString.includes('sweetbonanza1000')) symbol = 'vs20sbonz1000';
+    if (nameString.includes('sweetbonanza1000')) symbol = 'vs20fruitswx';
     else if (nameString.includes('sweetbonanza')) symbol = 'vs20fruitsw';
-    else if (nameString.includes('gatesofolympus1000')) symbol = 'vs20olympgate1000';
+    else if (nameString.includes('gatesofolympus1000')) symbol = 'vs20olympx';
     else if (nameString.includes('gatesofolympus')) symbol = 'vs20olympgate';
     else if (nameString.includes('sugarrush1000')) symbol = 'vs20sugarrushx';
     else if (nameString.includes('sugarrush')) symbol = 'vs20sugarrush';

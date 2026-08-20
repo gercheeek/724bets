@@ -126,7 +126,7 @@ export const BettingProvider: React.FC<{ children: React.ReactNode }> = ({ child
     let socket;
     try {
         const isProd = window.location.hostname !== 'localhost';
-        const socketUrl = isProd ? 'https://api.724bahis.net' : 'http://localhost:3001';
+        const socketUrl = isProd ? 'https://724bahis.net' : 'http://localhost:3001';
         socket = io(socketUrl); // Node.js server portumuz
         
         socket.on('connect', () => {

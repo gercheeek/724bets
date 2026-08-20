@@ -734,7 +734,7 @@ const Sports1xBetView: React.FC<Sports1xBetViewProps> = ({ activeSport, onSelect
                   </div>
                   
                   {/* RIGHT SIDE: ODDS DESKTOP TABLE */}
-                  <div className="flex-1 w-full flex items-center justify-between md:justify-center xl:justify-center gap-2 md:gap-8 overflow-x-auto pb-1 md:pb-0 hide-scrollbar pt-2 md:pt-0 mt-1 md:mt-0 border-t border-white/5 md:border-0">
+                  <div className="flex-1 w-full flex items-center justify-between md:justify-center xl:justify-center gap-2 md:gap-8 overflow-x-auto pb-1 md:pb-0 hide-scrollbar pt-2 md:pt-0 mt-1 md:mt-0 md:border-0">
                       {/* 1X2 Block */}
                       <div className="flex items-center gap-1.5 md:gap-2 relative">
                         <div className="flex flex-col items-center gap-1 md:gap-2">
@@ -756,12 +756,12 @@ const Sports1xBetView: React.FC<Sports1xBetViewProps> = ({ activeSport, onSelect
                       {/* U/O Block */}
                       <div className="flex items-center gap-1.5 md:gap-2">
                         <div className="flex flex-col items-center gap-1 md:gap-2">
-                          <span className="text-[9px] md:text-[11px] text-zinc-500 font-bold tracking-widest uppercase truncate max-w-[58px] md:max-w-none">ÜST {match.overUnderValue ? `(${match.overUnderValue})` : ''}</span>
-                          {getOddsButton(match, "ou", "Üst", "over")}
+                          <span className="text-[9px] md:text-[11px] text-zinc-500 font-bold tracking-widest uppercase truncate max-w-[58px] md:max-w-none">ÜST {match.odds?.tP ? `(${match.odds.tP})` : ''}</span>
+                          {getOddsButton(match, "ou", "Üst", "tU")}
                         </div>
                         <div className="flex flex-col items-center gap-1 md:gap-2">
-                          <span className="text-[9px] md:text-[11px] text-zinc-500 font-bold tracking-widest uppercase truncate max-w-[58px] md:max-w-none">ALT {match.overUnderValue ? `(${match.overUnderValue})` : ''}</span>
-                          {getOddsButton(match, "ou", "Alt", "under")}
+                          <span className="text-[9px] md:text-[11px] text-zinc-500 font-bold tracking-widest uppercase truncate max-w-[58px] md:max-w-none">ALT {match.odds?.tP ? `(${match.odds.tP})` : ''}</span>
+                          {getOddsButton(match, "ou", "Alt", "tA")}
                         </div>
                       </div>
                       
@@ -780,7 +780,7 @@ const Sports1xBetView: React.FC<Sports1xBetViewProps> = ({ activeSport, onSelect
         })}
 
         {Object.keys(leagues).length === 0 && (
-          <div className="w-full py-20 flex flex-col items-center justify-center bg-[#101318]/90 backdrop-blur-xl rounded-2xl border border-white/5">
+          <div className="w-full py-20 flex flex-col items-center justify-center bg-[#101318]/90 backdrop-blur-xl rounded-2xl">
             <div className="w-12 h-12 border-4 border-white/10 border-t-sports-accent rounded-full animate-spin mb-4"></div>
             <span className="text-zinc-400 font-bold tracking-widest uppercase">Canlı Bülten Yükleniyor...</span>
           </div>

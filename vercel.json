@@ -1,5 +1,6 @@
 {
   "rewrites": [
+    { "source": "/api/evetabi/:path*", "destination": "https://evetabi.com/api/:path*" },
     { "source": "/api/casino/:path*", "destination": "http://85.121.178.80:3001/api/casino/:path*" },
     { "source": "/((?!api/|api$).*)", "destination": "/index.html" }
   ]

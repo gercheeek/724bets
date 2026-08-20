@@ -14,6 +14,11 @@ export default defineConfig(({ mode }) => {
         strictPort: true,
         host: '0.0.0.0',
         proxy: {
+          '/api/evetabi': {
+            target: 'https://evetabi.com/api',
+            changeOrigin: true,
+            rewrite: (path) => path.replace(/^\/api\/evetabi/, '')
+          },
           '/api/casino': {
             target: 'http://localhost:3001',
             changeOrigin: true

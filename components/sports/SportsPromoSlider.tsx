@@ -9,14 +9,15 @@ import { getMatchPriorityScore } from '../../utils/eliteTeams';
 function isBannedLeague(league: string) {
     if (!league) return false;
     const l = league.toUpperCase();
-    return l.includes('QUEENSLAND') || l.includes('VICTORIA') || l.includes('NPL') || l.includes('RESERVE') || l.includes('YOUTH') || l.includes('U19') || l.includes('U21') || l.includes('U23') || l.includes('WOMEN') || l.includes('KADIN') || l.includes('ELEMELER') || l.includes('QUALIFIERS') || l.includes('2.') || l.includes('SERIE B') || l.includes('SERIE C') || l.includes('PORTUGAL 2') || l.includes('CHAMPIONSHIP') || l.includes('LIGA 2') || l.includes('LIG 2') || l.includes('TROPHY') || l.includes('İRLANDA') || l.includes('IRELAND') || l.includes('LEINSTER') || l.includes('ŞAMPİYONASI') || l.includes('AMATEUR') || l.includes('AMATÖR');
+    // Removed ELEMELER and QUALIFIERS to allow UEFA Qualifiers
+    return l.includes('QUEENSLAND') || l.includes('VICTORIA') || l.includes('NPL') || l.includes('RESERVE') || l.includes('YOUTH') || l.includes('U19') || l.includes('U21') || l.includes('U23') || l.includes('WOMEN') || l.includes('KADIN') || l.includes('2.') || l.includes('SERIE B') || l.includes('SERIE C') || l.includes('PORTUGAL 2') || l.includes('CHAMPIONSHIP') || l.includes('LIGA 2') || l.includes('LIG 2') || l.includes('TROPHY') || l.includes('İRLANDA') || l.includes('IRELAND') || l.includes('LEINSTER') || l.includes('ŞAMPİYONASI') || l.includes('AMATEUR') || l.includes('AMATÖR') || l.includes('VIRTUAL') || l.includes('SRL') || l.includes('CYBER') || l.includes('ESPORTS') || l.includes('E-SPORTS') || l.includes('SHORT FOOTBALL') || l.includes('LIGA PRO') || l.includes('MLS+') || l.includes('FIFA');
 }
 
 function isPremium(league: string) {
     if (!league) return false;
     const l = league.toUpperCase();
     
-    // Explicitly exclude amateur/lower leagues
+    // Explicitly exclude amateur/lower/fake leagues
     if (isBannedLeague(league)) {
         return false;
     }
@@ -55,15 +56,14 @@ function isPremium(league: string) {
 
 function isYouthOrReserve(home: string, away: string, league: string) {
     const str = `${home} ${away} ${league}`.toUpperCase();
-    return str.includes('U19') || str.includes('U20') || str.includes('U21') || str.includes('U23') || str.includes('RESERVE') || str.includes('YOUTH') || str.includes('ACADEMY') || str.includes('KADIN') || str.includes('WOMEN');
+    return str.includes('U19') || str.includes('U20') || str.includes('U21') || str.includes('U23') || str.includes('RESERVE') || str.includes('YOUTH') || str.includes('ACADEMY') || str.includes('KADIN') || str.includes('WOMEN') || str.includes('VIRTUAL') || str.includes('SRL') || str.includes('CYBER') || str.includes('ESPORTS') || str.includes('FIFA') || str.includes('MLS+') || str.includes('5X5') || str.includes('3X3') || str.includes('LFL') || str.includes('AMATÖR') || str.includes('AMATEUR') || str.includes('SHORT FOOTBALL');
 }
 
 export const cleanTeamName = (name: string) => {
     if (!name) return '';
-    // Remove common long suffixes to make it cleaner (e.g. Gremio FB Porto Alegrense -> Gremio)
-    // Also remove "VIRTUAL" (case-insensitive) as requested by the user
     return name.replace(/\s(FC|SAD|FB PORTO ALEGRENSE|ROTTERDAM|EAGLES|FK|SK|AS|US|UNITED)$/i, '')
                .replace(/VIRTUAL/i, '')
+               .replace(/\s*\+$/, '')
                .trim();
 };
 
@@ -273,7 +273,7 @@ function MatchSlide({ matchData, theme, leagueName, compact = false, onSelectMat
                     </div>
 
                     {/* Logos and Odds Row */}
-                    <div className="flex items-stretch justify-center w-full relative z-20 gap-3 md:gap-8 max-w-[700px] mx-auto mt-1 md:mt-3 h-[130px] md:h-[190px]">
+                    <div className="flex items-stretch justify-center w-full relative z-20 gap-3 md:gap-8 max-w-[700px] mx-auto mt-1 md:mt-3 h-[130px] sm:h-[150px] md:h-[170px]">
                         {/* Home Team */}
                         <div className="flex flex-col items-center justify-end group cursor-pointer flex-1" onClick={(e) => { e.stopPropagation(); addSelection({ id: matchData.match.homeId || matchData.match.id+'_1', matchId: matchData.match.id, matchName: `${matchData.home} vs ${matchData.away}`, selectionName: 'Maç Sonucu: 1', odd: parseFloat(matchData.homeOdd) }); window.dispatchEvent(new CustomEvent('open-betslip')); }}>
                             <div className="flex-1 flex items-center justify-center w-full mb-2 md:mb-4">
@@ -282,9 +282,9 @@ function MatchSlide({ matchData, theme, leagueName, compact = false, onSelectMat
                                     <PlayerLogo name={matchData.home} fallbackLogo="" sport={matchData.sport} />
                                 </div>
                             </div>
-                            <div className={`shrink-0 flex flex-col items-center justify-center bg-black/40 backdrop-blur-md border border-white/10 rounded-lg px-1 md:px-4 py-1.5 md:py-2.5 group-hover:bg-white/10 group-hover:border-[#00E5FF]/40 transition-all shadow-[0_8px_32px_rgba(0,0,0,0.3)] w-[100%] md:w-auto min-w-[70px] md:min-w-[140px] max-w-[110px] md:max-w-[180px]`}>
-                                <span className={`text-white/70 font-bold uppercase tracking-wider mb-0.5 md:mb-1 group-hover:text-white transition-colors w-full text-center truncate ${compact ? 'text-[7px]' : 'text-[8px] md:text-[10px]'}`} title={cleanTeamName(matchData.home)}>{cleanTeamName(matchData.home)}</span>
-                                <span className={`text-white font-black drop-shadow-[0_0_10px_rgba(255,255,255,0.3)] group-hover:text-[#00E5FF] transition-colors ${compact ? 'text-[14px] md:text-[18px]' : 'text-[16px] md:text-[24px]'}`}>
+                            <div className={`shrink-0 flex flex-col items-center justify-center bg-black/30 backdrop-blur-md border border-white/5 rounded-xl px-2 md:px-4 py-1 md:py-1.5 group-hover:bg-white/10 group-hover:border-[#00E5FF]/30 transition-all shadow-lg w-[100%] md:w-auto min-w-[60px] md:min-w-[110px] max-w-[100px] md:max-w-[140px]`}>
+                                <span className={`text-white/70 font-bold uppercase tracking-wider mb-0.5 group-hover:text-white transition-colors w-full text-center truncate ${compact ? 'text-[6px]' : 'text-[7px] md:text-[9px]'}`} title={cleanTeamName(matchData.home)}>{cleanTeamName(matchData.home)}</span>
+                                <span className={`text-white font-black drop-shadow-[0_0_10px_rgba(255,255,255,0.3)] group-hover:text-[#00E5FF] transition-colors ${compact ? 'text-[12px] md:text-[14px]' : 'text-[14px] md:text-[18px]'}`}>
                                     {matchData.homeOdd === '-' ? '🔒' : <AnimatedOdd value={matchData.homeOdd} />}
                                 </span>
                             </div>
@@ -305,9 +305,9 @@ function MatchSlide({ matchData, theme, leagueName, compact = false, onSelectMat
                                 )}
                             </div>
                             
-                            <div className={`shrink-0 flex flex-col items-center justify-center bg-black/40 backdrop-blur-md border border-white/10 rounded-lg px-2 md:px-6 py-1.5 md:py-2.5 group-hover:bg-white/10 group-hover:border-[#00E5FF]/40 transition-all shadow-[0_8px_32px_rgba(0,0,0,0.3)] w-[90%] md:w-auto min-w-[70px] md:min-w-[120px]`}>
-                                <span className={`text-white/70 font-bold uppercase tracking-wider mb-0.5 md:mb-1 group-hover:text-white transition-colors ${compact ? 'text-[7px]' : 'text-[8px] md:text-[10px]'}`}>BERABERE</span>
-                                <span className={`text-white font-black drop-shadow-[0_0_10px_rgba(255,255,255,0.3)] group-hover:text-[#00E5FF] transition-colors ${compact ? 'text-[14px] md:text-[18px]' : 'text-[16px] md:text-[24px]'}`}>
+                            <div className={`shrink-0 flex flex-col items-center justify-center bg-black/30 backdrop-blur-md border border-white/5 rounded-xl px-2 md:px-4 py-1 md:py-1.5 group-hover:bg-white/10 group-hover:border-[#00E5FF]/30 transition-all shadow-lg w-[90%] md:w-auto min-w-[60px] md:min-w-[110px] max-w-[100px] md:max-w-[140px]`}>
+                                <span className={`text-white/70 font-bold uppercase tracking-wider mb-0.5 group-hover:text-white transition-colors ${compact ? 'text-[6px]' : 'text-[7px] md:text-[9px]'}`}>BERABERE</span>
+                                <span className={`text-white font-black drop-shadow-[0_0_10px_rgba(255,255,255,0.3)] group-hover:text-[#00E5FF] transition-colors ${compact ? 'text-[12px] md:text-[14px]' : 'text-[14px] md:text-[18px]'}`}>
                                     {matchData.drawOdd === '-' ? '🔒' : <AnimatedOdd value={matchData.drawOdd} />}
                                 </span>
                             </div>
@@ -321,9 +321,9 @@ function MatchSlide({ matchData, theme, leagueName, compact = false, onSelectMat
                                     <PlayerLogo name={matchData.away} fallbackLogo="" sport={matchData.sport} />
                                 </div>
                             </div>
-                            <div className={`shrink-0 flex flex-col items-center justify-center bg-black/40 backdrop-blur-md border border-white/10 rounded-lg px-1 md:px-4 py-1.5 md:py-2.5 group-hover:bg-white/10 group-hover:border-[#00E5FF]/40 transition-all shadow-[0_8px_32px_rgba(0,0,0,0.3)] w-[100%] md:w-auto min-w-[70px] md:min-w-[140px] max-w-[110px] md:max-w-[180px]`}>
-                                <span className={`text-white/70 font-bold uppercase tracking-wider mb-0.5 md:mb-1 group-hover:text-white transition-colors w-full text-center truncate ${compact ? 'text-[7px]' : 'text-[8px] md:text-[10px]'}`} title={cleanTeamName(matchData.away)}>{cleanTeamName(matchData.away)}</span>
-                                <span className={`text-white font-black drop-shadow-[0_0_10px_rgba(255,255,255,0.3)] group-hover:text-[#00E5FF] transition-colors ${compact ? 'text-[14px] md:text-[18px]' : 'text-[16px] md:text-[24px]'}`}>
+                            <div className={`shrink-0 flex flex-col items-center justify-center bg-black/30 backdrop-blur-md border border-white/5 rounded-xl px-2 md:px-4 py-1 md:py-1.5 group-hover:bg-white/10 group-hover:border-[#00E5FF]/30 transition-all shadow-lg w-[100%] md:w-auto min-w-[60px] md:min-w-[110px] max-w-[100px] md:max-w-[140px]`}>
+                                <span className={`text-white/70 font-bold uppercase tracking-wider mb-0.5 group-hover:text-white transition-colors w-full text-center truncate ${compact ? 'text-[6px]' : 'text-[7px] md:text-[9px]'}`} title={cleanTeamName(matchData.away)}>{cleanTeamName(matchData.away)}</span>
+                                <span className={`text-white font-black drop-shadow-[0_0_10px_rgba(255,255,255,0.3)] group-hover:text-[#00E5FF] transition-colors ${compact ? 'text-[12px] md:text-[14px]' : 'text-[14px] md:text-[18px]'}`}>
                                     {matchData.awayOdd === '-' ? '🔒' : <AnimatedOdd value={matchData.awayOdd} />}
                                 </span>
                             </div>
@@ -339,43 +339,77 @@ export default function SportsPromoSlider({ matches = [], compact = false, onSel
     const [currentSlide, setCurrentSlide] = useState(0);
 
     const allSlides = useMemo(() => {
-        const soccerMatches = Array.isArray(matches) ? matches.filter(m => (m.sport || '').toLowerCase().includes('futbol') || (m.sport || '').toLowerCase().includes('soccer') || (m.sport || '').toLowerCase().includes('football')) : [];
+        if (!Array.isArray(matches)) return [];
 
-        // Adım 1: Sadece büyük takımları / premium ligleri filtrele (ve genç/rezerv takımları engelle)
-        let premiumMatches = soccerMatches.filter(m => {
-            // Logosuz takımları slider'a verme
-            if (findBestLogoMatch(m.home) === null || findBestLogoMatch(m.away) === null) return false;
+        const ELITE_TEAMS = [
+            'GALATASARAY', 'FENERBAHÇE', 'FENERBAHCE', 'BEŞİKTAŞ', 'BESIKTAS', 'TRABZONSPOR',
+            'MANCHESTER UNITED', 'MANCHESTER CITY', 'ARSENAL', 'LIVERPOOL', 'CHELSEA', 'TOTTENHAM', 'NEWCASTLE', 'ASTON VILLA', 'EVERTON', 'WEST HAM', 'LEICESTER', 'NOTTINGHAM', 'BRIGHTON', 'WOLVERHAMPTON',
+            'REAL MADRID', 'BARCELONA', 'ATLETICO MADRID', 'SEVILLA', 'VALENCIA', 'VILLARREAL', 'REAL SOCIEDAD', 'ATHLETIC BILBAO', 'REAL BETIS', 'CELTA VIGO',
+            'JUVENTUS', 'MILAN', 'INTER', 'NAPOLI', 'ROMA', 'LAZIO', 'ATALANTA', 'FIORENTINA', 'TORINO', 'BOLOGNA', 'PARMA',
+            'BAYERN', 'DORTMUND', 'LEVERKUSEN', 'LEIPZIG', 'FRANKFURT', 'MÖNCHENGLADBACH', 'MONCHENGLADBACH', 'STUTTGART', 'WOLFSBURG', 'BREMEN', 'SCHALKE',
+            'PARIS SAINT-GERMAIN', 'PSG', 'MARSEILLE', 'LYON', 'MONACO', 'LILLE', 'RENNES', 'NICE', 'LENS',
+            'BENFICA', 'PORTO', 'SPORTING', 'BRAGA', 'AJAX', 'PSV', 'FEYENOORD', 'ALKMAAR',
+            'BOCA JUNIORS', 'RIVER PLATE', 'INDEPENDIENTE', 'RACING CLUB', 'SAN LORENZO', 'FLAMENGO', 'PALMEIRAS', 'SANTOS', 'SÃO PAULO', 'SAO PAULO', 'CORINTHIANS', 'FLUMINENSE', 'GREMIO', 'MINEIRO', 'CRUZEIRO',
+            'CELTIC', 'RANGERS', 'OLYMPIACOS', 'PANATHINAIKOS', 'AEK', 'PAOK', 'BRUGGE', 'ANDERLECHT', 'SALZBURG', 'KOPENHAG', 'COPENHAGEN', 'SHAKHTAR', 'DİNAMO KİEV', 'DYNAMO KYIV', 'DINAMO ZAGREB', 'KIZILYILDIZ', 'RED STAR', 'PARTIZAN', 'SLAVIA PRAG',
+            'INTER MIAMI', 'GALAXY', 'AL NASSR', 'AL HILAL', 'AL ITTIHAD', 'TÜRKİYE', 'TURKEY'
+        ];
+
+        // 1. Temel Filtreleme: SADECE Elit Takımlar ve Sahte/Genç maçları eleme
+        const validMatches = matches.filter(m => {
+            const h = (m.home || '').toUpperCase();
+            const a = (m.away || '').toUpperCase();
+            const l = (m.league || '').toUpperCase();
             
-            if (isYouthOrReserve(m.home || '', m.away || '', m.league || '')) return false;
-            if (isBannedLeague(m.league || '')) return false;
-            return isPremium(m.league || '') || getMatchPriorityScore(m.home, m.away) > 0;
+            if (!h || !a) return false;
+            if (isYouthOrReserve(h, a, l)) return false;
+            if (isBannedLeague(l)) return false;
+            
+            // ELİT TAKIM KONTROLÜ: Ev sahibi veya deplasmandan biri listede olmalı
+            const isEliteMatch = ELITE_TEAMS.some(team => h.includes(team) || a.includes(team));
+            
+            return isEliteMatch;
         });
-        
-        // Eğer premium maç hiç yoksa (hem canlı hem gelecek), en azından logolu maçlara düş (yine gençleri engelle)
-        if (premiumMatches.length === 0) {
-            premiumMatches = soccerMatches.filter(m => {
-                if (isYouthOrReserve(m.home || '', m.away || '', m.league || '')) return false;
-                if (isBannedLeague(m.league || '')) return false;
-                return findBestLogoMatch(m.home) !== null && findBestLogoMatch(m.away) !== null;
-            });
-        }
 
-        const sortedSoccerMatches = [...premiumMatches].sort((a, b) => {
-            let scoreA = getMatchPriorityScore(a.home, a.away) + ((a.league || '').toUpperCase().includes('SÜPER LİG') ? 1000 : 0) + ((a.league || '').toUpperCase().includes('CHAMPIONS') ? 500 : 0);
-            let scoreB = getMatchPriorityScore(b.home, b.away) + ((b.league || '').toUpperCase().includes('SÜPER LİG') ? 1000 : 0) + ((b.league || '').toUpperCase().includes('CHAMPIONS') ? 500 : 0);
-            
-            // Canlı maçlara her zaman öncelik ver ama artık "ufak takım" filtrelemesinden geçtiğimiz için
-            // sadece BÜYÜK takımların canlı maçları öne çıkacak. Canlı büyük maç yoksa, gelecek büyük maçlar çıkacak.
-            if (a.isLive) scoreA += 10000;
-            if (b.isLive) scoreB += 10000;
-            
-            if (findBestLogoMatch(a.home) && findBestLogoMatch(a.away)) scoreA += 50;
-            if (findBestLogoMatch(b.home) && findBestLogoMatch(b.away)) scoreB += 50;
-            
+        // 2. Puanlama ve Sıralama
+        const sorted = [...validMatches].sort((a, b) => {
+            const homeA = (a.home || '').toUpperCase();
+            const awayA = (a.away || '').toUpperCase();
+            const homeB = (b.home || '').toUpperCase();
+            const awayB = (b.away || '').toUpperCase();
+
+            const getScore = (home: string, away: string, isLive: boolean) => {
+                let score = 0;
+                const matchStr = `${home} ${away}`.toUpperCase();
+                
+                // Türk Takımlarına Sınırsız Öncelik
+                if (matchStr.includes('BEŞİKTAŞ') || matchStr.includes('BESIKTAS') ||
+                    matchStr.includes('FENERBAHÇE') || matchStr.includes('FENERBAHCE') ||
+                    matchStr.includes('GALATASARAY') || matchStr.includes('TRABZONSPOR') ||
+                    matchStr.includes('TÜRKİYE') || matchStr.includes('TURKEY')) {
+                    score += 50000;
+                }
+
+                // Canlı Maçlara Ekstra Puan (Böylece Elit Canlılar En Üste Çıkar)
+                if (isLive) score += 1000;
+
+                // İki takım da Elit ise (Derbi)
+                const isHomeElite = ELITE_TEAMS.some(t => home.includes(t));
+                const isAwayElite = ELITE_TEAMS.some(t => away.includes(t));
+                if (isHomeElite && isAwayElite) score += 500;
+
+                // Logosu olanlara ufak bir avantaj
+                if (findBestLogoMatch(home) && findBestLogoMatch(away)) score += 50;
+
+                return score;
+            };
+
+            const scoreA = getScore(homeA, awayA, !!a.isLive);
+            const scoreB = getScore(homeB, awayB, !!b.isLive);
+
             return scoreB - scoreA;
         });
 
-        let availableMatches = sortedSoccerMatches.slice(0, 8); // Max 8 matches
+        const availableMatches = sorted.slice(0, 8); // Max 8 matches
 
         const matchSlides = availableMatches.map((m, idx) => {
             let theme = 'premium';
@@ -555,7 +589,7 @@ export default function SportsPromoSlider({ matches = [], compact = false, onSel
                 .hud-stripes { background: repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(0, 255, 135, 0.03) 5px, rgba(0, 255, 135, 0.03) 10px); }
             `}</style>
 
-            <div className={`overflow-hidden rounded-xl relative w-full ${compact ? 'h-[180px] sm:h-[200px] md:h-[220px]' : 'h-[220px] sm:h-[240px] md:h-[280px]'} bg-[#050505] shadow-2xl cursor-pointer font-montserrat`}>
+            <div className={`overflow-hidden rounded-xl relative w-full ${compact ? 'h-[180px] sm:h-[200px] md:h-[220px]' : 'h-[240px] sm:h-[280px] md:h-[300px]'} bg-[#050505] shadow-2xl cursor-pointer font-montserrat`}>
                 
                 <div className="w-full h-full flex transition-transform duration-700 ease-in-out" style={{ transform: getTransform() }}>
                     {allSlides.map((slide) => (

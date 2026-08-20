@@ -628,7 +628,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
             `}</style>
             
             {/* Chat Header */}
-            <div className="bg-[#0A0C10] pl-3 pr-2 h-[72px] text-white flex items-center justify-between flex-shrink-0 shadow-[0_4px_30px_rgba(0,0,0,0.8)] z-[100] border-b border-white/5 relative">
+            <div className="bg-[#0A0C10] pl-3 pr-2 h-[72px] text-white flex items-center justify-between flex-shrink-0 shadow-[0_4px_30px_rgba(0,0,0,0.8)] z-[100] relative">
                 
                 {/* Channel Dropdown */}
                 <div className="relative w-full pr-4 z-50">
@@ -1080,7 +1080,7 @@ const ModernChat: React.FC<ModernChatProps> = ({ open, onClose, siteUser, userRo
     )}
 
     {/* Bottom Input Area */}
-    <div className="p-3 bg-transparent border-t border-white/5 relative shrink-0">
+    <div className="p-3 bg-transparent relative shrink-0">
         
         {/* Floating New Messages Button */}
         {isScrolledUp && unreadCount > 0 && (

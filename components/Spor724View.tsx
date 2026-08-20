@@ -1110,7 +1110,7 @@ export default function Spor724View({ onNavigate, defaultTab }: Spor724ViewProps
   } as React.CSSProperties;
 
   return (
-    <div style={dynamicStyle} className={`flex flex-col h-[calc(100vh-64px)] md:h-screen w-full bg-[#0a0c10] text-zinc-300 font-sans overflow-hidden relative transition-colors duration-700 ${isEsportsMode ? 'theme-esports' : ''}`}>
+    <div style={dynamicStyle} className={`flex flex-col h-[calc(100vh-64px)] md:h-screen w-full bg-[#000000] text-zinc-300 font-sans overflow-hidden relative transition-colors duration-700 ${isEsportsMode ? 'theme-esports' : ''}`}>
       
       {/* Premium Luxury Background Layer */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
@@ -1137,7 +1137,7 @@ export default function Spor724View({ onNavigate, defaultTab }: Spor724ViewProps
         <div className="max-w-[1200px] mx-auto pb-24 md:pb-12">
             
             {/* Top Icon Navigation (Sticky) */}
-            <div className="sticky top-0 z-50 bg-[#0a0c10]/95 backdrop-blur-md shadow-xl flex items-center justify-between mb-4">
+            <div className="sticky top-0 z-50 bg-[#000000]/95 backdrop-blur-md shadow-xl flex items-center justify-between mb-4 border-b border-white/[0.05]">
                 <div className="flex-1 overflow-hidden">
                   <SportsIconNav activeTab={navTab} liveCounts={liveCountsMap} onTabChange={(tab) => {
                     handleSetSelectedMatch(null); // HERHANGİ BİR SEKMEYE TIKLANDIĞINDA MAÇIN İÇİNDEN ÇIK!
@@ -1299,8 +1299,8 @@ export default function Spor724View({ onNavigate, defaultTab }: Spor724ViewProps
                     )}
                     
                     {!isLoading && filteredMatches.length === 0 && (
-                       <div className="text-center py-24 text-zinc-400 text-sm font-medium flex flex-col items-center justify-center bg-gradient-to-b from-[#18191c] to-[#111216] rounded-xl border border-white/5 shadow-inner">
-                          <div className="w-20 h-20 bg-[#23273a]/50 rounded-full flex items-center justify-center mb-5 border border-white/5 shadow-[0_0_30px_rgba(0,0,0,0.5)]">
+                       <div className="text-center py-24 text-zinc-400 text-sm font-medium flex flex-col items-center justify-center bg-gradient-to-b from-[#0a0a0a] to-[#000000] rounded-xl border border-white/5 shadow-inner">
+                          <div className="w-20 h-20 bg-[#111111]/50 rounded-full flex items-center justify-center mb-5 border border-white/5 shadow-[0_0_30px_rgba(0,0,0,0.8)]">
                              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-zinc-500">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                              </svg>
@@ -1319,7 +1319,7 @@ export default function Spor724View({ onNavigate, defaultTab }: Spor724ViewProps
                             <div className="flex flex-col gap-8">
                                 {favorites.length > 0 && filteredMatches.filter(m => favorites.includes(String(m.id))).length > 0 && (
                                     <div className="flex flex-col gap-3 mb-8">
-                                        <div className="flex items-center gap-2 px-1 border-b border-[#f2a900]/30 pb-2">
+                                        <div className="flex items-center gap-2 px-1 pb-2">
                                             <div className="w-6 h-6 rounded-md bg-[#f2a900]/10 text-[#f2a900] flex items-center justify-center">
                                                 <Star size={14} className="fill-[#f2a900]" />
                                             </div>
@@ -1362,7 +1362,7 @@ export default function Spor724View({ onNavigate, defaultTab }: Spor724ViewProps
                                     if (nonFavSportMatches.length === 0) return null;
                                     return (
                                         <div key={sport} className="flex flex-col gap-3">
-                                            <div className="flex items-center gap-2 px-1 border-b border-white/5 pb-2">
+                                            <div className="flex items-center gap-2 px-1 pb-2">
                                                 <div className="w-6 h-6 rounded-md bg-[#3b82f6]/10 text-[#3b82f6] flex items-center justify-center">
                                                     {getSportIcon(sport)}
                                                 </div>

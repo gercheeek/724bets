@@ -296,7 +296,8 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
           hexColor: '#60A5FA',
           isTurkish: false,
           bgImage: '/assets/leagues/champions-league-bg.jpg',
-          badgeText: 'Öne Çıkan Turnuva'
+          badgeText: 'POPÜLER',
+          isSpecial: true
       };
     }
     if (l.includes('avrupa ligi') || l.includes('europa league')) {
@@ -311,7 +312,8 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
           hexColor: '#F97316',
           isTurkish: false,
           bgImage: '/assets/leagues/europa-league-bg.jpg',
-          badgeText: 'Öne Çıkan Turnuva'
+          badgeText: 'POPÜLER',
+          isSpecial: true
       };
     }
     if (l.includes('konferans ligi') || l.includes('conference league')) {
@@ -326,7 +328,8 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
           hexColor: '#22C55E',
           isTurkish: false,
           bgImage: '/assets/leagues/conference-league-bg.jpg',
-          badgeText: 'Öne Çıkan Turnuva'
+          badgeText: 'POPÜLER',
+          isSpecial: true
       };
     }
     if (l.includes('dostluk maçları') || l.includes('friendlies') || l.includes('friendly')) {
@@ -420,11 +423,16 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
           const theme = getLeagueTheme(league, isTennis);
           const displayLeagueName = league.replace(/^AVRUPA\s*-\s*/i, '').trim();
           
+          const isSpecial = (theme as any).isSpecial;
+          const specialWrapper = isSpecial 
+            ? `border border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.5)] mt-6 mb-3 scale-[1.02] transform transition-transform ${theme.accentShadow}` 
+            : "border border-white/5 mt-3 shadow-lg";
+
           return (
-            <div key={league} className={`group bg-gradient-to-r from-[#181a25] to-[#12141d] hover:from-[#1d202e] hover:to-[#151824] rounded-xl overflow-hidden border border-white/5 border-l-[4px] ${theme.accentBorder} relative mt-3 shadow-lg`}>
+            <div key={league} className={`group bg-gradient-to-r from-[#181a25] to-[#12141d] hover:from-[#1d202e] hover:to-[#151824] rounded-xl overflow-hidden border-l-[4px] ${theme.accentBorder} relative ${specialWrapper}`}>
               <button 
                 onClick={() => toggleLeague(league)}
-                className={`w-full flex items-center justify-between px-4 sm:px-6 py-4 sm:py-5 relative text-left bg-transparent group`}
+                className={`w-full flex items-center justify-between px-4 sm:px-6 relative text-left bg-transparent group ${isSpecial ? 'py-5 sm:py-6' : 'py-4 sm:py-5'}`}
               >
                 {/* Custom Cinematic Background Image */}
                 {(theme as any).bgImage && (
@@ -443,7 +451,7 @@ export const PopularEventsAccordion: React.FC<PopularEventsAccordionProps> = ({ 
 
 
                   <div className="flex flex-col items-start text-left min-w-0 flex-1 pr-4 gap-1 sm:gap-1.5">
-                    <span className="text-white font-extrabold text-[15px] sm:text-[17px] tracking-wide uppercase truncate w-full drop-shadow-sm" title={displayLeagueName}>
+                    <span className={`text-white font-extrabold tracking-wide uppercase truncate w-full drop-shadow-sm ${isSpecial ? 'text-[17px] sm:text-[20px]' : 'text-[15px] sm:text-[17px]'}`} title={displayLeagueName}>
                       {displayLeagueName}
                     </span>
                     <div className="flex items-center">
