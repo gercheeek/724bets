@@ -133,6 +133,63 @@ const Header: React.FC<HeaderProps> = ({
   const dropdownRef = useRef<HTMLDivElement>(null);
   const walletDropdownRef = useRef<HTMLDivElement>(null);
   const [logoHoverCount, setLogoHoverCount] = useState(0);
+
+  // Multi-Currency Rates & Converter Engine (Base: TRY)
+  const ALL_CURRENCIES = [
+    { code: 'TRY', name: 'Türk Lirası (TL)', symbol: '₺', bg: '#00E5FF', dec: 2 },
+    { code: 'USD', name: 'Amerikan Doları', symbol: '$', bg: '#10B981', dec: 2 },
+    { code: 'USDT', name: 'Tether (USDT)', symbol: '₮', bg: '#26A17B', dec: 2 },
+    { code: 'BTC', name: 'Bitcoin (BTC)', symbol: '₿', bg: '#F7931A', dec: 5 },
+    { code: 'ETH', name: 'Ethereum (ETH)', symbol: 'Ξ', bg: '#627EEA', dec: 4 },
+    { code: 'XRP', name: 'Ripple (XRP)', symbol: '✕', bg: '#23292F', dec: 2 },
+    { code: 'TRX', name: 'TRON (TRX)', symbol: 'T', bg: '#EF0027', dec: 2 },
+    { code: 'SOL', name: 'Solana (SOL)', symbol: 'S', bg: '#14F195', dec: 3 },
+    { code: 'LTC', name: 'Litecoin (LTC)', symbol: 'Ł', bg: '#345D9D', dec: 3 }
+  ];
+
+  const [rates, setRates] = useState<Record<string, number>>({
+    TRY: 1,
+    USD: 36.50,
+    USDT: 36.50,
+    BTC: 3450000.00,
+    ETH: 98000.00,
+    XRP: 92.50,
+    TRX: 8.40,
+    SOL: 6800.00,
+    LTC: 4200.00
+  });
+
+  useEffect(() => {
+    async function fetchRates() {
+      try {
+        const res = await fetch('https://api.binance.com/api/v3/ticker/price?symbols=%5B%22USDTTRY%22,%22BTCTRY%22,%22ETHTRY%22,%22XRPTRY%22,%22TRXTRY%22,%22LTCTRY%22,%22SOLTRY%22%5D');
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data)) {
+            setRates(prev => {
+              const updated = { ...prev };
+              data.forEach((item: { symbol: string; price: string }) => {
+                const price = parseFloat(item.price);
+                if (item.symbol === 'USDTTRY') {
+                  updated.USDT = price;
+                  updated.USD = price;
+                } else if (item.symbol === 'BTCTRY') updated.BTC = price;
+                else if (item.symbol === 'ETHTRY') updated.ETH = price;
+                else if (item.symbol === 'XRPTRY') updated.XRP = price;
+                else if (item.symbol === 'TRXTRY') updated.TRX = price;
+                else if (item.symbol === 'LTCTRY') updated.LTC = price;
+                else if (item.symbol === 'SOLTRY') updated.SOL = price;
+              });
+              return updated;
+            });
+          }
+        }
+      } catch (e) {
+        // Fallback rates active
+      }
+    }
+    fetchRates();
+  }, []);
   
   // Editor Backdoor State
   const lastLogoClickRef = useRef<number>(0);
@@ -451,61 +508,91 @@ const Header: React.FC<HeaderProps> = ({
 
 
               {/* Combined Balance & Wallet Pill */}
-              <div className="flex items-center gap-1.5 bg-[#20242D] border border-transparent rounded-xl p-1.5 shadow-inner relative" ref={walletDropdownRef}>
-                {/* Balance Selector */}
-                <div 
-                  className="flex items-center px-3 md:px-4 cursor-pointer hover:bg-white/5 rounded-lg transition-colors h-[36px]"
-                  onClick={() => setWalletDropdownOpen(prev => !prev)}
-                >
-                  <span className="font-black text-[#00E5FF] text-[13px] md:text-[14px] tracking-tight mr-2 whitespace-nowrap drop-shadow-[0_0_5px_rgba(16,185,129,0.3)]">₺{Number(siteUser.balance || 0).toFixed(2)}</span>
-                  <ChevronDown className={`w-4 h-4 text-[#00E5FF]/70 transition-transform ${walletDropdownOpen ? 'rotate-180' : ''}`} />
-                </div>
-                
-                {/* Deposit Button */}
-                <button 
-                  onClick={() => {
-                    const event = new CustomEvent('openDepositModal', { detail: { tab: 'deposit' } });
-                    window.dispatchEvent(event);
-                  }}
-                  className="bg-gradient-to-r from-[color:var(--theme-accent)]/20 to-[color:var(--theme-accent)]/5 hover:from-[color:var(--theme-accent)]/30 hover:to-[color:var(--theme-accent)]/10 text-[color:var(--theme-accent)] font-black tracking-widest text-[12px] h-[36px] px-4 md:px-5 rounded-lg transition-all flex items-center shadow-[0_0_15px_rgba(0,229,255,0.15)] hover:shadow-[0_0_25px_rgba(0,229,255,0.3)] uppercase border-none"
-                >
-                  <Wallet className="w-4 h-4 mr-2 hidden sm:block" />
-                  CÜZDAN
-                </button>
+              {(() => {
+                const activeCurr = ALL_CURRENCIES.find(c => c.code === selectedCurrency) || ALL_CURRENCIES[0];
+                const displayRate = rates[activeCurr.code] || 1;
+                const convertedDisplayVal = (Number(siteUser.balance || 0) / displayRate);
 
-                {walletDropdownOpen && (
-                  <div className="absolute left-1/2 -translate-x-1/2 md:translate-x-0 md:right-0 md:left-auto top-[calc(100%+8px)] w-72 rounded-xl py-0 z-50 bg-[#0A0C10] border border-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.8)] text-left overflow-hidden">
-                    <div className="p-3 border-b border-white/5">
-                      <div className="relative">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                        <input 
-                          type="text" 
-                          value={walletSearch}
-                          onChange={(e) => setWalletSearch(e.target.value)}
-                          placeholder={t("wallet_ara")} 
-                          className="w-full bg-[#0A0C10] border border-white/5 rounded-lg py-2 pl-9 pr-4 text-white text-sm focus:outline-none focus:border-emerald-500/50 transition-colors placeholder-zinc-500"
-                        />
-                      </div>
+                const filteredCurrencies = ALL_CURRENCIES.filter(c => 
+                  c.name.toLowerCase().includes(walletSearch.toLowerCase()) || 
+                  c.code.toLowerCase().includes(walletSearch.toLowerCase())
+                );
+
+                return (
+                  <div className="flex items-center gap-1.5 bg-[#20242D] border border-transparent rounded-xl p-1.5 shadow-inner relative" ref={walletDropdownRef}>
+                    {/* Balance Selector */}
+                    <div 
+                      className="flex items-center px-3 md:px-4 cursor-pointer hover:bg-white/5 rounded-lg transition-colors h-[36px]"
+                      onClick={() => setWalletDropdownOpen(prev => !prev)}
+                    >
+                      <span className="font-black text-[#00E5FF] text-[13px] md:text-[14px] tracking-tight mr-2 whitespace-nowrap drop-shadow-[0_0_5px_rgba(16,185,129,0.3)]">
+                        {activeCurr.symbol}{convertedDisplayVal.toLocaleString('tr-TR', { minimumFractionDigits: activeCurr.dec, maximumFractionDigits: activeCurr.dec })} <span className="text-[10px] text-zinc-400 font-bold ml-0.5">{activeCurr.code}</span>
+                      </span>
+                      <ChevronDown className={`w-4 h-4 text-[#00E5FF]/70 transition-transform ${walletDropdownOpen ? 'rotate-180' : ''}`} />
                     </div>
-                    <div className="flex flex-col max-h-[300px] overflow-y-auto">
-                      {[
-                        { sym: 'USD', icon: '$', bg: '#00E5FF', name: 'Dolar' },
-                        { sym: 'USDT', icon: '₮', bg: '#26A17B', name: 'Tether' }
-                      ].map((crypto) => (
-                        <div key={crypto.sym} className="flex items-center justify-between px-4 py-3 hover:bg-white/5 cursor-pointer transition-colors group">
-                          <span className="text-white font-bold text-[14px] font-mono">{Number(crypto.sym === 'USD' ? (siteUser.balance || 0) : 0).toFixed(2)}</span>
-                          <div className="flex items-center gap-2">
-                            <span className="text-zinc-500 text-[12px] group-hover:text-zinc-400">{crypto.name}</span>
-                            <div className="w-6 h-6 rounded-full flex items-center justify-center text-[#06080C] text-[10px] font-bold" style={{ backgroundColor: crypto.bg }}>
-                              {crypto.icon}
-                            </div>
+                    
+                    {/* Deposit Button */}
+                    <button 
+                      onClick={() => {
+                        const event = new CustomEvent('openDepositModal', { detail: { tab: 'deposit' } });
+                        window.dispatchEvent(event);
+                      }}
+                      className="bg-gradient-to-r from-[color:var(--theme-accent)]/20 to-[color:var(--theme-accent)]/5 hover:from-[color:var(--theme-accent)]/30 hover:to-[color:var(--theme-accent)]/10 text-[color:var(--theme-accent)] font-black tracking-widest text-[12px] h-[36px] px-4 md:px-5 rounded-lg transition-all flex items-center shadow-[0_0_15px_rgba(0,229,255,0.15)] hover:shadow-[0_0_25px_rgba(0,229,255,0.3)] uppercase border-none"
+                    >
+                      <Wallet className="w-4 h-4 mr-2 hidden sm:block" />
+                      CÜZDAN
+                    </button>
+
+                    {walletDropdownOpen && (
+                      <div className="absolute left-1/2 -translate-x-1/2 md:translate-x-0 md:right-0 md:left-auto top-[calc(100%+8px)] w-72 rounded-xl py-0 z-50 bg-[#0A0C10] border border-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.8)] text-left overflow-hidden">
+                        <div className="p-3 border-b border-white/5">
+                          <div className="relative">
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                            <input 
+                              type="text" 
+                              value={walletSearch}
+                              onChange={(e) => setWalletSearch(e.target.value)}
+                              placeholder="Para Birimi Veya Coin Ara..." 
+                              className="w-full bg-[#0A0C10] border border-white/5 rounded-lg py-2 pl-9 pr-4 text-white text-sm focus:outline-none focus:border-emerald-500/50 transition-colors placeholder-zinc-500"
+                            />
                           </div>
                         </div>
-                      ))}
-                    </div>
+                        <div className="flex flex-col max-h-[300px] overflow-y-auto">
+                          {filteredCurrencies.map((crypto) => {
+                            const cRate = rates[crypto.code] || 1;
+                            const cVal = (Number(siteUser.balance || 0) / cRate);
+                            const isSelected = selectedCurrency === crypto.code;
+
+                            return (
+                              <div 
+                                key={crypto.code} 
+                                onClick={() => {
+                                  setSelectedCurrency(crypto.code);
+                                  setWalletDropdownOpen(false);
+                                }}
+                                className={`flex items-center justify-between px-4 py-3 hover:bg-white/10 cursor-pointer transition-colors group ${isSelected ? 'bg-white/10 border-l-2 border-[#00E5FF]' : ''}`}
+                              >
+                                <div className="flex flex-col">
+                                  <span className="text-white font-bold text-[14px] font-mono">
+                                    {crypto.symbol}{cVal.toLocaleString('tr-TR', { minimumFractionDigits: crypto.dec, maximumFractionDigits: crypto.dec })}
+                                  </span>
+                                  <span className="text-[10px] text-zinc-500">1 {crypto.code} = {cRate.toLocaleString('tr-TR', { maximumFractionDigits: 2 })} ₺</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <span className="text-zinc-400 text-[11px] font-semibold group-hover:text-white transition-colors">{crypto.name}</span>
+                                  <div className="w-6 h-6 rounded-full flex items-center justify-center text-[#06080C] text-[10px] font-black shadow-sm" style={{ backgroundColor: crypto.bg }}>
+                                    {crypto.symbol}
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>              <div className="relative" ref={profileRef}>
+                );
+              })()}              <div className="relative" ref={profileRef}>
                 {/* User Avatar Block */}
                 <div 
                   className="flex items-center bg-[#20242D] hover:bg-[#2a303c] border-none shadow-sm cursor-pointer transition-colors rounded-xl p-1.5 pr-3 h-[48px]"
