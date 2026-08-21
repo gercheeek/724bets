@@ -45,8 +45,7 @@ const { PrismaClient } = require('./node_modules/.prisma/client/index.js');
 
 const db = new Database('./dev.db');
 
-const sqlite = new Database('./prisma/dev.db');
-const adapter = new PrismaBetterSqlite3(sqlite);
+const adapter = new PrismaBetterSqlite3({ url: 'file:./dev.db' });
 const prisma = new PrismaClient({ adapter });
 const INITIAL_BALANCE = 1000.00;
 
