@@ -13,7 +13,7 @@ export default function AdminRiskTab() {
     useEffect(() => {
         const fetchStats = async () => {
             try {
-                const res = await fetch('https://api.724bahis.net/api/admin/dashboard-stats');
+                const res = await fetch('/api/admin/dashboard-stats');
                 const data = await res.json();
                 if (data.success) {
                     setStats(data.stats);

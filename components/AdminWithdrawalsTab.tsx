@@ -21,7 +21,7 @@ export default function AdminWithdrawalsTab() {
     setLoading(true);
     setError('');
     try {
-      const res = await fetch('https://api.724bahis.net/api/admin/payments/pending?type=withdraw');
+      const res = await fetch('/api/admin/payments/pending?type=withdraw');
       const data = await res.json();
       if (data.success) {
         setRequests(data.pending);
@@ -43,8 +43,8 @@ export default function AdminWithdrawalsTab() {
   const handleAction = async (id: string, action: 'approve' | 'reject') => {
     try {
       const endpoint = action === 'approve' 
-        ? 'https://api.724bahis.net/api/admin/payments/approve' 
-        : 'https://api.724bahis.net/api/admin/payments/reject';
+        ? '/api/admin/payments/approve' 
+        : '/api/admin/payments/reject';
       
       const res = await fetch(endpoint, {
         method: 'POST',

@@ -19,7 +19,7 @@ export function AdminWalletsTab() {
 
   const fetchMethods = async () => {
     try {
-      const res = await fetch('https://api.724bahis.net/api/admin/payment-methods');
+      const res = await fetch('/api/admin/payment-methods');
       const data = await res.json();
       if (data.success) {
         setMethods(data.methods);
@@ -40,7 +40,7 @@ export function AdminWalletsTab() {
     
     try {
       const isNew = !editingMethod.id;
-      const url = 'https://api.724bahis.net/api/admin/payment-methods';
+      const url = '/api/admin/payment-methods';
       const method = isNew ? 'POST' : 'PUT';
       
       const res = await fetch(url, {
@@ -65,7 +65,7 @@ export function AdminWalletsTab() {
   const handleDelete = async (id: string) => {
     if (!confirm('Silmek istediğinize emin misiniz?')) return;
     try {
-      const res = await fetch('https://api.724bahis.net/api/admin/payment-methods', {
+      const res = await fetch('/api/admin/payment-methods', {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id })

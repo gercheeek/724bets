@@ -8,7 +8,7 @@ import {
 } from 'recharts';
 import { io } from 'socket.io-client';
 
-const socket = io('https://api.724bahis.net', { transports: ['websocket'] });
+const socket = io('', { transports: ['websocket'] });
 
 interface ApiMatch {
     id: string;
@@ -51,7 +51,7 @@ export default function AdminSportsTab() {
 
     useEffect(() => {
         // Fetch initial list
-        fetch('https://api.724bahis.net/api/sports/matches')
+        fetch('/api/sports/matches')
             .then(res => res.json())
             .then(data => {
                 if (data.success) {
