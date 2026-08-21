@@ -123,7 +123,7 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose, initialTab = 'deposi
       const fetchHistory = async () => {
         setLoadingHistory(true);
         try {
-          const res = await fetch(`https://api.724bahis.net/api/payments/history?userId=${siteUser.id}`);
+          const res = await fetch(`/api/payments/history?userId=${siteUser.id}`);
           const data = await res.json();
           if (data.success) {
             setHistory(data.history);
@@ -192,7 +192,7 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose, initialTab = 'deposi
     }
 
     try {
-      const endpoint = 'https://api.724bahis.net/api/payments/withdraw';
+      const endpoint = '/api/payments/withdraw';
       const res = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

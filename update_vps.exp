@@ -4,7 +4,7 @@ set timeout -1
 set ip "85.121.178.80"
 set password "kQkrGBYHtY76dIF0z1"
 
-spawn scp -o StrictHostKeyChecking=no socket_server.cjs root@$ip:/opt/724bets-backend/
+spawn scp -o StrictHostKeyChecking=no socket_server_vps.cjs socket_server.cjs oroplay.cjs gamdom_image_map.json root@$ip:/opt/724bets-backend/
 expect "*?assword:*"
 send "$password\r"
 expect eof
