@@ -586,15 +586,28 @@ app.post('/api/payments/withdraw', express.json(), async (req, res) => {
         const { userId, method, amount, txHash } = req.body; // txHash can be user's IBAN/Wallet for withdrawal
         if (!userId || !method || !amount) return res.status(400).json({ success: false, error: 'Missing fields' });
         
-        const user = await prisma.user.findUnique({ where: { id: userId } });
-        if (!user || user.balance < amount) {
-            return res.status(400).json({ success: false, error: 'Insufficient balance' });
+        let user = await prisma.user.findFirst({
+            where: {
+                OR: [
+                    { id: userId },
+                    { username: userId }
+                ]
+            }
+        });
+
+        if (!user) {
+            user = await getOrCreateUser(userId);
+        }
+
+        const withdrawAmount = parseFloat(amount);
+        if (!user || user.balance < withdrawAmount) {
+            return res.status(400).json({ success: false, error: `Yetersiz bakiye. Mevcut bakiyeniz: ${user ? user.balance : 0} ₺` });
         }
 
         // Deduct balance immediately for withdrawal request
         await prisma.user.update({
-            where: { id: userId },
-            data: { balance: { decrement: parseFloat(amount) } }
+            where: { id: user.id },
+            data: { balance: { decrement: withdrawAmount } }
         });
 
         const request = await prisma.paymentRequest.create({
