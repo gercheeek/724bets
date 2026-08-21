@@ -189,6 +189,8 @@ const Header: React.FC<HeaderProps> = ({
       }
     }
     fetchRates();
+    const interval = setInterval(fetchRates, 30000); // 30 saniyede bir otomatik güncelle
+    return () => clearInterval(interval);
   }, []);
   
   // Editor Backdoor State
