@@ -94,6 +94,20 @@ const WITHDRAW_METHODS = [
   { id: 'crypto', name: 'Kripto Para', type: 'crypto', neoCode: 'crypto', badge: 'USDT/BTC/XRP', minAmount: 100 },
 ];
 
+const TURKISH_BANKS = [
+  'Ziraat Bankası', 'Garanti BBVA', 'Türkiye İş Bankası', 'Akbank', 
+  'Yapı Kredi', 'VakıfBank', 'Enpara.com', 'QNB Finansbank', 'Halkbank', 'Papara / IBAN'
+];
+
+const CRYPTO_COINS = [
+  { code: 'USDT_TRC20', name: 'USDT (TRC-20)' },
+  { code: 'USDT_ERC20', name: 'USDT (ERC-20)' },
+  { code: 'BTC', name: 'Bitcoin (BTC)' },
+  { code: 'ETH', name: 'Ethereum (ETH)' },
+  { code: 'XRP', name: 'Ripple (XRP)' },
+  { code: 'TRX', name: 'TRON (TRX)' }
+];
+
 const WalletModal: React.FC<WalletModalProps> = ({ onClose, initialTab = 'deposit' }) => {
   const { t } = useTranslation();
   const { siteUser } = useUser();
@@ -107,6 +121,24 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose, initialTab = 'deposi
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
   
+  // Specific Withdrawal Form State
+  const [selectedBank, setSelectedBank] = useState<string>('Ziraat Bankası');
+  const [accountName, setAccountName] = useState<string>(siteUser?.username || '');
+  const [selectedCoin, setSelectedCoin] = useState<string>('USDT (TRC-20)');
+  const [cryptoAddress, setCryptoAddress] = useState<string>('');
+  const [cryptoMemo, setCryptoMemo] = useState<string>('');
+
+  // Receipt Modal State
+  const [lastReceipt, setLastReceipt] = useState<{
+    trxId: string;
+    method: string;
+    amount: string;
+    details: string;
+    date: string;
+    fullText: string;
+  } | null>(null);
+  const [copiedKey, setCopiedKey] = useState<string>('');
+
   const [history, setHistory] = useState<any[]>([]);
   const [loadingHistory, setLoadingHistory] = useState(false);
 
@@ -140,8 +172,10 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose, initialTab = 'deposi
     }
   }, [activeTab, siteUser]);
 
-  const handleCopy = (text: string) => {
+  const handleCopyText = (text: string, key: string) => {
     navigator.clipboard.writeText(text);
+    setCopiedKey(key);
+    setTimeout(() => setCopiedKey(''), 2500);
   };
 
   const handleSubmit = async () => {
@@ -151,11 +185,6 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose, initialTab = 'deposi
     }
     if (!amount || isNaN(Number(amount)) || Number(amount) < (selectedMethod?.minAmount || 10)) {
       setError(`Minimum tutar: ${selectedMethod?.minAmount || 10} ₺`);
-      return;
-    }
-
-    if (activeTab === 'withdraw' && !txHash) {
-      setError('Lütfen çekim yapılacak cüzdan/IBAN adresinizi girin.');
       return;
     }
 
@@ -199,36 +228,70 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose, initialTab = 'deposi
       }
     }
 
-    try {
-      const endpoint = '/api/payments/withdraw';
-      const res = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          userId: siteUser.id,
-          method: selectedMethod.name,
-          amount: amount,
-          txHash: txHash
-        })
-      });
-      if (!res.ok) {
-        const text = await res.text().catch(() => '');
-        setError(`[HTTP ${res.status}] Çekim Hatası: ${text.substring(0, 150) || res.statusText}`);
-        return;
-      }
-      const data = await res.json();
-      if (data.success) {
-        setSuccess(true);
-        setTimeout(() => {
-          onClose();
-        }, 3000);
+    // Handle Withdrawal Request Submission
+    if (activeTab === 'withdraw') {
+      let withdrawalDetails = '';
+      if (selectedMethod.id === 'crypto') {
+        if (!cryptoAddress || cryptoAddress.trim().length < 6) {
+          setError('Lütfen geçerli bir kripto cüzdan adresi girin.');
+          setLoading(false);
+          return;
+        }
+        withdrawalDetails = `Coin: ${selectedCoin} | Cüzdan: ${cryptoAddress.trim()}${cryptoMemo ? ' | Memo: ' + cryptoMemo.trim() : ''}`;
       } else {
-        setError(`[İşlem Hatası] ${data.error || 'İşlem başarısız oldu.'}`);
+        if (!txHash || txHash.trim().length < 8) {
+          setError('Lütfen geçerli bir IBAN veya Hesap numarası girin.');
+          setLoading(false);
+          return;
+        }
+        withdrawalDetails = `Banka: ${selectedBank} | Ad Soyad: ${accountName || siteUser.username} | IBAN: ${txHash.trim()}`;
       }
-    } catch (err: any) {
-      setError(`[Bağlantı Hatası] Debug: ${err?.message || String(err)}`);
-    } finally {
-      setLoading(false);
+
+      const generatedTrx = `TRX_${Date.now()}_${Math.floor(Math.random() * 8999 + 1000)}`;
+
+      try {
+        const endpoint = '/api/payments/withdraw';
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            userId: siteUser.id,
+            method: `${selectedMethod.name} (${selectedMethod.id === 'crypto' ? selectedCoin : selectedBank})`,
+            amount: amount,
+            txHash: `${generatedTrx} - ${withdrawalDetails}`
+          })
+        });
+        if (!res.ok) {
+          const text = await res.text().catch(() => '');
+          setError(`[HTTP ${res.status}] Çekim Hatası: ${text.substring(0, 150) || res.statusText}`);
+          setLoading(false);
+          return;
+        }
+        const data = await res.json();
+        if (data.success) {
+          const finalTrxId = data.request?.id || generatedTrx;
+          const numAmt = parseFloat(amount).toLocaleString('tr-TR', { minimumFractionDigits: 2 });
+          const dateStr = new Date().toLocaleString('tr-TR');
+          
+          const fullText = `=== 724BETS ÇEKİM TALEBİ FİŞİ ===\nİşlem ID (TRX): ${finalTrxId}\nKullanıcı: ${siteUser.username}\nYöntem: ${selectedMethod.id === 'crypto' ? `Kripto (${selectedCoin})` : `Banka Havalesi (${selectedBank})`}\nTutar: ${numAmt} TL\nDetaylar: ${withdrawalDetails}\nTarih: ${dateStr}\nDurum: Bekliyor (Finans Onayında)`;
+
+          setLastReceipt({
+            trxId: finalTrxId,
+            method: selectedMethod.id === 'crypto' ? `Kripto (${selectedCoin})` : `Banka Havalesi (${selectedBank})`,
+            amount: `${numAmt} TL`,
+            details: withdrawalDetails,
+            date: dateStr,
+            fullText
+          });
+          setSuccess(true);
+        } else {
+          setError(`[İşlem Hatası] ${data.error || 'İşlem başarısız oldu.'}`);
+        }
+      } catch (err: any) {
+        setError(`[Bağlantı Hatası] Debug: ${err?.message || String(err)}`);
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
@@ -252,7 +315,7 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose, initialTab = 'deposi
 
         <div className="flex border-b border-white/5 bg-[#0A0C10]">
           <button 
-            onClick={() => setActiveTab('deposit')}
+            onClick={() => { setActiveTab('deposit'); setSuccess(false); setError(''); }}
             className={`flex-1 py-3.5 text-center font-bold text-[13px] uppercase tracking-wider transition-all border-b-[3px] ${
               activeTab === 'deposit' ? 'text-white border-[#00E676] bg-[#00E5FF]/5' : 'text-zinc-500 border-transparent hover:text-zinc-300 hover:bg-white/5'
             }`}
@@ -260,7 +323,7 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose, initialTab = 'deposi
             Yatırım
           </button>
           <button 
-            onClick={() => setActiveTab('withdraw')}
+            onClick={() => { setActiveTab('withdraw'); setSuccess(false); setError(''); }}
             className={`flex-1 py-3.5 text-center font-bold text-[13px] uppercase tracking-wider transition-all border-b-[3px] ${
               activeTab === 'withdraw' ? 'text-white border-[#00E676] bg-[#00E5FF]/5' : 'text-zinc-500 border-transparent hover:text-zinc-300 hover:bg-white/5'
             }`}
@@ -268,7 +331,7 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose, initialTab = 'deposi
             Çekim
           </button>
           <button 
-            onClick={() => setActiveTab('history')}
+            onClick={() => { setActiveTab('history'); setSuccess(false); setError(''); }}
             className={`flex-1 py-3.5 text-center font-bold text-[13px] uppercase tracking-wider transition-all border-b-[3px] ${
               activeTab === 'history' ? 'text-white border-[#00E5FF] bg-[#00E5FF]/5' : 'text-zinc-500 border-transparent hover:text-zinc-300 hover:bg-white/5'
             }`}
@@ -277,14 +340,61 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose, initialTab = 'deposi
           </button>
         </div>
 
-        <div className="p-5 bg-[#0A0C10] flex-1 max-h-[60vh] overflow-y-auto custom-scrollbar">
-          {success ? (
-            <div className="flex flex-col items-center justify-center py-10 text-center">
-              <CheckCircle2 className="w-16 h-16 text-[#00E676] mb-4 drop-shadow-[0_0_15px_rgba(0,230,118,0.5)]" />
-              <h3 className="text-white font-bold text-xl mb-2">İşlem Başarılı!</h3>
-              <p className="text-zinc-400 text-sm">
-                Talebiniz alınmıştır. Finans birimimiz tarafından incelendikten sonra bakiyenize yansıyacaktır.
-              </p>
+        <div className="p-5 bg-[#0A0C10] flex-1 max-h-[65vh] overflow-y-auto custom-scrollbar">
+          {success && lastReceipt ? (
+            <div className="flex flex-col items-center justify-center py-4 text-center animate-fade-in">
+              <CheckCircle2 className="w-14 h-14 text-[#00E676] mb-2 drop-shadow-[0_0_15px_rgba(0,230,118,0.5)]" />
+              <h3 className="text-white font-black text-xl mb-1">Çekim Talebi Alındı!</h3>
+              <p className="text-zinc-400 text-xs mb-4">Talebiniz finans ekibimize iletilmiştir.</p>
+
+              <div className="w-full bg-[#131620] border border-white/10 rounded-xl p-4 text-left font-mono text-xs text-zinc-300 mb-4 space-y-2.5 relative shadow-inner">
+                <div className="flex items-center justify-between border-b border-white/5 pb-2">
+                  <span className="text-zinc-500 font-bold uppercase text-[10px]">İşlem Numarası (TRX ID):</span>
+                  <button 
+                    onClick={() => handleCopyText(lastReceipt.trxId, 'trxId')}
+                    className="flex items-center gap-1 text-[#00E5FF] font-bold hover:underline select-all text-[11px]"
+                  >
+                    {copiedKey === 'trxId' ? '✓ Kopyalandı' : `${lastReceipt.trxId.substring(0, 16)}... 📋`}
+                  </button>
+                </div>
+
+                <div className="flex justify-between">
+                  <span className="text-zinc-500">Çekim Yöntemi:</span>
+                  <span className="text-white font-bold">{lastReceipt.method}</span>
+                </div>
+
+                <div className="flex justify-between">
+                  <span className="text-zinc-500">Tutar:</span>
+                  <span className="text-[#00E676] font-black">{lastReceipt.amount}</span>
+                </div>
+
+                <div className="flex justify-between">
+                  <span className="text-zinc-500">Tarih:</span>
+                  <span className="text-zinc-400">{lastReceipt.date}</span>
+                </div>
+
+                <div className="flex flex-col pt-1 border-t border-white/5">
+                  <span className="text-zinc-500 text-[10px] mb-1">Hesap / Cüzdan Detayları:</span>
+                  <span className="text-amber-400 font-semibold break-all bg-black/40 p-2 rounded border border-amber-500/20 select-all">
+                    {lastReceipt.details}
+                  </span>
+                </div>
+              </div>
+
+              <div className="w-full flex flex-col gap-2">
+                <button 
+                  onClick={() => handleCopyText(lastReceipt.fullText, 'fullReceipt')}
+                  className="w-full bg-[#00E5FF]/10 hover:bg-[#00E5FF]/20 text-[#00E5FF] border border-[#00E5FF]/30 font-bold py-3 rounded-xl text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2"
+                >
+                  {copiedKey === 'fullReceipt' ? '✓ Tüm Fiş Metni Kopyalandı!' : 'Tüm İşlem Fişini Kopyala 📋'}
+                </button>
+                <button 
+                  onClick={() => { setSuccess(false); setLastReceipt(null); onClose(); }}
+                  className="w-full bg-white/5 hover:bg-white/10 text-zinc-300 font-bold py-2.5 rounded-xl text-xs uppercase transition-all"
+                >
+                  Pencereyi Kapat ✕
+                </button>
+              </div>
             </div>
           ) : activeTab === 'history' ? (
             <div className="space-y-3">
@@ -320,21 +430,21 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose, initialTab = 'deposi
               )}
             </div>
           ) : (
-            <div className="bg-[#0A0C10] rounded-xl p-5 border border-white/5 shadow-inner">
+            <div>
               <div className="mb-5">
                 <label className="block text-[11px] uppercase tracking-wider font-bold text-zinc-500 mb-2">Ödeme Yöntemi Seçin</label>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-[220px] overflow-y-auto custom-scrollbar p-0.5">
+                <div className="grid grid-cols-2 gap-2.5">
                   {methods.map((m) => (
                     <button
                       key={m.id}
-                      onClick={() => setSelectedMethod(m)}
-                      className={`p-2.5 rounded-xl border text-left flex flex-col justify-between transition-all relative overflow-hidden group ${
+                      onClick={() => { setSelectedMethod(m); setError(''); }}
+                      className={`p-3 rounded-xl border text-left transition-all relative overflow-hidden flex flex-col justify-between ${
                         selectedMethod?.id === m.id 
-                          ? 'border-[#00E5FF] bg-[#00E5FF]/10 text-white shadow-[0_0_15px_rgba(0,229,255,0.2)]' 
-                          : 'border-white/10 bg-white/5 text-zinc-400 hover:text-white hover:border-white/20'
+                          ? 'bg-gradient-to-br from-[#00E5FF]/20 to-blue-600/10 border-[#00E5FF] shadow-[0_0_15px_rgba(0,229,255,0.15)]' 
+                          : 'bg-[#131620] border-white/5 hover:border-white/20'
                       }`}
                     >
-                      <div className="flex items-center justify-between w-full mb-1">
+                      <div className="flex items-center justify-between mb-2">
                         <MethodLogo code={m.neoCode} />
                         {m.badge && (
                           <span className="text-[9px] font-black px-1.5 py-0.5 rounded bg-white/10 text-[#00E5FF]">
@@ -362,7 +472,9 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose, initialTab = 'deposi
               )}
 
               <div className="mb-4">
-                <label className="block text-[11px] uppercase tracking-wider font-bold text-zinc-500 mb-1.5">Yatırılacak Tutar (TL)</label>
+                <label className="block text-[11px] uppercase tracking-wider font-bold text-zinc-500 mb-1.5">
+                  {activeTab === 'deposit' ? 'Yatırılacak Tutar (TL)' : 'Çekilecek Tutar (TL)'}
+                </label>
                 <div className="relative">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 font-bold">₺</span>
                   <input 
@@ -375,18 +487,97 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose, initialTab = 'deposi
                 </div>
               </div>
 
-              {activeTab === 'withdraw' && (
-                <div className="mb-6">
-                  <label className="block text-[11px] uppercase tracking-wider font-bold text-zinc-500 mb-1.5">
-                    Çekim Yapılacak Hesap / Cüzdan / IBAN
-                  </label>
-                  <input 
-                    type="text" 
-                    value={txHash}
-                    onChange={(e) => setTxHash(e.target.value)}
-                    placeholder="TR12 3456..."
-                    className="w-full bg-[#131620] border border-white/10 rounded-lg py-3 px-4 text-white font-medium outline-none focus:border-[#00E5FF]/50"
-                  />
+              {activeTab === 'withdraw' && selectedMethod?.id === 'crypto' && (
+                <div className="space-y-4 mb-6 animate-fade-in">
+                  <div>
+                    <label className="block text-[11px] uppercase tracking-wider font-bold text-zinc-500 mb-1.5">
+                      Çekim Yapılacak Kripto Para / Ağ
+                    </label>
+                    <select 
+                      value={selectedCoin}
+                      onChange={(e) => setSelectedCoin(e.target.value)}
+                      className="w-full bg-[#131620] border border-white/10 rounded-lg py-3 px-3 text-white font-bold outline-none focus:border-[#00E5FF]/50"
+                    >
+                      {CRYPTO_COINS.map(c => (
+                        <option key={c.code} value={c.name} className="bg-[#0A0C10] text-white">
+                          {c.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] uppercase tracking-wider font-bold text-zinc-500 mb-1.5">
+                      Kripto Cüzdan Adresi (Wallet Address)
+                    </label>
+                    <input 
+                      type="text" 
+                      value={cryptoAddress}
+                      onChange={(e) => setCryptoAddress(e.target.value)}
+                      placeholder="Örn: T9yD1P... veya 0x71C..."
+                      className="w-full bg-[#131620] border border-white/10 rounded-lg py-3 px-4 text-white font-mono text-xs font-semibold outline-none focus:border-[#00E5FF]/50"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] uppercase tracking-wider font-bold text-zinc-500 mb-1.5">
+                      Destination Tag / Memo <span className="text-zinc-600 font-normal">(Opsiyonel / XRP için)</span>
+                    </label>
+                    <input 
+                      type="text" 
+                      value={cryptoMemo}
+                      onChange={(e) => setCryptoMemo(e.target.value)}
+                      placeholder="Örn: 1029384 (Gerekmiyorsa boş bırakın)"
+                      className="w-full bg-[#131620] border border-white/10 rounded-lg py-2.5 px-4 text-zinc-300 font-mono text-xs outline-none focus:border-[#00E5FF]/50"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {activeTab === 'withdraw' && selectedMethod?.id === 'banktransfer' && (
+                <div className="space-y-4 mb-6 animate-fade-in">
+                  <div>
+                    <label className="block text-[11px] uppercase tracking-wider font-bold text-zinc-500 mb-1.5">
+                      Banka Seçin
+                    </label>
+                    <select 
+                      value={selectedBank}
+                      onChange={(e) => setSelectedBank(e.target.value)}
+                      className="w-full bg-[#131620] border border-white/10 rounded-lg py-3 px-3 text-white font-bold outline-none focus:border-[#00E5FF]/50"
+                    >
+                      {TURKISH_BANKS.map(b => (
+                        <option key={b} value={b} className="bg-[#0A0C10] text-white">
+                          {b}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] uppercase tracking-wider font-bold text-zinc-500 mb-1.5">
+                      Hesap Sahibi Ad Soyad
+                    </label>
+                    <input 
+                      type="text" 
+                      value={accountName}
+                      onChange={(e) => setAccountName(e.target.value)}
+                      placeholder="Banka hesabınızdaki ad soyad"
+                      className="w-full bg-[#131620] border border-white/10 rounded-lg py-3 px-4 text-white font-semibold outline-none focus:border-[#00E5FF]/50"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] uppercase tracking-wider font-bold text-zinc-500 mb-1.5">
+                      IBAN Adresi
+                    </label>
+                    <input 
+                      type="text" 
+                      value={txHash}
+                      onChange={(e) => setTxHash(e.target.value)}
+                      placeholder="TR00 0000 0000 0000 0000 0000 00"
+                      className="w-full bg-[#131620] border border-white/10 rounded-lg py-3 px-4 text-white font-mono text-xs font-semibold outline-none focus:border-[#00E5FF]/50"
+                    />
+                  </div>
                 </div>
               )}
 
@@ -402,7 +593,7 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose, initialTab = 'deposi
                 disabled={loading}
                 className="w-full bg-gradient-to-r from-[#00E5FF] to-blue-600 hover:brightness-110 text-black font-black py-3.5 rounded-xl uppercase tracking-wider transition-all disabled:opacity-50 shadow-lg shadow-[#00E5FF]/20 flex items-center justify-center gap-2"
               >
-                {loading ? 'Yönlendiriliyor...' : (activeTab === 'deposit' ? `${selectedMethod?.name || 'Ödeme'} İle Devam Et 🚀` : 'Çekim Talebi Oluştur')}
+                {loading ? 'İşleniyor...' : (activeTab === 'deposit' ? `${selectedMethod?.name || 'Ödeme'} İle Devam Et 🚀` : 'Çekim Talebi Oluştur')}
               </button>
             </div>
           )}
@@ -413,4 +604,3 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose, initialTab = 'deposi
 };
 
 export default WalletModal;
-
