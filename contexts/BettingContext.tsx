@@ -103,142 +103,95 @@ const normalizeEvent = (ev: any) => {
 export const BettingProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { language } = useLanguage();
 
-  // Initial Mock Standalone Events (100% Frontend Standalone Data Engine)
-  const INITIAL_MATCHES = [
-    {
-      id: 'm1',
-      sport: 'Futbol',
-      league: 'UEFA Şampiyonlar Ligi',
-      home: 'Real Madrid',
-      away: 'FC Barcelona',
-      score: '2 - 1',
-      minute: 68,
-      isLive: true,
-      time: "68'",
-      odds: { '1': 1.95, 'X': 3.40, '2': 3.80, 'tU': 1.85, 'tA': 1.95, 'cs1X': 1.25, 'cs12': 1.30, 'csX2': 1.80, 'gg': 1.65, 'ng': 2.10 },
-      markets: [
-        { name: 'Maç Sonucu (1X2)', selections: [{ name: '1', odd: 1.95 }, { name: 'X', odd: 3.40 }, { name: '2', odd: 3.80 }] },
-        { name: 'Toplam Gol 2.5', selections: [{ name: 'Üst', odd: 1.85 }, { name: 'Alt', odd: 1.95 }] },
-        { name: 'Karşılıklı Gol', selections: [{ name: 'Var', odd: 1.65 }, { name: 'Yok', odd: 2.10 }] }
-      ]
-    },
-    {
-      id: 'm2',
-      sport: 'Futbol',
-      league: 'Trendyol Süper Lig',
-      home: 'Galatasaray',
-      away: 'Fenerbahçe',
-      score: '1 - 1',
-      minute: 42,
-      isLive: true,
-      time: "42'",
-      odds: { '1': 2.10, 'X': 3.20, '2': 3.30, 'tU': 1.90, 'tA': 1.90, 'cs1X': 1.32, 'cs12': 1.35, 'csX2': 1.70, 'gg': 1.70, 'ng': 2.05 },
-      markets: [
-        { name: 'Maç Sonucu (1X2)', selections: [{ name: '1', odd: 2.10 }, { name: 'X', odd: 3.20 }, { name: '2', odd: 3.30 }] },
-        { name: 'Toplam Gol 2.5', selections: [{ name: 'Üst', odd: 1.90 }, { name: 'Alt', odd: 1.90 }] }
-      ]
-    },
-    {
-      id: 'm3',
-      sport: 'Futbol',
-      league: 'İngiltere Premier Lig',
-      home: 'Arsenal',
-      away: 'Manchester City',
-      score: '0 - 0',
-      minute: 18,
-      isLive: true,
-      time: "18'",
-      odds: { '1': 2.80, 'X': 3.30, '2': 2.45, 'tU': 2.00, 'tA': 1.80, 'cs1X': 1.55, 'cs12': 1.32, 'csX2': 1.42, 'gg': 1.75, 'ng': 1.95 },
-      markets: [
-        { name: 'Maç Sonucu (1X2)', selections: [{ name: '1', odd: 2.80 }, { name: 'X', odd: 3.30 }, { name: '2', odd: 2.45 }] }
-      ]
-    },
-    {
-      id: 'm4',
-      sport: 'Basketbol',
-      league: 'NBA',
-      home: 'Los Angeles Lakers',
-      away: 'Golden State Warriors',
-      score: '84 - 82',
-      minute: 34,
-      isLive: true,
-      time: '3. Çeyrek',
-      odds: { '1': 1.75, 'X': 14.0, '2': 2.15, 'tU': 1.90, 'tA': 1.90 },
-      markets: [
-        { name: 'Maç Kazananı', selections: [{ name: '1', odd: 1.75 }, { name: '2', odd: 2.15 }] }
-      ]
-    },
-    {
-      id: 'm5',
-      sport: 'Futbol',
-      league: 'UEFA Şampiyonlar Ligi',
-      home: 'Paris Saint-Germain',
-      away: 'Bayern Münih',
-      score: '0 - 0',
-      minute: 0,
-      isLive: false,
-      time: 'Yarın 22:00',
-      odds: { '1': 2.30, 'X': 3.50, '2': 2.90, 'tU': 2.10, 'tA': 1.72, 'cs1X': 1.40, 'cs12': 1.30, 'csX2': 1.60, 'gg': 1.55, 'ng': 2.30 },
-      markets: [
-        { name: 'Maç Sonucu (1X2)', selections: [{ name: '1', odd: 2.30 }, { name: 'X', odd: 3.50 }, { name: '2', odd: 2.90 }] }
-      ]
-    },
-    {
-      id: 'm6',
-      sport: 'Futbol',
-      league: 'İtalya Serie A',
-      home: 'Inter',
-      away: 'AC Milan',
-      score: '0 - 0',
-      minute: 0,
-      isLive: false,
-      time: 'Pazar 21:45',
-      odds: { '1': 2.05, 'X': 3.30, '2': 3.60, 'tU': 1.85, 'tA': 1.95, 'cs1X': 1.30, 'cs12': 1.32, 'csX2': 1.75, 'gg': 1.72, 'ng': 2.00 },
-      markets: [
-        { name: 'Maç Sonucu (1X2)', selections: [{ name: '1', odd: 2.05 }, { name: 'X', odd: 3.30 }, { name: '2', odd: 3.60 }] }
-      ]
-    }
-  ];
-
-  const [events, setEvents] = useState<any[]>(INITIAL_MATCHES);
+  const [events, setEvents] = useState<any[]>([]);
   const [scrapedMatches, setScrapedMatches] = useState<any[]>([]);
-  const [globalLiveMatches, setGlobalLiveMatches] = useState<any[]>(INITIAL_MATCHES.filter(m => m.isLive));
-  const [global1xBetMatches, setGlobal1xBetMatches] = useState<any[]>(INITIAL_MATCHES.filter(m => m.isLive));
-  const [global1xBetPreMatches, setGlobal1xBetPreMatches] = useState<any[]>(INITIAL_MATCHES.filter(m => !m.isLive));
+  const [globalLiveMatches, setGlobalLiveMatches] = useState<any[]>([]);
+  const [global1xBetMatches, setGlobal1xBetMatches] = useState<any[]>([]);
+  const [global1xBetPreMatches, setGlobal1xBetPreMatches] = useState<any[]>([]);
   const [outrights, setOutrights] = useState<any[]>([
     { id: 'o1', title: 'UEFA Şampiyonlar Ligi Şampiyonu 2026', sport: 'Futbol', selections: [{ name: 'Real Madrid', odd: 3.50 }, { name: 'Manchester City', odd: 3.75 }, { name: 'Arsenal', odd: 6.00 }] },
     { id: 'o2', title: 'Trendyol Süper Lig Şampiyonu 2026', sport: 'Futbol', selections: [{ name: 'Galatasaray', odd: 1.85 }, { name: 'Fenerbahçe', odd: 2.10 }, { name: 'Beşiktaş', odd: 12.0 }] }
   ]);
   const [isConnected, setIsConnected] = useState(true);
 
-  // 100% Frontend Client-Side Dynamic Live Match Score & Minute Simulator
+  // Live 1xFrame (1xBet API) Data Fetcher Engine
   useEffect(() => {
-    const interval = setInterval(() => {
-      setEvents(prev => prev.map(m => {
-        if (m.isLive && typeof m.minute === 'number' && m.minute < 90) {
-          const nextMin = m.minute + 1;
-          return {
-            ...m,
-            minute: nextMin,
-            time: `${nextMin}'`
-          };
-        }
-        return m;
-      }));
+    function parse1xFrameData(match: any, isLive: boolean) {
+      let odds: any = { "1": '-', "X": '-', "2": '-', "tU": '-', "tA": '-', "tP": '2.5', "cs1X": '-', "cs12": '-', "csX2": '-', "gg": '-', "ng": '-' };
+      if (match.E) {
+        match.E.forEach((odd: any) => {
+          if (odd.T === 1) odds["1"] = odd.C; 
+          if (odd.T === 2) odds["X"] = odd.C; 
+          if (odd.T === 3) odds["2"] = odd.C; 
+          if (odd.T === 9 && odds["tU"] === '-') { odds["tU"] = odd.C; odds["tP"] = odd.P || '2.5'; }
+          if (odd.T === 10 && odds["tA"] === '-') { odds["tA"] = odd.C; }
+          if (odd.T === 4) odds["cs1X"] = odd.C; 
+          if (odd.T === 5) odds["cs12"] = odd.C; 
+          if (odd.T === 6) odds["csX2"] = odd.C; 
+        });
+      }
 
-      setGlobal1xBetMatches(prev => prev.map(m => {
-        if (m.isLive && typeof m.minute === 'number' && m.minute < 90) {
-          const nextMin = m.minute + 1;
-          return {
-            ...m,
-            minute: nextMin,
-            time: `${nextMin}'`
-          };
-        }
-        return m;
-      }));
-    }, 10000); // Advance live minute every 10 seconds client-side
+      let scoreHome = 0;
+      let scoreAway = 0;
+      if (match.SC && match.SC.FS) {
+        scoreHome = match.SC.FS.S1 || 0;
+        scoreAway = match.SC.FS.S2 || 0;
+      }
 
+      const elapsedMins = match.SC && match.SC.TS ? Math.floor(match.SC.TS / 60) : 45;
+
+      return {
+        id: match.I || Math.random().toString(),
+        sport: match.SN || match.SE || 'Futbol',
+        league: match.L || match.LE || 'Diğer Ligler',
+        home: match.O1 || 'Ev Sahibi',
+        away: match.O2 || 'Deplasman',
+        homeTeam: match.O1 || 'Ev Sahibi',
+        awayTeam: match.O2 || 'Deplasman',
+        score: `${scoreHome} - ${scoreAway}`,
+        scoreHome,
+        scoreAway,
+        minute: elapsedMins,
+        time: isLive ? (elapsedMins > 0 ? `${elapsedMins}'` : 'CANLI') : 'YAKLAŞAN',
+        isLive: isLive,
+        odds: odds,
+        homeOdd: odds["1"] !== '-' ? odds["1"] : '1.90',
+        drawOdd: odds["X"] !== '-' ? odds["X"] : '3.30',
+        awayOdd: odds["2"] !== '-' ? odds["2"] : '3.50',
+        markets: [
+          { name: 'Maç Sonucu (1X2)', selections: [{ name: '1', odd: odds["1"] }, { name: 'X', odd: odds["X"] }, { name: '2', odd: odds["2"] }] }
+        ]
+      };
+    }
+
+    async function fetchLive1xFrame() {
+      try {
+        const res = await fetch('https://1xframemxz.com/service-api/LiveFeed/Get1x2_VZip?count=100&lng=tr&mode=4&country=180&partner=85&noFilterBlockEvent=true');
+        if (res.ok) {
+          const data = await res.json();
+          if (data && Array.isArray(data.Value)) {
+            const blacklist = ['virtual', 'srl', 'simulated', 'cyber', 'e-soccer', 'esports', 'short football', 'liga pro', 'fifa', 'ea sports', '8x8', '4x4', '3x3'];
+            const parsed = data.Value
+              .filter((m: any) => {
+                const combined = `${m.LE || ''} ${m.O1 || ''} ${m.O2 || ''}`.toLowerCase();
+                return !blacklist.some(b => combined.includes(b));
+              })
+              .map((m: any) => parse1xFrameData(m, true));
+
+            if (parsed.length > 0) {
+              setEvents(parsed);
+              setGlobal1xBetMatches(parsed);
+              setGlobalLiveMatches(parsed);
+            }
+          }
+        }
+      } catch (e) {
+        console.error("1xFrame fetch error:", e);
+      }
+    }
+
+    fetchLive1xFrame();
+    const interval = setInterval(fetchLive1xFrame, 10000);
     return () => clearInterval(interval);
   }, []);
 

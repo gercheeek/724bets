@@ -180,13 +180,30 @@ export default function SportsIconNav({ activeTab = 'home', onTabChange = () => 
             <div className="flex-1 overflow-x-auto no-scrollbar flex items-center gap-2 px-2 py-1 scroll-smooth w-full">
                 {navItems.map((item, idx) => {
                     const isActive = typeof window !== 'undefined' && window.location.pathname.includes(item.id);
-                    let count = liveCounts[item.title] || 0;
                     
-                    // Fallback to dynamic counts from global1xBetMatches if 0
-                    if (count === 0 && global1xBetMatches && global1xBetMatches.length > 0) {
-                        // Create a realistic-looking fake count based on the total matches and index
-                        count = Math.max(1, Math.floor(global1xBetMatches.length / (idx + 1.2)) + (idx % 3));
+                    // Calculate real match count for this sport from global1xBetMatches
+                    let count = 0;
+                    if (global1xBetMatches && global1xBetMatches.length > 0) {
+                        const titleLower = item.title.toLowerCase();
+                        count = global1xBetMatches.filter(m => {
+                            const s = (m.sport || '').toLowerCase();
+                            if (titleLower === 'futbol') return s.includes('futbol') || s.includes('soccer');
+                            if (titleLower === 'tenis') return s.includes('tenis') || s.includes('tennis');
+                            if (titleLower === 'basketbol') return s.includes('basketbol') || s.includes('basketball');
+                            if (titleLower === 'voleybol') return s.includes('voleybol') || s.includes('volleyball');
+                            if (titleLower === 'masa tenisi') return s.includes('masa');
+                            if (titleLower === 'beyzbol') return s.includes('beyzbol') || s.includes('baseball');
+                            if (titleLower === 'buz hokeyi') return s.includes('hokey') || s.includes('hockey');
+                            if (titleLower === 'kriket') return s.includes('kriket') || s.includes('cricket');
+                            if (titleLower === 'ragbi') return s.includes('ragbi') || s.includes('rugby');
+                            return s.includes(titleLower);
+                        }).length;
+                    } else if (liveCounts && liveCounts[item.title] !== undefined) {
+                        count = liveCounts[item.title];
                     }
+                    
+                    // 0 olanları gizle direkt
+                    if (count === 0) return null;
                     
                     return (
                     <button 
