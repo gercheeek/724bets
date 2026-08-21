@@ -129,7 +129,7 @@ const HacksawSlotView = React.lazy(() => import('./components/HacksawSlotView'))
 const RedTigerSlotView = React.lazy(() => import('./components/RedTigerSlotView'));
 const AdventureMap = React.lazy(() => import('./components/AdventureMap'));
 import SecretCurtain from './components/SecretCurtain';
-const SITE_CACHE_VERSION = "2026.07.25_v2";
+const SITE_CACHE_VERSION = "2026.08.21_v3";
 
 const formatDateTR = (dateStr: string) => {
     const d = new Date(dateStr);

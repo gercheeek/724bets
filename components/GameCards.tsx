@@ -3,7 +3,17 @@ import React, { useState } from 'react';
 export const BaseGameCard: React.FC<{ game: any, onClick: () => void, variant?: 'cyan' | 'green' | 'purple' | 'gold' }> = ({ game, onClick, variant = 'cyan' }) => {
   const [imgError, setImgError] = useState(false);
   const imageUrl = game.img || game.image;
-  const hasImage = imageUrl && imageUrl.length > 5 && !imgError && !imageUrl.includes('unsplash');
+  const isPlaceholder = imageUrl && (
+    imageUrl.includes('unsplash') || 
+    imageUrl.includes('picsum.photos') || 
+    imageUrl.includes('placehold') || 
+    imageUrl.includes('loremflickr') ||
+    imageUrl.includes('freepik') ||
+    imageUrl.includes('dummyimage') ||
+    imageUrl.includes('stock') ||
+    imageUrl.includes('mockup')
+  );
+  const hasImage = imageUrl && imageUrl.length > 5 && !imgError && !isPlaceholder;
 
   const colors = {
     cyan: { border: 'hover:border-[#00E5FF]/50', shadow: 'hover:shadow-[0_10px_40px_rgba(0,229,255,0.3)]', glow: 'from-[#00E5FF]/20', ring: 'group-hover:ring-[#00E5FF]/50' },

@@ -140,6 +140,27 @@ async function getAllGames() {
         const vendors = await getVendors();
         let allGames = [];
         
+        const gamdomDict = new Map();
+        try {
+            const mapPath = require('path').join(__dirname, 'gamdom_image_map.json');
+            if (fs.existsSync(mapPath)) {
+                const gamdomMap = JSON.parse(fs.readFileSync(mapPath, 'utf8'));
+                if (Array.isArray(gamdomMap)) {
+                    gamdomMap.forEach(item => {
+                        if (item && item.name && item.game_image) {
+                            const normKey = item.name.toLowerCase().replace(/[^a-z0-9]/g, '');
+                            if (normKey && !gamdomDict.has(normKey)) {
+                                gamdomDict.set(normKey, item.game_image);
+                            }
+                        }
+                    });
+                    console.log(`[OroPlay] Indexed ${gamdomDict.size} Gamdom images from ${gamdomMap.length} total entries.`);
+                }
+            }
+        } catch (e) {
+            console.error('[OroPlay] Error loading gamdom_image_map.json:', e);
+        }
+        
         // Loop sequentially to avoid rate limit (5 req / 30s for tokens, let's be safe for games too)
         for (const vendor of vendors) {
             try {
@@ -149,15 +170,17 @@ async function getAllGames() {
                 // Map OroPlay format to CasinoLobbyGame format
                 const mappedGames = games.map((g, index) => {
                     const isLive = vendor.type === 1; // 1: live casino, 2: slot, 3: mini-game
+                    const rawThumb = (g.thumbnail || g.image || g.img || '').trim();
+                    const finalImage = rawThumb.length > 5 ? rawThumb : '';
+
                     return {
                         id: `${g.vendorCode}-${g.gameCode}`,
                         name: g.gameName,
                         provider: g.provider || vendor.name,
                         type: isLive ? 'live' : 'slot',
-                        // Optional: Assign some deterministic colors based on provider or type
                         themeColor: isLive ? 'from-[#F50057] to-[#311B92]' : 'from-[#00E5FF] to-[#1A237E]',
-                        image: g.thumbnail,
-                        // We do not set link here. Link is fetched dynamically via getLaunchUrl when clicked.
+                        image: finalImage,
+                        isMapped: !!rawThumb,
                         isActive: !g.underMaintenance,
                         order: index,
                         vendorCode: g.vendorCode,

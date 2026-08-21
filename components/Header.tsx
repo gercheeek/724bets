@@ -464,7 +464,7 @@ const Header: React.FC<HeaderProps> = ({
                 {/* Deposit Button */}
                 <button 
                   onClick={() => {
-                    const event = new CustomEvent('openWalletModal', { detail: 'deposit' });
+                    const event = new CustomEvent('openDepositModal', { detail: { tab: 'deposit' } });
                     window.dispatchEvent(event);
                   }}
                   className="bg-gradient-to-r from-[color:var(--theme-accent)]/20 to-[color:var(--theme-accent)]/5 hover:from-[color:var(--theme-accent)]/30 hover:to-[color:var(--theme-accent)]/10 text-[color:var(--theme-accent)] font-black tracking-widest text-[12px] h-[36px] px-4 md:px-5 rounded-lg transition-all flex items-center shadow-[0_0_15px_rgba(0,229,255,0.15)] hover:shadow-[0_0_25px_rgba(0,229,255,0.3)] uppercase border-none"

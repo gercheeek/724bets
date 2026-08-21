@@ -121,14 +121,14 @@ const GameBlock: React.FC<BlockProps> = ({ title, icon, games, showPlayers, isSp
                   style={{ backgroundImage: `url(${game.image})`, filter: 'blur(20px) saturate(150%) brightness(1.2)' }}
                 ></div>
                 
-                <div className="casino-card-wrapper relative rounded-xl overflow-hidden aspect-[3/4] bg-[#111317] z-10 transition-all duration-300 transform group-hover:-translate-y-2 border border-transparent group-hover:border-[color:var(--theme-accent)]/50">
+                <div className="casino-card-wrapper relative rounded-xl overflow-hidden aspect-[4/3] bg-[#111317] z-10 transition-all duration-300 transform group-hover:-translate-y-2 border border-transparent group-hover:border-[color:var(--theme-accent)]/50">
                   <img 
                     src={game.image} 
                     alt={game.title}
                     className="absolute inset-0 !w-full !h-full !object-cover !object-center block transition-transform duration-700 ease-out group-hover:scale-110"
                   />
                   
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
 
                   {/* Hover Buttons */}
                   <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none group-hover:pointer-events-auto bg-black/60 backdrop-blur-[2px]">

@@ -93,35 +93,36 @@ const getGameColor = (name: string) => {
 
 import { BaseGameCard, GameCard, NewGameCard } from './GameCards';
 
-const SectionHeader: React.FC<{ title: string, icon?: React.ReactNode, onViewAll?: () => void, onScrollLeft?: () => void, onScrollRight?: () => void }> = ({ title, icon, onViewAll, onScrollLeft, onScrollRight }) => (
+const SectionHeader: React.FC<{ title: string, iconColor?: string, onViewAll?: () => void, onScrollLeft?: () => void, onScrollRight?: () => void }> = ({ title, iconColor = '#00E5FF', onViewAll, onScrollLeft, onScrollRight }) => (
   <div className="flex items-center justify-between mb-4 mt-8 px-1 md:px-0">
     <div className="flex items-center gap-2">
-      <div className="flex items-center justify-center h-[10px] w-[10px] rounded-full bg-[#00E5FF]/20 border border-[#00E5FF]/50 shadow-[0_0_10px_rgba(0,229,255,0.6)]">
-        <span className="h-[4px] w-[4px] rounded-full bg-[#00E5FF] shadow-[0_0_5px_#00E5FF]"></span>
+      <div className="flex items-center justify-center h-[10px] w-[10px] rounded-full border shadow-md" style={{ borderColor: `${iconColor}80`, backgroundColor: `${iconColor}33`, boxShadow: `0 0 10px ${iconColor}99` }}>
+        <span className="h-[4px] w-[4px] rounded-full" style={{ backgroundColor: iconColor, boxShadow: `0 0 5px ${iconColor}` }}></span>
       </div>
       <h2 className="text-white text-[12px] md:text-[14px] font-black tracking-wide uppercase">{title}</h2>
     </div>
-    <div className="flex gap-2 items-center">
+    <div className="flex items-center gap-2">
       {onViewAll && (
-        <button className="btn-secondary-modern" onClick={onViewAll}>
-          Tümünü gör
+        <button onClick={onViewAll} className="text-[11px] md:text-xs font-black text-white hover:text-white transition-all flex items-center gap-1 group cursor-pointer border border-[#00E5FF]/30 bg-[#00E5FF]/20 hover:bg-[#00E5FF]/30 px-3.5 py-1.5 rounded-full shadow-[0_0_10px_rgba(0,229,255,0.2)] hover:shadow-[0_0_15px_rgba(0,229,255,0.4)] uppercase tracking-wider">
+          <span>Tümünü Gör</span>
+          <ChevronRight size={14} className="group-hover:translate-x-0.5 transition-transform text-[#00E5FF] drop-shadow-[0_0_3px_#00E5FF]" />
         </button>
       )}
       {(onScrollLeft || onScrollRight) && (
-        <>
-          <button onClick={onScrollLeft} className="btn-icon-modern">
-            <ChevronLeft size={20} />
+        <div className="flex items-center gap-1">
+          <button onClick={onScrollLeft} className="w-8 h-8 rounded bg-white/5 hover:bg-white/10 flex items-center justify-center text-[#848B9D] hover:text-white transition-colors">
+            <ChevronLeft size={16} />
           </button>
-          <button onClick={onScrollRight} className="btn-icon-modern">
-            <ChevronRight size={20} />
+          <button onClick={onScrollRight} className="w-8 h-8 rounded bg-white/5 hover:bg-white/10 flex items-center justify-center text-[#848B9D] hover:text-white transition-colors">
+            <ChevronRight size={16} />
           </button>
-        </>
+        </div>
       )}
     </div>
   </div>
 );
 
-const SliderSection: React.FC<{ title: string, icon?: React.ReactNode, games: any[], onSelect: (g: any) => void, onDemo: (g: any) => void }> = ({ title, icon, games, onSelect, onDemo }) => {
+const SliderSection: React.FC<{ title: string, iconColor?: string, games: any[], onSelect: (g: any) => void, onViewAll?: () => void }> = ({ title, iconColor, games, onSelect, onViewAll }) => {
   const scrollRef = React.useRef<HTMLDivElement>(null);
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
@@ -130,24 +131,24 @@ const SliderSection: React.FC<{ title: string, icon?: React.ReactNode, games: an
     }
   };
 
+  if (!games || games.length === 0) return null;
+
   return (
-    <div className="flex flex-col gap-4 mb-4">
+    <div className="mb-10">
       <SectionHeader 
         title={title} 
-        icon={icon} 
-        onViewAll={() => {}} 
+        iconColor={iconColor} 
+        onViewAll={onViewAll} 
         onScrollLeft={() => scroll('left')} 
         onScrollRight={() => scroll('right')} 
       />
       
-      <div ref={scrollRef} className="overflow-x-auto hide-scrollbar -mx-4 px-4 pb-6 pt-2" style={{ scrollSnapType: 'x mandatory' }}>
-        <div className="flex gap-3 md:gap-4 min-w-max">
-          {games.map((game, i) => (
-            <div key={`${game.id}-${i}`} className="w-[110px] sm:w-[120px] md:w-[130px] lg:w-[140px] xl:w-[150px]" style={{ flexShrink: 0, scrollSnapAlign: 'start' }}>
-              <GameCard game={game} onClick={() => onSelect(game)} onDemoClick={() => onDemo(game)} />
-            </div>
-          ))}
-        </div>
+      <div ref={scrollRef} className="flex overflow-x-auto hide-scrollbar gap-2 md:gap-3 pb-4 px-1 md:px-0 relative" style={{ scrollSnapType: 'x mandatory' }}>
+        {games.map((game, i) => (
+          <div key={`${game.id}-${i}`} className="w-[140px] sm:w-[150px] md:w-[160px] flex-shrink-0 animate-in fade-in duration-500" style={{ scrollSnapAlign: 'start' }}>
+            <GameCard game={game} onClick={() => onSelect(game)} />
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -293,40 +294,29 @@ export default function CasinoLobby({
   const filteredGames = allGames.filter(game => {
     let matchesTab = false;
     const gameName = (game.name || '').toLowerCase();
+    const imageUrl = (game.img || game.image || '').toLowerCase();
+    
+    const isPlaceholder = imageUrl.includes('unsplash') || 
+                          imageUrl.includes('picsum.photos') || 
+                          imageUrl.includes('placehold') || 
+                          imageUrl.includes('loremflickr') ||
+                          imageUrl.includes('freepik') ||
+                          imageUrl.includes('dummyimage') ||
+                          imageUrl.includes('stock') ||
+                          imageUrl.includes('mockup');
+
+    if (isPlaceholder) return false;
     
     if (activeTab === 'all') {
       matchesTab = true;
     } else if (activeTab === 'popular') {
-      // Custom logic for popular (Kesin isimler kullanarak varyasyonları filtrele)
-      const premiumExactNames = [
-        'gates of olympus 1000', 'gates of olympus super scatter', 'sweet bonanza', 'sweet bonanza 1000', 
-        'le bandit', 'sweet bonanza 2500', 'sugar rush 1000', 'big bass bonanza 1000', 'gates of olympus', 
-        'starlight princess super scatter', 'sweet bonanza dice', 'skull fiesta', 'sweet bonanza xmas', 
-        'duck hunters: happy hour', 'starlight princess 1000', 'le santa', 'big bass splash 1000', 
-        'big bass vegas double down deluxe', 'big bass bonanza', 'sugar rush super scatter', 
-        'bigger bass bonanza', 'shining dice', 'gates of olympus xmas 1000', 'flaming hot extreme bell link', 
-        'clover gold', 'big bass halloween', 'sweet rush bonanza', 'mythical treasure', 
-        'sweet bonanza super scatter', 'big bass splash', 'gold party', '7 clovers of fortune', 
-        'better barn house bonanza', 'big bass secrets of the golden lake', 'wisdom of athena 1000 xmas', 
-        'the dog house megaways 1000', 'christmas big bass bonanza', 'big bass christmas – frozen lake', 
-        'fortune of olympus', 'wisdom of athena 1000', 'wild wild riches', 'big bass - hold & spinner', 
-        '777 wheel blitz', 'epic ze zeus', '40 super hot bell link', '40 burning hot bell link', 
-        'tanked', 'lobster house', 'dork unit', '40 shining crown bell link', 'queenie', 'seker bey bell link', 
-        'shining crown', 'duck hunters', 'wild wild riches megaways', 'monkey warrior', 'aztec treasure', 
-        'vampires vs wolves', 'hot chilli', 'tree of riches', 'john hunter and the tomb of the scarab queen', 
-        'super joker', 'fire strike', 'hercules and pegasus', 'greek gods', 'money mouse', 'buffalo king', 
-        'magic journey', 'release the kraken', 'super 7s', 'master joker', 'lucky dragons', 'journey to the west', 
-        'jurassic giants', '888 dragons', '3 genie wishes', 'hercules son of zeus', 'dragon kingdom', 
-        'ancient egypt classic', 'triple dragons', 'dwarven gold deluxe', 'romeo and juliet', 
-        'hockey league wild match'
+      const popularKeywords = [
+        'olympus', 'bonanza', 'sugar rush', 'starlight princess', 
+        'bandit', 'bass splash', 'dog house', 'reactoonz', 'book of dead',
+        'crazy time', 'lightning roulette', 'aviator', 'hades', 'zeus',
+        'fruit party', 'le santa', 'shining crown', 'hot extreme'
       ];
-      
-      const normGameName = gameName.trim().replace(/[^a-z0-9 ]/g, "");
-      const hitIndex = premiumExactNames.findIndex(name => {
-        const normName = name.replace(/[^a-z0-9 ]/g, "");
-        return normName === normGameName || normName.includes(normGameName) || normGameName.includes(normName);
-      });
-      matchesTab = hitIndex !== -1;
+      matchesTab = popularKeywords.some(keyword => gameName.includes(keyword)) && !gameName.includes('dice') && !gameName.includes('candyland');
     } else if (activeTab === 'slots') {
       matchesTab = game.category === 'slots';
     } else if (activeTab === 'live') {
@@ -512,72 +502,23 @@ export default function CasinoLobby({
 
         {/* 4. GAME GRIDS */}
         <div>
-          {activeTab === 'all' && !searchQuery && dynamicPopularGames.length > 0 && (
-            <div className="mb-10">
-              <div className="flex items-center justify-between mb-4 px-1 md:px-0">
-                <div className="flex items-center gap-2">
-                  <div className="flex items-center justify-center h-[10px] w-[10px] rounded-full bg-[#F59E0B]/20 border border-[#F59E0B]/50 shadow-[0_0_10px_rgba(245,158,11,0.6)]">
-                    <span className="h-[4px] w-[4px] rounded-full bg-[#F59E0B] shadow-[0_0_5px_#F59E0B]"></span>
-                  </div>
-                  <h2 className="text-white text-[12px] md:text-[14px] font-black tracking-wide uppercase">Popüler Oyunlar</h2>
-                </div>
-                <div className="flex items-center gap-2">
-                  <button className="text-[11px] md:text-xs font-black text-white hover:text-white transition-all flex items-center gap-1 group cursor-pointer border border-[#00E5FF]/30 bg-[#00E5FF]/20 hover:bg-[#00E5FF]/30 px-3.5 py-1.5 rounded-full shadow-[0_0_10px_rgba(0,229,255,0.2)] hover:shadow-[0_0_15px_rgba(0,229,255,0.4)] uppercase tracking-wider">
-                    <span>Tümünü Gör</span>
-                    <ChevronRight size={14} className="group-hover:translate-x-0.5 transition-transform text-[#00E5FF] drop-shadow-[0_0_3px_#00E5FF]" />
-                  </button>
-                  <div className="flex items-center gap-1">
-                    <button className="w-8 h-8 rounded bg-white/5 hover:bg-white/10 flex items-center justify-center text-[#848B9D] hover:text-white transition-colors">
-                      <ChevronLeft size={16} />
-                    </button>
-                    <button className="w-8 h-8 rounded bg-white/5 hover:bg-white/10 flex items-center justify-center text-[#848B9D] hover:text-white transition-colors">
-                      <ChevronRight size={16} />
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 md:gap-3 w-full animate-fade-in relative px-1 md:px-0">
-                {dynamicPopularGames.map((game) => (
-                  <div key={game.id} className="animate-in fade-in duration-500">
-                    <GameCard game={game} onClick={() => handleGameSelect(game)} />
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {activeTab === 'all' && !searchQuery && dynamicNewGames.length > 0 && (
-            <div className="mb-10">
-              <div className="flex items-center justify-between mb-4 px-1 md:px-0">
-                <div className="flex items-center gap-2">
-                  <div className="flex items-center justify-center h-[10px] w-[10px] rounded-full bg-[#00E5FF]/20 border border-[#00E5FF]/50 shadow-[0_0_10px_rgba(0,229,255,0.6)]">
-                    <span className="h-[4px] w-[4px] rounded-full bg-[#00E5FF] shadow-[0_0_5px_#00E5FF]"></span>
-                  </div>
-                  <h2 className="text-white text-[12px] md:text-[14px] font-black tracking-wide uppercase">Yeni</h2>
-                </div>
-                <div className="flex items-center gap-2">
-                  <button className="text-[11px] md:text-xs font-black text-white hover:text-white transition-all flex items-center gap-1 group cursor-pointer border border-[#00E5FF]/30 bg-[#00E5FF]/20 hover:bg-[#00E5FF]/30 px-3.5 py-1.5 rounded-full shadow-[0_0_10px_rgba(0,229,255,0.2)] hover:shadow-[0_0_15px_rgba(0,229,255,0.4)] uppercase tracking-wider">
-                    <span>Tümünü Gör</span>
-                    <ChevronRight size={14} className="group-hover:translate-x-0.5 transition-transform text-[#00E5FF] drop-shadow-[0_0_3px_#00E5FF]" />
-                  </button>
-                  <div className="flex items-center gap-1">
-                    <button className="w-8 h-8 rounded bg-white/5 hover:bg-white/10 flex items-center justify-center text-[#848B9D] hover:text-white transition-colors">
-                      <ChevronLeft size={16} />
-                    </button>
-                    <button className="w-8 h-8 rounded bg-white/5 hover:bg-white/10 flex items-center justify-center text-[#848B9D] hover:text-white transition-colors">
-                      <ChevronRight size={16} />
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 md:gap-3 w-full animate-fade-in relative px-1 md:px-0">
-                {dynamicNewGames.map((game) => (
-                  <div key={game.id} className="animate-in fade-in duration-500">
-                    <GameCard game={game} onClick={() => handleGameSelect(game)} />
-                  </div>
-                ))}
-              </div>
-            </div>
+          {activeTab === 'all' && !searchQuery && (
+            <>
+              <SliderSection 
+                title="Popüler Oyunlar" 
+                iconColor="#F59E0B"
+                games={dynamicPopularGames}
+                onSelect={handleGameSelect}
+                onViewAll={() => handleTabChange('popular')}
+              />
+              <SliderSection 
+                title="Yeni" 
+                iconColor="#00E5FF"
+                games={dynamicNewGames}
+                onSelect={handleGameSelect}
+                onViewAll={() => handleTabChange('new')}
+              />
+            </>
           )}
 
           <SectionHeader title={searchQuery ? 'Arama Sonuçları' : (activeTab === 'all' ? 'Tüm Oyunlar' : (TABS.find(t => t.id === activeTab)?.label || 'Oyunlar'))} />
