@@ -313,7 +313,7 @@ app.get('/api/logo/:teamId', async (req, res) => {
   }
 
   // 2. Check if Bulk Scraper downloaded it as "teamname.png"
-  const slugName = teamName.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '.png';
+  const slugName = (teamName || '').toLowerCase().replace(/[^a-z0-9]+/g, '-') + '.png';
   const bulkPath = path.join(logosDir, slugName);
   
   if (fs.existsSync(bulkPath)) {
@@ -390,13 +390,21 @@ app.post('/api/payments/neopays/initiate', express.json(), async (req, res) => {
             return res.status(400).json({ success: false, error: 'Eksik bilgi (userId veya amount)' });
         }
 
-        const user = await prisma.user.findUnique({ where: { id: userId } });
+        let user = await prisma.user.findFirst({
+            where: {
+                OR: [
+                    { id: userId },
+                    { username: userId }
+                ]
+            }
+        });
+
         if (!user) {
-            return res.status(404).json({ success: false, error: 'Kullanıcı bulunamadı' });
+            user = await getOrCreateUser(userId);
         }
 
         const trx = `TRX_${Date.now()}_${Math.floor(Math.random() * 10000)}`;
-        const depositAmount = parseFloat(amount);
+        const depositAmount = parseFloat(String(amount).replace(',', '.'));
         const sid = neopaysConfig.sid;
         const secretKey = neopaysConfig.secretKey;
         const method = (selectedMethod || 'banktransfer').toLowerCase();
