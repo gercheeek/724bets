@@ -36,8 +36,49 @@ export default function AdminDepositsTab() {
     }
   };
 
+  const [neopaysSid, setNeopaysSid] = useState('');
+  const [neopaysSecretKey, setNeopaysSecretKey] = useState('');
+  const [savingNeopays, setSavingNeopays] = useState(false);
+  const [neopaysMsg, setNeopaysMsg] = useState('');
+
+  const fetchNeopaysConfig = async () => {
+    try {
+      const res = await fetch('/api/admin/neopays-settings');
+      const data = await res.json();
+      if (data.success && data.config) {
+        setNeopaysSid(data.config.sid || '');
+        setNeopaysSecretKey(data.config.secretKey || '');
+      }
+    } catch (e) {
+      console.error('Error fetching neopays config:', e);
+    }
+  };
+
+  const saveNeopaysConfig = async () => {
+    setSavingNeopays(true);
+    setNeopaysMsg('');
+    try {
+      const res = await fetch('/api/admin/neopays-settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sid: neopaysSid, secretKey: neopaysSecretKey, active: true })
+      });
+      const data = await res.json();
+      if (data.success) {
+        setNeopaysMsg('✅ NeoPays ayarları başarıyla kaydedildi!');
+      } else {
+        setNeopaysMsg('❌ Hata: ' + (data.error || 'Kaydedilemedi'));
+      }
+    } catch (e) {
+      setNeopaysMsg('❌ Bağlantı hatası.');
+    } finally {
+      setSavingNeopays(false);
+    }
+  };
+
   useEffect(() => {
     fetchDeposits();
+    fetchNeopaysConfig();
   }, []);
 
   const handleUpdateStatus = async (id: string, newStatus: 'approved' | 'rejected') => {
@@ -73,15 +114,65 @@ export default function AdminDepositsTab() {
             <Wallet className="w-6 h-6 text-[#10b981]" />
             Para Yatırma (Deposit) Talepleri
           </h2>
-          <p className="text-zinc-400 mt-1">Kullanıcılardan gelen bekleyen yatırım talepleri (Prisma API)</p>
+          <p className="text-zinc-400 mt-1">Kullanıcılardan gelen bekleyen yatırım talepleri ve NeoPays entegrasyonu</p>
         </div>
         <button 
-          onClick={fetchDeposits}
+          onClick={() => { fetchDeposits(); fetchNeopaysConfig(); }}
           className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 rounded-lg text-white font-medium transition-colors"
         >
           <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
           Yenile
         </button>
+      </div>
+
+      {/* NeoPays Admin Config Box */}
+      <div className="bg-[#15171e] p-6 rounded-xl border border-gray-800 shadow-xl space-y-4">
+        <div className="flex items-center justify-between border-b border-gray-800 pb-3">
+          <div>
+            <h3 className="text-lg font-bold text-white flex items-center gap-2">
+              <Building2 className="w-5 h-5 text-[#00E5FF]" />
+              NeoPays Havale Entegrasyonu Ayarları
+            </h3>
+            <p className="text-xs text-gray-400 mt-0.5">NeoPays panelinden aldığınız SID ve Secret Key bilgilerini girin.</p>
+          </div>
+          <span className="text-xs bg-[#00E5FF]/10 text-[#00E5FF] px-2.5 py-1 rounded-full font-bold uppercase border border-[#00E5FF]/20">
+            Otomatik Callback Aktif
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-xs font-bold text-gray-400 mb-1">NeoPays SID (Site ID)</label>
+            <input 
+              type="text" 
+              value={neopaysSid} 
+              onChange={(e) => setNeopaysSid(e.target.value)}
+              placeholder="Örn: 1001"
+              className="w-full bg-black/40 border border-gray-700 rounded-lg px-3 py-2 text-white font-mono text-sm outline-none focus:border-[#00E5FF] transition-all"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-bold text-gray-400 mb-1">NeoPays Secret Key (Gizli Anahtar)</label>
+            <input 
+              type="password" 
+              value={neopaysSecretKey} 
+              onChange={(e) => setNeopaysSecretKey(e.target.value)}
+              placeholder="Secret Key"
+              className="w-full bg-black/40 border border-gray-700 rounded-lg px-3 py-2 text-white font-mono text-sm outline-none focus:border-[#00E5FF] transition-all"
+            />
+          </div>
+        </div>
+
+        <div className="flex items-center justify-between pt-2">
+          {neopaysMsg && <span className="text-xs font-bold">{neopaysMsg}</span>}
+          <button
+            onClick={saveNeopaysConfig}
+            disabled={savingNeopays}
+            className="ml-auto px-5 py-2 bg-gradient-to-r from-[#00E5FF] to-blue-600 text-black font-black text-xs uppercase tracking-wider rounded-lg hover:brightness-110 transition-all shadow-lg shadow-[#00E5FF]/20"
+          >
+            {savingNeopays ? 'Kaydediliyor...' : 'NeoPays Ayarlarını Kaydet'}
+          </button>
+        </div>
       </div>
 
       {error && (

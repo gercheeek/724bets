@@ -8,13 +8,102 @@ interface WalletModalProps {
   initialTab?: 'deposit' | 'withdraw';
 }
 
+const MethodLogo: React.FC<{ code: string }> = ({ code }) => {
+  switch (code) {
+    case 'papara':
+      return (
+        <span className="font-black text-[11px] text-white bg-gradient-to-r from-[#7B2CBF] to-[#9D4EDD] px-2 py-0.5 rounded shadow-[0_0_8px_rgba(123,44,191,0.5)] tracking-tighter">
+          papara
+        </span>
+      );
+    case 'creditcard':
+      return (
+        <div className="flex items-center gap-0.5 bg-black/40 px-1.5 py-1 rounded border border-white/10">
+          <div className="w-3 h-3 rounded-full bg-[#EB001B]"></div>
+          <div className="w-3 h-3 rounded-full bg-[#FF5F00] -ml-1.5 opacity-90"></div>
+          <span className="text-[9px] font-black text-white ml-1">CARD</span>
+        </div>
+      );
+    case 'crypto':
+      return (
+        <div className="w-6 h-6 rounded-full bg-[#26A17B] text-black font-black text-[11px] flex items-center justify-center border border-white/20 shadow-[0_0_8px_rgba(38,161,123,0.4)]">
+          ₮
+        </div>
+      );
+    case 'banktransfer':
+      return (
+        <div className="w-6 h-6 rounded-lg bg-[#00E5FF]/20 text-[#00E5FF] flex items-center justify-center font-black text-xs border border-[#00E5FF]/40 shadow-[0_0_8px_rgba(0,229,255,0.3)]">
+          🏦
+        </div>
+      );
+    case 'parolapara':
+      return (
+        <span className="px-1.5 py-0.5 bg-[#00D2FF]/20 text-[#00D2FF] border border-[#00D2FF]/40 rounded font-black text-[10px] tracking-tight">
+          PAROLA
+        </span>
+      );
+    case 'popypara':
+      return (
+        <span className="px-1.5 py-0.5 bg-[#FFB800]/20 text-[#FFB800] border border-[#FFB800]/40 rounded font-black text-[10px] tracking-tight">
+          POPY
+        </span>
+      );
+    case 'papel':
+      return (
+        <span className="px-1.5 py-0.5 bg-[#10B981]/20 text-[#10B981] border border-[#10B981]/40 rounded font-black text-[10px] tracking-tight">
+          PAPEL
+        </span>
+      );
+    case 'paybol':
+      return (
+        <span className="px-1.5 py-0.5 bg-[#3B82F6]/20 text-[#3B82F6] border border-[#3B82F6]/40 rounded font-black text-[10px] tracking-tight">
+          PAYBOL⚡
+        </span>
+      );
+    case 'pep':
+      return (
+        <span className="px-1.5 py-0.5 bg-[#E11D48]/20 text-[#E11D48] border border-[#E11D48]/40 rounded font-black text-[10px] tracking-tight">
+          PeP
+        </span>
+      );
+    case 'payco':
+      return (
+        <span className="px-1.5 py-0.5 bg-[#06B6D4]/20 text-[#06B6D4] border border-[#06B6D4]/40 rounded font-black text-[10px] tracking-tight">
+          PAYCO
+        </span>
+      );
+    case 'paratim':
+      return (
+        <span className="px-1.5 py-0.5 bg-[#6366F1]/20 text-[#6366F1] border border-[#6366F1]/40 rounded font-black text-[10px] tracking-tight">
+          PARATİM
+        </span>
+      );
+    default:
+      return <span className="text-xl">💳</span>;
+  }
+};
+
+const NEOPAYS_METHODS = [
+  { id: 'banktransfer', name: 'Banka Havalesi', type: 'banktransfer', neoCode: 'banktransfer', badge: '7/24 EFT/Havale', minAmount: 100 },
+  { id: 'papara', name: 'Papara', type: 'papara', neoCode: 'papara', badge: 'Anında', minAmount: 50 },
+  { id: 'creditcard', name: 'Kredi Kartı', type: 'creditcard', neoCode: 'creditcard', badge: '3D Secure', minAmount: 100 },
+  { id: 'crypto', name: 'Kripto Para', type: 'crypto', neoCode: 'crypto', badge: 'USDT/BTC', minAmount: 20 },
+  { id: 'parolapara', name: 'Parolapara', type: 'parolapara', neoCode: 'parolapara', badge: 'Hızlı Transfer', minAmount: 50 },
+  { id: 'popypara', name: 'Popy Para', type: 'popypara', neoCode: 'popypara', badge: 'Cüzdan', minAmount: 50 },
+  { id: 'papel', name: 'Papel', type: 'papel', neoCode: 'papel', badge: 'Cüzdan', minAmount: 50 },
+  { id: 'paybol', name: 'Paybol', type: 'paybol', neoCode: 'paybol', badge: 'Anında', minAmount: 50 },
+  { id: 'pep', name: 'Pep', type: 'pep', neoCode: 'pep', badge: 'Mobil Ödeme', minAmount: 50 },
+  { id: 'payco', name: 'Payco', type: 'payco', neoCode: 'payco', badge: 'Dijital', minAmount: 50 },
+  { id: 'paratim', name: 'Paratim', type: 'paratim', neoCode: 'paratim', badge: 'Cüzdan', minAmount: 50 },
+];
+
 const WalletModal: React.FC<WalletModalProps> = ({ onClose, initialTab = 'deposit' }) => {
   const { t } = useTranslation();
   const { siteUser } = useUser();
   const [activeTab, setActiveTab] = useState<'deposit' | 'withdraw' | 'history'>(initialTab as any);
   
-  const [methods, setMethods] = useState<any[]>([]);
-  const [selectedMethod, setSelectedMethod] = useState<any>(null);
+  const [methods, setMethods] = useState<any[]>(NEOPAYS_METHODS);
+  const [selectedMethod, setSelectedMethod] = useState<any>(NEOPAYS_METHODS[0]);
   const [amount, setAmount] = useState<string>('');
   const [txHash, setTxHash] = useState<string>('');
   const [loading, setLoading] = useState(false);
@@ -25,30 +114,8 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose, initialTab = 'deposi
   const [loadingHistory, setLoadingHistory] = useState(false);
 
   useEffect(() => {
-    const fetchMethods = async () => {
-      try {
-        const res = await fetch('https://api.724bahis.net/api/admin/payment-methods');
-        const data = await res.json();
-        if (data.success && data.methods.length > 0) {
-          const activeMethods = data.methods.filter((m: any) => m.isActive);
-          setMethods(activeMethods);
-          if (activeMethods.length > 0) {
-            setSelectedMethod(activeMethods[0]);
-          }
-        } else {
-          const dummies = [
-            { id: '1', name: 'Papara', type: 'papara', accountName: '724Bets Destek', accountNo: '1234567890', minAmount: 50 },
-            { id: '2', name: 'Banka Havalesi', type: 'bank_transfer', accountName: '724Bets Finans', accountNo: 'TR12 3456 7890 0000 0000 0000 00', minAmount: 100 },
-            { id: '3', name: 'USDT (TRC-20)', type: 'crypto', accountName: 'USDT Cüzdanı', accountNo: 'TXYZ1234567890abcdef', minAmount: 10 }
-          ];
-          setMethods(dummies);
-          setSelectedMethod(dummies[0]);
-        }
-      } catch (err) {
-        console.error("Error fetching methods", err);
-      }
-    };
-    fetchMethods();
+    setMethods(NEOPAYS_METHODS);
+    if (!selectedMethod) setSelectedMethod(NEOPAYS_METHODS[0]);
   }, []);
 
   useEffect(() => {
@@ -80,14 +147,11 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose, initialTab = 'deposi
       setError('Lütfen önce giriş yapın.');
       return;
     }
-    if (!amount || isNaN(Number(amount)) || Number(amount) < selectedMethod?.minAmount) {
-      setError(`Minimum tutar: ${selectedMethod?.minAmount}`);
+    if (!amount || isNaN(Number(amount)) || Number(amount) < (selectedMethod?.minAmount || 10)) {
+      setError(`Minimum tutar: ${selectedMethod?.minAmount || 10} ₺`);
       return;
     }
-    if (activeTab === 'deposit' && !txHash) {
-      setError('Lütfen işlem referans numarasını girin.');
-      return;
-    }
+
     if (activeTab === 'withdraw' && !txHash) {
       setError('Lütfen çekim yapılacak cüzdan/IBAN adresinizi girin.');
       return;
@@ -96,8 +160,39 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose, initialTab = 'deposi
     setLoading(true);
     setError('');
 
+    // Handle NeoPays Deposit Redirect for any selected method
+    if (activeTab === 'deposit') {
+      try {
+        const neoCode = selectedMethod?.neoCode || selectedMethod?.type || 'banktransfer';
+        const res = await fetch('/api/payments/neopays/initiate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            userId: siteUser.id,
+            amount: amount,
+            method: neoCode,
+            fullname: siteUser.username,
+            returnUrl: window.location.origin
+          })
+        });
+        const data = await res.json();
+        if (data.success && data.url) {
+          window.location.href = data.url;
+          return;
+        } else {
+          setError(data.error || 'NeoPays ödeme yönlendirmesi alınamadı.');
+          setLoading(false);
+          return;
+        }
+      } catch (err) {
+        setError('NeoPays ödeme servisine bağlanılamadı.');
+        setLoading(false);
+        return;
+      }
+    }
+
     try {
-      const endpoint = activeTab === 'deposit' ? 'https://api.724bahis.net/api/payments/deposit' : 'https://api.724bahis.net/api/payments/withdraw';
+      const endpoint = 'https://api.724bahis.net/api/payments/withdraw';
       const res = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -214,71 +309,73 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose, initialTab = 'deposi
           ) : (
             <div className="bg-[#0A0C10] rounded-xl p-5 border border-white/5 shadow-inner">
               <div className="mb-5">
-                <label className="block text-[11px] uppercase tracking-wider font-bold text-zinc-500 mb-1.5">Ödeme Yöntemi</label>
-                <div className="grid grid-cols-3 gap-2">
+                <label className="block text-[11px] uppercase tracking-wider font-bold text-zinc-500 mb-2">Ödeme Yöntemi Seçin</label>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-[220px] overflow-y-auto custom-scrollbar p-0.5">
                   {methods.map((m) => (
                     <button
                       key={m.id}
                       onClick={() => setSelectedMethod(m)}
-                      className={`py-2 px-3 rounded-lg border text-sm font-bold transition-all ${
+                      className={`p-2.5 rounded-xl border text-left flex flex-col justify-between transition-all relative overflow-hidden group ${
                         selectedMethod?.id === m.id 
-                          ? 'border-[#00E676] bg-[#00E5FF]/10 text-white' 
-                          : 'border-white/10 bg-white/5 text-zinc-400 hover:text-white'
+                          ? 'border-[#00E5FF] bg-[#00E5FF]/10 text-white shadow-[0_0_15px_rgba(0,229,255,0.2)]' 
+                          : 'border-white/10 bg-white/5 text-zinc-400 hover:text-white hover:border-white/20'
                       }`}
                     >
-                      {m.name}
+                      <div className="flex items-center justify-between w-full mb-1">
+                        <MethodLogo code={m.neoCode} />
+                        {m.badge && (
+                          <span className="text-[9px] font-black px-1.5 py-0.5 rounded bg-white/10 text-[#00E5FF]">
+                            {m.badge}
+                          </span>
+                        )}
+                      </div>
+                      <div className="font-bold text-xs truncate text-white">{m.name}</div>
+                      <div className="text-[10px] text-zinc-500 font-medium mt-0.5">Min: {m.minAmount || 50} ₺</div>
                     </button>
                   ))}
                 </div>
               </div>
 
-              {selectedMethod && activeTab === 'deposit' && (
-                <div className="bg-[#00E5FF]/5 border border-[#00E676]/20 rounded-lg p-4 mb-5">
-                  <p className="text-[12px] text-zinc-300 leading-relaxed font-medium mb-3">
-                    Lütfen aşağıdaki hesaba gönderim yaptıktan sonra işlemi onaylayın.
-                  </p>
-                  <div className="mb-2">
-                    <span className="text-[10px] text-zinc-500 uppercase font-bold">Alıcı Adı</span>
-                    <div className="text-white font-bold text-sm">{selectedMethod.accountName}</div>
-                  </div>
+              {activeTab === 'deposit' && selectedMethod && (
+                <div className="bg-[#00E5FF]/10 border border-[#00E5FF]/30 rounded-xl p-3.5 mb-5 flex items-center gap-3">
+                  <MethodLogo code={selectedMethod.neoCode} />
                   <div>
-                    <span className="text-[10px] text-zinc-500 uppercase font-bold">Hesap / IBAN / Cüzdan</span>
-                    <div className="flex items-center justify-between bg-black/50 p-2 rounded border border-white/5 mt-1">
-                      <span className="text-[#00E5FF] font-mono text-sm break-all">{selectedMethod.accountNo}</span>
-                      <button onClick={() => handleCopy(selectedMethod.accountNo)} className="text-zinc-400 hover:text-white p-1">
-                        <Copy className="w-4 h-4" />
-                      </button>
-                    </div>
+                    <div className="text-white font-bold text-xs">{selectedMethod.name} İle Güvenli Ödeme</div>
+                    <p className="text-[11px] text-zinc-400 mt-0.5">
+                      Tutarı girip onayladığınızda NeoPays ödeme sayfasına otomatik yönlendirileceksiniz.
+                    </p>
                   </div>
                 </div>
               )}
 
               <div className="mb-4">
-                <label className="block text-[11px] uppercase tracking-wider font-bold text-zinc-500 mb-1.5">Tutar (USD/TL)</label>
+                <label className="block text-[11px] uppercase tracking-wider font-bold text-zinc-500 mb-1.5">Yatırılacak Tutar (TL)</label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 font-bold">$</span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 font-bold">₺</span>
                   <input 
                     type="number" 
                     value={amount}
                     onChange={(e) => setAmount(e.target.value)}
-                    placeholder={selectedMethod?.minAmount?.toString() || '0'}
+                    placeholder={selectedMethod?.minAmount?.toString() || '100'}
                     className="w-full bg-[#131620] border border-white/10 rounded-lg py-3 pl-8 pr-4 text-white font-bold outline-none focus:border-[#00E5FF]/50"
                   />
                 </div>
               </div>
 
-              <div className="mb-6">
-                <label className="block text-[11px] uppercase tracking-wider font-bold text-zinc-500 mb-1.5">
-                  {activeTab === 'deposit' ? 'İşlem Numarası / Gönderen Adı' : 'Çekim Yapılacak Hesap / Cüzdan / IBAN'}
-                </label>
-                <input 
-                  type="text" 
-                  value={txHash}
-                  onChange={(e) => setTxHash(e.target.value)}
-                  placeholder={activeTab === 'deposit' ? 'Örn: Ahmet Yılmaz veya TX123456' : 'TR12 3456...'}
-                  className="w-full bg-[#131620] border border-white/10 rounded-lg py-3 px-4 text-white font-medium outline-none focus:border-[#00E5FF]/50"
-                />
-              </div>
+              {activeTab === 'withdraw' && (
+                <div className="mb-6">
+                  <label className="block text-[11px] uppercase tracking-wider font-bold text-zinc-500 mb-1.5">
+                    Çekim Yapılacak Hesap / Cüzdan / IBAN
+                  </label>
+                  <input 
+                    type="text" 
+                    value={txHash}
+                    onChange={(e) => setTxHash(e.target.value)}
+                    placeholder="TR12 3456..."
+                    className="w-full bg-[#131620] border border-white/10 rounded-lg py-3 px-4 text-white font-medium outline-none focus:border-[#00E5FF]/50"
+                  />
+                </div>
+              )}
 
               {error && (
                 <div className="text-red-500 text-sm font-bold mb-4 flex items-center gap-2">
@@ -289,9 +386,9 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose, initialTab = 'deposi
               <button 
                 onClick={handleSubmit}
                 disabled={loading}
-                className="w-full bg-[#c6ff00] hover:bg-[#a6d900] text-black font-black py-3.5 rounded-lg uppercase tracking-wider transition-colors disabled:opacity-50"
+                className="w-full bg-gradient-to-r from-[#00E5FF] to-blue-600 hover:brightness-110 text-black font-black py-3.5 rounded-xl uppercase tracking-wider transition-all disabled:opacity-50 shadow-lg shadow-[#00E5FF]/20 flex items-center justify-center gap-2"
               >
-                {loading ? 'İşleniyor...' : (activeTab === 'deposit' ? 'Yatırımı Bildir' : 'Çekim Talebi Oluştur')}
+                {loading ? 'Yönlendiriliyor...' : (activeTab === 'deposit' ? `${selectedMethod?.name || 'Ödeme'} İle Devam Et 🚀` : 'Çekim Talebi Oluştur')}
               </button>
             </div>
           )}

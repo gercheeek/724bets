@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import rawCasinoData from '../data/slotra_casino.json';
 
 export interface Game {
   id: string | number;
@@ -30,6 +31,27 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   useEffect(() => {
     let isMounted = true;
 
+    const mapGames = (gamesToMap: any[]) => {
+      return gamesToMap.map((g: any) => {
+        const validImage = (g.image || g.img || '').trim();
+        const finalImg = validImage.length > 5 ? validImage : '';
+        
+        return {
+          id: g.id || Math.random().toString(),
+          name: g.name || 'Unknown Game',
+          provider: g.provider || 'Unknown',
+          category: g.type === 'live' ? 'live' : 'slots',
+          img: finalImg,
+          image: finalImg,
+          vendorCode: g.vendorCode || '',
+          gameCode: g.gameCode || '',
+          isActive: g.isActive !== false,
+          isMapped: g.isMapped === true,
+          isNew: g.isNew === true
+        };
+      });
+    };
+
     const fetchGames = async () => {
       try {
         const res = await fetch('/api/casino/games');
@@ -38,35 +60,21 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         
         if (isMounted) {
           if (data.success && Array.isArray(data.games) && data.games.length > 0) {
-            const mapped = data.games.map((g: any) => {
-              // We'll use a better fallback in the UI, but here we just ensure a valid URL structure
-              const validImage = (g.image || g.img || '').trim();
-              const finalImg = validImage.length > 5 ? validImage : '';
-              
-              return {
-                id: g.id || Math.random().toString(),
-                name: g.name || 'Unknown Game',
-                provider: g.provider || 'Unknown',
-                category: g.type === 'live' ? 'live' : 'slots',
-                img: finalImg,
-                image: finalImg,
-                vendorCode: g.vendorCode || '',
-                gameCode: g.gameCode || '',
-                isActive: g.isActive !== false,
-                isMapped: g.isMapped === true,
-                isNew: g.isNew === true
-              };
-            });
-            setGames(mapped);
+            setGames(mapGames(data.games));
+            setError(null);
           } else {
-            setError('No games found in API response');
+            // Fallback if success false or empty array
+            console.warn('API returned no games, falling back to local JSON data.');
+            setGames(mapGames(rawCasinoData));
+            setError('Using local fallback data');
           }
           setIsLoading(false);
         }
       } catch (err: any) {
         if (isMounted) {
-          console.error('GameContext fetch error:', err);
-          setError(err.message || 'Failed to fetch games');
+          console.error('GameContext fetch error, falling back to local JSON data:', err);
+          setGames(mapGames(rawCasinoData));
+          setError(err.message || 'Using local fallback data due to fetch error');
           setIsLoading(false);
         }
       }

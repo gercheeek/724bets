@@ -145,7 +145,7 @@ const SliderSection: React.FC<{ title: string, iconColor?: string, games: any[],
       
       <div ref={scrollRef} className="flex overflow-x-auto hide-scrollbar gap-2 md:gap-3 pb-4 px-1 md:px-0 relative" style={{ scrollSnapType: 'x mandatory' }}>
         {games.map((game, i) => (
-          <div key={`${game.id}-${i}`} className="w-[140px] sm:w-[150px] md:w-[160px] flex-shrink-0 animate-in fade-in duration-500" style={{ scrollSnapAlign: 'start' }}>
+          <div key={`${game.id}-${i}`} className="w-[120px] md:w-[140px] flex-shrink-0 animate-in fade-in duration-500" style={{ scrollSnapAlign: 'start' }}>
             <GameCard game={game} onClick={() => onSelect(game)} />
           </div>
         ))}
@@ -168,7 +168,7 @@ export default function CasinoLobby({
   initialTab?: string
 }) {
   const { t } = useLanguage();
-  const dynamicOriginals: any[] = [];
+  const dynamicOriginals: any[] = getOriginalsData(t);
 
   const [activeTab, setActiveTab] = useState(initialTab || 'all');
   const [currentPath, setCurrentPath] = useState(typeof window !== 'undefined' ? window.location.pathname : '');
@@ -250,11 +250,19 @@ export default function CasinoLobby({
   useEffect(() => {
     const newPool = allGames.filter(g => g.category === 'new' || g.isNew || (g.name || '').toLowerCase().includes('yeni'));
     
-    // Sadece Popüler skorlamasına göre üstte yer alan oyunları al
+    // Sadece Popüler skorlamasına göre üstte yer alan oyunları al ve benzer isimleri filtrele
     const popularPool = allGames.filter(g => getPopularityScore(g.name || '') > 0).sort((a, b) => getPopularityScore(b.name || '') - getPopularityScore(a.name || ''));
     
+    const seenBases = new Set<string>();
+    const deduplicatedPopular = popularPool.filter(g => {
+      const base = (g.name || '').toLowerCase().replace(/1000|dice|super|scatter|megaways/g, '').trim();
+      if (seenBases.has(base)) return false;
+      seenBases.add(base);
+      return true;
+    });
+
     setDynamicNewGames(shuffleGamesList(newPool).slice(0, 14));
-    setDynamicPopularGames(popularPool.slice(0, 20));
+    setDynamicPopularGames((deduplicatedPopular.length >= 6 ? deduplicatedPopular : popularPool).slice(0, 18));
   }, [allGames]);
 
   useEffect(() => {
@@ -512,7 +520,15 @@ export default function CasinoLobby({
                 onViewAll={() => handleTabChange('popular')}
               />
               <SliderSection 
-                title="Yeni" 
+                title="Orijinal Oyunlar" 
+                iconColor="#10B981"
+                games={dynamicOriginals}
+                onSelect={(g) => {
+                  if (onNavigate) onNavigate(g.path || 'pool');
+                }}
+              />
+              <SliderSection 
+                title="Yeni Oyunlar" 
                 iconColor="#00E5FF"
                 games={dynamicNewGames}
                 onSelect={handleGameSelect}
@@ -523,7 +539,7 @@ export default function CasinoLobby({
 
           <SectionHeader title={searchQuery ? 'Arama Sonuçları' : (activeTab === 'all' ? 'Tüm Oyunlar' : (TABS.find(t => t.id === activeTab)?.label || 'Oyunlar'))} />
           
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 md:gap-4 w-full px-1 md:px-0">
+          <div className="grid grid-cols-[repeat(auto-fill,minmax(120px,1fr))] md:grid-cols-[repeat(auto-fill,minmax(140px,1fr))] gap-2 md:gap-4 w-full px-1 md:px-0">
             {filteredGames.slice(0, displayLimit).map((game) => (
               <GameCard key={game.id} game={game} onClick={() => handleGameSelect(game)} />
             ))}

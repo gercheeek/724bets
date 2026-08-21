@@ -4,16 +4,24 @@ import { GameDetailModal, GameData } from './GameDetailModal';
 import { useLanguage } from '../contexts/LanguageContext';
 import { BaseGameCard } from './GameCards';
 
-export const getOriginalsData = (t: (key: string) => string): GameData[] => [];
+export const getOriginalsData = (t?: (key: string) => string): any[] => [
+  { id: 'plinko', name: 'Plinko 724', category: 'Originals', provider: '724bets', img: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=400&auto=format&fit=crop', path: 'pool' },
+  { id: 'mines', name: 'Mines 724', category: 'Originals', provider: '724bets', img: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?q=80&w=400&auto=format&fit=crop', path: 'pool' },
+  { id: 'crash', name: 'Crash Aviator', category: 'Originals', provider: '724bets', img: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=400&auto=format&fit=crop', path: 'pool' },
+  { id: 'dice', name: 'Dice Master', category: 'Originals', provider: '724bets', img: 'https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?q=80&w=400&auto=format&fit=crop', path: 'pool' },
+  { id: 'wheel', name: 'Fortune Wheel', category: 'Originals', provider: '724bets', img: 'https://images.unsplash.com/photo-1518609878373-06d740f60d8b?q=80&w=400&auto=format&fit=crop', path: 'wheel' },
+  { id: 'limbo', name: 'Limbo Rocket', category: 'Originals', provider: '724bets', img: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=400&auto=format&fit=crop', path: 'pool' },
+  { id: 'blackjack', name: 'Blackjack 21', category: 'Originals', provider: '724bets', img: 'https://images.unsplash.com/photo-1511193311914-0346f16efe90?q=80&w=400&auto=format&fit=crop', path: 'blackjack' },
+  { id: 'raffle', name: 'Çekiliş Parkı', category: 'Originals', provider: '724bets', img: 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?q=80&w=400&auto=format&fit=crop', path: 'raffle' },
+];
 
-// Custom Card just for Originals to mimic the BC Game style typography
 const OriginalGameCard: React.FC<{ game: any, onClick: () => void }> = ({ game, onClick }) => {
     return (
         <div 
             onClick={onClick}
-            className="group relative flex flex-col cursor-pointer rounded-2xl overflow-hidden transition-all duration-300 border border-white/5 bg-[#1a1c22] shadow-[0_5px_15px_rgba(0,0,0,0.4)] hover:shadow-[0_10px_30px_rgba(0,229,255,0.2)] hover:-translate-y-2 w-full hover:border-[#00E5FF]/30"
+            className="group relative flex flex-col cursor-pointer rounded-2xl overflow-hidden transition-all duration-500 border border-white/5 bg-[#1a1c22] shadow-[0_4px_12px_rgba(0,0,0,0.3)] hover:shadow-[0_8px_25px_rgba(0,229,255,0.2)] hover:-translate-y-1 w-full max-w-[160px] mx-auto hover:border-[#00E5FF]/30"
         >
-            <div className="relative w-full aspect-[4/5] overflow-hidden rounded-2xl bg-[#0A0C10]">
+            <div className="relative w-full aspect-[3/4] overflow-hidden rounded-2xl bg-[#0A0C10]">
                 {/* Clean Flat Background Image */}
                 <img 
                     src={game.image || game.img} 
@@ -21,11 +29,9 @@ const OriginalGameCard: React.FC<{ game: any, onClick: () => void }> = ({ game, 
                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" 
                 />
                 
-
-
                 {/* Hover Glow */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#00E5FF]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 mix-blend-overlay z-20 pointer-events-none"></div>
-                <div className="absolute inset-0 ring-1 ring-inset ring-white/10 group-hover:ring-[#00E5FF]/50 rounded-2xl z-30 pointer-events-none transition-all duration-300"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-[#00E5FF]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 mix-blend-overlay z-20 pointer-events-none"></div>
+                <div className="absolute inset-0 ring-1 ring-inset ring-white/5 group-hover:ring-[#00E5FF]/30 rounded-2xl z-30 pointer-events-none transition-all duration-500"></div>
             </div>
         </div>
     );

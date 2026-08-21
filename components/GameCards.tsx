@@ -16,32 +16,32 @@ export const BaseGameCard: React.FC<{ game: any, onClick: () => void, variant?: 
   const hasImage = imageUrl && imageUrl.length > 5 && !imgError && !isPlaceholder;
 
   const colors = {
-    cyan: { border: 'hover:border-[#00E5FF]/50', shadow: 'hover:shadow-[0_10px_40px_rgba(0,229,255,0.3)]', glow: 'from-[#00E5FF]/20', ring: 'group-hover:ring-[#00E5FF]/50' },
-    green: { border: 'hover:border-[#00E5FF]/50', shadow: 'hover:shadow-[0_10px_40px_rgba(0,229,255,0.3)]', glow: 'from-[#00E5FF]/20', ring: 'group-hover:ring-[#00E5FF]/50' },
-    purple: { border: 'hover:border-[#00E5FF]/50', shadow: 'hover:shadow-[0_10px_40px_rgba(0,229,255,0.3)]', glow: 'from-[#00E5FF]/20', ring: 'group-hover:ring-[#00E5FF]/50' },
-    gold: { border: 'hover:border-[#00E5FF]/50', shadow: 'hover:shadow-[0_10px_40px_rgba(0,229,255,0.3)]', glow: 'from-[#00E5FF]/20', ring: 'group-hover:ring-[#00E5FF]/50' }
+    cyan: { border: 'hover:border-[#00E5FF]/30', shadow: 'hover:shadow-[0_8px_25px_rgba(0,229,255,0.2)]', glow: 'from-[#00E5FF]/10', ring: 'group-hover:ring-[#00E5FF]/30' },
+    green: { border: 'hover:border-[#00E5FF]/30', shadow: 'hover:shadow-[0_8px_25px_rgba(0,229,255,0.2)]', glow: 'from-[#00E5FF]/10', ring: 'group-hover:ring-[#00E5FF]/30' },
+    purple: { border: 'hover:border-[#00E5FF]/30', shadow: 'hover:shadow-[0_8px_25px_rgba(0,229,255,0.2)]', glow: 'from-[#00E5FF]/10', ring: 'group-hover:ring-[#00E5FF]/30' },
+    gold: { border: 'hover:border-[#00E5FF]/30', shadow: 'hover:shadow-[0_8px_25px_rgba(0,229,255,0.2)]', glow: 'from-[#00E5FF]/10', ring: 'group-hover:ring-[#00E5FF]/30' }
   };
   const theme = colors[variant];
 
   return (
     <div 
-      className={`group relative flex flex-col cursor-pointer rounded-2xl overflow-hidden transition-all duration-500 hover:z-10 border border-white/5 bg-transparent ${theme.border} shadow-[0_4px_15px_rgba(0,0,0,0.5)] ${theme.shadow} hover:-translate-y-2 w-full`}
+      className={`group relative flex flex-col cursor-pointer rounded-2xl overflow-hidden transition-all duration-500 hover:z-10 border border-white/5 bg-transparent ${theme.border} shadow-[0_4px_12px_rgba(0,0,0,0.3)] ${theme.shadow} hover:-translate-y-1 w-full max-w-[160px] mx-auto`}
       tabIndex={0}
       onClick={onClick}
     >
-      <div className="relative w-full aspect-[3/4] overflow-hidden rounded-2xl bg-[#111317]">
+      <div className="relative w-full aspect-[3/4] overflow-hidden rounded-2xl bg-[#0A0C10]">
         {hasImage ? (
           <img 
             src={imageUrl} 
             alt={game.name} 
-            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110 z-0" 
+            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 z-0" 
             loading="lazy" 
             onError={() => setImgError(true)}
           />
         ) : (
-          <div className="absolute inset-0 flex flex-col items-center justify-center p-4 bg-gradient-to-br from-[#1A1F2D] to-[#111317] z-0">
-            <div className="w-14 h-14 mb-4 rounded-xl bg-gradient-to-br from-[#00E5FF]/20 to-purple-500/20 flex items-center justify-center border border-white/5 shadow-inner">
-               <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="url(#gradient)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <div className="absolute inset-0 flex flex-col items-center justify-center p-3 bg-gradient-to-br from-[#12141A] to-[#0A0C10] z-0">
+            <div className="w-10 h-10 mb-3 rounded-xl bg-gradient-to-br from-[#00E5FF]/10 to-purple-500/10 flex items-center justify-center border border-white/5">
+               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="url(#gradient)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                   <defs>
                     <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
                       <stop offset="0%" stopColor="#00E5FF" />
@@ -51,14 +51,14 @@ export const BaseGameCard: React.FC<{ game: any, onClick: () => void, variant?: 
                   <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline>
                </svg>
             </div>
-            <span className="text-white font-bold text-center text-sm tracking-wide line-clamp-3 leading-tight drop-shadow-md">{game.name || 'Oyun'}</span>
-            <span className="text-gray-400 text-xs font-medium mt-2">{game.provider || 'Casino'}</span>
+            <span className="text-white/90 font-bold text-center text-xs tracking-wide line-clamp-2 leading-snug">{game.name || 'Oyun'}</span>
+            <span className="text-gray-500 text-[10px] font-medium mt-1 uppercase tracking-wider">{game.provider || 'Casino'}</span>
           </div>
         )}
         
         {/* Inner Glow / Glassmorphism */}
         <div className={`absolute inset-0 bg-gradient-to-t ${theme.glow} to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 mix-blend-overlay z-10 pointer-events-none`}></div>
-        <div className={`absolute inset-0 ring-1 ring-inset ring-white/10 ${theme.ring} rounded-2xl z-20 pointer-events-none transition-all duration-500`}></div>
+        <div className={`absolute inset-0 ring-1 ring-inset ring-white/5 ${theme.ring} rounded-2xl z-20 pointer-events-none transition-all duration-500`}></div>
       </div>
     </div>
   );
