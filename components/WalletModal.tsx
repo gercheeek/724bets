@@ -175,17 +175,23 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose, initialTab = 'deposi
             returnUrl: window.location.origin
           })
         });
+        if (!res.ok) {
+          const text = await res.text().catch(() => '');
+          setError(`[HTTP ${res.status}] NeoPays Hatası: ${text.substring(0, 150) || res.statusText}`);
+          setLoading(false);
+          return;
+        }
         const data = await res.json();
         if (data.success && data.url) {
           window.location.href = data.url;
           return;
         } else {
-          setError(data.error || 'NeoPays ödeme yönlendirmesi alınamadı.');
+          setError(`[NeoPays Hatası] ${data.error || 'Ödeme yönlendirmesi alınamadı.'}`);
           setLoading(false);
           return;
         }
-      } catch (err) {
-        setError('NeoPays ödeme servisine bağlanılamadı.');
+      } catch (err: any) {
+        setError(`[Bağlantı Hatası] Debug: ${err?.message || String(err)}`);
         setLoading(false);
         return;
       }
@@ -203,6 +209,11 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose, initialTab = 'deposi
           txHash: txHash
         })
       });
+      if (!res.ok) {
+        const text = await res.text().catch(() => '');
+        setError(`[HTTP ${res.status}] Çekim Hatası: ${text.substring(0, 150) || res.statusText}`);
+        return;
+      }
       const data = await res.json();
       if (data.success) {
         setSuccess(true);
@@ -210,10 +221,10 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose, initialTab = 'deposi
           onClose();
         }, 3000);
       } else {
-        setError(data.error || 'İşlem başarısız oldu.');
+        setError(`[İşlem Hatası] ${data.error || 'İşlem başarısız oldu.'}`);
       }
-    } catch (err) {
-      setError('Sunucu bağlantı hatası.');
+    } catch (err: any) {
+      setError(`[Bağlantı Hatası] Debug: ${err?.message || String(err)}`);
     } finally {
       setLoading(false);
     }
