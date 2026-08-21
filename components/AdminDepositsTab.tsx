@@ -21,7 +21,7 @@ export default function AdminDepositsTab() {
     setLoading(true);
     setError('');
     try {
-      const res = await fetch('https://api.724bahis.net/api/admin/payments/pending?type=deposit');
+      const res = await fetch('/api/admin/payments/pending?type=deposit');
       const data = await res.json();
       if (data.success) {
         setDeposits(data.pending);
@@ -84,8 +84,8 @@ export default function AdminDepositsTab() {
   const handleUpdateStatus = async (id: string, newStatus: 'approved' | 'rejected') => {
     try {
       const endpoint = newStatus === 'approved' 
-        ? 'https://api.724bahis.net/api/admin/payments/approve' 
-        : 'https://api.724bahis.net/api/admin/payments/reject';
+        ? '/api/admin/payments/approve' 
+        : '/api/admin/payments/reject';
       
       const res = await fetch(endpoint, {
         method: 'POST',

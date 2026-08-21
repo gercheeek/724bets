@@ -130,7 +130,7 @@ export default function AdminPanel(props: AdminPanelProps) {
                 </div>
 
                 {/* Content */}
-                <div className="flex flex-1 overflow-hidden relative">
+                <div className="flex flex-1 overflow-hidden relative min-h-0">
                     
                     {/* Pro Sidebar Navigation */}
                     {/* Mobile Overlay */}
@@ -141,7 +141,7 @@ export default function AdminPanel(props: AdminPanelProps) {
                         ></div>
                     )}
                     
-                    <div className={`${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 absolute md:relative z-50 h-full w-64 bg-[#0a0c10] border-r border-gray-800 p-3 flex flex-col gap-1 overflow-y-auto shrink-0 shadow-[4px_0_24px_rgba(0,0,0,0.5)] custom-scrollbar select-none transition-transform duration-300`}>
+                    <div className={`${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 absolute md:relative z-50 h-full max-h-full min-h-0 w-64 bg-[#0a0c10] border-r border-gray-800 p-3 flex flex-col gap-1 overflow-y-auto shrink-0 shadow-[4px_0_24px_rgba(0,0,0,0.5)] select-none transition-transform duration-300`}>
                         
                         {/* BAHİS & SİSTEM MOTORU */}
                         <div onClick={() => toggleGroup('BAHİS & SİSTEM MOTORU')} className="flex items-center justify-between cursor-pointer group mb-1 px-2">
