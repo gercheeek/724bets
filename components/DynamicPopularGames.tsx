@@ -21,6 +21,7 @@ export default function DynamicPopularGames({ onGameSelect, onViewChange }: { on
         const res = await fetch('/api/casino/games');
         const data = await res.json();
         if (data.success && Array.isArray(data.games)) {
+          // Normal API verisini formatla
           const mapped = data.games.map((g: any) => ({
             id: g.id,
             name: g.name,
@@ -31,7 +32,74 @@ export default function DynamicPopularGames({ onGameSelect, onViewChange }: { on
             vendorCode: g.vendorCode,
             gameCode: g.gameCode
           }));
-          setDynamicPopularGames(shuffleGamesList(mapped).slice(0, 16));
+
+          // Premium Oyunların tam ve kesin isimleri (varyasyon kirliliğini önlemek için)
+          const premiumExactNames = [
+            'gates of olympus 1000', 'gates of olympus super scatter', 'sweet bonanza', 'sweet bonanza 1000', 
+            'le bandit', 'sweet bonanza 2500', 'sugar rush 1000', 'big bass bonanza 1000', 'gates of olympus', 
+            'starlight princess super scatter', 'sweet bonanza dice', 'skull fiesta', 'sweet bonanza xmas', 
+            'duck hunters: happy hour', 'starlight princess 1000', 'le santa', 'big bass splash 1000', 
+            'big bass vegas double down deluxe', 'big bass bonanza', 'sugar rush super scatter', 
+            'bigger bass bonanza', 'shining dice', 'gates of olympus xmas 1000', 'flaming hot extreme bell link', 
+            'clover gold', 'big bass halloween', 'sweet rush bonanza', 'mythical treasure', 
+            'sweet bonanza super scatter', 'big bass splash', 'gold party', '7 clovers of fortune', 
+            'better barn house bonanza', 'big bass secrets of the golden lake', 'wisdom of athena 1000 xmas', 
+            'the dog house megaways 1000', 'christmas big bass bonanza', 'big bass christmas – frozen lake', 
+            'fortune of olympus', 'wisdom of athena 1000', 'wild wild riches', 'big bass - hold & spinner', 
+            '777 wheel blitz', 'epic ze zeus', '40 super hot bell link', '40 burning hot bell link', 
+            'tanked', 'lobster house', 'dork unit', '40 shining crown bell link', 'queenie', 'seker bey bell link', 
+            'shining crown', 'duck hunters', 'wild wild riches megaways', 'monkey warrior', 'aztec treasure', 
+            'vampires vs wolves', 'hot chilli', 'tree of riches', 'john hunter and the tomb of the scarab queen', 
+            'super joker', 'fire strike', 'hercules and pegasus', 'greek gods', 'money mouse', 'buffalo king', 
+            'magic journey', 'release the kraken', 'super 7s', 'master joker', 'lucky dragons', 'journey to the west', 
+            'jurassic giants', '888 dragons', '3 genie wishes', 'hercules son of zeus', 'dragon kingdom', 
+            'ancient egypt classic', 'triple dragons', 'dwarven gold deluxe', 'romeo and juliet', 
+            'hockey league wild match'
+          ];
+
+          const topGames: any[] = [];
+          const otherGames: any[] = [];
+
+          // Tekrarı önlemek için (Örn: iki tane Sweet Bonanza çıkmasın diye) base kelimeleri takip et
+          const usedBases = new Set<string>();
+
+          mapped.forEach((game) => {
+            const gameName = (game.name || '').toLowerCase().trim();
+            const normGameName = gameName.replace(/[^a-z0-9 ]/g, "");
+            
+            // Eğer resim yoksa veya hatalı bir görsel URL'si ise bu oyunu tamamen atla
+            const hasValidImage = game.img && typeof game.img === 'string' && game.img.length > 15 && !game.img.includes('placeholder');
+            
+            if (hasValidImage) {
+               // Tam eşleşme kontrolü (Sweet Bonanza Dice vb. varyasyonları elemek için)
+               const hitIndex = premiumExactNames.findIndex(name => {
+                 const normName = name.replace(/[^a-z0-9 ]/g, "");
+                 return normName === normGameName || normName.includes(normGameName) || normGameName.includes(normName);
+               });
+               
+               if (hitIndex !== -1) {
+                 topGames.push({ ...game, hitIndex });
+               } else {
+                 // Sadece çok bilinen kelimeleri barındırıp varyant olanları (Dice vb.) ayıkla
+                 const isSpamVariant = gameName.includes('dice') || gameName.includes('candyland') || gameName.includes('auto');
+                 
+                 if (!isSpamVariant) {
+                   otherGames.push(game);
+                 }
+               }
+            }
+          });
+
+          // Top oyunları belirlediğimiz kalite sırasına göre diz
+          topGames.sort((a, b) => a.hitIndex - b.hitIndex);
+          
+          // Geriye kalan oyunları karıştır (rastgelelik hissi için)
+          const shuffledOthers = shuffleGamesList(otherGames);
+
+          // Top oyunları en başa al, sonuna karıştırılmış diğer oyunları ekle, toplam 16 oyun slider için
+          const finalPopularList = [...topGames, ...shuffledOthers].slice(0, 16);
+
+          setDynamicPopularGames(finalPopularList);
         }
       } catch (e) {
         console.error('Failed to fetch popular games:', e);

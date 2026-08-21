@@ -24,7 +24,7 @@ const TABS = [
   { id: 'slots', label: 'Slotlar', icon: <Flame size={16} /> },
   { id: 'egt', label: 'EGT', icon: <Flame size={16} /> },
   { id: 'new', label: 'Yeni Eklenenler', icon: <Sparkles size={16} /> },
-  { id: 'holdwin', label: 'Hold & Win', icon: <Disc size={16} /> },
+  { id: 'holdwin', label: 'Hold & Win', icon: <Crown size={16} /> },
   { id: 'megaways', label: 'Megaways', icon: <Flame size={16} /> },
   { id: 'bonusbuy', label: 'Bonus Satın Al', icon: <Star size={16} /> },
 ];
@@ -213,6 +213,7 @@ export default function CasinoLobby({
   const [searchQuery, setSearchQuery] = useState('');
   
   const [displayLimit, setDisplayLimit] = useState(100);
+  const [sortOption, setSortOption] = useState('popular');
 
   useEffect(() => {
     setDisplayLimit(100);
@@ -226,25 +227,41 @@ export default function CasinoLobby({
   const [shuffledAllGames, setShuffledAllGames] = useState<any[]>([]);
   const [dynamicNewGames, setDynamicNewGames] = useState<any[]>([]);
   const [dynamicPopularGames, setDynamicPopularGames] = useState<any[]>([]);
-  const [oroGames, setOroGames] = useState<any[]>([]);
+const FALLBACK_GAMES = [
+  { id: 'slot-pragmatic-vs20sbonz1000', name: 'Sweet Bonanza 1000', provider: 'Pragmatic Play', category: 'slots', image: 'https://images.unsplash.com/photo-1579373903781-fd5c0c30c4cd?q=80&w=400&auto=format&fit=crop', img: 'https://images.unsplash.com/photo-1579373903781-fd5c0c30c4cd?q=80&w=400&auto=format&fit=crop', vendorCode: 'slot-pragmatic', gameCode: 'vs20sbonz1000', isMapped: true },
+  { id: 'slot-pragmatic-vs20olympx', name: 'Gates of Olympus 1000', provider: 'Pragmatic Play', category: 'slots', image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=400&auto=format&fit=crop', img: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=400&auto=format&fit=crop', vendorCode: 'slot-pragmatic', gameCode: 'vs20olympx', isMapped: true },
+  { id: 'slot-pragmatic-vs20sugarrushx', name: 'Sugar Rush 1000', provider: 'Pragmatic Play', category: 'slots', image: 'https://images.unsplash.com/photo-1582058091505-f87a2e55a40f?q=80&w=400&auto=format&fit=crop', img: 'https://images.unsplash.com/photo-1582058091505-f87a2e55a40f?q=80&w=400&auto=format&fit=crop', vendorCode: 'slot-pragmatic', gameCode: 'vs20sugarrushx', isMapped: true },
+  { id: 'slot-pragmatic-vs20starlightx', name: 'Starlight Princess 1000', provider: 'Pragmatic Play', category: 'slots', image: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=400&auto=format&fit=crop', img: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=400&auto=format&fit=crop', vendorCode: 'slot-pragmatic', gameCode: 'vs20starlightx', isMapped: true },
+  { id: 'slot-pragmatic-vs20bigbass', name: 'Big Bass Splash', provider: 'Pragmatic Play', category: 'slots', image: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=400&auto=format&fit=crop', img: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=400&auto=format&fit=crop', vendorCode: 'slot-pragmatic', gameCode: 'vs20bigbass', isMapped: true },
+  { id: 'slot-pragmatic-vs20doghouse', name: 'The Dog House Megaways', provider: 'Pragmatic Play', category: 'slots', image: 'https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?q=80&w=400&auto=format&fit=crop', img: 'https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?q=80&w=400&auto=format&fit=crop', vendorCode: 'slot-pragmatic', gameCode: 'vs20doghouse', isMapped: true },
+  { id: 'slot-pragmatic-vs20fruitparty', name: 'Fruit Party', provider: 'Pragmatic Play', category: 'slots', image: 'https://images.unsplash.com/photo-1619566636858-adf3ef46400b?q=80&w=400&auto=format&fit=crop', img: 'https://images.unsplash.com/photo-1619566636858-adf3ef46400b?q=80&w=400&auto=format&fit=crop', vendorCode: 'slot-pragmatic', gameCode: 'vs20fruitparty', isMapped: true }
+];
+
+  const [oroGames, setOroGames] = useState<any[]>(FALLBACK_GAMES);
 
   useEffect(() => {
     const fetchOroGames = async () => {
       try {
         const res = await fetch('/api/casino/games');
         const data = await res.json();
-        if (data.success && Array.isArray(data.games)) {
-          const mapped = data.games.map((g: any) => ({
-            id: g.id,
-            name: g.name,
-            provider: g.provider,
-            category: g.type === 'live' ? 'live' : 'slots',
-            img: g.image,
-            image: g.image,
-            vendorCode: g.vendorCode,
-            gameCode: g.gameCode,
-            isActive: g.isActive
-          }));
+        if (data.success && Array.isArray(data.games) && data.games.length > 0) {
+          const mapped = data.games.map((g: any) => {
+            const fallbackImg = `https://images.unsplash.com/photo-1596838132731-3301c3fd4317?q=80&w=400&auto=format&fit=crop`;
+            const validImage = (g.image || g.img || '').trim();
+            const finalImg = validImage.length > 5 ? validImage : fallbackImg;
+            return {
+              id: g.id,
+              name: g.name,
+              provider: g.provider,
+              category: g.type === 'live' ? 'live' : 'slots',
+              img: finalImg,
+              image: finalImg,
+              vendorCode: g.vendorCode,
+              gameCode: g.gameCode,
+              isActive: g.isActive,
+              isMapped: g.isMapped
+            };
+          });
           setOroGames(mapped);
         }
       } catch (err) {
@@ -313,14 +330,57 @@ export default function CasinoLobby({
 
   const filteredGames = allGames.filter(game => {
     let matchesTab = false;
+    const gameName = (game.name || '').toLowerCase();
+    
     if (activeTab === 'all') {
       matchesTab = true;
     } else if (activeTab === 'popular') {
-      matchesTab = game.category === 'slots' || game.category === 'popular';
+      // Custom logic for popular (Kesin isimler kullanarak varyasyonları filtrele)
+      const premiumExactNames = [
+        'gates of olympus 1000', 'gates of olympus super scatter', 'sweet bonanza', 'sweet bonanza 1000', 
+        'le bandit', 'sweet bonanza 2500', 'sugar rush 1000', 'big bass bonanza 1000', 'gates of olympus', 
+        'starlight princess super scatter', 'sweet bonanza dice', 'skull fiesta', 'sweet bonanza xmas', 
+        'duck hunters: happy hour', 'starlight princess 1000', 'le santa', 'big bass splash 1000', 
+        'big bass vegas double down deluxe', 'big bass bonanza', 'sugar rush super scatter', 
+        'bigger bass bonanza', 'shining dice', 'gates of olympus xmas 1000', 'flaming hot extreme bell link', 
+        'clover gold', 'big bass halloween', 'sweet rush bonanza', 'mythical treasure', 
+        'sweet bonanza super scatter', 'big bass splash', 'gold party', '7 clovers of fortune', 
+        'better barn house bonanza', 'big bass secrets of the golden lake', 'wisdom of athena 1000 xmas', 
+        'the dog house megaways 1000', 'christmas big bass bonanza', 'big bass christmas – frozen lake', 
+        'fortune of olympus', 'wisdom of athena 1000', 'wild wild riches', 'big bass - hold & spinner', 
+        '777 wheel blitz', 'epic ze zeus', '40 super hot bell link', '40 burning hot bell link', 
+        'tanked', 'lobster house', 'dork unit', '40 shining crown bell link', 'queenie', 'seker bey bell link', 
+        'shining crown', 'duck hunters', 'wild wild riches megaways', 'monkey warrior', 'aztec treasure', 
+        'vampires vs wolves', 'hot chilli', 'tree of riches', 'john hunter and the tomb of the scarab queen', 
+        'super joker', 'fire strike', 'hercules and pegasus', 'greek gods', 'money mouse', 'buffalo king', 
+        'magic journey', 'release the kraken', 'super 7s', 'master joker', 'lucky dragons', 'journey to the west', 
+        'jurassic giants', '888 dragons', '3 genie wishes', 'hercules son of zeus', 'dragon kingdom', 
+        'ancient egypt classic', 'triple dragons', 'dwarven gold deluxe', 'romeo and juliet', 
+        'hockey league wild match'
+      ];
+      
+      const normGameName = gameName.trim().replace(/[^a-z0-9 ]/g, "");
+      const hitIndex = premiumExactNames.findIndex(name => {
+        const normName = name.replace(/[^a-z0-9 ]/g, "");
+        return normName === normGameName || normName.includes(normGameName) || normGameName.includes(normName);
+      });
+      matchesTab = hitIndex !== -1;
     } else if (activeTab === 'slots') {
       matchesTab = game.category === 'slots';
     } else if (activeTab === 'live') {
       matchesTab = game.category === 'live';
+    } else if (activeTab === 'new' || activeTab === 'yeni') {
+      matchesTab = game.category === 'new' || game.isNew || gameName.includes('yeni') || gameName.includes('new');
+    } else if (activeTab === 'megaways') {
+      matchesTab = gameName.includes('megaways');
+    } else if (activeTab === 'bonusbuy' || activeTab === 'bonus') {
+      matchesTab = gameName.includes('bonus') || gameName.includes('buy');
+    } else if (activeTab === 'egt') {
+      matchesTab = (game.provider || '').toLowerCase().includes('egt') || (game.provider || '').toLowerCase().includes('amuso') || gameName.includes('hot');
+    } else if (activeTab === 'holdwin') {
+      matchesTab = gameName.includes('hold') || gameName.includes('win');
+    } else if (activeTab === 'originals') {
+      matchesTab = game.category === 'originals' || game.provider === 'Originals';
     } else {
       matchesTab = true;
     }
@@ -328,10 +388,37 @@ export default function CasinoLobby({
       (game.name && game.name.toLowerCase().includes(searchQuery.toLowerCase())) ||
       (game.provider && game.provider.toLowerCase().includes(searchQuery.toLowerCase()));
     return matchesTab && matchesSearch;
+  }).sort((a, b) => {
+    if (sortOption === 'az') return (a.name || '').localeCompare(b.name || '');
+    if (sortOption === 'za') return (b.name || '').localeCompare(a.name || '');
+    
+    // Popularity weighting for 'popular' sorting or default
+    const popA = getPopularityScore(a.name || '');
+    const popB = getPopularityScore(b.name || '');
+    if (popA !== popB) return popB - popA; // Higher score comes first
+
+    return 0;
   });
 
+  function getPopularityScore(name: string) {
+    const n = name.toLowerCase();
+    if (n.includes('sweet bonanza 1000')) return 100;
+    if (n.includes('gates of olympus 1000')) return 99;
+    if (n.includes('sugar rush 1000')) return 98;
+    if (n.includes('starlight princess 1000')) return 97;
+    if (n.includes('sweet bonanza')) return 96;
+    if (n.includes('gates of olympus')) return 95;
+    if (n.includes('sugar rush')) return 94;
+    if (n.includes('starlight princess')) return 93;
+    if (n.includes('big bass')) return 90;
+    if (n.includes('dog house')) return 85;
+    if (n.includes('fruit party')) return 80;
+    if (n.includes('megaways')) return 70;
+    return 0;
+  }
+
   // Group games for the 'all' view
-  const popularGames = allGames.filter(g => g.category === 'popular').slice(0, 18);
+  const popularGames = allGames.filter(g => getPopularityScore(g.name || '') > 0).sort((a, b) => getPopularityScore(b.name || '') - getPopularityScore(a.name || '')).slice(0, 18);
   const liveGames = allGames.filter(g => g.category === 'live').slice(0, 12);
   const newGames = allGames.filter(g => g.category === 'new' || g.isNew).slice(0, 12);
 
@@ -407,6 +494,52 @@ export default function CasinoLobby({
               {tab.label}
             </button>
           ))}
+        </div>
+      </div>
+      
+      {/* 2. SEARCH AND SORTING FRAME */}
+      <div className="max-w-[1720px] mx-auto w-full px-4 md:px-8 xl:px-12 mt-4">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-3 bg-[#111317]/80 rounded-xl border border-white/5 shadow-sm">
+          {/* SEARCH INPUT */}
+          <div className="relative flex-1 max-w-md">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+              <Search size={18} />
+            </div>
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Oyun veya sağlayıcı ara..."
+              className="w-full bg-[#1A1F2D] text-white text-sm font-semibold pl-10 pr-4 py-2.5 rounded-lg border border-white/10 outline-none focus:border-[#00E5FF]/50 focus:ring-1 focus:ring-[#00E5FF]/50 transition-all placeholder-gray-500"
+            />
+            {searchQuery && (
+              <button 
+                onClick={() => setSearchQuery('')}
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-white transition-colors"
+              >
+                ✕
+              </button>
+            )}
+          </div>
+          
+          {/* SORTING */}
+          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 text-gray-400 mr-2">
+              <Filter size={18} />
+              <span className="text-sm font-semibold hidden sm:inline">Sıralama:</span>
+            </div>
+            <select 
+              value={sortOption}
+              onChange={(e) => setSortOption(e.target.value)}
+              className="bg-[#1A1F2D] text-white text-sm font-semibold px-4 py-2.5 rounded-lg border border-white/10 outline-none hover:border-white/20 focus:border-[#00E5FF]/50 transition-all cursor-pointer min-w-[140px]"
+            >
+              <option value="popular">En Popülerler</option>
+              <option value="az">A'dan Z'ye</option>
+              <option value="za">Z'den A'ya</option>
+              <option value="rtp">En Yüksek RTP</option>
+              <option value="newest">En Yeniler</option>
+            </select>
+          </div>
         </div>
       </div>
 
