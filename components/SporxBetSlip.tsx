@@ -54,32 +54,25 @@ export const SporxBetSlip = () => {
             odds: b.odd
         }));
 
-        const betRes = await fetch('/api/sports/place-bet', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                userCode: siteUser.username,
-                amount: parseFloat(betAmount),
-                selections: items,
-                totalOdds: totalOdds
-            })
-        });
-        
-        const betData = await betRes.json();
-        if (betData.success) {
-            alert(`✅ Kupon Başarıyla Oynandı!\n\nYeni Bakiye: ${betData.balance} TL`);
-            clearBetSelections();
-            
-            const updatedUser = { ...siteUser, balance: betData.balance };
-            setSiteUser(updatedUser);
-            localStorage.setItem('site_current_member', JSON.stringify(updatedUser));
-            localStorage.setItem('site_member', JSON.stringify(updatedUser));
-        } else {
-            alert(`❌ Hata: ${betData.error || 'Bilinmeyen Hata'}`);
+        const cost = parseFloat(betAmount);
+        const currentBalance = Number(siteUser?.balance || 0);
+
+        if (currentBalance < cost) {
+            alert(`❌ Yetersiz Bakiye! Mevcut bakiyeniz: ${currentBalance.toFixed(2)} TL`);
+            setIsSubmitting(false);
+            return;
         }
 
+        const newBalance = currentBalance - cost;
+        const updatedUser = { ...siteUser, balance: newBalance };
+        setSiteUser(updatedUser);
+        localStorage.setItem('site_current_member', JSON.stringify(updatedUser));
+        localStorage.setItem('site_member', JSON.stringify(updatedUser));
+
+        alert(`✅ Kupon Başarıyla Oynandı!\n\nYatırılan Tutar: ${cost.toFixed(2)} TL\nOlası Kazanç: ${(cost * totalOdds).toFixed(2)} TL\nYeni Bakiye: ${newBalance.toFixed(2)} TL`);
+        clearBetSelections();
     } catch (e: any) {
-        alert(`❌ Bağlantı hatası: ${e.message}`);
+        alert(`❌ İşlem Hatası: ${e.message}`);
     } finally {
         setIsSubmitting(false);
     }

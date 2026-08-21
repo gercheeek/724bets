@@ -97,193 +97,150 @@ const normalizeEvent = (ev: any) => {
   
   // Sidebar Canlı Sayacı için isLive propertysini zorla ekle
   ev.isLive = d.status === 'in_progress' || d.status === 'playing' || d.status === 'started' || d.status === 'halftime';
-  
   return ev;
 };
 
 export const BettingProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { language } = useLanguage();
-  const [events, setEvents] = useState<any[]>([]);
-  const [scrapedMatches, setScrapedMatches] = useState<any[]>([]);
-  const [globalLiveMatches, setGlobalLiveMatches] = useState<any[]>([]);
-  const [global1xBetMatches, setGlobal1xBetMatches] = useState<any[]>([]);
-  const [global1xBetPreMatches, setGlobal1xBetPreMatches] = useState<any[]>([]);
-  const [outrights, setOutrights] = useState<any[]>([]);
-  const [isConnected, setIsConnected] = useState(false);
 
-  // Eski sistemin devasa JSON dosyalarını çekmesini durdurduk.
-  // Artık sadece kendi Socket.io sunucumuz üzerinden veri alıyoruz.
-  const fetchScraped = async () => {
-    // Disabled old Supabase integration
-  };
-
-  useEffect(() => {
-    // Disabled
-  }, []);
-
-  // SİSTEM YENİ API ADRESİ İLE TEKRAR AKTİF EDİLDİ
-  useEffect(() => {
-    let socket;
-    try {
-        const isProd = window.location.hostname !== 'localhost';
-        const socketUrl = isProd ? 'https://724bahis.net' : 'http://localhost:3001';
-        socket = io(socketUrl); // Node.js server portumuz
-        
-        socket.on('connect', () => {
-            console.log('✅ Connected to local Socket.io Server (V2 Data Engine)');
-            setIsConnected(true);
-        });
-
-        socket.on('disconnect', () => {
-            console.log('❌ Disconnected from Socket.io Server');
-            setIsConnected(false);
-        });
-
-        socket.on('matches_update', (payload) => {
-            if (Array.isArray(payload)) {
-                // Initial load: Socket.io'dan gelen formaplanmış veriyi direkt al
-                const formattedMatches = payload.map(m => normalizeEvent(m));
-
-                setEvents(prev => {
-                    const mergedMap = new Map();
-                    // Önceki verileri koru
-                    prev.forEach(e => mergedMap.set(e.id, e));
-                    
-                    // Yeni gelenleri üstüne yaz (Canlı + PreMatch)
-                    formattedMatches.forEach(ev => {
-                        mergedMap.set(ev.id, ev);
-                    });
-                    
-                    return Array.from(mergedMap.values());
-                });
-
-                // Ayrıca global canlı maçları ayrıca kaydet (Sidebar vb. için)
-                setGlobalLiveMatches(formattedMatches.filter(m => m.isLive));
-            }
-        });
-
-        socket.on('outrights_update', (payload) => {
-            if (Array.isArray(payload)) {
-                setOutrights(payload);
-            }
-        });
-
-        socket.on('1xbetLiveMatches', (payload) => {
-            if (Array.isArray(payload)) {
-                const now = Date.now();
-                setGlobal1xBetMatches(prev => {
-                    const mergedMap = new Map();
-                    // Mevcut maçları haritaya ekle (Eğer son 60 saniye içinde güncellenmişse tut)
-                    prev.forEach(m => {
-                        const lastSeen = m.lastSeen || now;
-                        if (now - lastSeen < 60000) {
-                            let newTime = m.time;
-                            const minVal = parseInt(String(m.time).replace(/\D/g, '')) || 0;
-                            // Eğer maç 90 dk veya üzerindeyse ve feed'den düştüyse "Bitti" olarak kabul et
-                            if (minVal >= 90 || m.time === 'Bitti') {
-                                newTime = 'Bitti';
-                            }
-                            mergedMap.set(m.id, { 
-                                ...m, 
-                                isSuspended: true,
-                                time: newTime,
-                                odds: { "1": "-", "X": "-", "2": "-", "tU": "-", "tA": "-", "cs1X": "-", "cs12": "-", "csX2": "-", "gg": "-", "ng": "-" } // Oranları kitle
-                            });
-                        }
-                    });
-                    
-                    // Yeni gelen canlı maçları üzerine yaz (Aktif ve güncel)
-                    payload.forEach(m => {
-                        mergedMap.set(m.id, { ...m, isSuspended: false, lastSeen: now });
-                    });
-                    
-                    return Array.from(mergedMap.values());
-                });
-            }
-        });
-
-        socket.on('1xbetPreMatches', (payload) => {
-            if (Array.isArray(payload)) {
-                setGlobal1xBetPreMatches(payload);
-            }
-        });
-
-        // DELTA SOCKETS: Yalnızca değişen veriyi alarak performansı 100x artırıyoruz
-        socket.on('matches_delta', (delta) => {
-            if (delta && (delta.updated || delta.removed)) {
-                setEvents(prev => {
-                    const newMap = new Map();
-                    prev.forEach(e => newMap.set(e.id, e));
-
-                    if (delta.removed) {
-                        delta.removed.forEach(id => newMap.delete(id));
-                    }
-                    if (delta.updated) {
-                        delta.updated.forEach(match => {
-                            newMap.set(match.id, normalizeEvent(match));
-                        });
-                    }
-                    
-                    return Array.from(newMap.values());
-                });
-            }
-        });
-
-        socket.on('time_sync', (syncPayload) => {
-            if (Array.isArray(syncPayload)) {
-                setEvents(prev => {
-                    let hasChanges = false;
-                    const next = prev.map(match => {
-                        const syncData = syncPayload.find(s => s.id === match.id);
-                        if (syncData && (match.minute !== syncData.minute || match.last_update_ts !== Date.now())) {
-                            hasChanges = true;
-                            // Update minute directly and refresh last_update_ts to keep live local ticker synced
-                            return { ...match, minute: syncData.minute, last_update_ts: Date.now() };
-                        }
-                        return match;
-                    });
-                    return hasChanges ? next : prev;
-                });
-            }
-        });
-    } catch (e) {
-        console.error("Socket.io client loading error:", e);
+  // Initial Mock Standalone Events (100% Frontend Standalone Data Engine)
+  const INITIAL_MATCHES = [
+    {
+      id: 'm1',
+      sport: 'Futbol',
+      league: 'UEFA Şampiyonlar Ligi',
+      home: 'Real Madrid',
+      away: 'FC Barcelona',
+      score: '2 - 1',
+      minute: 68,
+      isLive: true,
+      time: "68'",
+      odds: { '1': 1.95, 'X': 3.40, '2': 3.80, 'tU': 1.85, 'tA': 1.95, 'cs1X': 1.25, 'cs12': 1.30, 'csX2': 1.80, 'gg': 1.65, 'ng': 2.10 },
+      markets: [
+        { name: 'Maç Sonucu (1X2)', selections: [{ name: '1', odd: 1.95 }, { name: 'X', odd: 3.40 }, { name: '2', odd: 3.80 }] },
+        { name: 'Toplam Gol 2.5', selections: [{ name: 'Üst', odd: 1.85 }, { name: 'Alt', odd: 1.95 }] },
+        { name: 'Karşılıklı Gol', selections: [{ name: 'Var', odd: 1.65 }, { name: 'Yok', odd: 2.10 }] }
+      ]
+    },
+    {
+      id: 'm2',
+      sport: 'Futbol',
+      league: 'Trendyol Süper Lig',
+      home: 'Galatasaray',
+      away: 'Fenerbahçe',
+      score: '1 - 1',
+      minute: 42,
+      isLive: true,
+      time: "42'",
+      odds: { '1': 2.10, 'X': 3.20, '2': 3.30, 'tU': 1.90, 'tA': 1.90, 'cs1X': 1.32, 'cs12': 1.35, 'csX2': 1.70, 'gg': 1.70, 'ng': 2.05 },
+      markets: [
+        { name: 'Maç Sonucu (1X2)', selections: [{ name: '1', odd: 2.10 }, { name: 'X', odd: 3.20 }, { name: '2', odd: 3.30 }] },
+        { name: 'Toplam Gol 2.5', selections: [{ name: 'Üst', odd: 1.90 }, { name: 'Alt', odd: 1.90 }] }
+      ]
+    },
+    {
+      id: 'm3',
+      sport: 'Futbol',
+      league: 'İngiltere Premier Lig',
+      home: 'Arsenal',
+      away: 'Manchester City',
+      score: '0 - 0',
+      minute: 18,
+      isLive: true,
+      time: "18'",
+      odds: { '1': 2.80, 'X': 3.30, '2': 2.45, 'tU': 2.00, 'tA': 1.80, 'cs1X': 1.55, 'cs12': 1.32, 'csX2': 1.42, 'gg': 1.75, 'ng': 1.95 },
+      markets: [
+        { name: 'Maç Sonucu (1X2)', selections: [{ name: '1', odd: 2.80 }, { name: 'X', odd: 3.30 }, { name: '2', odd: 2.45 }] }
+      ]
+    },
+    {
+      id: 'm4',
+      sport: 'Basketbol',
+      league: 'NBA',
+      home: 'Los Angeles Lakers',
+      away: 'Golden State Warriors',
+      score: '84 - 82',
+      minute: 34,
+      isLive: true,
+      time: '3. Çeyrek',
+      odds: { '1': 1.75, 'X': 14.0, '2': 2.15, 'tU': 1.90, 'tA': 1.90 },
+      markets: [
+        { name: 'Maç Kazananı', selections: [{ name: '1', odd: 1.75 }, { name: '2', odd: 2.15 }] }
+      ]
+    },
+    {
+      id: 'm5',
+      sport: 'Futbol',
+      league: 'UEFA Şampiyonlar Ligi',
+      home: 'Paris Saint-Germain',
+      away: 'Bayern Münih',
+      score: '0 - 0',
+      minute: 0,
+      isLive: false,
+      time: 'Yarın 22:00',
+      odds: { '1': 2.30, 'X': 3.50, '2': 2.90, 'tU': 2.10, 'tA': 1.72, 'cs1X': 1.40, 'cs12': 1.30, 'csX2': 1.60, 'gg': 1.55, 'ng': 2.30 },
+      markets: [
+        { name: 'Maç Sonucu (1X2)', selections: [{ name: '1', odd: 2.30 }, { name: 'X', odd: 3.50 }, { name: '2', odd: 2.90 }] }
+      ]
+    },
+    {
+      id: 'm6',
+      sport: 'Futbol',
+      league: 'İtalya Serie A',
+      home: 'Inter',
+      away: 'AC Milan',
+      score: '0 - 0',
+      minute: 0,
+      isLive: false,
+      time: 'Pazar 21:45',
+      odds: { '1': 2.05, 'X': 3.30, '2': 3.60, 'tU': 1.85, 'tA': 1.95, 'cs1X': 1.30, 'cs12': 1.32, 'csX2': 1.75, 'gg': 1.72, 'ng': 2.00 },
+      markets: [
+        { name: 'Maç Sonucu (1X2)', selections: [{ name: '1', odd: 2.05 }, { name: 'X', odd: 3.30 }, { name: '2', odd: 3.60 }] }
+      ]
     }
+  ];
 
-    return () => {
-        if (socket) socket.disconnect();
-    };
+  const [events, setEvents] = useState<any[]>(INITIAL_MATCHES);
+  const [scrapedMatches, setScrapedMatches] = useState<any[]>([]);
+  const [globalLiveMatches, setGlobalLiveMatches] = useState<any[]>(INITIAL_MATCHES.filter(m => m.isLive));
+  const [global1xBetMatches, setGlobal1xBetMatches] = useState<any[]>(INITIAL_MATCHES.filter(m => m.isLive));
+  const [global1xBetPreMatches, setGlobal1xBetPreMatches] = useState<any[]>(INITIAL_MATCHES.filter(m => !m.isLive));
+  const [outrights, setOutrights] = useState<any[]>([
+    { id: 'o1', title: 'UEFA Şampiyonlar Ligi Şampiyonu 2026', sport: 'Futbol', selections: [{ name: 'Real Madrid', odd: 3.50 }, { name: 'Manchester City', odd: 3.75 }, { name: 'Arsenal', odd: 6.00 }] },
+    { id: 'o2', title: 'Trendyol Süper Lig Şampiyonu 2026', sport: 'Futbol', selections: [{ name: 'Galatasaray', odd: 1.85 }, { name: 'Fenerbahçe', odd: 2.10 }, { name: 'Beşiktaş', odd: 12.0 }] }
+  ]);
+  const [isConnected, setIsConnected] = useState(true);
+
+  // 100% Frontend Client-Side Dynamic Live Match Score & Minute Simulator
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setEvents(prev => prev.map(m => {
+        if (m.isLive && typeof m.minute === 'number' && m.minute < 90) {
+          const nextMin = m.minute + 1;
+          return {
+            ...m,
+            minute: nextMin,
+            time: `${nextMin}'`
+          };
+        }
+        return m;
+      }));
+
+      setGlobal1xBetMatches(prev => prev.map(m => {
+        if (m.isLive && typeof m.minute === 'number' && m.minute < 90) {
+          const nextMin = m.minute + 1;
+          return {
+            ...m,
+            minute: nextMin,
+            time: `${nextMin}'`
+          };
+        }
+        return m;
+      }));
+    }, 10000); // Advance live minute every 10 seconds client-side
+
+    return () => clearInterval(interval);
   }, []);
-
-  // Synchronize events with language and scraped matches
-  useEffect(() => {
-    setEvents(prev => {
-      const socketEvents = prev.filter(e => !e.isScraped && !e.id.toString().startsWith('pre_pl_') && !e.id.toString().startsWith('scraped_pl_') && !e.id.toString().startsWith('scraped_pre_') && !e.id.toString().startsWith('mock_'));
-      
-      // 2. Akıllı Birleştirme (Smart Deduplication)
-      const mergedMap = new Map();
-      
-      // Base mock events removed
-      // Prematch events (Scraped JSON)
-      scrapedMatches.forEach(e => {
-        mergedMap.set(e.id, e); // already normalized
-      });
-      
-      // Live events (Socket) - Overwrites scraped if they have the same ID (prioritizes Live)
-      socketEvents.forEach(e => {
-        mergedMap.set(e.id, e);
-      });
-      
-      return Array.from(mergedMap.values());
-    });
-  }, [language, scrapedMatches]);
-
-  // Time Checker removed: Let real WebSocket handle live matches natively
-  // Stage 1: Pre-Match Polling (Her 60 saniyede bir)
-  // 404 hatalarını önlemek için bu API isteği kaldırıldı, prelive_matches.json zaten kullanılıyor.
-  useEffect(() => {
-    // const fetchPreMatchData = async () => { ... }
-  }, [scrapedMatches]);
 
 
   const wsRef = useRef<WebSocket | null>(null);
@@ -309,8 +266,8 @@ export const BettingProvider: React.FC<{ children: React.ReactNode }> = ({ child
       return [...filtered, {
         id: Math.random().toString(36).substr(2, 9),
         matchId: match.id,
-        homeTeam: match.data?.tournament?.competitors?.home?.name || 'Ev Sahibi',
-        awayTeam: match.data?.tournament?.competitors?.away?.name || 'Deplasman',
+        homeTeam: match.home || match.homeTeam || match.data?.tournament?.competitors?.home?.name || 'Ev Sahibi',
+        awayTeam: match.away || match.awayTeam || match.data?.tournament?.competitors?.away?.name || 'Deplasman',
         marketName,
         selectionName,
         odd
