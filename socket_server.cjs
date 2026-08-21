@@ -17,10 +17,10 @@ const io = new Server(server, {
   }
 });
 
-// Logo Scraper Proxy
 const { getLogo } = require('./logoScraper.cjs');
 const path = require('path');
 const fs = require('fs');
+const crypto = require('crypto');
 
 // OroPlay Integration
 const oroplay = require('./oroplay.cjs');
@@ -39,11 +39,14 @@ app.get('/api/casino/test-vps', (req, res) => {
 });
 
 require('dotenv').config();
-const { PrismaClient } = require('@prisma/client');
 const Database = require('better-sqlite3');
 const { PrismaBetterSqlite3 } = require('@prisma/adapter-better-sqlite3');
+const { PrismaClient } = require('./node_modules/.prisma/client/index.js');
 
-const adapter = new PrismaBetterSqlite3({ url: "file:./dev.db" });
+const db = new Database('./dev.db');
+
+const sqlite = new Database('./prisma/dev.db');
+const adapter = new PrismaBetterSqlite3(sqlite);
 const prisma = new PrismaClient({ adapter });
 const INITIAL_BALANCE = 1000.00;
 
@@ -169,12 +172,13 @@ app.post('/api/casino/launch', express.json(), async (req, res) => {
     }
 
     const code = userCode || 'testuser';
-
-    try {
-        await getOrCreateUser(code);
-    } catch(err) {
-        logError('Error ensuring user exists', err.stack || err.message);
+    if (typeof balance === 'number') {
+        userBalances[code] = balance;
+    } else if (userBalances[code] === undefined) {
+        userBalances[code] = INITIAL_BALANCE;
     }
+
+    const currentBalance = userBalances[code];
 
     try {
         // Note: OroPlay account is in Seamless Wallet mode.
@@ -184,7 +188,7 @@ app.post('/api/casino/launch', express.json(), async (req, res) => {
         logInfo(`[Casino Launch] Success for ${code}: vendor=${vendorCode}, game=${gameCode}`);
         res.json({ success: true, launchUrl: url });
     } catch (err) {
-        logError(`[Casino Launch] Failed for vendor=${vendorCode}, game=${gameCode}`, err.stack || err.message);
+        logError(`[Casino Launch] Failed for vendor=${vendorCode}, game=${gameCode}`, err);
         res.status(500).json({ success: false, error: 'Bu oyun sağlayıcısı şu an kullanılamıyor.' });
     }
 });
@@ -196,7 +200,7 @@ app.get('/api/casino/agent-balance', async (req, res) => {
         const balance = await oroplay.getAgentBalance();
         res.json({ success: true, agentBalance: balance });
     } catch (err) {
-        res.status(500).json({ success: false, error: err.stack || err.message });
+        res.status(500).json({ success: false, error: err.message });
     }
 });
 
@@ -206,7 +210,7 @@ app.get('/api/casino/user-balance', async (req, res) => {
         const user = await getOrCreateUser(userCode);
         res.json({ success: true, balance: user.balance });
     } catch (err) {
-        logError('Error fetching user balance', err.stack || err.message);
+        logError('Error fetching user balance', err);
         res.status(500).json({ success: false, error: 'Internal Server Error' });
     }
 });
@@ -327,12 +331,201 @@ app.get('/api/logo/:teamId', async (req, res) => {
       res.status(404).json({ error: 'Logo not found' });
     }
   } catch (err) {
-    console.error(`[API] Error fetching logo for ${teamName}:`, err.stack || err.message);
+    console.error(`[API] Error fetching logo for ${teamName}:`, err.message);
     res.status(500).json({ error: 'Failed to fetch logo' });
   }
 });
 
 // Proxy for detailed match data
+// --- NEOPAYS PAYMENT INTEGRATION CONFIG & ENDPOINTS ---
+
+let neopaysConfig = {
+    sid: process.env.NEOPAYS_SID || '1001',
+    secretKey: process.env.NEOPAYS_SECRET_KEY || 'default_secret_key',
+    active: true
+};
+
+const NEOPAYS_CONFIG_FILE = path.join(__dirname, 'neopays_config.json');
+if (fs.existsSync(NEOPAYS_CONFIG_FILE)) {
+    try {
+        const fileData = JSON.parse(fs.readFileSync(NEOPAYS_CONFIG_FILE, 'utf8'));
+        neopaysConfig = { ...neopaysConfig, ...fileData };
+    } catch(e) {
+        logError('Error reading neopays_config.json', e);
+    }
+}
+
+function saveNeopaysConfig() {
+    try {
+        fs.writeFileSync(NEOPAYS_CONFIG_FILE, JSON.stringify(neopaysConfig, null, 2), 'utf8');
+    } catch(e) {
+        logError('Error saving neopays_config.json', e);
+    }
+}
+
+// Admin: Get NeoPays Settings
+app.get('/api/admin/neopays-settings', (req, res) => {
+    res.json({ success: true, config: neopaysConfig });
+});
+
+// Admin: Update NeoPays Settings
+app.post('/api/admin/neopays-settings', express.json(), (req, res) => {
+    try {
+        const { sid, secretKey, active } = req.body;
+        if (sid !== undefined) neopaysConfig.sid = String(sid).trim();
+        if (secretKey !== undefined) neopaysConfig.secretKey = String(secretKey).trim();
+        if (active !== undefined) neopaysConfig.active = Boolean(active);
+        saveNeopaysConfig();
+        res.json({ success: true, config: neopaysConfig });
+    } catch (err) {
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
+
+// User: Initiate NeoPays Deposit (Supports all 11 methods)
+app.post('/api/payments/neopays/initiate', express.json(), async (req, res) => {
+    try {
+        const { userId, amount, method: selectedMethod, fullname, returnUrl } = req.body;
+        if (!userId || !amount) {
+            return res.status(400).json({ success: false, error: 'Eksik bilgi (userId veya amount)' });
+        }
+
+        const user = await prisma.user.findUnique({ where: { id: userId } });
+        if (!user) {
+            return res.status(404).json({ success: false, error: 'Kullanıcı bulunamadı' });
+        }
+
+        const trx = `TRX_${Date.now()}_${Math.floor(Math.random() * 10000)}`;
+        const depositAmount = parseFloat(amount);
+        const sid = neopaysConfig.sid;
+        const secretKey = neopaysConfig.secretKey;
+        const method = (selectedMethod || 'banktransfer').toLowerCase();
+
+        // Hash: SHA256(sid + userid + trx + secret_key)
+        const hashInput = `${sid}${user.id}${trx}${secretKey}`;
+        const hash = crypto.createHash('sha256').update(hashInput).digest('hex');
+
+        const payload = {
+            sid: sid,
+            method: method,
+            username: user.username,
+            userid: user.id,
+            trx: trx,
+            amount: depositAmount,
+            fullname: fullname || user.username,
+            return_url: returnUrl || 'https://724bets.net/deposit',
+            hash: hash
+        };
+
+        // Create pending payment request in DB
+        await prisma.paymentRequest.create({
+            data: {
+                userId: user.id,
+                type: 'deposit',
+                method: `NeoPays (${method.toUpperCase()})`,
+                amount: depositAmount,
+                txHash: trx,
+                status: 'pending'
+            }
+        });
+
+        // Send request to NeoPays API
+        const response = await fetch('https://api.neopays.net/api/v1/deposits/init', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+
+        if (data.code === 200 && data.url) {
+            res.json({ success: true, url: data.url, trx });
+        } else {
+            res.status(400).json({ success: false, error: data.message || 'NeoPays oturumu başlatılamadı' });
+        }
+    } catch (error) {
+        logError('NeoPays Deposit Initiate Error', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Callback Handler for NeoPays Deposit & Withdrawal
+const handleNeopaysCallback = async (req, res) => {
+    try {
+        const body = req.body || {};
+        const { sid, key, service, method, user_id, username, amount, currency, transaction_id, status, trx, hash } = body;
+
+        logInfo('Received NeoPays Callback:', body);
+
+        const expectedSid = neopaysConfig.sid;
+        const secretKey = neopaysConfig.secretKey;
+
+        // Verify Hash: SHA256(sid + user_id + trx + SECRET_KEY)
+        const targetUserId = user_id || username || '';
+        const targetTrx = trx || '';
+        const calculatedHash = crypto.createHash('sha256').update(`${sid || expectedSid}${targetUserId}${targetTrx}${secretKey}`).digest('hex');
+
+        if (hash && hash.toLowerCase() !== calculatedHash.toLowerCase()) {
+            logError('NeoPays Callback Hash Mismatch:', { incoming: hash, calculated: calculatedHash });
+            return res.json({ code: 999, message: 'Geçersiz güvenlik imzası (Hash mismatch)' });
+        }
+
+        if (service === 'deposit' || status === 'S') {
+            const depositUser = await prisma.user.findFirst({
+                where: {
+                    OR: [
+                        { id: user_id || '' },
+                        { username: username || '' }
+                    ]
+                }
+            });
+
+            if (!depositUser) {
+                return res.json({ code: 999, message: 'Kullanıcı bulunamadı' });
+            }
+
+            const depAmount = parseFloat(amount || 0);
+
+            // Increment user balance
+            await prisma.user.update({
+                where: { id: depositUser.id },
+                data: { balance: { increment: depAmount } }
+            });
+
+            // Log Transaction
+            await prisma.transaction.create({
+                data: {
+                    transactionCode: `NEO_${transaction_id || Date.now()}`,
+                    userId: depositUser.id,
+                    amount: depAmount,
+                    type: 'deposit'
+                }
+            });
+
+            // Update payment request status if existing
+            if (trx) {
+                await prisma.paymentRequest.updateMany({
+                    where: { txHash: trx },
+                    data: { status: 'approved' }
+                });
+            }
+
+            return res.json({ code: 200, message: 'Müşteri hesabına bakiye eklendi!' });
+        }
+
+        res.json({ code: 200, message: 'İşlem alındı' });
+    } catch (err) {
+        logError('NeoPays Callback Exception:', err);
+        res.json({ code: 999, message: err.message || 'Sunucu hatası' });
+    }
+};
+
+app.post('/api/neopays', express.json(), handleNeopaysCallback);
+app.post('/api/payments/neopays/callback', express.json(), handleNeopaysCallback);
+
 // --- PAYMENT GATEWAY API ---
 
 // Admin: Get payment methods
@@ -1304,7 +1497,7 @@ function connectSwarm() {
   }, 10000);
   
   ws.on('error', (err) => {
-      logError("WebSocket Error", { error: err.stack || err.message });
+      logError("WebSocket Error", { error: err.message });
   });
 }
 
