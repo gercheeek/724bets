@@ -114,84 +114,49 @@ export const BettingProvider: React.FC<{ children: React.ReactNode }> = ({ child
   ]);
   const [isConnected, setIsConnected] = useState(true);
 
-  // Live 1xFrame (1xBet API) Data Fetcher Engine
+  // Live 1xBet Feed Fetcher via VPS Proxy (/api/sports/matches)
   useEffect(() => {
-    function parse1xFrameData(match: any, isLive: boolean) {
-      let odds: any = { "1": '-', "X": '-', "2": '-', "tU": '-', "tA": '-', "tP": '2.5', "cs1X": '-', "cs12": '-', "csX2": '-', "gg": '-', "ng": '-' };
-      if (match.E) {
-        match.E.forEach((odd: any) => {
-          if (odd.T === 1) odds["1"] = odd.C; 
-          if (odd.T === 2) odds["X"] = odd.C; 
-          if (odd.T === 3) odds["2"] = odd.C; 
-          if (odd.T === 9 && odds["tU"] === '-') { odds["tU"] = odd.C; odds["tP"] = odd.P || '2.5'; }
-          if (odd.T === 10 && odds["tA"] === '-') { odds["tA"] = odd.C; }
-          if (odd.T === 4) odds["cs1X"] = odd.C; 
-          if (odd.T === 5) odds["cs12"] = odd.C; 
-          if (odd.T === 6) odds["csX2"] = odd.C; 
-        });
-      }
-
-      let scoreHome = 0;
-      let scoreAway = 0;
-      if (match.SC && match.SC.FS) {
-        scoreHome = match.SC.FS.S1 || 0;
-        scoreAway = match.SC.FS.S2 || 0;
-      }
-
-      const elapsedMins = match.SC && match.SC.TS ? Math.floor(match.SC.TS / 60) : 45;
-
-      return {
-        id: match.I || Math.random().toString(),
-        sport: match.SN || match.SE || 'Futbol',
-        league: match.L || match.LE || 'Diğer Ligler',
-        home: match.O1 || 'Ev Sahibi',
-        away: match.O2 || 'Deplasman',
-        homeTeam: match.O1 || 'Ev Sahibi',
-        awayTeam: match.O2 || 'Deplasman',
-        score: `${scoreHome} - ${scoreAway}`,
-        scoreHome,
-        scoreAway,
-        minute: elapsedMins,
-        time: isLive ? (elapsedMins > 0 ? `${elapsedMins}'` : 'CANLI') : 'YAKLAŞAN',
-        isLive: isLive,
-        odds: odds,
-        homeOdd: odds["1"] !== '-' ? odds["1"] : '1.90',
-        drawOdd: odds["X"] !== '-' ? odds["X"] : '3.30',
-        awayOdd: odds["2"] !== '-' ? odds["2"] : '3.50',
-        markets: [
-          { name: 'Maç Sonucu (1X2)', selections: [{ name: '1', odd: odds["1"] }, { name: 'X', odd: odds["X"] }, { name: '2', odd: odds["2"] }] }
-        ]
-      };
-    }
-
-    async function fetchLive1xFrame() {
+    async function fetchLiveMatches() {
       try {
-        const res = await fetch('https://1xframemxz.com/service-api/LiveFeed/Get1x2_VZip?count=100&lng=tr&mode=4&country=180&partner=85&noFilterBlockEvent=true');
+        const res = await fetch('/api/sports/matches');
         if (res.ok) {
           const data = await res.json();
-          if (data && Array.isArray(data.Value)) {
-            const blacklist = ['virtual', 'srl', 'simulated', 'cyber', 'e-soccer', 'esports', 'short football', 'liga pro', 'fifa', 'ea sports', '8x8', '4x4', '3x3'];
-            const parsed = data.Value
-              .filter((m: any) => {
-                const combined = `${m.LE || ''} ${m.O1 || ''} ${m.O2 || ''}`.toLowerCase();
-                return !blacklist.some(b => combined.includes(b));
-              })
-              .map((m: any) => parse1xFrameData(m, true));
+          if (data.success && Array.isArray(data.live) && data.live.length > 0) {
+            const normalized = data.live.map((m: any) => ({
+              ...m,
+              home: m.homeTeam || m.home || 'Ev Sahibi',
+              away: m.awayTeam || m.away || 'Deplasman',
+              homeOdd: m.odds?.['1'] !== '-' && m.odds?.['1'] !== undefined ? String(m.odds?.['1']) : '1.90',
+              drawOdd: m.odds?.['X'] !== '-' && m.odds?.['X'] !== undefined ? String(m.odds?.['X']) : '3.30',
+              awayOdd: m.odds?.['2'] !== '-' && m.odds?.['2'] !== undefined ? String(m.odds?.['2']) : '3.50',
+              markets: [
+                {
+                  name: 'Maç Sonucu (1X2)',
+                  selections: [
+                    { name: '1', odd: m.odds?.['1'] || 1.90 },
+                    { name: 'X', odd: m.odds?.['X'] || 3.30 },
+                    { name: '2', odd: m.odds?.['2'] || 3.50 }
+                  ]
+                }
+              ]
+            }));
 
-            if (parsed.length > 0) {
-              setEvents(parsed);
-              setGlobal1xBetMatches(parsed);
-              setGlobalLiveMatches(parsed);
+            setEvents(normalized);
+            setGlobal1xBetMatches(normalized);
+            setGlobalLiveMatches(normalized);
+            if (Array.isArray(data.prematch)) {
+              setGlobal1xBetPreMatches(data.prematch);
             }
+            return;
           }
         }
       } catch (e) {
-        console.error("1xFrame fetch error:", e);
+        console.error("Error fetching live matches from /api/sports/matches:", e);
       }
     }
 
-    fetchLive1xFrame();
-    const interval = setInterval(fetchLive1xFrame, 10000);
+    fetchLiveMatches();
+    const interval = setInterval(fetchLiveMatches, 5000);
     return () => clearInterval(interval);
   }, []);
 
