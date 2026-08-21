@@ -203,7 +203,7 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose, initialTab = 'deposi
             amount: amount,
             method: neoCode,
             fullname: siteUser.username,
-            returnUrl: window.location.origin
+            returnUrl: window.location.origin.replace('https://724bets.net', 'https://www.724bets.net')
           })
         });
         if (!res.ok) {

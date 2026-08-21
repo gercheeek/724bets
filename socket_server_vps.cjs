@@ -420,6 +420,11 @@ app.post('/api/payments/neopays/initiate', express.json(), async (req, res) => {
         const hashInput = `${sid}${user.id}${trx}${secretKey}`;
         const hash = crypto.createHash('sha256').update(hashInput).digest('hex');
 
+        let finalReturnUrl = (returnUrl || 'https://www.724bets.net/deposit').trim();
+        if (finalReturnUrl.startsWith('https://724bets.net')) {
+            finalReturnUrl = finalReturnUrl.replace('https://724bets.net', 'https://www.724bets.net');
+        }
+
         const payload = {
             sid: sid,
             method: method,
@@ -428,7 +433,7 @@ app.post('/api/payments/neopays/initiate', express.json(), async (req, res) => {
             trx: trx,
             amount: depositAmount,
             fullname: fullname || user.username,
-            return_url: returnUrl || 'https://724bets.net/deposit',
+            return_url: finalReturnUrl,
             hash: hash
         };
 
