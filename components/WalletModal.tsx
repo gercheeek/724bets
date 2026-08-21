@@ -83,18 +83,15 @@ const MethodLogo: React.FC<{ code: string }> = ({ code }) => {
   }
 };
 
-const NEOPAYS_METHODS = [
+const DEPOSIT_METHODS = [
   { id: 'banktransfer', name: 'Banka Havalesi', type: 'banktransfer', neoCode: 'banktransfer', badge: '7/24 EFT/Havale', minAmount: 100 },
-  { id: 'papara', name: 'Papara', type: 'papara', neoCode: 'papara', badge: 'Anında', minAmount: 50 },
+  { id: 'crypto', name: 'Kripto Para', type: 'crypto', neoCode: 'crypto', badge: 'USDT/BTC/XRP', minAmount: 50 },
   { id: 'creditcard', name: 'Kredi Kartı', type: 'creditcard', neoCode: 'creditcard', badge: '3D Secure', minAmount: 100 },
-  { id: 'crypto', name: 'Kripto Para', type: 'crypto', neoCode: 'crypto', badge: 'USDT/BTC', minAmount: 20 },
-  { id: 'parolapara', name: 'Parolapara', type: 'parolapara', neoCode: 'parolapara', badge: 'Hızlı Transfer', minAmount: 50 },
-  { id: 'popypara', name: 'Popy Para', type: 'popypara', neoCode: 'popypara', badge: 'Cüzdan', minAmount: 50 },
-  { id: 'papel', name: 'Papel', type: 'papel', neoCode: 'papel', badge: 'Cüzdan', minAmount: 50 },
-  { id: 'paybol', name: 'Paybol', type: 'paybol', neoCode: 'paybol', badge: 'Anında', minAmount: 50 },
-  { id: 'pep', name: 'Pep', type: 'pep', neoCode: 'pep', badge: 'Mobil Ödeme', minAmount: 50 },
-  { id: 'payco', name: 'Payco', type: 'payco', neoCode: 'payco', badge: 'Dijital', minAmount: 50 },
-  { id: 'paratim', name: 'Paratim', type: 'paratim', neoCode: 'paratim', badge: 'Cüzdan', minAmount: 50 },
+];
+
+const WITHDRAW_METHODS = [
+  { id: 'banktransfer', name: 'Banka Havalesi', type: 'banktransfer', neoCode: 'banktransfer', badge: '7/24 IBAN Transfer', minAmount: 100 },
+  { id: 'crypto', name: 'Kripto Para', type: 'crypto', neoCode: 'crypto', badge: 'USDT/BTC/XRP', minAmount: 100 },
 ];
 
 const WalletModal: React.FC<WalletModalProps> = ({ onClose, initialTab = 'deposit' }) => {
@@ -102,8 +99,8 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose, initialTab = 'deposi
   const { siteUser } = useUser();
   const [activeTab, setActiveTab] = useState<'deposit' | 'withdraw' | 'history'>(initialTab as any);
   
-  const [methods, setMethods] = useState<any[]>(NEOPAYS_METHODS);
-  const [selectedMethod, setSelectedMethod] = useState<any>(NEOPAYS_METHODS[0]);
+  const [methods, setMethods] = useState<any[]>(DEPOSIT_METHODS);
+  const [selectedMethod, setSelectedMethod] = useState<any>(DEPOSIT_METHODS[0]);
   const [amount, setAmount] = useState<string>('');
   const [txHash, setTxHash] = useState<string>('');
   const [loading, setLoading] = useState(false);
@@ -114,9 +111,14 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose, initialTab = 'deposi
   const [loadingHistory, setLoadingHistory] = useState(false);
 
   useEffect(() => {
-    setMethods(NEOPAYS_METHODS);
-    if (!selectedMethod) setSelectedMethod(NEOPAYS_METHODS[0]);
-  }, []);
+    if (activeTab === 'withdraw') {
+      setMethods(WITHDRAW_METHODS);
+      setSelectedMethod(WITHDRAW_METHODS[0]);
+    } else {
+      setMethods(DEPOSIT_METHODS);
+      setSelectedMethod(DEPOSIT_METHODS[0]);
+    }
+  }, [activeTab]);
 
   useEffect(() => {
     if (activeTab === 'history' && siteUser) {
