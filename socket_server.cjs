@@ -50,14 +50,22 @@ const prisma = new PrismaClient({ adapter });
 const INITIAL_BALANCE = 1000.00;
 
 // Helper function to get or create a user in Prisma
-async function getOrCreateUser(username) {
-  let user = await prisma.user.findUnique({ where: { username } });
+async function getOrCreateUser(identifier) {
+  if (!identifier) return null;
+  let user = await prisma.user.findFirst({
+    where: {
+      OR: [
+        { id: String(identifier) },
+        { username: String(identifier) }
+      ]
+    }
+  });
   if (!user) {
     user = await prisma.user.create({
       data: {
-        username,
+        username: String(identifier),
         password: 'default_password',
-        balance: INITIAL_BALANCE
+        balance: 50000.00
       }
     });
   }
