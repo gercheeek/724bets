@@ -389,8 +389,9 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose, initialTab = 'deposi
               )}
 
               {error && (
-                <div className="text-red-500 text-sm font-bold mb-4 flex items-center gap-2">
-                  <AlertCircle className="w-4 h-4" /> {error}
+                <div className="bg-red-500/10 border border-red-500/40 rounded-xl p-3.5 mb-4 text-red-400 text-xs font-mono font-semibold break-all select-all flex items-start gap-2 shadow-[0_0_15px_rgba(239,68,68,0.15)]">
+                  <AlertCircle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
+                  <div className="flex-1">{error}</div>
                 </div>
               )}
 
