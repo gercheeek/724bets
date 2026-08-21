@@ -258,22 +258,32 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose, initialTab = 'deposi
             userId: siteUser.id,
             method: `${selectedMethod.name} (${selectedMethod.id === 'crypto' ? selectedCoin : selectedBank})`,
             amount: amount,
-            txHash: `${generatedTrx} - ${withdrawalDetails}`
+            txHash: `${generatedTrx} - ${withdrawalDetails}`,
+            iban: selectedMethod.id === 'crypto' ? undefined : txHash.trim(),
+            bankId: selectedMethod.id === 'crypto' ? undefined : "48889430-844c-4149-bca0-1745e64319ed",
+            walletAddress: selectedMethod.id === 'crypto' ? cryptoAddress.trim() : undefined,
+            coinId: selectedMethod.id === 'crypto' ? "01a7e83c-17cd-4039-9f03-92f4e5d256dd" : undefined,
+            memo: cryptoMemo ? cryptoMemo.trim() : undefined,
+            fullname: accountName || siteUser.username
           })
         });
+        
+        const data = await res.json().catch(() => ({}));
+        
         if (!res.ok) {
-          const text = await res.text().catch(() => '');
-          setError(`[HTTP ${res.status}] Çekim Hatası: ${text.substring(0, 150) || res.statusText}`);
+          const debugStr = data.debug ? JSON.stringify(data.debug, null, 2) : '';
+          setError(`[HTTP ${res.status} Hata] ${data.error || res.statusText}${debugStr ? '\n\n[Debug Log]:\n' + debugStr : ''}`);
           setLoading(false);
           return;
         }
-        const data = await res.json();
+
         if (data.success) {
           const finalTrxId = data.request?.id || generatedTrx;
           const numAmt = parseFloat(amount).toLocaleString('tr-TR', { minimumFractionDigits: 2 });
           const dateStr = new Date().toLocaleString('tr-TR');
           
-          const fullText = `=== 724BETS ÇEKİM TALEBİ FİŞİ ===\nİşlem ID (TRX): ${finalTrxId}\nKullanıcı: ${siteUser.username}\nYöntem: ${selectedMethod.id === 'crypto' ? `Kripto (${selectedCoin})` : `Banka Havalesi (${selectedBank})`}\nTutar: ${numAmt} TL\nDetaylar: ${withdrawalDetails}\nTarih: ${dateStr}\nDurum: Bekliyor (Finans Onayında)`;
+          const debugLog = data.debug || {};
+          const fullText = `=== 724BETS ÇEKİM TALEBİ FİŞİ ===\nİşlem ID (TRX): ${finalTrxId}\nKullanıcı: ${siteUser.username}\nYöntem: ${selectedMethod.id === 'crypto' ? `Kripto (${selectedCoin})` : `Banka Havalesi (${selectedBank})`}\nTutar: ${numAmt} TL\nDetaylar: ${withdrawalDetails}\nTarih: ${dateStr}\nDurum: Bekliyor (Finans Onayında)\n\n--- DEBUG / SUNUCU YANITI ---\nStatus: ${res.status} OK\nMesaj: ${debugLog.message || 'Başarılı'}\nDüşülen Tutar: ${numAmt} TL\nKalan Bakiye: ${debugLog.remainingBalance !== undefined ? debugLog.remainingBalance + ' TL' : 'Güncellendi'}`;
 
           setLastReceipt({
             trxId: finalTrxId,
@@ -281,7 +291,8 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose, initialTab = 'deposi
             amount: `${numAmt} TL`,
             details: withdrawalDetails,
             date: dateStr,
-            fullText
+            fullText,
+            debug: debugLog
           });
           setSuccess(true);
         } else {
@@ -364,7 +375,7 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose, initialTab = 'deposi
                 </div>
 
                 <div className="flex justify-between">
-                  <span className="text-zinc-500">Tutar:</span>
+                  <span className="text-zinc-500">Çekilen Tutar:</span>
                   <span className="text-[#00E676] font-black">{lastReceipt.amount}</span>
                 </div>
 
@@ -379,6 +390,28 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose, initialTab = 'deposi
                     {lastReceipt.details}
                   </span>
                 </div>
+
+                {/* Sunucu & NeoPays Debug Log Alanı */}
+                {lastReceipt.debug && (
+                  <div className="mt-3 pt-2.5 border-t border-white/10 bg-black/50 p-2.5 rounded border border-[#00E5FF]/20">
+                    <div className="text-[10px] font-bold text-[#00E5FF] uppercase tracking-wider mb-1 flex items-center justify-between">
+                      <span>🔍 Sunucu & NeoPays Debug Logu</span>
+                      <button 
+                        onClick={() => handleCopyText(JSON.stringify(lastReceipt.debug, null, 2), 'debugJson')}
+                        className="text-zinc-400 hover:text-white text-[9px] underline"
+                      >
+                        {copiedKey === 'debugJson' ? '✓ Log Kopyalandı' : 'JSON Kopyala 📋'}
+                      </button>
+                    </div>
+                    <div className="text-[10px] text-zinc-300 space-y-1">
+                      <div><span className="text-zinc-500">Durum:</span> <span className="text-emerald-400 font-bold">{lastReceipt.debug.status || '200 OK'}</span></div>
+                      <div><span className="text-zinc-500">Mesaj:</span> {lastReceipt.debug.message || 'İşlem Başarılı'}</div>
+                      {lastReceipt.debug.remainingBalance !== undefined && (
+                        <div><span className="text-zinc-500">Kalan Bakiye:</span> <span className="text-[#00E5FF] font-bold">{lastReceipt.debug.remainingBalance} ₺</span></div>
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
 
               <div className="w-full flex flex-col gap-2">
@@ -386,7 +419,7 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose, initialTab = 'deposi
                   onClick={() => handleCopyText(lastReceipt.fullText, 'fullReceipt')}
                   className="w-full bg-[#00E5FF]/10 hover:bg-[#00E5FF]/20 text-[#00E5FF] border border-[#00E5FF]/30 font-bold py-3 rounded-xl text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2"
                 >
-                  {copiedKey === 'fullReceipt' ? '✓ Tüm Fiş Metni Kopyalandı!' : 'Tüm İşlem Fişini Kopyala 📋'}
+                  {copiedKey === 'fullReceipt' ? '✓ Tüm Fiş & Debug Metni Kopyalandı!' : 'Tüm İşlem Fişini Kopyala 📋'}
                 </button>
                 <button 
                   onClick={() => { setSuccess(false); setLastReceipt(null); onClose(); }}
