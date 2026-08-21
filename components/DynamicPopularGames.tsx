@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Star, ChevronLeft, ChevronRight } from 'lucide-react';
 import { GameCard } from './GameCards';
 import { ALL_GAMES, DEMO_GAMES } from '../data/games';
+import { useGames } from '../contexts/GameContext';
 
 export default function DynamicPopularGames({ onGameSelect, onViewChange }: { onGameSelect: (game: any) => void, onViewChange?: (view: string) => void }) {
+  const { games } = useGames();
   const [dynamicPopularGames, setDynamicPopularGames] = useState<any[]>([]);
 
   const shuffleGamesList = (gamesArray: any[]) => {
@@ -16,22 +18,8 @@ export default function DynamicPopularGames({ onGameSelect, onViewChange }: { on
   };
 
   useEffect(() => {
-    const fetchGames = async () => {
-      try {
-        const res = await fetch('/api/casino/games');
-        const data = await res.json();
-        if (data.success && Array.isArray(data.games)) {
-          // Normal API verisini formatla
-          const mapped = data.games.map((g: any) => ({
-            id: g.id,
-            name: g.name,
-            provider: g.provider,
-            category: g.type === 'live' ? 'live' : 'slots',
-            img: g.image,
-            image: g.image,
-            vendorCode: g.vendorCode,
-            gameCode: g.gameCode
-          }));
+    if (games && games.length > 0) {
+      const mapped = games;
 
           // Premium Oyunların tam ve kesin isimleri (varyasyon kirliliğini önlemek için)
           const premiumExactNames = [
@@ -100,13 +88,8 @@ export default function DynamicPopularGames({ onGameSelect, onViewChange }: { on
           const finalPopularList = [...topGames, ...shuffledOthers].slice(0, 16);
 
           setDynamicPopularGames(finalPopularList);
-        }
-      } catch (e) {
-        console.error('Failed to fetch popular games:', e);
-      }
-    };
-    fetchGames();
-  }, []);
+    }
+  }, [games]);
 
   if (dynamicPopularGames.length === 0) return null;
 

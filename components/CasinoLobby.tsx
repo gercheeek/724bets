@@ -5,6 +5,7 @@ import { VirtuosoGrid } from 'react-virtuoso';
 import { CasinoLobbyGame } from '../types';
 import { ALL_GAMES, DEMO_GAMES } from '../data/games';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useGames } from '../contexts/GameContext';
 import { getOriginalsData } from './OriginalsSlider';
 import { PopularLiveWidget } from './PopularLiveWidget';
 import { GamePlayView } from './GamePlayView';
@@ -227,49 +228,8 @@ export default function CasinoLobby({
   const [shuffledAllGames, setShuffledAllGames] = useState<any[]>([]);
   const [dynamicNewGames, setDynamicNewGames] = useState<any[]>([]);
   const [dynamicPopularGames, setDynamicPopularGames] = useState<any[]>([]);
-const FALLBACK_GAMES = [
-  { id: 'slot-pragmatic-vs20sbonz1000', name: 'Sweet Bonanza 1000', provider: 'Pragmatic Play', category: 'slots', image: 'https://images.unsplash.com/photo-1579373903781-fd5c0c30c4cd?q=80&w=400&auto=format&fit=crop', img: 'https://images.unsplash.com/photo-1579373903781-fd5c0c30c4cd?q=80&w=400&auto=format&fit=crop', vendorCode: 'slot-pragmatic', gameCode: 'vs20sbonz1000', isMapped: true },
-  { id: 'slot-pragmatic-vs20olympx', name: 'Gates of Olympus 1000', provider: 'Pragmatic Play', category: 'slots', image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=400&auto=format&fit=crop', img: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=400&auto=format&fit=crop', vendorCode: 'slot-pragmatic', gameCode: 'vs20olympx', isMapped: true },
-  { id: 'slot-pragmatic-vs20sugarrushx', name: 'Sugar Rush 1000', provider: 'Pragmatic Play', category: 'slots', image: 'https://images.unsplash.com/photo-1582058091505-f87a2e55a40f?q=80&w=400&auto=format&fit=crop', img: 'https://images.unsplash.com/photo-1582058091505-f87a2e55a40f?q=80&w=400&auto=format&fit=crop', vendorCode: 'slot-pragmatic', gameCode: 'vs20sugarrushx', isMapped: true },
-  { id: 'slot-pragmatic-vs20starlightx', name: 'Starlight Princess 1000', provider: 'Pragmatic Play', category: 'slots', image: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=400&auto=format&fit=crop', img: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=400&auto=format&fit=crop', vendorCode: 'slot-pragmatic', gameCode: 'vs20starlightx', isMapped: true },
-  { id: 'slot-pragmatic-vs20bigbass', name: 'Big Bass Splash', provider: 'Pragmatic Play', category: 'slots', image: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=400&auto=format&fit=crop', img: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=400&auto=format&fit=crop', vendorCode: 'slot-pragmatic', gameCode: 'vs20bigbass', isMapped: true },
-  { id: 'slot-pragmatic-vs20doghouse', name: 'The Dog House Megaways', provider: 'Pragmatic Play', category: 'slots', image: 'https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?q=80&w=400&auto=format&fit=crop', img: 'https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?q=80&w=400&auto=format&fit=crop', vendorCode: 'slot-pragmatic', gameCode: 'vs20doghouse', isMapped: true },
-  { id: 'slot-pragmatic-vs20fruitparty', name: 'Fruit Party', provider: 'Pragmatic Play', category: 'slots', image: 'https://images.unsplash.com/photo-1619566636858-adf3ef46400b?q=80&w=400&auto=format&fit=crop', img: 'https://images.unsplash.com/photo-1619566636858-adf3ef46400b?q=80&w=400&auto=format&fit=crop', vendorCode: 'slot-pragmatic', gameCode: 'vs20fruitparty', isMapped: true }
-];
+  const { games: oroGames, isLoading } = useGames();
 
-  const [oroGames, setOroGames] = useState<any[]>(FALLBACK_GAMES);
-
-  useEffect(() => {
-    const fetchOroGames = async () => {
-      try {
-        const res = await fetch('/api/casino/games');
-        const data = await res.json();
-        if (data.success && Array.isArray(data.games) && data.games.length > 0) {
-          const mapped = data.games.map((g: any) => {
-            const fallbackImg = `https://images.unsplash.com/photo-1596838132731-3301c3fd4317?q=80&w=400&auto=format&fit=crop`;
-            const validImage = (g.image || g.img || '').trim();
-            const finalImg = validImage.length > 5 ? validImage : fallbackImg;
-            return {
-              id: g.id,
-              name: g.name,
-              provider: g.provider,
-              category: g.type === 'live' ? 'live' : 'slots',
-              img: finalImg,
-              image: finalImg,
-              vendorCode: g.vendorCode,
-              gameCode: g.gameCode,
-              isActive: g.isActive,
-              isMapped: g.isMapped
-            };
-          });
-          setOroGames(mapped);
-        }
-      } catch (err) {
-        console.error('Failed to fetch OroPlay games:', err);
-      }
-    };
-    fetchOroGames();
-  }, []);
 
   const shuffleGamesList = (gamesArray: any[]) => {
     const arr = [...gamesArray];
@@ -287,12 +247,14 @@ const FALLBACK_GAMES = [
   };
 
   useEffect(() => {
-    const newPool = allGames.filter(g => g.category === 'new' || g.isNew || g.category === 'slots');
-    const popularPool = allGames.filter(g => g.category === 'popular' || g.category === 'slots');
+    const newPool = allGames.filter(g => g.category === 'new' || g.isNew || (g.name || '').toLowerCase().includes('yeni'));
+    
+    // Sadece Popüler skorlamasına göre üstte yer alan oyunları al
+    const popularPool = allGames.filter(g => getPopularityScore(g.name || '') > 0).sort((a, b) => getPopularityScore(b.name || '') - getPopularityScore(a.name || ''));
     
     setDynamicNewGames(shuffleGamesList(newPool).slice(0, 14));
     setDynamicPopularGames(popularPool.slice(0, 20));
-  }, [oroGames.length, customGames.length, dynamicOriginals.length]);
+  }, [allGames]);
 
   useEffect(() => {
     if (oroGames.length > 0) {

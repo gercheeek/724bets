@@ -73,6 +73,7 @@ const LiveBetsFeed = React.lazy(() => import('./components/LiveBetsFeed'));
 import CasinoLobby from './components/CasinoLobby';
 import { UserProvider } from './contexts/UserContext';
 import { BetSlipProvider } from './contexts/BetSlipContext';
+import { GameProvider } from './contexts/GameContext';
 
 // Portal Components
 import CouponsView from './components/CouponsView';
@@ -2110,6 +2111,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
 
   return (
     <UserProvider siteUser={siteUser} setSiteUser={setSiteUser}>
+      <GameProvider>
       <BetSlipProvider>
       <React.Suspense fallback={<AppLoader />}>
         <>
@@ -3317,6 +3319,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
         </>
             </React.Suspense>
     </BetSlipProvider>
+    </GameProvider>
     </UserProvider>
   );
 };
