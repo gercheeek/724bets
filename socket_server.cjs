@@ -440,7 +440,8 @@ app.post('/api/payments/neopays/initiate', express.json(), async (req, res) => {
                 method: `NeoPays (${method.toUpperCase()})`,
                 amount: depositAmount,
                 txHash: trx,
-                status: 'pending'
+                status: 'pending',
+                updatedAt: new Date()
             }
         });
 
@@ -627,12 +628,13 @@ app.post('/api/payments/withdraw', express.json(), async (req, res) => {
 
         const request = await prisma.paymentRequest.create({
             data: {
-                userId,
+                userId: user.id,
                 type: 'withdraw',
                 method,
-                amount: parseFloat(amount),
+                amount: withdrawAmount,
                 txHash, // where to send the money
-                status: 'pending'
+                status: 'pending',
+                updatedAt: new Date()
             }
         });
         res.json({ success: true, request });
