@@ -39,8 +39,11 @@ const customAliases: Record<string, string> = {
   'marsilya': 'marseille',
   'kizilyildiz': 'crvena-zvezda',
   'bayern-munih': 'bayern-munich',
+  'bayern-munchen': 'bayern-munich',
+  'bayern': 'bayern-munich',
   'psg': 'paris-sg',
   'paris-saint-germain': 'paris-sg',
+  'paris-sg': 'paris-sg',
   'sporting-lizbon': 'sporting-cp',
   'roma': 'as-roma',
   'lazio': 'ss-lazio',
@@ -49,7 +52,20 @@ const customAliases: Record<string, string> = {
   'fiorentina': 'acf-fiorentina',
   'dinamo-kiev': 'dynamo-kyiv',
   'dynamo-kiev': 'dynamo-kyiv',
-  'kyiv': 'dynamo-kyiv'
+  'kyiv': 'dynamo-kyiv',
+  'manchester-united': 'manchester-united',
+  'manchester-utd': 'manchester-united',
+  'man-utd': 'manchester-united',
+  'manchester-city': 'manchester-city',
+  'man-city': 'manchester-city',
+  'dortmund': 'borussia-dortmund',
+  'brentford': 'brentford',
+  'tottenham': 'tottenham-hotspur',
+  'tottenham-hotspur': 'tottenham-hotspur',
+  'inter': 'inter-milan',
+  'milan': 'ac-milan',
+  'atletico-madrid': 'atletico-madrid',
+  'atletico': 'atletico-madrid'
 };
 
 const logoCache = new Map<string, string | null>();
@@ -71,20 +87,32 @@ export const findBestLogoMatch = (rawName: string): string | null => {
   // 1. Birebir tam eşleşme (örn: "fenerbahçe" -> "fenerbahçe.png")
   else if (logoIndex.includes(norm)) {
     match = norm;
-  } 
-  // 2. Prefix eşleşmesi
-  else if (logoIndex.find((file: string) => file.startsWith(norm + '-'))) {
-    match = logoIndex.find((file: string) => file.startsWith(norm + '-')) || null;
   }
-  // 3. İçinde geçme eşleşmesi
-  else if (logoIndex.find((file: string) => {
-    if (norm.includes('gremio') && file.includes('porto')) return false;
-    return (norm.includes(file) || (file.includes(norm) && norm.length > 4)) && file.length > 3;
-  })) {
-    match = logoIndex.find((file: string) => {
-      if (norm.includes('gremio') && file.includes('porto')) return false;
-      return (norm.includes(file) || (file.includes(norm) && norm.length > 4)) && file.length > 3;
-    }) || null;
+  // 2. Exact word match in logoIndex (e.g. "tottenham" -> "tottenham-hotspur")
+  else {
+    const words = norm.split('-');
+    for (const w of words) {
+      if (w.length >= 4) {
+        const found = logoIndex.find((f: string) => f === w || f.startsWith(w + '-') || f.endsWith('-' + w));
+        if (found) {
+          match = found;
+          break;
+        }
+      }
+    }
+
+    // 3. Prefix eşleşmesi
+    if (!match) {
+      match = logoIndex.find((file: string) => file.startsWith(norm + '-')) || null;
+    }
+
+    // 4. İçinde geçme eşleşmesi
+    if (!match) {
+      match = logoIndex.find((file: string) => {
+        if (norm.includes('gremio') && file.includes('porto')) return false;
+        return (norm.includes(file) || (file.includes(norm) && norm.length > 4)) && file.length > 3;
+      }) || null;
+    }
   }
   
   logoCache.set(rawName, match);
@@ -92,17 +120,14 @@ export const findBestLogoMatch = (rawName: string): string | null => {
 }
 
 export const PlayerLogo: React.FC<PlayerLogoProps> = ({ name, fallbackLogo, sport }) => {
+  const [pipelineStep, setPipelineStep] = useState(0);
   const [hasError, setHasError] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(false);
 
-  const isFootball = !sport || sport.toLowerCase().includes('futbol') || sport.toLowerCase().includes('soccer') || sport.toLowerCase().includes('football');
-
-  // Akıllı eşleşme algoritması ile lokal dosyayı bul (Sadece Futbol)
-  const bestMatch = isFootball ? findBestLogoMatch(name) : null;
+  // Akıllı eşleşme algoritması ile 3,100+ lokal takım logosundan takımı bul
+  const bestMatch = name ? findBestLogoMatch(name) : null;
   const localImgUrl = bestMatch ? `/assets/logos/${bestMatch}.png` : null;
 
   const urls = [localImgUrl, fallbackLogo].filter(Boolean) as string[];
-  const [pipelineStep, setPipelineStep] = useState(0);
   const currentUrl = urls[pipelineStep];
 
   const handleError = () => {
@@ -112,10 +137,6 @@ export const PlayerLogo: React.FC<PlayerLogoProps> = ({ name, fallbackLogo, spor
     } else {
       setHasError(true);
     }
-  };
-  
-  const handleLoad = () => {
-    setIsLoaded(true);
   };
 
   if (hasError || !currentUrl) {
@@ -129,7 +150,6 @@ export const PlayerLogo: React.FC<PlayerLogoProps> = ({ name, fallbackLogo, spor
         alt={name} 
         className="w-full h-full object-contain p-0.5 filter drop-shadow-[0_2px_5px_rgba(0,0,0,0.7)] hover:scale-110 transition-transform duration-300"
         onError={handleError}
-        onLoad={handleLoad}
       />
     </div>
   );
