@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { ProceduralLogo } from './ProceduralLogo';
 import logoIndex from '../../src/assets/logo-index.json';
+import teamLogosData from '../../utils/team_logos.json';
+
+const teamLogos: Record<string, string> = teamLogosData;
 
 interface PlayerLogoProps {
   name: string;
@@ -65,7 +68,11 @@ const customAliases: Record<string, string> = {
   'inter': 'inter-milan',
   'milan': 'ac-milan',
   'atletico-madrid': 'atletico-madrid',
-  'atletico': 'atletico-madrid'
+  'atletico': 'atletico-madrid',
+  'athletic-bilbao': 'athletic-bilbao',
+  'athletic-club': 'athletic-bilbao',
+  'sevilla': 'sevilla',
+  'sevilla-fc': 'sevilla'
 };
 
 const logoCache = new Map<string, string | null>();
@@ -123,11 +130,16 @@ export const PlayerLogo: React.FC<PlayerLogoProps> = ({ name, fallbackLogo, spor
   const [pipelineStep, setPipelineStep] = useState(0);
   const [hasError, setHasError] = useState(false);
 
-  // Akıllı eşleşme algoritması ile 3,100+ lokal takım logosundan takımı bul
+  // 1. Check dictionary in team_logos.json
+  const normClean = name ? name.toLowerCase().replace(/[^a-z0-9ğüşöçiı]/g, '') : '';
+  const jsonLogoUrl = teamLogos[normClean] || teamLogos[name?.toLowerCase()?.trim() ?? ''];
+
+  // 2. Check 3,100+ local team logos library
   const bestMatch = name ? findBestLogoMatch(name) : null;
   const localImgUrl = bestMatch ? `/assets/logos/${bestMatch}.png` : null;
 
-  const urls = [localImgUrl, fallbackLogo].filter(Boolean) as string[];
+  // Pipeline order: team_logos.json CDN -> Local PNG logo -> Fallback URL
+  const urls = [jsonLogoUrl, localImgUrl, fallbackLogo].filter(Boolean) as string[];
   const currentUrl = urls[pipelineStep];
 
   const handleError = () => {
