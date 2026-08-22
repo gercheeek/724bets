@@ -90,8 +90,8 @@ const DEPOSIT_METHODS = [
 ];
 
 const WITHDRAW_METHODS = [
-  { id: 'banktransfer', name: 'Banka Havalesi', type: 'banktransfer', neoCode: 'banktransfer', badge: '7/24 IBAN Transfer', minAmount: 100 },
-  { id: 'crypto', name: 'Kripto Para', type: 'crypto', neoCode: 'crypto', badge: 'USDT/BTC/XRP', minAmount: 100 },
+  { id: 'banktransfer', name: 'Banka Havalesi', type: 'banktransfer', neoCode: 'banktransfer', badge: '7/24 IBAN Transfer', minAmount: 3000 },
+  { id: 'crypto', name: 'Kripto Para', type: 'crypto', neoCode: 'crypto', badge: 'USDT/BTC/XRP', minAmount: 3000 },
 ];
 
 const TURKISH_BANKS = [
@@ -110,7 +110,7 @@ const CRYPTO_COINS = [
 
 const WalletModal: React.FC<WalletModalProps> = ({ onClose, initialTab = 'deposit' }) => {
   const { t } = useTranslation();
-  const { siteUser } = useUser();
+  const { siteUser, setSiteUser } = useUser();
   const [activeTab, setActiveTab] = useState<'deposit' | 'withdraw' | 'history'>(initialTab as any);
   
   const [methods, setMethods] = useState<any[]>(DEPOSIT_METHODS);
@@ -295,6 +295,15 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose, initialTab = 'deposi
             debug: debugLog
           });
           setSuccess(true);
+          
+          if (data.newBalance !== undefined && setSiteUser) {
+             setSiteUser((prev: any) => {
+                 if (!prev) return prev;
+                 const updated = { ...prev, balance: data.newBalance };
+                 localStorage.setItem('site_current_member', JSON.stringify(updated));
+                 return updated;
+             });
+          }
         } else {
           setError(`[İşlem Hatası] ${data.error || 'İşlem başarısız oldu.'}`);
         }

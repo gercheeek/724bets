@@ -1,5 +1,5 @@
 #!/usr/bin/expect -f
-set timeout 60
+set timeout -1
 set ip "85.121.178.80"
 set password "kQkrGBYHtY76dIF0z1"
 

@@ -358,8 +358,9 @@ export default function SportsPromoSlider({ matches = [], compact = false, onSel
             'INTER MIAMI', 'GALAXY', 'AL NASSR', 'AL HILAL', 'AL ITTIHAD', 'TÜRKİYE', 'TURKEY'
         ];
 
-        // 1. Temel Filtreleme: Sahte/Genç maçları eleme
+        // 1. Temel Filtreleme: Sahte/Genç maçları VE CANLI maçları slider'dan tam men etme
         const validMatches = matches.filter(m => {
+            if (m.isLive) return false; // Kural: Slider'da asla CANLI maç gösterilmez
             const h = (m.home || '').toUpperCase();
             const a = (m.away || '').toUpperCase();
             const l = (m.league || '').toUpperCase();
@@ -381,7 +382,7 @@ export default function SportsPromoSlider({ matches = [], compact = false, onSel
             const awayB = (b.away || '').toUpperCase();
             const leagueB = (b.league || '').toUpperCase();
 
-            const getScore = (home: string, away: string, league: string, isLive: boolean) => {
+            const getScore = (home: string, away: string, league: string) => {
                 let score = 0;
                 const matchStr = `${home} ${away}`.toUpperCase();
 
@@ -417,20 +418,11 @@ export default function SportsPromoSlider({ matches = [], compact = false, onSel
                     score -= 40000; // Bilinmeyen ve logosuz alt lig takımlarını dibe itin
                 }
 
-                // 5. Canlı Maç Bonusu (SADECE Maç Elit, Popüler Lig veya Logolu ise yüksek bonus ver)
-                if (isLive) {
-                    if (isHomeElite || isAwayElite || isPremium(league)) {
-                        score += 10000; // Tanınan canlı maçlara ekstra canlı bonusu
-                    } else {
-                        score += 100; // Bilinmeyen canlı maçlara çok küçük bonus
-                    }
-                }
-
                 return score;
             };
 
-            const scoreA = getScore(homeA, awayA, leagueA, !!a.isLive);
-            const scoreB = getScore(homeB, awayB, leagueB, !!b.isLive);
+            const scoreA = getScore(homeA, awayA, leagueA);
+            const scoreB = getScore(homeB, awayB, leagueB);
 
             return scoreB - scoreA;
         });

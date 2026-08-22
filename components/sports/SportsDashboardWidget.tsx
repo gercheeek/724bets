@@ -4,6 +4,8 @@ import { useBetSlip } from '../../contexts/BetSlipContext';
 import { useBetting } from '../../contexts/BettingContext';
 import teamLogosData from '../../utils/team_logos.json';
 
+import { PlayerLogo } from './PlayerLogo';
+
 const teamLogos: Record<string, string> = teamLogosData;
 
 /* ─── initials helper ─── */
@@ -16,31 +18,15 @@ function getInitials(name: string) {
 
 /* ─── TeamAvatar ─── */
 function TeamAvatar({ name, url, size = 64 }: { name: string; url?: string; size?: number }) {
-    const norm = (n: string) => n ? n.toLowerCase().replace(/[^a-z0-9ğüşöçiı]/g, '') : '';
-    const resolvedUrl = (url && url !== '') ? url : (teamLogos[norm(name)] || teamLogos[name?.toLowerCase() ?? '']);
-    const [showInitials, setShowInitials] = useState(!resolvedUrl);
-
-    const isBig = size >= 64;
-    const textSz = isBig ? 'text-[19px]' : 'text-[9px]';
-
     return (
-        <div className={`rounded-full flex items-center justify-center overflow-hidden relative shrink-0`}
+        <div className={`rounded-full flex items-center justify-center overflow-hidden relative shrink-0 p-1`}
             style={{
                 width: size,
                 height: size,
                 background: 'rgba(255,255,255,0.03)',
                 boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.05), 0 4px 10px rgba(0,0,0,0.5)'
             }}>
-            {!showInitials && resolvedUrl ? (
-                <img
-                    src={resolvedUrl}
-                    alt={name}
-                    className="w-[85%] h-[85%] object-contain drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]"
-                    onError={() => setShowInitials(true)}
-                />
-            ) : (
-                <span className={`${textSz} font-black text-white/60 select-none tracking-tight`}>{getInitials(name)}</span>
-            )}
+            <PlayerLogo name={name} fallbackLogo={url || ''} />
         </div>
     );
 }
@@ -160,10 +146,11 @@ export default function SportsDashboardWidget({ matches = [], onSelectMatch }: {
         return (ideal.length >= 3 ? ideal : sorted).slice(0, 3);
     }, [allMatches, global1xBetMatches, global1xBetPreMatches]);
 
-    /* ── Top Event ── */
+    /* ── Top Event (KURAL: Asla CANLI maç gösterilmez, sadece Prestijli Maç Önü Maçlar) ── */
     const topEventMatch = React.useMemo(() => {
         let pool = allMatches.length > 0 ? allMatches : [...global1xBetMatches, ...global1xBetPreMatches];
-        pool = pool.filter(m => !isYouthOrReserve(m.home || '', m.away || '', m.league || '') && !isBannedLeague(m.league || ''));
+        // CANLI maçları ve 3.lig/amatör maçları kesinlikle filtrele
+        pool = pool.filter(m => !m.isLive && !isYouthOrReserve(m.home || '', m.away || '', m.league || '') && !isBannedLeague(m.league || ''));
         
         let valid = pool.filter(m => m.homeOdd && m.homeOdd !== '-' && m.drawOdd && m.drawOdd !== '-' && m.awayOdd && m.awayOdd !== '-');
         if (!valid.length) return null;
@@ -175,10 +162,12 @@ export default function SportsDashboardWidget({ matches = [], onSelectMatch }: {
             const c = (m.country || '').toLowerCase(), l = (m.league || '').toLowerCase();
             return ['turkey', 'türkiye', 'süper lig', 'trendyol süper lig', 'super lig', 'tff 1. lig', '1. lig'].some(x => c === x || l === x);
         };
-        return wL.find(m => m.isLive && isTR(m)) || wL.find(m => !m.isLive && isTR(m)) ||
-            wL.find(m => m.isLive) || wL.find(m => !m.isLive) ||
-            valid.find(m => m.isLive && isTR(m)) || valid.find(m => !m.isLive && isTR(m)) ||
-            valid.find(m => m.isLive) || valid.find(m => !m.isLive) || null;
+
+        // Öncelik: Sadece Maç Önü (TR ligleri -> Logolu Majör Maçlar -> Genel Logolu Maçlar)
+        return wL.find(m => !m.isLive && isTR(m)) || 
+               wL.find(m => !m.isLive) || 
+               valid.find(m => !m.isLive && isTR(m)) || 
+               valid.find(m => !m.isLive) || null;
     }, [allMatches, global1xBetMatches, global1xBetPreMatches]);
 
     /* ── Triple Combo ── */

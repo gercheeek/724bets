@@ -31,6 +31,14 @@ export default defineConfig(({ mode }) => {
             target: 'http://localhost:3009',
             changeOrigin: true
           },
+          '/api/payments': {
+            target: 'http://localhost:3009',
+            changeOrigin: true
+          },
+          '/api/admin': {
+            target: 'http://localhost:3009',
+            changeOrigin: true
+          },
           /* '^/api/(?!sports|logo|casino|evetabi)': {
             target: 'http://localhost:4000',
             changeOrigin: true,

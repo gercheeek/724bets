@@ -152,8 +152,13 @@ app.get('/api/sports/my-bets', async (req, res) => {
         const userCode = req.query.userCode;
         if (!userCode) return res.status(400).json({ success: false, error: 'userCode required' });
         
-        const user = await prisma.user.findUnique({
-            where: { username: userCode },
+        const user = await prisma.user.findFirst({
+            where: {
+                OR: [
+                    { id: userCode },
+                    { username: userCode }
+                ]
+            },
             include: {
                 bets: {
                     include: { items: true },
@@ -179,13 +184,8 @@ app.post('/api/casino/launch', express.json(), async (req, res) => {
     }
 
     const code = userCode || 'testuser';
-    if (typeof balance === 'number') {
-        userBalances[code] = balance;
-    } else if (userBalances[code] === undefined) {
-        userBalances[code] = INITIAL_BALANCE;
-    }
-
-    const currentBalance = userBalances[code];
+    const user = await getOrCreateUser(code);
+    const currentBalance = user.balance;
 
     try {
         // Note: OroPlay account is in Seamless Wallet mode.
@@ -214,8 +214,15 @@ app.get('/api/casino/agent-balance', async (req, res) => {
 app.get('/api/casino/user-balance', async (req, res) => {
     try {
         const userCode = req.query.userCode || 'testuser';
-        const user = await getOrCreateUser(userCode);
-        res.json({ success: true, balance: user.balance });
+        const user = await prisma.user.findFirst({
+            where: {
+                OR: [
+                    { id: userCode },
+                    { username: userCode }
+                ]
+            }
+        });
+        res.json({ success: true, balance: user ? user.balance : 0 });
     } catch (err) {
         logError('Error fetching user balance', err);
         res.status(500).json({ success: false, error: 'Internal Server Error' });
@@ -444,16 +451,21 @@ app.post('/api/payments/neopays/initiate', express.json(), async (req, res) => {
         });
 
         // Send request to NeoPays API
-        const response = await fetch('https://api.neopays.net/api/v1/deposits/init', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify(payload)
-        });
-
-        const data = await response.json();
+        let data = {};
+        if (sid === '1001') {
+            // Mock response for local/test
+            data = { code: 200, url: 'https://724bets.net/deposit-success-mock?trx=' + trx };
+        } else {
+            const response = await fetch('https://api.neopays.net/api/v1/deposits/init', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+            data = await response.json();
+        }
 
         if (data.code === 200 && data.url) {
             res.json({ success: true, url: data.url, trx });
@@ -1675,7 +1687,7 @@ async function update1xBetFeed() {
 setInterval(update1xBetFeed, 10000);
 update1xBetFeed();
 
-const PORT = 3009;
+const PORT = 3001;
 server.listen(PORT, () => {
     console.log(`🚀 Socket.io Server running on port ${PORT}`);
 });

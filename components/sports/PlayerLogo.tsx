@@ -44,9 +44,9 @@ const customAliases: Record<string, string> = {
   'bayern-munih': 'bayern-munich',
   'bayern-munchen': 'bayern-munich',
   'bayern': 'bayern-munich',
-  'psg': 'paris-sg',
-  'paris-saint-germain': 'paris-sg',
-  'paris-sg': 'paris-sg',
+  'psg': 'paris-saintgermain',
+  'paris-saint-germain': 'paris-saintgermain',
+  'paris-sg': 'paris-saintgermain',
   'sporting-lizbon': 'sporting-cp',
   'roma': 'as-roma',
   'lazio': 'ss-lazio',
@@ -141,11 +141,11 @@ export const PlayerLogo: React.FC<PlayerLogoProps> = ({ name, fallbackLogo, spor
   const n = (name || '').toLowerCase().replace(/[^a-z0-9ğüşöçiı]/g, '');
   const exactTeamLogo = teamLogosData[n] || teamLogosData[(name || '').toLowerCase()] ? n : null;
   const bestMatch = exactTeamLogo || (name ? findBestLogoMatch(name) : null);
-  const localImgAssetUrl = bestMatch ? `/assets/logos/${bestMatch}.png` : null;
   const localImgUrl = bestMatch ? `/logos/${bestMatch}.png` : null;
+  const localImgAssetUrl = bestMatch ? `/assets/logos/${bestMatch}.png` : null;
 
-  // Pipeline order: Local Asset PNG logo -> Backend Proxy (football-logos.cc) -> Local PNG logo -> Fallback URL
-  const urls = [localImgAssetUrl, proxyUrl, localImgUrl, fallbackLogo].filter(Boolean) as string[];
+  // Pipeline order: Local PNG logo -> Local Asset PNG logo -> Backend Proxy -> Fallback URL
+  const urls = [localImgUrl, localImgAssetUrl, proxyUrl, fallbackLogo].filter(Boolean) as string[];
   const currentUrl = urls[pipelineStep];
 
   const handleError = () => {

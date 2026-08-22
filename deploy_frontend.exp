@@ -53,6 +53,11 @@ expect "*?assword:*"
 send "$password\r"
 expect eof
 
+spawn scp -o StrictHostKeyChecking=no socket_server_vps.cjs root@$ip:/opt/724bets-backend/socket_server_vps.cjs
+expect "*?assword:*"
+send "$password\r"
+expect eof
+
 spawn scp -o StrictHostKeyChecking=no oroplay.cjs root@$ip:/opt/724bets-backend/oroplay.cjs
 expect "*?assword:*"
 send "$password\r"

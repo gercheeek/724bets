@@ -26,8 +26,8 @@ export const UserProvider: React.FC<{ children: ReactNode, siteUser: SiteUser | 
   React.useEffect(() => {
     const syncBalance = async () => {
       try {
-        const username = siteUser?.username || 'testuser';
-        const res = await fetch(`/api/casino/user-balance?userCode=${username}`);
+        const userCode = siteUser?.id || siteUser?.username || 'testuser';
+        const res = await fetch(`/api/casino/user-balance?userCode=${userCode}`);
         const data = await res.json();
         if (data.success && typeof data.balance === 'number') {
           setSiteUser(prev => {
