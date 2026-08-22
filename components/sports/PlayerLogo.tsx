@@ -132,14 +132,20 @@ export const PlayerLogo: React.FC<PlayerLogoProps> = ({ name, fallbackLogo, spor
 
   // 1. Check dictionary in team_logos.json
   const normClean = name ? name.toLowerCase().replace(/[^a-z0-9ğüşöçiı]/g, '') : '';
-  const jsonLogoUrl = teamLogos[normClean] || teamLogos[name?.toLowerCase()?.trim() ?? ''];
+  const hasJsonMapping = !!(teamLogos[normClean] || teamLogos[name?.toLowerCase()?.trim() ?? '']);
+  
+  // Use our backend proxy to avoid Cloudflare 403 errors and trigger background scraping!
+  const proxyUrl = hasJsonMapping ? `/api/logo/${normClean}?name=${encodeURIComponent(name)}` : null;
 
   // 2. Check 3,100+ local team logos library
-  const bestMatch = name ? findBestLogoMatch(name) : null;
-  const localImgUrl = bestMatch ? `/assets/logos/${bestMatch}.png` : null;
+  const n = (name || '').toLowerCase().replace(/[^a-z0-9ğüşöçiı]/g, '');
+  const exactTeamLogo = teamLogosData[n] || teamLogosData[(name || '').toLowerCase()] ? n : null;
+  const bestMatch = exactTeamLogo || (name ? findBestLogoMatch(name) : null);
+  const localImgAssetUrl = bestMatch ? `/assets/logos/${bestMatch}.png` : null;
+  const localImgUrl = bestMatch ? `/logos/${bestMatch}.png` : null;
 
-  // Pipeline order: team_logos.json CDN -> Local PNG logo -> Fallback URL
-  const urls = [jsonLogoUrl, localImgUrl, fallbackLogo].filter(Boolean) as string[];
+  // Pipeline order: Local Asset PNG logo -> Backend Proxy (football-logos.cc) -> Local PNG logo -> Fallback URL
+  const urls = [localImgAssetUrl, proxyUrl, localImgUrl, fallbackLogo].filter(Boolean) as string[];
   const currentUrl = urls[pipelineStep];
 
   const handleError = () => {

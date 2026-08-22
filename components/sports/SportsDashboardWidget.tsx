@@ -130,14 +130,11 @@ function SectionHeader({ icon, title, accent = '#00E5FF' }: { icon: React.ReactN
 }
 
 function isBannedLeague(league: string) {
-    if (!league) return false;
-    const l = league.toUpperCase();
-    return l.includes('QUEENSLAND') || l.includes('VICTORIA') || l.includes('NPL') || l.includes('RESERVE') || l.includes('YOUTH') || l.includes('U19') || l.includes('U21') || l.includes('U23') || l.includes('WOMEN') || l.includes('KADIN') || l.includes('2.') || l.includes('SERIE B') || l.includes('SERIE C') || l.includes('PORTUGAL 2') || l.includes('CHAMPIONSHIP') || l.includes('LIGA 2') || l.includes('LIG 2') || l.includes('TROPHY') || l.includes('İRLANDA') || l.includes('IRELAND') || l.includes('LEINSTER') || l.includes('ŞAMPİYONASI') || l.includes('AMATEUR') || l.includes('AMATÖR') || l.includes('VIRTUAL') || l.includes('SRL') || l.includes('CYBER') || l.includes('ESPORTS') || l.includes('E-SPORTS') || l.includes('SHORT FOOTBALL') || l.includes('LIGA PRO') || l.includes('MLS+') || l.includes('FIFA');
+    return false;
 }
 
 function isYouthOrReserve(home: string, away: string, league: string) {
-    const str = `${home} ${away} ${league}`.toUpperCase();
-    return str.includes('U19') || str.includes('U20') || str.includes('U21') || str.includes('U23') || str.includes('RESERVE') || str.includes('YOUTH') || str.includes('ACADEMY') || str.includes('KADIN') || str.includes('WOMEN') || str.includes('VIRTUAL') || str.includes('SRL') || str.includes('CYBER') || str.includes('ESPORTS') || str.includes('FIFA') || str.includes('MLS+') || str.includes('5X5') || str.includes('3X3') || str.includes('LFL') || str.includes('AMATÖR') || str.includes('AMATEUR') || str.includes('SHORT FOOTBALL');
+    return false;
 }
 
 /* ─── Main Widget ─── */

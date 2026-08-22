@@ -20,10 +20,18 @@ export default defineConfig(({ mode }) => {
             rewrite: (path) => path.replace(/^\/api\/evetabi/, '')
           },
           '/api/casino': {
-            target: 'http://localhost:3001',
+            target: 'http://localhost:3009',
             changeOrigin: true
           },
-          '/api': {
+          '/api/sports': {
+            target: 'http://localhost:3009',
+            changeOrigin: true
+          },
+          '/api/logo': {
+            target: 'http://localhost:3009',
+            changeOrigin: true
+          },
+          /* '^/api/(?!sports|logo|casino|evetabi)': {
             target: 'http://localhost:4000',
             changeOrigin: true,
             configure: (proxy) => {
@@ -34,7 +42,7 @@ export default defineConfig(({ mode }) => {
                 }
               });
             }
-          }
+          } */
         }
       },
       plugins: [react()],

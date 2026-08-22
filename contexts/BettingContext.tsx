@@ -121,33 +121,40 @@ export const BettingProvider: React.FC<{ children: React.ReactNode }> = ({ child
         const res = await fetch('/api/sports/matches');
         if (res.ok) {
           const data = await res.json();
-          if (data.success && Array.isArray(data.live) && data.live.length > 0) {
-            const normalized = data.live.map((m: any) => ({
-              ...m,
-              home: m.homeTeam || m.home || 'Ev Sahibi',
-              away: m.awayTeam || m.away || 'Deplasman',
-              homeOdd: m.odds?.['1'] !== '-' && m.odds?.['1'] !== undefined ? String(m.odds?.['1']) : '1.90',
-              drawOdd: m.odds?.['X'] !== '-' && m.odds?.['X'] !== undefined ? String(m.odds?.['X']) : '3.30',
-              awayOdd: m.odds?.['2'] !== '-' && m.odds?.['2'] !== undefined ? String(m.odds?.['2']) : '3.50',
-              markets: [
-                {
-                  name: 'Maç Sonucu (1X2)',
-                  selections: [
-                    { name: '1', odd: m.odds?.['1'] || 1.90 },
-                    { name: 'X', odd: m.odds?.['X'] || 3.30 },
-                    { name: '2', odd: m.odds?.['2'] || 3.50 }
-                  ]
-                }
-              ]
-            }));
+          if (data.success) {
+            const normalizeMatches = (matchesArray: any[]) => {
+              if (!Array.isArray(matchesArray)) return [];
+              return matchesArray.map((m: any) => ({
+                ...m,
+                home: m.homeTeam || m.home || 'Ev Sahibi',
+                away: m.awayTeam || m.away || 'Deplasman',
+                homeOdd: m.odds?.['1'] !== '-' && m.odds?.['1'] !== undefined ? String(m.odds?.['1']) : '1.90',
+                drawOdd: m.odds?.['X'] !== '-' && m.odds?.['X'] !== undefined ? String(m.odds?.['X']) : '3.30',
+                awayOdd: m.odds?.['2'] !== '-' && m.odds?.['2'] !== undefined ? String(m.odds?.['2']) : '3.50',
+                markets: [
+                  {
+                    name: 'Maç Sonucu (1X2)',
+                    selections: [
+                      { name: '1', odd: m.odds?.['1'] || 1.90 },
+                      { name: 'X', odd: m.odds?.['X'] || 3.30 },
+                      { name: '2', odd: m.odds?.['2'] || 3.50 }
+                    ]
+                  }
+                ]
+              }));
+            };
 
-            setEvents(normalized);
-            setGlobal1xBetMatches(normalized);
-            setGlobalLiveMatches(normalized);
-            if (Array.isArray(data.prematch)) {
-              setGlobal1xBetPreMatches(data.prematch);
+            if (Array.isArray(data.live)) {
+              const normalizedLive = normalizeMatches(data.live);
+              setEvents(normalizedLive);
+              setGlobal1xBetMatches(normalizedLive);
+              setGlobalLiveMatches(normalizedLive);
             }
-            return;
+
+            if (Array.isArray(data.prematch)) {
+              const normalizedPre = normalizeMatches(data.prematch);
+              setGlobal1xBetPreMatches(normalizedPre);
+            }
           }
         }
       } catch (e) {

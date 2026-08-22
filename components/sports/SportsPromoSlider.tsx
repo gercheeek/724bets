@@ -9,8 +9,10 @@ import { getMatchPriorityScore } from '../../utils/eliteTeams';
 function isBannedLeague(league: string) {
     if (!league) return false;
     const l = league.toUpperCase();
-    // Removed ELEMELER and QUALIFIERS to allow UEFA Qualifiers
-    return l.includes('QUEENSLAND') || l.includes('VICTORIA') || l.includes('NPL') || l.includes('RESERVE') || l.includes('YOUTH') || l.includes('U19') || l.includes('U21') || l.includes('U23') || l.includes('WOMEN') || l.includes('KADIN') || l.includes('2.') || l.includes('SERIE B') || l.includes('SERIE C') || l.includes('PORTUGAL 2') || l.includes('CHAMPIONSHIP') || l.includes('LIGA 2') || l.includes('LIG 2') || l.includes('TROPHY') || l.includes('İRLANDA') || l.includes('IRELAND') || l.includes('LEINSTER') || l.includes('ŞAMPİYONASI') || l.includes('AMATEUR') || l.includes('AMATÖR') || l.includes('VIRTUAL') || l.includes('SRL') || l.includes('CYBER') || l.includes('ESPORTS') || l.includes('E-SPORTS') || l.includes('SHORT FOOTBALL') || l.includes('LIGA PRO') || l.includes('MLS+') || l.includes('FIFA');
+    return l.includes('5X5') || l.includes('3X3') || l.includes('4X4') || l.includes('6X6') || l.includes('7X7') || l.includes('8X8') ||
+           l.includes('LFL') || l.includes('SHORT FOOTBALL') || l.includes('CYBER') || l.includes('ESPORTS') || l.includes('E-SPORTS') ||
+           l.includes('VIRTUAL') || l.includes('SRL') || l.includes('LIGA PRO') || l.includes('AMATÖR') || l.includes('AMATEUR') ||
+           l.includes('RESERVE') || l.includes('REZERVL') || l.includes('YOUTH') || l.includes('GENÇLER');
 }
 
 function isPremium(league: string) {
@@ -56,7 +58,9 @@ function isPremium(league: string) {
 
 function isYouthOrReserve(home: string, away: string, league: string) {
     const str = `${home} ${away} ${league}`.toUpperCase();
-    return str.includes('U19') || str.includes('U20') || str.includes('U21') || str.includes('U23') || str.includes('RESERVE') || str.includes('YOUTH') || str.includes('ACADEMY') || str.includes('KADIN') || str.includes('WOMEN') || str.includes('VIRTUAL') || str.includes('SRL') || str.includes('CYBER') || str.includes('ESPORTS') || str.includes('FIFA') || str.includes('MLS+') || str.includes('5X5') || str.includes('3X3') || str.includes('LFL') || str.includes('AMATÖR') || str.includes('AMATEUR') || str.includes('SHORT FOOTBALL');
+    return str.includes('5X5') || str.includes('3X3') || str.includes('4X4') || str.includes('6X6') ||
+           str.includes('(AMATÖR)') || str.includes('(AMATEUR)') || str.includes('AMATEUR') || str.includes('AMATÖR') ||
+           str.includes('RESERVE') || str.includes('REZERVL') || str.includes('YOUTH') || str.includes('U19') || str.includes('U21') || str.includes('U23');
 }
 
 export const cleanTeamName = (name: string) => {
@@ -354,7 +358,7 @@ export default function SportsPromoSlider({ matches = [], compact = false, onSel
             'INTER MIAMI', 'GALAXY', 'AL NASSR', 'AL HILAL', 'AL ITTIHAD', 'TÜRKİYE', 'TURKEY'
         ];
 
-        // 1. Temel Filtreleme: SADECE Elit Takımlar ve Sahte/Genç maçları eleme
+        // 1. Temel Filtreleme: Sahte/Genç maçları eleme
         const validMatches = matches.filter(m => {
             const h = (m.home || '').toUpperCase();
             const a = (m.away || '').toUpperCase();
@@ -364,47 +368,69 @@ export default function SportsPromoSlider({ matches = [], compact = false, onSel
             if (isYouthOrReserve(h, a, l)) return false;
             if (isBannedLeague(l)) return false;
             
-            // ELİT TAKIM KONTROLÜ: Ev sahibi veya deplasmandan biri listede olmalı
-            const isEliteMatch = ELITE_TEAMS.some(team => h.includes(team) || a.includes(team));
-            
-            return isEliteMatch;
+            return true;
         });
 
-        // 2. Puanlama ve Sıralama
+        // 2. Puanlama ve Sıralama (Dünyanın En İyi Takımları ve Popüler Ligler Öncelikli)
         const sorted = [...validMatches].sort((a, b) => {
             const homeA = (a.home || '').toUpperCase();
             const awayA = (a.away || '').toUpperCase();
+            const leagueA = (a.league || '').toUpperCase();
+
             const homeB = (b.home || '').toUpperCase();
             const awayB = (b.away || '').toUpperCase();
+            const leagueB = (b.league || '').toUpperCase();
 
-            const getScore = (home: string, away: string, isLive: boolean) => {
+            const getScore = (home: string, away: string, league: string, isLive: boolean) => {
                 let score = 0;
                 const matchStr = `${home} ${away}`.toUpperCase();
-                
-                // Türk Takımlarına Sınırsız Öncelik
+
+                // 1. Türk Takımları / Türkiye Milli Takımı (En Yüksek Öncelik)
                 if (matchStr.includes('BEŞİKTAŞ') || matchStr.includes('BESIKTAS') ||
                     matchStr.includes('FENERBAHÇE') || matchStr.includes('FENERBAHCE') ||
                     matchStr.includes('GALATASARAY') || matchStr.includes('TRABZONSPOR') ||
                     matchStr.includes('TÜRKİYE') || matchStr.includes('TURKEY')) {
-                    score += 50000;
+                    score += 100000;
                 }
 
-                // Canlı Maçlara Ekstra Puan (Böylece Elit Canlılar En Üste Çıkar)
-                if (isLive) score += 1000;
-
-                // İki takım da Elit ise (Derbi)
+                // 2. Elit Takımlar (Dünyanın En İyi 100 Takımı)
                 const isHomeElite = ELITE_TEAMS.some(t => home.includes(t));
                 const isAwayElite = ELITE_TEAMS.some(t => away.includes(t));
-                if (isHomeElite && isAwayElite) score += 500;
 
-                // Logosu olanlara ufak bir avantaj
-                if (findBestLogoMatch(home) && findBestLogoMatch(away)) score += 50;
+                if (isHomeElite && isAwayElite) {
+                    score += 50000; // Çift Elit (Derbi / Süper Maç)
+                } else if (isHomeElite || isAwayElite) {
+                    score += 25000; // Tek Elit Takım
+                }
+
+                // 3. Popüler / Dev Ligler (Premier League, La Liga, Süper Lig vb.)
+                if (isPremium(league)) {
+                    score += 15000;
+                }
+
+                // 4. Logo Kontrolü (Logosu Olmayan Takımlara Ağır Ceza Puanı)
+                const hasHomeLogo = !!findBestLogoMatch(home);
+                const hasAwayLogo = !!findBestLogoMatch(away);
+                if (hasHomeLogo && hasAwayLogo) {
+                    score += 5000;
+                } else if (!hasHomeLogo && !hasAwayLogo && !isHomeElite && !isAwayElite) {
+                    score -= 40000; // Bilinmeyen ve logosuz alt lig takımlarını dibe itin
+                }
+
+                // 5. Canlı Maç Bonusu (SADECE Maç Elit, Popüler Lig veya Logolu ise yüksek bonus ver)
+                if (isLive) {
+                    if (isHomeElite || isAwayElite || isPremium(league)) {
+                        score += 10000; // Tanınan canlı maçlara ekstra canlı bonusu
+                    } else {
+                        score += 100; // Bilinmeyen canlı maçlara çok küçük bonus
+                    }
+                }
 
                 return score;
             };
 
-            const scoreA = getScore(homeA, awayA, !!a.isLive);
-            const scoreB = getScore(homeB, awayB, !!b.isLive);
+            const scoreA = getScore(homeA, awayA, leagueA, !!a.isLive);
+            const scoreB = getScore(homeB, awayB, leagueB, !!b.isLive);
 
             return scoreB - scoreA;
         });

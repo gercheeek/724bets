@@ -49,7 +49,7 @@ async function processQueue() {
                 await page.goto(`https://football-logos.cc/?q=${encodeURIComponent(teamName)}`, { waitUntil: 'networkidle2', timeout: 15000 });
 
                 // Get the first visible image that matches the search or inside a group
-                const logoUrl = await page.evaluate((searchQuery) => {
+                const base64Data = await page.evaluate(async (searchQuery) => {
                     const items = Array.from(document.querySelectorAll('.group'));
                     let imgUrl = null;
                     
@@ -64,15 +64,28 @@ async function processQueue() {
                         }
                     }
                     
+                    if (!imgUrl) return null;
                     
-                    return imgUrl;
+                    // Fetch within the browser context to bypass Cloudflare
+                    try {
+                        const response = await fetch(imgUrl);
+                        const blob = await response.blob();
+                        return new Promise((resolve) => {
+                            const reader = new FileReader();
+                            reader.onloadend = () => resolve(reader.result);
+                            reader.readAsDataURL(blob);
+                        });
+                    } catch(e) {
+                        return null;
+                    }
                 }, teamName);
 
                 await page.close();
 
-                if (logoUrl) {
-                    console.log(`[Scraper] Found logo for ${teamName}: ${logoUrl}`);
-                    await downloadImage(logoUrl, filePath);
+                if (base64Data) {
+                    console.log(`[Scraper] Found and downloaded logo for ${teamName}`);
+                    const base64Image = base64Data.split(';base64,').pop();
+                    fs.writeFileSync(filePath, base64Image, {encoding: 'base64'});
                     resolve(filePath);
                 } else {
                     console.log(`[Scraper] No logo found for ${teamName}`);
@@ -90,31 +103,6 @@ async function processQueue() {
         isProcessing = false;
         if (queue.length > 0) processQueue();
     }
-}
-
-function downloadImage(url, dest) {
-    return new Promise((resolve, reject) => {
-        const file = fs.createWriteStream(dest);
-        https.get(url, {
-            headers: {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-                'Referer': 'https://football-logos.cc/',
-                'Accept': 'image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8'
-            }
-        }, (response) => {
-            if (response.statusCode === 200) {
-                response.pipe(file);
-                file.on('finish', () => {
-                    file.close();
-                    resolve(dest);
-                });
-            } else {
-                reject(new Error(`Failed to download image. Status: ${response.statusCode}`));
-            }
-        }).on('error', (err) => {
-            fs.unlink(dest, () => reject(err));
-        });
-    });
 }
 
 function getLogo(teamId, teamName) {

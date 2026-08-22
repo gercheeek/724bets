@@ -329,17 +329,15 @@ app.get('/api/logo/:teamId', async (req, res) => {
     return res.sendFile(exactPath);
   }
 
-  // 3. If neither exists, trigger the dynamic lazy-scraper
+  // 3. If neither exists, trigger the dynamic lazy-scraper IN THE BACKGROUND to avoid lagging the client!
   try {
-    const logoPath = await getLogo(teamId, teamName);
-    if (logoPath && fs.existsSync(logoPath)) {
-      res.sendFile(logoPath);
-    } else {
-      res.status(404).json({ error: 'Logo not found' });
-    }
+    getLogo(teamId, teamName).catch(err => {
+      console.error(`[API] Background scraping failed for ${teamName}:`, err.message);
+    });
+    // Immediately return 404 so the frontend falls back to the local library instantly (no lag)
+    res.status(404).json({ error: 'Logo not found locally, scraping in background' });
   } catch (err) {
-    console.error(`[API] Error fetching logo for ${teamName}:`, err.message);
-    res.status(500).json({ error: 'Failed to fetch logo' });
+    res.status(500).json({ error: 'Failed to trigger scraper' });
   }
 });
 
@@ -1636,8 +1634,10 @@ function parse1xBetMatchData(data, isLive) {
 
 
 let preMatches1xBet = [];
-
+let isFetchingFeed = false;
 async function update1xBetFeed() {
+    if (isFetchingFeed) return;
+    isFetchingFeed = true;
     try {
         // Fetch LIVE
         const liveRes = await fetch("https://1xframemxz.com/service-api/LiveFeed/Get1x2_Zip?count=50&lng=tr&mode=4&country=180&partner=85&noFilterBlockEvent=true&sports=1", {
@@ -1664,16 +1664,18 @@ async function update1xBetFeed() {
             io.emit('1xbetPreMatches', preMatches1xBet);
             console.log(`[1xBet Native API] Updated PREMATCH matches: ${preMatches1xBet.length} (Filtered aggressive e-sports)`);
         }
-    } catch (e) {
-        console.error("[1xBet Native API] Fetch Error:", e.message);
+    } catch (err) {
+        console.error("[1xBet Native API] Feed update error:", err.message);
+    } finally {
+        isFetchingFeed = false;
     }
 }
 
-// Update every 3 seconds for lightning fast scores
-setInterval(update1xBetFeed, 3000);
+// Update every 10 seconds to reduce load, and only if previous finished
+setInterval(update1xBetFeed, 10000);
 update1xBetFeed();
 
-const PORT = 3001;
+const PORT = 3009;
 server.listen(PORT, () => {
     console.log(`🚀 Socket.io Server running on port ${PORT}`);
 });
