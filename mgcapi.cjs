@@ -174,7 +174,7 @@ async function getLaunchUrl(vendorCode, gameCode, userCode, currency = 'TRY') {
             method: 'POST',
             headers: headers,
             body: JSON.stringify(payload),
-            signal: AbortSignal.timeout(3500)
+            signal: AbortSignal.timeout(1800)
         });
         const data = await resObj.json();
         

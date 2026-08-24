@@ -180,6 +180,7 @@ export default function CasinoLobby({
 
   const handleTabChange = (tabId: string) => {
     setActiveTab(tabId);
+    setSelectedProvider('all');
     const lang = typeof window !== 'undefined' ? window.location.pathname.split('/')[1] : 'tr';
     const langPrefix = ['tr', 'en', 'pt', 'es'].includes(lang) ? lang : 'tr';
     
@@ -230,20 +231,10 @@ export default function CasinoLobby({
 
   useEffect(() => {
     const newPool = allGames.filter(g => g.category === 'new' || g.isNew || (g.name || '').toLowerCase().includes('yeni'));
-    
-    // Sadece Popüler skorlamasına göre üstte yer alan oyunları al ve benzer isimleri filtrele
-    const popularPool = allGames.filter(g => getPopularityScore(g.name || '') > 0).sort((a, b) => getPopularityScore(b.name || '') - getPopularityScore(a.name || ''));
-    
-    const seenBases = new Set<string>();
-    const deduplicatedPopular = popularPool.filter(g => {
-      const base = (g.name || '').toLowerCase().replace(/1000|dice|super|scatter|megaways/g, '').trim();
-      if (seenBases.has(base)) return false;
-      seenBases.add(base);
-      return true;
-    });
+    setDynamicNewGames(newPool.slice(0, 12));
 
-    setDynamicNewGames(shuffleGamesList(newPool).slice(0, 14));
-    setDynamicPopularGames((deduplicatedPopular.length >= 6 ? deduplicatedPopular : popularPool).slice(0, 18));
+    const popularPool = allGames.filter(g => getPopularityScore(g.name || '') > 0).sort((a, b) => getPopularityScore(b.name || '') - getPopularityScore(a.name || ''));
+    setDynamicPopularGames(popularPool.slice(0, 18));
   }, [allGames]);
 
   useEffect(() => {
@@ -260,12 +251,30 @@ export default function CasinoLobby({
   }, []);
 
   const handleGameSelect = (game: any) => {
-    if (game.category === 'originals' || game.provider === 'Originals' || game.name === 'Plinko' || game.name === 'Chicken Run' || game.name === 'Mission Uncrossable') {
-      let path = game.name.toLowerCase().replace(/\s+/g, '-');
-      if (path === 'mission-uncrossable') path = 'chicken-run';
-      if (onNavigate) {
-        onNavigate(path);
-      }
+    const gameName = (game.name || '').toLowerCase();
+    
+    // Always route our Originals to their native views, regardless of provider string
+    if (gameName.includes('blackjack')) {
+      onNavigate && onNavigate('blackjack-pro');
+      return;
+    }
+    if (gameName.includes('plinko')) {
+      onNavigate && onNavigate('plinko');
+      return;
+    }
+    if (gameName.includes('limbo')) {
+      onNavigate && onNavigate('limbo');
+      return;
+    }
+
+    if (game.provider === 'Originals') {
+      setSelectedGame(game);
+      setShowDemoIframe(true);
+      return;
+    }
+
+    if (game.type === 'live' || game.category === 'live') {
+      onGameSelect ? onGameSelect(game) : onNavigate && onNavigate('casino');
     } else {
       setSelectedGame(game);
       setShowDemoIframe(true);
@@ -305,9 +314,9 @@ export default function CasinoLobby({
     } else if (activeTab === 'blueprint') {
       matchesTab = providerLower.includes('blueprint');
     } else if (activeTab === 'egt-digital') {
-      matchesTab = providerLower.includes('egt digital');
+      matchesTab = providerLower.includes('egt digital') || providerLower.includes('egtdigital');
     } else if (activeTab === 'egt-amusnet') {
-      matchesTab = providerLower.includes('egt amusnet') || providerLower.includes('amusnet');
+      matchesTab = providerLower.includes('amusnet') || providerLower.includes('egt amusnet') || providerLower === 'egt';
     } else if (activeTab === 'novomatic') {
       matchesTab = providerLower.includes('novomatic');
     } else if (activeTab === 'popular') {
@@ -329,7 +338,7 @@ export default function CasinoLobby({
     } else if (activeTab === 'bonusbuy' || activeTab === 'bonus') {
       matchesTab = gameName.includes('bonus') || gameName.includes('buy');
     } else if (activeTab === 'egt') {
-      matchesTab = providerLower.includes('egt') || providerLower.includes('amuso') || gameName.includes('hot');
+      matchesTab = providerLower.includes('egt') || providerLower.includes('amus') || gameName.includes('hot');
     } else if (activeTab === 'holdwin') {
       matchesTab = gameName.includes('hold') || gameName.includes('win');
     } else if (activeTab === 'originals') {
@@ -340,7 +349,7 @@ export default function CasinoLobby({
 
     let matchesProvider = true;
     if (selectedProvider !== 'all') {
-      matchesProvider = providerLower === selectedProvider.toLowerCase();
+      matchesProvider = providerLower.includes(selectedProvider.toLowerCase());
     }
 
     const matchesSearch = !searchQuery || 
@@ -585,12 +594,17 @@ export default function CasinoLobby({
             </div>
           )}
           
-          {filteredGames.length === 0 && (
+          {isLoading && allGames.length === 0 ? (
+            <div className="w-full py-20 flex flex-col items-center justify-center text-[#848B9D]">
+              <div className="w-10 h-10 border-4 border-[#00E5FF] border-t-transparent rounded-full animate-spin mb-4" />
+              <p className="text-sm font-bold text-white uppercase tracking-wider">Oyunlar Yükleniyor...</p>
+            </div>
+          ) : filteredGames.length === 0 ? (
             <div className="w-full py-20 flex flex-col items-center justify-center text-[#848B9D]">
               <Search size={48} className="mb-4 opacity-20" />
               <p className="text-lg font-medium">Oyun bulunamadı</p>
             </div>
-          )}
+          ) : null}
         </div>
       </div>
 
