@@ -1888,47 +1888,94 @@ app.post('/api/casino/callback/api', express.json(), async (req, res) => {
         }
 
         const user = await getOrCreateUser(userId);
+        const beforeBalance = Number(user.balance) || 0;
+        const currentCurrency = currencyId || "TRY";
+        const txId = transactionId || `tx_${Date.now()}`;
         
-        // Handling commands based on MGCAPI documentation
+        // Handling commands based on official MGCAPI documentation
         if (cmd === 'getPlayerInfo') {
-            // Sadece bakiye sorgusu
             return res.json({ 
                 result: true, 
                 err_desc: "OK", 
                 err_code: 0, 
-                balance: user.balance,
-                currency: "TRY",
-                display_name: userId,
+                currency: currentCurrency,
+                balance: beforeBalance,
+                display_name: user.username || userId,
                 gender: "male",
                 country: "TR",
-                player_id: userId
+                player_id: typeof user.id === 'number' ? user.id : 1
             });
         } 
         else if (cmd === 'withdraw') {
-            // Bahis - Bakiyeden düş
             const amount = parseFloat(betAmount || 0);
-            if (user.balance < amount) {
-                return res.json({ result: false, err_desc: "Insufficient balance", err_code: 1, balance: user.balance });
+            if (beforeBalance < amount) {
+                return res.json({ 
+                    result: false, 
+                    err_desc: "Insufficient balance", 
+                    err_code: 1, 
+                    balance: beforeBalance,
+                    before_balance: beforeBalance,
+                    transactionId: txId
+                });
             }
-            user.balance -= amount;
-            return res.json({ result: true, err_desc: "OK", err_code: 0, balance: user.balance });
+            const newBalance = beforeBalance - amount;
+            user.balance = newBalance;
+            await updateUserBalance(user.username, newBalance);
+
+            return res.json({ 
+                result: true, 
+                err_desc: "OK", 
+                err_code: 0, 
+                balance: newBalance,
+                before_balance: beforeBalance,
+                transactionId: txId
+            });
         } 
         else if (cmd === 'deposit') {
-            // Kazanç - Bakiyeye ekle
             const amount = parseFloat(winAmount || 0);
-            user.balance += amount;
-            return res.json({ result: true, err_desc: "OK", err_code: 0, balance: user.balance });
+            const newBalance = beforeBalance + amount;
+            user.balance = newBalance;
+            await updateUserBalance(user.username, newBalance);
+
+            return res.json({ 
+                result: true, 
+                err_desc: "OK", 
+                err_code: 0, 
+                balance: newBalance,
+                before_balance: beforeBalance,
+                transactionId: txId
+            });
         }
         else if (cmd === 'rollback') {
-            // İptal (Bakiye değişikliği gerekirse işlem id'sine göre yapılır, şimdilik sadece OK dönüyoruz)
-            return res.json({ result: true, err_desc: "OK", err_code: 0, balance: user.balance });
+            return res.json({ 
+                result: true, 
+                err_desc: "OK", 
+                err_code: 0, 
+                balance: beforeBalance,
+                before_balance: beforeBalance,
+                transactionId: txId
+            });
         }
         
-        // Bilinmeyen komut
-        return res.json({ result: false, err_desc: "Unknown command", err_code: 99, balance: user.balance });
+        // Unknown command
+        return res.json({ 
+            result: false, 
+            err_desc: "Invalid command", 
+            err_code: 6, 
+            balance: beforeBalance,
+            before_balance: beforeBalance,
+            transactionId: txId
+        });
         
     } catch (err) {
         console.error('[MGCAPI Callback Error]', err);
-        res.json({ result: false, err_desc: "Internal error", err_code: 500, balance: 0 });
+        res.status(500).json({ 
+            result: false, 
+            err_desc: "Internal server error", 
+            err_code: 500, 
+            balance: 0,
+            before_balance: 0,
+            transactionId: ""
+        });
     }
 });
