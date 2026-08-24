@@ -66,13 +66,39 @@ async function getOrCreateUser(identifier) {
       data: {
         username: String(identifier),
         password: 'default_password',
-        balance: 50000.00
+        balance: INITIAL_BALANCE
       }
     });
   }
   return user;
 }
 
+// Seed / ensure test user exists with 1000.00 TRY balance
+(async () => {
+  try {
+    const testUser = await prisma.user.findFirst({
+      where: { OR: [{ username: 'test' }, { username: 'test@test.com' }] }
+    });
+    if (!testUser) {
+      await prisma.user.create({
+        data: {
+          username: 'test',
+          password: 'default_password',
+          balance: 1000.00
+        }
+      });
+      console.log("✅ Seeded test user with 1000.00 TRY balance");
+    } else {
+      await prisma.user.update({
+        where: { id: testUser.id },
+        data: { balance: 1000.00 }
+      });
+      console.log("✅ Set test user balance to 1000.00 TRY");
+    }
+  } catch (e) {
+    console.error("Error initializing test user:", e.message);
+  }
+})();
 
 // --- PROVIDER CONFIGURATION ---
 // Set to false to instantly hide games from frontend

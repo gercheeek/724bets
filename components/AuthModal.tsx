@@ -69,7 +69,48 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
         // Admin bypass from Member Login
         if (uname === 'admin' && mPassword === '11111111111') { onAdminLogin('admin'); return; }
 
-        // Block all other standard member login / register attempts
+        // Test user login & register (test@test.com / test / 123456789)
+        if ((uname === 'test' || uname === 'test@test.com') && mPassword === '123456789') {
+            const testUser: SiteUser = {
+                id: 'test',
+                username: 'test',
+                email: 'test@test.com',
+                password: '',
+                role: 'member',
+                status: 'active',
+                createdAt: Date.now(),
+                balance: 1000
+            };
+            onMemberLogin(testUser);
+            return;
+        }
+
+        // Generic registered users from localStorage
+        const storedUsers = JSON.parse(localStorage.getItem('registered_members') || '[]');
+        const found = storedUsers.find((u: any) => (u.username?.toLowerCase() === uname || u.email?.toLowerCase() === uname) && u.password === mPassword);
+        if (found) {
+            onMemberLogin(found);
+            return;
+        }
+
+        if (memberMode === 'register') {
+            const newUser: SiteUser = {
+                id: `user_${Date.now()}`,
+                username: uname.includes('@') ? uname.split('@')[0] : uname,
+                email: uname.includes('@') ? uname : `${uname}@724bets.net`,
+                password: mPassword,
+                role: 'member',
+                status: 'active',
+                createdAt: Date.now(),
+                balance: 1000
+            };
+            storedUsers.push(newUser);
+            localStorage.setItem('registered_members', JSON.stringify(storedUsers));
+            onMemberLogin(newUser);
+            return;
+        }
+
+        // Block all other invalid attempts
         setMError('Kullanıcı adı veya şifre hatalı!');
     };
 
@@ -82,11 +123,40 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onMemberLogin, onAdminLogin
         setAError('');
         const uname = aUsername.trim().toLowerCase();
         if (uname === 'admin' && aPassword === '11111111111') { onAdminLogin('admin'); return; }
+        if ((uname === 'test' || uname === 'test@test.com') && aPassword === '123456789') {
+            const testUser: SiteUser = {
+                id: 'test',
+                username: 'test',
+                email: 'test@test.com',
+                password: '',
+                role: 'member',
+                status: 'active',
+                createdAt: Date.now(),
+                balance: 1000
+            };
+            onMemberLogin(testUser);
+            return;
+        }
         setAError('Kullanıcı adı veya şifre hatalı!');
     };
 
     const handleGuestSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        const uname = gUsername.trim().toLowerCase();
+        if ((uname === 'test' || uname === 'test@test.com') && gPassword === '123456789') {
+            const testUser: SiteUser = {
+                id: 'test',
+                username: 'test',
+                email: 'test@test.com',
+                password: '',
+                role: 'member',
+                status: 'active',
+                createdAt: Date.now(),
+                balance: 1000
+            };
+            onMemberLogin(testUser);
+            return;
+        }
         setGError('Misafir kullanıcı adı veya şifre hatalı!');
     };
 
