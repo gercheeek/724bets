@@ -403,9 +403,10 @@ export const GamePlayView: React.FC<GamePlayViewProps> = ({ game, demoUrl, onClo
                       <Wallet size={14} className={`transition-colors duration-300 ${status === 'win' ? 'text-white' : status === 'loss' ? 'text-red-400' : 'text-[#10b981]'}`} />
                     </div>
                     <div className="flex flex-col">
-                      <span className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider">Bakiye</span>
+                      <span className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider">Bakiye ({activeCurrency})</span>
                       <span className={`font-black text-sm tabular-nums transition-all ${status === 'win' ? 'flash-win' : status === 'loss' ? 'flash-loss' : 'text-[#10b981]'}`}>
-                        ₺{displayBalance.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                        {activeCurrency === 'USD' ? '$' : activeCurrency === 'EUR' ? '€' : activeCurrency === 'USDT' ? '₮' : activeCurrency === 'BTC' ? '₿' : '₺'}
+                        {(activeCurrency === 'TRY' ? displayBalance : (displayBalance / (activeCurrency === 'USD' || activeCurrency === 'USDT' ? 36.5 : activeCurrency === 'EUR' ? 39.5 : 1))).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                       </span>
                     </div>
                   </div>
