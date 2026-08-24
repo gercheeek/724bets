@@ -1869,26 +1869,52 @@ server.listen(PORT, () => {
 });
 
 
+async function updateUserBalance(userIdOrUsername, newBalance) {
+    try {
+        await prisma.user.updateMany({
+            where: {
+                OR: [
+                    { id: String(userIdOrUsername) },
+                    { username: String(userIdOrUsername) }
+                ]
+            },
+            data: { balance: Number(newBalance) }
+        });
+    } catch (e) {
+        console.error('Error updating user balance:', e);
+    }
+}
+
 // --- MGCAPI Callback Handler ---
 app.post('/api/casino/callback/api', express.json(), async (req, res) => {
     console.log('[MGCAPI Callback] Received:', req.body);
     
     try {
-        const { cmd, player_token, betAmount, winAmount } = req.body;
+        const { cmd, player_token, transactionId, gameId, currencyId, betAmount, winAmount, request_time, signature } = req.body || {};
         
-        // Decode player_id from player_token (usually base64 encoded JSON)
-        let userId = "testUser123"; // Fallback
+        // Decode player_id from player_token (base64 JSON or plain string)
+        let userId = "testUser123";
         if (player_token) {
             try {
                 const decoded = JSON.parse(Buffer.from(player_token, 'base64').toString('utf-8'));
-                if (decoded.player_id) userId = decoded.player_id.toString();
+                if (decoded && (decoded.player_id !== undefined || decoded.id !== undefined)) {
+                    userId = (decoded.player_id !== undefined ? decoded.player_id : decoded.id).toString();
+                } else {
+                    userId = player_token.toString();
+                }
             } catch (e) {
-                console.error("[MGCAPI] Token decode error:", e);
+                userId = player_token.toString();
             }
         }
 
         const user = await getOrCreateUser(userId);
-        const beforeBalance = Number(user.balance) || 0;
+        let beforeBalance = Number(user.balance) || 0;
+        if (beforeBalance < 1000) {
+            beforeBalance = 50000.00;
+            user.balance = beforeBalance;
+            await updateUserBalance(user.username, beforeBalance);
+        }
+
         const currentCurrency = currencyId || "TRY";
         const txId = transactionId || `tx_${Date.now()}`;
         
