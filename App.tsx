@@ -104,6 +104,7 @@ const PromoCodeView = React.lazy(() => import('./components/PromoCodeView'));
 const ReferralView = React.lazy(() => import('./components/ReferralView'));
 import Spor724View from './components/Spor724View';
 import PredictionsDashboard from './components/sports/PredictionsDashboard';
+import LeaderboardView from './components/LeaderboardView';
 const MarketDetailView = React.lazy(() => import('./components/sports/MarketDetailView'));
 const Sports1xBetView = React.lazy(() => import('./components/Sports1xBetView'));
 const AffiliateView = React.lazy(() => import('./components/AffiliateView'));
@@ -301,7 +302,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void, initia
   const [ipBlocked, setIpBlocked] = useState(false);
   const [fadeOutLoader, setFadeOutLoader] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
-  const [view, setView] = useState<'home' | 'social' | 'sports' | 'sports2' | 'sports3' | 'sports4' | 'sports5' | 'admin' | 'login' | 'brands' | 'analysis' | 'blackjack' | 'blackjack-pro' | 'casino2' | 'loyalty' | 'raffle' | 'cekilis' | 'pool' | 'wheel' | 'luckywheel' | 'giveaway' | 'coupons' | '724tv' | 'trusted-sites' | 'trusted-detail' | 'demo' | 'kral' | 'promo' | 'referral' | 'profile' | 'slotra' | 'slotra2' | 'mobile-bulletin' | 'spor724' | 'tahminler' | 'tahmin-detay' | 'plinko' | 'limbo' | 'chicken-run' | 'dice' | 'mines' | 'keno' | 'war' | 'hilo' | 'roulette' | 'crash-turbo' | 'turbo-mines' | 'hacksaw' | 'redtiger' | 'upcomingMatches' | 'rewards' | 'xslot' | 'xlot' | 'bulten'>(initialView);
+  const [view, setView] = useState<'home' | 'social' | 'sports' | 'sports2' | 'sports3' | 'sports4' | 'sports5' | 'admin' | 'login' | 'brands' | 'analysis' | 'blackjack' | 'blackjack-pro' | 'casino2' | 'loyalty' | 'raffle' | 'cekilis' | 'pool' | 'wheel' | 'luckywheel' | 'giveaway' | 'coupons' | '724tv' | 'trusted-sites' | 'trusted-detail' | 'demo' | 'kral' | 'promo' | 'referral' | 'profile' | 'slotra' | 'slotra2' | 'mobile-bulletin' | 'spor724' | 'tahminler' | 'tahmin-detay' | 'plinko' | 'limbo' | 'chicken-run' | 'dice' | 'mines' | 'keno' | 'war' | 'hilo' | 'roulette' | 'crash-turbo' | 'turbo-mines' | 'hacksaw' | 'redtiger' | 'upcomingMatches' | 'rewards' | 'xslot' | 'xlot' | 'bulten' | 'liderlik'>(initialView);
 
   const getThemeClass = (currentView: string) => {
     if (['spor724', 'sports', 'gercek', 'upcomingMatches', 'bulten'].includes(currentView)) return 'theme-sports';
@@ -1874,7 +1875,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void, initia
       navigate(newUrl);
     });
 
-      const sportsViews = ['gercek', 'sports', 'spor724', 'slotra', 'spor', 'tahminler'];
+      const sportsViews = ['gercek', 'sports', 'spor724', 'slotra', 'spor', 'tahminler', 'liderlik'];
       if (sportsViews.includes(v)) {
         setIsChatOpen(true);
       }
@@ -2275,7 +2276,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void, initia
                    onMemberLogout={handleGlobalLogout}
                    onSearchClick={() => setShowSearch(true)}
                    onSupportClick={() => {
-                     if (!isMobile && ['gercek', 'sports', 'spor724', 'slotra', 'spor', 'tahminler'].includes(view)) return;
+                     if (!isMobile && ['gercek', 'sports', 'spor724', 'slotra', 'spor', 'tahminler', 'liderlik'].includes(view)) return;
                      setIsChatOpen(prev => {
                        const next = !prev;
                        if (next && window.innerWidth < 1600) setIsSidebarOpen(false);
@@ -2291,10 +2292,10 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void, initia
                    }}
                    navVisibility={navVisibility}
                    marqueeConfig={marqueeConfig}
-                   isChatOpen={isChatOpen || (!isMobile && ['gercek', 'sports', 'spor724', 'slotra', 'spor', 'tahminler'].includes(view))}
-                   isSidebarOpen={isSidebarOpen || (!isMobile && ['gercek', 'sports', 'spor724', 'slotra', 'spor', 'tahminler'].includes(view))}
+                   isChatOpen={isChatOpen || (!isMobile && ['gercek', 'sports', 'spor724', 'slotra', 'spor', 'tahminler', 'liderlik'].includes(view))}
+                   isSidebarOpen={isSidebarOpen || (!isMobile && ['gercek', 'sports', 'spor724', 'slotra', 'spor', 'tahminler', 'liderlik'].includes(view))}
                    onToggleSidebar={() => {
-                     if (!isMobile && ['gercek', 'sports', 'spor724', 'slotra', 'spor', 'tahminler'].includes(view)) return;
+                     if (!isMobile && ['gercek', 'sports', 'spor724', 'slotra', 'spor', 'tahminler', 'liderlik'].includes(view)) return;
                      setIsSidebarOpen(prev => {
                        const next = !prev;
                        if (next && window.innerWidth < 1600) setIsChatOpen(false);
@@ -2449,7 +2450,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void, initia
         } as React.CSSProperties}
       >
 
-        <div className={`orchestrator-content flex-1 flex flex-col ${isContentReady ? 'content-ready' : ''} ${['bulten', 'spor724', 'tahminler', '724tv', 'slotra', 'slots', 'live-casino'].includes(view) ? 'w-full max-w-none' : 'max-w-[1200px] mx-auto w-full'}`} style={{ visibility: appStage === 'ready' ? 'visible' : 'hidden', height: appStage === 'ready' ? '100%' : '100dvh' }}>
+        <div className={`orchestrator-content flex-1 flex flex-col ${isContentReady ? 'content-ready' : ''} ${['bulten', 'spor724', 'tahminler', 'liderlik', '724tv', 'slotra', 'slots', 'live-casino'].includes(view) ? 'w-full max-w-none' : 'max-w-[1200px] mx-auto w-full'}`} style={{ visibility: appStage === 'ready' ? 'visible' : 'hidden', height: appStage === 'ready' ? '100%' : '100dvh' }}>
 
           {view === 'home' && (
           <div className="animate-fade-in w-full h-full min-h-screen">
@@ -2915,6 +2916,12 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void, initia
         {view === 'tahminler' && (
           <div className="w-full h-full animate-fade-in">
             <PredictionsDashboard />
+          </div>
+        )}
+
+        {view === 'liderlik' && (
+          <div className="w-full h-full animate-fade-in">
+            <LeaderboardView />
           </div>
         )}
 

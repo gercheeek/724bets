@@ -201,7 +201,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, activeView, onViewC
           <div className={`flex flex-col gap-2.5 px-3 mb-6 transition-all duration-400 ${isOpen ? 'opacity-100 block' : 'opacity-0 hidden'}`}>
              
              {/* Promo 1: Leaderboard */}
-             <div onClick={() => onViewChange('tahminler')} className="relative cursor-pointer h-[58px] w-full group hover:scale-[1.02] transition-all duration-300 z-10">
+             <div onClick={() => onViewChange('liderlik')} className="relative cursor-pointer h-[58px] w-full group hover:scale-[1.02] transition-all duration-300 z-10">
                 {/* Background & Overlays (Hidden Overflow) */}
                 <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#2c1e4a] via-[#52257d] to-[#7a2fb0] overflow-hidden border border-white/5 border-t-white/15 shadow-[0_4px_12px_rgba(0,0,0,0.4)] group-hover:brightness-110 transition-all">
                   <div className="absolute right-0 top-0 bottom-0 w-24 bg-[radial-gradient(ellipse_at_right,_var(--tw-gradient-stops))] from-white/30 to-transparent blur-md z-0" />
