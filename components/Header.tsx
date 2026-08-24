@@ -116,7 +116,16 @@ const Header: React.FC<HeaderProps> = ({
   onToggleChat,
 }) => {
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
-  const [selectedCurrency, setSelectedCurrency] = useState('TRY');
+  const [selectedCurrency, setSelectedCurrency] = useState(() => {
+    return localStorage.getItem('site_selected_currency') || 'TRY';
+  });
+
+  const handleCurrencySelect = (code: string) => {
+    setSelectedCurrency(code);
+    localStorage.setItem('site_selected_currency', code);
+    window.dispatchEvent(new CustomEvent('currency-changed', { detail: code }));
+    setWalletDropdownOpen(false);
+  };
   const [logoHovered, setLogoHovered] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -568,10 +577,7 @@ const Header: React.FC<HeaderProps> = ({
                             return (
                               <div 
                                 key={crypto.code} 
-                                onClick={() => {
-                                  setSelectedCurrency(crypto.code);
-                                  setWalletDropdownOpen(false);
-                                }}
+                                onClick={() => handleCurrencySelect(crypto.code)}
                                 className={`flex items-center justify-between px-4 py-3 hover:bg-white/10 cursor-pointer transition-colors group ${isSelected ? 'bg-white/10 border-l-2 border-[#00E5FF]' : ''}`}
                               >
                                 <div className="flex flex-col">
@@ -779,7 +785,7 @@ const Header: React.FC<HeaderProps> = ({
                 ].map((curr) => (
                   <button
                     key={curr.code}
-                    onClick={() => setSelectedCurrency(curr.code)}
+                    onClick={() => handleCurrencySelect(curr.code)}
                     className={`flex items-center gap-3 p-3 rounded-xl transition-all duration-300 border ${
                       selectedCurrency === curr.code 
                         ? 'border-[#00E5FF] bg-white/5 text-white' 

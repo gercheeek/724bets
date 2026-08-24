@@ -25,6 +25,18 @@ export const GamePlayView: React.FC<GamePlayViewProps> = ({ game, demoUrl, onClo
   const [realLaunchUrl, setRealLaunchUrl] = useState<string | null>(null);
   const [loadingRealGame, setLoadingRealGame] = useState<boolean>(false);
   const [realGameError, setRealGameError] = useState<string | null>(null);
+  const [activeCurrency, setActiveCurrency] = useState<string>(() => {
+    return localStorage.getItem('site_selected_currency') || 'TRY';
+  });
+
+  useEffect(() => {
+    const handleCurrencyChange = (e: any) => {
+      const newCurr = e.detail || localStorage.getItem('site_selected_currency') || 'TRY';
+      setActiveCurrency(newCurr);
+    };
+    window.addEventListener('currency-changed', handleCurrencyChange);
+    return () => window.removeEventListener('currency-changed', handleCurrencyChange);
+  }, []);
 
   // Fix for audio continuing after unmount in some browsers
   useEffect(() => {
@@ -81,7 +93,8 @@ export const GamePlayView: React.FC<GamePlayViewProps> = ({ game, demoUrl, onClo
               vendorCode: vendorCode,
               gameCode: gameCode,
               userCode: siteUser?.username || "testuser",
-              balance: siteUser?.balance || 0
+              balance: siteUser?.balance || 0,
+              currency: activeCurrency
             })
           });
           const data = await res.json();
@@ -90,11 +103,11 @@ export const GamePlayView: React.FC<GamePlayViewProps> = ({ game, demoUrl, onClo
             setRealLaunchUrl(data.launchUrl);
           } else {
             console.warn('[GamePlayView] launch failed, using dynamic demo URL');
-            setRealLaunchUrl(getGameLaunchUrl(game));
+            setRealLaunchUrl(getGameLaunchUrl(game, activeCurrency));
           }
         } catch (err) {
           console.error('Error fetching launch URL:', err);
-          setRealLaunchUrl(getGameLaunchUrl(game));
+          setRealLaunchUrl(getGameLaunchUrl(game, activeCurrency));
         } finally {
           setLoadingRealGame(false);
         }
@@ -102,7 +115,7 @@ export const GamePlayView: React.FC<GamePlayViewProps> = ({ game, demoUrl, onClo
     };
 
     fetchRealUrl();
-  }, [game]);
+  }, [game, activeCurrency]);
 
   const gameName = game.name || game.title || 'Slot Game';
   const provider = game.provider || 'Pragmatic Play';
@@ -286,10 +299,10 @@ export const GamePlayView: React.FC<GamePlayViewProps> = ({ game, demoUrl, onClo
             <iframe 
               id="game-play-iframe"
               ref={iframeRef}
-              key={(isRealMoney && realLaunchUrl) ? realLaunchUrl : (demoUrl || 'demo-key')}
+              key={`${(isRealMoney && realLaunchUrl) ? realLaunchUrl : (demoUrl || 'demo-key')}_${activeCurrency}`}
               src={(isRealMoney && realLaunchUrl) 
                 ? realLaunchUrl 
-                : (demoUrl || getGameLaunchUrl(game))} 
+                : (demoUrl || getGameLaunchUrl(game, activeCurrency))} 
               className="w-full h-full border-0"
               allow="autoplay; fullscreen; encrypted-media; screen-wake-lock; clipboard-write; microphone; camera; display-capture; payment; web-share"
               allowFullScreen

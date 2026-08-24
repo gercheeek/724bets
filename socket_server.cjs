@@ -241,13 +241,15 @@ app.get('/api/sports/my-bets', async (req, res) => {
 });
 
 app.post('/api/casino/launch', express.json(), async (req, res) => {
-    const { vendorCode, gameCode, userCode, balance } = req.body;
+    const { vendorCode, gameCode, userCode, balance, currency } = req.body;
     if (!vendorCode || !gameCode) {
         return res.status(400).json({ success: false, error: 'Missing vendorCode or gameCode' });
     }
 
     const code = userCode || 'testuser';
     const user = await getOrCreateUser(code);
+    const userCurrency = (currency || user.currency || 'TRY').toUpperCase();
+    user.currency = userCurrency;
     
     // Sync DB balance with frontend header balance if provided
     if (balance !== undefined && !isNaN(Number(balance))) {
@@ -260,12 +262,12 @@ app.post('/api/casino/launch', express.json(), async (req, res) => {
     try {
         let url = "";
         if (PROVIDERS.mgcapi) {
-            url = await mgcapi.getLaunchUrl(vendorCode, gameCode, code);
+            url = await mgcapi.getLaunchUrl(vendorCode, gameCode, code, userCurrency);
         } else if (PROVIDERS.oroplay) {
-            url = await oroplay.getLaunchUrl(vendorCode, gameCode, code);
+            url = await oroplay.getLaunchUrl(vendorCode, gameCode, code, userCurrency);
         }
-        logInfo(`[Casino Launch] Success for ${code}: vendor=${vendorCode}, game=${gameCode}, balance=${currentBalance}`);
-        res.json({ success: true, launchUrl: url });
+        logInfo(`[Casino Launch] Success for ${code}: vendor=${vendorCode}, game=${gameCode}, currency=${userCurrency}, balance=${currentBalance}`);
+        res.json({ success: true, launchUrl: url, currency: userCurrency });
     } catch (err) {
         logError(`[Casino Launch] Failed for vendor=${vendorCode}, game=${gameCode}`, err);
         res.status(500).json({ success: false, error: 'Bu oyun sağlayıcısı şu an kullanılamıyor.' });

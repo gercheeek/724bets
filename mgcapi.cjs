@@ -129,8 +129,9 @@ async function getAllGames() {
 /**
  * Launch a game for a specific user
  */
-async function getLaunchUrl(vendorCode, gameCode, userCode) {
-    console.log(`[MGCAPI] Generating launch URL for user ${userCode}, game ${gameCode}`);
+async function getLaunchUrl(vendorCode, gameCode, userCode, currency = 'TRY') {
+    const userCur = (currency || 'TRY').toUpperCase();
+    console.log(`[MGCAPI] Generating launch URL for user ${userCode}, game ${gameCode}, currency ${userCur}`);
     
     // Find numeric game_id from gamesCache if available
     let numericGameId = Number(gameCode);
@@ -151,7 +152,7 @@ async function getLaunchUrl(vendorCode, gameCode, userCode) {
         player_token: Buffer.from(JSON.stringify({ game_id: numericGameId || 117274, player_id: userCode || 'test', partner_id: '1' })).toString('base64'),
         app_id: APP_ID,
         language: 'tr',
-        currency: 'TRY',
+        currency: userCur,
         request_time: Date.now(),
         urls: {
             base_url: 'https://www.724bets.net',
@@ -189,7 +190,7 @@ async function getLaunchUrl(vendorCode, gameCode, userCode) {
 
     console.warn('[MGCAPI] playGame fallback to direct client for game:', gameCode);
     const matchedSymbol = resolveSymbol(gameCode, vendorCode);
-    return `https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=tr&cur=TRY&gameSymbol=${matchedSymbol}&lobbyUrl=https%3A%2F%2Fwww.724bets.net%2Fcasino`;
+    return `https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=tr&cur=${userCur}&gameSymbol=${matchedSymbol}&lobbyUrl=https%3A%2F%2Fwww.724bets.net%2Fcasino`;
 }
 
 /**

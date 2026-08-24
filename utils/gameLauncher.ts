@@ -349,8 +349,9 @@ export function getGameSymbol(game: any): string {
 /**
  * Builds the exact launch / demo URL for a game
  */
-export function getGameLaunchUrl(game: any): string {
+export function getGameLaunchUrl(game: any, currency = 'TRY'): string {
   if (!game) return '';
   const symbol = getGameSymbol(game);
-  return `https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=tr&cur=TRY&gameSymbol=${symbol}&lobbyUrl=https%3A%2F%2Fwww.724bets.net%2Fcasino`;
+  const cur = (currency || 'TRY').toUpperCase();
+  return `https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=tr&cur=${cur}&gameSymbol=${symbol}&lobbyUrl=https%3A%2F%2Fwww.724bets.net%2Fcasino`;
 }
