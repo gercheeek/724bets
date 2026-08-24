@@ -24,6 +24,7 @@ const crypto = require('crypto');
 
 // OroPlay Integration
 const oroplay = require('./oroplay.cjs');
+const mgcapi = require('./mgcapi.cjs');
 
 app.get('/', (req, res) => {
     res.send('<h1 style="font-family:sans-serif;color:#10B981;text-align:center;margin-top:20%;">🚀 724Bets Backend API Sunucusu Başarıyla Çalışıyor!</h1>');
@@ -72,12 +73,48 @@ async function getOrCreateUser(identifier) {
   return user;
 }
 
+
+// --- PROVIDER CONFIGURATION ---
+// Set to false to instantly hide games from frontend
+const PROVIDERS = {
+    oroplay: false,
+    mgcapi: true
+};
+// ------------------------------
+
 app.get('/api/casino/games', async (req, res) => {
     try {
-        const games = await oroplay.getAllGames();
-        res.json({ success: true, games: games || [] });
+        let allGames = [];
+        
+        // Sadece açık olan API'lerden oyunları çek
+        if (PROVIDERS.oroplay) {
+            const oroplayGames = await oroplay.getAllGames();
+            allGames = allGames.concat(oroplayGames || []);
+        }
+        if (PROVIDERS.mgcapi) {
+            const mgcGames = await mgcapi.getAllGames();
+            if (mgcGames && Array.isArray(mgcGames)) {
+                const mappedMgc = mgcGames.map(g => {
+                    const isLive = g.game_type === 2 || (g.provider_title && g.provider_title.toLowerCase().includes('live')); // Tahmini type belirleme
+                    return {
+                        id: `${g.provider_code}-${g.id}`,
+                        name: g.name,
+                        provider: g.provider_title || g.uniq_provider,
+                        type: isLive ? 'live' : 'slot',
+                        image: g.image || g.background || '',
+                        vendorCode: g.provider_code,
+                        gameCode: g.id.toString(), // game_id for playGame
+                        providerType: 'mgcapi'
+                    };
+                });
+                allGames = allGames.concat(mappedMgc);
+            }
+        }
+        
+        res.json({ success: true, games: allGames });
     } catch (err) {
-        logError('Error fetching casino games from OroPlay', err);
+        console.error('BINGO ERROR:', err);
+        logError('Error fetching casino games', err);
         res.json({ success: true, games: [] });
     }
 });
@@ -191,7 +228,12 @@ app.post('/api/casino/launch', express.json(), async (req, res) => {
         // Note: OroPlay account is in Seamless Wallet mode.
         // Balance is managed via /api/casino/callback/api/balance and /api/casino/callback/api/transaction callbacks.
         // No need to call createUser/depositUser (Transfer Wallet mode).
-        const url = await oroplay.getLaunchUrl(vendorCode, gameCode, code);
+        let url = "";
+        if (PROVIDERS.mgcapi) {
+            url = await mgcapi.getLaunchUrl(vendorCode, gameCode, code);
+        } else if (PROVIDERS.oroplay) {
+            url = await oroplay.getLaunchUrl(vendorCode, gameCode, code);
+        }
         logInfo(`[Casino Launch] Success for ${code}: vendor=${vendorCode}, game=${gameCode}`);
         res.json({ success: true, launchUrl: url });
     } catch (err) {
@@ -1824,4 +1866,69 @@ update1xBetFeed();
 const PORT = 3001;
 server.listen(PORT, () => {
     console.log(`🚀 Socket.io Server running on port ${PORT}`);
+});
+
+
+// --- MGCAPI Callback Handler ---
+app.post('/api/casino/callback/api', express.json(), async (req, res) => {
+    console.log('[MGCAPI Callback] Received:', req.body);
+    
+    try {
+        const { cmd, player_token, betAmount, winAmount } = req.body;
+        
+        // Decode player_id from player_token (usually base64 encoded JSON)
+        let userId = "testUser123"; // Fallback
+        if (player_token) {
+            try {
+                const decoded = JSON.parse(Buffer.from(player_token, 'base64').toString('utf-8'));
+                if (decoded.player_id) userId = decoded.player_id.toString();
+            } catch (e) {
+                console.error("[MGCAPI] Token decode error:", e);
+            }
+        }
+
+        const user = await getOrCreateUser(userId);
+        
+        // Handling commands based on MGCAPI documentation
+        if (cmd === 'getPlayerInfo') {
+            // Sadece bakiye sorgusu
+            return res.json({ 
+                result: true, 
+                err_desc: "OK", 
+                err_code: 0, 
+                balance: user.balance,
+                currency: "TRY",
+                display_name: userId,
+                gender: "male",
+                country: "TR",
+                player_id: userId
+            });
+        } 
+        else if (cmd === 'withdraw') {
+            // Bahis - Bakiyeden düş
+            const amount = parseFloat(betAmount || 0);
+            if (user.balance < amount) {
+                return res.json({ result: false, err_desc: "Insufficient balance", err_code: 1, balance: user.balance });
+            }
+            user.balance -= amount;
+            return res.json({ result: true, err_desc: "OK", err_code: 0, balance: user.balance });
+        } 
+        else if (cmd === 'deposit') {
+            // Kazanç - Bakiyeye ekle
+            const amount = parseFloat(winAmount || 0);
+            user.balance += amount;
+            return res.json({ result: true, err_desc: "OK", err_code: 0, balance: user.balance });
+        }
+        else if (cmd === 'rollback') {
+            // İptal (Bakiye değişikliği gerekirse işlem id'sine göre yapılır, şimdilik sadece OK dönüyoruz)
+            return res.json({ result: true, err_desc: "OK", err_code: 0, balance: user.balance });
+        }
+        
+        // Bilinmeyen komut
+        return res.json({ result: false, err_desc: "Unknown command", err_code: 99, balance: user.balance });
+        
+    } catch (err) {
+        console.error('[MGCAPI Callback Error]', err);
+        res.json({ result: false, err_desc: "Internal error", err_code: 500, balance: 0 });
+    }
 });

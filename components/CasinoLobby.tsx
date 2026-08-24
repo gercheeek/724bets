@@ -14,14 +14,18 @@ import LiveWinsMarquee from './LiveWinsMarquee';
 
 const TABS = [
   { id: 'all', label: 'Tümü', icon: <Grid2X2 size={16} /> },
+  { id: 'pragmatic', label: 'Pragmatic Play', icon: <Flame size={16} /> },
+  { id: 'blueprint', label: 'Blueprint', icon: <Crown size={16} /> },
+  { id: 'egt-digital', label: 'EGT Digital', icon: <Flame size={16} /> },
+  { id: 'egt-amusnet', label: 'EGT Amusnet', icon: <Flame size={16} /> },
+  { id: 'novomatic', label: 'Novomatic', icon: <Star size={16} /> },
+  { id: 'slots', label: 'Slotlar', icon: <Flame size={16} /> },
   { id: 'live', label: 'Canlı Casino', icon: <MonitorPlay size={16} /> },
   { id: 'popular', label: 'Popüler', icon: <Star size={16} /> },
-  { id: 'slots', label: 'Slotlar', icon: <Flame size={16} /> },
-  { id: 'egt', label: 'EGT', icon: <Flame size={16} /> },
   { id: 'new', label: 'Yeni Eklenenler', icon: <Sparkles size={16} /> },
-  { id: 'holdwin', label: 'Hold & Win', icon: <Crown size={16} /> },
   { id: 'megaways', label: 'Megaways', icon: <Flame size={16} /> },
   { id: 'bonusbuy', label: 'Bonus Satın Al', icon: <Star size={16} /> },
+  { id: 'holdwin', label: 'Hold & Win', icon: <Crown size={16} /> },
 ];
 
 const BANNERS = [
@@ -207,13 +211,14 @@ export default function CasinoLobby({
   };
   
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedProvider, setSelectedProvider] = useState<string>('all');
   
-  const [displayLimit, setDisplayLimit] = useState(100);
+  const [displayLimit, setDisplayLimit] = useState(120);
   const [sortOption, setSortOption] = useState('popular');
 
   useEffect(() => {
-    setDisplayLimit(100);
-  }, [activeTab, searchQuery]);
+    setDisplayLimit(120);
+  }, [activeTab, searchQuery, selectedProvider]);
 
   const [showProviders, setShowProviders] = useState(false);
   const [currentBanner, setCurrentBanner] = useState(0);
@@ -309,20 +314,32 @@ export default function CasinoLobby({
 
     if (isPlaceholder) return false;
     
+    const providerLower = (game.provider || '').toLowerCase();
+    
     if (activeTab === 'all') {
       matchesTab = true;
+    } else if (activeTab === 'pragmatic') {
+      matchesTab = providerLower.includes('pragmatic');
+    } else if (activeTab === 'blueprint') {
+      matchesTab = providerLower.includes('blueprint');
+    } else if (activeTab === 'egt-digital') {
+      matchesTab = providerLower.includes('egt digital');
+    } else if (activeTab === 'egt-amusnet') {
+      matchesTab = providerLower.includes('egt amusnet') || providerLower.includes('amusnet');
+    } else if (activeTab === 'novomatic') {
+      matchesTab = providerLower.includes('novomatic');
     } else if (activeTab === 'popular') {
       const popularKeywords = [
         'olympus', 'bonanza', 'sugar rush', 'starlight princess', 
         'bandit', 'bass splash', 'dog house', 'reactoonz', 'book of dead',
         'crazy time', 'lightning roulette', 'aviator', 'hades', 'zeus',
-        'fruit party', 'le santa', 'shining crown', 'hot extreme'
+        'fruit party', 'le santa', 'shining crown', 'hot extreme', 'bulky fruits'
       ];
       matchesTab = popularKeywords.some(keyword => gameName.includes(keyword)) && !gameName.includes('dice') && !gameName.includes('candyland');
     } else if (activeTab === 'slots') {
-      matchesTab = game.category === 'slots';
+      matchesTab = game.category === 'slots' || game.type !== 'live';
     } else if (activeTab === 'live') {
-      matchesTab = game.category === 'live';
+      matchesTab = game.category === 'live' || game.type === 'live';
     } else if (activeTab === 'new' || activeTab === 'yeni') {
       matchesTab = game.category === 'new' || game.isNew || gameName.includes('yeni') || gameName.includes('new');
     } else if (activeTab === 'megaways') {
@@ -330,7 +347,7 @@ export default function CasinoLobby({
     } else if (activeTab === 'bonusbuy' || activeTab === 'bonus') {
       matchesTab = gameName.includes('bonus') || gameName.includes('buy');
     } else if (activeTab === 'egt') {
-      matchesTab = (game.provider || '').toLowerCase().includes('egt') || (game.provider || '').toLowerCase().includes('amuso') || gameName.includes('hot');
+      matchesTab = providerLower.includes('egt') || providerLower.includes('amuso') || gameName.includes('hot');
     } else if (activeTab === 'holdwin') {
       matchesTab = gameName.includes('hold') || gameName.includes('win');
     } else if (activeTab === 'originals') {
@@ -338,10 +355,16 @@ export default function CasinoLobby({
     } else {
       matchesTab = true;
     }
+
+    let matchesProvider = true;
+    if (selectedProvider !== 'all') {
+      matchesProvider = providerLower === selectedProvider.toLowerCase();
+    }
+
     const matchesSearch = !searchQuery || 
       (game.name && game.name.toLowerCase().includes(searchQuery.toLowerCase())) ||
       (game.provider && game.provider.toLowerCase().includes(searchQuery.toLowerCase()));
-    return matchesTab && matchesSearch;
+    return matchesTab && matchesProvider && matchesSearch;
   }).sort((a, b) => {
     if (sortOption === 'az') return (a.name || '').localeCompare(b.name || '');
     if (sortOption === 'za') return (b.name || '').localeCompare(a.name || '');
@@ -463,7 +486,7 @@ export default function CasinoLobby({
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Oyun veya sağlayıcı ara..."
+              placeholder="Oyun veya sağlayıcı ara (1.274+ oyun)..."
               className="w-full bg-[#1A1F2D] text-white text-sm font-semibold pl-10 pr-4 py-2.5 rounded-lg border border-white/10 outline-none focus:border-[#00E5FF]/50 focus:ring-1 focus:ring-[#00E5FF]/50 transition-all placeholder-gray-500"
             />
             {searchQuery && (
@@ -476,35 +499,53 @@ export default function CasinoLobby({
             )}
           </div>
           
-          {/* SORTING */}
-          <div className="flex items-center gap-2">
-            <div className="flex items-center gap-2 text-gray-400 mr-2">
-              <Filter size={18} />
-              <span className="text-sm font-semibold hidden sm:inline">Sıralama:</span>
+          <div className="flex flex-wrap items-center gap-3">
+            {/* PROVIDER FILTER */}
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 text-gray-400 mr-1">
+                <Disc size={18} />
+                <span className="text-sm font-semibold hidden sm:inline">Sağlayıcı:</span>
+              </div>
+              <select 
+                value={selectedProvider}
+                onChange={(e) => setSelectedProvider(e.target.value)}
+                className="bg-[#1A1F2D] text-white text-sm font-semibold px-4 py-2.5 rounded-lg border border-white/10 outline-none hover:border-white/20 focus:border-[#00E5FF]/50 transition-all cursor-pointer min-w-[150px]"
+              >
+                <option value="all">Tüm Sağlayıcılar ({allGames.length})</option>
+                <option value="pragmatic play">Pragmatic Play ({allGames.filter(g => (g.provider||'').toLowerCase().includes('pragmatic')).length})</option>
+                <option value="blueprint">Blueprint ({allGames.filter(g => (g.provider||'').toLowerCase().includes('blueprint')).length})</option>
+                <option value="egt digital">EGT Digital ({allGames.filter(g => (g.provider||'').toLowerCase().includes('egt digital')).length})</option>
+                <option value="egt amusnet">EGT Amusnet ({allGames.filter(g => (g.provider||'').toLowerCase().includes('amusnet')).length})</option>
+                <option value="novomatic">Novomatic ({allGames.filter(g => (g.provider||'').toLowerCase().includes('novomatic')).length})</option>
+              </select>
             </div>
-            <select 
-              value={sortOption}
-              onChange={(e) => setSortOption(e.target.value)}
-              className="bg-[#1A1F2D] text-white text-sm font-semibold px-4 py-2.5 rounded-lg border border-white/10 outline-none hover:border-white/20 focus:border-[#00E5FF]/50 transition-all cursor-pointer min-w-[140px]"
-            >
-              <option value="popular">En Popülerler</option>
-              <option value="az">A'dan Z'ye</option>
-              <option value="za">Z'den A'ya</option>
-              <option value="rtp">En Yüksek RTP</option>
-              <option value="newest">En Yeniler</option>
-            </select>
+
+            {/* SORTING */}
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 text-gray-400 mr-1">
+                <Filter size={18} />
+                <span className="text-sm font-semibold hidden sm:inline">Sıralama:</span>
+              </div>
+              <select 
+                value={sortOption}
+                onChange={(e) => setSortOption(e.target.value)}
+                className="bg-[#1A1F2D] text-white text-sm font-semibold px-4 py-2.5 rounded-lg border border-white/10 outline-none hover:border-white/20 focus:border-[#00E5FF]/50 transition-all cursor-pointer min-w-[140px]"
+              >
+                <option value="popular">En Popülerler</option>
+                <option value="az">A'dan Z'ye</option>
+                <option value="za">Z'den A'ya</option>
+                <option value="rtp">En Yüksek RTP</option>
+                <option value="newest">En Yeniler</option>
+              </select>
+            </div>
           </div>
         </div>
       </div>
 
       <div className="w-full max-w-[1720px] mx-auto px-4 md:px-8 xl:px-12 pt-6 min-w-0">
-        {/* Slider removed as requested */}
-
-        {/* Filters and search removed as requested */}
-
         {/* 4. GAME GRIDS */}
         <div>
-          {activeTab === 'all' && !searchQuery && (
+          {activeTab === 'all' && selectedProvider === 'all' && !searchQuery && (
             <>
               <SliderSection 
                 title="Popüler Oyunlar" 
@@ -531,7 +572,13 @@ export default function CasinoLobby({
             </>
           )}
 
-          <SectionHeader title={searchQuery ? 'Arama Sonuçları' : (activeTab === 'all' ? 'Tüm Oyunlar' : (TABS.find(t => t.id === activeTab)?.label || 'Oyunlar'))} />
+          <SectionHeader 
+            title={
+              searchQuery 
+                ? `Arama Sonuçları (${filteredGames.length} Oyun)` 
+                : `${activeTab === 'all' ? (selectedProvider !== 'all' ? selectedProvider.toUpperCase() : 'Tüm Oyunlar') : (TABS.find(t => t.id === activeTab)?.label || 'Oyunlar')} (${filteredGames.length} Oyun)`
+            } 
+          />
           
           <div className="grid grid-cols-[repeat(auto-fill,minmax(120px,1fr))] md:grid-cols-[repeat(auto-fill,minmax(140px,1fr))] gap-2 md:gap-4 w-full px-1 md:px-0">
             {filteredGames.slice(0, displayLimit).map((game) => (
@@ -540,12 +587,18 @@ export default function CasinoLobby({
           </div>
           
           {filteredGames.length > displayLimit && (
-            <div className="flex justify-center mt-8 mb-12">
+            <div className="flex flex-wrap items-center justify-center gap-3 mt-8 mb-12">
               <button 
-                onClick={() => setDisplayLimit(prev => prev + 100)}
-                className="px-8 py-3 bg-[#1A1F2D] hover:bg-[#00E5FF]/20 text-[#00E5FF] font-black rounded-lg transition-all border border-[#00E5FF]/30 hover:shadow-[0_0_20px_rgba(0,229,255,0.3)]"
+                onClick={() => setDisplayLimit(prev => prev + 120)}
+                className="px-6 py-3 bg-[#1A1F2D] hover:bg-[#00E5FF]/20 text-[#00E5FF] font-black rounded-lg transition-all border border-[#00E5FF]/30 hover:shadow-[0_0_20px_rgba(0,229,255,0.3)] cursor-pointer text-sm"
               >
-                Daha Fazla Oyun Göster ({filteredGames.length - displayLimit})
+                Daha Fazla Göster (+120)
+              </button>
+              <button 
+                onClick={() => setDisplayLimit(filteredGames.length)}
+                className="px-6 py-3 bg-gradient-to-r from-[#00E5FF]/20 to-purple-500/20 hover:from-[#00E5FF]/30 hover:to-purple-500/30 text-white font-black rounded-lg transition-all border border-white/10 hover:border-[#00E5FF]/50 hover:shadow-[0_0_20px_rgba(0,229,255,0.3)] cursor-pointer text-sm"
+              >
+                Tümünü Göster ({filteredGames.length} Oyun)
               </button>
             </div>
           )}
