@@ -23,31 +23,6 @@ export const UserProvider: React.FC<{ children: ReactNode, siteUser: SiteUser | 
   const [isFunMode, setIsFunMode] = React.useState<boolean>(true); // Default to Eğlence Modu
   const [demoBalance, setDemoBalance] = React.useState<number>(10000); // 10,000 USD Demo Balance
 
-  React.useEffect(() => {
-    const syncBalance = async () => {
-      try {
-        const userCode = siteUser?.id || siteUser?.username || 'testuser';
-        const res = await fetch(`/api/casino/user-balance?userCode=${userCode}`);
-        const data = await res.json();
-        if (data.success && typeof data.balance === 'number') {
-          setSiteUser(prev => {
-            if (!prev) return prev;
-            if (prev.balance === data.balance) return prev;
-            const updated = { ...prev, balance: data.balance };
-            localStorage.setItem('site_current_member', JSON.stringify(updated));
-            return updated;
-          });
-        }
-      } catch (err) {
-        // silent sync error
-      }
-    };
-
-    syncBalance();
-    const interval = setInterval(syncBalance, 2000);
-    return () => clearInterval(interval);
-  }, [siteUser?.username]);
-
   
   const sendDiscordNotification = async (payload: any) => {
     try {

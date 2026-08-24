@@ -751,6 +751,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void, initia
 
   const lastBalanceRef = useRef(siteUser?.balance);
   const broadcastChannelRef = useRef<any>(null);
+  const myClientId = useRef(Math.random().toString(36).substring(2));
 
   // Global Local Storage Sync for siteUser (Ensures games using setSiteUser directly don't lose balance)
   useEffect(() => {
@@ -763,12 +764,12 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void, initia
       }
       
       // Broadcast if balance changed LOCALLY (prevent infinite loops)
-      if (lastBalanceRef.current !== undefined && lastBalanceRef.current !== siteUser.balance) {
+      if (lastBalanceRef.current !== undefined && Math.abs(Number(lastBalanceRef.current) - Number(siteUser.balance)) > 0.01) {
         if (broadcastChannelRef.current) {
           broadcastChannelRef.current.send({
             type: 'broadcast',
             event: 'balance_update',
-            payload: { balance: siteUser.balance }
+            payload: { balance: siteUser.balance, senderId: myClientId.current }
           }).catch(() => {});
         }
       }
@@ -783,9 +784,10 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void, initia
     // 1. Listen for DB changes (Real members)
     const dbChannel = supabase.channel(`public:members:id=eq.${siteUser.id}`)
       .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'members', filter: `id=eq.${siteUser.id}` }, (payload: any) => {
-        const newBalance = payload.new.balance;
+        const newBalance = Number(payload.new?.balance);
+        if (isNaN(newBalance)) return;
         setSiteUser(prev => {
-          if (prev && prev.balance !== newBalance) {
+          if (prev && Math.abs(Number(prev.balance) - newBalance) > 0.01) {
             lastBalanceRef.current = newBalance; // Prevent echo
             return { ...prev, balance: newBalance };
           }
@@ -797,9 +799,11 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void, initia
     // 2. Broadcast channel for Guest users & instant optimistic sync
     const broadcastChannel = supabase.channel(`user_sync_${siteUser.id}`)
       .on('broadcast', { event: 'balance_update' }, (payload: any) => {
-        const newBalance = payload.payload.balance;
+        if (payload?.payload?.senderId === myClientId.current) return; // Prevent echo loop!
+        const newBalance = Number(payload?.payload?.balance);
+        if (isNaN(newBalance)) return;
         setSiteUser(prev => {
-          if (prev && prev.balance !== newBalance) {
+          if (prev && Math.abs(Number(prev.balance) - newBalance) > 0.01) {
             lastBalanceRef.current = newBalance; // Prevent echo
             return { ...prev, balance: newBalance };
           }
@@ -817,10 +821,10 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void, initia
     };
   }, [siteUser?.id]);
 
-  // Instant Casino Live Balance Sync (Reflects slot spins/wins in header immediately)
+  // Instant Casino Live Balance Sync (Reflects slot spins/wins in header cleanly)
   useEffect(() => {
     if (!siteUser) return;
-    const userCode = siteUser.username || siteUser.id || 'testuser';
+    const userCode = siteUser.username || siteUser.email || siteUser.id || 'test';
     let isCancelled = false;
 
     const pollBalance = async () => {
@@ -832,20 +836,15 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void, initia
           const newBal = Number(data.balance);
           setSiteUser((prev: any) => {
             if (!prev) return prev;
-            if (Number(prev.balance) === newBal) return prev;
-            const updated = { ...prev, balance: newBal };
-            try {
-              localStorage.setItem('site_member', JSON.stringify(updated));
-              localStorage.setItem('site_current_member', JSON.stringify(updated));
-            } catch (e) {}
-            return updated;
+            if (Math.abs(Number(prev.balance) - newBal) < 0.01) return prev;
+            return { ...prev, balance: newBal };
           });
         }
       } catch (e) {}
     };
 
     pollBalance();
-    const interval = setInterval(pollBalance, 1000); // 1-second instant sync
+    const interval = setInterval(pollBalance, 1500);
     return () => {
       isCancelled = true;
       clearInterval(interval);
