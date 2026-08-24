@@ -44,7 +44,7 @@ export default function AdminDashboardTab() {
     useEffect(() => {
         const fetchStats = async () => {
             try {
-                const res = await fetch('/api/admin/dashboard-stats');
+                const res = await fetch('http://localhost:3001/api/admin/dashboard-stats');
                 const data = await res.json();
                 if (data.success) {
                     setStats(data.stats);
@@ -87,10 +87,10 @@ export default function AdminDashboardTab() {
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 pb-3 border-b border-white/5 gap-3">
                 <div>
                     <h2 className="text-lg font-bold text-white tracking-wide uppercase flex items-center gap-2">
-                        <Activity className="w-5 h-5 text-[#00ff88]" />
+                        <Activity className="w-5 h-5 text-[#10B981]" />
                         Komuta Merkezi
                     </h2>
-                    <p className="text-xs text-zinc-500 mt-0.5 font-mono">SİSTEM DURUMU: <span className="text-[#00ff88]">OPTİMAL (OTOMASYON AKTİF)</span></p>
+                    <p className="text-xs text-zinc-500 mt-0.5 font-mono">SİSTEM DURUMU: <span className="text-[#10B981]">OPTİMAL (OTOMASYON AKTİF)</span></p>
                 </div>
                 
                 {/* Panic Buttons (SUPER_ADMIN) */}
@@ -111,25 +111,25 @@ export default function AdminDashboardTab() {
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 mb-3">
                 <button 
                     onClick={() => setActiveMetric('pnl')}
-                    className={`text-left bg-[#0b0c10] border transition-all rounded p-2 shadow-sm relative overflow-hidden group ${activeMetric === 'pnl' ? 'border-[#00ff88]/50 shadow-[0_0_10px_rgba(0,255,136,0.1)] bg-[#00ff88]/5' : 'border-white/5 hover:border-[#00ff88]/30'}`}
+                    className={`text-left bg-[#1A2436]/40 backdrop-blur-md shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] border transition-all rounded p-2 shadow-sm relative overflow-hidden group ${activeMetric === 'pnl' ? 'border-[#10B981]/50 shadow-[0_0_10px_rgba(0,255,136,0.1)] bg-[#10B981]/5' : 'border-white/5 hover:border-[#10B981]/30'}`}
                 >
                     <svg className="absolute bottom-0 left-0 w-full h-1/2 opacity-20 group-hover:opacity-40 transition-opacity" viewBox="0 0 100 20" preserveAspectRatio="none">
                         <path d="M0,20 L10,15 L20,18 L30,12 L40,16 L50,8 L60,10 L70,5 L80,8 L90,2 L100,0 L100,20 Z" fill="url(#pnl-grad)" />
-                        <defs><linearGradient id="pnl-grad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#00ff88"/><stop offset="100%" stopColor="transparent"/></linearGradient></defs>
+                        <defs><linearGradient id="pnl-grad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#10B981"/><stop offset="100%" stopColor="transparent"/></linearGradient></defs>
                     </svg>
                     <div className="flex justify-between items-start mb-1.5 relative z-10">
                         <p className="text-zinc-500 text-[9px] font-black uppercase tracking-wider">Günlük Net PNL</p>
-                        <TrendingUp className={`w-3 h-3 ${activeMetric === 'pnl' ? 'text-[#00ff88] animate-pulse' : 'text-zinc-600'}`} />
+                        <TrendingUp className={`w-3 h-3 ${activeMetric === 'pnl' ? 'text-[#10B981] animate-pulse' : 'text-zinc-600'}`} />
                     </div>
                     <div className="flex items-end gap-1.5 relative z-10">
                         <h3 className="text-base font-black text-white font-mono">₺{stats ? (stats.totalDeposits - stats.totalWithdrawals).toLocaleString('tr-TR') : '...'}</h3>
-                        <span className="text-[#00ff88] text-[9px] font-bold flex items-center mb-0.5"><ArrowUpRight className="w-2 h-2" /> Canlı</span>
+                        <span className="text-[#10B981] text-[9px] font-bold flex items-center mb-0.5"><ArrowUpRight className="w-2 h-2" /> Canlı</span>
                     </div>
                 </button>
 
                 <button 
                     onClick={() => setActiveMetric('risk')}
-                    className={`text-left bg-[#0b0c10] border transition-all rounded p-2 shadow-sm relative overflow-hidden group ${activeMetric === 'risk' ? 'border-[#ef4444]/50 shadow-[0_0_10px_rgba(239,68,68,0.1)] bg-[#ef4444]/5' : 'border-white/5 hover:border-[#ef4444]/30'}`}
+                    className={`text-left bg-[#1A2436]/40 backdrop-blur-md shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] border transition-all rounded p-2 shadow-sm relative overflow-hidden group ${activeMetric === 'risk' ? 'border-[#ef4444]/50 shadow-[0_0_10px_rgba(239,68,68,0.1)] bg-[#ef4444]/5' : 'border-white/5 hover:border-[#ef4444]/30'}`}
                 >
                     <svg className="absolute bottom-0 left-0 w-full h-1/2 opacity-20 group-hover:opacity-40 transition-opacity" viewBox="0 0 100 20" preserveAspectRatio="none">
                         <path d="M0,20 L15,10 L30,15 L45,5 L60,12 L75,2 L90,8 L100,0 L100,20 Z" fill="url(#risk-grad)" />
@@ -147,7 +147,7 @@ export default function AdminDashboardTab() {
 
                 <button 
                     onClick={() => setActiveMetric('players')}
-                    className={`text-left bg-[#0b0c10] border transition-all rounded p-2 shadow-sm relative overflow-hidden group ${activeMetric === 'players' ? 'border-[#3b82f6]/50 shadow-[0_0_10px_rgba(59,130,246,0.1)] bg-[#3b82f6]/5' : 'border-white/5 hover:border-[#3b82f6]/30'}`}
+                    className={`text-left bg-[#1A2436]/40 backdrop-blur-md shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] border transition-all rounded p-2 shadow-sm relative overflow-hidden group ${activeMetric === 'players' ? 'border-[#3b82f6]/50 shadow-[0_0_10px_rgba(59,130,246,0.1)] bg-[#3b82f6]/5' : 'border-white/5 hover:border-[#3b82f6]/30'}`}
                 >
                     <svg className="absolute bottom-0 left-0 w-full h-1/2 opacity-20 group-hover:opacity-40 transition-opacity" viewBox="0 0 100 20" preserveAspectRatio="none">
                         <path d="M0,20 L20,18 L40,12 L60,15 L80,5 L100,2 L100,20 Z" fill="url(#players-grad)" />
@@ -163,7 +163,7 @@ export default function AdminDashboardTab() {
                     </div>
                 </button>
 
-                <div className="bg-[#0b0c10] border border-white/5 hover:border-[#eab308]/30 transition-colors rounded p-2 shadow-sm relative overflow-hidden group">
+                <div className="bg-[#1A2436]/40 backdrop-blur-md shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] border border-white/5 hover:border-[#eab308]/30 transition-colors rounded p-2 shadow-sm relative overflow-hidden group">
                     <svg className="absolute bottom-0 left-0 w-full h-1/2 opacity-20 group-hover:opacity-40 transition-opacity" viewBox="0 0 100 20" preserveAspectRatio="none">
                         <path d="M0,20 L15,18 L30,19 L45,15 L60,16 L75,12 L90,14 L100,10 L100,20 Z" fill="url(#pending-grad)" />
                         <defs><linearGradient id="pending-grad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#eab308"/><stop offset="100%" stopColor="transparent"/></linearGradient></defs>
@@ -178,7 +178,7 @@ export default function AdminDashboardTab() {
                     </div>
                 </div>
                 
-                <div className="bg-[#0b0c10] border border-white/5 hover:border-[#10b981]/30 transition-colors rounded p-2 shadow-sm relative overflow-hidden group">
+                <div className="bg-[#1A2436]/40 backdrop-blur-md shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] border border-white/5 hover:border-[#10b981]/30 transition-colors rounded p-2 shadow-sm relative overflow-hidden group">
                     <div className="flex justify-between items-start mb-1.5">
                         <p className="text-zinc-500 text-[9px] font-black uppercase tracking-wider">Ort. Çekim Onayı</p>
                         <TrendingUp className="w-3 h-3 text-[#10b981]" />
@@ -189,7 +189,7 @@ export default function AdminDashboardTab() {
                     </div>
                 </div>
 
-                <div className="bg-[#0b0c10] border border-white/5 hover:border-[#8b5cf6]/30 transition-colors rounded p-2 shadow-sm relative overflow-hidden group">
+                <div className="bg-[#1A2436]/40 backdrop-blur-md shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] border border-white/5 hover:border-[#8b5cf6]/30 transition-colors rounded p-2 shadow-sm relative overflow-hidden group">
                     <div className="flex justify-between items-start mb-1.5">
                         <p className="text-zinc-500 text-[9px] font-black uppercase tracking-wider">Destek Sırası</p>
                         <Users className="w-3 h-3 text-[#8b5cf6]" />
@@ -205,7 +205,7 @@ export default function AdminDashboardTab() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 flex-1 min-h-[220px]">
                 
                 {/* Dynamic Chart */}
-                <div className="lg:col-span-2 bg-[#0b0c10] border border-white/5 rounded p-3 shadow-sm flex flex-col relative">
+                <div className="lg:col-span-2 bg-[#1A2436]/40 backdrop-blur-md shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] border border-white/5 rounded p-3 shadow-sm flex flex-col relative">
                     
                     <div className="flex items-center justify-between mb-2">
                         <h3 className="text-zinc-400 text-[10px] font-black uppercase tracking-wider">
@@ -225,8 +225,8 @@ export default function AdminDashboardTab() {
                             <AreaChart data={activeMetric === 'pnl' ? pnlData : activeMetric === 'risk' ? riskData : playersData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                                 <defs>
                                     <linearGradient id="colorMetric" x1="0" y1="0" x2="0" y2="1">
-                                        <stop offset="5%" stopColor={activeMetric === 'pnl' ? '#00ff88' : activeMetric === 'risk' ? '#ef4444' : '#3b82f6'} stopOpacity={0.4}/>
-                                        <stop offset="95%" stopColor={activeMetric === 'pnl' ? '#00ff88' : activeMetric === 'risk' ? '#ef4444' : '#3b82f6'} stopOpacity={0}/>
+                                        <stop offset="5%" stopColor={activeMetric === 'pnl' ? '#10B981' : activeMetric === 'risk' ? '#ef4444' : '#3b82f6'} stopOpacity={0.4}/>
+                                        <stop offset="95%" stopColor={activeMetric === 'pnl' ? '#10B981' : activeMetric === 'risk' ? '#ef4444' : '#3b82f6'} stopOpacity={0}/>
                                     </linearGradient>
                                 </defs>
                                 <CartesianGrid strokeDasharray="3 3" stroke="#ffffff0a" vertical={false} />
@@ -234,17 +234,17 @@ export default function AdminDashboardTab() {
                                 <YAxis stroke="#ffffff30" fontSize={10} tickLine={false} axisLine={false} tickFormatter={(value) => activeMetric === 'players' ? value : `₺${value/1000}k`} />
                                 <RechartsTooltip 
                                     contentStyle={{ backgroundColor: '#111318', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '6px', fontSize: '11px', boxShadow: '0 4px 20px rgba(0,0,0,0.5)' }}
-                                    itemStyle={{ color: activeMetric === 'pnl' ? '#00ff88' : activeMetric === 'risk' ? '#ef4444' : '#3b82f6', fontWeight: 'bold' }}
+                                    itemStyle={{ color: activeMetric === 'pnl' ? '#10B981' : activeMetric === 'risk' ? '#ef4444' : '#3b82f6', fontWeight: 'bold' }}
                                     formatter={(value: number) => [activeMetric === 'players' ? value : `₺${value.toLocaleString()}`, activeMetric.toUpperCase()]}
                                 />
                                 <Area 
                                     type="monotone" 
                                     dataKey="amount" 
-                                    stroke={activeMetric === 'pnl' ? '#00ff88' : activeMetric === 'risk' ? '#ef4444' : '#3b82f6'} 
+                                    stroke={activeMetric === 'pnl' ? '#10B981' : activeMetric === 'risk' ? '#ef4444' : '#3b82f6'} 
                                     strokeWidth={3} 
                                     fillOpacity={1} 
                                     fill="url(#colorMetric)" 
-                                    style={{ filter: `drop-shadow(0 0 8px ${activeMetric === 'pnl' ? 'rgba(0,255,136,0.3)' : activeMetric === 'risk' ? 'rgba(239,68,68,0.3)' : 'rgba(59,130,246,0.3)'})` }}
+                                    style={{ filter: `drop-shadow(0 0 8px ${activeMetric === 'pnl' ? 'rgba(16,185,129,0.3)' : activeMetric === 'risk' ? 'rgba(239,68,68,0.3)' : 'rgba(59,130,246,0.3)'})` }}
                                 />
                             </AreaChart>
                         </ResponsiveContainer>
@@ -252,10 +252,10 @@ export default function AdminDashboardTab() {
                 </div>
 
                 {/* Live Activity Feed */}
-                <div className="bg-[#0b0c10] border border-white/5 rounded p-3 shadow-sm flex flex-col overflow-hidden">
+                <div className="bg-[#1A2436]/40 backdrop-blur-md shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] border border-white/5 rounded p-3 shadow-sm flex flex-col overflow-hidden">
                     <div className="flex items-center justify-between mb-2">
                         <h3 className="text-zinc-400 text-[9px] font-black uppercase tracking-wider flex items-center gap-1.5">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#00ff88] animate-pulse shadow-[0_0_5px_rgba(0,255,136,0.6)]"></span>
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse shadow-[0_0_5px_rgba(16,185,129,0.6)]"></span>
                             Canlı İşlem Akışı
                         </h3>
                         <div className="flex gap-1">
@@ -265,12 +265,12 @@ export default function AdminDashboardTab() {
                     </div>
                     <div className="flex-1 overflow-y-auto custom-scrollbar pr-1.5 space-y-1">
                         {liveLogs.map((log) => (
-                            <div key={log.id} className="text-[10px] font-mono p-2 rounded border border-white/5 bg-[#111216] animate-in fade-in slide-in-from-top-2 duration-300 hover:border-white/10 cursor-pointer flex items-start gap-2">
+                            <div key={log.id} className="text-[10px] font-mono p-2 rounded border border-white/5 bg-[#131b2b]/60 animate-in fade-in slide-in-from-top-2 duration-300 hover:border-white/10 cursor-pointer flex items-start gap-2">
                                 <div className="mt-0.5 text-xs">{log.icon || '🔹'}</div>
                                 <div className="flex-1">
                                     <div className="flex items-center gap-1.5 mb-1">
                                         <span className={`px-1.5 py-0.5 rounded text-[8px] font-black tracking-wider ${
-                                            log.type === 'success' ? 'bg-[#00ff88]/10 text-[#00ff88] border border-[#00ff88]/20' : 
+                                            log.type === 'success' ? 'bg-[#10B981]/10 text-[#10B981] border border-[#10B981]/20' : 
                                             log.type === 'warning' ? 'bg-[#ef4444]/10 text-[#ef4444] border border-[#ef4444]/20' : 
                                             'bg-[#3b82f6]/10 text-[#3b82f6] border border-[#3b82f6]/20'
                                         }`}>
@@ -288,17 +288,17 @@ export default function AdminDashboardTab() {
             </div>
 
             {/* Bottom Area: API Health */}
-            <div className="mt-4 bg-[#0b0c10] border border-white/5 rounded-lg p-4 shadow-lg mb-4">
+            <div className="mt-4 bg-[#1A2436]/40 backdrop-blur-md shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] border border-white/5 rounded-lg p-4 shadow-lg mb-4">
                 <h3 className="text-zinc-400 text-[10px] font-black uppercase tracking-wider mb-3">Sağlayıcı (API) Sağlık Durumu</h3>
                 <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
                     {[
-                        { name: 'Evolution', ping: '12ms', status: 'optimal', color: '#00ff88' },
-                        { name: 'Pragmatic Play', ping: '45ms', status: 'optimal', color: '#00ff88' },
+                        { name: 'Evolution', ping: '12ms', status: 'optimal', color: '#10B981' },
+                        { name: 'Pragmatic Play', ping: '45ms', status: 'optimal', color: '#10B981' },
                         { name: 'EGT', ping: '120ms', status: 'warning', color: '#eab308' },
-                        { name: 'Sportsradar', ping: '18ms', status: 'optimal', color: '#00ff88' },
+                        { name: 'Sportsradar', ping: '18ms', status: 'optimal', color: '#10B981' },
                         { name: 'NetEnt', ping: 'ERR', status: 'error', color: '#ef4444' }
                     ].map((api, i) => (
-                        <div key={i} className="flex flex-col p-2 bg-[#111216] border border-white/5 rounded-lg hover:border-white/10 transition-colors">
+                        <div key={i} className="flex flex-col p-2 bg-[#131b2b]/60 border border-white/5 rounded-lg hover:border-white/10 transition-colors">
                             <div className="flex items-center justify-between mb-1">
                                 <span className="font-bold text-white text-[11px]">{api.name}</span>
                                 <div className={`w-2 h-2 rounded-full`} style={{ backgroundColor: api.color, boxShadow: `0 0 8px ${api.color}80` }}></div>

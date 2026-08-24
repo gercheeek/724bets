@@ -8,7 +8,7 @@ import {
 } from 'recharts';
 import { io } from 'socket.io-client';
 
-const socket = io('', { transports: ['websocket'] });
+const socket = io('http://localhost:3001', { transports: ['websocket'] });
 
 interface ApiMatch {
     id: string;
@@ -51,7 +51,7 @@ export default function AdminSportsTab() {
 
     useEffect(() => {
         // Fetch initial list
-        fetch('/api/sports/matches')
+        fetch('http://localhost:3001/api/sports/matches')
             .then(res => res.json())
             .then(data => {
                 if (data.success) {
@@ -149,7 +149,7 @@ export default function AdminSportsTab() {
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 pb-4 border-b border-zinc-800 gap-4">
                 <div>
                     <h2 className="text-xl font-bold text-white tracking-wide uppercase flex items-center gap-2">
-                        <Activity className="w-6 h-6 text-[#00E5FF]" />
+                        <Activity className="w-6 h-6 text-[#10B981]" />
                         Spor Yönetimi
                     </h2>
                     <p className="text-sm text-zinc-400 mt-1">Maç sağlayıcı entegrasyonu ve aktif maç yönetimi</p>
@@ -231,7 +231,7 @@ export default function AdminSportsTab() {
                                 <h3 className="text-base font-bold text-white tracking-wide uppercase flex items-center gap-2">
                                     Canlı Maçlar (Havuz)
                                 </h3>
-                                <span className="ml-2 bg-[#00E5FF]/20 text-[#00E5FF] text-xs font-bold px-2.5 py-0.5 rounded-full border border-emerald-500/30">
+                                <span className="ml-2 bg-[#00E5FF]/20 text-[#10B981] text-xs font-bold px-2.5 py-0.5 rounded-full border border-emerald-500/30">
                                     {filteredLive.length} Maç
                                 </span>
                             </div>
@@ -241,12 +241,12 @@ export default function AdminSportsTab() {
                             >
                                 {isLiveWindowOpen ? (
                                     <>
-                                        <ChevronUp className="w-4 h-4 text-[#00E5FF]" />
+                                        <ChevronUp className="w-4 h-4 text-[#10B981]" />
                                         <span>Pencereyi Kapat</span>
                                     </>
                                 ) : (
                                     <>
-                                        <ChevronDown className="w-4 h-4 text-[#00E5FF]" />
+                                        <ChevronDown className="w-4 h-4 text-[#10B981]" />
                                         <span>Pencereyi Aç</span>
                                     </>
                                 )}
@@ -354,7 +354,7 @@ export default function AdminSportsTab() {
                             <label 
                                 className={`flex items-center p-4 rounded-xl border cursor-pointer transition-all ${
                                     apiProvider === 'atekbet' 
-                                    ? 'bg-[#00E5FF]/10 border-emerald-500/50 shadow-[0_0_15px_rgba(16,185,129,0.15)]' 
+                                    ? 'bg-[#10B981]/10 border-emerald-500/50 shadow-[0_0_15px_rgba(16,185,129,0.15)]' 
                                     : 'bg-[#1a1d24] border-zinc-800 hover:border-zinc-700'
                                 }`}
                             >
@@ -370,12 +370,12 @@ export default function AdminSportsTab() {
                                     <div className="flex items-center justify-between mb-1">
                                         <div className="flex items-center gap-2">
                                             <h4 className="font-bold text-white text-lg">Atekbet Swarm (Birincil Sunucu)</h4>
-                                            {apiProvider === 'atekbet' && <span className="bg-[#00E5FF]/20 text-[#00E5FF] text-[10px] px-2 py-0.5 rounded uppercase tracking-wider font-bold">Aktif</span>}
+                                            {apiProvider === 'atekbet' && <span className="bg-[#00E5FF]/20 text-[#10B981] text-[10px] px-2 py-0.5 rounded uppercase tracking-wider font-bold">Aktif</span>}
                                         </div>
-                                        {apiProvider === 'atekbet' && <CheckCircle2 className="w-5 h-5 text-[#00E5FF]" />}
+                                        {apiProvider === 'atekbet' && <CheckCircle2 className="w-5 h-5 text-[#10B981]" />}
                                     </div>
                                     <p className="text-sm text-zinc-400">Ana BetConstruct WSS beslemesi. Standart trafiği karşılar.</p>
-                                    <div className="mt-2 text-xs font-mono text-emerald-300/70 bg-[#00E5FF]/10 inline-block px-2 py-1 rounded">wss://swarm.atekbet.com/</div>
+                                    <div className="mt-2 text-xs font-mono text-emerald-300/70 bg-[#10B981]/10 inline-block px-2 py-1 rounded">wss://swarm.atekbet.com/</div>
                                 </div>
                             </label>
 
@@ -434,9 +434,9 @@ export default function AdminSportsTab() {
                             ) : pushMessage ? (
                                 <div className="flex flex-col items-center gap-3 animate-in fade-in">
                                     <div className="w-12 h-12 bg-[#00E5FF]/20 rounded-full flex items-center justify-center">
-                                        <CheckCircle2 className="w-6 h-6 text-[#00E5FF]" />
+                                        <CheckCircle2 className="w-6 h-6 text-[#10B981]" />
                                     </div>
-                                    <p className="text-sm font-bold text-[#00E5FF]">{pushMessage}</p>
+                                    <p className="text-sm font-bold text-[#10B981]">{pushMessage}</p>
                                 </div>
                             ) : (
                                 <>
@@ -474,7 +474,7 @@ export default function AdminSportsTab() {
                                 <div className="flex items-end justify-between mb-1">
                                     <span className="text-xs text-zinc-500 uppercase">Risk Merkezi</span>
                                     {data.risk === 'DENGELİ' 
-                                        ? <span className="text-xs font-black text-[#00E5FF] bg-[#00E5FF]/10 px-2 py-0.5 rounded">DENGELİ</span>
+                                        ? <span className="text-xs font-black text-[#10B981] bg-[#10B981]/10 px-2 py-0.5 rounded">DENGELİ</span>
                                         : <span className="text-xs font-black text-rose-400 bg-rose-500/10 px-2 py-0.5 rounded flex items-center gap-1"><ShieldAlert className="w-3 h-3"/> {data.risk} YÜKSEK</span>
                                     }
                                 </div>
@@ -580,7 +580,7 @@ export default function AdminSportsTab() {
                                 <Activity className="w-6 h-6 text-cyan-500 animate-pulse" />
                                 WebSocket Canlı Hız Testi (Ping)
                             </h3>
-                            <div className="flex items-center gap-2 bg-[#00E5FF]/10 text-[#00E5FF] px-4 py-2 rounded-lg border border-emerald-500/30 font-bold">
+                            <div className="flex items-center gap-2 bg-[#10B981]/10 text-[#10B981] px-4 py-2 rounded-lg border border-emerald-500/30 font-bold">
                                 <span className="w-2.5 h-2.5 bg-[#00E5FF] rounded-full animate-pulse"></span>
                                 Proxy Bağlantısı Aktif
                             </div>

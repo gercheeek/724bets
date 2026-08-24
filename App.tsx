@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, startTransition } from 'react';
 import { createPortal } from 'react-dom';
 import { useLocation, useNavigate, Routes, Route, Navigate } from 'react-router-dom';
-import { viewToPath, pathToView } from './utils/routes';
+import { viewToPath, pathToView, getDerivedView } from './utils/routes';
 
 import { ThemeProvider } from './ThemeContext';
 import { LanguageProvider } from './contexts/LanguageContext';
@@ -221,36 +221,6 @@ export default function App() {
   const location = useLocation();
   const navigate = useNavigate();
   const [isBypassed, setIsBypassed] = useState(true);
-
-  const getDerivedView = (path: string) => {
-    const parts = path.split('/').filter(Boolean);
-    const validLangs = ['tr', 'en', 'pt', 'es'];
-    const hasLang = parts[0] && validLangs.includes(parts[0]);
-    const cleanParts = hasLang ? parts.slice(1) : parts;
-    const cleanPath = '/' + cleanParts.join('/');
-    
-    if (cleanPath === '/' || cleanPath === '/anasayfa') return 'home';
-    if (cleanPath.startsWith('/spor')) return 'spor724';
-    if (cleanPath.startsWith('/casino') && !cleanPath.includes('demo')) return 'casino';
-    if (cleanPath.startsWith('/canli-casino')) return 'live-casino';
-    if (cleanPath === '/demo-oyunlar' || cleanPath === '/casino/demo' || cleanPath === '/demo') return 'demo';
-    if (cleanPath === '/raffles') return 'cekilis';
-    if (cleanPath === '/bilet') return 'raffle';
-    if (cleanPath === '/canli') return 'sports';
-    if (cleanPath === '/lucky-wheel' || cleanPath === '/luckywheel' || cleanPath === '/cark') return 'luckywheel';
-    if (cleanPath === '/brands' || cleanPath === '/trusted-sites') return 'trusted-sites';
-    if (cleanPath === '/admin') return 'admin';
-    if (cleanPath === '/analysis') return 'analysis';
-    if (cleanPath === '/coupons') return 'coupons';
-    if (cleanPath === '/724tv') return '724tv';
-    if (cleanPath === '/trusted-detail') return 'trusted-detail';
-    if (cleanPath === '/bulten') return 'bulten';
-    if (cleanPath.startsWith('/tahmin/')) return 'tahmin-detay';
-    
-    const rawView = cleanParts[0] || '';
-    return pathToView[rawView] || rawView || 'home';
-  };
-
   const view = getDerivedView(location.pathname);
 
   // Set data-section for Modular Theming
@@ -306,7 +276,7 @@ export default function App() {
         <BettingProvider>
           {/* SecretCurtain removed */}
           <div className="min-h-screen bg-theme-main text-theme-primary flex flex-col font-sans">
-            <AppContent setIsAdminPanelOpen={setIsAdminPanelOpen} />
+            <AppContent setIsAdminPanelOpen={setIsAdminPanelOpen} initialView={view as any} />
           </div>
 
           {isFinancePanelOpen && (
@@ -318,7 +288,7 @@ export default function App() {
   );
 }
 
-const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({ setIsAdminPanelOpen }) => {
+const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void, initialView: any }> = ({ setIsAdminPanelOpen, initialView }) => {
   const { t, i18n } = useTranslation();
   const sports2ContainerRef = useRef<HTMLDivElement>(null);
   const sportsContainerRef = useRef<HTMLDivElement>(null);
@@ -331,7 +301,14 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
   const [ipBlocked, setIpBlocked] = useState(false);
   const [fadeOutLoader, setFadeOutLoader] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
-  const [view, setView] = useState<'home' | 'social' | 'sports' | 'sports2' | 'sports3' | 'sports4' | 'sports5' | 'admin' | 'login' | 'brands' | 'analysis' | 'blackjack' | 'blackjack-pro' | 'casino2' | 'loyalty' | 'raffle' | 'cekilis' | 'pool' | 'wheel' | 'luckywheel' | 'giveaway' | 'coupons' | '724tv' | 'trusted-sites' | 'trusted-detail' | 'demo' | 'kral' | 'promo' | 'referral' | 'profile' | 'slotra' | 'slotra2' | 'mobile-bulletin' | 'spor724' | 'tahminler' | 'tahmin-detay' | 'plinko' | 'limbo' | 'chicken-run' | 'dice' | 'mines' | 'keno' | 'war' | 'hilo' | 'roulette' | 'crash-turbo' | 'turbo-mines' | 'hacksaw' | 'redtiger' | 'upcomingMatches' | 'rewards' | 'xslot' | 'xlot' | 'bulten'>(window.location.pathname.startsWith('/spor') ? 'spor724' : window.location.pathname.includes('lucky') ? 'luckywheel' : (window.location.pathname.includes('xslot') || window.location.pathname.includes('xlot')) ? 'xslot' : 'home');
+  const [view, setView] = useState<'home' | 'social' | 'sports' | 'sports2' | 'sports3' | 'sports4' | 'sports5' | 'admin' | 'login' | 'brands' | 'analysis' | 'blackjack' | 'blackjack-pro' | 'casino2' | 'loyalty' | 'raffle' | 'cekilis' | 'pool' | 'wheel' | 'luckywheel' | 'giveaway' | 'coupons' | '724tv' | 'trusted-sites' | 'trusted-detail' | 'demo' | 'kral' | 'promo' | 'referral' | 'profile' | 'slotra' | 'slotra2' | 'mobile-bulletin' | 'spor724' | 'tahminler' | 'tahmin-detay' | 'plinko' | 'limbo' | 'chicken-run' | 'dice' | 'mines' | 'keno' | 'war' | 'hilo' | 'roulette' | 'crash-turbo' | 'turbo-mines' | 'hacksaw' | 'redtiger' | 'upcomingMatches' | 'rewards' | 'xslot' | 'xlot' | 'bulten'>(initialView);
+
+  const getThemeClass = (currentView: string) => {
+    if (['spor724', 'sports', 'gercek', 'upcomingMatches', 'bulten'].includes(currentView)) return 'theme-sports';
+    if (['tahminler', 'tahmin-detay'].includes(currentView)) return 'theme-predictions';
+    return 'theme-casino';
+  };
+  const activeTheme = getThemeClass(view);
   const [bultenLoading, setBultenLoading] = useState(true);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [iframeLoading, setIframeLoading] = useState(true);
@@ -1564,7 +1541,12 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void }> = ({
       if (cleanPath === '/deposit' || cleanPath === '/withdraw') {
         window.dispatchEvent(new CustomEvent('openDepositModal', { detail: { tab: cleanPath.substring(1) } }));
         navigate(`/${actualUrlLang || 'tr'}`, { replace: true });
+        return;
       }
+
+      // Update the view state based on the current URL
+      const newView = getDerivedView(window.location.pathname);
+      setView(newView as any);
     };
 
     window.addEventListener('popstate', syncViewWithUrl);

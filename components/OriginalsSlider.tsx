@@ -5,14 +5,14 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { BaseGameCard } from './GameCards';
 
 export const getOriginalsData = (t?: (key: string) => string): any[] => [
-  { id: 'plinko', name: 'Plinko 724', category: 'Originals', provider: '724bets', img: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=400&auto=format&fit=crop', path: 'pool' },
-  { id: 'mines', name: 'Mines 724', category: 'Originals', provider: '724bets', img: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?q=80&w=400&auto=format&fit=crop', path: 'pool' },
-  { id: 'crash', name: 'Crash Aviator', category: 'Originals', provider: '724bets', img: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=400&auto=format&fit=crop', path: 'pool' },
-  { id: 'dice', name: 'Dice Master', category: 'Originals', provider: '724bets', img: 'https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?q=80&w=400&auto=format&fit=crop', path: 'pool' },
-  { id: 'wheel', name: 'Fortune Wheel', category: 'Originals', provider: '724bets', img: 'https://images.unsplash.com/photo-1518609878373-06d740f60d8b?q=80&w=400&auto=format&fit=crop', path: 'wheel' },
-  { id: 'limbo', name: 'Limbo Rocket', category: 'Originals', provider: '724bets', img: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=400&auto=format&fit=crop', path: 'pool' },
-  { id: 'blackjack', name: 'Blackjack 21', category: 'Originals', provider: '724bets', img: 'https://images.unsplash.com/photo-1511193311914-0346f16efe90?q=80&w=400&auto=format&fit=crop', path: 'blackjack' },
-  { id: 'raffle', name: 'Çekiliş Parkı', category: 'Originals', provider: '724bets', img: 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?q=80&w=400&auto=format&fit=crop', path: 'raffle' },
+  { id: 'plinko', name: 'Plinko', category: 'Originals', provider: '724games', img: '/images/plinko_premium.jpg', path: 'plinko' },
+  { id: 'mines', name: 'Mines', category: 'Originals', provider: '724games', img: '/images/mines_premium.jpg', path: 'mines' },
+  { id: 'crash', name: 'Crash', category: 'Originals', provider: '724games', img: '/images/crash_premium.jpg', path: 'crash' },
+  { id: 'dice', name: 'Dice', category: 'Originals', provider: '724games', img: '/images/dice_premium.jpg', path: 'dice' },
+  { id: 'wheel', name: 'Roulette', category: 'Originals', provider: '724games', img: '/images/roulette_premium.jpg', path: 'wheel' },
+  { id: 'limbo', name: 'Limbo', category: 'Originals', provider: '724games', img: '/images/limbo_premium.jpg', path: 'limbo' },
+  { id: 'blackjack', name: 'Blackjack', category: 'Originals', provider: '724games', img: '/images/blackjack_premium.jpg', path: 'blackjack' },
+  { id: 'keno', name: 'Keno', category: 'Originals', provider: '724games', img: '/images/keno_premium.jpg', path: 'keno' },
 ];
 
 const OriginalGameCard: React.FC<{ game: any, onClick: () => void }> = ({ game, onClick }) => {

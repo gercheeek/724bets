@@ -488,10 +488,10 @@ app.post('/api/payments/neopays/initiate', express.json(), async (req, res) => {
 // Callback Handler for NeoPays Deposit & Withdrawal
 const handleNeopaysCallback = async (req, res) => {
     try {
-        const body = req.body || {};
+        const body = { ...(req.query || {}), ...(req.body || {}) };
         const { sid, key, service, method, user_id, username, amount, currency, transaction_id, status, trx, hash } = body;
 
-        logInfo('Received NeoPays Callback:', body);
+        logInfo('Received NeoPays Callback:', JSON.stringify(body));
 
         const expectedSid = neopaysConfig.sid;
         const secretKey = neopaysConfig.secretKey;
@@ -547,6 +547,52 @@ const handleNeopaysCallback = async (req, res) => {
             }
 
             return res.json({ code: 200, message: 'Müşteri hesabına bakiye eklendi!' });
+        } else if (service === 'withdrawal') {
+            const withdrawUser = await prisma.user.findFirst({
+                where: {
+                    OR: [
+                        { id: user_id || '' },
+                        { username: username || '' }
+                    ]
+                }
+            });
+
+            if (!withdrawUser) {
+                return res.json({ code: 999, message: 'Kullanıcı bulunamadı' });
+            }
+
+            const wAmount = parseFloat(amount || 0);
+
+            if (status === 'C') { // Successful completed
+                if (trx) {
+                    await prisma.paymentRequest.updateMany({
+                        where: { txHash: { startsWith: trx } },
+                        data: { status: 'approved' }
+                    });
+                }
+                await prisma.transaction.create({
+                    data: {
+                        transactionCode: `NEO_W_${transaction_id || Date.now()}`,
+                        userId: withdrawUser.id,
+                        amount: wAmount,
+                        type: 'withdraw'
+                    }
+                });
+                return res.json({ code: 200, message: 'Çekim onaylandı!' });
+            } else if (status === 'R') { // Rejected
+                // Refund the user's balance since it was deducted when requesting
+                await prisma.user.update({
+                    where: { id: withdrawUser.id },
+                    data: { balance: { increment: wAmount } }
+                });
+                if (trx) {
+                    await prisma.paymentRequest.updateMany({
+                        where: { txHash: { startsWith: trx } },
+                        data: { status: 'rejected' }
+                    });
+                }
+                return res.json({ code: 200, message: 'Çekim reddedildi, bakiye iade edildi!' });
+            }
         }
 
         res.json({ code: 200, message: 'İşlem alındı' });
@@ -556,8 +602,8 @@ const handleNeopaysCallback = async (req, res) => {
     }
 };
 
-app.post('/api/neopays', express.json(), handleNeopaysCallback);
-app.post('/api/payments/neopays/callback', express.json(), handleNeopaysCallback);
+app.post('/api/neopays', express.json(), express.urlencoded({ extended: true }), handleNeopaysCallback);
+app.post('/api/payments/neopays/callback', express.json(), express.urlencoded({ extended: true }), handleNeopaysCallback);
 
 // --- PAYMENT GATEWAY API ---
 
@@ -648,7 +694,6 @@ app.post('/api/payments/withdraw', express.json(), async (req, res) => {
         });
 
         const trxCode = `TRX_${Date.now()}_${Math.floor(Math.random() * 8999 + 1000)}`;
-        const fullDetails = txHash || `Banka/Cüzdan: ${iban || walletAddress || 'Belirtilmedi'}`;
 
         const request = await prisma.paymentRequest.create({
             data: {
@@ -656,16 +701,13 @@ app.post('/api/payments/withdraw', express.json(), async (req, res) => {
                 type: 'withdraw',
                 method,
                 amount: withdrawAmount,
-                txHash: `${trxCode} - ${fullDetails}`,
+                txHash: `${trxCode} - ${txHash || req.body.iban || req.body.walletAddress || ''}`,
                 status: 'pending',
                 updatedAt: new Date()
             }
         });
-
-        // Check if NeoPays API integration should be called
         const isNeoPaysActive = neopaysConfig && neopaysConfig.active && neopaysConfig.sid && neopaysConfig.sid !== '1001';
         let neoPaysDebug = null;
-
         if (isNeoPaysActive) {
             const isCrypto = method.toLowerCase().includes('kripto') || method.toLowerCase().includes('crypto');
             const neoMethod = isCrypto ? 'crypto' : 'banktransfer';

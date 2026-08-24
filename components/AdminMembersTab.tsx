@@ -24,7 +24,7 @@ export default function AdminMembersTab() {
     const refresh = async () => {
         setLoading(true);
         try {
-            const res = await fetch('/api/admin/users');
+            const res = await fetch('http://localhost:3001/api/admin/users');
             const data = await res.json();
             if (data.success) {
                 const mapped = data.users.map((m: any) => ({
@@ -109,7 +109,7 @@ export default function AdminMembersTab() {
         setActionLoading(true);
         const nextStatus = selectedUser.status === 'banned' ? 'active' : 'banned';
         try {
-            const res = await fetch(`/api/admin/users/${selectedUser.id}/status`, {
+            const res = await fetch(`http://localhost:3001/api/admin/users/${selectedUser.id}/status`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ status: nextStatus })
@@ -133,7 +133,7 @@ export default function AdminMembersTab() {
         setActionLoading(true);
         
         try {
-            const res = await fetch(`/api/admin/users/${selectedUser.id}/balance`, {
+            const res = await fetch(`http://localhost:3001/api/admin/users/${selectedUser.id}/balance`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ amount, action: type })

@@ -149,10 +149,12 @@ export default function SportsDashboardWidget({ matches = [], onSelectMatch }: {
     /* ── Top Event (KURAL: Asla CANLI maç gösterilmez, sadece Prestijli Maç Önü Maçlar) ── */
     const topEventMatch = React.useMemo(() => {
         let pool = allMatches.length > 0 ? allMatches : [...global1xBetMatches, ...global1xBetPreMatches];
-        // CANLI maçları ve 3.lig/amatör maçları kesinlikle filtrele
-        pool = pool.filter(m => !m.isLive && !isYouthOrReserve(m.home || '', m.away || '', m.league || '') && !isBannedLeague(m.league || ''));
+        
+        // Asla boş kalmaması için filtreleri yumuşattık. Sadece çok amatör olanları çıkar.
+        pool = pool.filter(m => !isYouthOrReserve(m.home || '', m.away || '', m.league || '') && !isBannedLeague(m.league || ''));
         
         let valid = pool.filter(m => m.homeOdd && m.homeOdd !== '-' && m.drawOdd && m.drawOdd !== '-' && m.awayOdd && m.awayOdd !== '-');
+        if (!valid.length) valid = pool; // Eğer oran yoksa bari maçı göster.
         if (!valid.length) return null;
         
         const n = (s: string) => (s || '').toLowerCase().replace(/[^a-z0-9ğüşöçiı]/g, '');
@@ -163,11 +165,15 @@ export default function SportsDashboardWidget({ matches = [], onSelectMatch }: {
             return ['turkey', 'türkiye', 'süper lig', 'trendyol süper lig', 'super lig', 'tff 1. lig', '1. lig'].some(x => c === x || l === x);
         };
 
-        // Öncelik: Sadece Maç Önü (TR ligleri -> Logolu Majör Maçlar -> Genel Logolu Maçlar)
+        // Yeni Hiyerarşi: Maç Önü TR -> Maç Önü Logolu -> Canlı Logolu -> Maç Önü Herhangi -> Canlı Herhangi
         return wL.find(m => !m.isLive && isTR(m)) || 
                wL.find(m => !m.isLive) || 
+               wL.find(m => m.isLive && isTR(m)) ||
+               wL.find(m => m.isLive) ||
                valid.find(m => !m.isLive && isTR(m)) || 
-               valid.find(m => !m.isLive) || null;
+               valid.find(m => !m.isLive) || 
+               valid.find(m => m.isLive) || 
+               valid[0] || null;
     }, [allMatches, global1xBetMatches, global1xBetPreMatches]);
 
     /* ── Triple Combo ── */
@@ -175,8 +181,22 @@ export default function SportsDashboardWidget({ matches = [], onSelectMatch }: {
         let pool = allMatches.length > 0 ? allMatches : [...global1xBetMatches, ...global1xBetPreMatches];
         pool = pool.filter(m => !isYouthOrReserve(m.home || '', m.away || '', m.league || '') && !isBannedLeague(m.league || ''));
         
-        let list = pool.filter(m => !m.isLive && m.homeOdd && m.homeOdd !== '-' && parseFloat(m.homeOdd) > 1.1 && parseFloat(m.homeOdd) <= 1.6);
-        return [...list].sort((a, b) => parseFloat(a.homeOdd) - parseFloat(b.homeOdd)).slice(0, 3);
+        // Önce favori maç önü maçları (1.10 - 1.70 arası)
+        let list = pool.filter(m => !m.isLive && m.homeOdd && m.homeOdd !== '-' && parseFloat(m.homeOdd) >= 1.1 && parseFloat(m.homeOdd) <= 1.7);
+        if (list.length < 3) {
+            // Yetmezse, canlıdaki favorileri de ekle
+            const liveFavs = pool.filter(m => m.isLive && m.homeOdd && m.homeOdd !== '-' && parseFloat(m.homeOdd) >= 1.1 && parseFloat(m.homeOdd) <= 1.8);
+            list = [...list, ...liveFavs];
+        }
+        if (list.length < 3) {
+            // Hala yetmezse, oran sınırı olmadan geçerli herhangi maçları al
+            const valid = pool.filter(m => m.homeOdd && m.homeOdd !== '-');
+            list = [...list, ...valid];
+        }
+        
+        // Eşsiz olanları (unique) ID'ye göre filtrele ve 3 tane al
+        const uniqueList = Array.from(new Map(list.map(m => [m.id, m])).values());
+        return uniqueList.slice(0, 3);
     }, [allMatches, global1xBetMatches, global1xBetPreMatches]);
 
     const rawOdd = hotComboMatches.reduce((a, m) => a * parseFloat(m.homeOdd), 1);
@@ -216,9 +236,9 @@ export default function SportsDashboardWidget({ matches = [], onSelectMatch }: {
         <div className="flex flex-col gap-4 w-full bg-sports-main rounded-sports-card p-4">
 
             {/* ════════════════════════════════════════
-                3-COLUMN GRID
+                GRID
             ════════════════════════════════════════ */}
-            <div className="w-full grid grid-cols-1 xl:grid-cols-3 gap-4">
+            <div className={`w-full grid grid-cols-1 ${(!currentOutright || !currentOutright.participants || currentOutright.participants.length === 0) ? 'xl:grid-cols-2' : 'xl:grid-cols-3'} gap-4`}>
 
                 {/* ══ COL 1: Öne Çıkan Maçlar ══ */}
                 <div className="flex flex-col gap-2.5">
@@ -249,9 +269,9 @@ export default function SportsDashboardWidget({ matches = [], onSelectMatch }: {
                                     <div className="flex items-center justify-between px-4 pt-3 pb-1 relative z-10 w-full">
                                         <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full flex-1 min-w-0"
                                             style={{ background: 'rgba(6,182,212,0.07)' }}>
-                                            <span className="w-1.5 h-1.5 shrink-0 rounded-full bg-cyan-400 animate-pulse"
+                                            <span className="w-1.5 h-1.5 shrink-0 rounded-full bg-cyan-400 animate-pulse mt-0.5"
                                                 style={{ boxShadow: '0 0 6px rgba(6,182,212,0.9)' }} />
-                                            <span className="text-[9px] font-black text-cyan-400 tracking-widest uppercase truncate min-w-0">
+                                            <span className="text-[9px] font-black text-cyan-400 tracking-widest uppercase whitespace-normal break-words line-clamp-2 leading-tight">
                                                 {topEventMatch.league}
                                             </span>
                                         </div>
@@ -489,6 +509,7 @@ export default function SportsDashboardWidget({ matches = [], onSelectMatch }: {
                 </div>
 
                 {/* ══ COL 3: Uzun Vadeli Bahisler ══ */}
+                {currentOutright && currentOutright.participants && currentOutright.participants.length > 0 && (
                 <div className="flex flex-col gap-2.5">
                     <SectionHeader icon={<Trophy className="w-3 h-3" style={{ color: '#06B6D4' }} />} title="Uzun Vadeli Bahisler" accent="#06B6D4" />
 
@@ -581,6 +602,7 @@ export default function SportsDashboardWidget({ matches = [], onSelectMatch }: {
                         )}
                     </div>
                 </div>
+                )}
             </div>
 
             {/* ════════════════════════════════════════

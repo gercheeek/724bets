@@ -1,0 +1,43 @@
+
+/* Module Themes */
+.theme-sports {
+  --theme-bg: #0f172a;
+  --theme-accent: #10B981;
+  --theme-accent-glow: rgba(16, 185, 129, 0.4);
+}
+
+.theme-casino {
+  --theme-bg: #1e1b4b;
+  --theme-accent: #a855f7;
+  --theme-accent-glow: rgba(168, 85, 247, 0.4);
+}
+
+.theme-predictions {
+  --theme-bg: #451a03;
+  --theme-accent: #eab308;
+  --theme-accent-glow: rgba(234, 179, 8, 0.4);
+}
+
+.app-container {
+  background-color: var(--theme-bg, #0B0E14);
+  transition: background-color 0.5s ease;
+}
+@keyframes shimmer { 100% { transform: translateX(100%); } }
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee-scroll {
+  animation: marquee 80s linear infinite;
+  display: flex;
+  width: max-content;
+}
+.animate-marquee-scroll:hover {
+  animation-play-state: paused;
+}

@@ -79,21 +79,21 @@ export const SporxBetSlip = () => {
   };
 
   return (
-    <div className="w-[320px] flex-shrink-0 bg-[#20252D] flex flex-col h-full border-l border-white/5">
+    <div className="w-[320px] flex-shrink-0 bg-gradient-to-b from-[#1A2436] to-[#101623] flex flex-col h-full border-l border-white/5">
       {/* Header & Tabs */}
-      <div className="px-4 pt-4 pb-2 bg-[#0A0C10] border-b border-white/5">
-        <div className="flex items-center gap-2 mb-4 justify-center text-[color:var(--theme-accent)]">
+      <div className="px-4 pt-4 pb-2 bg-[#131b2b] shadow-[inset_0_-1px_0_rgba(255,255,255,0.05)] relative z-10">
+        <div className="flex items-center gap-2 mb-4 justify-center text-[#10B981]">
           <Trophy className="w-5 h-5" />
           <span className="font-bold tracking-wide uppercase">Kuponum</span>
         </div>
         
-        <div className="flex bg-[#161920] rounded-lg p-1">
+        <div className="flex bg-transparent rounded-lg p-1">
           {['Tekil', 'Kombine', 'Sistem'].map(t => (
             <button 
               key={t}
               onClick={() => setBetTab(t)}
               className={`flex-1 py-1.5 text-xs font-bold rounded-md transition-all ${
-                betTab === t ? 'bg-[color:var(--theme-accent)] text-black shadow-md' : 'text-zinc-500 hover:text-white'
+                betTab === t ? 'bg-[#10B981] text-white shadow-[0_0_10px_rgba(16,185,129,0.3)] font-black' : 'text-zinc-500 hover:text-white'
               }`}
             >
               {t}
@@ -104,9 +104,9 @@ export const SporxBetSlip = () => {
 
       {/* Bet Slip Content */}
       {betSelections.length > 0 ? (
-        <div className="flex-1 flex flex-col p-3 gap-2 overflow-y-auto custom-scrollbar bg-[#161920]">
+        <div className="flex-1 flex flex-col p-3 gap-2 overflow-y-auto custom-scrollbar bg-transparent">
           {betSelections.map(bet => (
-            <div key={bet.id} className="bg-[#0A0C10] rounded-xl p-3 border border-white/5 relative group hover:border-white/10 transition-colors">
+            <div key={bet.id} className="bg-gradient-to-br from-[#1A2436] to-[#131b2b] rounded-xl p-3 border border-white/5 relative group hover:border-white/20 transition-all shadow-[inset_0_1px_1px_rgba(255,255,255,0.05),_0_4px_10px_rgba(0,0,0,0.3)] hover:-translate-y-0.5">
               <button 
                 onClick={() => removeBetSelection(bet.id)}
                 className="absolute top-2 right-2 p-1.5 text-zinc-500 hover:text-red-500 hover:bg-red-500/10 rounded-md transition-colors"
@@ -117,7 +117,7 @@ export const SporxBetSlip = () => {
                 <div className="text-[10px] text-zinc-500 mb-1 uppercase tracking-wider">{bet.marketName}</div>
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-xs font-bold text-white">{bet.selectionName}</span>
-                  <span className="text-sm font-black text-[color:var(--theme-accent)] bg-[color:var(--theme-accent)]/10 px-2 py-0.5 rounded">
+                  <span className="text-sm font-black text-[#10B981] bg-[#10B981]/10 px-2 py-0.5 rounded">
                     {bet.odd.toFixed(2)}
                   </span>
                 </div>
@@ -127,13 +127,13 @@ export const SporxBetSlip = () => {
           ))}
           
           <div className="mt-auto pt-4 flex flex-col gap-3">
-            <div className="bg-[#0A0C10] rounded-xl p-4 border border-white/5">
+            <div className="bg-gradient-to-b from-[#1A2436] to-[#101623] rounded-xl p-4 border border-white/5 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)]">
               <div className="flex items-center justify-between mb-3">
                 <span className="text-xs font-bold text-zinc-400">Toplam Oran</span>
-                <span className="text-lg font-black text-[color:var(--theme-accent)]">{totalOdds.toFixed(2)}</span>
+                <span className="text-lg font-black text-[#10B981]">{totalOdds.toFixed(2)}</span>
               </div>
               
-              <div className="bg-[#161920] rounded-lg p-2 border border-white/5 flex items-center justify-between mb-3">
+              <div className="bg-transparent rounded-lg p-2 border border-white/5 flex items-center justify-between mb-3">
                 <span className="text-xs text-zinc-500 pl-2">Miktar (₺)</span>
                 <input 
                   type="number" 
@@ -152,7 +152,7 @@ export const SporxBetSlip = () => {
             <button 
               onClick={placeBet}
               disabled={isSubmitting}
-              className={`w-full py-4 bg-gradient-to-r from-[color:var(--theme-accent)] to-[#00E75A] text-black font-black uppercase tracking-wider rounded-xl transition-all shadow-[0_0_20px_rgba(0,255,163,0.2)] ${
+              className={`w-full py-4 bg-gradient-to-r from-[#10B981] to-[#059669] text-black font-black uppercase tracking-wider rounded-xl transition-all shadow-[inset_0_1px_1px_rgba(255,255,255,0.3),_0_0_20px_rgba(16,185,129,0.3)] ${
                  isSubmitting ? 'opacity-50 cursor-not-allowed scale-95' : 'hover:scale-[1.02]'
               }`}
             >
@@ -167,7 +167,7 @@ export const SporxBetSlip = () => {
           </div>
         </div>
       ) : (
-        <div className="flex-1 p-6 flex flex-col items-center justify-center text-center bg-[#161920]">
+        <div className="flex-1 p-6 flex flex-col items-center justify-center text-center bg-transparent">
           <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center text-zinc-600 mb-4 border border-white/5">
             <Trophy className="w-8 h-8 opacity-50" />
           </div>
@@ -177,19 +177,19 @@ export const SporxBetSlip = () => {
           </p>
           
           <div className="w-full flex flex-col gap-2">
-            <button className="flex items-center justify-between w-full p-4 rounded-xl hover:bg-white/5 bg-[#0A0C10] border border-white/5 text-zinc-300 transition-colors group">
+            <button className="flex items-center justify-between w-full p-4 rounded-xl hover:bg-white/5 bg-gradient-to-b from-[#1A2436] to-[#101623] border border-white/5 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] text-zinc-300 transition-colors group">
               <div className="flex items-center gap-3">
-                <Activity className="w-5 h-5 text-[color:var(--theme-accent)]" />
+                <Activity className="w-5 h-5 text-[#10B981]" />
                 <span className="text-sm font-bold">Spor bahisleri</span>
               </div>
-              <span className="text-zinc-600 group-hover:text-[color:var(--theme-accent)] transition-colors">→</span>
+              <span className="text-zinc-600 group-hover:text-[#10B981] transition-colors">→</span>
             </button>
-            <button className="flex items-center justify-between w-full p-4 rounded-xl hover:bg-white/5 bg-[#0A0C10] border border-white/5 text-zinc-300 transition-colors group">
+            <button className="flex items-center justify-between w-full p-4 rounded-xl hover:bg-white/5 bg-gradient-to-b from-[#1A2436] to-[#101623] border border-white/5 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] text-zinc-300 transition-colors group">
               <div className="flex items-center gap-3">
-                <Star className="w-5 h-5 text-[color:var(--theme-accent)]" />
+                <Star className="w-5 h-5 text-[#10B981]" />
                 <span className="text-sm font-bold">Canlı Bahis</span>
               </div>
-              <span className="text-zinc-600 group-hover:text-[color:var(--theme-accent)] transition-colors">→</span>
+              <span className="text-zinc-600 group-hover:text-[#10B981] transition-colors">→</span>
             </button>
           </div>
         </div>

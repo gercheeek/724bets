@@ -12,9 +12,9 @@ const providerData = [
 
 export default function AdminProviderTab() {
     return (
-        <div className="p-4 sm:p-6 text-white h-full flex flex-col relative overflow-y-auto custom-scrollbar bg-[#050608]">
+        <div className="p-4 sm:p-6 text-white h-full flex flex-col relative overflow-y-auto custom-scrollbar bg-transparent">
             {/* Header */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 pb-4 border-b border-white/5 gap-4">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 pb-4 border-b border-white/5 gap-4">
                 <div>
                     <h2 className="text-xl font-bold text-white tracking-wide uppercase flex items-center gap-2">
                         <Gamepad2 className="w-6 h-6 text-[#a855f7]" />
@@ -23,10 +23,26 @@ export default function AdminProviderTab() {
                     <p className="text-sm text-zinc-500 mt-1 font-mono">DURUM: <span className="text-[#a855f7]">CANLI ANALİZ</span></p>
                 </div>
             </div>
+            
+            {/* API 2 Status Banner */}
+            <div className="bg-[#1e1b4b]/60 border border-[#a855f7]/30 rounded-xl p-4 mb-6 flex flex-col md:flex-row items-center justify-between shadow-[0_0_20px_rgba(168,85,247,0.1)]">
+                <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-full bg-[#a855f7]/20 border border-[#a855f7]/40 flex items-center justify-center">
+                        <span className="text-2xl animate-pulse">🔌</span>
+                    </div>
+                    <div>
+                        <h3 className="font-bold text-white text-lg tracking-wide uppercase">API 2 (Casino Hub)</h3>
+                        <p className="text-sm text-zinc-400">Durum: <span className="text-yellow-400 font-bold">Entegrasyon Bekleniyor</span> • Gateway hazır.</p>
+                    </div>
+                </div>
+                <div className="mt-4 md:mt-0 flex gap-2">
+                    <button className="px-4 py-2 rounded text-sm font-bold bg-[#a855f7]/10 text-[#a855f7] border border-[#a855f7]/30 hover:bg-[#a855f7]/20 transition-all">Gateway Test Et</button>
+                </div>
+            </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 flex-1 min-h-[400px]">
                 {/* RTP Chart */}
-                <div className="lg:col-span-2 bg-[#0b0c10] border border-white/5 rounded-xl p-5 shadow-lg flex flex-col">
+                <div className="lg:col-span-2 bg-[#1e1b4b]/60 backdrop-blur-md shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] border border-white/5 rounded-xl p-5 shadow-lg flex flex-col">
                     <h3 className="text-zinc-400 text-sm font-bold uppercase tracking-wider mb-6 flex items-center gap-2">
                         <BarChart2 className="w-4 h-4" />
                         Son 24 Saat Gerçekleşen RTP Oranları
@@ -67,7 +83,7 @@ export default function AdminProviderTab() {
                 </div>
 
                 {/* Heatmap & Alerts */}
-                <div className="bg-[#0b0c10] border border-white/5 rounded-xl p-5 shadow-lg flex flex-col">
+                <div className="bg-[#1e1b4b]/60 backdrop-blur-md shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] border border-white/5 rounded-xl p-5 shadow-lg flex flex-col">
                     <h3 className="text-zinc-400 text-sm font-bold uppercase tracking-wider mb-4 flex items-center gap-2">
                         Oyun Isı Haritası & Alarmlar
                     </h3>

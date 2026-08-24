@@ -19,7 +19,7 @@ export function AdminWalletsTab() {
 
   const fetchMethods = async () => {
     try {
-      const res = await fetch('/api/admin/payment-methods');
+      const res = await fetch('http://localhost:3001/api/admin/payment-methods');
       const data = await res.json();
       if (data.success) {
         setMethods(data.methods);
@@ -65,7 +65,7 @@ export function AdminWalletsTab() {
   const handleDelete = async (id: string) => {
     if (!confirm('Silmek istediğinize emin misiniz?')) return;
     try {
-      const res = await fetch('/api/admin/payment-methods', {
+      const res = await fetch('http://localhost:3001/api/admin/payment-methods', {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id })

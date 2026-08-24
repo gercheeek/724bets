@@ -45,7 +45,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, activeView, onViewC
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const isSportsView = ['sports', 'spor724', 'gercek', 'upcomingMatches', 'bulten', 'tahminler'].includes(activeView);
+  const isSportsView = ['sports', 'spor724', 'gercek', 'upcomingMatches', 'bulten'].includes(activeView);
+  const isPredictionsView = ['tahminler', 'tahminler'].includes(activeView);
   const isCasinoView = ['casino', 'slots', 'live-casino', 'originals'].includes(activeView);
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, route: string) => {
@@ -157,7 +158,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, activeView, onViewC
         <div className={`flex-1 flex items-center bg-[#131823] p-1 rounded-xl h-[44px] transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] relative z-[99999] pointer-events-auto border-none shadow-inner ${!isOpen ? 'opacity-0 w-0 hidden' : 'opacity-100'}`}>
           <button 
             onClick={() => { onViewChange('casino'); if (window.innerWidth < 1024) onToggle?.(); }}
-            className={`flex-1 flex items-center justify-center h-full rounded-lg font-bold text-[14px] transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer pointer-events-auto z-[99999] ${isCasinoView ? 'bg-gradient-to-r from-purple-500/15 to-pink-500/15 border-none text-purple-400 shadow-[0_0_15px_rgba(168,85,247,0.15)]' : 'text-[#8b92a5] hover:text-white border-none'}`}
+            className={`flex-1 flex items-center justify-center h-full rounded-lg font-bold text-[12px] md:text-[14px] transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer pointer-events-auto z-[99999] ${isCasinoView ? 'bg-gradient-to-r from-purple-500/15 to-pink-500/15 border-none text-purple-400 shadow-[0_0_15px_rgba(168,85,247,0.15)]' : 'text-[#8b92a5] hover:text-white border-none'}`}
           >
             Casino
           </button>
@@ -167,9 +168,18 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, activeView, onViewC
                 onViewChange('spor724'); 
                 if (window.innerWidth < 1024) onToggle?.(); 
             }}
-            className={`flex-1 flex items-center justify-center h-full rounded-lg font-bold text-[14px] transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer pointer-events-auto z-[99999] ${isSportsView ? 'bg-gradient-to-r from-[color:var(--theme-accent)]/15 to-[color:var(--theme-accent)]/5 border-none text-[color:var(--theme-accent)] shadow-[0_0_15px_rgba(0,229,255,0.15)]' : 'text-[#8b92a5] hover:text-white border-none'}`}
+            className={`flex-1 flex items-center justify-center h-full rounded-lg font-bold text-[12px] md:text-[14px] transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer pointer-events-auto z-[99999] ${isSportsView ? 'bg-gradient-to-r from-[#10B981]/15 to-[#10B981]/5 border-none text-[#10B981] shadow-[0_0_15px_rgba(16,185,129,0.15)]' : 'text-[#8b92a5] hover:text-white border-none'}`}
           >
             Spor
+          </button>
+          <button 
+            onClick={() => { 
+                onViewChange('tahminler'); 
+                if (window.innerWidth < 1024) onToggle?.(); 
+            }}
+            className={`flex-1 flex items-center justify-center h-full rounded-lg font-bold text-[12px] md:text-[14px] transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer pointer-events-auto z-[99999] ${isPredictionsView ? 'bg-gradient-to-r from-yellow-500/15 to-orange-500/15 border-none text-yellow-400 shadow-[0_0_15px_rgba(234,179,8,0.15)]' : 'text-[#8b92a5] hover:text-white border-none'}`}
+          >
+            Tahmin
           </button>
         </div>
       </div>
@@ -181,6 +191,10 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle, activeView, onViewC
         {/* Main Menu Items or Sports Content */}
         {isSportsView ? (
           <SportsSidebarContent isOpen={isOpen} onViewChange={onViewChange} onToggle={onToggle} />
+        ) : isPredictionsView ? (
+          <nav className="flex flex-col w-full relative z-[99999] pointer-events-auto">
+            {[{ id: 'tahminler', label: 'Liderlik Tablosu', icon: Target, route: 'tahminler' }, { id: 'vip-tips', label: 'VIP Tahminler', icon: Diamond, route: 'vip-tips' }].map(item => renderLink(item))}
+          </nav>
         ) : (
           <nav className="flex flex-col w-full relative z-[99999] pointer-events-auto">
             {menuItems.map(item => renderLink(item))}

@@ -20,23 +20,23 @@ export default defineConfig(({ mode }) => {
             rewrite: (path) => path.replace(/^\/api\/evetabi/, '')
           },
           '/api/casino': {
-            target: 'http://localhost:3009',
+            target: 'http://localhost:3001',
             changeOrigin: true
           },
           '/api/sports': {
-            target: 'http://localhost:3009',
+            target: 'http://localhost:3001',
             changeOrigin: true
           },
           '/api/logo': {
-            target: 'http://localhost:3009',
+            target: 'http://localhost:3001',
             changeOrigin: true
           },
           '/api/payments': {
-            target: 'http://localhost:3009',
+            target: 'http://localhost:3001',
             changeOrigin: true
           },
           '/api/admin': {
-            target: 'http://localhost:3009',
+            target: 'http://localhost:3001',
             changeOrigin: true
           },
           /* '^/api/(?!sports|logo|casino|evetabi)': {

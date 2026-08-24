@@ -36,9 +36,11 @@ export const AnimatedOdd: React.FC<{ value: string }> = ({ value }) => {
         );
     }
 
+    const displayValue = !isNaN(parseFloat(value)) ? parseFloat(value).toFixed(2) : value;
+    
     return (
         <span className={`inline-flex items-center justify-center px-1.5 py-0.5 rounded-[4px] font-black transform ${flashClass || 'text-white'}`}>
-            {value}
+            {displayValue}
         </span>
     );
 };

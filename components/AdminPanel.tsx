@@ -1,25 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { X, Settings, Bot, Activity, Save, Trophy, TrendingUp, ShieldCheck, Globe, Monitor, Users, ShieldAlert, Gift, Network, Lock, ArrowDownToLine, Gamepad2, MessageSquare, Wallet, Target, ChevronDown, ChevronRight, Crown } from 'lucide-react';
-import AdminLuckyWheelTab from './AdminLuckyWheelTab';
-import AdminMembersTab from './AdminMembersTab';
-import AdminRiskTab from './AdminRiskTab';
-import AdminLiveRadarTab from './AdminLiveRadarTab';
-import AdminMarketingTab from './AdminMarketingTab';
-import AdminWithdrawalsTab from './AdminWithdrawalsTab';
-import AdminAuditLogsTab from './AdminAuditLogsTab';
-import AdminSportsTab from './AdminSportsTab';
-import AdminOddsEngineTab from './AdminOddsEngineTab';
-import AdminTVTab from './AdminTVTab';
-import AdminDashboardTab from './AdminDashboardTab';
-import AdminWhaleTab from './AdminWhaleTab';
-import AdminLiquidityTab from './AdminLiquidityTab';
-import AdminProviderTab from './AdminProviderTab';
-import { AdminWalletsTab } from './AdminWalletsTab';
-import AdminCommunityTab from './AdminCommunityTab';
-import AdminKralTab from './AdminKralTab';
-import AdminBettingEngineTab from './AdminBettingEngineTab';
-import AdminFraudTab from './AdminFraudTab';
-import AdminDepositsTab from './AdminDepositsTab';
+const AdminLuckyWheelTab = React.lazy(() => import('./AdminLuckyWheelTab'));
+const AdminMembersTab = React.lazy(() => import('./AdminMembersTab'));
+const AdminRiskTab = React.lazy(() => import('./AdminRiskTab'));
+const AdminLiveRadarTab = React.lazy(() => import('./AdminLiveRadarTab'));
+const AdminMarketingTab = React.lazy(() => import('./AdminMarketingTab'));
+const AdminWithdrawalsTab = React.lazy(() => import('./AdminWithdrawalsTab'));
+const AdminAuditLogsTab = React.lazy(() => import('./AdminAuditLogsTab'));
+const AdminSportsTab = React.lazy(() => import('./AdminSportsTab'));
+const AdminOddsEngineTab = React.lazy(() => import('./AdminOddsEngineTab'));
+const AdminTVTab = React.lazy(() => import('./AdminTVTab'));
+const AdminDashboardTab = React.lazy(() => import('./AdminDashboardTab'));
+const AdminWhaleTab = React.lazy(() => import('./AdminWhaleTab'));
+const AdminLiquidityTab = React.lazy(() => import('./AdminLiquidityTab'));
+const AdminProviderTab = React.lazy(() => import('./AdminProviderTab'));
+const AdminWalletsTab = React.lazy(() => import('./AdminWalletsTab').then(module => ({ default: module.AdminWalletsTab })));
+const AdminCommunityTab = React.lazy(() => import('./AdminCommunityTab'));
+const AdminKralTab = React.lazy(() => import('./AdminKralTab'));
+const AdminBettingEngineTab = React.lazy(() => import('./AdminBettingEngineTab'));
+const AdminFraudTab = React.lazy(() => import('./AdminFraudTab'));
+const AdminDepositsTab = React.lazy(() => import('./AdminDepositsTab'));
 import { LuckyWheelConfig } from '../types';
 
 interface AdminPanelProps {
@@ -205,7 +205,7 @@ export default function AdminPanel(props: AdminPanelProps) {
                                 <button onClick={() => { setActiveTab('sports'); setIsSidebarOpen(false); }} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'sports' ? 'bg-[#10b981]/10 text-[#10b981] border border-[#10b981]/30 shadow-[0_0_10px_rgba(16,185,129,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
                                     <Trophy className="w-4 h-4" /> SPOR YÖNETİMİ
                                 </button>
-                                <button onClick={() => { setActiveTab('odds'); setIsSidebarOpen(false); }} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'odds' ? 'bg-[color:var(--theme-accent)]/10 text-[color:var(--theme-accent)] border border-[color:var(--theme-accent)]/30 shadow-[0_0_10px_rgba(6,182,212,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
+                                <button onClick={() => { setActiveTab('odds'); setIsSidebarOpen(false); }} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'odds' ? 'bg-[#10B981]/10 text-[#10B981] border border-[#10B981]/30 shadow-[0_0_10px_rgba(6,182,212,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
                                     <Settings className="w-4 h-4" /> ORAN MOTORU
                                 </button>
                                 <button onClick={() => { setActiveTab('radar'); setIsSidebarOpen(false); }} className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2.5 transition-all ${activeTab === 'radar' ? 'bg-[#8b5cf6]/10 text-[#8b5cf6] border border-[#8b5cf6]/30 shadow-[0_0_10px_rgba(139,92,246,0.1)]' : 'bg-transparent text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'}`}>
@@ -317,7 +317,7 @@ export default function AdminPanel(props: AdminPanelProps) {
 
                         // Eğer yetki varsa veya sayfa herkese açıksa, ilgili tabı render et:
                         return (
-                            <>
+                            <React.Suspense fallback={<div className="flex-1 flex items-center justify-center min-h-[500px] w-full"><div className="w-12 h-12 border-4 border-[#10B981] border-t-transparent rounded-full animate-spin"></div></div>}>
                                 {activeTab === 'dashboard' && (
                                     <AdminDashboardTab />
                                 )}
@@ -332,8 +332,8 @@ export default function AdminPanel(props: AdminPanelProps) {
                                 {['bonus', 'affiliate'].includes(activeTab) && (
                                     <div className="h-full flex items-center justify-center text-center p-8">
                                         <div className="max-w-md bg-[#0b0c10] border border-white/5 rounded-2xl p-8 shadow-2xl">
-                                            <div className="w-16 h-16 bg-[color:var(--theme-accent)]/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-[color:var(--theme-accent)]/30">
-                                                <Lock className="w-8 h-8 text-[color:var(--theme-accent)]" />
+                                            <div className="w-16 h-16 bg-[#10B981]/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-[#10B981]/30">
+                                                <Lock className="w-8 h-8 text-[#10B981]" />
                                             </div>
                                             <h2 className="text-xl font-black text-white mb-2 uppercase tracking-wider">Modül Hazırlanıyor</h2>
                                             <p className="text-sm text-zinc-400">Bu modül (Pazarlama/Güvenlik) şu anda geliştirme aşamasındadır. Ana komuta merkezindeki (Casino Komuta) SLA ve API sağlık durumlarını inceleyebilirsiniz.</p>
@@ -536,7 +536,7 @@ export default function AdminPanel(props: AdminPanelProps) {
                                         )}
                                     </>
                                 )}
-                            </>
+                            </React.Suspense>
                         );
                     })()}
                     </div>

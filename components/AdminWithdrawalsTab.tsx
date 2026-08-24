@@ -21,7 +21,7 @@ export default function AdminWithdrawalsTab() {
     setLoading(true);
     setError('');
     try {
-      const res = await fetch('/api/admin/payments/pending?type=withdraw');
+      const res = await fetch('http://localhost:3001/api/admin/payments/pending?type=withdraw');
       const data = await res.json();
       if (data.success) {
         setRequests(data.pending);

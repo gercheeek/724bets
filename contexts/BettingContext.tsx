@@ -100,14 +100,76 @@ const normalizeEvent = (ev: any) => {
   return ev;
 };
 
+const MOCK_MATCHES = [
+  {
+    id: 'm1',
+    sport: 'Futbol',
+    league: 'Trendyol Süper Lig',
+    country: 'Türkiye',
+    homeTeam: 'Fenerbahçe',
+    home: 'Fenerbahçe',
+    awayTeam: 'Galatasaray',
+    away: 'Galatasaray',
+    homeLogo: 'https://assets.football-logos.cc/logos/turkey/700x700/fenerbahce.0df7e3ee.png',
+    awayLogo: 'https://assets.football-logos.cc/logos/turkey/700x700/galatasaray.090f837e.png',
+    time: '20:00',
+    date: 'Bugün',
+    isLive: false,
+    homeOdd: '2.10',
+    drawOdd: '3.40',
+    awayOdd: '2.85',
+    odds: { '1': '2.10', 'X': '3.40', '2': '2.85', 'O': '1.80', 'U': '1.90', 'tP': '2.5' }
+  },
+  {
+    id: 'm2',
+    sport: 'Futbol',
+    league: 'UEFA Champions League',
+    country: 'Europe',
+    homeTeam: 'Real Madrid',
+    home: 'Real Madrid',
+    awayTeam: 'Manchester City',
+    away: 'Manchester City',
+    homeLogo: 'https://assets.football-logos.cc/logos/spain/700x700/real-madrid.0b9dfb2e.png',
+    awayLogo: 'https://assets.football-logos.cc/logos/england/700x700/manchester-city.4f8101a9.png',
+    time: '22:00',
+    date: 'Bugün',
+    isLive: false,
+    homeOdd: '2.40',
+    drawOdd: '3.60',
+    awayOdd: '2.50',
+    odds: { '1': '2.40', 'X': '3.60', '2': '2.50', 'O': '1.85', 'U': '1.85', 'tP': '2.5' }
+  },
+  {
+    id: 'm3',
+    sport: 'Futbol',
+    league: 'Premier League',
+    country: 'England',
+    homeTeam: 'Arsenal',
+    home: 'Arsenal',
+    awayTeam: 'Liverpool',
+    away: 'Liverpool',
+    homeLogo: 'https://assets.football-logos.cc/logos/england/700x700/arsenal.56dddf4b.png',
+    awayLogo: 'https://assets.football-logos.cc/logos/england/700x700/liverpool.5ca73373.png',
+    time: "75' (2-1)",
+    date: 'Bugün',
+    isLive: true,
+    homeOdd: '1.95',
+    drawOdd: '3.80',
+    awayOdd: '3.10',
+    odds: { '1': '1.95', 'X': '3.80', '2': '3.10', 'O': '1.70', 'U': '2.00', 'tP': '3.5' }
+  }
+];
+
 export const BettingProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { language } = useLanguage();
 
   const [events, setEvents] = useState<any[]>([]);
   const [scrapedMatches, setScrapedMatches] = useState<any[]>([]);
-  const [globalLiveMatches, setGlobalLiveMatches] = useState<any[]>([]);
-  const [global1xBetMatches, setGlobal1xBetMatches] = useState<any[]>([]);
-  const [global1xBetPreMatches, setGlobal1xBetPreMatches] = useState<any[]>([]);
+  const [globalLiveMatches, setGlobalLiveMatches] = useState<any[]>(MOCK_MATCHES.filter(m => m.isLive));
+  
+
+  const [global1xBetMatches, setGlobal1xBetMatches] = useState<any[]>(MOCK_MATCHES.filter(m => m.isLive));
+  const [global1xBetPreMatches, setGlobal1xBetPreMatches] = useState<any[]>(MOCK_MATCHES.filter(m => !m.isLive));
   const [outrights, setOutrights] = useState<any[]>([
     { id: 'o1', title: 'UEFA Şampiyonlar Ligi Şampiyonu 2026', sport: 'Futbol', selections: [{ name: 'Real Madrid', odd: 3.50 }, { name: 'Manchester City', odd: 3.75 }, { name: 'Arsenal', odd: 6.00 }] },
     { id: 'o2', title: 'Trendyol Süper Lig Şampiyonu 2026', sport: 'Futbol', selections: [{ name: 'Galatasaray', odd: 1.85 }, { name: 'Fenerbahçe', odd: 2.10 }, { name: 'Beşiktaş', odd: 12.0 }] }
@@ -118,7 +180,7 @@ export const BettingProvider: React.FC<{ children: React.ReactNode }> = ({ child
   useEffect(() => {
     async function fetchLiveMatches() {
       try {
-        const res = await fetch('/api/sports/matches');
+        const res = await fetch('http://localhost:3001/api/sports/matches');
         if (res.ok) {
           const data = await res.json();
           if (data.success) {

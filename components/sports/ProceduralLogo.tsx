@@ -75,11 +75,13 @@ export const ProceduralLogo: React.FC<ProceduralLogoProps> = React.memo(({ name,
       const parts = teamName.split('/');
       return (parts[0].trim()[0] + parts[1].trim()[0]).toUpperCase();
     }
-    const words = teamName.split(' ').filter(w => w.length > 0);
+    const ignoreList = ['fc', 'afc', 'sc', 'cd', 'ac', 'ss', 'ssc', 'sl', 'kf', 'sv', 'rc', 'ud', 'bk', 'ak', 'fk', 'nk'];
+    let words = teamName.split(' ').filter(w => w.length > 0 && !ignoreList.includes(w.toLowerCase().replace(/[^a-z]/g, '')));
+    if (words.length === 0) words = teamName.split(' ');
     if (words.length >= 2) {
       return (words[0][0] + words[1][0]).toUpperCase();
     }
-    return teamName.substring(0, 2).toUpperCase();
+    return words[0].substring(0, 2).toUpperCase();
   };
 
   const initials = getInitials(name);

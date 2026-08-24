@@ -10,7 +10,7 @@ export interface RainEvent {
   max_participants: number;
 }
 
-export const useRainEvent = () => {
+export const useRainEvent = (currentUserId?: string) => {
   const [activeEvent, setActiveEvent] = useState<RainEvent | null>(null);
   const [participantsCount, setParticipantsCount] = useState(0);
   const [hasClaimed, setHasClaimed] = useState(false);
@@ -28,9 +28,28 @@ export const useRainEvent = () => {
         .single();
 
       if (data) {
+        const diff = Math.floor((new Date(data.ends_at).getTime() - Date.now()) / 1000);
+        if (diff <= 0) {
+            setActiveEvent(null);
+            return;
+        }
+        
         setActiveEvent(data);
-        calculateTimeLeft(data.ends_at);
+        setTimeLeft(diff);
         fetchParticipants(data.id);
+        
+        // Check local storage for instant frontend persistence
+        if (localStorage.getItem('rain_claimed_' + data.id) === 'true') {
+            setHasClaimed(true);
+        } else if (currentUserId && currentUserId !== 'guest') {
+            const { data: claimData } = await supabase
+                .from('rain_participants')
+                .select('id')
+                .eq('event_id', data.id)
+                .eq('user_id', currentUserId)
+                .single();
+            if (claimData) setHasClaimed(true);
+        }
       }
     };
 
@@ -42,8 +61,16 @@ export const useRainEvent = () => {
       .on('postgres_changes', { event: '*', schema: 'public', table: 'rain_events' }, (payload) => {
         const newEvent = payload.new as RainEvent;
         if (newEvent.status === 'active') {
-          setActiveEvent(newEvent);
-          setHasClaimed(false);
+          setActiveEvent(prev => {
+            if (!prev || prev.id !== newEvent.id) {
+               if (localStorage.getItem('rain_claimed_' + newEvent.id) === 'true') {
+                   setHasClaimed(true);
+               } else {
+                   setHasClaimed(false);
+               }
+            }
+            return newEvent;
+          });
           calculateTimeLeft(newEvent.ends_at);
         } else {
           setActiveEvent(null);
@@ -63,17 +90,25 @@ export const useRainEvent = () => {
       supabase.removeChannel(rainChannel);
       supabase.removeChannel(participantsChannel);
     };
-  }, []);
+  }, [currentUserId]);
 
   // Zamanlayıcı
   useEffect(() => {
-    if (!activeEvent || !timeLeft) return;
+    if (!activeEvent) return;
+    
     const interval = setInterval(() => {
-      setTimeLeft(prev => (prev && prev > 0 ? prev - 1 : 0));
-      if (timeLeft <= 1) setActiveEvent(null); // Süre bitti
+      setTimeLeft(prev => {
+        if (prev === null) return null;
+        if (prev <= 1) {
+            setActiveEvent(null); // Auto-hide when time is up
+            return 0;
+        }
+        return prev - 1;
+      });
     }, 1000);
+    
     return () => clearInterval(interval);
-  }, [activeEvent, timeLeft]);
+  }, [activeEvent]);
 
   const calculateTimeLeft = (endsAt: string) => {
     const diff = Math.floor((new Date(endsAt).getTime() - Date.now()) / 1000);
@@ -98,6 +133,7 @@ export const useRainEvent = () => {
 
       if (error) throw error;
       setHasClaimed(true);
+      localStorage.setItem('rain_claimed_' + activeEvent.id, 'true');
       return data;
     } catch (err: any) {
       console.error("Rain Claim Error:", err.message);

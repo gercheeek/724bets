@@ -94,12 +94,15 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onS
     return () => clearInterval(timer);
   }, []);
 
-  // Filter and pick Top 15
+  // Filter and pick Top 10 upcoming matches
   const topMatches = React.useMemo(() => {
     return matches
       .filter(m => {
         if (!m.homeOdd || m.homeOdd === '-') return false;
         
+        // YAKLAŞAN MAÇLAR OLMALI - Canlı olanları ELEDİK.
+        if (m.isLive) return false;
+
         const isTennisOrBasketball = m.sport?.toLowerCase().includes('tenis') || m.sport?.toLowerCase().includes('tennis') || m.sport?.toLowerCase().includes('basket');
         
         // --- STRICT FILTERING FOR TOP MATCHES ---
@@ -109,15 +112,12 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onS
             return false;
         }
 
-        // Must have logos
-        if (findBestLogoMatch(m.home) === null || findBestLogoMatch(m.away) === null) {
-            return false;
-        }
+        // We removed the logo requirement so the component doesn't disappear if no logos match
         
-        // En fazla 24 saat uzağındaki maçlar
-        if (m.timestamp && !m.isLive) {
+        // Zaman filtresi: Eğer geçmişteyse (diff < 0) filterla.
+        if (m.timestamp) {
            const diff = m.timestamp - Date.now();
-           if (diff > 86400000) return false;
+           if (diff < -3600000) return false; // 1 saatten eski bitmiş olabilecek maçları gizle
         }
         
         return true; 
@@ -128,26 +128,30 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onS
           const t = match.home.toLowerCase() + ' ' + match.away.toLowerCase();
           const l = match.league.toLowerCase();
           
-          // 1. Türk takımlarına ve Türkiye liglerine devasa öncelik
+          // 1. Türk takımlarına ve Türkiye liglerine devasa öncelik (Kullanıcı genelde Türk takımları olsun dedi)
           const turkishTeams = ['galatasaray', 'fenerbahçe', 'fenerbahce', 'beşiktaş', 'besiktas', 'trabzonspor', 'başakşehir', 'basaksehir', 'konyaspor', 'adana demirspor', 'sivasspor', 'göztepe'];
-          if (turkishTeams.some(tt => t.includes(tt))) score += 15000;
-          if (l.includes('süper lig') || l.includes('super lig') || l.includes('türkiye kupası') || l.includes('1. lig')) score += 12000;
+          if (turkishTeams.some(tt => t.includes(tt))) score += 50000;
+          if (l.includes('süper lig') || l.includes('super lig') || l.includes('türkiye kupası') || l.includes('1. lig')) score += 40000;
           
-          // 2. Avrupa 5 Büyük Lig
+          // 2. VIP / Elite 100 Takımlar
+          const eliteScore = getMatchPriorityScore(match.home, match.away);
+          if (eliteScore > 0) score += (eliteScore * 3000);
+          
+          // 3. Avrupa 5 Büyük Lig
           const top5Leagues = ['premier', 'la liga', 'serie a', 'bundesliga', 'ligue 1'];
           if (top5Leagues.some(el => l.includes(el))) score += 8000;
           
-          // 3. Avrupa Kupaları
+          // 4. Avrupa Kupaları
           if (l.includes('şampiyonlar ligi') || l.includes('champions league') || l.includes('avrupa ligi') || l.includes('europa league')) score += 5000;
-          
-          // VIP takımlar (Real Madrid, City vs. + Diğer elite)
-          const eliteScore = getMatchPriorityScore(match.home, match.away);
-          if (eliteScore > 0) score += (eliteScore * 2000);
           
           if (ELITE_LEAGUES.some(el => l.includes(el))) score += 500;
           
-          if (match.isLive) score += 200; // Live maçlar öne
-          
+          // Yakın zamanda başlayacak maçlara hafif avantaj
+          if (match.timestamp) {
+            const diff = match.timestamp - Date.now();
+            if (diff < 10800000) score += 1000; // Son 3 saat
+          }
+
           return score;
         };
 
@@ -162,7 +166,7 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onS
            return scoreB - scoreA; // Highest score first
         }
         
-        // Zaman olarak en yakın olan öne (Canlılar ve yakın saattekiler)
+        // Zaman olarak en yakın olan öne
         return (a.timestamp || 0) - (b.timestamp || 0);
       })
       .slice(0, 10);
@@ -240,17 +244,17 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onS
               <div 
                 key={match.id} 
                 onClick={() => onSelectMatch && onSelectMatch(match)}
-                className="cursor-pointer min-w-[240px] w-[240px] shrink-0 bg-[#121825] rounded-xl border border-white/5 p-2.5 flex flex-col shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_8px_32px_rgba(0,0,0,0.3)] hover:border-[#00FF87]/30 hover:bg-[#161D2C] transition-all duration-300 relative group/card transform-gpu overflow-hidden"
+                className="cursor-pointer min-w-[240px] w-[240px] shrink-0 bg-gradient-to-b from-[#161B26] to-[#0A0D14] rounded-xl p-2.5 flex flex-col shadow-[inset_0_1px_1px_rgba(255,255,255,0.05),0_10px_20px_rgba(0,0,0,0.5)] hover:shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),0_0_20px_rgba(0,229,255,0.15)] transition-all duration-500 relative group/card transform-gpu overflow-hidden border-none"
               >
                 <div className="flex items-start mb-3 relative z-10 flex-col gap-1">
                   <div className="flex items-center justify-between w-full">
                     {match.isLive ? (
-                        <div className="flex items-center gap-1.5 bg-red-500/10 text-red-500 border border-red-500/20 px-2 py-0.5 rounded self-start">
+                        <div className="flex items-center gap-1.5 bg-gradient-to-r from-red-500/20 to-red-500/5 text-red-400 px-2 py-0.5 rounded self-start shadow-[inset_0_0_10px_rgba(239,68,68,0.2)] border-none">
                             <div className="w-1.5 h-1.5 rounded-full bg-red-500 shadow-[0_0_8px_#ef4444] animate-pulse"></div>
                             <span className="text-[10px] font-bold whitespace-nowrap tracking-wider">CANLI</span>
                         </div>
                     ) : (
-                        <span className="bg-[#00E5FF]/10 text-[#00E5FF] border border-[#00E5FF]/20 px-2 py-0.5 rounded text-[10px] font-bold self-start whitespace-nowrap tracking-wider">
+                        <span className="bg-gradient-to-r from-[#00E5FF]/20 to-[#00E5FF]/5 text-[#00E5FF] px-2.5 py-0.5 rounded text-[11px] font-black self-start whitespace-nowrap tracking-wider shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),inset_0_0_15px_rgba(0,229,255,0.2)] border-none">
                             {getCountdown(ts, false)}
                         </span>
                     )}
@@ -285,9 +289,9 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onS
                       {isTennis ? (
                         <div className="flex flex-col items-center">
                            <div className="flex gap-2 items-center mb-1.5">
-                              <span className="text-[20px] font-black text-white drop-shadow-md">{match.info?.score1 || '0'}</span>
+                              <span className="text-[20px] font-black text-[#00E5FF] drop-shadow-[0_0_8px_rgba(0,229,255,0.8)]">{match.info?.score1 || '0'}</span>
                               <span className="text-[14px] font-bold text-white/50">-</span>
-                              <span className="text-[20px] font-black text-white drop-shadow-md">{match.info?.score2 || '0'}</span>
+                              <span className="text-[20px] font-black text-[#00E5FF] drop-shadow-[0_0_8px_rgba(0,229,255,0.8)]">{match.info?.score2 || '0'}</span>
                            </div>
                            {(() => {
                              const rawGameState = match.info?.current_game_state || '0:0';
@@ -323,7 +327,7 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onS
                                 {match.score || '0 - 0'}
                               </div>
                            ) : (
-                              <div className="text-sm font-black text-white/30 italic tracking-widest mt-1">VS</div>
+                              <div className="text-base font-black text-transparent bg-clip-text bg-gradient-to-b from-white/70 to-white/10 italic tracking-widest mt-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">VS</div>
                            )}
                            <span className="text-[9px] text-[#00E5FF] font-semibold mt-1.5 animate-pulse tracking-wide drop-shadow-[0_0_3px_rgba(0,229,255,0.4)]">
                               {match.isLive ? <LiveTimer minute={match.time || match.minute} lastUpdateTs={match.last_update_ts} hidePrefix /> : ''}
@@ -358,10 +362,10 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onS
                           e.stopPropagation();
                           addSelection({ id: match.homeId || match.id+'_1', matchId: match.id, matchName: `${match.home} vs ${match.away}`, selectionName: 'Maç Sonucu: 1', odd: parseFloat(hOdd.toString().replace(',','.')) });
                         }}
-                        className="bg-[#0A0E17] border border-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] hover:border-[#00FF87]/50 hover:bg-[#00FF87]/5 rounded-lg p-2 flex flex-col items-center justify-center gap-1 transition-all group cursor-pointer active:scale-[0.96]"
+                        className="bg-gradient-to-b from-[#1E2333] to-[#121622] shadow-[inset_0_1px_1px_rgba(255,255,255,0.08),0_4px_8px_rgba(0,0,0,0.4)] hover:from-[#232A3D] hover:to-[#171C2B] hover:shadow-[inset_0_1px_2px_rgba(255,255,255,0.15),0_0_15px_rgba(0,229,255,0.2)] rounded-lg p-2 flex flex-col items-center justify-center gap-1 transition-all group cursor-pointer active:scale-[0.96] border-none relative overflow-hidden before:absolute before:inset-0 before:bg-gradient-to-b before:from-white/[0.03] before:to-transparent before:opacity-0 hover:before:opacity-100"
                       >
-                        <span className="text-[10px] text-zinc-400 font-semibold tracking-wide group-hover:text-[#00FF87]/80 transition-colors">1</span>
-                        <div className="text-[14px] font-black group-hover:text-[#00FF87] transition-colors"><AnimatedOdd value={hOdd} /></div>
+                        <span className="text-[10px] text-zinc-400 font-semibold tracking-wide group-hover:text-[#00E5FF]/80 transition-colors">1</span>
+                        <div className="text-[14px] font-black group-hover:text-[#00E5FF] transition-colors"><AnimatedOdd value={hOdd} /></div>
                       </button>
                       {!isTennis && (
                         <button 
@@ -369,10 +373,10 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onS
                             e.stopPropagation();
                             addSelection({ id: match.drawId || match.id+'_x', matchId: match.id, matchName: `${match.home} vs ${match.away}`, selectionName: 'Maç Sonucu: X', odd: parseFloat(dOdd.toString().replace(',','.')) });
                           }}
-                          className="bg-[#0A0E17] border border-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] hover:border-[#00FF87]/50 hover:bg-[#00FF87]/5 rounded-lg p-2 flex flex-col items-center justify-center gap-1 transition-all group cursor-pointer active:scale-[0.96]"
+                          className="bg-gradient-to-b from-[#1E2333] to-[#121622] shadow-[inset_0_1px_1px_rgba(255,255,255,0.08),0_4px_8px_rgba(0,0,0,0.4)] hover:from-[#232A3D] hover:to-[#171C2B] hover:shadow-[inset_0_1px_2px_rgba(255,255,255,0.15),0_0_15px_rgba(0,229,255,0.2)] rounded-lg p-2 flex flex-col items-center justify-center gap-1 transition-all group cursor-pointer active:scale-[0.96] border-none relative overflow-hidden before:absolute before:inset-0 before:bg-gradient-to-b before:from-white/[0.03] before:to-transparent before:opacity-0 hover:before:opacity-100"
                         >
-                          <span className="text-[10px] text-zinc-400 font-semibold tracking-wide group-hover:text-[#00FF87]/80 transition-colors">X</span>
-                          <div className="text-[14px] font-black group-hover:text-[#00FF87] transition-colors"><AnimatedOdd value={dOdd} /></div>
+                          <span className="text-[10px] text-zinc-400 font-semibold tracking-wide group-hover:text-[#00E5FF]/80 transition-colors">X</span>
+                          <div className="text-[14px] font-black group-hover:text-[#00E5FF] transition-colors"><AnimatedOdd value={dOdd} /></div>
                         </button>
                       )}
                       <button 
@@ -380,10 +384,10 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onS
                           e.stopPropagation();
                           addSelection({ id: match.awayId || match.id+'_2', matchId: match.id, matchName: `${match.home} vs ${match.away}`, selectionName: 'Maç Sonucu: 2', odd: parseFloat(aOdd.toString().replace(',','.')) });
                         }}
-                        className="bg-[#0A0E17] border border-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] hover:border-[#00FF87]/50 hover:bg-[#00FF87]/5 rounded-lg p-2 flex flex-col items-center justify-center gap-1 transition-all group cursor-pointer active:scale-[0.96]"
+                        className="bg-gradient-to-b from-[#1E2333] to-[#121622] shadow-[inset_0_1px_1px_rgba(255,255,255,0.08),0_4px_8px_rgba(0,0,0,0.4)] hover:from-[#232A3D] hover:to-[#171C2B] hover:shadow-[inset_0_1px_2px_rgba(255,255,255,0.15),0_0_15px_rgba(0,229,255,0.2)] rounded-lg p-2 flex flex-col items-center justify-center gap-1 transition-all group cursor-pointer active:scale-[0.96] border-none relative overflow-hidden before:absolute before:inset-0 before:bg-gradient-to-b before:from-white/[0.03] before:to-transparent before:opacity-0 hover:before:opacity-100"
                       >
-                        <span className="text-[10px] text-zinc-400 font-semibold tracking-wide group-hover:text-[#00FF87]/80 transition-colors">2</span>
-                        <div className="text-[14px] font-black group-hover:text-[#00FF87] transition-colors"><AnimatedOdd value={aOdd} /></div>
+                        <span className="text-[10px] text-zinc-400 font-semibold tracking-wide group-hover:text-[#00E5FF]/80 transition-colors">2</span>
+                        <div className="text-[14px] font-black group-hover:text-[#00E5FF] transition-colors"><AnimatedOdd value={aOdd} /></div>
                       </button>
                     </div>
                   </div>
@@ -399,7 +403,7 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onS
                           e.stopPropagation();
                           addSelection({ id: match.id+'_under', matchId: match.id, matchName: `${match.home} vs ${match.away}`, selectionName: '2.5 Alt', odd: parseFloat(underOdd) });
                         }}
-                        className="bg-white/[0.04] backdrop-blur-sm border border-white/10 hover:border-[#00E5FF]/50 hover:shadow-[inset_0_0_15px_rgba(0,229,255,0.2)] rounded p-1.5 flex flex-col items-center justify-center gap-0.5 transition-all group cursor-pointer active:scale-[0.98]"
+                        className="bg-gradient-to-b from-[#1E2333] to-[#121622] shadow-[inset_0_1px_1px_rgba(255,255,255,0.08),0_4px_8px_rgba(0,0,0,0.4)] hover:from-[#232A3D] hover:to-[#171C2B] hover:shadow-[inset_0_1px_2px_rgba(255,255,255,0.15),0_0_15px_rgba(0,229,255,0.2)] rounded-lg p-1.5 flex flex-col items-center justify-center gap-0.5 transition-all group cursor-pointer active:scale-[0.98] border-none relative overflow-hidden"
                       >
                         <span className="text-[10px] text-[#8e939d] font-medium tracking-wide group-hover:text-[#00E5FF] transition-colors">Alt</span>
                         <div className="text-[12px] group-hover:text-white transition-colors"><AnimatedOdd value={underOdd} /></div>
@@ -409,7 +413,7 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onS
                           e.stopPropagation();
                           addSelection({ id: match.id+'_over', matchId: match.id, matchName: `${match.home} vs ${match.away}`, selectionName: '2.5 Üst', odd: parseFloat(overOdd) });
                         }}
-                        className="bg-white/[0.04] backdrop-blur-sm border border-white/10 hover:border-[#00E5FF]/50 hover:shadow-[inset_0_0_15px_rgba(0,229,255,0.2)] rounded p-1.5 flex flex-col items-center justify-center gap-0.5 transition-all group cursor-pointer active:scale-[0.98]"
+                        className="bg-gradient-to-b from-[#1E2333] to-[#121622] shadow-[inset_0_1px_1px_rgba(255,255,255,0.08),0_4px_8px_rgba(0,0,0,0.4)] hover:from-[#232A3D] hover:to-[#171C2B] hover:shadow-[inset_0_1px_2px_rgba(255,255,255,0.15),0_0_15px_rgba(0,229,255,0.2)] rounded-lg p-1.5 flex flex-col items-center justify-center gap-0.5 transition-all group cursor-pointer active:scale-[0.98] border-none relative overflow-hidden"
                       >
                         <span className="text-[10px] text-[#8e939d] font-medium tracking-wide group-hover:text-[#00E5FF] transition-colors">Üst</span>
                         <div className="text-[12px] group-hover:text-white transition-colors"><AnimatedOdd value={overOdd} /></div>
@@ -432,7 +436,7 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onS
                                 e.stopPropagation();
                                 addSelection({ id: match.id+'_1_p3', matchId: match.id, matchName: `${match.home} vs ${match.away}`, selectionName: 'Maç Sonucu: 1', odd: parseFloat(hOdd) });
                               }}
-                              className="bg-white/[0.04] backdrop-blur-sm border border-white/10 hover:border-[#00E5FF]/50 hover:shadow-[inset_0_0_15px_rgba(0,229,255,0.2)] rounded p-1.5 flex flex-col items-center justify-center gap-0.5 transition-all group cursor-pointer active:scale-[0.98]"
+                              className="bg-gradient-to-b from-[#1E2333] to-[#121622] shadow-[inset_0_1px_1px_rgba(255,255,255,0.08),0_4px_8px_rgba(0,0,0,0.4)] hover:from-[#232A3D] hover:to-[#171C2B] hover:shadow-[inset_0_1px_2px_rgba(255,255,255,0.15),0_0_15px_rgba(0,229,255,0.2)] rounded-lg p-1.5 flex flex-col items-center justify-center gap-0.5 transition-all group cursor-pointer active:scale-[0.98] border-none relative overflow-hidden"
                             >
                               <span className="text-[10px] text-[#8e939d] font-medium tracking-wide group-hover:text-[#00E5FF] transition-colors">1</span>
                               <div className="text-[12px] group-hover:text-white transition-colors"><AnimatedOdd value={hOdd} /></div>
@@ -442,7 +446,7 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onS
                                 e.stopPropagation();
                                 addSelection({ id: match.id+'_2_p3', matchId: match.id, matchName: `${match.home} vs ${match.away}`, selectionName: 'Maç Sonucu: 2', odd: parseFloat(aOdd) });
                               }}
-                              className="bg-white/[0.04] backdrop-blur-sm border border-white/10 hover:border-[#00E5FF]/50 hover:shadow-[inset_0_0_15px_rgba(0,229,255,0.2)] rounded p-1.5 flex flex-col items-center justify-center gap-0.5 transition-all group cursor-pointer active:scale-[0.98]"
+                              className="bg-gradient-to-b from-[#1E2333] to-[#121622] shadow-[inset_0_1px_1px_rgba(255,255,255,0.08),0_4px_8px_rgba(0,0,0,0.4)] hover:from-[#232A3D] hover:to-[#171C2B] hover:shadow-[inset_0_1px_2px_rgba(255,255,255,0.15),0_0_15px_rgba(0,229,255,0.2)] rounded-lg p-1.5 flex flex-col items-center justify-center gap-0.5 transition-all group cursor-pointer active:scale-[0.98] border-none relative overflow-hidden"
                             >
                               <span className="text-[10px] text-[#8e939d] font-medium tracking-wide group-hover:text-[#00E5FF] transition-colors">2</span>
                               <div className="text-[12px] group-hover:text-white transition-colors"><AnimatedOdd value={aOdd} /></div>
@@ -463,7 +467,7 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onS
                                 if (isGgResolved) return;
                                 addSelection({ id: match.id+'_gg', matchId: match.id, matchName: `${match.home} vs ${match.away}`, selectionName: 'KG Var', odd: parseFloat(ggOdd) });
                               }}
-                              className={`bg-white/[0.04] backdrop-blur-sm border border-white/10 rounded p-1.5 flex flex-col items-center justify-center gap-0.5 transition-all group ${isGgResolved ? 'opacity-40 cursor-not-allowed bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,rgba(255,255,255,0.03)_10px,rgba(255,255,255,0.03)_20px)]' : 'hover:border-[#00E5FF]/50 hover:shadow-[inset_0_0_15px_rgba(0,229,255,0.2)] cursor-pointer active:scale-[0.98]'}`}
+                              className={`bg-gradient-to-b from-[#1E2333] to-[#121622] shadow-[inset_0_1px_1px_rgba(255,255,255,0.08),0_4px_8px_rgba(0,0,0,0.4)] rounded-lg p-1.5 flex flex-col items-center justify-center gap-0.5 transition-all group border-none relative overflow-hidden ${isGgResolved ? 'opacity-40 cursor-not-allowed bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,rgba(255,255,255,0.03)_10px,rgba(255,255,255,0.03)_20px)]' : 'hover:from-[#232A3D] hover:to-[#171C2B] hover:shadow-[inset_0_1px_2px_rgba(255,255,255,0.15),0_0_15px_rgba(0,229,255,0.2)] cursor-pointer active:scale-[0.98]'}`}
                             >
                             <span className={`text-[10px] text-[#8e939d] font-medium tracking-wide transition-colors ${!isGgResolved && 'group-hover:text-[#00E5FF]'}`}>Var</span>
                             <div className={`text-[12px] transition-colors ${!isGgResolved && 'group-hover:text-white'}`}>
@@ -476,7 +480,7 @@ export const TopMatchesWidget: React.FC<TopMatchesWidgetProps> = ({ matches, onS
                                 if (isGgResolved) return;
                                 addSelection({ id: match.id+'_ng', matchId: match.id, matchName: `${match.home} vs ${match.away}`, selectionName: 'KG Yok', odd: parseFloat(ngOdd) });
                               }}
-                              className={`bg-white/[0.04] backdrop-blur-sm border border-white/10 rounded p-1.5 flex flex-col items-center justify-center gap-0.5 transition-all group ${isGgResolved ? 'opacity-40 cursor-not-allowed bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,rgba(255,255,255,0.03)_10px,rgba(255,255,255,0.03)_20px)]' : 'hover:border-[#00E5FF]/50 hover:shadow-[inset_0_0_15px_rgba(0,229,255,0.2)] cursor-pointer active:scale-[0.98]'}`}
+                              className={`bg-gradient-to-b from-[#1E2333] to-[#121622] shadow-[inset_0_1px_1px_rgba(255,255,255,0.08),0_4px_8px_rgba(0,0,0,0.4)] rounded-lg p-1.5 flex flex-col items-center justify-center gap-0.5 transition-all group border-none relative overflow-hidden ${isGgResolved ? 'opacity-40 cursor-not-allowed bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,rgba(255,255,255,0.03)_10px,rgba(255,255,255,0.03)_20px)]' : 'hover:from-[#232A3D] hover:to-[#171C2B] hover:shadow-[inset_0_1px_2px_rgba(255,255,255,0.15),0_0_15px_rgba(0,229,255,0.2)] cursor-pointer active:scale-[0.98]'}`}
                             >
                             <span className={`text-[10px] text-[#8e939d] font-medium tracking-wide transition-colors ${!isGgResolved && 'group-hover:text-[#00E5FF]'}`}>Yok</span>
                             <div className={`text-[12px] transition-colors ${!isGgResolved && 'group-hover:text-white'}`}>

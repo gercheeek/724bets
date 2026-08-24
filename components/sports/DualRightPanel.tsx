@@ -545,7 +545,7 @@ export const DualRightPanel: React.FC<{
                           </button>
                           <button 
                             onClick={() => siteUser ? setIsConfirmingBet(true) : handlePlaceBet()}
-                            className="flex-1 h-10 md:h-12 bg-gradient-to-r from-[#00E5FF] to-[#0099CC] text-black font-black text-[13px] md:text-[15px] rounded-lg tracking-widest uppercase flex items-center justify-center hover:from-[#00FFFF] hover:to-[#00b3e6] transition-all gap-1 shadow-[0_0_20px_rgba(0,229,255,0.3)] hover:shadow-[0_0_30px_rgba(0,229,255,0.5)] active:scale-[0.98] relative overflow-hidden group/btn border border-white/20"
+                            className="flex-1 h-10 md:h-12 bg-gradient-to-r from-[#10B981] to-[#059669] text-black font-black text-[13px] md:text-[15px] rounded-lg tracking-widest uppercase flex items-center justify-center hover:from-[#00FFFF] hover:to-[#00b3e6] transition-all gap-1 shadow-[inset_0_1px_1px_rgba(255,255,255,0.3),_0_0_20px_rgba(16,185,129,0.4)] hover:shadow-[inset_0_1px_1px_rgba(255,255,255,0.3),_0_0_30px_rgba(16,185,129,0.6)] active:scale-[0.98] relative overflow-hidden group/btn border border-white/20"
                           >
                             <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/40 to-transparent group-hover/btn:animate-[shine-sweep_2s_ease-in-out_infinite]" />
                             <span className="relative z-10 flex items-center gap-1">

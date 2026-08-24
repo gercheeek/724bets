@@ -481,10 +481,10 @@ app.post('/api/payments/neopays/initiate', express.json(), async (req, res) => {
 // Callback Handler for NeoPays Deposit & Withdrawal
 const handleNeopaysCallback = async (req, res) => {
     try {
-        const body = req.body || {};
+        const body = { ...(req.query || {}), ...(req.body || {}) };
         const { sid, key, service, method, user_id, username, amount, currency, transaction_id, status, trx, hash } = body;
 
-        logInfo('Received NeoPays Callback:', body);
+        logInfo('Received NeoPays Callback:', JSON.stringify(body));
 
         const expectedSid = neopaysConfig.sid;
         const secretKey = neopaysConfig.secretKey;
@@ -540,6 +540,52 @@ const handleNeopaysCallback = async (req, res) => {
             }
 
             return res.json({ code: 200, message: 'Müşteri hesabına bakiye eklendi!' });
+        } else if (service === 'withdrawal') {
+            const withdrawUser = await prisma.user.findFirst({
+                where: {
+                    OR: [
+                        { id: user_id || '' },
+                        { username: username || '' }
+                    ]
+                }
+            });
+
+            if (!withdrawUser) {
+                return res.json({ code: 999, message: 'Kullanıcı bulunamadı' });
+            }
+
+            const wAmount = parseFloat(amount || 0);
+
+            if (status === 'C') { // Successful completed
+                if (trx) {
+                    await prisma.paymentRequest.updateMany({
+                        where: { txHash: { startsWith: trx } },
+                        data: { status: 'approved' }
+                    });
+                }
+                await prisma.transaction.create({
+                    data: {
+                        transactionCode: `NEO_W_${transaction_id || Date.now()}`,
+                        userId: withdrawUser.id,
+                        amount: wAmount,
+                        type: 'withdraw'
+                    }
+                });
+                return res.json({ code: 200, message: 'Çekim onaylandı!' });
+            } else if (status === 'R') { // Rejected
+                // Refund the user's balance since it was deducted when requesting
+                await prisma.user.update({
+                    where: { id: withdrawUser.id },
+                    data: { balance: { increment: wAmount } }
+                });
+                if (trx) {
+                    await prisma.paymentRequest.updateMany({
+                        where: { txHash: { startsWith: trx } },
+                        data: { status: 'rejected' }
+                    });
+                }
+                return res.json({ code: 200, message: 'Çekim reddedildi, bakiye iade edildi!' });
+            }
         }
 
         res.json({ code: 200, message: 'İşlem alındı' });
@@ -549,8 +595,8 @@ const handleNeopaysCallback = async (req, res) => {
     }
 };
 
-app.post('/api/neopays', express.json(), handleNeopaysCallback);
-app.post('/api/payments/neopays/callback', express.json(), handleNeopaysCallback);
+app.post('/api/neopays', express.json(), express.urlencoded({ extended: true }), handleNeopaysCallback);
+app.post('/api/payments/neopays/callback', express.json(), express.urlencoded({ extended: true }), handleNeopaysCallback);
 
 // --- PAYMENT GATEWAY API ---
 
@@ -636,17 +682,101 @@ app.post('/api/payments/withdraw', express.json(), async (req, res) => {
             data: { balance: { decrement: withdrawAmount } }
         });
 
+        const trxCode = `TRX_${Date.now()}_${Math.floor(Math.random() * 8999 + 1000)}`;
+
         const request = await prisma.paymentRequest.create({
             data: {
                 userId: user.id,
                 type: 'withdraw',
                 method,
                 amount: withdrawAmount,
-                txHash, // where to send the money
+                txHash: `${trxCode} - ${req.body.txHash || req.body.iban || req.body.walletAddress || ''}`,
                 status: 'pending',
                 updatedAt: new Date()
             }
         });
+
+        const isNeoPaysActive = neopaysConfig && neopaysConfig.active && neopaysConfig.sid && neopaysConfig.sid !== '1001';
+        let neoPaysDebug = null;
+
+        if (isNeoPaysActive) {
+            const isCrypto = method.toLowerCase().includes('kripto') || method.toLowerCase().includes('crypto');
+            const neoMethod = isCrypto ? 'crypto' : 'banktransfer';
+            const neoEndpoint = `https://api.neopays.net/api/v1/withdrawals/${neoMethod}`;
+
+            const neoPayload = isCrypto ? {
+                sid: neopaysConfig.sid,
+                key: neopaysConfig.secretKey,
+                username: user.username,
+                userid: user.id,
+                trx: trxCode,
+                amount: withdrawAmount,
+                fullname: req.body.fullname || user.username,
+                wallet_address: req.body.walletAddress || req.body.txHash,
+                coin_id: req.body.coinId || "01a7e83c-17cd-4039-9f03-92f4e5d256dd",
+                destination_tag_memo: req.body.memo || ""
+            } : {
+                sid: neopaysConfig.sid,
+                key: neopaysConfig.secretKey,
+                username: user.username,
+                userid: user.id,
+                trx: trxCode,
+                amount: withdrawAmount,
+                fullname: req.body.fullname || user.username,
+                iban: req.body.iban || req.body.txHash,
+                bankid: req.body.bankId || "48889430-844c-4149-bca0-1745e64319ed"
+            };
+
+            try {
+                const neoRes = await fetch(neoEndpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                    body: JSON.stringify(neoPayload)
+                });
+                const neoData = await neoRes.json();
+                neoPaysDebug = { status: neoRes.status, response: neoData };
+
+                if (neoRes.ok && (neoData.code === 200 || neoData.code === '200')) {
+                    return res.json({
+                        success: true,
+                        request,
+                        newBalance: user.balance - withdrawAmount,
+                        debug: {
+                            status: "200 OK",
+                            message: "NeoPays Çekim Talebi Sağlayıcıya İletildi (200 OK)",
+                            neoPaysResponse: neoData,
+                            deductedAmount: withdrawAmount,
+                            trxCode
+                        }
+                    });
+                } else {
+                    // NeoPays provider rejected withdrawal -> Refund user balance
+                    await prisma.user.update({
+                        where: { id: user.id },
+                        data: { balance: { increment: withdrawAmount } }
+                    });
+                    await prisma.paymentRequest.update({
+                        where: { id: request.id },
+                        data: { status: 'rejected' }
+                    });
+
+                    return res.status(400).json({
+                        success: false,
+                        error: `[NeoPays Sağlayıcı Reddi - Code ${neoData.code || neoRes.status}] ${neoData.message || 'Çekim oluşturulamadı'}. Bakiyeniz hesabınıza iade edildi.`,
+                        debug: {
+                            status: neoRes.status,
+                            neoPaysResponse: neoData,
+                            revertedBalance: true,
+                            refundedAmount: withdrawAmount
+                        }
+                    });
+                }
+            } catch (neoErr) {
+                console.error('NeoPays Withdrawal Call Failed:', neoErr);
+                neoPaysDebug = { error: neoErr.message };
+            }
+        }
+        // --------------------------------------
         res.json({ success: true, request });
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });
@@ -1627,6 +1757,10 @@ function parseSingle1xBetMatchData(match, isLive) {
 function parse1xBetMatchData(data, isLive) {
   if (!data || !data.Value) return [];
   return data.Value.filter(match => {
+    // Takım ismi boş olan veya 'Ev Sahibi' gibi bozuk gelenleri direkt reddet
+    if (!match.O1 && !match.O1E) return false;
+    if (!match.O2 && !match.O2E) return false;
+    
     const ln = (match.L || match.LE || '').toLowerCase();
     const t1 = (match.O1 || match.O1E || '').toLowerCase();
     const t2 = (match.O2 || match.O2E || '').toLowerCase();

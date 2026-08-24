@@ -21,7 +21,7 @@ export default function AdminDepositsTab() {
     setLoading(true);
     setError('');
     try {
-      const res = await fetch('/api/admin/payments/pending?type=deposit');
+      const res = await fetch('http://localhost:3001/api/admin/payments/pending?type=deposit');
       const data = await res.json();
       if (data.success) {
         setDeposits(data.pending);
@@ -43,7 +43,7 @@ export default function AdminDepositsTab() {
 
   const fetchNeopaysConfig = async () => {
     try {
-      const res = await fetch('/api/admin/neopays-settings');
+      const res = await fetch('http://localhost:3001/api/admin/neopays-settings');
       const data = await res.json();
       if (data.success && data.config) {
         setNeopaysSid(data.config.sid || '');
@@ -58,7 +58,7 @@ export default function AdminDepositsTab() {
     setSavingNeopays(true);
     setNeopaysMsg('');
     try {
-      const res = await fetch('/api/admin/neopays-settings', {
+      const res = await fetch('http://localhost:3001/api/admin/neopays-settings', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ sid: neopaysSid, secretKey: neopaysSecretKey, active: true })

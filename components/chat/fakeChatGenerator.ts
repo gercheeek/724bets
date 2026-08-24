@@ -10,66 +10,60 @@ const EMOJIS = ["😂", "🔥", "🚀", "💀", "🤑", "🤬", "💸", "🎰", 
 
 // --- ENGLISH (GLOBAL) ---
 const EN_SHORT = [
-    "LFG!", "spin it", "fucking rigged", "shit game", "wtf",
-    "gg", "omg yes", "cash out now", "buy bonus", "fuck this",
-    "scam", "moon 🚀", "hahaha", "gl all", "nice hit",
-    "fucking finally", "bs", "ez money", "rip balance", "let's go bitches",
-    "any drops?", "bored", "send tips", "lmao", "ded"
+    "LFG!", "spin it", "let's go", "good luck", "gg",
+    "omg yes", "nice win", "wow", "any drops?", "bored",
+    "moon 🚀", "hahaha", "gl all", "nice hit", "finally",
+    "ez", "let's go friends", "fun game", "send tips", "nice"
 ];
 
 const EN_LONG = [
-    "Bro I just lost my entire paycheck on this fucking slot, what the actual fuck is this rtp 💀💀",
-    "This is why I always tell you guys to stop chasing losses. I deposited $100 and cashed out $2000, easy money bitches 🤑🔥",
-    "Does anyone know when the next rain is dropping? I swear I've been waiting for hours and nothing is happening",
-    "Can someone explain how the VIP system works? I've been playing every day and I'm still not getting any good cashback..."
+    "I just hit a crazy multiplier on this slot! 🚀🔥",
+    "This is why I always tell you guys to be patient. Deposited $100 and cashed out $2000, have a good day everyone 🤑",
+    "Does anyone know when the next rain is dropping? Been waiting for it 🌧️",
+    "The VIP system is actually really nice, just got a huge cashback!"
 ];
 
 // --- TURKISH (TR) ---
 const TR_SHORT = [
-    "amk", "kasa katlandı", "sikecem böyle işi", "oynatma", "sg",
-    "ananı sikeyim", "gg", "helal", "bas bas", "orospu cocuklari",
-    "lan", "yine yattık amk", "valla billa", "hadi lan", "ver ulan",
-    "şansımı sikeyim", "yok böyle bişey", "aq", "kasayı sıfırladık", "siktir git",
-    "helal lan size", "patladı", "geliyor gelmekte olan", "kodumun oyunu", "hahaha amk"
+    "kasa katlandı", "harika oyun", "bol şans", "gg", "helal",
+    "bas bas", "şansımız döndü", "geliyor gelmekte olan", "hadi bakalım", "vay canına",
+    "helal olsun", "tebrikler", "bugün çok iyi", "selamlar", "hoş bulduk",
+    "vip avantajları harika", "çarkı çevirdim", "çok eğlenceli", "iyi oyunlar", "kazananlara tebrikler"
 ];
 
 const TR_LONG = [
-    "Oğlum sabahtan beri aynı slota basıyorum yemin ederim bir kere bile bonus vermedi, anasını sikeyim böyle rtp'nin amk 🤬💀",
-    "Beyler sakın hırs yapmayın bak, 500 lira attım tek spinde 10k çektim. Çıkmasını bileceksin siktirip gideceksin bu kadar basit 💸🚀",
-    "Ya amına koyayım dünden beri rain bekliyoruz hala adminler bi bok atmadı, ne cimri adamlarsınız lan siz",
-    "Şu siktiğimin çarkından bir kere bile düzgün bir şey çıkmadı, hep boş hep boş yeter ulan 🤡"
+    "Arkadaşlar Sweet Bonanza bugün çok iyi veriyor, kesinlikle denemelisiniz 🚀🔥",
+    "Sabreden derviş muradına ermiş derler. 500 lira attım tek spinde 10k çektim. Herkese bol şans 💸",
+    "Yağmur (Rain) etkinliği ne zaman başlar acaba? Bilen var mı moderatör bey? 🌧️",
+    "VIP iademi aldım, 724Bets gerçekten çok güvenilir bir sistem kurmuş, teşekkürler."
 ];
 
 // --- PORTUGUESE (BR) ---
 const BR_SHORT = [
-    "pqp", "caralho", "bora", "fudeu", "tomanocu",
-    "kkkkkk", "lixo de jogo", "vtnc", "paga", "faz o pix",
-    "merda", "socorro", "vamo porra", "vai tomar no cu", "aff",
-    "pagou mt", "slc", "deu ruim", "foda", "roubo",
-    "me fudi", "tá de sacanagem", "chupa", "bora ganhar", "tamo junto"
+    "bora", "muito bom", "kkkkkk", "paga", "faz o pix",
+    "vamo", "aff", "pagou mt", "slc", "boa sorte",
+    "tamo junto", "bora ganhar", "bom jogo", "ganhei", "incrível"
 ];
 
 const BR_LONG = [
-    "Mano, perdi todo o meu dinheiro nessa porra de jogo, vai tomar no cu desse rtp lixo do caralho 🤬💀",
-    "Falei pra vocês, só ter paciência! Coloquei 50 pila e já saquei 2k, faz o pix porra 🤑🚀",
-    "Alguém sabe que horas vai ter chuva de moeda? Tô aqui desde cedo igual um otário esperando kkkkk",
-    "Esse vip não serve pra bosta nenhuma, tô jogando igual um condenado e não ganho nada de cashback, tnc"
+    "Mano, acabei de ganhar um multiplicador gigante nesse jogo, que loucura 🚀🔥",
+    "Falei pra vocês, só ter paciência! Coloquei 50 pila e já saquei 2k, faz o pix 🤑",
+    "Alguém sabe que horas vai ter chuva de moeda? Tô aqui esperando kkkkk",
+    "Esse sistema VIP é muito bom, o cashback caiu na hora!"
 ];
 
 // --- SPANISH (AR) ---
 const AR_SHORT = [
-    "puta madre", "vamos", "mierda", "joder", "la concha",
-    "jajaja", "hijo de puta", "paga ya", "vete a la mierda", "estafa",
-    "qué asco", "vamos carajo", "que robo", "la ctm", "dale boludo",
-    "la puta que te pario", "che", "tremendo", "me cago en todo", "anda a cagar",
-    "ganancia", "suerte", "maldita sea", "que locura", "no mames"
+    "vamos", "jajaja", "paga ya", "vamos carajo", "che",
+    "tremendo", "ganancia", "suerte", "que locura", "excelente",
+    "bien jugado", "dale", "buena suerte", "increíble", "saludos"
 ];
 
 const AR_LONG = [
-    "Boludo perdí todo mi sueldo en esta mierda de juego, la puta madre que lo parió con este rtp de mierda 🤬💀",
-    "Se los dije hijos de puta, metí 10 lucas y ya saqué como 100k, a mamarla todos 🤑🚀",
-    "¿Alguien sabe cuándo carajo van a tirar plata en el chat? Estoy acá desde hace mil horas y nada",
-    "Me cago en el sistema VIP de mierda este, juego todo el día y no te devuelven una mierda loco"
+    "Acabo de pegar un multiplicador re loco en este juego, no lo puedo creer 🚀🔥",
+    "Se los dije muchachos, paciencia. Metí 10 lucas y ya saqué como 100k, vamos 🤑",
+    "¿Alguien sabe cuándo tiran plata en el chat? Estoy acá esperando 🌧️",
+    "El sistema VIP es excelente, me devolvieron al instante, recomendadísimo."
 ];
 
 function getRandomItem(arr: any[]) {

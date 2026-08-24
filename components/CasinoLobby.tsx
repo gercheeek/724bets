@@ -9,15 +9,9 @@ import { useGames } from '../contexts/GameContext';
 import { getOriginalsData } from './OriginalsSlider';
 import { PopularLiveWidget } from './PopularLiveWidget';
 import { GamePlayView } from './GamePlayView';
-import rawCasinoData from '../data/slotra_casino.json';
+import LiveWinsMarquee from './LiveWinsMarquee';
 
-const LIVE_CASINO_GAMES = rawCasinoData.map((game: any, index: number) => ({
-  id: `live-slotra-${index}`,
-  name: game.name.replace('Game thumb - ', ''),
-  img: game.image,
-  category: 'live',
-  provider: 'Live Casino'
-}));
+
 const TABS = [
   { id: 'all', label: 'Tümü', icon: <Grid2X2 size={16} /> },
   { id: 'live', label: 'Canlı Casino', icon: <MonitorPlay size={16} /> },

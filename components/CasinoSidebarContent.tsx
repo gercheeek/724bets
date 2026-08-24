@@ -7,7 +7,6 @@ interface CasinoSidebarContentProps {
   onToggle?: () => void;
 }
 
-import rawCasinoData from '../data/slotra_casino.json';
 
 const CASINO_GAMES: any[] = [];
 

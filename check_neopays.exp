@@ -1,0 +1,9 @@
+#!/usr/bin/expect -f
+set timeout -1
+set ip "85.121.178.80"
+set password "kQkrGBYHtY76dIF0z1"
+
+spawn ssh -o StrictHostKeyChecking=no root@$ip "cat /opt/724bets-backend/neopays_config.json"
+expect "*?assword:*"
+send "$password\r"
+expect eof

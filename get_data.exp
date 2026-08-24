@@ -1,0 +1,6 @@
+#!/usr/bin/expect -f
+set timeout 60
+spawn scp -o StrictHostKeyChecking=no root@85.121.178.80:/opt/724bets-backend/data/slotra_casino.json /Users/alex/Desktop/7_24bets-landing-page/data/slotra_casino.json
+expect "password:"
+send "kQkrGBYHtY76dIF0z1\r"
+expect eof

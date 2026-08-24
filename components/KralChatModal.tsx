@@ -3,7 +3,7 @@ import { X, Crown, Megaphone, Trash2, Lock, Unlock, Send, Zap, Activity, Bot, Co
 import { triggerGlobalToast } from './GlobalToaster';
 import { supabase } from '../utils/supabase';
 import ModernChat from './ModernChat';
-import AdminRainControl from './AdminRainControl';
+import AdminChatControl from './AdminChatControl';
 
 const FIXED_BOTS = [
     { id: 1, isim: 'CryptoKral', rol: 'VIP', uyelikTarihi: '2 Yıllık Üye', karakter: 'Sürekli kasa katlayan, yüksek bahisçi', avatarRenk: '#FFD700', typingStyle: 'perfect', slang: ['kral', 'kardeşim'], emojiStyle: 'money' },
@@ -813,7 +813,7 @@ export default function KralChatModal({ isOpen, onClose }: KralChatModalProps) {
                         >
                             <X size={20} />
                         </button>
-                        <AdminRainControl adminId={'KRAL_KOMUTA'} />
+                        <AdminChatControl adminId={'KRAL_KOMUTA'} />
                     </div>
                 </div>
             )}

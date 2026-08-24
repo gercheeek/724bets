@@ -28,7 +28,12 @@ export const GamePlayView: React.FC<GamePlayViewProps> = ({ game, demoUrl, onClo
   useEffect(() => {
     return () => {
       if (iframeRef.current) {
-        iframeRef.current.src = 'about:blank';
+        try { iframeRef.current.src = 'about:blank'; } catch (e) {}
+      }
+      // Fallback: manually find and destroy if the ref was detached
+      const gameIframe = document.getElementById('game-play-iframe') as HTMLIFrameElement;
+      if (gameIframe) {
+        try { gameIframe.src = 'about:blank'; } catch (e) {}
       }
     };
   }, []);
@@ -187,9 +192,20 @@ export const GamePlayView: React.FC<GamePlayViewProps> = ({ game, demoUrl, onClo
 
       {/* Top Section: Game Iframe & Control Bar */}
       <div id="game-play-container" className="w-full bg-[#0B0E14] relative">
-        <button onClick={onClose} className="absolute top-4 right-4 z-[60] w-10 h-10 bg-black/60 hover:bg-black/80 text-white/70 hover:text-white rounded-full flex items-center justify-center transition-all backdrop-blur-sm">
-          <X size={20} />
-        </button>
+        {/* Right Action Buttons */}
+        <div className="absolute top-4 right-4 flex items-center gap-3 z-[60]">
+          <button 
+            onClick={() => {
+              if (iframeRef.current) { try { iframeRef.current.src = 'about:blank'; } catch(e){} }
+              const el = document.getElementById('game-play-iframe') as HTMLIFrameElement;
+              if (el) { try { el.src = 'about:blank'; } catch(e){} }
+              onClose();
+            }} 
+            className="w-10 h-10 bg-black/60 hover:bg-black/80 text-white/70 hover:text-white rounded-full flex items-center justify-center transition-all backdrop-blur-sm shadow-lg"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
 
         {/* Game Iframe Wrapper */}
         <div className={`w-full relative ${isFullscreen ? 'h-screen' : 'h-[60vh] md:h-[70vh] lg:h-[75vh]'}`}>
@@ -265,11 +281,17 @@ export const GamePlayView: React.FC<GamePlayViewProps> = ({ game, demoUrl, onClo
               <p className="text-[#848B9D] text-center mb-6 max-w-md">{realGameError}</p>
               <div className="flex gap-3">
                 <button onClick={() => setIsRealMoney(false)} className="px-6 py-3 bg-[#1A1F2D] text-white rounded-lg font-bold text-sm hover:bg-[#252A3A] transition-colors">Demo Modunda Oyna</button>
-                <button onClick={onClose} className="px-6 py-3 bg-gradient-to-r from-[#00E5FF] to-[#00b3cc] text-[#0A0D14] rounded-lg font-bold text-sm hover:brightness-110 transition-all">Başka Oyun Seç</button>
+                <button onClick={() => {
+                  if (iframeRef.current) { try { iframeRef.current.src = 'about:blank'; } catch(e){} }
+                  const el = document.getElementById('game-play-iframe') as HTMLIFrameElement;
+                  if (el) { try { el.src = 'about:blank'; } catch(e){} }
+                  onClose();
+                }} className="px-6 py-3 bg-gradient-to-r from-[#00E5FF] to-[#00b3cc] text-[#0A0D14] rounded-lg font-bold text-sm hover:brightness-110 transition-all">Başka Oyun Seç</button>
               </div>
             </div>
           ) : (
             <iframe 
+              id="game-play-iframe"
               ref={iframeRef}
               key={(isRealMoney && realLaunchUrl) ? realLaunchUrl : (demoUrl || 'demo-key')}
               src={(isRealMoney && realLaunchUrl) 

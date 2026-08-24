@@ -24,6 +24,8 @@ import DynamicSlotsGames from './DynamicSlotsGames';
 import EmptySectionX from './EmptySectionX';
 import { PopularLiveWidget } from './PopularLiveWidget';
 import HeroWelcomeBanner from './HeroWelcomeBanner';
+import LiveWinsMarquee from './LiveWinsMarquee';
+
 import FeaturedCombos from './sports/FeaturedCombos';
 import SportsPromoSlider from './sports/SportsPromoSlider';
 import { UpcomingTournamentsWidget } from './UpcomingTournamentsWidget';
@@ -148,8 +150,16 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
   const [detailModalGame, setDetailModalGame] = useState<GameData | null>(null);
   const [heroImageIndex, setHeroImageIndex] = useState(0);
   const { t } = useLanguage();
-  const { events } = useBetting();
-  const matches = events || []; // Use real betting events for widgets
+  const { events, global1xBetPreMatches, globalLiveMatches } = useBetting();
+  
+  // Widgetlara göndereceğimiz veriyi zenginleştirelim. Eğer "events" sadece canlı maçları içeriyorsa,
+  // Yaklaşan maçlar widget'ları kaybolur. O yüzden pre-match verilerini ekliyoruz.
+  const allMatches = [...(events || []), ...(global1xBetPreMatches || []), ...(globalLiveMatches || [])];
+  // Tekrarlayanları (ID'ye göre) filtrele
+  const matchesMap = new Map();
+  allMatches.forEach(m => { if (m.id) matchesMap.set(m.id, m); });
+  const matches = Array.from(matchesMap.values());
+  
   const setSelectedMatch = (m: any) => {};
     useEffect(() => {
         const timer = setInterval(() => {
@@ -420,6 +430,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
         // GUEST VIEW (NEW DESIGN - Matches reference)
         <div className="w-full max-w-[1400px] mx-auto px-2 md:px-4 xl:px-4 pt-5 pb-6 flex flex-col gap-2">
             <HeroWelcomeBanner onRegisterClick={onMemberRegisterClick} />
+            
             {/* Quick Access Banners for Guest View */}
             <div className="w-full flex flex-row gap-2 md:gap-4 mt-2 mb-2">
               {/* Casino Banner */}
@@ -469,7 +480,14 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
                       </div>
                   </div>
               </div>
-            </div><div className="w-full mt-2 mb-6 sm:mt-4 sm:mb-8 flex flex-col gap-10">
+            </div>
+            
+            {/* Live Wins moved under Casino/Sports Banners */}
+            <div className="mt-8 mb-4 rounded-2xl overflow-hidden border border-white/5 shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+                <LiveWinsMarquee />
+            </div>
+            
+            <div className="w-full mt-4 mb-6 sm:mt-6 sm:mb-8 flex flex-col gap-10">
               <LiveWinsTicker />
               <OriginalsSlider onNavigate={onViewChange} />
 
@@ -521,6 +539,7 @@ const GuestLanding: React.FC<GuestLandingProps> = ({
               
               <div className="w-full">
                 <TopMatchesWidget 
+                  title="Yaklaşan En İyi Maçlar"
                   matches={matches}
                   onSelectMatch={(m) => {
                     setSelectedMatch(m);

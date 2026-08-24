@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import rawCasinoData from '../data/slotra_casino.json';
 
 export interface Game {
   id: string | number;
@@ -59,22 +58,20 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         const data = await res.json();
         
         if (isMounted) {
-          if (data.success && Array.isArray(data.games) && data.games.length > 0) {
+          if (data.success && Array.isArray(data.games)) {
             setGames(mapGames(data.games));
             setError(null);
           } else {
-            // Fallback if success false or empty array
-            console.warn('API returned no games, falling back to local JSON data.');
-            setGames(mapGames(rawCasinoData));
-            setError('Using local fallback data');
+            setGames([]);
+            setError('API returned no games');
           }
           setIsLoading(false);
         }
       } catch (err: any) {
         if (isMounted) {
-          console.error('GameContext fetch error, falling back to local JSON data:', err);
-          setGames(mapGames(rawCasinoData));
-          setError(err.message || 'Using local fallback data due to fetch error');
+          console.error('GameContext fetch error:', err);
+          setGames([]);
+          setError(err.message || 'Fetch error');
           setIsLoading(false);
         }
       }

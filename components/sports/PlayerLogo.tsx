@@ -135,7 +135,7 @@ export const PlayerLogo: React.FC<PlayerLogoProps> = ({ name, fallbackLogo, spor
   const hasJsonMapping = !!(teamLogos[normClean] || teamLogos[name?.toLowerCase()?.trim() ?? '']);
   
   // Use our backend proxy to avoid Cloudflare 403 errors and trigger background scraping!
-  const proxyUrl = hasJsonMapping ? `/api/logo/${normClean}?name=${encodeURIComponent(name)}` : null;
+  const proxyUrl = hasJsonMapping ? `http://localhost:3001/api/logo/${normClean}?name=${encodeURIComponent(name)}` : null;
 
   // 2. Check 3,100+ local team logos library
   const n = (name || '').toLowerCase().replace(/[^a-z0-9ğüşöçiı]/g, '');
