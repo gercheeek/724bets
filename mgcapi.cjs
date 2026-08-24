@@ -70,10 +70,11 @@ async function getAllGames() {
     try {
         console.log('[MGCAPI] Fetching game list...');
         const request_time = Date.now().toString();
-        const str = `${APP_ID}${request_time}`;
+        const limit = "10000";
+        const str = `${request_time}${APP_ID}${limit}`;
         const sign = crypto.createHmac('md5', APP_KEY).update(encodeURIComponent(str)).digest('hex');
 
-        const url = `${API_URL}/api/v1/get-games?app_id=${APP_ID}&request_time=${request_time}&sign=${sign}&limit=10000`;
+        const url = `${API_URL}/api/v1/get-games?request_time=${request_time}&app_id=${APP_ID}&limit=${limit}&sign=${sign}`;
         const res = await fetch(url);
         const data = await res.json();
         
