@@ -291,6 +291,7 @@ export const GamePlayView: React.FC<GamePlayViewProps> = ({ game, demoUrl, onClo
                 ? realLaunchUrl 
                 : (demoUrl || getGameLaunchUrl(game))} 
               className="w-full h-full border-0"
+              allow="autoplay; fullscreen; encrypted-media; screen-wake-lock; clipboard-write; microphone; camera; display-capture; payment; web-share"
               allowFullScreen
             />
           )}

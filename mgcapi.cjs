@@ -159,7 +159,7 @@ async function getLaunchUrl(vendorCode, gameCode, userCode) {
 
     console.warn('[MGCAPI] playGame returned fallback for game:', gameCode);
     const matchedSymbol = resolveSymbol(gameCode, vendorCode);
-    return `https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=tr&cur=TRY&gameSymbol=${matchedSymbol}&websiteUrl=https%3A%2F%2Fwww.724bets.net&jurisdiction=99&enviroment=PREPROD&m=1`;
+    return `https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=tr&cur=TRY&gameSymbol=${matchedSymbol}&lobbyUrl=https%3A%2F%2Fwww.724bets.net%2Fcasino`;
 }
 
 

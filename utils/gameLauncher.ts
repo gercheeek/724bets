@@ -352,5 +352,5 @@ export function getGameSymbol(game: any): string {
 export function getGameLaunchUrl(game: any): string {
   if (!game) return '';
   const symbol = getGameSymbol(game);
-  return `https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=tr&cur=TRY&gameSymbol=${symbol}&websiteUrl=https%3A%2F%2F724bets.net&jurisdiction=99&enviroment=PREPROD&m=1`;
+  return `https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=tr&cur=TRY&gameSymbol=${symbol}&lobbyUrl=https%3A%2F%2Fwww.724bets.net%2Fcasino`;
 }
