@@ -17,6 +17,12 @@ function createSign(params, apiKey) {
     return crypto.createHmac('md5', apiKey).update(encoded).digest('hex');
 }
 
+function createQuerySign(app_id, request_time, apiKey) {
+    const str = `${app_id}${request_time}`;
+    const encoded = encodeURIComponent(str);
+    return crypto.createHmac('md5', apiKey).update(encoded).digest('hex');
+}
+
 let gamesCache = [];
 
 // Helper to resolve accurate symbol for any game
@@ -26,6 +32,7 @@ function resolveSymbol(gameCode, vendorCode) {
         (g.id && g.id.toString() === gameCode.toString()) || 
         (g.game_id && g.game_id.toString() === gameCode.toString()) ||
         (g.game_code && g.game_code.toString() === gameCode.toString()) ||
+        (g.lower_key && g.lower_key.toString() === gameCode.toString()) ||
         (g.code && g.code.toString() === gameCode.toString())
     );
 
@@ -68,27 +75,41 @@ function resolveSymbol(gameCode, vendorCode) {
 }
 
 /**
+ * Get All Options (Providers & Categories)
+ */
+async function getOptions() {
+    try {
+        const request_time = Date.now().toString();
+        const sign = createQuerySign(APP_ID, request_time, APP_KEY);
+        const url = `${API_URL}/api/v1/get-options?app_id=${APP_ID}&request_time=${request_time}&sign=${sign}`;
+        const res = await fetch(url);
+        return await res.json();
+    } catch (err) {
+        console.error('[MGCAPI] Error fetching options:', err.message);
+        return null;
+    }
+}
+
+/**
  * Fetch all available games from MGCAPI
  */
 async function getAllGames() {
     try {
         console.log('[MGCAPI] Fetching game list...');
         const request_time = Date.now().toString();
-        const limit = "10000";
-        const str = `${request_time}${APP_ID}${limit}`;
-        const sign = crypto.createHmac('md5', APP_KEY).update(encodeURIComponent(str)).digest('hex');
+        const sign = createQuerySign(APP_ID, request_time, APP_KEY);
 
-        const url = `${API_URL}/api/v1/get-games?request_time=${request_time}&app_id=${APP_ID}&limit=${limit}&sign=${sign}`;
+        const url = `${API_URL}/api/v1/get-games?app_id=${APP_ID}&request_time=${request_time}&sign=${sign}`;
         const res = await fetch(url);
         const data = await res.json();
         
         let list = [];
-        if (Array.isArray(data)) {
+        if (data && data.games) {
+            list = Array.isArray(data.games) ? data.games : Object.values(data.games);
+        } else if (Array.isArray(data)) {
             list = data;
         } else if (data && data.data && Array.isArray(data.data)) {
             list = data.data;
-        } else if (data && data.games && Array.isArray(data.games)) {
-            list = data.games;
         }
 
         if (list.length > 0) {
@@ -111,18 +132,30 @@ async function getAllGames() {
 async function getLaunchUrl(vendorCode, gameCode, userCode) {
     console.log(`[MGCAPI] Generating launch URL for user ${userCode}, game ${gameCode}`);
     
+    // Find numeric game_id from gamesCache if available
+    let numericGameId = Number(gameCode);
+    if (isNaN(numericGameId) && gamesCache.length > 0) {
+        const foundGame = gamesCache.find(g => 
+            (g.lower_key && g.lower_key.toString().toLowerCase() === String(gameCode).toLowerCase()) ||
+            (g.name && g.name.toLowerCase() === String(gameCode).toLowerCase())
+        );
+        if (foundGame && foundGame.id) {
+            numericGameId = foundGame.id;
+        }
+    }
+
     const payload = {
-        exit: 'https://www.724bets.net/',
-        game_id: Number(gameCode) || gameCode,
-        player_id: userCode ? userCode.toString() : 'player_1',
-        player_token: Buffer.from(JSON.stringify({ player_id: userCode || 1 })).toString('base64'),
+        exit: 'https://www.724bets.net/casino',
+        game_id: isNaN(numericGameId) ? 117274 : numericGameId,
+        player_id: userCode ? userCode.toString() : 'test',
+        player_token: Buffer.from(JSON.stringify({ game_id: numericGameId || 117274, player_id: userCode || 'test', partner_id: '1' })).toString('base64'),
         app_id: APP_ID,
         language: 'tr',
         currency: 'TRY',
         request_time: Date.now(),
         urls: {
             base_url: 'https://www.724bets.net',
-            wallet_url: 'https://www.724bets.net/api/casino/callback/api',
+            wallet_url: 'https://www.724bets.net/wallet',
             other_url: 'https://www.724bets.net/support'
         }
     };
@@ -135,44 +168,40 @@ async function getLaunchUrl(vendorCode, gameCode, userCode) {
         'Accept': 'application/json'
     };
     
-    const endpoints = [`${API_URL}/api/v1/playGame`, 'https://stage.mgcapi.com/api/v1/playGame'];
-    for (const ep of endpoints) {
-        try {
-            const resObj = await fetch(ep, {
-                method: 'POST',
-                headers: headers,
-                body: JSON.stringify(payload),
-                signal: AbortSignal.timeout(4000)
-            });
-            const data = await resObj.json();
-            
-            if (data && (data.result === true || data.status === 200) && data.url) {
-                console.log(`[MGCAPI] Real game launch URL acquired from ${ep}:`, data.url);
-                return data.url;
-            } else {
-                console.warn(`[MGCAPI] ${ep} returned:`, data);
-            }
-        } catch (err) {
-            console.warn(`[MGCAPI] Error connecting to ${ep}:`, err.message);
+    try {
+        const resObj = await fetch(`${API_URL}/api/v1/playGame`, {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(payload),
+            signal: AbortSignal.timeout(3500)
+        });
+        const data = await resObj.json();
+        
+        if (data && (data.result === true || data.status === 200) && data.url) {
+            console.log(`[MGCAPI] Real game launch URL acquired:`, data.url);
+            return data.url;
+        } else {
+            console.warn(`[MGCAPI] playGame returned:`, data);
         }
+    } catch (err) {
+        console.warn(`[MGCAPI] Error connecting to playGame endpoint:`, err.message);
     }
 
-    console.warn('[MGCAPI] playGame returned fallback for game:', gameCode);
+    console.warn('[MGCAPI] playGame fallback to direct client for game:', gameCode);
     const matchedSymbol = resolveSymbol(gameCode, vendorCode);
     return `https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=tr&cur=TRY&gameSymbol=${matchedSymbol}&lobbyUrl=https%3A%2F%2Fwww.724bets.net%2Fcasino`;
 }
 
-
 /**
  * Update the webhook URL on MGCAPI
  */
-async function updateWebhook() {
-    console.log('[MGCAPI] Updating webhook URL...');
+async function updateWebhook(targetUrl = 'https://www.724bets.net/api/casino/callback/api') {
+    console.log('[MGCAPI] Updating webhook URL to:', targetUrl);
     const endpoint = `${API_URL}/api/v1/webhook-url-update`;
     const params = {
         app_id: APP_ID,
         request_time: Date.now().toString(),
-        webhook_url: 'https://724bets.net/api/casino/callback/api'
+        webhook_url: targetUrl
     };
 
     const concatenated = Object.entries(params)
@@ -185,7 +214,7 @@ async function updateWebhook() {
     const queryString = new URLSearchParams(params).toString();
     
     try {
-        const resObj = await fetch(`${endpoint}?${queryString}`, { method: 'POST' });
+        const resObj = await fetch(`${endpoint}?${queryString}`, { method: 'POST', signal: AbortSignal.timeout(5000) });
         const data = await resObj.json();
         console.log('[MGCAPI] Webhook update response:', data);
         return data;
@@ -195,9 +224,11 @@ async function updateWebhook() {
 }
 
 module.exports = {
+    getOptions,
     updateWebhook,
     getAllGames,
     getLaunchUrl,
     createSign,
+    createQuerySign,
     generateSignature: createSign
 };
