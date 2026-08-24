@@ -144,7 +144,8 @@ async function getLaunchUrl(vendorCode, gameCode, userCode) {
         const resObj = await fetch(`${API_URL}/api/v1/playGame`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
+            body: JSON.stringify(payload),
+            signal: AbortSignal.timeout(3000)
         });
         const data = await resObj.json();
         
@@ -153,15 +154,12 @@ async function getLaunchUrl(vendorCode, gameCode, userCode) {
         } else if (data && data.status === 200 && data.data && data.data.url) {
             return data.data.url;
         } else {
-            console.warn('[MGCAPI] playGame returned maintenance/error in test mode for game:', gameCode, data);
-            
-            // TEST MODE FALLBACK:
-            // Match the exact game clicked dynamically
+            console.warn('[MGCAPI] playGame returned maintenance/error in test mode for game:', gameCode);
             const matchedSymbol = resolveSymbol(gameCode, vendorCode);
             return `https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=tr&cur=TRY&gameSymbol=${matchedSymbol}&websiteUrl=https%3A%2F%2F724bets.net&jurisdiction=99&enviroment=PREPROD&m=1`;
         }
     } catch (err) {
-        console.error('[MGCAPI] Launch game request failed:', err.message);
+        console.warn('[MGCAPI] Launch game fast fallback:', err.message);
         const matchedSymbol = resolveSymbol(gameCode, vendorCode);
         return `https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=tr&cur=TRY&gameSymbol=${matchedSymbol}&websiteUrl=https%3A%2F%2F724bets.net&jurisdiction=99&enviroment=PREPROD&m=1`;
     }
