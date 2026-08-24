@@ -1935,6 +1935,26 @@ async function updateUserBalance(userIdOrUsername, newBalance) {
     }
 }
 
+const CURRENCY_RATES = {
+  TRY: 1,
+  USD: 36.50,
+  USDT: 36.50,
+  EUR: 39.50,
+  GBP: 46.20,
+  BTC: 3450000.00,
+  ETH: 98000.00,
+  XRP: 92.50,
+  TRX: 8.40,
+  SOL: 6800.00,
+  LTC: 4200.00
+};
+
+function getRate(curr) {
+  if (!curr) return 1;
+  const upper = String(curr).toUpperCase();
+  return CURRENCY_RATES[upper] || 1;
+}
+
 // --- MGCAPI Callback Handler ---
 app.post('/api/casino/callback/api', express.json(), async (req, res) => {
     console.log('[MGCAPI Callback] Received:', req.body);
@@ -1960,7 +1980,9 @@ app.post('/api/casino/callback/api', express.json(), async (req, res) => {
         const user = await getOrCreateUser(userId);
         let beforeBalance = Number(user.balance) || 0;
 
-        const currentCurrency = currencyId || "TRY";
+        const currentCurrency = (currencyId || user.currency || "TRY").toUpperCase();
+        const rate = getRate(currentCurrency);
+        const convertedBeforeBalance = parseFloat((beforeBalance / rate).toFixed(2));
         const txId = transactionId || `tx_${Date.now()}`;
 
         // Reject invalid test signatures (test-cases Wrong Sign)
@@ -1969,8 +1991,8 @@ app.post('/api/casino/callback/api', express.json(), async (req, res) => {
                 result: false, 
                 err_desc: "Invalid signature", 
                 err_code: 1, 
-                balance: beforeBalance,
-                before_balance: beforeBalance,
+                balance: convertedBeforeBalance,
+                before_balance: convertedBeforeBalance,
                 transactionId: txId
             });
         }
@@ -1982,7 +2004,7 @@ app.post('/api/casino/callback/api', express.json(), async (req, res) => {
                 err_desc: "OK", 
                 err_code: 0, 
                 currency: currentCurrency,
-                balance: beforeBalance,
+                balance: convertedBeforeBalance,
                 display_name: user.username || userId,
                 gender: "male",
                 country: "TR",
@@ -2003,35 +2025,40 @@ app.post('/api/casino/callback/api', express.json(), async (req, res) => {
                 });
             }
 
-            const amount = parseFloat(betAmount || 0);
-            if (beforeBalance < amount) {
+            const amountInGameCur = parseFloat(betAmount || 0);
+            const amountInTRY = amountInGameCur * rate;
+
+            if (beforeBalance < amountInTRY) {
                 return res.json({ 
                     result: false, 
                     err_desc: "Insufficient balance", 
                     err_code: 1, 
-                    balance: beforeBalance,
-                    before_balance: beforeBalance,
+                    balance: convertedBeforeBalance,
+                    before_balance: convertedBeforeBalance,
                     transactionId: txId
                 });
             }
-            const newBalance = Math.max(0, parseFloat((beforeBalance - amount).toFixed(2)));
-            user.balance = newBalance;
-            await updateUserBalance(user.username, newBalance);
+            const newBalanceTRY = Math.max(0, parseFloat((beforeBalance - amountInTRY).toFixed(2)));
+            user.balance = newBalanceTRY;
+            await updateUserBalance(user.username, newBalanceTRY);
+
+            const newBalanceInGameCur = parseFloat((newBalanceTRY / rate).toFixed(2));
+            const beforeBalanceInGameCur = parseFloat((beforeBalance / rate).toFixed(2));
 
             if (transactionId) {
-                processedTransactions.set(transactionId, { balance: newBalance, before_balance: beforeBalance });
+                processedTransactions.set(transactionId, { balance: newBalanceInGameCur, before_balance: beforeBalanceInGameCur });
             }
 
             // Real-time broadcast to frontend header
-            io.emit('balance_update', { username: user.username, balance: newBalance });
-            io.emit('user_balance_updated', { userId: user.id, username: user.username, balance: newBalance });
+            io.emit('balance_update', { username: user.username, balance: newBalanceTRY });
+            io.emit('user_balance_updated', { userId: user.id, username: user.username, balance: newBalanceTRY });
 
             return res.json({ 
                 result: true, 
                 err_desc: "OK", 
                 err_code: 0, 
-                balance: newBalance,
-                before_balance: beforeBalance,
+                balance: newBalanceInGameCur,
+                before_balance: beforeBalanceInGameCur,
                 transactionId: txId
             });
         } 
@@ -2049,25 +2076,30 @@ app.post('/api/casino/callback/api', express.json(), async (req, res) => {
                 });
             }
 
-            const amount = parseFloat(winAmount || 0);
-            const newBalance = parseFloat((beforeBalance + amount).toFixed(2));
-            user.balance = newBalance;
-            await updateUserBalance(user.username, newBalance);
+            const amountInGameCur = parseFloat(winAmount || 0);
+            const amountInTRY = amountInGameCur * rate;
+
+            const newBalanceTRY = parseFloat((beforeBalance + amountInTRY).toFixed(2));
+            user.balance = newBalanceTRY;
+            await updateUserBalance(user.username, newBalanceTRY);
+
+            const newBalanceInGameCur = parseFloat((newBalanceTRY / rate).toFixed(2));
+            const beforeBalanceInGameCur = parseFloat((beforeBalance / rate).toFixed(2));
 
             if (transactionId) {
-                processedTransactions.set(transactionId, { balance: newBalance, before_balance: beforeBalance });
+                processedTransactions.set(transactionId, { balance: newBalanceInGameCur, before_balance: beforeBalanceInGameCur });
             }
 
             // Real-time broadcast to frontend header
-            io.emit('balance_update', { username: user.username, balance: newBalance });
-            io.emit('user_balance_updated', { userId: user.id, username: user.username, balance: newBalance });
+            io.emit('balance_update', { username: user.username, balance: newBalanceTRY });
+            io.emit('user_balance_updated', { userId: user.id, username: user.username, balance: newBalanceTRY });
 
             return res.json({ 
                 result: true, 
                 err_desc: "OK", 
                 err_code: 0, 
-                balance: newBalance,
-                before_balance: beforeBalance,
+                balance: newBalanceInGameCur,
+                before_balance: beforeBalanceInGameCur,
                 transactionId: txId
             });
         }
