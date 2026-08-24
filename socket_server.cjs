@@ -1938,10 +1938,10 @@ app.post('/api/casino/callback/api', express.json(), async (req, res) => {
     console.log('[MGCAPI Callback] Received:', req.body);
     
     try {
-        const { cmd, player_token, transactionId, gameId, currencyId, betAmount, winAmount, request_time, signature } = req.body || {};
+        const { cmd, player_id, player_token, transactionId, gameId, currencyId, betAmount, winAmount, request_time, signature } = req.body || {};
         
-        // Decode player_id from player_token (base64 JSON or plain string)
-        let userId = "testUser123";
+        // Decode player_id from req.body or player_token (base64 JSON or plain string)
+        let userId = player_id ? String(player_id) : "test";
         if (player_token) {
             try {
                 const decoded = JSON.parse(Buffer.from(player_token, 'base64').toString('utf-8'));
