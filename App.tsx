@@ -817,6 +817,41 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void, initia
     };
   }, [siteUser?.id]);
 
+  // Instant Casino Live Balance Sync (Reflects slot spins/wins in header immediately)
+  useEffect(() => {
+    if (!siteUser) return;
+    const userCode = siteUser.username || siteUser.id || 'testuser';
+    let isCancelled = false;
+
+    const pollBalance = async () => {
+      try {
+        const res = await fetch(`/api/casino/user-balance?userCode=${encodeURIComponent(userCode)}&_t=${Date.now()}`);
+        if (!res.ok) return;
+        const data = await res.json();
+        if (!isCancelled && data.success && typeof data.balance === 'number') {
+          const newBal = Number(data.balance);
+          setSiteUser((prev: any) => {
+            if (!prev) return prev;
+            if (Number(prev.balance) === newBal) return prev;
+            const updated = { ...prev, balance: newBal };
+            try {
+              localStorage.setItem('site_member', JSON.stringify(updated));
+              localStorage.setItem('site_current_member', JSON.stringify(updated));
+            } catch (e) {}
+            return updated;
+          });
+        }
+      } catch (e) {}
+    };
+
+    pollBalance();
+    const interval = setInterval(pollBalance, 1000); // 1-second instant sync
+    return () => {
+      isCancelled = true;
+      clearInterval(interval);
+    };
+  }, [siteUser?.username, siteUser?.id]);
+
   useEffect(() => {
     const handleStorageChange = (e: StorageEvent) => {
       // If site_member is removed by another tab, sync logout here
