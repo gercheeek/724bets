@@ -1981,7 +1981,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void, initia
   };
 
   const isLocalhost = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
-  const isMaintenanceActive = !isLocalhost; // Take the site offline for production, only work on local
+  const isMaintenanceActive = siteStatusConfig?.isMaintenanceMode || false;
 
   const getNextThreeAnalyses = () => {
     const combined = analyses.length > 0 ? analyses : demoAnalyses;
