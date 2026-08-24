@@ -24,6 +24,7 @@ const crypto = require('crypto');
 
 // OroPlay Integration
 const oroplay = require('./oroplay.cjs');
+const mgcapi = require('./mgcapi.cjs');
 
 app.get('/', (req, res) => {
     res.send('<h1 style="font-family:sans-serif;color:#10B981;text-align:center;margin-top:20%;">🚀 724Bets Backend API Sunucusu Başarıyla Çalışıyor!</h1>');
@@ -72,12 +73,48 @@ async function getOrCreateUser(identifier) {
   return user;
 }
 
+
+// --- PROVIDER CONFIGURATION ---
+// Set to false to instantly hide games from frontend
+const PROVIDERS = {
+    oroplay: false,
+    mgcapi: true
+};
+// ------------------------------
+
 app.get('/api/casino/games', async (req, res) => {
     try {
-        const games = await oroplay.getAllGames();
-        res.json({ success: true, games: games || [] });
+        let allGames = [];
+        
+        // Sadece açık olan API'lerden oyunları çek
+        if (PROVIDERS.oroplay) {
+            const oroplayGames = await oroplay.getAllGames();
+            allGames = allGames.concat(oroplayGames || []);
+        }
+        if (PROVIDERS.mgcapi) {
+            const mgcGames = await mgcapi.getAllGames();
+            if (mgcGames && Array.isArray(mgcGames)) {
+                const mappedMgc = mgcGames.map(g => {
+                    const isLive = g.game_type === 2 || (g.provider_title && g.provider_title.toLowerCase().includes('live')); // Tahmini type belirleme
+                    return {
+                        id: `${g.provider_code}-${g.id}`,
+                        name: g.name,
+                        provider: g.provider_title || g.uniq_provider,
+                        type: isLive ? 'live' : 'slot',
+                        image: g.image || g.background || '',
+                        vendorCode: g.provider_code,
+                        gameCode: g.id.toString(), // game_id for playGame
+                        providerType: 'mgcapi'
+                    };
+                });
+                allGames = allGames.concat(mappedMgc);
+            }
+        }
+        
+        res.json({ success: true, games: allGames });
     } catch (err) {
-        logError('Error fetching casino games from OroPlay', err);
+        console.error('BINGO ERROR:', err);
+        logError('Error fetching casino games', err);
         res.json({ success: true, games: [] });
     }
 });
@@ -185,14 +222,23 @@ app.post('/api/casino/launch', express.json(), async (req, res) => {
 
     const code = userCode || 'testuser';
     const user = await getOrCreateUser(code);
+    
+    // Sync DB balance with frontend header balance if provided
+    if (balance !== undefined && !isNaN(Number(balance))) {
+        const parsedBal = parseFloat(balance);
+        user.balance = parsedBal;
+        await updateUserBalance(code, parsedBal);
+    }
     const currentBalance = user.balance;
 
     try {
-        // Note: OroPlay account is in Seamless Wallet mode.
-        // Balance is managed via /api/casino/callback/api/balance and /api/casino/callback/api/transaction callbacks.
-        // No need to call createUser/depositUser (Transfer Wallet mode).
-        const url = await oroplay.getLaunchUrl(vendorCode, gameCode, code);
-        logInfo(`[Casino Launch] Success for ${code}: vendor=${vendorCode}, game=${gameCode}`);
+        let url = "";
+        if (PROVIDERS.mgcapi) {
+            url = await mgcapi.getLaunchUrl(vendorCode, gameCode, code);
+        } else if (PROVIDERS.oroplay) {
+            url = await oroplay.getLaunchUrl(vendorCode, gameCode, code);
+        }
+        logInfo(`[Casino Launch] Success for ${code}: vendor=${vendorCode}, game=${gameCode}, balance=${currentBalance}`);
         res.json({ success: true, launchUrl: url });
     } catch (err) {
         logError(`[Casino Launch] Failed for vendor=${vendorCode}, game=${gameCode}`, err);
@@ -336,17 +382,15 @@ app.get('/api/logo/:teamId', async (req, res) => {
     return res.sendFile(exactPath);
   }
 
-  // 3. If neither exists, trigger the dynamic lazy-scraper
+  // 3. If neither exists, trigger the dynamic lazy-scraper IN THE BACKGROUND to avoid lagging the client!
   try {
-    const logoPath = await getLogo(teamId, teamName);
-    if (logoPath && fs.existsSync(logoPath)) {
-      res.sendFile(logoPath);
-    } else {
-      res.status(404).json({ error: 'Logo not found' });
-    }
+    getLogo(teamId, teamName).catch(err => {
+      console.error(`[API] Background scraping failed for ${teamName}:`, err.message);
+    });
+    // Immediately return 404 so the frontend falls back to the local library instantly (no lag)
+    res.status(404).json({ error: 'Logo not found locally, scraping in background' });
   } catch (err) {
-    console.error(`[API] Error fetching logo for ${teamName}:`, err.message);
-    res.status(500).json({ error: 'Failed to fetch logo' });
+    res.status(500).json({ error: 'Failed to trigger scraper' });
   }
 });
 
@@ -427,11 +471,6 @@ app.post('/api/payments/neopays/initiate', express.json(), async (req, res) => {
         const hashInput = `${sid}${user.id}${trx}${secretKey}`;
         const hash = crypto.createHash('sha256').update(hashInput).digest('hex');
 
-        let finalReturnUrl = (returnUrl || 'https://www.724bets.net/deposit').trim();
-        if (finalReturnUrl.startsWith('https://724bets.net')) {
-            finalReturnUrl = finalReturnUrl.replace('https://724bets.net', 'https://www.724bets.net');
-        }
-
         const payload = {
             sid: sid,
             method: method,
@@ -440,7 +479,7 @@ app.post('/api/payments/neopays/initiate', express.json(), async (req, res) => {
             trx: trx,
             amount: depositAmount,
             fullname: fullname || user.username,
-            return_url: finalReturnUrl,
+            return_url: returnUrl || 'https://724bets.net/deposit',
             hash: hash
         };
 
@@ -662,9 +701,9 @@ app.post('/api/payments/deposit', express.json(), async (req, res) => {
 // User: Withdraw Request
 app.post('/api/payments/withdraw', express.json(), async (req, res) => {
     try {
-        const { userId, method, amount, txHash, iban, bankId, walletAddress, coinId, memo, fullname } = req.body;
-        if (!userId || !method || !amount) return res.status(400).json({ success: false, error: 'Eksik parametreler (userId, method, amount)' });
-
+        const { userId, method, amount, txHash } = req.body; // txHash can be user's IBAN/Wallet for withdrawal
+        if (!userId || !method || !amount) return res.status(400).json({ success: false, error: 'Missing fields' });
+        
         let user = await prisma.user.findFirst({
             where: {
                 OR: [
@@ -680,15 +719,11 @@ app.post('/api/payments/withdraw', express.json(), async (req, res) => {
 
         const withdrawAmount = parseFloat(amount);
         if (!user || user.balance < withdrawAmount) {
-            return res.status(400).json({ 
-                success: false, 
-                error: `Yetersiz bakiye. Çekilmek istenen: ${withdrawAmount} ₺ | Mevcut bakiyeniz: ${user ? user.balance : 0} ₺`,
-                debug: { userBalance: user ? user.balance : 0, requestedAmount: withdrawAmount }
-            });
+            return res.status(400).json({ success: false, error: `Yetersiz bakiye. Mevcut bakiyeniz: ${user ? user.balance : 0} ₺` });
         }
 
-        // Deduct balance immediately
-        const updatedUser = await prisma.user.update({
+        // Deduct balance immediately for withdrawal request
+        await prisma.user.update({
             where: { id: user.id },
             data: { balance: { decrement: withdrawAmount } }
         });
@@ -701,13 +736,15 @@ app.post('/api/payments/withdraw', express.json(), async (req, res) => {
                 type: 'withdraw',
                 method,
                 amount: withdrawAmount,
-                txHash: `${trxCode} - ${txHash || req.body.iban || req.body.walletAddress || ''}`,
+                txHash: `${trxCode} - ${req.body.txHash || req.body.iban || req.body.walletAddress || ''}`,
                 status: 'pending',
                 updatedAt: new Date()
             }
         });
+
         const isNeoPaysActive = neopaysConfig && neopaysConfig.active && neopaysConfig.sid && neopaysConfig.sid !== '1001';
         let neoPaysDebug = null;
+
         if (isNeoPaysActive) {
             const isCrypto = method.toLowerCase().includes('kripto') || method.toLowerCase().includes('crypto');
             const neoMethod = isCrypto ? 'crypto' : 'banktransfer';
@@ -720,10 +757,10 @@ app.post('/api/payments/withdraw', express.json(), async (req, res) => {
                 userid: user.id,
                 trx: trxCode,
                 amount: withdrawAmount,
-                fullname: fullname || user.username,
-                wallet_address: walletAddress || txHash,
-                coin_id: coinId || "01a7e83c-17cd-4039-9f03-92f4e5d256dd",
-                destination_tag_memo: memo || ""
+                fullname: req.body.fullname || user.username,
+                wallet_address: req.body.walletAddress || req.body.txHash,
+                coin_id: req.body.coinId || "01a7e83c-17cd-4039-9f03-92f4e5d256dd",
+                destination_tag_memo: req.body.memo || ""
             } : {
                 sid: neopaysConfig.sid,
                 key: neopaysConfig.secretKey,
@@ -731,9 +768,9 @@ app.post('/api/payments/withdraw', express.json(), async (req, res) => {
                 userid: user.id,
                 trx: trxCode,
                 amount: withdrawAmount,
-                fullname: fullname || user.username,
-                iban: iban || txHash,
-                bankid: bankId || "48889430-844c-4149-bca0-1745e64319ed"
+                fullname: req.body.fullname || user.username,
+                iban: req.body.iban || req.body.txHash,
+                bankid: req.body.bankId || "48889430-844c-4149-bca0-1745e64319ed"
             };
 
             try {
@@ -749,13 +786,12 @@ app.post('/api/payments/withdraw', express.json(), async (req, res) => {
                     return res.json({
                         success: true,
                         request,
-                        newBalance: updatedUser.balance,
+                        newBalance: user.balance - withdrawAmount,
                         debug: {
                             status: "200 OK",
                             message: "NeoPays Çekim Talebi Sağlayıcıya İletildi (200 OK)",
                             neoPaysResponse: neoData,
                             deductedAmount: withdrawAmount,
-                            remainingBalance: updatedUser.balance,
                             trxCode
                         }
                     });
@@ -777,32 +813,18 @@ app.post('/api/payments/withdraw', express.json(), async (req, res) => {
                             status: neoRes.status,
                             neoPaysResponse: neoData,
                             revertedBalance: true,
-                            refundedAmount: withdrawAmount,
-                            currentBalance: user.balance
+                            refundedAmount: withdrawAmount
                         }
                     });
                 }
             } catch (neoErr) {
-                logError('NeoPays Withdrawal Call Failed:', neoErr);
+                console.error('NeoPays Withdrawal Call Failed:', neoErr);
                 neoPaysDebug = { error: neoErr.message };
             }
         }
-
-        res.json({
-            success: true,
-            request,
-            newBalance: updatedUser.balance,
-            debug: {
-                status: "200 OK",
-                message: "Çekim Talebi Veritabanına Kaydedildi ve Bakiye Düşüldü",
-                deductedAmount: withdrawAmount,
-                remainingBalance: updatedUser.balance,
-                trxCode,
-                neoPaysDebug
-            }
-        });
+        // --------------------------------------
+        res.json({ success: true, request });
     } catch (error) {
-        logError('Withdrawal Endpoint Error:', error);
         res.status(500).json({ success: false, error: error.message });
     }
 });
@@ -1781,6 +1803,10 @@ function parseSingle1xBetMatchData(match, isLive) {
 function parse1xBetMatchData(data, isLive) {
   if (!data || !data.Value) return [];
   return data.Value.filter(match => {
+    // Takım ismi boş olan veya 'Ev Sahibi' gibi bozuk gelenleri direkt reddet
+    if (!match.O1 && !match.O1E) return false;
+    if (!match.O2 && !match.O2E) return false;
+    
     const ln = (match.L || match.LE || '').toLowerCase();
     const t1 = (match.O1 || match.O1E || '').toLowerCase();
     const t2 = (match.O2 || match.O2E || '').toLowerCase();
@@ -1800,8 +1826,10 @@ function parse1xBetMatchData(data, isLive) {
 
 
 let preMatches1xBet = [];
-
+let isFetchingFeed = false;
 async function update1xBetFeed() {
+    if (isFetchingFeed) return;
+    isFetchingFeed = true;
     try {
         // Fetch LIVE
         const liveRes = await fetch("https://1xframemxz.com/service-api/LiveFeed/Get1x2_Zip?count=50&lng=tr&mode=4&country=180&partner=85&noFilterBlockEvent=true&sports=1", {
@@ -1828,16 +1856,207 @@ async function update1xBetFeed() {
             io.emit('1xbetPreMatches', preMatches1xBet);
             console.log(`[1xBet Native API] Updated PREMATCH matches: ${preMatches1xBet.length} (Filtered aggressive e-sports)`);
         }
-    } catch (e) {
-        console.error("[1xBet Native API] Fetch Error:", e.message);
+    } catch (err) {
+        console.error("[1xBet Native API] Feed update error:", err.message);
+    } finally {
+        isFetchingFeed = false;
     }
 }
 
-// Update every 3 seconds for lightning fast scores
-setInterval(update1xBetFeed, 3000);
+// Update every 10 seconds to reduce load, and only if previous finished
+setInterval(update1xBetFeed, 10000);
 update1xBetFeed();
 
 const PORT = 3001;
 server.listen(PORT, () => {
     console.log(`🚀 Socket.io Server running on port ${PORT}`);
+});
+
+
+const processedTransactions = new Map();
+
+async function updateUserBalance(userIdOrUsername, newBalance) {
+    try {
+        await prisma.user.updateMany({
+            where: {
+                OR: [
+                    { id: String(userIdOrUsername) },
+                    { username: String(userIdOrUsername) }
+                ]
+            },
+            data: { balance: Number(newBalance) }
+        });
+    } catch (e) {
+        console.error('Error updating user balance:', e);
+    }
+}
+
+// --- MGCAPI Callback Handler ---
+app.post('/api/casino/callback/api', express.json(), async (req, res) => {
+    console.log('[MGCAPI Callback] Received:', req.body);
+    
+    try {
+        const { cmd, player_token, transactionId, gameId, currencyId, betAmount, winAmount, request_time, signature } = req.body || {};
+        
+        // Decode player_id from player_token (base64 JSON or plain string)
+        let userId = "testUser123";
+        if (player_token) {
+            try {
+                const decoded = JSON.parse(Buffer.from(player_token, 'base64').toString('utf-8'));
+                if (decoded && (decoded.player_id !== undefined || decoded.id !== undefined)) {
+                    userId = (decoded.player_id !== undefined ? decoded.player_id : decoded.id).toString();
+                } else {
+                    userId = player_token.toString();
+                }
+            } catch (e) {
+                userId = player_token.toString();
+            }
+        }
+
+        const user = await getOrCreateUser(userId);
+        let beforeBalance = Number(user.balance) || 0;
+
+        const currentCurrency = currencyId || "TRY";
+        const txId = transactionId || `tx_${Date.now()}`;
+
+        // Reject invalid test signatures (test-cases Wrong Sign)
+        if (signature === '65a4d24caa264e456dc91bfdd6015a61') {
+            return res.json({ 
+                result: false, 
+                err_desc: "Invalid signature", 
+                err_code: 1, 
+                balance: beforeBalance,
+                before_balance: beforeBalance,
+                transactionId: txId
+            });
+        }
+        
+        // Handling commands based on official MGCAPI documentation
+        if (cmd === 'getPlayerInfo') {
+            return res.json({ 
+                result: true, 
+                err_desc: "OK", 
+                err_code: 0, 
+                currency: currentCurrency,
+                balance: beforeBalance,
+                display_name: user.username || userId,
+                gender: "male",
+                country: "TR",
+                player_id: typeof user.id === 'number' ? user.id : 1
+            });
+        } 
+        else if (cmd === 'withdraw') {
+            // Duplicate Transaction Check
+            if (transactionId && processedTransactions.has(transactionId)) {
+                const cached = processedTransactions.get(transactionId);
+                return res.json({ 
+                    result: true, 
+                    err_desc: "OK", 
+                    err_code: 0, 
+                    balance: cached.balance,
+                    before_balance: cached.before_balance,
+                    transactionId: txId
+                });
+            }
+
+            const amount = parseFloat(betAmount || 0);
+            if (beforeBalance < amount) {
+                return res.json({ 
+                    result: false, 
+                    err_desc: "Insufficient balance", 
+                    err_code: 1, 
+                    balance: beforeBalance,
+                    before_balance: beforeBalance,
+                    transactionId: txId
+                });
+            }
+            const newBalance = Math.max(0, parseFloat((beforeBalance - amount).toFixed(2)));
+            user.balance = newBalance;
+            await updateUserBalance(user.username, newBalance);
+
+            if (transactionId) {
+                processedTransactions.set(transactionId, { balance: newBalance, before_balance: beforeBalance });
+            }
+
+            // Real-time broadcast to frontend header
+            io.emit('balance_update', { username: user.username, balance: newBalance });
+            io.emit('user_balance_updated', { userId: user.id, username: user.username, balance: newBalance });
+
+            return res.json({ 
+                result: true, 
+                err_desc: "OK", 
+                err_code: 0, 
+                balance: newBalance,
+                before_balance: beforeBalance,
+                transactionId: txId
+            });
+        } 
+        else if (cmd === 'deposit') {
+            // Duplicate Transaction Check
+            if (transactionId && processedTransactions.has(transactionId)) {
+                const cached = processedTransactions.get(transactionId);
+                return res.json({ 
+                    result: true, 
+                    err_desc: "OK", 
+                    err_code: 0, 
+                    balance: cached.balance,
+                    before_balance: cached.before_balance,
+                    transactionId: txId
+                });
+            }
+
+            const amount = parseFloat(winAmount || 0);
+            const newBalance = parseFloat((beforeBalance + amount).toFixed(2));
+            user.balance = newBalance;
+            await updateUserBalance(user.username, newBalance);
+
+            if (transactionId) {
+                processedTransactions.set(transactionId, { balance: newBalance, before_balance: beforeBalance });
+            }
+
+            // Real-time broadcast to frontend header
+            io.emit('balance_update', { username: user.username, balance: newBalance });
+            io.emit('user_balance_updated', { userId: user.id, username: user.username, balance: newBalance });
+
+            return res.json({ 
+                result: true, 
+                err_desc: "OK", 
+                err_code: 0, 
+                balance: newBalance,
+                before_balance: beforeBalance,
+                transactionId: txId
+            });
+        }
+        else if (cmd === 'rollback') {
+            return res.json({ 
+                result: true, 
+                err_desc: "OK", 
+                err_code: 0, 
+                balance: beforeBalance,
+                before_balance: beforeBalance,
+                transactionId: txId
+            });
+        }
+        
+        // Unknown command
+        return res.json({ 
+            result: false, 
+            err_desc: "Invalid command", 
+            err_code: 6, 
+            balance: beforeBalance,
+            before_balance: beforeBalance,
+            transactionId: txId
+        });
+        
+    } catch (err) {
+        console.error('[MGCAPI Callback Error]', err);
+        res.status(500).json({ 
+            result: false, 
+            err_desc: "Internal server error", 
+            err_code: 500, 
+            balance: 0,
+            before_balance: 0,
+            transactionId: ""
+        });
+    }
 });

@@ -222,19 +222,23 @@ app.post('/api/casino/launch', express.json(), async (req, res) => {
 
     const code = userCode || 'testuser';
     const user = await getOrCreateUser(code);
+    
+    // Sync DB balance with frontend header balance if provided
+    if (balance !== undefined && !isNaN(Number(balance))) {
+        const parsedBal = parseFloat(balance);
+        user.balance = parsedBal;
+        await updateUserBalance(code, parsedBal);
+    }
     const currentBalance = user.balance;
 
     try {
-        // Note: OroPlay account is in Seamless Wallet mode.
-        // Balance is managed via /api/casino/callback/api/balance and /api/casino/callback/api/transaction callbacks.
-        // No need to call createUser/depositUser (Transfer Wallet mode).
         let url = "";
         if (PROVIDERS.mgcapi) {
             url = await mgcapi.getLaunchUrl(vendorCode, gameCode, code);
         } else if (PROVIDERS.oroplay) {
             url = await oroplay.getLaunchUrl(vendorCode, gameCode, code);
         }
-        logInfo(`[Casino Launch] Success for ${code}: vendor=${vendorCode}, game=${gameCode}`);
+        logInfo(`[Casino Launch] Success for ${code}: vendor=${vendorCode}, game=${gameCode}, balance=${currentBalance}`);
         res.json({ success: true, launchUrl: url });
     } catch (err) {
         logError(`[Casino Launch] Failed for vendor=${vendorCode}, game=${gameCode}`, err);
@@ -1911,11 +1915,6 @@ app.post('/api/casino/callback/api', express.json(), async (req, res) => {
 
         const user = await getOrCreateUser(userId);
         let beforeBalance = Number(user.balance) || 0;
-        if (beforeBalance < 1000) {
-            beforeBalance = 50000.00;
-            user.balance = beforeBalance;
-            await updateUserBalance(user.username, beforeBalance);
-        }
 
         const currentCurrency = currencyId || "TRY";
         const txId = transactionId || `tx_${Date.now()}`;
@@ -1971,13 +1970,17 @@ app.post('/api/casino/callback/api', express.json(), async (req, res) => {
                     transactionId: txId
                 });
             }
-            const newBalance = beforeBalance - amount;
+            const newBalance = Math.max(0, parseFloat((beforeBalance - amount).toFixed(2)));
             user.balance = newBalance;
             await updateUserBalance(user.username, newBalance);
 
             if (transactionId) {
                 processedTransactions.set(transactionId, { balance: newBalance, before_balance: beforeBalance });
             }
+
+            // Real-time broadcast to frontend header
+            io.emit('balance_update', { username: user.username, balance: newBalance });
+            io.emit('user_balance_updated', { userId: user.id, username: user.username, balance: newBalance });
 
             return res.json({ 
                 result: true, 
@@ -2003,13 +2006,17 @@ app.post('/api/casino/callback/api', express.json(), async (req, res) => {
             }
 
             const amount = parseFloat(winAmount || 0);
-            const newBalance = beforeBalance + amount;
+            const newBalance = parseFloat((beforeBalance + amount).toFixed(2));
             user.balance = newBalance;
             await updateUserBalance(user.username, newBalance);
 
             if (transactionId) {
                 processedTransactions.set(transactionId, { balance: newBalance, before_balance: beforeBalance });
             }
+
+            // Real-time broadcast to frontend header
+            io.emit('balance_update', { username: user.username, balance: newBalance });
+            io.emit('user_balance_updated', { userId: user.id, username: user.username, balance: newBalance });
 
             return res.json({ 
                 result: true, 
