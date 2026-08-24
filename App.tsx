@@ -851,6 +851,19 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void, initia
     };
   }, [siteUser?.username, siteUser?.id]);
 
+  // Bidirectional Balance Sync: When balance is updated locally (Deposit, Admin, Bonus, Wallet), push to Casino DB immediately
+  useEffect(() => {
+    if (!siteUser) return;
+    const userCode = siteUser.username || siteUser.email || siteUser.id;
+    if (!userCode || siteUser.balance === undefined) return;
+
+    fetch('/api/casino/user-balance', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userCode, balance: siteUser.balance })
+    }).catch(() => {});
+  }, [siteUser?.balance]);
+
   useEffect(() => {
     const handleStorageChange = (e: StorageEvent) => {
       // If site_member is removed by another tab, sync logout here

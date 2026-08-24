@@ -286,18 +286,34 @@ app.get('/api/casino/agent-balance', async (req, res) => {
 app.get('/api/casino/user-balance', async (req, res) => {
     try {
         const userCode = req.query.userCode || 'testuser';
-        const user = await prisma.user.findFirst({
-            where: {
-                OR: [
-                    { id: userCode },
-                    { username: userCode }
-                ]
-            }
-        });
-        res.json({ success: true, balance: user ? user.balance : 0 });
+        const user = await getOrCreateUser(userCode);
+        res.json({ success: true, balance: user ? Number(user.balance) : 1000 });
     } catch (err) {
         logError('Error fetching user balance', err);
         res.status(500).json({ success: false, error: 'Internal Server Error' });
+    }
+});
+
+app.post('/api/casino/user-balance', express.json(), async (req, res) => {
+    try {
+        const { userCode, username, balance } = req.body || {};
+        const code = userCode || username || 'testuser';
+        if (balance === undefined || isNaN(Number(balance))) {
+            return res.status(400).json({ success: false, error: 'Invalid balance value' });
+        }
+        const newBal = parseFloat(Number(balance).toFixed(2));
+        const user = await getOrCreateUser(code);
+        user.balance = newBal;
+        await updateUserBalance(user.username, newBal);
+        
+        io.emit('balance_update', { username: user.username, balance: newBal });
+        io.emit('user_balance_updated', { userId: user.id, username: user.username, balance: newBal });
+        
+        console.log(`[Balance Update API] Updated ${user.username} balance to ${newBal} TRY`);
+        res.json({ success: true, balance: newBal });
+    } catch (err) {
+        logError('Error setting user balance', err);
+        res.status(500).json({ success: false, error: err.message });
     }
 });
 
