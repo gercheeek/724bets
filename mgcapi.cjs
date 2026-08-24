@@ -7,10 +7,14 @@ const API_URL = process.env.MGCAPI_API_URL || 'https://stage.mgcapi.com';
 const APP_ID = process.env.MGCAPI_APP_ID || 'cc49d408-decf-48c3-a75e-9ae61bc1cb59';
 const APP_KEY = process.env.MGCAPI_APP_KEY || '9f5f538a-121c-4bf1-846d-9b6c048a263f';
 
-// ─── SIGNATURE GENERATOR ───
-function generateSignature(exit, game_id, player_id, shop_id, player_token, app_id, language, request_time, currency) {
-    const str = `${encodeURIComponent(exit)}${game_id}${player_id}${shop_id}${encodeURIComponent(player_token)}${app_id}${language}${request_time}${currency}`;
-    return crypto.createHmac('md5', APP_KEY).update(str).digest('hex');
+// ─── SIGNATURE GENERATOR (Official MGCAPI Standard) ───
+function createSign(params, apiKey) {
+    const values = Object.entries(params)
+        .filter(([key]) => key !== 'sign' && key !== 'urls')
+        .map(([, value]) => (value && typeof value === 'object' ? JSON.stringify(value) : value))
+        .join('');
+    const encoded = encodeURIComponent(values);
+    return crypto.createHmac('md5', apiKey).update(encoded).digest('hex');
 }
 
 let gamesCache = [];
@@ -107,52 +111,49 @@ async function getAllGames() {
 async function getLaunchUrl(vendorCode, gameCode, userCode) {
     console.log(`[MGCAPI] Generating launch URL for user ${userCode}, game ${gameCode}`);
     
-    const exit = 'https://www.724bets.net';
-    const game_id = Number(gameCode) || gameCode;
-    const player_id = userCode ? userCode.toString() : '1';
-    const shop_id = '1';
-    const player_token = Buffer.from(JSON.stringify({ player_id: userCode || 1 })).toString('base64');
-    const language = 'en';
-    const currency = 'TRY';
-    const request_time = Date.now().toString();
-
-    const sign = generateSignature(exit, game_id, player_id, shop_id, player_token, APP_ID, language, request_time, currency);
-
     const payload = {
-        exit,
-        game_id,
-        player_id,
-        shop_id: 1,
-        player_token,
+        exit: 'https://www.724bets.net/',
+        game_id: Number(gameCode) || gameCode,
+        player_id: userCode ? userCode.toString() : 'player_1',
+        player_token: Buffer.from(JSON.stringify({ player_id: userCode || 1 })).toString('base64'),
         app_id: APP_ID,
-        language,
-        request_time: Number(request_time),
-        currency,
-        sign,
+        language: 'tr',
+        currency: 'TRY',
+        request_time: Date.now(),
         urls: {
             base_url: 'https://www.724bets.net',
             wallet_url: 'https://www.724bets.net/api/casino/callback/api',
-            other_url: 'https://www.724bets.net'
+            other_url: 'https://www.724bets.net/support'
         }
     };
     
-    const endpoints = ['https://mgcbot.mgcapi.com/api/v1/playGame', 'https://stage.mgcapi.com/api/v1/playGame'];
+    payload.sign = createSign(payload, APP_KEY);
+
+    const headers = {
+        'Content-Type': 'application/json',
+        'User-Agent': 'service/1.0.0',
+        'Accept': 'application/json'
+    };
+    
+    const endpoints = [`${API_URL}/api/v1/playGame`, 'https://stage.mgcapi.com/api/v1/playGame'];
     for (const ep of endpoints) {
         try {
             const resObj = await fetch(ep, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: headers,
                 body: JSON.stringify(payload),
-                signal: AbortSignal.timeout(3000)
+                signal: AbortSignal.timeout(4000)
             });
             const data = await resObj.json();
             
             if (data && (data.result === true || data.status === 200) && data.url) {
-                console.log(`[MGCAPI] Got real game launch URL from ${ep}:`, data.url);
+                console.log(`[MGCAPI] Real game launch URL acquired from ${ep}:`, data.url);
                 return data.url;
+            } else {
+                console.warn(`[MGCAPI] ${ep} returned:`, data);
             }
         } catch (err) {
-            // continue fallback
+            console.warn(`[MGCAPI] Error connecting to ${ep}:`, err.message);
         }
     }
 

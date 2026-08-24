@@ -1,0 +1,51 @@
+const crypto = require('crypto');
+
+const APP_KEY = '9f5f538a-121c-4bf1-846d-9b6c048a263f';
+const APP_ID = 'cc49d408-decf-48c3-a75e-9ae61bc1cb59';
+
+async function test() {
+  const exit = 'https://www.724bets.net';
+  const game_id = 90044;
+  const player_id = '1';
+  const shop_id = '1';
+  const player_token = Buffer.from(JSON.stringify({ player_id: 1 })).toString('base64');
+  const language = 'en';
+  const request_time = Date.now().toString();
+  const currency = 'TRY';
+
+  const str = `${encodeURIComponent(exit)}${game_id}${player_id}${shop_id}${encodeURIComponent(player_token)}${APP_ID}${language}${request_time}${currency}`;
+  const sign = crypto.createHmac('md5', APP_KEY).update(str).digest('hex');
+
+  const payload = {
+    exit,
+    game_id,
+    player_id,
+    shop_id: 1,
+    player_token,
+    app_id: APP_ID,
+    language,
+    request_time: Number(request_time),
+    currency,
+    sign,
+    urls: {
+      base_url: 'https://www.724bets.net',
+      wallet_url: 'https://www.724bets.net/api/casino/callback/api',
+      other_url: 'https://www.724bets.net'
+    }
+  };
+
+  const hosts = ['https://mgcbot.mgcapi.com', 'https://stage.mgcapi.com'];
+  for (const h of hosts) {
+    try {
+      const res = await fetch(`${h}/api/v1/playGame`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      console.log(`[${h}] HTTP ${res.status}:`, await res.text());
+    } catch (e) {
+      console.error(`[${h}] ERR:`, e.message);
+    }
+  }
+}
+test();
