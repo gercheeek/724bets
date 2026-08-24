@@ -1,0 +1,48 @@
+const crypto = require('crypto');
+
+
+const API_URL = 'https://stage.mgcapi.com';
+const APP_ID = 'cc49d408-decf-48c3-a75e-9ae61bc1cb59';
+const APP_KEY = '9f5f538a-121c-4bf1-846d-9b6c048a263f';
+
+function createSign(params, apiKey) {
+  const values = Object.entries(params)
+    .filter(([key]) => key !== 'sign' && key !== 'urls')
+    .map(([, value]) => (value && typeof value === 'object' ? JSON.stringify(value) : value))
+    .join('');
+  const encoded = encodeURIComponent(values);
+  return crypto.createHmac('md5', apiKey).update(encoded).digest('hex');
+}
+
+async function testLaunch() {
+    const payload = {
+        app_id: APP_ID,
+        game_id: 187635,
+        player_id: 'player_test',
+        player_token: Buffer.from(JSON.stringify({ player_id: 'player_test' })).toString('base64'),
+        currency: 'TRY',
+        language: 'tr',
+        request_time: Date.now(),
+        exit: 'https://724bets.net/',
+        urls: {
+            base_url: 'https://724bets.net',
+            wallet_url: 'https://724bets.net/api/casino/callback/api',
+            other_url: 'https://724bets.net'
+        }
+    };
+
+    payload.sign = createSign(payload, APP_KEY);
+    
+    try {
+        const resObj = await fetch(`${API_URL}/api/v1/playGame`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        const data = await resObj.json();
+        console.log(JSON.stringify(data, null, 2));
+    } catch (err) {
+        console.error(err);
+    }
+}
+testLaunch();

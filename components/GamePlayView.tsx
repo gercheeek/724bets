@@ -5,6 +5,8 @@ import OriginalsSlider from './OriginalsSlider';
 import { usePragmaticSync } from '../hooks/usePragmaticSync';
 import { useUser } from '../contexts/UserContext';
 
+import { getGameLaunchUrl, getGameSymbol } from '../utils/gameLauncher';
+
 interface GamePlayViewProps {
   game: any;
   demoUrl: string;
@@ -64,17 +66,8 @@ export const GamePlayView: React.FC<GamePlayViewProps> = ({ game, demoUrl, onClo
       }
 
       if (!vendorCode || !gameCode) {
-        const nameStr = (game?.name || '').toLowerCase();
-        if (nameStr.includes('sweet bonanza 1000')) { vendorCode = 'slot-pragmatic'; gameCode = 'vs20fruitswx'; }
-        else if (nameStr.includes('sweet bonanza')) { vendorCode = 'slot-pragmatic'; gameCode = 'vs20fruitsw'; }
-        else if (nameStr.includes('gates of olympus 1000')) { vendorCode = 'slot-pragmatic'; gameCode = 'vs20olympx'; }
-        else if (nameStr.includes('gates of olympus')) { vendorCode = 'slot-pragmatic'; gameCode = 'vs20olympgate'; }
-        else if (nameStr.includes('big bass')) { vendorCode = 'slot-pragmatic'; gameCode = 'vs10txbigbass'; }
-        else if (nameStr.includes('sugar rush 1000')) { vendorCode = 'slot-pragmatic'; gameCode = 'vs20sugarrushx'; }
-        else if (nameStr.includes('sugar rush')) { vendorCode = 'slot-pragmatic'; gameCode = 'vs20sugarrush'; }
-        else if (nameStr.includes('starlight')) { vendorCode = 'slot-pragmatic'; gameCode = 'vs20starlightx'; }
-        else if (nameStr.includes('dog house')) { vendorCode = 'slot-pragmatic'; gameCode = 'vs20doghouse'; }
-        else { vendorCode = 'slot-pragmatic'; gameCode = 'vs20olympx'; } // General slot fallback
+        vendorCode = 'TPG_DARGE_V2';
+        gameCode = getGameSymbol(game);
       }
 
       if (vendorCode && gameCode) {
@@ -93,15 +86,15 @@ export const GamePlayView: React.FC<GamePlayViewProps> = ({ game, demoUrl, onClo
           });
           const data = await res.json();
           if (data.success && data.launchUrl) {
-            console.log('[GamePlayView] Got real launch URL from OroPlay');
+            console.log('[GamePlayView] Got launch URL:', data.launchUrl);
             setRealLaunchUrl(data.launchUrl);
           } else {
-            console.warn('[GamePlayView] OroPlay launch failed:', data);
-            setRealGameError('Bu oyun sağlayıcısı şu an kullanılamıyor. Lütfen başka bir oyun deneyin.');
+            console.warn('[GamePlayView] launch failed, using dynamic demo URL');
+            setRealLaunchUrl(getGameLaunchUrl(game));
           }
         } catch (err) {
-          console.error('Error fetching real launch URL:', err);
-          setRealGameError('Oyun sunucusuna bağlanılamadı.');
+          console.error('Error fetching launch URL:', err);
+          setRealLaunchUrl(getGameLaunchUrl(game));
         } finally {
           setLoadingRealGame(false);
         }
@@ -296,7 +289,7 @@ export const GamePlayView: React.FC<GamePlayViewProps> = ({ game, demoUrl, onClo
               key={(isRealMoney && realLaunchUrl) ? realLaunchUrl : (demoUrl || 'demo-key')}
               src={(isRealMoney && realLaunchUrl) 
                 ? realLaunchUrl 
-                : (demoUrl || 'https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=tr&cur=TRY&gameSymbol=vs20olympx&jurisdiction=99')} 
+                : (demoUrl || getGameLaunchUrl(game))} 
               className="w-full h-full border-0"
               allowFullScreen
             />

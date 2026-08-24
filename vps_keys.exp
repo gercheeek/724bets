@@ -1,0 +1,30 @@
+#!/usr/bin/expect -f
+set timeout -1
+set ip "85.121.178.80"
+set password "kQkrGBYHtY76dIF0z1"
+
+spawn ssh -o StrictHostKeyChecking=no root@$ip "cat << 'INNER_EOF' > /opt/724bets-backend/test_keys.cjs
+const crypto = require('crypto');
+const API_URL = 'https://stage.mgcapi.com';
+const APP_ID = 'cc49d408-decf-48c3-a75e-9ae61bc1cb59';
+const APP_KEY = '9f5f538a-121c-4bf1-846d-9b6c048a263f';
+async function getGames() {
+    const request_time = Date.now().toString();
+    const str = \`\${APP_ID}\${request_time}\`;
+    const sign = crypto.createHmac('md5', APP_KEY).update(encodeURIComponent(str)).digest('hex');
+    const queryParams = new URLSearchParams({ app_id: APP_ID, request_time: request_time, sign: sign });
+    const url = \`\${API_URL}/api/v1/get-games?\${queryParams}\`;
+    const resObj = await fetch(url);
+    const data = await resObj.json();
+    console.log('Is Array?', Array.isArray(data));
+    console.log('Object Keys:', Object.keys(data));
+    if (data.data) {
+        console.log('data.data is Array?', Array.isArray(data.data));
+    }
+}
+getGames();
+INNER_EOF
+node /opt/724bets-backend/test_keys.cjs"
+expect "*?assword:*"
+send "$password\r"
+expect eof

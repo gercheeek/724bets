@@ -1,0 +1,14 @@
+#!/usr/bin/expect -f
+set timeout -1
+set ip "85.121.178.80"
+set password "kQkrGBYHtY76dIF0z1"
+
+spawn scp -o StrictHostKeyChecking=no test_launch.cjs root@$ip:/opt/724bets-backend/test_launch.cjs
+expect "*?assword:*"
+send "$password\r"
+expect eof
+
+spawn ssh -o StrictHostKeyChecking=no root@$ip "node /opt/724bets-backend/test_launch.cjs"
+expect "*?assword:*"
+send "$password\r"
+expect eof

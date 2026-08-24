@@ -32,12 +32,11 @@ import { UpcomingTournamentsWidget } from './UpcomingTournamentsWidget';
 import { TopMatchesWidget } from './sports/TopMatchesWidget';
 import { useBetting } from '../contexts/BettingContext';
 
+import { getGameLaunchUrl } from '../utils/gameLauncher';
+
 const getDemoUrl = (game: any): string | null => {
   if (!game) return null;
-  if (game.demoSymbol) {
-    return `https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=tr&cur=TRY&gameSymbol=${game.demoSymbol}&jurisdiction=99&lobbyUrl=https://724bets.net`;
-  }
-  return null;
+  return getGameLaunchUrl(game);
 };
 
 const ActivePlayersCounter = ({ type }: { type: 'casino' | 'sports' }) => {

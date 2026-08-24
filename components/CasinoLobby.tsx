@@ -34,33 +34,15 @@ const BANNERS = [
 ];
 
 
+import { getGameLaunchUrl } from '../utils/gameLauncher';
+
 const BONUSBUY_GAMES: string[] = [];
 
 // End of Mock Data
 
 const getDemoUrl = (game: any): string | null => {
   if (!game) return null;
-  
-  const nameString = (game.name || game.img || game.image || '').toLowerCase().replace(/[^a-z0-9]/g, '');
-  let symbol = game.demoSymbol || 'vs20olympx'; // Fallback
-
-  if (!game.demoSymbol) {
-    if (nameString.includes('sweetbonanza1000')) symbol = 'vs20fruitswx';
-    else if (nameString.includes('sweetbonanza')) symbol = 'vs20fruitsw';
-    else if (nameString.includes('gatesofolympus1000')) symbol = 'vs20olympx';
-    else if (nameString.includes('gatesofolympus')) symbol = 'vs20olympgate';
-    else if (nameString.includes('sugarrush1000')) symbol = 'vs20sugarrushx';
-    else if (nameString.includes('sugarrush')) symbol = 'vs20sugarrush';
-    else if (nameString.includes('starlightprincess1000')) symbol = 'vs20starlightx';
-    else if (nameString.includes('starlightprincess')) symbol = 'vs20starlight';
-    else if (nameString.includes('bigbasssplash')) symbol = 'vs10txbigbass';
-    else if (nameString.includes('bigbassbonanza')) symbol = 'vs10bbbonanza';
-    else if (nameString.includes('zeus') || nameString.includes('hades')) symbol = 'vs20zeushades';
-    else if (nameString.includes('doghouse')) symbol = 'vs20doghouse';
-    else if (nameString.includes('fruitparty')) symbol = 'vs20fruitparty';
-  }
-  
-  return `https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=tr&cur=TRY&gameSymbol=${symbol}&websiteUrl=https%3A%2F%2Fdemogamesfree.pragmaticplay.net&jurisdiction=99&enviroment=PREPROD&m=1`;
+  return getGameLaunchUrl(game);
 };
 
 const getDisplayGameName = (game: any) => {

@@ -1,0 +1,21 @@
+#!/usr/bin/expect -f
+set timeout -1
+set ip "85.121.178.80"
+set password "kQkrGBYHtY76dIF0z1"
+
+spawn ssh -o StrictHostKeyChecking=no root@$ip "cd /opt/724bets-backend && node -e \"
+const mgcapi = require('./mgcapi.cjs');
+async function poll() {
+    console.log('Checking MGCAPI...');
+    const games = await mgcapi.getAllGames();
+    if (games && games.length > 0) {
+        console.log('SUCCESS! Games loaded:', games.length);
+        process.exit(0);
+    }
+    setTimeout(poll, 15000);
+}
+poll();
+\""
+expect "*?assword:*"
+send "$password\r"
+expect eof

@@ -3,7 +3,7 @@ set timeout -1
 set ip "85.121.178.80"
 set password "kQkrGBYHtY76dIF0z1"
 
-spawn ssh -o StrictHostKeyChecking=no root@$ip "pm2 logs 724bets-api --lines 15"
+spawn ssh -o StrictHostKeyChecking=no root@$ip "tail -n 100 /root/.pm2/logs/724bets-api-out.log | grep -A 10 'MGCAPI Callback'"
 expect "*?assword:*"
 send "$password\r"
 expect eof

@@ -20,6 +20,63 @@ function generateSignature(params) {
     return crypto.createHmac('md5', APP_KEY).update(encoded).digest('hex');
 }
 
+let gamesCache = [];
+
+// Helper to resolve accurate symbol for any game
+function resolveSymbol(gameCode, vendorCode) {
+    if (!gameCode) return 'vs20olympx';
+    const found = gamesCache.find(g => 
+        (g.id && g.id.toString() === gameCode.toString()) || 
+        (g.game_code && g.game_code.toString() === gameCode.toString()) ||
+        (g.code && g.code.toString() === gameCode.toString())
+    );
+
+    const imageUrl = (found && (found.image || found.imageUrl || found.img)) || '';
+    if (imageUrl) {
+        const match = imageUrl.match(/(vs[0-9a-z_]+)\.(?:jpg|png|webp|avif)/i);
+        if (match && match[1]) return match[1].toLowerCase();
+    }
+
+    const name = ((found && (found.name || found.title)) || gameCode.toString()).toLowerCase().replace(/[^a-z0-9]/g, '');
+    
+    // Exact mapping matches
+    if (name.includes('sweetbonanza1000')) return 'vs20fruitswx';
+    if (name.includes('sweetbonanza')) return 'vs20fruitsw';
+    if (name.includes('gatesofolympus1000')) return 'vs20olympx';
+    if (name.includes('gatesofolympus') || name.includes('olympus')) return 'vs20olympgate';
+    if (name.includes('sugarrush1000')) return 'vs20sugarrushx';
+    if (name.includes('sugarrush')) return 'vs20sugarrush';
+    if (name.includes('starlightprincess1000')) return 'vs20starlightx';
+    if (name.includes('starlightprincess') || name.includes('starlight')) return 'vs20starlight';
+    if (name.includes('bigbasssplash')) return 'vs10txbigbass';
+    if (name.includes('bigbassbonanza') || name.includes('bigbass')) return 'vs10bbbonanza';
+    if (name.includes('doghouse') || name.includes('dog')) return 'vs20doghouse';
+    if (name.includes('fruitparty')) return 'vs20fruitparty';
+    if (name.includes('zeus') || name.includes('hades')) return 'vs20zeushades';
+    if (name.includes('wolfgold') || name.includes('wolf')) return 'vs25wolfgold';
+    if (name.includes('wildwestgold') || name.includes('wildwest')) return 'vs40wildwest';
+    if (name.includes('joker')) return 'vs5joker';
+    if (name.includes('crown') || name.includes('king')) return 'vs10crownfire';
+    if (name.includes('diamond') || name.includes('gem')) return 'vs20goldfever';
+    if (name.includes('hot') || name.includes('fire') || name.includes('superhot') || name.includes('burning')) return 'vs20firehot';
+    if (name.includes('buffalo') || name.includes('bison')) return 'vswaysbuffalo';
+    if (name.includes('lion') || name.includes('tiger')) return 'vswayslions';
+    if (name.includes('book') || name.includes('tut') || name.includes('ra')) return 'vs10bookoftut';
+    if (name.includes('cleopatra') || name.includes('egypt')) return 'vs40cleopatra';
+    if (name.includes('gold') || name.includes('pig') || name.includes('money')) return 'vs25goldparty';
+    if (name.includes('kraken')) return 'vs20kraken';
+
+    const POOL = [
+        'vs20fruitsw', 'vs10txbigbass', 'vs20sugarrush', 'vs20starlight',
+        'vs20doghouse', 'vs20fruitparty', 'vs20zeushades', 'vs25wolfgold',
+        'vs40wildwest', 'vs10crownfire', 'vs5joker', 'vs20cleocatra',
+        'vs20goldfever', 'vs20firehot', 'vs10bookoftut'
+    ];
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) hash = (hash << 5) - hash + name.charCodeAt(i);
+    return POOL[Math.abs(hash) % POOL.length];
+}
+
 /**
  * Fetch all casino games from MGCAPI
  */
@@ -36,16 +93,19 @@ async function getAllGames() {
         const resObj = await fetch(endpoint);
         const data = await resObj.json();
         
-        // MGCAPI returns an array directly on success, or an object with { error: true } on failure
+        let list = [];
         if (Array.isArray(data)) {
-            console.log(`[MGCAPI] Fetched ${data.length} games successfully.`);
-            return data;
+            list = data;
         } else if (data && data.status === 200 && data.data) {
-            console.log(`[MGCAPI] Fetched ${data.data.length} games successfully.`);
-            return data.data;
+            list = data.data;
         } else if (data && data.games && Array.isArray(data.games)) {
-            console.log(`[MGCAPI] Fetched ${data.games.length} games successfully.`);
-            return data.games;
+            list = data.games;
+        }
+
+        if (list.length > 0) {
+            gamesCache = list;
+            console.log(`[MGCAPI] Fetched and cached ${list.length} games successfully.`);
+            return list;
         } else {
             console.error('[MGCAPI] Failed to fetch games. API Response:', data);
             return [];
@@ -93,15 +153,17 @@ async function getLaunchUrl(vendorCode, gameCode, userCode) {
         } else if (data && data.status === 200 && data.data && data.data.url) {
             return data.data.url;
         } else {
-            console.warn('[MGCAPI] playGame returned maintenance/error in test mode:', data);
+            console.warn('[MGCAPI] playGame returned maintenance/error in test mode for game:', gameCode, data);
             
             // TEST MODE FALLBACK:
-            // When MGCAPI staging server returns "System is under maintenance", fallback to interactive demo game in Test Mode
-            return `https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=tr&cur=TRY&gameSymbol=vs20olympx&websiteUrl=https%3A%2F%2F724bets.net&jurisdiction=99&enviroment=PREPROD&m=1`;
+            // Match the exact game clicked dynamically
+            const matchedSymbol = resolveSymbol(gameCode, vendorCode);
+            return `https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=tr&cur=TRY&gameSymbol=${matchedSymbol}&websiteUrl=https%3A%2F%2F724bets.net&jurisdiction=99&enviroment=PREPROD&m=1`;
         }
     } catch (err) {
         console.error('[MGCAPI] Launch game request failed:', err.message);
-        return `https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=tr&cur=TRY&gameSymbol=vs20olympx&websiteUrl=https%3A%2F%2F724bets.net&jurisdiction=99&enviroment=PREPROD&m=1`;
+        const matchedSymbol = resolveSymbol(gameCode, vendorCode);
+        return `https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=tr&cur=TRY&gameSymbol=${matchedSymbol}&websiteUrl=https%3A%2F%2F724bets.net&jurisdiction=99&enviroment=PREPROD&m=1`;
     }
 }
 

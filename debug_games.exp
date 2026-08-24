@@ -1,0 +1,33 @@
+#!/usr/bin/expect -f
+set timeout -1
+set ip "85.121.178.80"
+set password "kQkrGBYHtY76dIF0z1"
+
+spawn ssh -o StrictHostKeyChecking=no root@$ip "cd /opt/724bets-backend && node -e \"
+const mgcapi = require('./mgcapi.cjs');
+(async () => {
+    try {
+        const mgcGames = await mgcapi.getAllGames();
+        console.log('Got games array:', Array.isArray(mgcGames));
+        if (Array.isArray(mgcGames)) {
+            console.log('Length:', mgcGames.length);
+            const mappedMgc = mgcGames.map(g => {
+                const isLive = g.game_type === 2 || (g.provider_title && g.provider_title.toLowerCase().includes('live'));
+                return {
+                    id: g.provider_code + '-' + g.id,
+                    name: g.name,
+                    provider: g.provider_title || g.uniq_provider,
+                    type: isLive ? 'live' : 'slot',
+                    imageUrl: g.image || g.background || '',
+                    vendorCode: g.provider_code,
+                    gameCode: g.id.toString(),
+                    providerType: 'mgcapi'
+                };
+            });
+            console.log('Mapped 0:', mappedMgc[0]);
+        }
+    } catch(e) { console.error(e); }
+})();\""
+expect "*?assword:*"
+send "$password\r"
+expect eof

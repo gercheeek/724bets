@@ -40,21 +40,11 @@ const liveCasinoGames: GameItem[] = ALL_GAMES.filter(g => g.category === 'live')
   demoSymbol: g.demoSymbol
 })).slice(0, 16);
 
+import { getGameLaunchUrl } from '../utils/gameLauncher';
+
 const getDemoUrl = (game: GameItem | null): string | null => {
   if (!game) return null;
-  const nameString = (game.title || '').toLowerCase().replace(/[^a-z0-9]/g, '');
-  let symbol = null;
-  if (nameString.includes('sweetbonanza1000')) symbol = 'vs20fruitswx';
-  else if (nameString.includes('sweetbonanza')) symbol = 'vs20fruitsw';
-  else if (nameString.includes('gatesofolympus1000')) symbol = 'vs20olympx';
-  else if (nameString.includes('gatesofolympus')) symbol = 'vs20olympgate';
-  else if (nameString.includes('sugarrush1000')) symbol = 'vs20sugarrushx';
-  else if (nameString.includes('sugarrush')) symbol = 'vs20sugarrush';
-  else if (nameString.includes('starlightprincess1000')) symbol = 'vs20starlightx';
-  else if (nameString.includes('starlightprincess')) symbol = 'vs20starlight';
-  else if (nameString.includes('bigbass')) symbol = 'vs10bbbonanza';
-  if (!symbol) return null;
-  return `https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=tr&cur=TRY&gameSymbol=${symbol}&jurisdiction=99&lobbyUrl=https://724bets.net`;
+  return getGameLaunchUrl(game);
 };
 
 interface BlockProps {
