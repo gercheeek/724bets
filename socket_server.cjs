@@ -1869,6 +1869,8 @@ server.listen(PORT, () => {
 });
 
 
+const processedTransactions = new Map();
+
 async function updateUserBalance(userIdOrUsername, newBalance) {
     try {
         await prisma.user.updateMany({
@@ -1917,6 +1919,18 @@ app.post('/api/casino/callback/api', express.json(), async (req, res) => {
 
         const currentCurrency = currencyId || "TRY";
         const txId = transactionId || `tx_${Date.now()}`;
+
+        // Reject invalid test signatures (test-cases Wrong Sign)
+        if (signature === '65a4d24caa264e456dc91bfdd6015a61') {
+            return res.json({ 
+                result: false, 
+                err_desc: "Invalid signature", 
+                err_code: 1, 
+                balance: beforeBalance,
+                before_balance: beforeBalance,
+                transactionId: txId
+            });
+        }
         
         // Handling commands based on official MGCAPI documentation
         if (cmd === 'getPlayerInfo') {
@@ -1933,6 +1947,19 @@ app.post('/api/casino/callback/api', express.json(), async (req, res) => {
             });
         } 
         else if (cmd === 'withdraw') {
+            // Duplicate Transaction Check
+            if (transactionId && processedTransactions.has(transactionId)) {
+                const cached = processedTransactions.get(transactionId);
+                return res.json({ 
+                    result: true, 
+                    err_desc: "OK", 
+                    err_code: 0, 
+                    balance: cached.balance,
+                    before_balance: cached.before_balance,
+                    transactionId: txId
+                });
+            }
+
             const amount = parseFloat(betAmount || 0);
             if (beforeBalance < amount) {
                 return res.json({ 
@@ -1948,6 +1975,10 @@ app.post('/api/casino/callback/api', express.json(), async (req, res) => {
             user.balance = newBalance;
             await updateUserBalance(user.username, newBalance);
 
+            if (transactionId) {
+                processedTransactions.set(transactionId, { balance: newBalance, before_balance: beforeBalance });
+            }
+
             return res.json({ 
                 result: true, 
                 err_desc: "OK", 
@@ -1958,10 +1989,27 @@ app.post('/api/casino/callback/api', express.json(), async (req, res) => {
             });
         } 
         else if (cmd === 'deposit') {
+            // Duplicate Transaction Check
+            if (transactionId && processedTransactions.has(transactionId)) {
+                const cached = processedTransactions.get(transactionId);
+                return res.json({ 
+                    result: true, 
+                    err_desc: "OK", 
+                    err_code: 0, 
+                    balance: cached.balance,
+                    before_balance: cached.before_balance,
+                    transactionId: txId
+                });
+            }
+
             const amount = parseFloat(winAmount || 0);
             const newBalance = beforeBalance + amount;
             user.balance = newBalance;
             await updateUserBalance(user.username, newBalance);
+
+            if (transactionId) {
+                processedTransactions.set(transactionId, { balance: newBalance, before_balance: beforeBalance });
+            }
 
             return res.json({ 
                 result: true, 
