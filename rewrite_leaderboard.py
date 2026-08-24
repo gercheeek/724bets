@@ -1,4 +1,8 @@
-"use client";
+import re
+
+filename = 'components/LeaderboardView.tsx'
+
+content = """"use client";
 import React, { useState, useEffect } from 'react';
 import { ChevronDown, ChevronUp, RefreshCw, Clock, Users, TrendingUp, Info } from 'lucide-react';
 
@@ -308,3 +312,9 @@ export default function LeaderboardView() {
     </div>
   );
 }
+"""
+
+with open(filename, 'w') as f:
+    f.write(content)
+
+print("Rewrote LeaderboardView.tsx to match Metaspins premium aesthetic strictly")
