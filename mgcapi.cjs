@@ -198,5 +198,6 @@ module.exports = {
     updateWebhook,
     getAllGames,
     getLaunchUrl,
-    generateSignature
+    createSign,
+    generateSignature: createSign
 };
