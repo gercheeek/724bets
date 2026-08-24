@@ -8,16 +8,9 @@ const APP_ID = process.env.MGCAPI_APP_ID || 'cc49d408-decf-48c3-a75e-9ae61bc1cb5
 const APP_KEY = process.env.MGCAPI_APP_KEY || '9f5f538a-121c-4bf1-846d-9b6c048a263f';
 
 // ─── SIGNATURE GENERATOR ───
-// Found from CDNParts API Documentation React App source
-function generateSignature(params) {
-    // Exclude 'sign' and 'urls' from the signature base string
-    const values = Object.entries(params)
-        .filter(([key]) => key !== 'sign' && key !== 'urls')
-        .map(([, value]) => (value && typeof value === 'object' ? JSON.stringify(value) : value))
-        .join('');
-        
-    const encoded = encodeURIComponent(values);
-    return crypto.createHmac('md5', APP_KEY).update(encoded).digest('hex');
+function generateSignature(exit, game_id, player_id, shop_id, player_token, app_id, language, request_time, currency) {
+    const str = `${encodeURIComponent(exit)}${game_id}${player_id}${shop_id}${encodeURIComponent(player_token)}${app_id}${language}${request_time}${currency}`;
+    return crypto.createHmac('md5', APP_KEY).update(str).digest('hex');
 }
 
 let gamesCache = [];
@@ -27,6 +20,7 @@ function resolveSymbol(gameCode, vendorCode) {
     if (!gameCode) return 'vs20olympx';
     const found = gamesCache.find(g => 
         (g.id && g.id.toString() === gameCode.toString()) || 
+        (g.game_id && g.game_id.toString() === gameCode.toString()) ||
         (g.game_code && g.game_code.toString() === gameCode.toString()) ||
         (g.code && g.code.toString() === gameCode.toString())
     );
@@ -66,37 +60,27 @@ function resolveSymbol(gameCode, vendorCode) {
     if (name.includes('gold') || name.includes('pig') || name.includes('money')) return 'vs25goldparty';
     if (name.includes('kraken')) return 'vs20kraken';
 
-    const POOL = [
-        'vs20fruitsw', 'vs10txbigbass', 'vs20sugarrush', 'vs20starlight',
-        'vs20doghouse', 'vs20fruitparty', 'vs20zeushades', 'vs25wolfgold',
-        'vs40wildwest', 'vs10crownfire', 'vs5joker', 'vs20cleocatra',
-        'vs20goldfever', 'vs20firehot', 'vs10bookoftut'
-    ];
-    let hash = 0;
-    for (let i = 0; i < name.length; i++) hash = (hash << 5) - hash + name.charCodeAt(i);
-    return POOL[Math.abs(hash) % POOL.length];
+    return 'vs20olympx';
 }
 
 /**
- * Fetch all casino games from MGCAPI
+ * Fetch all available games from MGCAPI
  */
 async function getAllGames() {
-    console.log('[MGCAPI] Fetching game list...');
-    
-    const request_time = Date.now().toString();
-    const str = `${APP_ID}${request_time}`;
-    const sign = crypto.createHmac('md5', APP_KEY).update(encodeURIComponent(str)).digest('hex');
-
-    const endpoint = `${API_URL}/api/v1/get-games?app_id=${APP_ID}&request_time=${request_time}&sign=${sign}`;
-    
     try {
-        const resObj = await fetch(endpoint);
-        const data = await resObj.json();
+        console.log('[MGCAPI] Fetching game list...');
+        const request_time = Date.now().toString();
+        const str = `${APP_ID}${request_time}`;
+        const sign = crypto.createHmac('md5', APP_KEY).update(encodeURIComponent(str)).digest('hex');
+
+        const url = `${API_URL}/api/v1/get-games?app_id=${APP_ID}&request_time=${request_time}&sign=${sign}&limit=10000`;
+        const res = await fetch(url);
+        const data = await res.json();
         
         let list = [];
         if (Array.isArray(data)) {
             list = data;
-        } else if (data && data.status === 200 && data.data) {
+        } else if (data && data.data && Array.isArray(data.data)) {
             list = data.data;
         } else if (data && data.games && Array.isArray(data.games)) {
             list = data.games;
@@ -122,47 +106,58 @@ async function getAllGames() {
 async function getLaunchUrl(vendorCode, gameCode, userCode) {
     console.log(`[MGCAPI] Generating launch URL for user ${userCode}, game ${gameCode}`);
     
+    const exit = 'https://www.724bets.net';
+    const game_id = Number(gameCode) || gameCode;
+    const player_id = userCode ? userCode.toString() : '1';
+    const shop_id = '1';
+    const player_token = Buffer.from(JSON.stringify({ player_id: userCode || 1 })).toString('base64');
+    const language = 'en';
+    const currency = 'TRY';
+    const request_time = Date.now().toString();
+
+    const sign = generateSignature(exit, game_id, player_id, shop_id, player_token, APP_ID, language, request_time, currency);
+
     const payload = {
-        exit: 'https://724bets.net/',
-        game_id: Number(gameCode) || gameCode,
-        player_id: userCode ? userCode.toString() : 'testuser',
-        player_token: Buffer.from(JSON.stringify({ player_id: userCode || 'testuser' })).toString('base64'),
+        exit,
+        game_id,
+        player_id,
+        shop_id: 1,
+        player_token,
         app_id: APP_ID,
-        language: 'tr',
-        currency: 'TRY',
-        request_time: Date.now(),
+        language,
+        request_time: Number(request_time),
+        currency,
+        sign,
         urls: {
-            base_url: 'https://724bets.net',
-            wallet_url: 'https://724bets.net/api/casino/callback/api',
-            other_url: 'https://724bets.net'
+            base_url: 'https://www.724bets.net',
+            wallet_url: 'https://www.724bets.net/api/casino/callback/api',
+            other_url: 'https://www.724bets.net'
         }
     };
     
-    payload.sign = generateSignature(payload);
-    
-    try {
-        const resObj = await fetch(`${API_URL}/api/v1/playGame`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload),
-            signal: AbortSignal.timeout(3000)
-        });
-        const data = await resObj.json();
-        
-        if (data && data.result === true && data.url) {
-            return data.url;
-        } else if (data && data.status === 200 && data.data && data.data.url) {
-            return data.data.url;
-        } else {
-            console.warn('[MGCAPI] playGame returned maintenance/error in test mode for game:', gameCode);
-            const matchedSymbol = resolveSymbol(gameCode, vendorCode);
-            return `https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=tr&cur=TRY&gameSymbol=${matchedSymbol}&websiteUrl=https%3A%2F%2F724bets.net&jurisdiction=99&enviroment=PREPROD&m=1`;
+    const endpoints = ['https://mgcbot.mgcapi.com/api/v1/playGame', 'https://stage.mgcapi.com/api/v1/playGame'];
+    for (const ep of endpoints) {
+        try {
+            const resObj = await fetch(ep, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+                signal: AbortSignal.timeout(3000)
+            });
+            const data = await resObj.json();
+            
+            if (data && (data.result === true || data.status === 200) && data.url) {
+                console.log(`[MGCAPI] Got real game launch URL from ${ep}:`, data.url);
+                return data.url;
+            }
+        } catch (err) {
+            // continue fallback
         }
-    } catch (err) {
-        console.warn('[MGCAPI] Launch game fast fallback:', err.message);
-        const matchedSymbol = resolveSymbol(gameCode, vendorCode);
-        return `https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=tr&cur=TRY&gameSymbol=${matchedSymbol}&websiteUrl=https%3A%2F%2F724bets.net&jurisdiction=99&enviroment=PREPROD&m=1`;
     }
+
+    console.warn('[MGCAPI] playGame returned fallback for game:', gameCode);
+    const matchedSymbol = resolveSymbol(gameCode, vendorCode);
+    return `https://demogamesfree.pragmaticplay.net/gs2c/openGame.do?lang=tr&cur=TRY&gameSymbol=${matchedSymbol}&websiteUrl=https%3A%2F%2Fwww.724bets.net&jurisdiction=99&enviroment=PREPROD&m=1`;
 }
 
 
