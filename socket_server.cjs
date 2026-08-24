@@ -1935,24 +1935,55 @@ async function updateUserBalance(userIdOrUsername, newBalance) {
     }
 }
 
-const CURRENCY_RATES = {
+let CURRENT_RATES = {
   TRY: 1,
-  USD: 36.50,
-  USDT: 36.50,
-  EUR: 39.50,
-  GBP: 46.20,
-  BTC: 3450000.00,
-  ETH: 98000.00,
+  USD: 48.03,
+  USDT: 48.03,
+  EUR: 41.50,
+  GBP: 48.50,
+  BTC: 3791892.00,
+  ETH: 119101.00,
   XRP: 92.50,
   TRX: 8.40,
   SOL: 6800.00,
   LTC: 4200.00
 };
 
+async function updateLiveRates() {
+  try {
+    const res = await fetch('https://api.binance.com/api/v3/ticker/price?symbols=%5B%22USDTTRY%22,%22BTCTRY%22,%22ETHTRY%22,%22XRPTRY%22,%22TRXTRY%22,%22LTCTRY%22,%22SOLTRY%22%5D');
+    if (res.ok) {
+      const data = await res.json();
+      if (Array.isArray(data)) {
+        data.forEach(item => {
+          const price = parseFloat(item.price);
+          if (item.symbol === 'USDTTRY') {
+            CURRENT_RATES.USDT = price;
+            CURRENT_RATES.USD = price;
+          } else if (item.symbol === 'BTCTRY') CURRENT_RATES.BTC = price;
+          else if (item.symbol === 'ETHTRY') CURRENT_RATES.ETH = price;
+          else if (item.symbol === 'XRPTRY') CURRENT_RATES.XRP = price;
+          else if (item.symbol === 'TRXTRY') CURRENT_RATES.TRX = price;
+          else if (item.symbol === 'LTCTRY') CURRENT_RATES.LTC = price;
+          else if (item.symbol === 'SOLTRY') CURRENT_RATES.SOL = price;
+        });
+      }
+    }
+  } catch (e) {
+    // fallback rates
+  }
+}
+updateLiveRates();
+setInterval(updateLiveRates, 15000);
+
+app.get('/api/rates', (req, res) => {
+  res.json({ success: true, rates: CURRENT_RATES });
+});
+
 function getRate(curr) {
   if (!curr) return 1;
   const upper = String(curr).toUpperCase();
-  return CURRENCY_RATES[upper] || 1;
+  return CURRENT_RATES[upper] || 1;
 }
 
 // --- MGCAPI Callback Handler ---

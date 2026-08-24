@@ -171,6 +171,17 @@ const Header: React.FC<HeaderProps> = ({
   useEffect(() => {
     async function fetchRates() {
       try {
+        const apiRes = await fetch('/api/rates');
+        if (apiRes.ok) {
+          const apiData = await apiRes.json();
+          if (apiData.success && apiData.rates) {
+            setRates(apiData.rates);
+            return;
+          }
+        }
+      } catch (e) {}
+
+      try {
         const res = await fetch('https://api.binance.com/api/v3/ticker/price?symbols=%5B%22USDTTRY%22,%22BTCTRY%22,%22ETHTRY%22,%22XRPTRY%22,%22TRXTRY%22,%22LTCTRY%22,%22SOLTRY%22%5D');
         if (res.ok) {
           const data = await res.json();
@@ -198,7 +209,7 @@ const Header: React.FC<HeaderProps> = ({
       }
     }
     fetchRates();
-    const interval = setInterval(fetchRates, 30000); // 30 saniyede bir otomatik güncelle
+    const interval = setInterval(fetchRates, 15000); // 15 saniyede bir senkronize et
     return () => clearInterval(interval);
   }, []);
   
