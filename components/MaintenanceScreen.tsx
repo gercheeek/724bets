@@ -36,13 +36,13 @@ const MaintenanceScreen: React.FC<MaintenanceScreenProps> = ({ message, onAdminL
       <div className="relative max-w-md w-full text-center">
         {/* Branding */}
         <div className="mb-6 md:mb-8 flex flex-col items-center">
-          <div className="w-12 h-12 mb-4 rounded-lg bg-amber-500 flex items-center justify-center shadow-[0_0_30px_rgba(245,158,11,0.25)]">
+          <div className="w-12 h-12 mb-4 rounded-lg bg-[#00E5FF] flex items-center justify-center shadow-[0_0_30px_rgba(0,229,255,0.25)]">
             <Settings className="w-6 h-6 text-black animate-spin" style={{ animationDuration: '4s' }} />
           </div>
           <h1 className="text-2xl md:text-3xl font-black tracking-tighter text-white mb-1">
-            724<span className="text-zinc-300">BAHİS.NET</span>
+            724<span className="text-[#00E5FF]">BETS.NET</span> <span className="text-zinc-500 font-light text-xl">|</span> 724<span className="text-zinc-300">BAHİS.NET</span>
           </h1>
-          <p className="text-zinc-500 font-bold tracking-[0.3em] uppercase text-[9px]">Premium Gaming & Analysis</p>
+          <p className="text-zinc-500 font-bold tracking-[0.3em] uppercase text-[9px]">Platform Bakım ve Altyapı Güncellemesi</p>
         </div>
 
         {/* Content Box */}

@@ -317,6 +317,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void, initia
   const [loadId, setLoadId] = useState(0);
   const [activeCasinoGame, setActiveCasinoGame] = useState<string | null>(null);
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [maintenanceBypass, setMaintenanceBypass] = useState(false);
   // Secret overlay removed
   const [isChatOpen, setIsChatOpen] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -597,7 +598,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void, initia
   const [siteStatusConfig, setSiteStatusConfig] = useState<SiteStatusConfig>(() => {
     const stored = localStorage.getItem('site_status');
     const parsed = stored ? JSON.parse(stored) : DEFAULT_SITE_STATUS_CONFIG;
-    return { ...parsed, isMaintenanceMode: false };
+    return { ...parsed, isMaintenanceMode: true };
   });
 
   const handleSiteStatusConfigChange = (cfg: SiteStatusConfig) => {
@@ -1994,7 +1995,7 @@ const AppContent: React.FC<{ setIsAdminPanelOpen: (val: boolean) => void, initia
   };
 
   const isLocalhost = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
-  const isMaintenanceActive = siteStatusConfig?.isMaintenanceMode || false;
+  const isMaintenanceActive = !maintenanceBypass && (siteStatusConfig?.isMaintenanceMode !== false);
 
   const getNextThreeAnalyses = () => {
     const combined = analyses.length > 0 ? analyses : demoAnalyses;
